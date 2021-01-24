@@ -1,0 +1,9 @@
+.light .switch span{
+  background: #999;
+}
+.light .switch .indicator{
+  background: linear-gradient(to bottom, #fff, #aaa);
+}
+.light .switch input:checked ~ span{
+  background: #76d7ff;
+}

@@ -1,0 +1,76 @@
+@import "./user.light.css";
+@import "./user.night.css";
+
+.pagecontent{
+  margin: 10px;
+  position: relative;
+}
+.pagecontent h2{
+  text-align: center;
+  font-size: 3em;
+  padding: 10px;
+}
+.pagecontent p{
+  font-size: 2em;
+  text-align: center;
+  margin: 10px;
+  border-radius: 4px;
+}
+.pagecontent label{
+  display: block;
+  text-align: center;
+  margin: 10px;
+  border-radius: 4px;
+}
+.pagecontent label input{
+ padding: 8px;
+ font-size: 20px;
+ width: 80%;
+ text-align: center;
+ border-radius: 2px;
+ background: #0000;
+ outline: none;
+}
+.pagecontent button{
+  position: relative;
+  width: 80%;
+  left: 50%;
+  top: 15px;
+  transform: translateX(-50%);
+  border: none;
+  text-decoration: none;
+  padding: 10px;
+  font-size: 15px;
+  margin: 0;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 5px #000;
+}
+.pagecontent a{
+  display: block;
+  border: none;
+  text-decoration: none;
+  padding: 10px;
+  font-size: 15px;
+  margin: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.pagecontent a:hover,
+.pagecontent button:hover{
+  box-shadow: inset 0 0 10px #000;
+}
+@media (max-width: 400px){
+  .pagecontent p{
+    font-size: 1em;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 4px;
+  }
+  .pagecontent a,
+  .pagecontent button{
+    display: block;
+  }
+}

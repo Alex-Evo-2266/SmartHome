@@ -1,0 +1,73 @@
+@import "./hidingLi.light.css";
+@import "./hidingLi.night.css";
+li.hidingLi{
+  width: calc(100% - 20px);
+  transform: none;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  list-style: none;
+  overflow: hidden;
+  position: relative;
+  transition: 0.5s;
+  margin-top: 6px;
+  border-radius: 4px;
+}
+li.hidingLi h3{
+  font-size: 24px;
+  padding: 5px;
+}
+li.hidingLi.hide{
+  height: 40px;
+  transition: 0.5s;
+
+}
+li.hidingLi.show{
+  height: auto;
+  transition: 0.5s;
+
+}
+.LiContent{
+  margin-top: 40px;
+}
+li.hidingLi .LiTitle{
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+li.hidingLi .fas{
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 20px;
+  padding: 10px;
+  transition: 0.5s;
+
+}
+li.hidingLi.show .fas{
+  transform: rotate(-180deg);
+}
+li.hidingLi .textInput{
+  position: relative;
+  font-size: 1.5em;
+  display: block;
+  padding: 5px 2px 5px 2px;
+  width: calc(100% - 80px);
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  outline: none;
+  border-radius: 5px;
+  border: none;
+}
+li.hidingLi label{
+  padding: 30px;
+  display: block;
+}
+li.hidingLi label h5{
+  position: relative;
+  width: 100%;
+  top: 0;
+  left: 0;
+  font-size: 24px;
+  text-align: center;
+}

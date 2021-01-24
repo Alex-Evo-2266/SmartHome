@@ -1,0 +1,143 @@
+@import "./leftMenu.light.css";
+@import "./leftMenu.night.css";
+.topMenu{
+  display: none;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+.menuTogle{
+  position: relative;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  z-index: 3;
+}
+.navigation nav{
+  z-index: 5;
+  position: fixed;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  transition: 0.5s;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  box-shadow: 0 0 10px #000;
+  padding-bottom: 60px;
+}
+.navigation nav::-webkit-scrollbar{
+  width: 0;
+}
+.navigation nav ul{
+  position: relative;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+.navigation nav ul li{
+  position: relative;
+  width: 100%;
+  list-style: none;
+  transition: 0.5s;
+}
+.navigation nav ul li a,
+.navigation nav ul li span.liinfo
+{
+  position: relative;
+  display: block;
+  width: 100%;
+  display: flex;
+  list-style: none;
+  text-decoration: none;
+}
+.navigation nav ul li a span,
+.navigation nav ul li span.liinfo span{
+  padding: 0;
+  margin: 0;
+}
+.navigation nav ul li a .icon,
+.navigation nav ul li span.liinfo .icon,
+.menuTogle .icon
+{
+  color: #fff;
+  position: relative;
+  display: block;
+  min-width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+}
+.icon .fas,
+.icon .far
+{
+  font-size: 24px;
+}
+.navigation nav ul li a .title,
+.navigation nav ul li span.liinfo .title{
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  height: 60px;
+  line-height: 60px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.profile{
+  height: 200px;
+  display: flex;
+  position: relative;
+}
+.verticalLine{
+  position: absolute;
+  top: 0;
+  left: 30px;
+  height: 90%;
+  background: #fff;
+  width: 4px;
+  display: block;
+
+}
+.navigation nav ul li ul{
+  display: none;
+  position: relative;
+  width: calc(100%-60px);
+  top: 0;
+  left: 60px;
+  transition: 0.5s;
+}
+.navigation nav ul li.active ul,
+.navigation nav ul li:hover ul
+{
+  display: block;
+}
+.navigation nav ul li ul li{
+  display: block;
+}
+.navigation nav.hide{
+  width: 0;
+}
+.navigation nav.hide:hover{
+  width: 0;
+}
+@media (max-width: 700px) {
+  .topMenu{
+    display: block;
+    z-index: 3;
+  }
+  .navigation nav{
+    width: 0;
+    margin-top: 60px;
+  }
+  .navigation nav.active{
+    width: 100%;
+  }
+}
+@media (min-width: 700px){
+  .navigation nav:hover
+  {
+    width: 300px;
+  }
+}

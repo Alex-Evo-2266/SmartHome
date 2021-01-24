@@ -1,0 +1,326 @@
+@import "./newScriptsPage.light.css";
+@import "./newScriptsPage.night.css";
+
+.NewScripConteiner{
+  margin-left: 60px;
+  background: rgba(255,255,255,.5);
+  width: 100%;
+  height: 100vh;
+}
+.NewScripConteiner h2,
+.NewScripConteiner h3{
+  display: block;
+  text-align: center;
+  font-size: 40px;
+}
+.NewScripConteiner h2{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.NewScripPage{
+  width: calc(100% - 64px);
+  height: calc(100% - 80px);
+  position: relative;
+  border-radius: 10px;
+  color: #000;
+  box-shadow: inset 0 0 5px #000;
+}
+.NewScripPage .If{
+  display: block;
+  height: calc(100% - 80px);
+  overflow-y: scroll;
+  margin: 0 10px;
+  border-radius: 10px;
+}
+.scriptOut{
+  display: flex;
+  position: relative;
+  justify-content: center;
+}
+.scriptOut p{
+  padding: 10px;
+  font-size: 30px;
+  color:#000;
+}
+.scriptOut input{
+  font-size: 25px;
+  outline: none;
+  border: none;
+  margin: 10px 0;
+  background: #aaa;
+  color:#fff;
+  box-shadow: inset 0 0 5px #000;
+}
+.scriptOut button{
+  position: absolute;
+  right: 20px;
+  top:10px;
+  padding: 5px 12px;
+  border: none;
+  box-shadow: 0 0 5px #000;
+  background: #aaa;
+  color:#fff;
+  font-weight: 600;
+}
+.deviceElement,
+.stateElement{
+  display: flex;
+  margin: 10px;
+  border: 2px;
+  border-radius: 10px;
+  align-items: center;
+  cursor:default;
+}
+.stateElement{
+  padding: 10px;
+}
+.imageConteiner{
+  height: 80px;
+  width: 90px;
+  border-radius: 7px 0 0 7px;
+  overflow: hidden;
+}
+.imageConteiner img{
+  object-fit:cover;
+  height: 100%;
+  width: 100%;
+}
+.imageConteiner div.iconImage{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  color:#000;
+}
+.imageConteiner div.iconImage p{
+  display: block;
+  text-align: center;
+  width: 100%;
+  padding: 0;
+  transform: translateY(3px);
+  font-size: 30px;
+}
+.deviceElement p,
+.stateElement p{
+  text-align: center;
+  width: 100%;
+  font-size: 20px;
+}
+.progammzon{
+  margin: 0 10px;
+  width: calc(100% - 24px);
+  height: calc(100% - 70px);
+  border: 2px solid #333;
+  border-radius: 10px;
+  position: relative;
+  background: #222;
+  overflow-y: scroll;
+}
+.triggerBlock{
+  display: flex;
+}
+.baseBlock{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  max-width: 200px;
+  color: #fff;
+  font-weight: 600;
+  margin: 5px;
+}
+.baseBlock .textBlock{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  background: Purple;
+}
+
+.baseBlock .addBlock{
+  text-align: center;
+  position: relative;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+}
+.groupBlock .addBlock{
+  text-align: center;
+  position: absolute;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+}
+.addBlock:hover{
+  background: #333;
+}
+.IfdeviceList{
+  padding: 10px 0;
+  border-radius: 10px;
+}
+.shoseBlock{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #222;
+}
+.shoseBlock li{
+  margin: 10px;
+  flex: 0 1 50%;
+  transition: 0.5s;
+}
+.shoseBlock li *{
+  transition: 0.5s;
+  color:#fff;
+}
+.shoseBlock li:hover{
+  background: rgba(150,150,150,.5);
+}
+.shoseBlock li:hover *{
+  opacity: 0.8;
+}
+.groupBlock{
+  position: relative;
+  width: calc(100% - 10px);
+  margin: 5px;
+}
+.groupBlock .groupBlockBottom{
+  position: absolute;
+  bottom: 0;
+  height: 30px;
+  width: 100%;
+  background: Purple;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ .groupBlockConteiner{
+  padding: 0 0 0 40px;
+}
+.groupBlock .groupBlockConteiner{
+  min-height: 80px;
+  padding: 35px 0 35px 40px;
+}
+.groupBlock .groupBlockTop{
+  position: absolute;
+  top: 0;
+  height: 30px;
+  width: 100%;
+  background: Purple;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.groupBlock .textBlock{
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 20px;
+}
+.actBlock{
+  display: flex;
+  position: relative;
+}
+.actBlock *{
+  color: #fff;
+}
+.actBlock .deviceBlock{
+  display: flex;
+  height: 30px;
+  background: #444;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  padding: 0 5px;
+}
+.actBlock .deviceBlock .nameBlock{
+  margin: 5px;
+}
+.actBlock select{
+  background: #888;
+  color: #fff;
+  font-weight: 500;
+  outline: none;
+}
+.actBlock input[type="text"],
+.actBlock input[type="number"]{
+  background: #888;
+  color: #fff;
+  font-weight: 500;
+  outline: none;
+  border: none;
+  margin: 5px;
+  font-size: 15px
+}
+.actBlock .operBlock{
+  display: flex;
+  height: 30px;
+  background: #444;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  padding: 0 5px;
+  min-width: 80px;
+}
+.valueBlock{
+  display: flex;
+  position: relative;
+  height: 30px;
+  background: #444;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  padding: 0 5px;
+  min-width: 80px;
+}
+.actBlock .deleteBlock{
+  margin: 5px 0 0 -5px;
+  height: 30px;
+  width: 30px;
+  background: red;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+.actBlock .addBlock{
+  text-align: center;
+  position: relative;
+  right: 0;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+}
+.groupBlock > .groupBlockTop .deleteBlock,
+.valueBlock .deleteBlock
+{
+  position: absolute;
+  margin: 0;
+  height: 30px;
+  width: 30px;
+  background: red;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+.groupBlock > .groupBlockTop .deleteBlock{
+  right: 40px;
+}
+.valueBlock .deleteBlock{
+  right: -30px;
+}
+.deleteBlock:hover{
+  background: #a00;
+}

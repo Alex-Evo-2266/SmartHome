@@ -8,9 +8,15 @@ class User(models.Model):
     UserMobile = models.CharField("user mobile", max_length = 200)
     UserLevel = models.IntegerField("user level")
 
+    def __str__(self):
+        return self.UserName
+
 class Device(models.Model):
     DeviceName = models.CharField("device name", max_length = 200)
     DeviceSystemName = models.CharField("device system name", max_length = 200)
     DeviceInformation = models.TextField("user config")
     DeviceTypeConnect = models.CharField("device type connect", max_length = 200)
     DeviceType = models.CharField("device type", max_length = 200)
+
+    def __str__(self):
+        return self.DeviceSystemName

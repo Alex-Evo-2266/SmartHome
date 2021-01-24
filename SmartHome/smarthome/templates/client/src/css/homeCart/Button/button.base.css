@@ -1,0 +1,73 @@
+@import "./button.light.css";
+@import "./button.night.css";
+
+
+ul.elementConteiner li{
+  position: relative;
+  list-style: none;
+  text-align: center;
+  margin: 15px;
+}
+ul.elementConteiner li label{
+  position: relative;
+}
+ul.elementConteiner li label input[type="checkbox"],
+ul.elementConteiner li label input[type="button"]{
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+ul.elementConteiner li label .icon-box{
+  width: 60px;
+  position: relative;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+ul.elementConteiner li label .icon-box i{
+  font-size: 30px;
+  /* color: #222; */
+}
+.BtnElement .deleteBtn,
+.ScriptElement .deleteBtn{
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: 0;
+  right: 0;
+  background: red;
+  border: none;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 18px;
+  color: #fff;
+}
+.BtnElement .editBtn,
+.ScriptElement .editBtn{
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: 0;
+  left: 0;
+  background: grey;
+  border: none;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 18px;
+  color: #fff;
+}
+.BtnElement .icon-box button i.i-cost,
+.ScriptElement .icon-box button i.i-cost{
+  font-size: 10px;
+  color: #fff;
+  text-align: center;
+  box-shadow: none;
+  position: relative;
+  top: -2px;
+}
+.deleteBtn:hover{
+  box-shadow: inset 0 0 5px #000;
+}

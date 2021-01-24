@@ -1,0 +1,14 @@
+.night .scriptOut input{
+  background: #333;
+  color:#fff;
+}
+.night .scriptOut button{
+  background: #333;
+  color:#fff;
+}
+.night .NewScripPage{
+  background: rgba(50,50,50,.5);
+}
+.night .scriptOut p{
+  color: #fff;
+}

@@ -1,0 +1,13 @@
+.night ul.elementConteiner{
+  background: linear-gradient(0deg, #000000, #111);
+}
+.night ul.elementConteiner::before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,.05);
+  bottom: -50%;
+  pointer-events: none;
+  z-index: 3;
+}

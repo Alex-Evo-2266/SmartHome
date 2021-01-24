@@ -1,0 +1,18 @@
+.light .scriptElement{
+  /* background: linear-gradient(to top, #ddd, #aaa); */
+  background: #edf5fc;
+}
+.light .scriptElement p{
+  color: #000;
+}
+.light .scriptElement .scriptStatus .showBtn,
+.light .scriptElement .scriptStatus .activateBtn{
+  background: #edf5fc;
+  color: #000;
+  box-shadow: -2px -2px 5px rgba(255,255,255,1),
+  3px 3px 5px rgba(0,0,0,0.1)
+}
+.light .scriptElement .scriptStatus .showBtn:hover,
+.light .scriptElement .scriptStatus .activateBtn:hover{
+  background: #76d7ff;
+}

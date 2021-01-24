@@ -1,0 +1,31 @@
+.night .pagecontent p{
+  border: 1px solid #333;
+  background: #111c;
+}
+.night .pagecontent label.textLabel{
+  border: 1px solid #333;
+  background: #111c;
+  color: #fff;
+  /* padding-bottom: 8px; */
+}
+.night .pagecontent label p{
+  border: none;
+  background: #0000;
+}
+.night .pagecontent label input{
+  border: 2px solid #333;
+  color: #fff;
+}
+.night .pagecontent label p:hover{
+  box-shadow: none;
+}
+.night .pagecontent a,
+.night .pagecontent button{
+  color: #fff;
+  background: #333;
+}
+.night .pagecontent a:hover,
+.night .pagecontent button:hover{
+  background: #1E90FF;
+  color: #000;
+}

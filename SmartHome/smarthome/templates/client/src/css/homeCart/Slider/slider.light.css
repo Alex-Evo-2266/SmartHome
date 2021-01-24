@@ -1,0 +1,23 @@
+.light .slider-box{
+  box-shadow: -2px -2px 5px rgba(255,255,255,1),
+  3px 3px 5px rgba(0,0,0,0.1)
+}
+.light .slider-box .slider input[type="range"]{
+
+}
+.light .slider input::-moz-range-thumb,
+.light .slider input::-webkit-slider-thumb,
+.light .slider input::-ms-thumb{
+
+}
+.light .slider input::-moz-range-progress,
+.light .slider input::-webkit-slider-progress,
+.light .slider input::-ms-progress{
+
+}
+.light .slider-box .name{
+
+}
+.light .slider-box .value{
+
+}

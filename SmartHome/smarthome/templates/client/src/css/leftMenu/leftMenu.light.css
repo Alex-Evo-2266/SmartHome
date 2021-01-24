@@ -1,0 +1,31 @@
+.light .navigation nav ul li:hover > a,
+.light .navigation nav ul li:hover > span.liinfo,
+.light .navigation nav ul li a.active,
+.light .menuTogle:hover
+{
+  background: #1E90FF;
+  transition: 0.3s;
+  color: #fff;
+}
+.light .navigation nav ul li:hover > a i,
+.light .navigation nav ul li:hover > span.liinfo i,
+.light .navigation nav ul li a.active i,
+.light .menuTogle:hover i{
+  color: #fff;
+}
+.light .topMenu{
+  background:linear-gradient(to top, #ddd, #bbb);
+  color: black;
+  z-index: 10;
+}
+.light .navigation nav
+{
+  background: #edf5fc;
+  color: black;
+}
+.light .navigation nav ul li a,
+.light .navigation nav ul li a .icon,
+.light .navigation nav ul li span.liinfo .icon,
+.light .menuTogle .icon{
+  color: black;
+}

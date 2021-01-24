@@ -1,0 +1,11 @@
+.light .scriptOut button{
+  background: #ddd;
+  color:#000;
+}
+.light .scriptOut input{
+  background: #ddd;
+  color:#000;
+}
+.light .NewScripPage{
+  background: rgba(255,255,255,.5);
+}

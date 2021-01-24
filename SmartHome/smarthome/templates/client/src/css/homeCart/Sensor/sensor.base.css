@@ -1,0 +1,17 @@
+@import "./sensor.light.css";
+@import "./sensor.night.css";
+
+.sensor-box{
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  align-items: center;
+}
+.sensor-box .sensor{
+  height: 100%;
+  width: 150px;
+  align-items: center;
+}
+.sensor-box .sensor p{
+  font-size: 20px;
+}

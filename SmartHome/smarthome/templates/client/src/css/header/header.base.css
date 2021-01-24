@@ -1,0 +1,58 @@
+@import "./header.light.css";
+@import "./header.night.css";
+header{
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 60px;
+  display: flex;
+  width: calc(100% - 60px);
+  z-index: 4;
+}
+header h1{
+  padding-top: 15px;
+  margin: 0 30px;
+}
+#searchDevices{
+  display: block;
+  position: relative;
+  outline: none;
+  font-size: 20px;
+  border: none;
+  box-shadow: inset 0 0 5px #000;
+  height: 30px;
+  top:15px;
+}
+.searchBtn{
+  position: relative;
+  height: 30px;
+  margin: 0 10px;
+  top:15px;
+  font-weight: bold;
+  display: block;
+  padding: 3px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px #000;
+  transition: 0.25s;
+  transform: translate(-1px ,-1px);
+}
+.searchBtn:active{
+  box-shadow: none;
+  transform: none;
+}
+.searchBtn:hover{
+  background: #1E90FF;
+}
+
+@media (max-width: 700px){
+  header{
+    z-index: 10
+  }
+  #searchDevices{
+    display: none;
+  }
+  .searchBtn{
+    display: none;
+  }
+}

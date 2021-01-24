@@ -1,0 +1,25 @@
+.toolbar{
+  position: absolute;
+  width: 100%;
+  top: -100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+}
+.toolbar.active{
+  top:0;
+}
+.toolbar .elementConteiner.top{
+  border-radius: 0 0 20px 20px;
+  width:calc(100% - 200px)
+}
+@media (max-width: 700px){
+  .toolbar .elementConteiner.top{
+    width:100%;
+    border-radius:0
+  }
+  .toolbar.active{
+    top:60px;
+  }
+}

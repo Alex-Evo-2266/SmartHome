@@ -1,0 +1,16 @@
+.light .InputNumber{
+  border: 2px solid #76d7ff;
+  box-shadow: 0 0 5px #000;
+}
+.light .InputNumber .InputNumber-btnUp,
+.light .InputNumber .InputNumber-btnDown{
+  background: linear-gradient(to left, #ddd, #aaa);
+}
+.light .InputNumber .InputNumber-btnUp i,
+.light .InputNumber .InputNumber-btnDown i{
+  color: #fff;
+}
+.light .InputNumber .InputNumber-btnUp:active i,
+.light .InputNumber .InputNumber-btnDown:active i{
+  color: #00f;
+}

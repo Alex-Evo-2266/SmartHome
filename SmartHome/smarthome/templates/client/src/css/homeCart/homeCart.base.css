@@ -1,0 +1,23 @@
+@import "./Button/button.base.css";
+@import "./Slider/slider.base.css";
+@import "./Sensor/sensor.base.css";
+@import "./Toolbar/toolbar.base.css";
+@import "./homeCart.light.css";
+@import "./homeCart.night.css";
+
+ul.elementConteiner{
+  position: relative;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+ul.elementConteiner.top{
+  height: auto;
+  padding:0;
+}

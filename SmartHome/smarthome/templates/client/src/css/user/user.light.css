@@ -1,0 +1,38 @@
+.light .pagecontent p{
+  border: 1px solid #333;
+  background: #76d7ff;
+}
+.light .pagecontent label.textLabel{
+  border: 1px solid #76d7ff;
+  background: #fffc;
+  color: #fff;
+  padding-bottom: 8px;
+}
+.light .pagecontent label p{
+  border: none;
+  background: #0000;
+  color: #000
+}
+.light .pagecontent label input{
+  border: 2px solid #76d7ff;
+  color: #000;
+  box-shadow: inset 0 0 5px #000;
+}
+.light .pagecontent label p:hover{
+  box-shadow: none;
+}
+.light .pagecontent a,
+.light .pagecontent button{
+  color: #000;
+  background: #76d7ff;
+  box-shadow: inset 0 0 10px #000;
+}
+.light .pagecontent a:hover,
+.light .pagecontent button:hover{
+  background: #1E90FF;
+  color: #000;
+}
+.light .pagecontent .configElement p{
+  background: #0000;
+  border: none;
+}
