@@ -1,10 +1,8 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {SocketContext} from '../../../hooks/socket.hook'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 
 export const SliderElement = ({index,data,min=0,max=100,firstValue=0,deleteBtn,editBtn,onClick}) =>{
-  const socket = useContext(SocketContext)
   const {devices, updateDevice} = useContext(DeviceStatusContext)
   const [value , setValue] = useState(firstValue)
   const [device, setDevice] = useState({})
@@ -63,11 +61,12 @@ export const SliderElement = ({index,data,min=0,max=100,firstValue=0,deleteBtn,e
 
     if(!data||!device)
       return
-    if(data.type==="dimmer")
-        socket.terminalMessage(`device ${device.DeviceSystemName} dimmer ${value}`)
-    if(data.type==="color")
-        socket.terminalMessage(`device ${device.DeviceSystemName} color ${value}`)
-    // socket.terminalMessage()
+    // if(data.type==="dimmer")
+    //     socket.terminalMessage(`device ${device.DeviceSystemName} dimmer ${value}`)
+    // if(data.type==="color")
+    //     socket.terminalMessage(`device ${device.DeviceSystemName} color ${value}`)
+    // // socket.terminalMessage()
+    return
     setTimeout(()=>updateDevice(),500)
   }
 

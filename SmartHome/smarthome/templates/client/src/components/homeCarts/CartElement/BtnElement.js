@@ -1,10 +1,8 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {SocketContext} from '../../../hooks/socket.hook'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 
 export const BtnElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,switchMode=true,deleteBtn}) =>{
-  const socket = useContext(SocketContext)
   const {devices, updateDevice} = useContext(DeviceStatusContext)
   const [value, setValue]=useState(firstValue)
   const [device, setDevice] = useState({})
@@ -61,19 +59,20 @@ const changeHandler = (event)=>{
 
   if(!data||!device)
     return
-  if(data.type==="power")
-      socket.terminalMessage(`device ${device.DeviceSystemName} powerTogle`)
-  if(data.type==="dimmer")
-      socket.terminalMessage(`device ${device.DeviceSystemName} dimmer ${data.value}`)
-  if(data.type==="color")
-      socket.terminalMessage(`device ${device.DeviceSystemName} color ${data.value}`)
-  if(data.type==="mode")
-      socket.terminalMessage(`device ${device.DeviceSystemName} mode ${data.value}`)
-  if(data.type==="switch mode")
-      socket.terminalMessage(`device ${device.DeviceSystemName} mode`)
-  if(data.type==="ir")
-      socket.terminalMessage(`device ${device.DeviceSystemName} send ${data.value}`)
-  // socket.terminalMessage()
+  // if(data.type==="power")
+  //     socket.terminalMessage(`device ${device.DeviceSystemName} powerTogle`)
+  // if(data.type==="dimmer")
+  //     socket.terminalMessage(`device ${device.DeviceSystemName} dimmer ${data.value}`)
+  // if(data.type==="color")
+  //     socket.terminalMessage(`device ${device.DeviceSystemName} color ${data.value}`)
+  // if(data.type==="mode")
+  //     socket.terminalMessage(`device ${device.DeviceSystemName} mode ${data.value}`)
+  // if(data.type==="switch mode")
+  //     socket.terminalMessage(`device ${device.DeviceSystemName} mode`)
+  // if(data.type==="ir")
+  //     socket.terminalMessage(`device ${device.DeviceSystemName} send ${data.value}`)
+  // // socket.terminalMessage()
+  return
   setTimeout(()=>updateDevice(),500)
 }
 

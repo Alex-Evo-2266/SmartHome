@@ -1,4 +1,5 @@
 import {useState, useCallback} from 'react'
+import $ from "jquery"
 
 export const useHttp = () => {
   const [loading, setLoading] = useState(false);
@@ -8,6 +9,8 @@ export const useHttp = () => {
     try {
       if(body&&!file){
         headers['Content-Type'] = 'application/json'
+        if(headers['X-CSRFToken']=""||!headers['X-CSRFToken'])
+          headers['X-CSRFToken'] = 'zoP8fbLHPAnLZpAx6CgpKnHnLMJVJQZzhZ7TJfh0hxUjdCUhGTitLkksprYcxZF4'
         body = JSON.stringify(body);
       }
       const response = await fetch(url, {method, body, headers});

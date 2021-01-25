@@ -6,7 +6,6 @@ import {Form} from './components/Form/form'
 import {AlertState} from './components/alert/alertState'
 import {MenuState} from './components/verticalMenu/menuState'
 import {FormState} from './components/Form/formState'
-import {SocketState} from './hooks/socket.hook'
 import {TerminalState} from './components/terminal/terminalState'
 import {AddScriptState} from './components/addScript/addScriptState'
 import {useRoutes} from './routes.js'
@@ -20,7 +19,7 @@ import './css/style-alert.css'
 import './css/style-components.css'
 
 function App() {
-  const {token, login, logout, userId, userLevel,ready,socket} = useAuth();
+  const {token, login, logout, userId, userLevel,ready} = useAuth();
   const {updataBackground} = useBackground(token);
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated,userLevel);
@@ -38,10 +37,9 @@ function App() {
 
   return (
     <AuthContext.Provider value={{
-      token, login, logout, userId, userLevel, isAuthenticated,socket
+      token, login, logout, userId, userLevel, isAuthenticated
     }}>
     <AlertState>
-    <SocketState>
     <MenuState>
     <FormState>
     <TerminalState>
@@ -61,7 +59,6 @@ function App() {
     </TerminalState>
     </FormState>
     </MenuState>
-    </SocketState>
     </AlertState>
     </AuthContext.Provider>
   );

@@ -1,5 +1,4 @@
 import {useState, useCallback, useEffect} from 'react';
-import io from 'socket.io-client';
 
 const storegeName = 'UserData';
 
@@ -8,7 +7,6 @@ export const useAuth = () => {
   const [userId, setUserId] = useState(null);
   const [userLevel, setUserLevel] = useState(null);
   const [ready, setReady] = useState(false)
-  const [socket,setSocket] = useState(null)
 
   const login = useCallback((jwtToken, id,level)=>{
     setToken(jwtToken);
@@ -28,7 +26,6 @@ export const useAuth = () => {
   },[])
 
   useEffect(()=>{
-    setSocket(io())
     const data = JSON.parse(localStorage.getItem(storegeName))
 
     if(data&&data.token){
@@ -37,5 +34,5 @@ export const useAuth = () => {
     setReady(true);
   },[login])
 
-  return {login, logout, token, userId, userLevel,ready,socket}
+  return {login, logout, token, userId, userLevel,ready}
 }

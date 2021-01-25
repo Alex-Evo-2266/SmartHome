@@ -3,13 +3,22 @@ from django.db import models
 # Create your models here.
 class User(models.Model):
     UserName = models.CharField("user name", max_length = 200)
+    UserSurname = models.CharField("user surname", max_length = 200, default="")
     UserPassword = models.CharField("user password", max_length = 200)
     UserEmail = models.EmailField("user email")
     UserMobile = models.CharField("user mobile", max_length = 200)
-    UserLevel = models.IntegerField("user level")
+    UserLevel = models.IntegerField("user level", default=1)
 
     def __str__(self):
         return self.UserName
+
+class UserConfig(models.Model):
+    Style = models.CharField("user name", max_length = 200, default="light")
+    user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key = True)
+
+    def __str__(self):
+        return self.Style
+
 
 class Device(models.Model):
     DeviceName = models.CharField("device name", max_length = 200)
