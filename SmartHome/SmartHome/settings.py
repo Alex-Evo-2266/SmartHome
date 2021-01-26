@@ -128,4 +128,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "smarthome/templates/client/build/static"),
 ]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'smarthome/media/')
+MEDIA_URL = '/smarthome/media/'
+
 # STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')

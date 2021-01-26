@@ -68,6 +68,11 @@ export const useBackground = () => {
         staticBackground: data.server.staticBackground||false
       }
     }
+    else{
+      document.body.style = `background: url(${defFon});
+        background-size: cover;
+        background-attachment: fixed;`;
+    }
     fonUpdata(config);
     setInterval(()=>{
       fonUpdata(config);
