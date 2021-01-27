@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '^$r07a)wyc)kr=+nke#gy1z9^xagv$b%4xbd)9aj8smcho^i3a'
 
+SECRET_JWT_KEY = "dxkhbg5hth56"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -32,7 +34,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'smarthome',
+    'smartHomeApi',
+    'client',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,10 +128,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "smarthome/templates/client/build/static"),
+    os.path.join(BASE_DIR, "client","templates","client","build","static"),
+    os.path.join(BASE_DIR,"static"),
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'smarthome/media/')
-MEDIA_URL = '/smarthome/media/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')

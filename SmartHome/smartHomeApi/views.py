@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import User, UserConfig,ServerConfig,Device
+from django.conf import settings
+from .models import User, UserConfig,ServerConfig
 import json
 import bcrypt
 import jwt
 
-SECRET_JWT_KEY = "dxkhbg5hth56"
 # Create your views here.
 def index(request):
     return render(request,'client/build/index.html')
@@ -30,7 +30,7 @@ def login(request):
             for item in users:
                 if item.UserName==data.get("name"):
                     if bcrypt.checkpw(data.get("password"),item.UserPassword):
-                        encoded_jwt = jwt.encode({"userId":item.id,"userLevel":item.UserLevel},SECRET_JWT_KEY,algorithm="HS256")
+                        encoded_jwt = jwt.encode({"userId":item.id,"userLevel":item.UserLevel},settings.SECRET_JWT_KEY,algorithm="HS256")
                         result = {"token":encoded_jwt, "userId":item.id,"userLavel":item.UserLevel}
                         return HttpResponse(json.dumps(result),status=200)
                     else:
