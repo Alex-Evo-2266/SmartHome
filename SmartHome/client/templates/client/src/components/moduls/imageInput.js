@@ -25,7 +25,7 @@ export const ImageInput = ({title, src, name, onChange=null, id}) =>{
     var data = new FormData();
     data.append(event.target.name,file)
     data.append('name',event.target.name)
-    await request(`/api/base/fonImage/set/${event.target.name.split('-')[1]}`, 'POST',data,{},true)
+    await request(`/api/media/set/${event.target.name}`, 'POST',data,{},true)
 
     if(onChange){
       onChange(event)

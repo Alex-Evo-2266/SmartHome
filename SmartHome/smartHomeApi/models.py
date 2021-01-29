@@ -32,3 +32,9 @@ class ServerConfig(models.Model):
 
     def __str__(self):
         return self.mqttBroker
+
+class UsersConfig(models.Model):
+    registerKey = models.SlugField("regKey", max_length = 200)
+
+    def __str__(self):
+        return self.registerKey

@@ -37,12 +37,12 @@ export const useBackground = () => {
     document.body.classList.add(data.style)
   }
   if(data.staticBackground){
-    document.body.style = `background: url(http://localhost:5000/api/base/fonImage/base);
+    document.body.style = `background: url(/media/fon/fon-base.jpg);
       background-size: cover;
       background-attachment: fixed;`;
     return
   }
-  document.body.style = `background: url(http://localhost:5000/api/base/fonImage/${backgroundType()});
+  document.body.style = `background: url(/media/fon/fon-${backgroundType()}.jpg);
     background-size: cover;
     background-attachment: fixed;`;
 },[])

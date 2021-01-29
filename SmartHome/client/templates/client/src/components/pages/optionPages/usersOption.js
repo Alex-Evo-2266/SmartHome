@@ -27,9 +27,7 @@ export const UsersOption = () =>{
 
   const configHandler = async(event)=>{
     await request(`/api/server/usersConfig/edit`, 'POST', config,{Authorization: `Bearer ${auth.token}`})
-    setTimeout(()=>{
-      window.location.reload();
-    },1000)
+    window.location.reload();
   }
 
   const updataConf = useCallback(async()=>{

@@ -27,7 +27,7 @@ export const ProfilePage = () => {
   },[error,message, clearError])
 
   const updataUser = useCallback(async()=>{
-    const data = await request(`/api/user/`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/user`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data) return;
     setUser(data);
     setNewuser({
