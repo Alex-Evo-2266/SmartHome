@@ -18,6 +18,29 @@ export const BinarySensorMqttEdit = ({deviceData,hide})=>{
     }
   },[error,message, clearError])
 
+  const [status, setStatus] = useState({
+    type:"status",
+    address:"",
+    low:"",
+    high:"",
+    icon:""
+  })
+  useEffect(()=>{
+    console.log(deviceData);
+    for (var item of deviceData.DeviceConfig) {
+      let confel = {
+        type:item.type,
+        address:item.address,
+        low:item.low||"",
+        high:item.high||"",
+        icon:item.icon||""
+      }
+      if(item.type==="status"){
+        setStatus(confel)
+      }
+    }
+  },[])
+
   const [device, setDevice] = useState({
     DeviceId:deviceData.DeviceId,
     DeviceInformation:deviceData.DeviceInformation,
@@ -26,11 +49,13 @@ export const BinarySensorMqttEdit = ({deviceData,hide})=>{
     DeviceType:deviceData.DeviceType,
     DeviceTypeConnect:deviceData.DeviceTypeConnect,
     RoomId:deviceData.RoomId,
-    status:deviceData.DeviceConfig.status
   })
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
+  }
+  const changeHandlerStatus = event => {
+    setStatus({ ...status, [event.target.name]: event.target.value })
   }
 const changeHandlerTest = event=>{
   if(USText(event.target.value)){
@@ -41,14 +66,12 @@ const changeHandlerTest = event=>{
 }
 
   const outHandler = async ()=>{
-    let dataout = {DeviceConfig:{}}
-    for(let key in device){
-      if(key.indexOf("Device")!==0&&key!=="RoomId"){
-        dataout.DeviceConfig[key] = device[key]
-      }
-      else{
-        dataout[key] = device[key]
-      }
+    let conf = []
+    if(status.address)
+      conf.push(status)
+    let dataout = {
+      ...device,
+      config:conf
     }
     await request(`/api/devices/edit`, 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
     hide();
@@ -90,7 +113,7 @@ const changeHandlerTest = event=>{
       <HidingLi title = "sensor config" show = {true}>
       <label>
         <h5>topic status</h5>
-        <input className = "textInput" placeholder="topic status" id="status" type="text" name="status" value={device.status} onChange={changeHandler} required/>
+        <input className = "textInput" placeholder="topic status" id="status" type="text" name="address" value={status.address} onChange={changeHandlerStatus} required/>
       </label>
       </HidingLi>
       <div className="controlForm" >

@@ -11,6 +11,11 @@ urlpatterns = [
     path('user/config/style/edit',views.edituserconfstyle),
     path('user',views.giveuser),
     path('user/edit',views.edituser),
+    path('devices/add',views.deviceAdd),
+    path('devices/all',views.devicesGive),
+    path('devices/get/<int:id>',views.deviceGive),
+    path('devices/edit',views.deviceEdit),
+    path('devices/delete',views.deviceDelete),
     # path('media/set/<slug:name>/', views.media)
     # path('devices/all',views.allDevices),
     # path('base/fonImage',views.fonImage),

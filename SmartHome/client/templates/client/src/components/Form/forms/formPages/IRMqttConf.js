@@ -4,11 +4,12 @@ import {HidingLi} from '../../../hidingLi.js'
 export const IRMqttConf = ({next,back})=>{
 
   const [form, setForm] = useState({
-    command:'',
+    type:"command",
+    address:'',
   });
 
   const nextpage = ()=>{
-    next(form)
+    next([form])
   }
 
   const changeHandler = event => {
@@ -28,17 +29,17 @@ export const IRMqttConf = ({next,back})=>{
           <HidingLi title = "IR config" show = {true}>
           <label>
             <h5>Enter the topic by command</h5>
-            <input className = "textInput" placeholder="topic command" id="command" type="text" name="command" value={form.command} onChange={changeHandler} required/>
+            <input className = "textInput" placeholder="topic command" id="command" type="text" name="address" value={form.address} onChange={changeHandler} required/>
           </label>
           </HidingLi>
         </ul>
       </div>
       <div className="formFooter">
       {
-        (!form.command)?
+        (!form.address)?
         <button onClick={errorbtn} className ='FormControlBtn right disabled'>Next <i className="fas fa-arrow-right"></i></button>
         :
-        <button onClick={nextpage} className ='FormControlBtn right' disabled = {!form.command}>Next <i className="fas fa-arrow-right"></i></button>
+        <button onClick={nextpage} className ='FormControlBtn right' disabled = {!form.address}>Next <i className="fas fa-arrow-right"></i></button>
       }
         <button onClick={back} className ="FormControlBtn left"><i className="fas fa-arrow-left"></i> Previous</button>
       </div>

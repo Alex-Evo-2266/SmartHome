@@ -26,10 +26,32 @@ export const IRMqttEdit = ({deviceData,hide})=>{
     DeviceType:deviceData.DeviceType,
     DeviceTypeConnect:deviceData.DeviceTypeConnect,
     RoomId:deviceData.RoomId,
-    command:deviceData.DeviceConfig.command
   })
+  const [command, setCommand] = useState({
+    type:"command",
+    address:'',
+  });
+
+  useEffect(()=>{
+    console.log(deviceData);
+    for (var item of deviceData.DeviceConfig) {
+      let confel = {
+        type:item.type,
+        address:item.address,
+        low:item.low||"",
+        high:item.high||"",
+        icon:item.icon||""
+      }
+      if(item.type==="command"){
+        setCommand(confel)
+      }
+    }
+  },[])
 
   const changeHandler = event => {
+    setDevice({ ...device, [event.target.name]: event.target.value })
+  }
+  const changeHandlerCommand = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
   }
 const changeHandlerTest = event=>{
@@ -41,14 +63,12 @@ const changeHandlerTest = event=>{
 }
 
   const outHandler = async ()=>{
-    let dataout = {DeviceConfig:{}}
-    for(let key in device){
-      if(key.indexOf("Device")!==0&&key!=="RoomId"){
-        dataout.DeviceConfig[key] = device[key]
-      }
-      else{
-        dataout[key] = device[key]
-      }
+    let conf = []
+    if(command.address)
+      conf.push(command)
+    let dataout = {
+      ...device,
+      config:conf
     }
     await request(`/api/devices/edit`, 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
     hide();
@@ -90,7 +110,7 @@ const changeHandlerTest = event=>{
       <HidingLi title = "IR config" show = {true}>
       <label>
         <h5>topic command</h5>
-        <input className = "textInput" placeholder="topic command" id="status" type="text" name="command" value={device.command} onChange={changeHandler} required/>
+        <input className = "textInput" placeholder="topic command" id="status" type="text" name="address" value={command.address} onChange={changeHandlerCommand} required/>
       </label>
       </HidingLi>
       <div className="controlForm" >

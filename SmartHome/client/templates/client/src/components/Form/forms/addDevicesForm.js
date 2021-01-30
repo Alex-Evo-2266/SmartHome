@@ -27,7 +27,7 @@ export const AddDevicesForm = (props)=>{
     typeDevice: '',
     name: '',
     systemName:'',
-    config:{},
+    config:[],
   });
 
   const {message, clearMessage} = useMessage();

@@ -1,5 +1,26 @@
 from django.db import models
 
+
+def genId(El):
+    i = 1
+    j = 0
+    b = False
+    print(i,j,b)
+    while i<=len(El)+1:
+        b = False
+        print(i,j,b)
+        while j<len(El):
+            print(i,j,b)
+            if El[j].id==i:
+                print(i,j,b)
+                b = True
+                break
+            j +=1
+        print(i,j,b,"end")
+        if(not b):
+            return i
+        i+=1
+    return 1
 # Create your models here.
 class User(models.Model):
     UserName = models.CharField("user name", max_length = 200)
@@ -38,3 +59,53 @@ class UsersConfig(models.Model):
 
     def __str__(self):
         return self.registerKey
+
+class Room(models.Model):
+    RoomName = models.CharField("root name", max_length = 200)
+
+    def __str__(self):
+        return self.RoomName
+
+
+class Device(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    DeviceName = models.CharField("device name", max_length = 200)
+    DeviceSystemName = models.SlugField("device system name", max_length = 200)
+    DeviceInformation = models.TextField("device info", default="")
+    DeviceType = models.SlugField("device type", max_length = 200, default="")
+    DeviceTypeConnect = models.SlugField("device connect type", max_length = 200, default="")
+    room = models.ForeignKey(Room, on_delete = models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.DeviceName
+
+class ConfigDevice(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    type = models.SlugField("device config type", max_length = 200)
+    address = models.SlugField("device config address", max_length = 200)
+    low = models.SlugField("device config low", max_length = 200, default="0")
+    high = models.SlugField("device config high", max_length = 200, default="255")
+    icon = models.SlugField("device icon", max_length = 200, default="")
+    device = models.ForeignKey(Device, on_delete = models.CASCADE)
+
+    def __str__(self):
+        return self.address +" "+ self.type
+
+class ValueDevice(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    type = models.SlugField("device value type", max_length = 200)
+    value = models.SlugField("device value value", max_length = 200)
+    device = models.ForeignKey(Device, on_delete = models.CASCADE)
+
+    def __str__(self):
+        return self.type +" "+ self.value
+
+class ValueListDevice(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    type = models.SlugField("device value list type", max_length = 200)
+    value = models.SlugField("device value list value", max_length = 200)
+    date = models.DateTimeField("device value element date")
+    device = models.ForeignKey(Device, on_delete = models.CASCADE)
+
+    def __str__(self):
+        return self.type +" "+ self.value

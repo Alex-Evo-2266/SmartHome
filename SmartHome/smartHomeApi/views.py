@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from .logic.user import addUser, login as Authorization, userConfEditStyle,user,editUser
 from .logic.auth import auth
+from .logic.devices import addDevice,giveDevices,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit
 from .models import User, UserConfig,ServerConfig
 import json
@@ -86,20 +87,38 @@ def edituser(request):
     except:
         return HttpResponse(json.dumps({"message":"error"}),status=400)
 
+def deviceAdd(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        print(data)
+        if addDevice(data):
+            return HttpResponse(json.dumps({"message":"ok"}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
 
+def devicesGive(request):
+    if request.method=="GET":
+        ret = giveDevices()
+        if(ret):
+            return HttpResponse(json.dumps(ret),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
 
+def deviceGive(request,id):
+    if request.method=="GET":
+        ret = giveDevice(id)
+        if(ret):
+            return HttpResponse(json.dumps(ret),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
 
-# def media(request, name):
-#     print(name)
-#     return HttpResponse("d")
-# def allDevices(request):
-#     devices = Device.objects.all()
-#     result = []
-#     for item in result:
-#         result.append(json.dumps(item))
-#     print(result)
-#     return HttpResponse(json.dumps(result),status=200)
-#
-# def fonImage(request):
-#     print("2")
-#     print(request.body)
+def deviceEdit(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if editDevice(data):
+            return HttpResponse(json.dumps({"message":"ok"}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def deviceDelete(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if deleteDevice(data["DeviceId"]):
+            return HttpResponse(json.dumps({"message":"ok"}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)

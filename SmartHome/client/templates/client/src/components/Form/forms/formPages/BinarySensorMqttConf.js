@@ -3,16 +3,17 @@ import {HidingLi} from '../../../hidingLi.js'
 
 export const BinarySensorMqttConf = ({next,back})=>{
 
-  const [form, setForm] = useState({
-    status:'',
+  const [statusConf, setStatusConf] = useState({
+    type:"status",
+    address:'',
   });
 
   const nextpage = ()=>{
-    next(form)
+    next([statusConf])
   }
 
   const changeHandler = event => {
-    setForm({ ...form, [event.target.name]: event.target.value })
+    setStatusConf({ ...statusConf, [event.target.name]: event.target.value })
   }
 
   const errorbtn = ()=>{
@@ -28,17 +29,17 @@ export const BinarySensorMqttConf = ({next,back})=>{
           <HidingLi title = "sensor config" show = {true}>
           <label>
             <h5>Enter the topic by status</h5>
-            <input className = "textInput" placeholder="topic status" id="status" type="text" name="status" value={form.status} onChange={changeHandler} required/>
+            <input className = "textInput" placeholder="topic status" id="status" type="text" name="address" value={statusConf.address} onChange={changeHandler} required/>
           </label>
           </HidingLi>
         </ul>
       </div>
       <div className="formFooter">
       {
-        (!form.status)?
+        (!statusConf.address)?
         <button onClick={errorbtn} className ='FormControlBtn right disabled'>Next <i className="fas fa-arrow-right"></i></button>
         :
-        <button onClick={nextpage} className ='FormControlBtn right' disabled = {!form.status}>Next <i className="fas fa-arrow-right"></i></button>
+        <button onClick={nextpage} className ='FormControlBtn right' disabled = {!statusConf.address}>Next <i className="fas fa-arrow-right"></i></button>
       }
         <button onClick={back} className ="FormControlBtn left"><i className="fas fa-arrow-left"></i> Previous</button>
       </div>
