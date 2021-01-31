@@ -48,6 +48,7 @@ export const ServerOption = () =>{
       staticBackground:data.server.staticBackground,
       updateFrequency:data.server.updateFrequency,
       mqttBroker:data.server.mqttBroker||"",
+      mqttBrokerPort:data.server.mqttBrokerPort||"",
       loginMqttBroker:data.server.loginMqttBroker||"",
       passwordMqttBroker:data.server.passwordMqttBroker||""
     })
@@ -86,9 +87,13 @@ export const ServerOption = () =>{
         </label>
       </div>
       <div className="configElement">
-        <p className="text">Mqtt broker</p>
+        <p className="text">Mqtt broker ip</p>
         <label className="text">
           <input placeholder="IP Mqtt broker" onChange={changeHandler} name="mqttBroker" type="text" value={serverconf.mqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
+        </label>
+        <p className="text">Mqtt broker port</p>
+        <label className="text">
+          <input placeholder="Port Mqtt broker" onChange={changeHandler} name="mqttBrokerPort" type="number" value={serverconf.mqttBrokerPort} disabled = {(serverconf.mqttBroker==="none")}></input>
         </label>
         <p className="text">Mqtt login</p>
         <label className="text">

@@ -47,12 +47,13 @@ class ServerConfig(models.Model):
     auteStyle = models.NullBooleanField("automatic style", default=True)
     staticBackground = models.NullBooleanField("static background", default=False)
     updateFrequency = models.IntegerField("time update", default=10)
-    mqttBroker = models.CharField("mqttBroker address", max_length = 200, default="")
+    mqttBroker = models.CharField("mqttBroker ip", max_length = 200, default="")
     loginMqttBroker = models.CharField("mqttBroker login", max_length = 200, default="")
     passwordMqttBroker = models.CharField("mqttBroker password", max_length = 200, default="")
+    mqttBrokerPort = models.CharField("mqttBroker port", max_length = 200, default="")
 
     def __str__(self):
-        return self.mqttBroker
+        return self.mqttBrokerPort
 
 class UsersConfig(models.Model):
     registerKey = models.SlugField("regKey", max_length = 200)

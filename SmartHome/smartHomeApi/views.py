@@ -4,7 +4,7 @@ from django.conf import settings
 from .logic.user import addUser, login as Authorization, userConfEditStyle,user,editUser
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevices,giveDevice,editDevice,deleteDevice
-from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit
+from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from .models import User, UserConfig,ServerConfig
 import json
 
@@ -29,8 +29,7 @@ def clientConfig(request):
     data = auth(request)
     if "userId" in data:
         user = User.objects.get(id=data.get("userId"))
-        config = ServerConfig.objects.all()[0]
-        server={"auteStyle":config.auteStyle,"staticBackground":config.staticBackground,"updateFrequency":config.updateFrequency,"mqttBroker":config.mqttBroker,"loginMqttBroker":config.loginMqttBroker,"passwordMqttBroker":config.passwordMqttBroker}
+        server=GiveServerConfig()
         result={"server":server,"user":user.userconfig.give()}
         return HttpResponse(json.dumps(result),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
