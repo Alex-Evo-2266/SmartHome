@@ -70,7 +70,7 @@ export const DimmerMqttEdit = ({deviceData,hide})=>{
         setDimmer(confel)
       }
     }
-  },[])
+  },[deviceData])
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })

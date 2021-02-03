@@ -14,6 +14,7 @@ export const ServerOption = () =>{
     staticBackground:false,
     updateFrequency: "2",
     mqttBroker:'none',
+    mqttBrokerPort:"",
     loginMqttBroker:'',
     passwordMqttBroker:''
   });

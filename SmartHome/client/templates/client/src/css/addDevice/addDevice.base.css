@@ -1,0 +1,186 @@
+@import "./addDevice.light.css";
+@import "./addDevice.night.css";
+
+.conteiner-head{
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.conteiner-head h2{
+  font-size: 3.5em;
+}
+@keyframes start-anim-conteiner {
+  0%{
+    transform: translateY(100%);
+  }
+  100%{
+    transform: translateY(0);
+  }
+}
+.conteiner-body{
+  background: #111;
+  min-height: 100vh;
+  padding: 10px 0;
+  position: relative;
+  transition: 0.5s;
+  animation: start-anim-conteiner 1.5s ease-out 1;
+}
+
+.conteiner-body-ul{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.conteiner-body-ul .conteiner-body-li{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  box-shadow: inset 0 0 5px #000;
+}
+.conteiner-body-ul .conteiner-body-li label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+}
+.conteiner-body-ul .conteiner-body-li label h5{
+  text-align: center;
+  font-size: 2em;
+  padding-bottom: 5px;
+}
+.conteiner-body-ul .conteiner-body-li label input[type="text"],
+.conteiner-body-ul .conteiner-body-li label input[type="number"]{
+  font-size: 1.8em;
+  outline: none;
+  text-align: center;
+  box-shadow: inset 0 0 5px #000;
+  background: #ddd;
+  border-radius: 4px;
+}
+.conteiner-body-li + .conteiner-body-li{
+  margin-top:10px;
+}
+.conteiner-body-li label{
+  width: calc(100% - 20px);
+}
+.conteiner-body-li input.textInput{
+  padding: 5px 0;
+  width: 100%;
+}
+.selectioEnlementImg{
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #333;
+  border-radius: 5px;
+}
+.selectioEnlementImg::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+.selectioEnlementImg.active::before{
+  box-shadow: inset 0 0 10px rgba(33,156,243,1),
+  inset 0 0 15px rgba(33,156,243,1),
+  inset 0 0 20px rgba(33,156,243,1);
+}
+.selectioEnlementImg img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.selectioEnlementImg .info{
+  height: 20px;
+  min-width: 100%;
+  background: #aaaa;
+  position: absolute;
+  bottom: -20px;
+  transition: 0.5s;
+  display: flex;
+  justify-content: center;
+}
+.selectioEnlementImg:hover .info{
+  bottom: 0;
+}
+.selectioEnlementImg .info p{
+  white-space: nowrap;
+  text-align: center;
+}
+.selectioEnlementImg .info p.scroll{
+  text-align: left;
+}
+.selectioEnlementImg:hover .info p.scroll{
+  animation: runtext 8s linear infinite;
+}
+@keyframes runtext {
+  from { text-indent: 0 }
+    to { text-indent: -50%; }
+}
+.selectioEnlementUl{
+  display: flex;
+  justify-content: space-around;
+}
+.conteiner-body-li ul{
+  padding: 10px 0;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.conteiner-body-li ul + .config{
+  padding: 0;
+}
+.conteiner-body-li .config{
+  width: 100%;
+}
+.conteiner-body-li ul li + .conteiner-body-li ul li{
+  margin:0 10px;
+}
+.conteiner-body-subli{
+  width: 100%;
+}
+.animationLi{
+  position: relative;
+  transition: 1s;
+}
+.animationLi.show{
+  animation: start-anim-li 1s ease-out 1;
+}
+.animationLi.hide{
+  animation: end-anim-li 1s ease-out 1;
+  left: -100%;
+}
+@keyframes end-anim-li {
+  0%{
+    left: 0;
+  }
+  100%{
+    left: -100%;
+  }
+}
+@keyframes start-anim-li {
+  100%{
+    left: 0;
+  }
+  0%{
+    left: -100%;
+  }
+}
+.btnOut{
+  width: 80%;
+  background: #aaa;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  font-size: 20px;
+  padding: 10px;
+}
+.btnOut:hover{
+  box-shadow: inset 0 0 10px #000;
+}

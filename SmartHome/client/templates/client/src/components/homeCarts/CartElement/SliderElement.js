@@ -3,7 +3,7 @@ import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 
 export const SliderElement = ({index,data,min=0,max=100,firstValue=0,deleteBtn,editBtn,onClick}) =>{
-  const {devices, updateDevice} = useContext(DeviceStatusContext)
+  const {devices} = useContext(DeviceStatusContext)
   const [value , setValue] = useState(firstValue)
   const [device, setDevice] = useState({})
   const [minstate, setMin] = useState(0)
@@ -67,7 +67,7 @@ export const SliderElement = ({index,data,min=0,max=100,firstValue=0,deleteBtn,e
     //     socket.terminalMessage(`device ${device.DeviceSystemName} color ${value}`)
     // // socket.terminalMessage()
     return
-    setTimeout(()=>updateDevice(),500)
+    // setTimeout(()=>updateDevice(),500)
   }
 
   const deletebtn = ()=>{

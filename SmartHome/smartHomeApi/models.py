@@ -84,6 +84,7 @@ class ConfigDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)
     type = models.SlugField("device config type", max_length = 200)
     address = models.SlugField("device config address", max_length = 200)
+    token = models.SlugField("device token", max_length = 200, default="")
     low = models.SlugField("device config low", max_length = 200, default="0")
     high = models.SlugField("device config high", max_length = 200, default="255")
     icon = models.SlugField("device icon", max_length = 200, default="")

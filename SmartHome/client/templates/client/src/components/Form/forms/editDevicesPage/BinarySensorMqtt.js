@@ -39,7 +39,7 @@ export const BinarySensorMqttEdit = ({deviceData,hide})=>{
         setStatus(confel)
       }
     }
-  },[])
+  },[deviceData])
 
   const [device, setDevice] = useState({
     DeviceId:deviceData.DeviceId,

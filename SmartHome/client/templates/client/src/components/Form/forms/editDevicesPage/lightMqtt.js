@@ -101,7 +101,7 @@ export const LightMqttEdit = ({deviceData,hide})=>{
         setMode(confel)
       }
     }
-  },[])
+  },[deviceData])
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
@@ -237,7 +237,7 @@ export const LightMqttEdit = ({deviceData,hide})=>{
       <HidingLi title = "Temp light">
       <label>
         <h5>temp topic</h5>
-        <input className = "textInput" placeholder="color" id="color" type="text" name="address" value={temp.address} onChange={changeHandlerTemp} required/>
+        <input className = "textInput" placeholder="temp" id="temp" type="text" name="address" value={temp.address} onChange={changeHandlerTemp} required/>
       </label>
       <label>
         <h5>max temp</h5>
@@ -251,11 +251,11 @@ export const LightMqttEdit = ({deviceData,hide})=>{
       <HidingLi title = "Mode">
       <label>
         <h5>mode topic</h5>
-        <input className = "textInput" placeholder="mode" id="mode" type="text" name="address" value={mode.address} onChange={changeHandler} required/>
+        <input className = "textInput" placeholder="mode" id="mode" type="text" name="address" value={mode.address} onChange={changeHandlerMode} required/>
       </label>
       <label>
         <h5>count mode</h5>
-        <input className = "textInput" placeholder="countMode" id="countMode" type="high" name="high" value={mode.high} onChange={changeHandler} required/>
+        <input className = "textInput" placeholder="countMode" id="countMode" type="high" name="high" value={mode.high} onChange={changeHandlerMode} required/>
       </label>
       </HidingLi>
       <div className="controlForm" >

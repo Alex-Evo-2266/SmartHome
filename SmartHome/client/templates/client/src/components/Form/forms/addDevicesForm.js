@@ -277,6 +277,10 @@ export const AddDevicesForm = (props)=>{
           <div className = "pageForm hide">
             <p>404</p>
           </div>
+          :(form.typeConnect === "miio")?
+          <div className = "pageForm hide">
+            <p>500</p>
+          </div>
           :(form.typeDevice !== "variable")?
           <div className = "pageForm hide">
             <p>404</p>

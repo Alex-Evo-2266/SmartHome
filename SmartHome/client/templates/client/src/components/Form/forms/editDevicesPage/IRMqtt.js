@@ -46,7 +46,7 @@ export const IRMqttEdit = ({deviceData,hide})=>{
         setCommand(confel)
       }
     }
-  },[])
+  },[deviceData])
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })

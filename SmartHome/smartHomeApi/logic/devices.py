@@ -15,6 +15,8 @@ def addDevice(data):
             conf = ConfigDevice.objects.create(id=genId(ConfigDevice.objects.all()),device=newDevice,type=item["type"], address=item["address"])
             if "low" in item:
                 conf.low=item["low"]
+            if "token" in item:
+                conf.token=item["token"]
             if "high" in item:
                 conf.high=item["high"]
             if "icon" in item:

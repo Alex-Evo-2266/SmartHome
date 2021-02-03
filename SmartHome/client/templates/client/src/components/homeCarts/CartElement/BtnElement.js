@@ -3,7 +3,7 @@ import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 
 export const BtnElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,switchMode=true,deleteBtn}) =>{
-  const {devices, updateDevice} = useContext(DeviceStatusContext)
+  const {devices} = useContext(DeviceStatusContext)
   const [value, setValue]=useState(firstValue)
   const [device, setDevice] = useState({})
   const {target} = useContext(CartEditContext)
@@ -73,7 +73,7 @@ const changeHandler = (event)=>{
   //     socket.terminalMessage(`device ${device.DeviceSystemName} send ${data.value}`)
   // // socket.terminalMessage()
   return
-  setTimeout(()=>updateDevice(),500)
+  // setTimeout(()=>updateDevice(),500)
 }
 
   const deletebtn = ()=>{

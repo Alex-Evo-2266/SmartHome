@@ -1,0 +1,19 @@
+.light .conteiner-body-ul .conteiner-body-li,
+.light .conteiner-body-ul .conteiner-body-li label input[type="text"],
+.light .conteiner-body-ul .conteiner-body-li label input[type="number"]{
+  border: 2px solid #76d7ff;
+}
+.light .conteiner-body-ul .conteiner-body-li label h5
+{
+    color: #000;
+}
+.light .conteiner-head h2{
+  color: #fff;
+}
+.light .conteiner-body-ul .conteiner-body-li label input[type="text"],
+.light .conteiner-body-ul .conteiner-body-li label input[type="number"]{
+  background: #ddd;
+}
+.light .conteiner-body{
+  background: #ddd;
+}

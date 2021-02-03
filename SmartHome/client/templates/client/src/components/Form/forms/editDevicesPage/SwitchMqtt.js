@@ -26,11 +26,7 @@ export const SwitchMqttEdit = ({deviceData,hide})=>{
     DeviceName:deviceData.DeviceName,
     DeviceType:deviceData.DeviceType,
     DeviceTypeConnect:deviceData.DeviceTypeConnect,
-    RoomId:deviceData.RoomId,
-    power:deviceData.DeviceConfig.power,
-    status:deviceData.DeviceConfig.status,
-    turnOnSignal:deviceData.DeviceConfig.turnOnSignal,
-    turnOffSignal:deviceData.DeviceConfig.turnOffSignal
+    RoomId:deviceData.RoomId
   })
 
   const [status, setStatus] = useState({
@@ -65,7 +61,7 @@ export const SwitchMqttEdit = ({deviceData,hide})=>{
         setPower(confel)
       }
     }
-  },[])
+  },[deviceData])
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
@@ -133,21 +129,21 @@ export const SwitchMqttEdit = ({deviceData,hide})=>{
       <li>
         <label>
           <h5>status topic</h5>
-          <input className = "textInput" placeholder="powerStatus" id="powerStatus" type="text" name="status" value={device.status} onChange={changeHandler} required/>
+          <input className = "textInput" placeholder="powerStatus" id="powerStatus" type="text" name="address" value={status.address} onChange={changeHandlerStatus} required/>
         </label>
       </li>
       <HidingLi title = "power config">
         <label>
           <h5>power topic</h5>
-          <input className = "textInput" placeholder="power" id="power" type="text" name="power" value={device.power} onChange={changeHandler} required/>
+          <input className = "textInput" placeholder="power" id="power" type="text" name="address" value={power.address} onChange={changeHandlerPower} required/>
         </label>
         <label>
           <h5>turn on signal</h5>
-          <input className = "textInput" placeholder="turnOnSignal" id="turnOnSignal" type="text" name="turnOnSignal" value={device.turnOnSignal} onChange={changeHandler} required/>
+          <input className = "textInput" placeholder="turnOnSignal" id="turnOnSignal" type="text" name="high" value={power.high} onChange={changeHandlerPower} required/>
         </label>
         <label>
           <h5>turn off signal</h5>
-          <input className = "textInput" placeholder="turnOffSignal" id="turnOffSignal" type="text" name="turnOffSignal" value={device.turnOffSignal} onChange={changeHandler} required/>
+          <input className = "textInput" placeholder="turnOffSignal" id="turnOffSignal" type="text" name="low" value={power.low} onChange={changeHandlerPower} required/>
         </label>
       </HidingLi>
       <div className="controlForm" >

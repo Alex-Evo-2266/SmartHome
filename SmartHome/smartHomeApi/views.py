@@ -29,7 +29,10 @@ def clientConfig(request):
     data = auth(request)
     if "userId" in data:
         user = User.objects.get(id=data.get("userId"))
+        print("server")
         server=GiveServerConfig()
+        print("server")
+        print(server)
         result={"server":server,"user":user.userconfig.give()}
         return HttpResponse(json.dumps(result),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
