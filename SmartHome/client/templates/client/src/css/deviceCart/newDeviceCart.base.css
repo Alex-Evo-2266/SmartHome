@@ -1,0 +1,24 @@
+@import "./newDeviceCart.light.css";
+@import "./newDeviceCart.night.css";
+
+.NewCardElement{
+  position: relative;
+  width: 300px;
+  min-height: 220px;
+  margin: 20px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.NewCardElement .NewCardHeader{
+  min-height: 80px;
+  background: #fff;
+}
+.NewCardElement .NewCardHeader .DeviceName p{
+  font-size: 3em;
+  /* text-align: center; */
+}
+.NewCardElement .NewCardHeader .typeConnect{
+  padding: 10px;
+  font-size: 20px;
+  text-align: center;
+}

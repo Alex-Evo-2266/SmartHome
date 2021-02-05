@@ -98,14 +98,9 @@
   border-radius: 5px;
 }
 .selectioEnlementImg .info{
-  height: 20px;
-  min-width: 100%;
-  background: #aaaa;
   position: absolute;
+  background: #aaaa;
   bottom: -20px;
-  transition: 0.5s;
-  display: flex;
-  justify-content: center;
 }
 .selectioEnlementImg:hover .info{
   bottom: 0;

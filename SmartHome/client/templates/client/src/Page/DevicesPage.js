@@ -4,7 +4,7 @@ import {Loader} from '../components/Loader'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
-import {DeviceElement} from '../components/moduls/deviceElement'
+import {NewDeviceElement} from '../components/moduls/newDeviceElement'
 
 export const DevicesPage = () => {
   const form = useContext(FormContext)
@@ -70,13 +70,13 @@ export const DevicesPage = () => {
               {
                 devices.map((item,index)=>{
                   return(
-                    <DeviceElement
+                    <NewDeviceElement
                       key = {index}
                       DeviceId = {item.DeviceId}
                       DeviceName = {item.DeviceName}
                       DeviceSystemName = {item.DeviceSystemName}
+                      configDevice = {item.DeviceConfig}
                       DeviceType = {item.DeviceType}
-                      powerTopic = {item.DeviceConfig.power||item.DeviceConfig.status||""}
                       DeviceTypeConnect = {item.DeviceTypeConnect}
                       DeviceInformation={item.DeviceInformation}
                       updataDevice={updataDevice}

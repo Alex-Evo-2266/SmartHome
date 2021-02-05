@@ -1,9 +1,17 @@
 from django.conf import settings
 from ..models import Device,ConfigDevice,Room,genId
+# from DeviceControl.miioDevice.control import is_device,lamp
+
 import json
 
 def addDevice(data):
     try:
+        if data.get("typeConnect")=="miio":
+            for item in data["config"]:
+                if item["type"]=="base":
+                    confirmation = is_device(item["address"],item["token"])
+                    if confirmation["type"]=="error":
+                        return False
         devices = Device.objects.all()
         for item in devices:
             if item.DeviceSystemName==data.get("systemName"):
@@ -27,31 +35,25 @@ def addDevice(data):
         return False
 
 def device(item):
+
     def confdecod(data):
         arr2 = []
         for element in data:
-            c = {
-                "type":element.type,
-                "address":element.address,
-                "low":element.low,
-                "high":element.high,
-                "icon":element.icon
-            }
-            arr2.append(c)
+            arr2.append(element.receiveDict())
         return arr2
-    roomid = None
-    if(item.room):
-        roomid = item.room.id
     return {
-        "DeviceId":item.id,
-        "DeviceName":item.DeviceName,
-        "DeviceSystemName":item.DeviceSystemName,
-        "DeviceInformation":item.DeviceInformation,
-        "DeviceTypeConnect":item.DeviceTypeConnect,
-        "DeviceType":item.DeviceType,
-        "RoomId":item.room,
+        **item.receiveDict(),
         "DeviceConfig":confdecod(item.configdevice_set.all())
     }
+
+def deviceValue(id, type):
+    dev = Device.objects.get(id=id)
+    value = dev.valuedevice_set.all()
+    print(value)
+    for item in value:
+        if item["type"]==type:
+            return item["type"]
+
 
 def giveDevice(id):
     dev = Device.objects.get(id=id)

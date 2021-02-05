@@ -80,6 +80,17 @@ class Device(models.Model):
     def __str__(self):
         return self.DeviceName
 
+    def receiveDict(self):
+        return {
+            "DeviceId":self.id,
+            "DeviceName":self.DeviceName,
+            "DeviceSystemName":self.DeviceSystemName,
+            "DeviceInformation":self.DeviceInformation,
+            "DeviceType":self.DeviceType,
+            "DeviceTypeConnect":self.DeviceTypeConnect,
+            "RoomId":self.room_id
+        }
+
 class ConfigDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)
     type = models.SlugField("device config type", max_length = 200)
@@ -93,6 +104,16 @@ class ConfigDevice(models.Model):
     def __str__(self):
         return self.address +" "+ self.type
 
+    def receiveDict(self):
+        return {
+            "type":self.type,
+            "address":self.address,
+            "low":self.low,
+            "high":self.high,
+            "icon":self.icon,
+            "token":self.token
+        }
+
 class ValueDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)
     type = models.SlugField("device value type", max_length = 200)
@@ -101,6 +122,12 @@ class ValueDevice(models.Model):
 
     def __str__(self):
         return self.type +" "+ self.value
+
+    def receiveDict(self):
+        return {
+            "type":self.type,
+            "value":self.value,
+        }
 
 class ValueListDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)
@@ -111,3 +138,10 @@ class ValueListDevice(models.Model):
 
     def __str__(self):
         return self.type +" "+ self.value
+
+    def receiveDict(self):
+        return {
+            "type":self.type,
+            "value":self.value,
+            "date":self.date
+        }
