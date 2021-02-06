@@ -13,17 +13,6 @@ class Light(MqttDevice):
                 self.brightnesstoken = item["address"]
                 self.brightnessMax = item["high"]
                 self.brightnessMin = item["low"]
-            if item["type"]=="color":
-                self.colortoken = item["address"]
-                self.colorMax = item["high"]
-                self.colorMin = item["low"]
-            if item["type"]=="temp":
-                self.temptoken = item["address"]
-                self.tempMax = item["high"]
-                self.tempMin = item["low"]
-            if item["type"]=="mode":
-                self.modetoken = item["address"]
-                self.modecount = item["high"]
 
     def on(self, mode=0):
         if(mode>=0&&mode<self.modecount):
@@ -36,11 +25,3 @@ class Light(MqttDevice):
     def set_brightness(self, lavel):
         if(lavel>=self.brightnessMin&&lavel<self.brightnessMax):
             self.send(self.brightnesstoken,lavel)
-
-    def set_color_temp(self, lavel):
-        if(lavel>=self.tempMin&&lavel<self.tempMax):
-            self.send(self.temptoken,lavel)
-
-    def set_rgb(self,lavel):
-        if(lavel>=self.colorMin&&lavel<self.colorMax):
-            self.send(self.colortoken,lavel)

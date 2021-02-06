@@ -4,6 +4,11 @@ import {AuthContext} from '../context/AuthContext.js'
 import {SelectioEnlementImg} from '../components/addDeviceComponent/selectioEnlementImg'
 import {MiioConfig} from '../components/addDeviceComponent/config/miio'
 import {LightMqtt} from '../components/addDeviceComponent/config/mqttLamp'
+import {RelayMqtt} from '../components/addDeviceComponent/config/mqttRelay'
+import {DimmerMqtt} from '../components/addDeviceComponent/config/mqttDimmer'
+import {SensorMqtt} from '../components/addDeviceComponent/config/mqttSensor'
+import {BinarySensorMqtt} from '../components/addDeviceComponent/config/mqttBinarySensor'
+import {OtherMqtt} from '../components/addDeviceComponent/config/mqttOther'
 import {AnimationLi} from '../components/animationLi.js'
 import {useHttp} from '../hooks/http.hook'
 import {useChecked} from '../hooks/checked.hook'
@@ -151,8 +156,18 @@ export const AddDevicesPage = () => {
               (form.typeConnect==="miio")?
               <MiioConfig onChange={confHandler}/>:
               (form.typeConnect==="mqtt"&&form.typeDevice==="light")?
-              <LightMqtt onChange={confHandler}/>
-              :null
+              <LightMqtt onChange={confHandler}/>:
+              (form.typeConnect==="mqtt"&&form.typeDevice==="switch")?
+              <RelayMqtt onChange={confHandler}/>:
+              (form.typeConnect==="mqtt"&&form.typeDevice==="dimmer")?
+              <DimmerMqtt onChange={confHandler}/>:
+              (form.typeConnect==="mqtt"&&form.typeDevice==="sensor")?
+              <SensorMqtt onChange={confHandler}/>:
+              (form.typeConnect==="mqtt"&&form.typeDevice==="binarySensor")?
+              <BinarySensorMqtt onChange={confHandler}/>:
+              (form.typeConnect==="mqtt"&&form.typeDevice==="other")?
+              <OtherMqtt onChange={confHandler}/>:
+              null
             }
           </AnimationLi>
           <AnimationLi className="conteiner-body-li" show={form.systemName&&form.name&&form.typeDevice&&(form.typeDevice==="variable"||(form.typeConnect&&form.config[0]&&form.config[0].address))}>

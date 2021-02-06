@@ -35,7 +35,6 @@ def addDevice(data):
         return False
 
 def device(item):
-
     def confdecod(data):
         arr2 = []
         for element in data:

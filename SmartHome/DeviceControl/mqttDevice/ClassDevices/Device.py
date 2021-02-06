@@ -1,7 +1,7 @@
 from smartHomeApi.logic.devices import deviceValue
 from DeviceControl.mqttDevice.connect import connect
 
-class Device():
+class MqttDevice():
 
     def __init__(
     self,

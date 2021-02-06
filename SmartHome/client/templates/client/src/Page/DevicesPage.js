@@ -1,4 +1,5 @@
 import React, {useContext,useEffect,useState,useCallback} from 'react'
+import {NavLink} from 'react-router-dom'
 import {FormContext} from '../components/Form/formContext'
 import {Loader} from '../components/Loader'
 import {useHttp} from '../hooks/http.hook'
@@ -56,7 +57,7 @@ export const DevicesPage = () => {
       <div className = "conteiner">
         <header>
           <h1>All Devices</h1>
-          <button className="titleButtonAdd"><i onClick={()=>{form.show("AddDevices",updataDevice)}} className="fas fa-plus"></i></button>
+          <NavLink to="/devices/add" className="titleButtonAdd"><i className="fas fa-plus"></i></NavLink>
           <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={keyd} value={search}/>
           <button onClick={searchout} className="searchBtn">Search</button>
         </header>
