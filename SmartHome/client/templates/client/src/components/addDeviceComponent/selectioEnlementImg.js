@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React from 'react'
 import {RunText} from '../runText'
 
 export const SelectioEnlementImg = ({width="90px", height="80px", name, title, onClick,src,active = false})=>{

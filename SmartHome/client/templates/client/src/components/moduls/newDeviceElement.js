@@ -1,10 +1,9 @@
-import React, {useContext,useState} from 'react'
+import React, {useContext} from 'react'
 import {FormContext} from '../Form/formContext'
 import {RunText} from '../runText'
 
 export const NewDeviceElement = (props) =>{
   const form = useContext(FormContext)
-  const [control, setControl] = useState([])
 
   return(
     <div className = "NewCardElement">

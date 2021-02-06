@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
 export const BinarySensorMqtt = ({onChange,back})=>{
@@ -8,16 +8,10 @@ export const BinarySensorMqtt = ({onChange,back})=>{
     address:'',
   });
 
-  const nextpage = ()=>{
-    onChange([status])
-  }
-
-  useEffect(()=>{
-    nextpage()
-  },[status])
-
   const changeHandler = event => {
-    setStatus({ ...status, [event.target.name]: event.target.value })
+    let s = { ...status, [event.target.name]: event.target.value }
+    setStatus(s)
+    onChange([s])
   }
 
   return(

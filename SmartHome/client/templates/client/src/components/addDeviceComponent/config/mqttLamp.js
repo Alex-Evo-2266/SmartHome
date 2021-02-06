@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
 export const LightMqtt = ({onChange,back})=>{
@@ -38,44 +38,38 @@ export const LightMqtt = ({onChange,back})=>{
     high:"1"
   })
 
-  const nextpage = ()=>{
+  const nextpage = (param)=>{
     let arr = []
-    if(power.address)
-      arr.push(power)
-    if(dimmer.address)
-      arr.push(dimmer)
-    if(color.address)
-      arr.push(color)
-    if(temp.address)
-      arr.push(temp)
-    if(status.address)
-      arr.push(status)
-    if(mode.address)
-      arr.push(mode)
+    for (var item of param) {
+      if(item.address)
+        arr.push(item)
+    }
     onChange(arr)
   }
 
-  useEffect(()=>{
-    nextpage()
-  },[power,dimmer,color,temp,status,mode])
-
   const changeHandlerPower = event => {
     setPower({ ...power, [event.target.name]: event.target.value })
+    nextpage([{ ...power, [event.target.name]: event.target.value },dimmer,color,mode,temp,status])
   }
   const changeHandlerDimmer = event => {
     setDimmer({ ...dimmer, [event.target.name]: event.target.value })
+    nextpage([{ ...dimmer, [event.target.name]: event.target.value },power,color,mode,temp,status])
   }
   const changeHandlerColor = event => {
     setColor({ ...color, [event.target.name]: event.target.value })
+    nextpage([{ ...color, [event.target.name]: event.target.value },dimmer,power,mode,temp,status])
   }
   const changeHandlerMode = event => {
     setMode({ ...mode, [event.target.name]: event.target.value })
+    nextpage([{ ...mode, [event.target.name]: event.target.value },dimmer,color,power,temp,status])
   }
   const changeHandlerTemp = event => {
     setTemp({ ...temp, [event.target.name]: event.target.value })
+    nextpage([{ ...temp, [event.target.name]: event.target.value },dimmer,color,mode,power,status])
   }
   const changeHandlerStatus = event => {
     setStatus({ ...status, [event.target.name]: event.target.value })
+    nextpage([{ ...status, [event.target.name]: event.target.value },dimmer,color,mode,temp,power])
   }
 
   return(

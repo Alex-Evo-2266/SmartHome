@@ -1,8 +1,8 @@
-import React,{useEffect} from 'react'
+import React,{useEffect,useCallback} from 'react'
 
 export const RunText = ({id, text,className})=>{
 
-  const anim = ()=>{
+  const anim = useCallback(()=>{
     let el = document.getElementById(`p-${id}`)
     let el2 = document.getElementById(`div-${id}`)
     if(el.clientWidth >= el2.clientWidth){
@@ -12,10 +12,11 @@ export const RunText = ({id, text,className})=>{
     else{
       el.className=""
     }
-  }
+  },[id,text])
+
   useEffect(()=>{
     anim()
-  },[id])
+  },[anim])
 
   return(
     <div id={`div-${id}`} className={`RunText ${className}`}>

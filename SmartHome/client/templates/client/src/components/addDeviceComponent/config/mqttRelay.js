@@ -1,7 +1,7 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
-export const RelayMqtt = ({onChange,back})=>{
+export const RelayMqtt = ({onChange})=>{
 
   const [power, setPower] = useState({
     type:"power",
@@ -14,24 +14,22 @@ export const RelayMqtt = ({onChange,back})=>{
     address:""
   })
 
-  const nextpage = ()=>{
+  const nextpage = (param)=>{
     let arr = []
-    if(power.address)
-      arr.push(power)
-    if(status.address)
-      arr.push(status)
+    for (var item of param) {
+      if(item.address)
+        arr.push(item)
+    }
     onChange(arr)
   }
 
-  useEffect(()=>{
-    nextpage()
-  },[power,status])
-
   const changeHandlerPower = event => {
     setPower({ ...power, [event.target.name]: event.target.value })
+    nextpage([{ ...power, [event.target.name]: event.target.value },status])
   }
   const changeHandlerStatus = event => {
     setStatus({ ...status, [event.target.name]: event.target.value })
+    nextpage([{ ...status, [event.target.name]: event.target.value },power])
   }
 
   return(

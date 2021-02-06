@@ -5,18 +5,13 @@ def genId(El):
     i = 1
     j = 0
     b = False
-    print(i,j,b)
     while i<=len(El)+1:
         b = False
-        print(i,j,b)
         while j<len(El):
-            print(i,j,b)
             if El[j].id==i:
-                print(i,j,b)
                 b = True
                 break
             j +=1
-        print(i,j,b,"end")
         if(not b):
             return i
         i+=1

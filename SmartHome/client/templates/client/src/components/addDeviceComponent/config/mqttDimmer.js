@@ -1,7 +1,7 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
-export const DimmerMqtt = ({onChange})=>{
+export const DimmerMqtt = ({onChange=()=>{}})=>{
 
   const [power, setPower] = useState({
     type:"power",
@@ -21,29 +21,27 @@ export const DimmerMqtt = ({onChange})=>{
   })
 
 
-  const nextpage = ()=>{
+  const nextpage = (param)=>{
     let arr = []
-    if(power.address)
-      arr.push(power)
-    if(dimmer.address)
-      arr.push(dimmer)
-    if(status.address)
-      arr.push(status)
+    for (var item of param) {
+      if(item.address)
+        arr.push(item)
+    }
     onChange(arr)
   }
 
-  useEffect(()=>{
-    nextpage()
-  },[power,status,dimmer])
-
   const changeHandlerPower = event => {
     setPower({ ...power, [event.target.name]: event.target.value })
+    nextpage([{ ...power, [event.target.name]: event.target.value },dimmer,status])
   }
   const changeHandlerDimmer = event => {
     setDimmer({ ...dimmer, [event.target.name]: event.target.value })
+    nextpage([power,{ ...dimmer, [event.target.name]: event.target.value },status])
   }
   const changeHandlerStatus = event => {
     setStatus({ ...status, [event.target.name]: event.target.value })
+    nextpage([power,dimmer,{ ...status, [event.target.name]: event.target.value }])
+
   }
 
   return(

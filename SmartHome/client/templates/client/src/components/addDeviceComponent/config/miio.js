@@ -1,4 +1,4 @@
-import React,{useState, useEffect,useCallback} from 'react'
+import React,{useState} from 'react'
 
 export const MiioConfig = ({onChange})=>{
 
@@ -9,16 +9,10 @@ export const MiioConfig = ({onChange})=>{
   })
 
   const changeHandler = event => {
-    setConfig({ ...config, [event.target.name]: event.target.value })
+    let s = { ...config, [event.target.name]: event.target.value }
+    setConfig(s)
+    onChange([s])
   }
-
-  const out = useCallback(()=>{
-    onChange([config])
-  },[config,onChange])
-
-  useEffect(()=>{
-    out()
-  },[config])
 
   return(
       <ul>

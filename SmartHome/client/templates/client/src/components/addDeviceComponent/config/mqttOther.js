@@ -1,5 +1,4 @@
-import React, {useState,useEffect} from 'react'
-import {HidingLi} from '../../hidingLi.js'
+import React, {useState} from 'react'
 
 export const OtherMqtt = ({onChange,back})=>{
 
@@ -13,30 +12,22 @@ export const OtherMqtt = ({onChange,back})=>{
     address:""
   })
 
-  const nextpage = ()=>{
+  const nextpage = (param)=>{
     let arr = []
-    if(form.address)
-      arr.push(form)
-    if(status.address)
-      arr.push(status)
+    for (var item of param) {
+      if(item.address)
+        arr.push(item)
+    }
     onChange(arr)
   }
 
-  useEffect(()=>{
-    nextpage()
-  },[form,status])
-
   const changeHandler = event => {
     setForm({ ...form, [event.target.name]: event.target.value })
+    nextpage([{ ...form, [event.target.name]: event.target.value },status])
   }
   const changeHandlerStatus = event => {
     setStatus({ ...status, [event.target.name]: event.target.value })
-  }
-
-  const errorbtn = ()=>{
-    let input = document.getElementById("command");
-    input.style.background="red"
-    input.style.boxShadow="inset 0 0 10px #000"
+    nextpage([{ ...status, [event.target.name]: event.target.value },form])
   }
 
   return(
