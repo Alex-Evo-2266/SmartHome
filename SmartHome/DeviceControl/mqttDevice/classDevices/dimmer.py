@@ -33,3 +33,11 @@ class MqttDimmer(MqttDevice):
         if(self.brightnesstoken):
             arr.append("dimmer")
         return arr
+
+    def get_value(self):
+        prop=[
+        "status",
+        "power",
+        "dimmer"
+        ]
+        return self.get_properties(prop)

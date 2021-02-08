@@ -58,3 +58,14 @@ class MqttLight(MqttDevice):
         if(self.modetoken):
             arr.append("mode")
         return arr
+
+    def get_value(self):
+        prop=[
+        "status",
+        "power",
+        "dimmer",
+        "mode",
+        "temp",
+        "color"
+        ]
+        return self.get_properties(prop)

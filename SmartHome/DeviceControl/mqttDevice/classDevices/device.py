@@ -44,6 +44,12 @@ class MqttDevice():
     def sendCommand(self, command:str):
         send(self.commandtoken,command)
 
+    def get_value(self):
+        prop=[
+        "status"
+        ]
+        return self.get_properties(prop)
+
     def controlDevice(self):
         arr = list()
         if(self.statustoken):

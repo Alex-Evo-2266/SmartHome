@@ -16,3 +16,10 @@ class MqttSensor(MqttDevice):
         "battery"
         ]
         return get_properties(self, properties)
+
+        def get_value(self):
+            prop=[
+            "status",
+            "battery"
+            ]
+            return self.get_properties(prop)

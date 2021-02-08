@@ -22,3 +22,6 @@
   font-size: 20px;
   text-align: center;
 }
+.DeviceControlLi{
+  display: flex;
+}

@@ -32,6 +32,7 @@ def model_device(ip, token):
 
 class ControlDevices():
 
+    device = None
     __control_power = None
     __control_dimmer = None
     __control_dimmer_min = None
@@ -47,10 +48,10 @@ class ControlDevices():
         self.__configs = configs
         try:
             if(item["DeviceTypeConnect"]=="miio"):
-                ret = self.config(configs = configs, type="base")
+                ret = self.config(type="base")
                 if(item["DeviceType"]=="light"):
                     self.device = Bulb(ret["address"])
-                    self.device.get_properties()
+                    conf2 = self.device.get_properties()
                     # print(self.device.model())
                     self.__control_power = True
                     self.__control_dimmer = True
@@ -69,7 +70,7 @@ class ControlDevices():
                     else:
                         self.__control_mode = 1;
                     print(self.__control_mode)
-                    if conf["background_light"]:
+                    if conf2["rgb"]:
                         self.__control_color = True;
                     else:
                         self.__control_color = False;
@@ -136,11 +137,40 @@ class ControlDevices():
                 arr.append(key)
         return arr
 
+    def get_value(self):
+        if(type(self.device)==Bulb):
+            val = self.device.get_properties()
+            values={
+            "power":val["power"],
+            "temp":val["ct"],
+            "color":val["rgb"],
+            "mode":val["active_mode"],
+            "background":{
+                "power":val["bg_power"],
+                "dimmer":val["bg_bright"],
+                "temp":val["bg_ct"],
+                "color":val["bg_rgb"],
+                "mode":val["nl_br"],
+                }
+            }
+            if(val["current_brightness"]):
+                values["dimmer"]=val["current_brightness"]
+            else:
+                values["dimmer"]=val["bright"]
+
+            return values
+        elif self.__item["DeviceTypeConnect"]=="mqtt":
+            return self.device.get_value()
+        else:
+            return None
+
+
     def config(self ,**kwargs):
-        for item in kwargs["configs"]:
+        for item in self.__configs:
             if(item["type"]==kwargs["type"]):
                 return item
         return None
+
 
 
     # def __str__(self)

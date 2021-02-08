@@ -7,6 +7,7 @@ from .logic.devices import addDevice,giveDevices,giveDevice,editDevice,deleteDev
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from .models import User, UserConfig,ServerConfig
 import json
+from .logic.deviceSetValue import setValue
 
 # Create your views here.
 
@@ -123,4 +124,11 @@ def deviceDelete(request):
         data = json.loads(request.body)
         if deleteDevice(data["DeviceId"]):
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def deviceSetValue(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        print(data)
+        setValue(data["id"],data["type"],data["status"])
     return HttpResponse(json.dumps({"message":"error"}),status=400)

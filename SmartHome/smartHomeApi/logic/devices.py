@@ -47,10 +47,12 @@ def device(item):
             arr2.append(element.receiveDict())
         return arr2
     e = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
+    # print(e.get_value())
     return {
         **item.receiveDict(),
         "DeviceConfig":confdecod(item.configdevice_set.all()),
-        "DeviceControl":e.get_control()
+        "DeviceControl":e.get_control(),
+        "DeviceValue":e.get_value()
     }
 
 

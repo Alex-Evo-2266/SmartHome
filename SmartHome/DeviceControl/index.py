@@ -10,6 +10,7 @@ def start():
     client.on_message = on_message
     bulb = Bulb("192.168.0.2")
     # c = bulb.turn_off()
+    # print(type(bulb)==Bulb)
     print(bulb)
     print(bulb.get_properties())
     print(bulb.get_capabilities()["support"])

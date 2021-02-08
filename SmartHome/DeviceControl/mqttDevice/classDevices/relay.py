@@ -23,3 +23,10 @@ class MqttRelay(MqttDevice):
         if(self.powertoken):
             arr.append("power")
         return arr
+
+    def get_value(self):
+        prop=[
+        "status",
+        "power"
+        ]
+        return self.get_properties(prop)

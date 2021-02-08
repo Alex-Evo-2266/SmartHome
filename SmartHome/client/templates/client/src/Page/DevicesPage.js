@@ -75,9 +75,11 @@ export const DevicesPage = () => {
                       DeviceName = {item.DeviceName}
                       DeviceSystemName = {item.DeviceSystemName}
                       configDevice = {item.DeviceConfig}
+                      Devicevalue={item.DeviceValue}
                       DeviceType = {item.DeviceType}
                       DeviceTypeConnect = {item.DeviceTypeConnect}
                       DeviceInformation={item.DeviceInformation}
+                      DeviceControl = {item.DeviceControl}
                       updataDevice={updataDevice}
                     />
                   )
