@@ -1,6 +1,6 @@
-from .Device import MqttDevice
+from .device import MqttDevice
 
-class Relay(MqttDevice):
+class MqttRelay(MqttDevice):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -11,9 +11,15 @@ class Relay(MqttDevice):
                 self.powerOff = item["low"]
 
     def on(self, mode=0):
-        if(mode>=0&&mode<self.modecount):
+        if(mode>=0 and mode<self.modecount):
             self.send(self.powertoken,self.powerOn)
             self.send(self.modetoken,mode)
 
     def off(self):
         self.send(self.powertoken,self.powerOff)
+
+    def controlDevice(self):
+        arr = MqttDevice.controlDevice(self)
+        if(self.powertoken):
+            arr.append("power")
+        return arr

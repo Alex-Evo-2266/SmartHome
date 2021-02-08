@@ -1,4 +1,4 @@
-from smartHomeApi.logic.devices import deviceValue
+from smartHomeApi.logic.deviceValue import devicestatus
 from DeviceControl.mqttDevice.connect import connect
 
 class MqttDevice():
@@ -28,12 +28,13 @@ class MqttDevice():
             if item["type"]=="command":
                 self.commandtoken = item["address"]
 
+
     def get_properties(self, properties):
         d = dict()
         for item in properties:
             for item2 in self.DeviceConfig:
                 if(item == item2["type"]):
-                    d = {**d,item:deviceValue(self.DeviceId, item)}
+                    d = {**d,item:devicestatus(self.DeviceId, item)}
         return d
 
     def send(self,topic:str, command: str):
@@ -42,3 +43,11 @@ class MqttDevice():
 
     def sendCommand(self, command:str):
         send(self.commandtoken,command)
+
+    def controlDevice(self):
+        arr = list()
+        if(self.statustoken):
+            arr.append("status")
+        if(self.commandtoken):
+            arr.append("command")
+        return arr

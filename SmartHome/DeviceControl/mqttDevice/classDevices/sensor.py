@@ -1,6 +1,6 @@
-from .Device import MqttDevice
+from .device import MqttDevice
 
-class Sensor(MqttDevice):
+class MqttSensor(MqttDevice):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

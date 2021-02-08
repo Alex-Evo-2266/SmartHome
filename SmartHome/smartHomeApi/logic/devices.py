@@ -1,5 +1,11 @@
 from django.conf import settings
 from ..models import Device,ConfigDevice,Room,genId
+from DeviceControl.mqttDevice.classDevices.dimmer import MqttDimmer
+from DeviceControl.mqttDevice.classDevices.device import MqttDevice
+from DeviceControl.mqttDevice.classDevices.light import MqttLight
+from DeviceControl.mqttDevice.classDevices.relay import MqttRelay
+from DeviceControl.mqttDevice.classDevices.sensor import MqttSensor
+from DeviceControl.SmartHomeDevice import ControlDevices
 # from DeviceControl.miioDevice.control import is_device,lamp
 
 import json
@@ -40,18 +46,12 @@ def device(item):
         for element in data:
             arr2.append(element.receiveDict())
         return arr2
+    e = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
     return {
         **item.receiveDict(),
-        "DeviceConfig":confdecod(item.configdevice_set.all())
+        "DeviceConfig":confdecod(item.configdevice_set.all()),
+        "DeviceControl":e.get_control()
     }
-
-def deviceValue(id, type):
-    dev = Device.objects.get(id=id)
-    value = dev.valuedevice_set.all()
-    print(value)
-    for item in value:
-        if item["type"]==type:
-            return item["type"]
 
 
 def giveDevice(id):
