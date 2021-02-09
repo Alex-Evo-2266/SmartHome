@@ -1,28 +1,51 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect,useContext} from 'react'
+import {useHttp} from '../../../hooks/http.hook'
+import {useMessage} from '../../../hooks/message.hook'
+import {AuthContext} from '../../../context/AuthContext.js'
 
-export const Dimmer = ({title,type,conf,value}) =>{
-  const [newvalue, setValue]=useState(value)
+export const Dimmer = ({updata,title,type,conf,value,idDevice}) =>{
+  const [newvalue, setValue]=useState(0)
+  const auth = useContext(AuthContext)
+  const {message} = useMessage();
+  const {loading, request, error, clearError} = useHttp();
+
+  useEffect(()=>{
+    setValue(value)
+  },[value])
+
+  const outValue = async(v)=>{
+    const data = await request('/api/devices/value/set', 'POST', {id: idDevice,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
+  }
+
+  const mouseUp = (event)=>{
+      outValue(event.target.value)
+    }
 
   const changeHandler = event =>{
     setValue(event.target.value)
+    setTimeout(function () {
+      updata()
+    }, 500);
   }
 
   return(
     <li className="DeviceControlLi">
       <div className="DeviceControlLiName">
-        <p>{title}</p>
+        <p>{title||""}</p>
       </div>
+      <div className="DeviceControlLiContent">
       <div className="DeviceControlLiValue">
-        <p>{newvalue}</p>
+        <p>{newvalue||""}</p>
       </div>
       <div className="DeviceLiControl">
       {
         (type==="dimmer")?
-        <input type="range" value={newvalue||0} min={conf.min} max={conf.max} onChange={changeHandler}/>:
+        <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler}/>:
         (type==="temp")?
-        <input type="range" value={newvalue||0} min={conf.min} max={conf.max} onChange={changeHandler}/>:
+        <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler}/>:
         null
       }
+      </div>
       </div>
     </li>
   )

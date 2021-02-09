@@ -5,39 +5,72 @@ import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
 import {NewDeviceElement} from '../components/moduls/newDeviceElement'
+import {DeviceStatusContext} from '../context/DeviceStatusContext'
 
 export const DevicesPage = () => {
   const auth = useContext(AuthContext)
   const {message} = useMessage();
-  const {loading, request, error, clearError} = useHttp();
+  const {request, error, clearError} = useHttp();
   const [devices, setDevices] = useState([]);
   const [allDevices, setAllDevices] = useState([]);
   const [search, setSearch] = useState('');
-
-  useEffect(()=>{
-    message(error,"error")
-    return ()=>{
-      clearError();
-    }
-  },[error,message, clearError])
+  const [cost, setCost] = useState(true)
+  const [interval, setInterval] = useState(2)
+  const [read, setRead] = useState(0)
 
   const updataDevice = useCallback(async()=>{
     const data = await request('/api/devices/all', 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    setDevices(data);
     setAllDevices(data);
   },[request,auth.token])
 
   useEffect(()=>{
+    console.error(error);
+    return ()=>{
+      clearError();
+    }
+  },[error, clearError])
+
+  useEffect(() => {
+    const interval2 = setTimeout(() => {
+      updataDevice()
+      setCost((prev)=>!prev)
+    }, interval*1000);
+    return () => {
+      return clearTimeout(interval2);
+    }
+  },[cost,interval,updataDevice]);
+
+  const importCarts = useCallback(async()=>{
+    try {
+      const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      setInterval(data2.server.updateFrequency)
+    } catch (e) {
+      console.error(e);
+    }
+  },[request,auth.token])
+
+  useEffect(()=>{
+    if(read<3){
+      setDevices(allDevices)
+      setRead(read+1)
+    }
+  },[allDevices])
+
+
+  useEffect(()=>{
     updataDevice()
+    importCarts()
   },[updataDevice])
 
   const searchout = ()=>{
     if(search===""){
       setDevices(allDevices)
+      updataDevice()
       return
     }
     let array = allDevices.filter(item => item.DeviceName.indexOf(search)!==-1)
     setDevices(array)
+    updataDevice()
   }
 
   const searchHandler = event => {
@@ -51,7 +84,7 @@ export const DevicesPage = () => {
   }
 
   return(
-    <>
+    <DeviceStatusContext.Provider value={{devices:allDevices, updateDevice:updataDevice}}>
       <div className = "conteiner">
         <header>
           <h1>All Devices</h1>
@@ -61,34 +94,22 @@ export const DevicesPage = () => {
         </header>
         <div className = "Devices">
           {
-            (loading)?
-            <Loader/>:
             (!devices||devices.length === 0)?
             <h2 className="empty">Not elements</h2>:
             <div className = "CardConteiner">
               {
                 devices.map((item,index)=>{
-                  return(
-                    <NewDeviceElement
-                      key = {index}
-                      DeviceId = {item.DeviceId}
-                      DeviceName = {item.DeviceName}
-                      DeviceSystemName = {item.DeviceSystemName}
-                      configDevice = {item.DeviceConfig}
-                      Devicevalue={item.DeviceValue}
-                      DeviceType = {item.DeviceType}
-                      DeviceTypeConnect = {item.DeviceTypeConnect}
-                      DeviceInformation={item.DeviceInformation}
-                      DeviceControl = {item.DeviceControl}
-                      updataDevice={updataDevice}
-                    />
-                  )
+                  if(item)
+                    return(
+                      <NewDeviceElement key = {index} id={item.DeviceId}/>
+                    )
+                  return null
                 })
               }
             </div>
           }
         </div>
       </div>
-    </>
+    </DeviceStatusContext.Provider>
   )
 }

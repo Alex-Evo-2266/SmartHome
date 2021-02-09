@@ -9,10 +9,10 @@ class MqttDimmer(MqttDevice):
                 self.powertoken = item["address"]
                 self.powerOn = item["high"]
                 self.powerOff = item["low"]
-            if item["type"]=="lavel":
+            if item["type"]=="dimmer":
                 self.brightnesstoken = item["address"]
-                self.brightnessMax = item["high"]
-                self.brightnessMin = item["low"]
+                self.brightnessMax = int(item["high"])
+                self.brightnessMin = int(item["low"])
 
     def on(self, mode=0):
         if(mode>=0 and mode<self.modecount):

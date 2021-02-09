@@ -1,20 +1,27 @@
 from smartHomeApi.logic.config import GiveServerConfig
-from .mqttDevice.connect import connect
 from yeelight import discover_bulbs
-from yeelight import Bulb
+from yeelight import Bulb,PowerMode
 from miio import Device,Discovery,Yeelight as Lamp,PhilipsBulb
+import json
+
+from .mqttDevice.connect import connect
+from smartHomeApi.logic.deviceValue import setValueAtToken,GetTopicks
 
 def start():
     client = connect()
     client.on_connect = on_connect
     client.on_message = on_message
-    bulb = Bulb("192.168.0.2")
-    # c = bulb.turn_off()
-    # print(type(bulb)==Bulb)
-    print(bulb)
-    print(bulb.get_properties())
-    print(bulb.get_capabilities()["support"])
-    print(bulb.get_model_specs())
+    try:
+        bulb = Bulb("192.168.0.2")
+        # bulb.set_power_mode(PowerMode.)
+        # print(bulb.set_brightness(100))
+        print(bulb)
+        print(bulb.get_properties())
+        print(bulb.get_capabilities()["support"])
+        print(bulb.get_model_specs())
+    except:
+        print("d")
+
     # devices = discover_bulbs()
     # print(devices)
     # d = Discovery.discover_mdns()
@@ -39,7 +46,11 @@ def start():
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    client.subscribe("lamp1-power")
+    topicks = GetTopicks()
+    for item in topicks:
+        print(item)
+        client.subscribe(item)
 
 def on_message(client, userdata, msg):
-    print(msg.topic+" "+str(msg.payload))
+    print(msg.topic+" "+str(json.loads(msg.payload)))
+    setValueAtToken(msg.topic,str(json.loads(msg.payload)))

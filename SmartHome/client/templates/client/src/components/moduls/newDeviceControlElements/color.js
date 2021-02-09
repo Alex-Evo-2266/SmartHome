@@ -1,10 +1,23 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect,useContext} from 'react'
+import {useHttp} from '../../../hooks/http.hook'
+import {useMessage} from '../../../hooks/message.hook'
+import {AuthContext} from '../../../context/AuthContext.js'
 
-export const Color = ({title,type,conf,value}) =>{
-  const [newvalue, setValue]=useState(value)
+export const Color = ({updata,title,type,conf,value}) =>{
+  const [newvalue, setValue]=useState(0)
+  const auth = useContext(AuthContext)
+  const {message} = useMessage();
+  const {loading, request, error, clearError} = useHttp();
+
+  useEffect(()=>{
+    setValue(value)
+  },[value])
 
   const changeHandler = event =>{
     setValue(event.target.value)
+    setTimeout(function () {
+      updata()
+    }, 500);
   }
 
   return(
@@ -12,6 +25,7 @@ export const Color = ({title,type,conf,value}) =>{
       <div className="DeviceControlLiName">
         <p>{title}</p>
       </div>
+      <div className="DeviceControlLiContent">
       <div className="DeviceControlLiValue">
         <p>{newvalue}</p>
       </div>
@@ -30,6 +44,7 @@ export const Color = ({title,type,conf,value}) =>{
         null
       }
 
+      </div>
       </div>
     </li>
   )

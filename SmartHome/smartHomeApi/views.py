@@ -16,7 +16,7 @@ def register(request):
         data = json.loads(request.body)
         if addUser(data):
             return HttpResponse(json.dumps({"message":"ok"}))
-    return HttpResponse(json.dumps({"message":"error"}))
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
 
 def login(request):
     if request.method=="POST" and request.body:
@@ -24,6 +24,8 @@ def login(request):
         res = Authorization(data)
         if("token" in res):
             return HttpResponse(json.dumps(res),status=200)
+        else:
+            return HttpResponse(json.dumps({"type":"error",**res}),status=400)
     return HttpResponse(status=400)
 
 def clientConfig(request):
@@ -130,5 +132,6 @@ def deviceSetValue(request):
     if request.method=="POST" and request.body:
         data = json.loads(request.body)
         print(data)
-        setValue(data["id"],data["type"],data["status"])
+        if setValue(data["id"],data["type"],data["status"]):
+            return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}),status=400)

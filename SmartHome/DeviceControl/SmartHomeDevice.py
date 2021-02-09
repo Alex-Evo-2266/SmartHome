@@ -3,8 +3,9 @@ from DeviceControl.mqttDevice.classDevices.device import MqttDevice
 from DeviceControl.mqttDevice.classDevices.light import MqttLight
 from DeviceControl.mqttDevice.classDevices.relay import MqttRelay
 from DeviceControl.mqttDevice.classDevices.sensor import MqttSensor
-from yeelight import Bulb
+from yeelight import Bulb ,PowerMode
 from miio import Device,Yeelight,DeviceError,DeviceException
+from smartHomeApi.logic.deviceValue import deviceSetStatus
 
 def is_device(ip, token):
     try:
@@ -52,7 +53,6 @@ class ControlDevices():
                 if(item["DeviceType"]=="light"):
                     self.device = Bulb(ret["address"])
                     conf2 = self.device.get_properties()
-                    # print(self.device.model())
                     self.__control_power = True
                     self.__control_dimmer = True
                     self.__control_dimmer_min = 0
@@ -69,7 +69,6 @@ class ControlDevices():
                         self.__control_mode = 2;
                     else:
                         self.__control_mode = 1;
-                    print(self.__control_mode)
                     if conf2["rgb"]:
                         self.__control_color = True;
                     else:
@@ -137,7 +136,7 @@ class ControlDevices():
                 arr.append(key)
         return arr
 
-    def get_value(self):
+    def get_value(self, save=True):
         if(type(self.device)==Bulb):
             val = self.device.get_properties()
             values={
@@ -157,7 +156,8 @@ class ControlDevices():
                 values["dimmer"]=val["current_brightness"]
             else:
                 values["dimmer"]=val["bright"]
-
+            for item2 in values:
+                deviceSetStatus(self.__item["DeviceId"],item2,values[item2])
             return values
         elif self.__item["DeviceTypeConnect"]=="mqtt":
             return self.device.get_value()
@@ -171,6 +171,44 @@ class ControlDevices():
                 return item
         return None
 
+    def set_power(self,status):
+        if(type(self.device)==Bulb):
+            if(status==1):
+                self.device.turn_on()
+            else:
+                self.device.turn_off()
+        elif self.__item["DeviceTypeConnect"]=="mqtt":
+            if(status==1):
+                self.device.on()
+            else:
+                self.device.off()
+
+    def set_mode(self, status):
+        if(type(self.device)==Bulb):
+            if(status==1):
+                self.device.set_power_mode(PowerMode.MOONLIGHT)
+            if(status==0):
+                self.device.set_power_mode(PowerMode.NORMAL)
+        elif self.__item["DeviceTypeConnect"]=="mqtt":
+            self.device.set_mode(status)
+
+    def set_dimmer(self, status):
+        try:
+            if(type(self.device)==Bulb or self.__item["DeviceTypeConnect"]=="mqtt"):
+                self.device.set_brightness(int(status))
+                return True
+            return False
+        except:
+            return False
+
+    def set_temp(self, status):
+        try:
+            if(type(self.device)==Bulb or self.__item["DeviceTypeConnect"]=="mqtt"):
+                self.device.set_color_temp(int(status))
+                return True
+            return False
+        except:
+            return False
 
 
     # def __str__(self)

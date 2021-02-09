@@ -10,6 +10,7 @@ def setValue(id, type, value):
                 arr2.append(element.receiveDict())
             return arr2
         e = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
+        value = int(value)
         if(type=="power"):
             e.set_power(value)
         if(type=="dimmer"):
@@ -21,5 +22,6 @@ def setValue(id, type, value):
         if(type=="mode"):
             e.set_mode(value)
         return True
-    except :
+    except Exception as e:
+        print(e)
         return None

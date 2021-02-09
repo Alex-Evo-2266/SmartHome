@@ -12,12 +12,12 @@ import json
 
 def addDevice(data):
     try:
-        if data.get("typeConnect")=="miio":
-            for item in data["config"]:
-                if item["type"]=="base":
-                    confirmation = is_device(item["address"],item["token"])
-                    if confirmation["type"]=="error":
-                        return False
+        # if data.get("typeConnect")=="miio":
+        #     for item in data["config"]:
+        #         if item["type"]=="base":
+                    # confirmation = is_device(item["address"],item["token"])
+                    # if confirmation["type"]=="error":
+                    #     return False
         devices = Device.objects.all()
         for item in devices:
             if item.DeviceSystemName==data.get("systemName"):
@@ -41,19 +41,22 @@ def addDevice(data):
         return False
 
 def device(item):
-    def confdecod(data):
-        arr2 = []
-        for element in data:
-            arr2.append(element.receiveDict())
-        return arr2
-    e = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
-    # print(e.get_value())
-    return {
-        **item.receiveDict(),
-        "DeviceConfig":confdecod(item.configdevice_set.all()),
-        "DeviceControl":e.get_control(),
-        "DeviceValue":e.get_value()
-    }
+    try:
+        def confdecod(data):
+            arr2 = []
+            for element in data:
+                arr2.append(element.receiveDict())
+            return arr2
+        e = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
+        return {
+            **item.receiveDict(),
+            "DeviceConfig":confdecod(item.configdevice_set.all()),
+            "DeviceControl":e.get_control(),
+            "DeviceValue":e.get_value()
+        }
+    except:
+        return None
+
 
 
 def giveDevice(id):

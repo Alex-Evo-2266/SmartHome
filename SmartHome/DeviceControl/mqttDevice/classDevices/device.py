@@ -39,6 +39,7 @@ class MqttDevice():
 
     def send(self,topic:str, command: str):
         client = connect()
+        print(command)
         client.publish(topic, command)
 
     def sendCommand(self, command:str):

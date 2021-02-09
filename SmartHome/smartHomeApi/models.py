@@ -125,7 +125,7 @@ class ValueDevice(models.Model):
         }
 
 class ValueListDevice(models.Model):
-    id = models.IntegerField("id", primary_key=True)
+    id = models.IntegerField("id", primary_key=True, max_length = 255)
     type = models.SlugField("device value list type", max_length = 200)
     value = models.SlugField("device value list value", max_length = 200)
     date = models.DateTimeField("device value element date")

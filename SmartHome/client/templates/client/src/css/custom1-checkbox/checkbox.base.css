@@ -1,0 +1,61 @@
+.custom1-checkbox{
+  /* position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(0, -50%); */
+  position: relative;
+  width: 90px;
+  height: 40px;
+  border-radius: 25px;
+  background: linear-gradient(0deg, #d8d8d8, #cccccc);
+  border-top: 0.02em solid #ececec;
+  border-bottom: 0.02em solid #ececec;
+}
+.custom1-checkbox .custom1-inner{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  background: linear-gradient(0deg, #a5a5a5, #717171);
+  border-radius: 20px;
+  box-shadow: inset 0 0 15px rgba(0,0,0,.5);
+}
+.custom1-checkbox .custom1-inner .custom1-toggle{
+  position: absolute;
+  left: -1.5px;
+  top: -2px;
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  background: linear-gradient(0deg, #ccc, #e4e4e4);
+  box-shadow: 0 4px 6px rgba(0,0,0,.2);
+  box-sizing: border-box;
+  border-top: 0.04em solid #ececec;
+  border-bottom: 0.01em solid #ececec;
+  transition: 0.5s;
+}
+.custom1-checkbox .custom1-inner.active .custom1-toggle{
+  left: 48px;
+}
+.custom1-checkbox .custom1-inner.active{
+  background: linear-gradient(0deg, #00d22d, #158a00);
+}
+.custom1-checkbox .custom1-inner .custom1-toggle::before{
+  content: 'OFF';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: linear-gradient(0deg, #e4e4e4, #ccc);
+  border-radius: 50%;
+  text-align: center;
+  font-size: 10px;
+  line-height: 28px;
+  color: #a9a9a9
+}
+.custom1-checkbox .custom1-inner.active .custom1-toggle::before{
+  content: 'ON';
+  color: #00d22d
+}

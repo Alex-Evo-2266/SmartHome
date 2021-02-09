@@ -23,9 +23,9 @@ def login(data):
             encoded_jwt = jwt.encode({"userId":u.id,"userLevel":u.UserLevel},settings.SECRET_JWT_KEY,algorithm="HS256")
             result = {"token":encoded_jwt, "userId":u.id,"userLavel":u.UserLevel}
             return result
-        return {}
-    except:
-        return {}
+        return {"message":"неверные данные"}
+    except Exception as e:
+        return {"message":e}
 
 def user(id):
     user = User.objects.get(id=id)

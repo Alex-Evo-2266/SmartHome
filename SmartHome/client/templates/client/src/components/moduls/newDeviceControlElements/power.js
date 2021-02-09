@@ -1,13 +1,17 @@
-import React, {useState,useContext} from 'react'
+import React, {useState,useContext,useEffect} from 'react'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
-export const Power = ({title,type,conf,value,idDevice}) =>{
+export const Power = ({updata,title,type,conf,value,idDevice}) =>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
-  const [newvalue, setValue]=useState(value)
+  const [newvalue, setValue]=useState(0)
+
+  useEffect(()=>{
+    setValue(value)
+  },[value])
 
   const outValue = async(v)=>{
     const data = await request('/api/devices/value/set', 'POST', {id: idDevice,type:"power",status:v},{Authorization: `Bearer ${auth.token}`})
@@ -22,6 +26,9 @@ export const Power = ({title,type,conf,value,idDevice}) =>{
       outValue(0)
       return 0
     })
+    setTimeout(function () {
+      updata()
+    }, 500);
   }
 
   return(
@@ -29,11 +36,14 @@ export const Power = ({title,type,conf,value,idDevice}) =>{
       <div className="DeviceControlLiName">
         <p>{title}</p>
       </div>
-      <div className="DeviceControlLiValue">
-        <p>{(newvalue===1)?"on":"off"}</p>
-      </div>
-      <div className="DeviceLiControl">
-        <input type="button" value={(newvalue===1)?"off":"on"}/>
+      <div className="DeviceControlLiContent">
+        <div className="DeviceLiControl">
+          <div className="custom1-checkbox">
+            <div className={`custom1-inner ${(newvalue===1)?"active":""}`} onClick={clickHandler} >
+              <div className="custom1-toggle"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </li>
   )
