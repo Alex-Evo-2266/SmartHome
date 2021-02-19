@@ -21,7 +21,7 @@ import './css/style-alert.css'
 import './css/style-components.css'
 
 function App() {
-  const {token, login, logout, userId, userLevel,ready,socket} = useAuth();
+  const {token, login, logout, userId, userLevel,ready} = useAuth();
   const {updataBackground} = useBackground(token);
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated,userLevel);
@@ -40,9 +40,9 @@ function App() {
 
   return (
     <AuthContext.Provider value={{
-      token, login, logout, userId, userLevel, isAuthenticated,socket
+      token, login, logout, userId, userLevel, isAuthenticated
     }}>
-    <SocketState socket={socket}>
+    <SocketState>
     <AlertState>
     <MenuState>
     <FormState>

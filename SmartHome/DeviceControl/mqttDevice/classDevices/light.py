@@ -1,10 +1,10 @@
 # from DeviceControl.miioDevice.definition import is_device, type_device
 from .device import MqttDevice
 class MqttLight(MqttDevice):
-    modetoken=None
-    modecount=None
 
     def __init__(self, *args, **kwargs):
+        self.modetoken=None
+        self.modecount=None
         super().__init__(*args, **kwargs)
         for item in self.DeviceConfig:
             if item["type"]=="power":
