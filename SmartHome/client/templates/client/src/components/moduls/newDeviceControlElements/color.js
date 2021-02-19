@@ -1,13 +1,7 @@
-import React, {useState,useEffect,useContext} from 'react'
-import {useHttp} from '../../../hooks/http.hook'
-import {useMessage} from '../../../hooks/message.hook'
-import {AuthContext} from '../../../context/AuthContext.js'
+import React, {useState,useEffect} from 'react'
 
 export const Color = ({updata,title,type,conf,value}) =>{
   const [newvalue, setValue]=useState(0)
-  const auth = useContext(AuthContext)
-  const {message} = useMessage();
-  const {loading, request, error, clearError} = useHttp();
 
   useEffect(()=>{
     setValue(value)

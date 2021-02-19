@@ -15,7 +15,7 @@ export const NewDeviceElement = ({id}) =>{
   useEffect(()=>{
     if(devices)
       setDevice(devices.filter(item => (item&&item.DeviceId===id))[0])
-  },[devices])
+  },[devices,id])
 
   if(!device||!device.DeviceControl){
     return null

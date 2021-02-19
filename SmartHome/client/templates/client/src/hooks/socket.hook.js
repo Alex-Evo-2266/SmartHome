@@ -42,7 +42,6 @@ export const SocketState = ({children}) =>{
     updateDevice()
     importCarts()
     return () => {
-      console.log("break");
       return setSocket(null)
     }
   },[])
@@ -53,25 +52,23 @@ export const SocketState = ({children}) =>{
       setCost((prev)=>!prev)
     }, interval*1000);
     return () => {
-      console.log("break");
       return clearTimeout(interval2);
     }
   },[cost,interval]);
 
   if(socket){
     socket.onopen = function() {
-      console.log("connect");
+      console.log("connect WebSocket");
       setConnect(true)
       socket.onmessage = function(e) {
           const data = JSON.parse(e.data);
-          console.log(data);
           setCost((prev)=>!prev)
           if(data.message instanceof Array)
             setDevices(data.message)
       };
     }
     socket.onclose = function() {
-      console.log("desconnect");
+      console.log("desconnect WebSocket");
       setConnect(false)
       setSocket(
         new WebSocket(

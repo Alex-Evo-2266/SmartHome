@@ -7,14 +7,21 @@ export const Mode = ({updata,title,type,conf,value,idDevice}) =>{
   const [newvalue, setValue]=useState(0)
   const auth = useContext(AuthContext)
   const {message} = useMessage();
-  const {loading, request, error, clearError} = useHttp();
+  const {request, error, clearError} = useHttp();
 
   useEffect(()=>{
     setValue(value)
   },[value])
 
+  useEffect(()=>{
+    message(error,"error")
+    return ()=>{
+      clearError();
+    }
+  },[error,message, clearError])
+
   const outValue = async(v)=>{
-    const data = await request('/api/devices/value/set', 'POST', {id: idDevice,type:"mode",status:v},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/devices/value/set', 'POST', {id: idDevice,type:"mode",status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   const clickHandler = event =>{

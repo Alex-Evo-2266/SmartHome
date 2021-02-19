@@ -1,31 +1,22 @@
-import React, {useContext,useEffect,useState,useCallback} from 'react'
+import React, {useContext,useEffect,useState} from 'react'
 import {NavLink} from 'react-router-dom'
-import {Loader} from '../components/Loader'
-import {useHttp} from '../hooks/http.hook'
-import {useMessage} from '../hooks/message.hook'
-import {AuthContext} from '../context/AuthContext.js'
+// import {Loader} from '../components/Loader'
 import {NewDeviceElement} from '../components/moduls/newDeviceElement'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
 
 export const DevicesPage = () => {
-  const auth = useContext(AuthContext)
   const allDevices = useContext(DeviceStatusContext)
 
   const [devices, setDevices] = useState([]);
   const [search, setSearch] = useState('');
   const [read, setRead] = useState(0)
 
-  // const updataDevice = useCallback(async()=>{
-    // const data = await request('/api/devices/all', 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    // setAllDevices(data);
-  // },[request,auth.token])
-
   useEffect(()=>{
     if(read<3){
       setDevices(allDevices.devices)
       setRead(read+1)
     }
-  },[allDevices.devices])
+  },[allDevices.devices,read])
 
   const searchout = ()=>{
     if(search===""){

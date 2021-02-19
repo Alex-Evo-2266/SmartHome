@@ -40,13 +40,16 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         if self.room_group_name=="chat_devices" and message=="all":
             conf = await sync_to_async(GiveServerConfig)()
             sec = conf["updateFrequency"]
+            nowtime = datetime.datetime.now().second
             udateTime = DeviceConsumer.now + sec
-            if udateTime > 60:
-                udateTime = 0
-            if udateTime > datetime.datetime.now().second:
-                return
             DeviceConsumer.now = datetime.datetime.now().second
-            # print(sync_to_async(giveDevices)())
+            if udateTime >= 60:
+                udateTime = udateTime - 60
+            if udateTime > 40 and nowtime < 20:
+                udateTime = nowtime + sec
+            print(DeviceConsumer.now,udateTime,nowtime)
+            if udateTime > nowtime:
+                return
             return await self.channel_layer.group_send(
             self.room_group_name,
                 {
