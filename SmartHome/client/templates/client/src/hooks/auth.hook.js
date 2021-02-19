@@ -7,6 +7,8 @@ export const useAuth = () => {
   const [userId, setUserId] = useState(null);
   const [userLevel, setUserLevel] = useState(null);
   const [ready, setReady] = useState(false)
+  const [socket, setSocket] = useState(null)
+
 
   const login = useCallback((jwtToken, id,level)=>{
     setToken(jwtToken);
@@ -26,6 +28,16 @@ export const useAuth = () => {
   },[])
 
   useEffect(()=>{
+    setSocket(
+      new WebSocket(
+          'ws://'
+          // + window.location.host
+          + '127.0.0.1:5000'
+          + '/ws/smartHome/'
+          + 'devices'
+          + '/'
+      )
+    )
     const data = JSON.parse(localStorage.getItem(storegeName))
 
     if(data&&data.token){
@@ -34,5 +46,5 @@ export const useAuth = () => {
     setReady(true);
   },[login])
 
-  return {login, logout, token, userId, userLevel,ready}
+  return {login, logout, token, userId, userLevel,ready,socket}
 }

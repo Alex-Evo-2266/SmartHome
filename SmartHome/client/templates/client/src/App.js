@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React,{useEffect,useState,useCallback} from 'react'
 import {BrowserRouter} from 'react-router-dom'
 import {Alert} from './components/alert/alert.js'
 import {Menu} from './components/verticalMenu/menu.js'
@@ -13,20 +13,23 @@ import {useAuth} from './hooks/auth.hook.js'
 import {useBackground} from './hooks/background.hook.js'
 import {AuthContext} from './context/AuthContext'
 import {TerminalCart} from './components/terminal/terminalCart'
+
+import {SocketState} from './hooks/socket.hook.js'
 import './css/style-auth.css'
 import './icon/css/all.min.css'
 import './css/style-alert.css'
 import './css/style-components.css'
 
 function App() {
-  const {token, login, logout, userId, userLevel,ready} = useAuth();
+  const {token, login, logout, userId, userLevel,ready,socket} = useAuth();
   const {updataBackground} = useBackground(token);
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated,userLevel);
 
   useEffect(()=>{
-    if(ready)
-    updataBackground(token)
+    if(ready){
+      updataBackground(token)
+    }
   },[ready,token,updataBackground])
 
   if (!ready) {
@@ -37,8 +40,9 @@ function App() {
 
   return (
     <AuthContext.Provider value={{
-      token, login, logout, userId, userLevel, isAuthenticated
+      token, login, logout, userId, userLevel, isAuthenticated,socket
     }}>
+    <SocketState socket={socket}>
     <AlertState>
     <MenuState>
     <FormState>
@@ -60,6 +64,7 @@ function App() {
     </FormState>
     </MenuState>
     </AlertState>
+    </SocketState>
     </AuthContext.Provider>
   );
 }

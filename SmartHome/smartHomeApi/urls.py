@@ -12,7 +12,7 @@ urlpatterns = [
     path('user',views.giveuser),
     path('user/edit',views.edituser),
     path('devices/add',views.deviceAdd),
-    path('devices/all',views.devicesGive),
+    # path('devices/all',views.devicesGive),
     path('devices/get/<int:id>',views.deviceGive),
     path('devices/edit',views.deviceEdit),
     path('devices/delete',views.deviceDelete),
