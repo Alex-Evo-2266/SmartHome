@@ -1,4 +1,4 @@
-import React, {useContext,useEffect,useState} from 'react'
+import React, {useContext,useEffect,useState,useRef} from 'react'
 import {NavLink} from 'react-router-dom'
 // import {Loader} from '../components/Loader'
 import {NewDeviceElement} from '../components/moduls/newDeviceElement'
@@ -9,14 +9,15 @@ export const DevicesPage = () => {
 
   const [devices, setDevices] = useState([]);
   const [search, setSearch] = useState('');
-  const [read, setRead] = useState(0)
+  const read = useRef(0)
 
   useEffect(()=>{
-    if(read<3){
+    if(read.current<3){
       setDevices(allDevices.devices)
-      setRead(read+1)
+      read.current++
     }
-  },[allDevices.devices,read])
+    console.log(allDevices.devices);
+  },[allDevices.devices])
 
   const searchout = ()=>{
     if(search===""){

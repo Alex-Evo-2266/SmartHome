@@ -49,7 +49,9 @@ class DeviceConsumer(AsyncWebsocketConsumer):
                 udateTime = nowtime + sec
             print(DeviceConsumer.now,udateTime,nowtime)
             if udateTime > nowtime:
+                print("error")
                 return
+            print("ok")
             return await self.channel_layer.group_send(
             self.room_group_name,
                 {
