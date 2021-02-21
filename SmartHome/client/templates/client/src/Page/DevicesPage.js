@@ -24,7 +24,7 @@ export const DevicesPage = () => {
       setDevices(allDevices.devices)
       return
     }
-    let array = allDevices.devices.filter(item => item.DeviceName.indexOf(search)!==-1)
+    let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(search)!==-1)
     setDevices(array)
   }
 

@@ -8,6 +8,7 @@ import {SwitchMqttEdit} from './editDevicesPage/SwitchMqtt'
 import {SensorMqttEdit} from './editDevicesPage/SensorMqtt'
 import {BinarySensorMqttEdit} from './editDevicesPage/BinarySensorMqtt'
 import {IRMqttEdit} from './editDevicesPage/IRMqtt.js'
+import {DeviceMiioEdit} from './editDevicesPage/DeviceMiio.js'
 import {DimmerMqttEdit} from './editDevicesPage/DimmerMqtt.js'
 import {SistemVariableEdit} from './editDevicesPage/SistemVariable.js'
 
@@ -90,6 +91,15 @@ if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="dimmer"){
     <div className = "form">
       <div className="editDevicesForm moreInput">
         <DimmerMqttEdit deviceData = {device} hide={props.hide}/>
+      </div>
+    </div>
+  )
+}
+if(device.DeviceTypeConnect==="miio"){
+  return(
+    <div className = "form">
+      <div className="editDevicesForm moreInput">
+        <DeviceMiioEdit deviceData = {device} hide={props.hide}/>
       </div>
     </div>
   )

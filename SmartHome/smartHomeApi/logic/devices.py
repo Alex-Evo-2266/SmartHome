@@ -111,6 +111,8 @@ def editDevice(data):
                 conf.high=item["high"]
             if "icon" in item:
                 conf.icon=item["icon"]
+            if "token" in item:
+                conf.token=item["token"]
             conf.save()
         return True
     except:
