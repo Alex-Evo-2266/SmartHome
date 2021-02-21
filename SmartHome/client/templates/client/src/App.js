@@ -13,6 +13,8 @@ import {useAuth} from './hooks/auth.hook.js'
 import {useBackground} from './hooks/background.hook.js'
 import {AuthContext} from './context/AuthContext'
 import {TerminalCart} from './components/terminal/terminalCart'
+
+import {SocketState} from './hooks/socket.hook.js'
 import './css/style-auth.css'
 import './icon/css/all.min.css'
 import './css/style-alert.css'
@@ -25,8 +27,9 @@ function App() {
   const routes = useRoutes(isAuthenticated,userLevel);
 
   useEffect(()=>{
-    if(ready)
-    updataBackground(token)
+    if(ready){
+      updataBackground(token)
+    }
   },[ready,token,updataBackground])
 
   if (!ready) {
@@ -39,6 +42,7 @@ function App() {
     <AuthContext.Provider value={{
       token, login, logout, userId, userLevel, isAuthenticated
     }}>
+    <SocketState>
     <AlertState>
     <MenuState>
     <FormState>
@@ -60,6 +64,7 @@ function App() {
     </FormState>
     </MenuState>
     </AlertState>
+    </SocketState>
     </AuthContext.Provider>
   );
 }

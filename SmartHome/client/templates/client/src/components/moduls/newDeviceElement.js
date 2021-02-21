@@ -15,7 +15,7 @@ export const NewDeviceElement = ({id}) =>{
   useEffect(()=>{
     if(devices)
       setDevice(devices.filter(item => (item&&item.DeviceId===id))[0])
-  },[devices])
+  },[devices,id])
 
   if(!device||!device.DeviceControl){
     return null
@@ -33,23 +33,23 @@ export const NewDeviceElement = ({id}) =>{
         <ul>
         {
           (device.DeviceControl.power)?
-          <Power updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue.power==="on"||device.DeviceValue.power==="1")?1:0} type="power"/>:null
+          <Power updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue&&(device.DeviceValue.power==="on"||device.DeviceValue.power==="1"))?1:0} type="power"/>:null
         }
         {
           (device.DeviceControl.dimmer)?
-          <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={Number(device.DeviceValue.dimmer)} type="dimmer" conf={device.DeviceControl.dimmer}/>:null
+          <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.dimmer):0} type="dimmer" conf={device.DeviceControl.dimmer}/>:null
         }
         {
           (device.DeviceControl.temp)?
-          <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={Number(device.DeviceValue.temp)} type="temp" conf={device.DeviceControl.temp}/>:null
+          <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.temp):0} type="temp" conf={device.DeviceControl.temp}/>:null
         }
         {
           (device.DeviceControl.color)?
-          <Color updata = {updateDevice} idDevice={device.DeviceId} value={Number(device.DeviceValue.color)} type="color"/>:null
+          <Color updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.color):0} type="color"/>:null
         }
         {
           (device.DeviceControl.mode)?
-          <Mode updata = {updateDevice} idDevice={device.DeviceId} value={Number(device.DeviceValue.mode)} type="mode" conf={device.DeviceControl.mode}/>:null
+          <Mode updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.mode):0} type="mode" conf={device.DeviceControl.mode}/>:null
         }
         </ul>
       </div>

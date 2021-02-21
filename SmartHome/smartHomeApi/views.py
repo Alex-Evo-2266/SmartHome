@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from .logic.user import addUser, login as Authorization, userConfEditStyle,user,editUser
 from .logic.auth import auth
-from .logic.devices import addDevice,giveDevices,giveDevice,editDevice,deleteDevice
+from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from .models import User, UserConfig,ServerConfig
 import json
@@ -34,8 +34,6 @@ def clientConfig(request):
         user = User.objects.get(id=data.get("userId"))
         print("server")
         server=GiveServerConfig()
-        print("server")
-        print(server)
         result={"server":server,"user":user.userconfig.give()}
         return HttpResponse(json.dumps(result),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
@@ -100,12 +98,12 @@ def deviceAdd(request):
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
-def devicesGive(request):
-    if request.method=="GET":
-        ret = giveDevices()
-        if(ret):
-            return HttpResponse(json.dumps(ret),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+# def devicesGive(request):
+#     if request.method=="GET":
+#         ret = giveDevices()
+#         if(ret):
+#             return HttpResponse(json.dumps(ret),status=201)
+#     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
 def deviceGive(request,id):
     if request.method=="GET":

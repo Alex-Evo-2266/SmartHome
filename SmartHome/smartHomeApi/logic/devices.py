@@ -8,7 +8,12 @@ from DeviceControl.mqttDevice.classDevices.sensor import MqttSensor
 from DeviceControl.SmartHomeDevice import ControlDevices
 # from DeviceControl.miioDevice.control import is_device,lamp
 
+from ..classes.devicesArrey import DevicesArrey
+
 import json
+
+
+devicesArrey = DevicesArrey()
 
 def addDevice(data):
     try:
@@ -47,14 +52,22 @@ def device(item):
             for element in data:
                 arr2.append(element.receiveDict())
             return arr2
-        e = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
+        e = devicesArrey.get(item.id)
+        if(not e):
+            dev = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
+            print("3",dev)
+            if dev.get_device():
+                devicesArrey.addDevice(item.id,dev)
+                e = devicesArrey.get(item.id)
+        el = e["device"]
         return {
             **item.receiveDict(),
             "DeviceConfig":confdecod(item.configdevice_set.all()),
-            "DeviceControl":e.get_control(),
-            "DeviceValue":e.get_value()
+            "DeviceControl":el.get_control(),
+            "DeviceValue":el.get_value()
         }
-    except:
+    except Exception as e:
+        print("error",e)
         return None
 
 
@@ -98,6 +111,8 @@ def editDevice(data):
                 conf.high=item["high"]
             if "icon" in item:
                 conf.icon=item["icon"]
+            if "token" in item:
+                conf.token=item["token"]
             conf.save()
         return True
     except:

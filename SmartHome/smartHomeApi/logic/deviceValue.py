@@ -20,7 +20,7 @@ def deviceSetStatus(id, type,value):
         dev = Device.objects.get(id=id)
         values = ValueDevice.objects.all()
         for item in values:
-            if item.device==dev and item.type==type:
+            if item.device_id==id and item.type==type:
                 item.value = value
                 item.save()
                 return value
@@ -42,5 +42,4 @@ def GetTopicks():
     for item in configs:
         if a(item.address) and item.type!="base":
             arr.append(item.address)
-    print(arr)
     return arr

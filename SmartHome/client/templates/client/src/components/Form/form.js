@@ -1,6 +1,5 @@
 import React, {useContext} from 'react'
 import {FormContext} from './formContext'
-import {AddDevicesForm} from './forms/addDevicesForm'
 import {EditDevicesForm} from './forms/editDevicesForm'
 import {BackForm} from '../moduls/backForm'
 
@@ -18,13 +17,6 @@ export const Form = ()=>{
     }
   }
 
-  if(form.type === "AddDevices"){
-    return (
-      <BackForm onClick = {hide}>
-        <AddDevicesForm hide = {hideAndApdata}/>
-      </BackForm>
-    )
-  }
   if(form.type === "EditDevices"){
     return (
       <BackForm onClick = {hide}>
