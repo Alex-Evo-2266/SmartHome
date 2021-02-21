@@ -48,13 +48,15 @@ def device(item):
                 arr2.append(element.receiveDict())
             return arr2
         e = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
+        print("p1",e)
         return {
             **item.receiveDict(),
             "DeviceConfig":confdecod(item.configdevice_set.all()),
             "DeviceControl":e.get_control(),
             "DeviceValue":e.get_value()
         }
-    except:
+    except Exception as e:
+        print("error",e)
         return None
 
 

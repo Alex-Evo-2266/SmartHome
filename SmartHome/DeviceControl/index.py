@@ -11,19 +11,23 @@ def start():
     client = connect()
     client.on_connect = on_connect
     client.on_message = on_message
-    try:
-        bulb = Bulb("192.168.0.3")
-        # bulb.set_power_mode(PowerMode.)
-        # print(bulb.set_brightness(100))
-        print(bulb)
-        print(bulb.get_properties())
-        print(bulb.get_capabilities()["support"])
-        print(bulb.get_model_specs())
-    except:
-        print("d")
+    # devices = discover_bulbs()
+    # print(devices)
+    def f():
+        try:
+            bulb = Bulb("192.168.0.2")
+            # bulb.set_power_mode(PowerMode.)
+            # print(bulb.set_brightness(100))
+            print(bulb.get_properties())
+            print(bulb)
 
-    devices = discover_bulbs()
-    print(devices)
+            # print(bulb.get_capabilities()["support"])
+            print(bulb.get_model_specs())
+        except:
+            print("d")
+            f()
+    f()
+
     # d = Discovery.discover_mdns()
     # print(str(d))
     # y = Lamp("192.168.0.2","c90bea48a5a5ff938393a9b5b1ad71d4")
@@ -32,7 +36,7 @@ def start():
     # print(ydevice_info)
     # y.set_developer_mode(True)
     # print("L")
-    # print(y,ydevice_info)
+    # print(y.status())
     # print(y.get_properties(["active_mode"]))
     # print(ydevice_info)
     # print(ydevice_info.model)

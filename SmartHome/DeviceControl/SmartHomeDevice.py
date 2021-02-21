@@ -33,31 +33,36 @@ def model_device(ip, token):
 
 class ControlDevices():
 
-    device = None
-    __control_power = None
-    __control_dimmer = None
-    __control_dimmer_min = None
-    __control_dimmer_max = None
-    __control_temp = None
-    __control_temp_min = None
-    __control_temp_max = None
-    __control_mode = None
-    __control_color = None
+
 
     def __init__(self, item,configs):
+        self.device = None
+        self.__control_power = None
+        self.__control_dimmer = None
+        self.__control_dimmer_min = None
+        self.__control_dimmer_max = None
+        self.__control_temp = None
+        self.__control_temp_min = None
+        self.__control_temp_max = None
+        self.__control_mode = None
+        self.__control_color = None
         self.__item = item
         self.__configs = configs
         try:
             if(item["DeviceTypeConnect"]=="miio"):
                 ret = self.config(type="base")
                 if(item["DeviceType"]=="light"):
+                    print("b")
                     self.device = Bulb(ret["address"])
+                    print(self.device)
                     conf2 = self.device.get_properties()
+                    print("1")
                     self.__control_power = True
                     self.__control_dimmer = True
                     self.__control_dimmer_min = 0
                     self.__control_dimmer_max = 100
                     conf = self.device.get_model_specs()
+                    print("2")
                     if conf["color_temp"]:
                         self.__control_temp = True
                         temp = conf["color_temp"]
@@ -103,6 +108,9 @@ class ControlDevices():
                         self.__control_color = True;
         except:
             self.device = None
+
+    def __str__(self):
+        return str(self.device)
 
     def get_device(self):
         # забрать само устройство

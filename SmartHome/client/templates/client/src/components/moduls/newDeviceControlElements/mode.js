@@ -38,6 +38,25 @@ export const Mode = ({updata,title,type,conf,value,idDevice}) =>{
     }, 500);
   }
 
+  if(conf===2){
+    return(
+      <li className="DeviceControlLi">
+        <div className="DeviceControlLiName">
+          <p>{title}</p>
+        </div>
+        <div className="DeviceControlLiContent">
+          <div className="DeviceLiControl">
+            <div className="custom1-checkbox">
+              <div className={`custom1-inner ${(newvalue===1)?"active":""}`} onClick={clickHandler} >
+                <div className="custom1-toggle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    )
+  }
+
   return(
     <li className="DeviceControlLi">
       <div className="DeviceControlLiName">
