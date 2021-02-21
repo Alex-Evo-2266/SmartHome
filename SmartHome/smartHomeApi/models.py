@@ -70,10 +70,11 @@ class Device(models.Model):
     DeviceInformation = models.TextField("device info", default="")
     DeviceType = models.SlugField("device type", max_length = 200, default="")
     DeviceTypeConnect = models.SlugField("device connect type", max_length = 200, default="")
+    DeviceControl= models.TextField("device control", max_length = 200, default="")
     room = models.ForeignKey(Room, on_delete = models.CASCADE, null=True)
 
     def __str__(self):
-        return self.DeviceName
+        return self.DeviceName + " " + self.DeviceControl
 
     def receiveDict(self):
         return {

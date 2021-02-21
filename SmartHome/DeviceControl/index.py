@@ -16,6 +16,7 @@ def start():
     def f():
         try:
             bulb = Bulb("192.168.0.2")
+            print("1")
             # bulb.set_power_mode(PowerMode.)
             # print(bulb.set_brightness(100))
             print(bulb.get_properties())
@@ -30,11 +31,12 @@ def start():
 
     # d = Discovery.discover_mdns()
     # print(str(d))
-    # y = Lamp("192.168.0.2","c90bea48a5a5ff938393a9b5b1ad71d4")
+    # y = Lamp("192.168.0.2","9cd3c27490faec9bf3f32eb2f39aa617")
     # y = Lamp("192.168.0.3","822dc07d3660422aef22c6cb11af3a25")
     # ydevice_info = y.info()
     # print(ydevice_info)
     # y.set_developer_mode(True)
+
     # print("L")
     # print(y.status())
     # print(y.get_properties(["active_mode"]))
