@@ -3,6 +3,7 @@ from DeviceControl.mqttDevice.classDevices.device import MqttDevice
 from DeviceControl.mqttDevice.classDevices.light import MqttLight
 from DeviceControl.mqttDevice.classDevices.relay import MqttRelay
 from DeviceControl.mqttDevice.classDevices.sensor import MqttSensor
+from DeviceControl.system.variable import Variable
 from yeelight import Bulb ,PowerMode
 from miio import Device,Yeelight,DeviceError,DeviceException
 from smartHomeApi.logic.deviceValue import deviceSetStatus
@@ -106,6 +107,9 @@ class ControlDevices():
                         self.__control_mode = int(item2["high"])
                     if item2["type"]=="color":
                         self.__control_color = True;
+            elif(item["DeviceTypeConnect"]=="system"):
+                if(item["DeviceType"]=="variable"):
+                    self.device = Variable(**item)
         except:
             self.device = None
 
@@ -120,6 +124,8 @@ class ControlDevices():
         control = {
         "status": True
         }
+        if self.__item["DeviceType"]=="variable":
+            control["status"] = False
         control["power"] = self.__control_power
         if self.__control_dimmer :
             control["dimmer"]={"min": self.__control_dimmer_min, "max": self.__control_dimmer_max}
@@ -169,6 +175,8 @@ class ControlDevices():
             return values
         elif self.__item["DeviceTypeConnect"]=="mqtt":
             return self.device.get_value()
+        elif self.__item["DeviceTypeConnect"]=="system" and self.__item["DeviceType"]=="variable":
+            return self.device.get_value()
         else:
             return None
 
@@ -178,6 +186,10 @@ class ControlDevices():
             if(item["type"]==kwargs["type"]):
                 return item
         return None
+
+    def set_value(self,status)->None:
+        if(type(self.device)==Variable):
+            self.device.set_value(status)
 
     def set_power(self,status):
         if(type(self.device)==Bulb):

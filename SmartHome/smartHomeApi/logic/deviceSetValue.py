@@ -5,18 +5,24 @@ from ..classes.devicesArrey import DevicesArrey
 devicesArrey = DevicesArrey()
 
 def setValue(id, type, value):
+    print(id, type, value)
     try:
         item = Device.objects.get(id=id)
-        device = devicesArrey.get(id)["device"]
+        deviceDect = devicesArrey.get(id)
+        print(deviceDect)
+        device = deviceDect["device"]
         def confdecod(data):
             arr2 = []
             for element in data:
                 arr2.append(element.receiveDict())
             return arr2
         e = device
-        print(e)
+        print(device)
         value = int(value)
+        if(type=="value"):
+            e.set_value(value)
         if(type=="power"):
+            print("10")
             e.set_power(value)
         if(type=="dimmer"):
             e.set_dimmer(value)

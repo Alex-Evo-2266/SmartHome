@@ -17,7 +17,7 @@ export const Color = ({updata,title,type,conf,value}) =>{
   return(
     <li className="DeviceControlLi">
       <div className="DeviceControlLiName">
-        <p>{title}</p>
+        <p>{title||"color"}</p>
       </div>
       <div className="DeviceControlLiContent">
       <div className="DeviceControlLiValue">

@@ -5,6 +5,9 @@ from .logic.user import addUser, login as Authorization, userConfEditStyle,user,
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
+from django.views.decorators.csrf import csrf_exempt
+from .logic.Cart import setPage,getPage
+
 from .models import User, UserConfig,ServerConfig
 import json
 from .logic.deviceSetValue import setValue
@@ -18,9 +21,12 @@ def register(request):
             return HttpResponse(json.dumps({"message":"ok"}))
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
+@csrf_exempt 
 def login(request):
     if request.method=="POST" and request.body:
+
         data = json.loads(request.body)
+        print(data)
         res = Authorization(data)
         if("token" in res):
             return HttpResponse(json.dumps(res),status=200)
@@ -131,5 +137,18 @@ def deviceSetValue(request):
         data = json.loads(request.body)
         print(data)
         if setValue(data["id"],data["type"],data["status"]):
+            return HttpResponse(json.dumps({"message":"ok"}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def getHomeCart(request,id):
+    if request.method=="GET":
+        page = getPage(id)
+        return HttpResponse(json.dumps({"message":"ok","page":page}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def setHomeCart(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if(setPage(data)):
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}),status=400)

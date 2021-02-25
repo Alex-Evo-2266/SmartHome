@@ -11,9 +11,7 @@ class MqttRelay(MqttDevice):
                 self.powerOff = item["low"]
 
     def on(self, mode=0):
-        if(mode>=0 and mode<self.modecount):
-            self.send(self.powertoken,self.powerOn)
-            self.send(self.modetoken,mode)
+        self.send(self.powertoken,self.powerOn)
 
     def off(self):
         self.send(self.powertoken,self.powerOff)

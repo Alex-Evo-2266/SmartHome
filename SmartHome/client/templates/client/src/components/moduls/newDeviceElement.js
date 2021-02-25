@@ -17,7 +17,7 @@ export const NewDeviceElement = ({id}) =>{
       setDevice(devices.filter(item => (item&&item.DeviceId===id))[0])
   },[devices,id])
 
-  if(!device||!device.DeviceControl){
+  if(!device){
     return null
   }
 
@@ -32,24 +32,44 @@ export const NewDeviceElement = ({id}) =>{
       <div className = "NewCardBody">
         <ul>
         {
-          (device.DeviceControl.power)?
-          <Power updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue&&(device.DeviceValue.power==="on"||device.DeviceValue.power==="1"))?1:0} type="power"/>:null
+          (device.DeviceTypeConnect==="system"&&device.DeviceType==="variable"&&device.DeviceValue&&device.DeviceValue.value)?
+          <li className="DeviceControlLi">
+            <div className="DeviceControlLiName">
+              <p>Value</p>
+            </div>
+            <div className="DeviceControlLiContent">
+              <div className="DeviceControlLiValue">
+                <p>{device.DeviceValue.value}</p>
+              </div>
+            </div>
+          </li>
+          :null
         }
         {
-          (device.DeviceControl.dimmer)?
-          <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.dimmer):0} type="dimmer" conf={device.DeviceControl.dimmer}/>:null
-        }
-        {
-          (device.DeviceControl.temp)?
-          <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.temp):0} type="temp" conf={device.DeviceControl.temp}/>:null
-        }
-        {
-          (device.DeviceControl.color)?
-          <Color updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.color):0} type="color"/>:null
-        }
-        {
-          (device.DeviceControl.mode)?
-          <Mode updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.mode):0} type="mode" conf={device.DeviceControl.mode}/>:null
+          (device.status==="offline")?
+          <li className="DeviceControlLi"><h4 className="offline">offline</h4></li>
+          :<>
+          {
+            (device.DeviceControl&&device.DeviceControl.power)?
+            <Power updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue&&(device.DeviceValue.power==="on"||device.DeviceValue.power==="1"))?1:0} type="power"/>:null
+          }
+          {
+            (device.DeviceControl&&device.DeviceControl.dimmer)?
+            <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.dimmer):0} type="dimmer" conf={device.DeviceControl.dimmer}/>:null
+          }
+          {
+            (device.DeviceControl&&device.DeviceControl.temp)?
+            <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.temp):0} type="temp" conf={device.DeviceControl.temp}/>:null
+          }
+          {
+            (device.DeviceControl&&device.DeviceControl.color)?
+            <Color updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.color):0} type="color"/>:null
+          }
+          {
+            (device.DeviceControl&&device.DeviceControl.mode)?
+            <Mode updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.mode):0} type="mode" conf={device.DeviceControl.mode}/>:null
+          }
+          </>
         }
         </ul>
       </div>

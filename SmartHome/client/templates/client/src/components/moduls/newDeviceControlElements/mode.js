@@ -37,12 +37,11 @@ export const Mode = ({updata,title,type,conf,value,idDevice}) =>{
       updata()
     }, 500);
   }
-
   if(conf===2){
     return(
       <li className="DeviceControlLi">
         <div className="DeviceControlLiName">
-          <p>{title}</p>
+          <p>{title||"mode"}</p>
         </div>
         <div className="DeviceControlLiContent">
           <div className="DeviceLiControl">
@@ -60,7 +59,7 @@ export const Mode = ({updata,title,type,conf,value,idDevice}) =>{
   return(
     <li className="DeviceControlLi">
       <div className="DeviceControlLiName">
-        <p>{title}</p>
+        <p>{title||"mode"}</p>
       </div>
       <div className="DeviceControlLiContent">
       <div className="DeviceControlLiValue">

@@ -109,6 +109,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

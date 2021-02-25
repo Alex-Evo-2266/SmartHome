@@ -5,12 +5,14 @@ from .logic.config import GiveServerConfig
 from asgiref.sync import sync_to_async
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.views.decorators.csrf import csrf_exempt
 
 import datetime
 
+
 class DeviceConsumer(AsyncWebsocketConsumer):
     now = datetime.datetime.now().second
-
+    
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name

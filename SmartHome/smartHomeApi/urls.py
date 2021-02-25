@@ -17,6 +17,9 @@ urlpatterns = [
     path('devices/edit',views.deviceEdit),
     path('devices/delete',views.deviceDelete),
     path('devices/value/set',views.deviceSetValue),
+    path('homeCart/get/<int:id>',views.getHomeCart),
+    path('homeCart/set',views.setHomeCart),
+    # path('home/value/set',views.deviceSetValue),
     # path('media/set/<slug:name>/', views.media)
     # path('devices/all',views.allDevices),
     # path('base/fonImage',views.fonImage),

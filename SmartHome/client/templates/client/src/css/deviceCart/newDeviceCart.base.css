@@ -42,6 +42,18 @@
 .DeviceLiControl{
   position: relative;
 }
+.DeviceControlLiName{
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+h4.offline{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-size: 20px;
+}
 .NewCardElement .NewCardControl .cardControlBtn{
   width: 100%;
   height: 50px;

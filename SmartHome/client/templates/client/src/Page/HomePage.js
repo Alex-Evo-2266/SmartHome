@@ -15,7 +15,7 @@ import {DeviceStatusContext} from '../context/DeviceStatusContext'
 export const HomePage = () => {
 
 // const heightElement = 80
-
+const allDevices = useContext(DeviceStatusContext)
 const [editMode, setEditMode] = useState(false);
 const [carts, setCarts] = useState([])
 const auth = useContext(AuthContext)
@@ -23,12 +23,11 @@ const {message} = useMessage();
 const {request, error, clearError} = useHttp();
 const [devices, setDevices] = useState({})
 const [scripts, setScripts] = useState({})
-const [interval, setInterval] = useState(2)
-const [cost, setCost] = useState(true)
 
 const addCart = async(type="base")=>{
   let newCart = {
-    id:carts.length,
+    mainId:null,
+    id:carts.length+1,
     name:"",
     order:"0",
     type:type,
@@ -58,7 +57,7 @@ const updataCart = async(index,cart)=>{
 
 const saveCarts = async()=>{
   try {
-    await request('/api/homeConfig/config/edit', 'POST', {carts},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/homeCart/set', 'POST', {id:1,name:"page1",carts},{Authorization: `Bearer ${auth.token}`})
   } catch (e) {
     console.error(e);
   }
@@ -66,35 +65,17 @@ const saveCarts = async()=>{
 
 const importCarts = useCallback(async()=>{
   try {
-    const data = await request('/api/homeConfig/config', 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    setCarts(data.homePage.carts)
+    const data = await request(`/api/homeCart/get/${1}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    setCarts(data.page.carts)
+    console.log(data.page.carts);
     const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     setInterval(data2.server.updateFrequency)
-    const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    await setScripts(data3);
+    // const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    // await setScripts(data3);
   } catch (e) {
     console.error(e);
   }
 },[request,auth.token])
-
-const updateDevice = useCallback(async()=>{
-  try {
-    const data = await request(`/api/devices/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    await setDevices(data);
-  } catch (e) {
-    console.error(e);
-  }
-},[request,auth.token])
-
-useEffect(() => {
-  const interval2 = setTimeout(() => {
-    updateDevice()
-    setCost((prev)=>!prev)
-  }, interval*1000);
-  return () => {
-    return clearTimeout(interval2);
-  }
-},[cost,interval,updateDevice]);
 
 useEffect(()=>{
   message(error,"error")
@@ -105,9 +86,15 @@ useEffect(()=>{
 
 useEffect(()=>{
   importCarts()
-  updateDevice()
-},[importCarts,updateDevice])
+},[importCarts])
 
+useEffect(()=>{
+  console.log(carts);
+},[carts])
+
+useEffect(()=>{
+  console.log(allDevices.devices);
+},[allDevices.devices])
 // useEffect(()=>{
 //   let elements = document.getElementsByClassName('gridElement')
 //   for (var item of elements) {
@@ -121,7 +108,6 @@ useEffect(()=>{
 
   return(
     <EditModeContext.Provider value={{setMode:setEditMode, mode:editMode,add:addCart}}>
-    <DeviceStatusContext.Provider value={{script:scripts,devices:devices, updateDevice:updateDevice}}>
     <CartEditState>
     <AddControlState>
       <CartEdit/>
@@ -138,7 +124,14 @@ useEffect(()=>{
                 <div className = "gridElement" key={index} style={{order:item.order}}>
                 {
                   (item.type==="base")?
-                  <HomebaseCart edit={editMode} hide={(i)=>removeCart(i)} updata={updataCart} index={index} data = {item} name={item.name}/>
+                  <HomebaseCart
+                  edit={editMode}
+                  hide={(i)=>removeCart(i)}
+                  updata={updataCart}
+                  index={index}
+                  data = {item}
+                  name={item.name}
+                  />
                   :null
                 }
                 </div>
@@ -149,7 +142,6 @@ useEffect(()=>{
       </div>
     </AddControlState>
     </CartEditState>
-    </DeviceStatusContext.Provider>
     </EditModeContext.Provider>
   )
 }

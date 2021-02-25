@@ -1,12 +1,30 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 import {CartEditContext} from '../EditCarts/CartEditContext'
+import {useHttp} from '../../../hooks/http.hook'
+import {useMessage} from '../../../hooks/message.hook'
+import {AuthContext} from '../../../context/AuthContext.js'
+
 
 export const BtnElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,switchMode=true,deleteBtn}) =>{
   const {devices} = useContext(DeviceStatusContext)
+  const auth = useContext(AuthContext)
   const [value, setValue]=useState(firstValue)
   const [device, setDevice] = useState({})
+  const {message} = useMessage();
+  const {request, error, clearError} = useHttp();
   const {target} = useContext(CartEditContext)
+
+  useEffect(()=>{
+    message(error,"error")
+    return ()=>{
+      clearError();
+    }
+  },[error,message, clearError])
+
+  const outValue = async(id,v)=>{
+    await request('/api/devices/value/set', 'POST', {id: data.deviceId,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
+  }
 
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0])
@@ -16,14 +34,14 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   },[devices])
 
   useEffect(()=>{
-    if(!data||!data.IdDevice||typeof(onClick)==="function")
+    if(!data||!data.deviceId||typeof(onClick)==="function")
       return
-    setDevice(lookForDeviceById(data.IdDevice))
+    setDevice(lookForDeviceById(data.deviceId))
   },[devices,data,onClick,lookForDeviceById])
 
   useEffect(()=>{
     if(typeof(onClick)==="function")return
-    if(device&&data&&data.type==="power"&&device.DeviceValue&&device.DeviceValue.power){
+    if(device&&data&&data.typeAction==="power"&&device.DeviceValue&&device.DeviceValue.power){
       if(!/\D/.test(device.DeviceValue.power)&&!/\D/.test(device.DeviceConfig.turnOffSignal)&&!/\D/.test(device.DeviceConfig.turnOnSignal)){
         let poz = Number(device.DeviceValue.power)
         let min = Number(device.DeviceConfig.turnOffSignal)
@@ -33,13 +51,13 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
         else
           setValue(false)
       }
-      if(device.DeviceValue.power===device.DeviceConfig.turnOffSignal)
+      if(device.DeviceValue.power===device.DeviceConfig.turnOffSignal||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="off"))
         setValue(false)
-      if(device.DeviceValue.power===device.DeviceConfig.turnOnSignal)
+      if(device.DeviceValue.power===device.DeviceConfig.turnOnSignal||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="on"))
         setValue(true)
     }
-    if(device&&data&&data.type==="mode"&&device.DeviceValue&&device.DeviceValue.mode){
-      if(data.value===device.DeviceValue.mode){
+    if(device&&data&&data.typeAction==="mode"&&device.DeviceValue&&device.DeviceValue.mode){
+      if(data.action===device.DeviceValue.mode){
         setValue(true)
       }
       else {
@@ -49,6 +67,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   },[device,onClick,data])
 
 const changeHandler = (event)=>{
+  let oldvel = value
   setValue((prev)=>!prev)
   if(!switchMode){
     setTimeout(()=>setValue(false),250)
@@ -59,8 +78,8 @@ const changeHandler = (event)=>{
 
   if(!data||!device)
     return
-  // if(data.type==="power")
-  //     socket.terminalMessage(`device ${device.DeviceSystemName} powerTogle`)
+  if(data.typeAction==="power")
+      outValue(device.DeviceId,!oldvel)
   // if(data.type==="dimmer")
   //     socket.terminalMessage(`device ${device.DeviceSystemName} dimmer ${data.value}`)
   // if(data.type==="color")

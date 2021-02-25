@@ -27,7 +27,7 @@ def start():
         except:
             print("d")
             f()
-    f()
+    # f()
 
     # d = Discovery.discover_mdns()
     # print(str(d))

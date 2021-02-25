@@ -7,6 +7,8 @@ import {BackForm} from '../../../moduls/backForm'
 export const BaseCartEdit = () =>{
   const {cartEdit, hide} = useContext(CartEditContext)
   const [cart ,setCart] = useState({
+    mainId:null,
+    id:null,
     name:"",
     type:"base",
     order:"0",
@@ -16,6 +18,8 @@ export const BaseCartEdit = () =>{
   useEffect(()=>{
     if(cartEdit.cart)
       setCart({
+        mainId:cartEdit.cart.mainId,
+        id:cartEdit.cart.id,
         name:cartEdit.cart.name,
         type:cartEdit.cart.type,
         order:cartEdit.cart.order,

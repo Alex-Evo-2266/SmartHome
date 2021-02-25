@@ -6,14 +6,23 @@ from DeviceControl.mqttDevice.classDevices.light import MqttLight
 from DeviceControl.mqttDevice.classDevices.relay import MqttRelay
 from DeviceControl.mqttDevice.classDevices.sensor import MqttSensor
 from DeviceControl.SmartHomeDevice import ControlDevices
+from yeelight import BulbException
 # from DeviceControl.miioDevice.control import is_device,lamp
+from .deviceValue import deviceSetStatus
 
 from ..classes.devicesArrey import DevicesArrey
 
 import json
+import ast
 
 
 devicesArrey = DevicesArrey()
+
+def confdecod(data):
+    arr2 = []
+    for element in data:
+        arr2.append(element.receiveDict())
+    return arr2
 
 def addDevice(data):
     try:
@@ -47,11 +56,6 @@ def addDevice(data):
 
 def device(item):
     try:
-        def confdecod(data):
-            arr2 = []
-            for element in data:
-                arr2.append(element.receiveDict())
-            return arr2
         e = devicesArrey.get(item.id)
         if(not e):
             dev = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
@@ -59,16 +63,30 @@ def device(item):
             if dev.get_device():
                 devicesArrey.addDevice(item.id,dev)
                 e = devicesArrey.get(item.id)
+            else:
+                return {
+                    **item.receiveDict(),
+                    "DeviceConfig":confdecod(item.configdevice_set.all()),
+                    "DeviceControl":ast.literal_eval(item.DeviceControl),
+                    "DeviceValue":None,
+                    "status":"offline"
+                }
         el = e["device"]
+        if(not item.DeviceControl):
+            item.DeviceControl = el.get_control()
+            item.save()
         return {
             **item.receiveDict(),
             "DeviceConfig":confdecod(item.configdevice_set.all()),
-            "DeviceControl":el.get_control(),
-            "DeviceValue":el.get_value()
+            "DeviceControl":ast.literal_eval(item.DeviceControl),
+            "DeviceValue":el.get_value(),
+            "status":"online"
         }
     except Exception as e:
-        print("error",e)
-        return None
+        print("error device",e)
+        el = devicesArrey.get(item.id)
+        if(el):
+            devicesArrey.delete(item.id)
 
 
 
@@ -96,32 +114,41 @@ def editDevice(data):
         dev.DeviceInformation = data["DeviceInformation"]
         dev.DeviceType = data["DeviceType"]
         dev.DeviceTypeConnect = data["DeviceTypeConnect"]
-        if(data["RoomId"]):
+        dev.DeviceControl = ""
+        if("RoomId" in data and data["RoomId"]):
             room = Room.objects.get(id=data["RoomId"])
             dev.room = room
+        if("DeviceValue" in data):
+            deviceSetStatus(data["DeviceId"],"value",data["DeviceValue"])
         dev.save()
         configs = ConfigDevice.objects.filter(device__id=data["DeviceId"])
-        for item in configs:
-            item.delete()
-        for item in data["config"]:
-            conf = ConfigDevice.objects.create(id=genId(ConfigDevice.objects.all()),device=dev,type=item["type"], address=item["address"])
-            if "low" in item:
-                conf.low=item["low"]
-            if "high" in item:
-                conf.high=item["high"]
-            if "icon" in item:
-                conf.icon=item["icon"]
-            if "token" in item:
-                conf.token=item["token"]
-            conf.save()
+        if("config" in data):
+            for item in configs:
+                item.delete()
+            for item in data["config"]:
+                conf = ConfigDevice.objects.create(id=genId(ConfigDevice.objects.all()),device=dev,type=item["type"], address=item["address"])
+                if "low" in item:
+                    conf.low=item["low"]
+                if "high" in item:
+                    conf.high=item["high"]
+                if "icon" in item:
+                    conf.icon=item["icon"]
+                if "token" in item:
+                    conf.token=item["token"]
+                conf.save()
+        devicesArrey.delete(data["DeviceId"])
+        devi = ControlDevices(dev.receiveDict(),confdecod(dev.configdevice_set.all()))
+        devicesArrey.addDevice(data["DeviceId"],devi)
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 def deleteDevice(id):
     try:
         dev = Device.objects.get(id=id)
         dev.delete()
+        devicesArrey.delete(id)
         return True
     except:
         return False

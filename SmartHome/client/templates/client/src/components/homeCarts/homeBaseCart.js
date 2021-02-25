@@ -53,12 +53,12 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
           return (
             <li key={indexbtn} style={{order:`${item.order||"0"}`}}>
             {
-              (item.item==="button")?
+              (item.type==="button")?
               <BtnElement
               index={indexbtn}
               disabled={edit}
               data={item}
-              switchMode={item.type==="power"}
+              switchMode={item.typeAction==="power"}
               deleteBtn={
                 (edit)?deleteElement:null
               }
@@ -67,20 +67,20 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               }
               >
                 {
-                  (item.type==="power")?
+                  (item.typeAction==="power")?
                   <i className="fas fa-power-off"></i>:
-                  (item.type==="dimmer")?
+                  (item.typeAction==="dimmer")?
                   <i className="fas fa-sun"></i>:
-                  (item.type==="color")?
+                  (item.typeAction==="color")?
                   <i className="fas fa-palette"></i>:
-                  (item.type==="mode")?
+                  (item.typeAction==="mode")?
                   <i>M {item.value}</i>:
-                  (item.type==="ir")?
+                  (item.typeAction==="ir")?
                   <i className="fas fa-tv"></i>:
                   <i>M</i>
                 }
               </BtnElement>:
-              (item.item==="slider")?
+              (item.type==="slider")?
               <SliderElement
               index={indexbtn}
               data={item}
@@ -92,7 +92,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                 (edit)?editElement:null
               }
               />:
-              (item.item==="sensor")?
+              (item.type==="sensor")?
               <SensorElement
               index={indexbtn}
               data={item}
@@ -103,7 +103,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                 (edit)?editElement:null
               }
               />:
-              (item.item==="script")?
+              (item.type==="script")?
               <ScriptElement
               index={indexbtn}
               data={item}
