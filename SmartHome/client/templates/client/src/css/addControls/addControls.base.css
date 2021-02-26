@@ -44,6 +44,10 @@
   color: #fff;
   opacity: 1;
 }
+.addElementBody .box ul li.noAnim:hover{
+  transform:none;
+  background: #fff;
+}
 .addElementBody .box ul li span{
   width: 20px;
   height: 20px;

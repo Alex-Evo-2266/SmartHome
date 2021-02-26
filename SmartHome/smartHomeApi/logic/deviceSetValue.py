@@ -18,6 +18,10 @@ def setValue(id, type, value):
             return arr2
         e = device
         print(device)
+        if(type=="modeTarget"):
+            print("d")
+            e.target_mode()
+            return True
         value = int(value)
         if(type=="value"):
             e.set_value(value)

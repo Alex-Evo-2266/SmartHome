@@ -15,7 +15,10 @@ def addHomeCart(id_in_page,name,type,order,homePage):
     return cart
 
 def addCartChildren(name,type,typeAction,order,action,device,homeCart):
-    element = CartChildren.objects.create(id=genId(CartChildren.objects.all()),name=name,type=type,typeAction=typeAction,order=order,action=action,device=device,homeCart=homeCart)
+    print(homeCart)
+    id=genId(CartChildren.objects.all())
+    print(id)
+    element = CartChildren.objects.create(id=id,name=name,type=type,typeAction=typeAction,order=order,device=device,action=action,homeCart=homeCart)
     return element
 
 def setPage(data):
@@ -28,6 +31,18 @@ def setPage(data):
         page = pages[0]
     # print(page,data["carts"])
     carts = data["carts"]
+    oldcart = page.homecart_set.all()
+    for olditem in oldcart:
+        t = False
+        for item in carts:
+            if(olditem.id==item["mainId"]):
+                t = True
+                break
+        if(not t):
+            olditem.delete()
+
+
+
     for item in carts:
         # print(item)
         cart = None
@@ -44,10 +59,14 @@ def setPage(data):
             print(item2)
             device = Device.objects.get(id=item2["deviceId"])
             element = None
+            print("r")
             if(not item2["id"]):
+                print("o")
                 element = addCartChildren(item2["name"],item2["type"],item2["typeAction"],item2["order"],item2["action"],device,cart)
+                print("k")
             else:
                 element = CartChildren.objects.get(id=item2["id"])
+                print(element)
                 element.name=item2["name"]
                 element.order=item2["order"]
                 element.save()

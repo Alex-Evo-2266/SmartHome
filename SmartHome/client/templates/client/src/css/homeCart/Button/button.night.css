@@ -8,6 +8,10 @@
   text-shadow: 0 0 10px rgba(33,156,243,1);
   transition: 0.5s;
 }
+.night ul.elementConteiner li label.disabled .icon-box i{
+  color: #333;
+  text-shadow: none;
+}
 .night ul.elementConteiner li label input[type="checkbox"]:checked ~ .icon-box{
   background: #000;
   border: 3px solid #fff;

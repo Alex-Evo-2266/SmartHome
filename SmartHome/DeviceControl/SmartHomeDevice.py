@@ -212,6 +212,13 @@ class ControlDevices():
         elif self.__item["DeviceTypeConnect"]=="mqtt":
             self.device.set_mode(status)
 
+    def target_mode(self):
+        status = int(self.get_value(False)["mode"])
+        status += 1
+        if(status>self.__control_mode-1):
+            status = 0
+        self.set_mode(status)
+
     def set_dimmer(self, status):
         try:
             if(type(self.device)==Bulb or self.__item["DeviceTypeConnect"]=="mqtt"):

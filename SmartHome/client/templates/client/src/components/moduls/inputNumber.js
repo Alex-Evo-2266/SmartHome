@@ -18,7 +18,8 @@ export const InputNumber = ({min,max,step=1,Xten=false,result,Value})=>{
     if(n+steploc>max)
       return setValue(max)
     setValue(String(n+steploc))
-    result(String(n+steploc))
+    if(typeof(result)==="function")
+      result(String(n+steploc))
   }
   const down = (steploc=1)=>{
     let n = Number(value)
@@ -27,7 +28,8 @@ export const InputNumber = ({min,max,step=1,Xten=false,result,Value})=>{
     if(n-steploc<min)
       return setValue(min)
     setValue(String(n-steploc))
-    result(String(n-steploc))
+    if(typeof(result)==="function")
+      result(String(n-steploc))
   }
 
   return(

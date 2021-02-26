@@ -180,7 +180,7 @@ class CartChildren(models.Model):
     type = models.CharField("element type", max_length = 20)
     typeAction = models.CharField("element typeAction", max_length = 20)
     order = models.IntegerField("element order", default=0)
-    device = models.OneToOneField(Device, on_delete = models.SET_NULL, null=True)
+    device = models.ForeignKey(Device, on_delete = models.CASCADE, null=True)
     action = models.CharField("element action", max_length = 20, default = "get")
     homeCart = models.ForeignKey(HomeCart, on_delete = models.CASCADE)
 

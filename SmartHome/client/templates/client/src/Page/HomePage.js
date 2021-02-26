@@ -92,9 +92,9 @@ useEffect(()=>{
   console.log(carts);
 },[carts])
 
-useEffect(()=>{
-  console.log(allDevices.devices);
-},[allDevices.devices])
+// useEffect(()=>{
+//   console.log(allDevices.devices);
+// },[allDevices.devices])
 // useEffect(()=>{
 //   let elements = document.getElementsByClassName('gridElement')
 //   for (var item of elements) {

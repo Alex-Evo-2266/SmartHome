@@ -11,6 +11,8 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   const auth = useContext(AuthContext)
   const [value, setValue]=useState(firstValue)
   const [device, setDevice] = useState({})
+  const [deviceConfig, setDeviceConfig] = useState({})
+  const [disabled2, setDisabled] = useState(disabled)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const {target} = useContext(CartEditContext)
@@ -40,20 +42,43 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   },[devices,data,onClick,lookForDeviceById])
 
   useEffect(()=>{
+    if(!disabled&&device.status){
+      if(device.status==="online"){
+        setDisabled(false)
+      }else{
+        setDisabled(true)
+      }
+      return
+    }
+    if(!disabled&&!devices.length) {
+      setDisabled(true)
+    }else if(!disabled&&devices.length) {
+      setDisabled(false)
+    }
+  },[device,disabled,devices])
+
+  useEffect(()=>{
+    if(!device||!device.DeviceConfig)return
+    let conf = device.DeviceConfig.filter((item)=>item.type===data.typeAction)
+    if(conf.length)
+      setDeviceConfig(conf[0])
+  },[device])
+
+  useEffect(()=>{
     if(typeof(onClick)==="function")return
     if(device&&data&&data.typeAction==="power"&&device.DeviceValue&&device.DeviceValue.power){
-      if(!/\D/.test(device.DeviceValue.power)&&!/\D/.test(device.DeviceConfig.turnOffSignal)&&!/\D/.test(device.DeviceConfig.turnOnSignal)){
+      if(!/\D/.test(device.DeviceValue.power)&&!/\D/.test(deviceConfig.low)&&!/\D/.test(deviceConfig.high)){
         let poz = Number(device.DeviceValue.power)
-        let min = Number(device.DeviceConfig.turnOffSignal)
-        let max = Number(device.DeviceConfig.turnOnSignal)
+        let min = Number(deviceConfig.low)
+        let max = Number(deviceConfig.high)
         if(poz>min&&poz<=max)
           setValue(true)
         else
           setValue(false)
       }
-      if(device.DeviceValue.power===device.DeviceConfig.turnOffSignal||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="off"))
+      if(device.DeviceValue.power===deviceConfig.low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="off"))
         setValue(false)
-      if(device.DeviceValue.power===device.DeviceConfig.turnOnSignal||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="on"))
+      if(device.DeviceValue.power===deviceConfig.high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="on"))
         setValue(true)
     }
     if(device&&data&&data.typeAction==="mode"&&device.DeviceValue&&device.DeviceValue.mode){
@@ -80,14 +105,16 @@ const changeHandler = (event)=>{
     return
   if(data.typeAction==="power")
       outValue(device.DeviceId,!oldvel)
-  // if(data.type==="dimmer")
-  //     socket.terminalMessage(`device ${device.DeviceSystemName} dimmer ${data.value}`)
-  // if(data.type==="color")
-  //     socket.terminalMessage(`device ${device.DeviceSystemName} color ${data.value}`)
-  // if(data.type==="mode")
-  //     socket.terminalMessage(`device ${device.DeviceSystemName} mode ${data.value}`)
-  // if(data.type==="switch mode")
-  //     socket.terminalMessage(`device ${device.DeviceSystemName} mode`)
+  if(data.typeAction==="dimmer")
+      outValue(device.DeviceId,data.action)
+  if(data.typeAction==="temp")
+      outValue(device.DeviceId,data.action)
+  if(data.typeAction==="color")
+      outValue(device.DeviceId,data.action)
+  if(data.typeAction==="mode")
+      outValue(device.DeviceId,data.action)
+  if(data.typeAction==="modeTarget")
+      outValue(device.DeviceId,"target")
   // if(data.type==="ir")
   //     socket.terminalMessage(`device ${device.DeviceSystemName} send ${data.value}`)
   // // socket.terminalMessage()
@@ -108,8 +135,8 @@ const changeHandler = (event)=>{
   }
 
   return(
-    <label className={`BtnElement ${className}`}>
-      <input type="checkbox" checked={value} name={name} onChange={changeHandler} disabled={disabled}/>
+    <label className={`BtnElement ${className} ${(disabled2)?"disabled":""}`}>
+      <input type="checkbox" checked={value} name={name} onChange={changeHandler} disabled={disabled2}/>
       <div className="icon-box">
         <div>
         {
