@@ -1,5 +1,5 @@
 from ..models import Device,ConfigDevice,Room,genId
-from DeviceControl.SmartHomeDevice import ControlDevices
+from .deviceControl.SmartHomeDevice import ControlDevices
 from ..classes.devicesArrey import DevicesArrey
 
 devicesArrey = DevicesArrey()
@@ -36,6 +36,8 @@ def setValue(id, type, value):
             e.set_color(value)
         if(type=="mode"):
             e.set_mode(value)
+        if(type=="variable"):
+            print("not")
         return True
     except Exception as e:
         print(e)

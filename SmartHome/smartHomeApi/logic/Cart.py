@@ -15,21 +15,17 @@ def addHomeCart(id_in_page,name,type,order,homePage):
     return cart
 
 def addCartChildren(name,type,typeAction,order,action,device,homeCart):
-    print(homeCart)
     id=genId(CartChildren.objects.all())
-    print(id)
     element = CartChildren.objects.create(id=id,name=name,type=type,typeAction=typeAction,order=order,device=device,action=action,homeCart=homeCart)
     return element
 
 def setPage(data):
     pages = HomePage.objects.filter(id=data["id"])
-    # print(pages)
     page = None
     if(not pages):
         page = addHomePage(data["name"],"",data["id"]);
     else:
         page = pages[0]
-    # print(page,data["carts"])
     carts = data["carts"]
     oldcart = page.homecart_set.all()
     for olditem in oldcart:
@@ -44,7 +40,6 @@ def setPage(data):
 
 
     for item in carts:
-        # print(item)
         cart = None
         if(not item["mainId"]):
             cart = addHomeCart(item["id"],item["name"],item["type"],item["order"],page)
@@ -54,19 +49,22 @@ def setPage(data):
             cart.order=item["order"]
             cart.save()
         elements = item["children"]
-        # print(cart,elements)
         for item2 in elements:
-            print(item2)
+            oldelement = cart.cartchildren_set.all()
+            for olditem in oldelement:
+                t = False
+                for item3 in elements:
+                    if(olditem.id==item3["id"]):
+                        t = True
+                        break
+                if(not t):
+                    olditem.delete()
             device = Device.objects.get(id=item2["deviceId"])
             element = None
-            print("r")
             if(not item2["id"]):
-                print("o")
                 element = addCartChildren(item2["name"],item2["type"],item2["typeAction"],item2["order"],item2["action"],device,cart)
-                print("k")
             else:
                 element = CartChildren.objects.get(id=item2["id"])
-                print(element)
                 element.name=item2["name"]
                 element.order=item2["order"]
                 element.save()
@@ -75,16 +73,13 @@ def setPage(data):
 
 def getPage(id)->dict:
     page = HomePage.objects.get(id=id)
-    # print(page.receiveDict())
     pageDict = page.receiveDict()
     carts = page.homecart_set.all()
     cartsList = list()
     for item in carts:
 
-        # print(item.receiveDict())
         cart = item.receiveDict()
         elements = item.cartchildren_set.all()
-        # print(elements)
         elementsList = list()
         for item2 in elements:
             element = item2.receiveDict()

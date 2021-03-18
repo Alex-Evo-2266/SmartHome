@@ -10,19 +10,16 @@ import {CartEdit} from '../components/homeCarts/EditCarts/CartEdit'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
-import {DeviceStatusContext} from '../context/DeviceStatusContext'
 
 export const HomePage = () => {
 
 // const heightElement = 80
-const allDevices = useContext(DeviceStatusContext)
 const [editMode, setEditMode] = useState(false);
 const [carts, setCarts] = useState([])
 const auth = useContext(AuthContext)
 const {message} = useMessage();
 const {request, error, clearError} = useHttp();
-const [devices, setDevices] = useState({})
-const [scripts, setScripts] = useState({})
+// const [scripts, setScripts] = useState({})
 
 const addCart = async(type="base")=>{
   let newCart = {

@@ -1,9 +1,9 @@
-from DeviceControl.mqttDevice.classDevices.dimmer import MqttDimmer
-from DeviceControl.mqttDevice.classDevices.device import MqttDevice
-from DeviceControl.mqttDevice.classDevices.light import MqttLight
-from DeviceControl.mqttDevice.classDevices.relay import MqttRelay
-from DeviceControl.mqttDevice.classDevices.sensor import MqttSensor
-from DeviceControl.system.variable import Variable
+from .mqttDevice.classDevices.dimmer import MqttDimmer
+from .mqttDevice.classDevices.device import MqttDevice
+from .mqttDevice.classDevices.light import MqttLight
+from .mqttDevice.classDevices.relay import MqttRelay
+from .mqttDevice.classDevices.sensor import MqttSensor
+from .system.variable import Variable
 from yeelight import Bulb ,PowerMode
 from miio import Device,Yeelight,DeviceError,DeviceException
 from smartHomeApi.logic.deviceValue import deviceSetStatus

@@ -31,7 +31,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0])
       return false
-    let condidat = devices.filter((item)=>item.DeviceId===id)
+    let condidat = devices.filter((item)=>(item&&item.DeviceId===id))
     return condidat[0]
   },[devices])
 
@@ -58,27 +58,29 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   },[device,disabled,devices])
 
   useEffect(()=>{
-    if(!device||!device.DeviceConfig)return
-    let conf = device.DeviceConfig.filter((item)=>item.type===data.typeAction)
+    if(!device||!device.DeviceConfig||!data)return
+    const {typeAction} = data
+    let conf = device.DeviceConfig.filter((item)=>item.type===typeAction)
     if(conf.length)
       setDeviceConfig(conf[0])
-  },[device])
+  },[device,data])
 
   useEffect(()=>{
     if(typeof(onClick)==="function")return
     if(device&&data&&data.typeAction==="power"&&device.DeviceValue&&device.DeviceValue.power){
-      if(!/\D/.test(device.DeviceValue.power)&&!/\D/.test(deviceConfig.low)&&!/\D/.test(deviceConfig.high)){
+      const {low,high} = deviceConfig
+      if(!/\D/.test(device.DeviceValue.power)&&!/\D/.test(low)&&!/\D/.test(high)){
         let poz = Number(device.DeviceValue.power)
-        let min = Number(deviceConfig.low)
-        let max = Number(deviceConfig.high)
+        let min = Number(low)
+        let max = Number(high)
         if(poz>min&&poz<=max)
           setValue(true)
         else
           setValue(false)
       }
-      if(device.DeviceValue.power===deviceConfig.low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="off"))
+      if(device.DeviceValue.power===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="off"))
         setValue(false)
-      if(device.DeviceValue.power===deviceConfig.high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="on"))
+      if(device.DeviceValue.power===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="on"))
         setValue(true)
     }
     if(device&&data&&data.typeAction==="mode"&&device.DeviceValue&&device.DeviceValue.mode){
@@ -89,7 +91,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
         setValue(false)
       }
     }
-  },[device,onClick,data])
+  },[device,onClick,data,deviceConfig])
 
 const changeHandler = (event)=>{
   let oldvel = value
@@ -115,6 +117,8 @@ const changeHandler = (event)=>{
       outValue(device.DeviceId,data.action)
   if(data.typeAction==="modeTarget")
       outValue(device.DeviceId,"target")
+  if(data.typeAction==="variable")
+      outValue(device.DeviceId,data.action)
   // if(data.type==="ir")
   //     socket.terminalMessage(`device ${device.DeviceSystemName} send ${data.value}`)
   // // socket.terminalMessage()

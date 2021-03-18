@@ -1,11 +1,11 @@
 from django.conf import settings
 from ..models import Device,ConfigDevice,Room,genId
-from DeviceControl.mqttDevice.classDevices.dimmer import MqttDimmer
-from DeviceControl.mqttDevice.classDevices.device import MqttDevice
-from DeviceControl.mqttDevice.classDevices.light import MqttLight
-from DeviceControl.mqttDevice.classDevices.relay import MqttRelay
-from DeviceControl.mqttDevice.classDevices.sensor import MqttSensor
-from DeviceControl.SmartHomeDevice import ControlDevices
+from .deviceControl.mqttDevice.classDevices.dimmer import MqttDimmer
+from .deviceControl.mqttDevice.classDevices.device import MqttDevice
+from .deviceControl.mqttDevice.classDevices.light import MqttLight
+from .deviceControl.mqttDevice.classDevices.relay import MqttRelay
+from .deviceControl.mqttDevice.classDevices.sensor import MqttSensor
+from .deviceControl.SmartHomeDevice import ControlDevices
 from yeelight import BulbException
 # from DeviceControl.miioDevice.control import is_device,lamp
 from .deviceValue import deviceSetStatus

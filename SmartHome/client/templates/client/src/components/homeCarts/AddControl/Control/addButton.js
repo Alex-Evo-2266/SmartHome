@@ -1,13 +1,13 @@
 import React, {useContext,useState,useEffect} from 'react'
 import {DeviceStatusContext} from '../../../../context/DeviceStatusContext'
-import {AuthContext} from '../../../../context/AuthContext.js'
+// import {AuthContext} from '../../../../context/AuthContext.js'
 import {InputNumber} from '../../../moduls/inputNumber'
 
 export const AddButton = ({add})=>{
   const {devices} = useContext(DeviceStatusContext)
   const [device, setDevice] = useState({});
   const [deviceConfig, setDeviceConfig] = useState({})
-  const auth = useContext(AuthContext)
+  // const auth = useContext(AuthContext)
   const [buttonForm, setButtonForm] = useState({
     id:null,
     name:"",
@@ -20,7 +20,14 @@ export const AddButton = ({add})=>{
 
   useEffect(()=>{
     if(device){
-      setButtonForm({...buttonForm,name:device.DeviceName,deviceId:device.DeviceId})
+      setButtonForm({id:null,
+        name:device.DeviceName,
+        type:"button",
+        typeAction:"",
+        order:0,
+        deviceId:device.DeviceId,
+        action:""
+      })
     }
   },[device])
 
@@ -83,12 +90,25 @@ export const AddButton = ({add})=>{
             </>:
             null
           }
+          {
+            (device.DeviceType==="variable")?
+            <>
+              <li onClick={()=>setButtonForm({...buttonForm,typeAction:"variable"})}>variable</li>
+            </>:
+            null
+          }
         </>:
         (deviceConfig)?
         <li className="noAnim">
           <InputNumber min={deviceConfig.min} max={deviceConfig.max} Xten={true} result={(v)=>setButtonForm({...buttonForm,action:v})} Value={buttonForm.action}/>
           <button onClick={outaction}>Ok</button>
-        </li>:null
+        </li>:
+        (buttonForm.typeAction==="variable")?
+        <li className="noAnim">
+          <input value={buttonForm.action} onChange={(event)=>setButtonForm({...buttonForm,action:event.target.value})}/>
+          <button onClick={outaction}>Ok</button>
+        </li>:
+        null
     }
     </ul>
   )

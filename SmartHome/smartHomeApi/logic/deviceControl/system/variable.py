@@ -1,5 +1,5 @@
 from smartHomeApi.logic.deviceValue import devicestatus,deviceSetStatus
-from DeviceControl.mqttDevice.connect import connect
+from ..mqttDevice.connect import connect
 
 class Variable():
 

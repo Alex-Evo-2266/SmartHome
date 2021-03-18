@@ -1,13 +1,11 @@
 import React, {useContext,useState} from 'react'
 import {AddControlContext} from './AddControlContext'
 import {BackForm} from '../../moduls/backForm'
-import {ModalWindow} from '../../modalWindow/modalWindow'
 import {AddButton} from './Control/addButton'
 
 export const AddControl = ()=>{
   const {addControl, hide} = useContext(AddControlContext)
   const [typeChild, setTypeChild] = useState("");
-  const [device, setDevice] = useState({});
 
   const close = ()=>{
     hide()
