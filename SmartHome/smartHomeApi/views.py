@@ -21,7 +21,7 @@ def register(request):
             return HttpResponse(json.dumps({"message":"ok"}))
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
-@csrf_exempt 
+# @csrf_exempt 
 def login(request):
     if request.method=="POST" and request.body:
 

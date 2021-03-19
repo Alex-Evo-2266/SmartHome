@@ -39,8 +39,8 @@ class UserConfig(models.Model):
         return {"Style":self.Style}
 
 class ServerConfig(models.Model):
-    auteStyle = models.NullBooleanField("automatic style", default=True)
-    staticBackground = models.NullBooleanField("static background", default=False)
+    auteStyle = models.BooleanField("automatic style", default=True)
+    staticBackground = models.BooleanField("static background", default=False)
     updateFrequency = models.IntegerField("time update", default=10)
     mqttBroker = models.CharField("mqttBroker ip", max_length = 200, default="")
     loginMqttBroker = models.CharField("mqttBroker login", max_length = 200, default="")
@@ -125,7 +125,7 @@ class ValueDevice(models.Model):
         }
 
 class ValueListDevice(models.Model):
-    id = models.IntegerField("id", primary_key=True, max_length = 255)
+    id = models.IntegerField("id", primary_key=True)
     type = models.SlugField("device value list type", max_length = 200)
     value = models.SlugField("device value list value", max_length = 200)
     date = models.DateTimeField("device value element date")
@@ -141,7 +141,7 @@ class ValueListDevice(models.Model):
             "date":self.date
         }
 class HomePage(models.Model):
-    id = models.IntegerField("id", primary_key=True, max_length = 255)
+    id = models.IntegerField("id", primary_key=True)
     name = models.CharField("page name", max_length = 50)
     information = models.TextField("page info", default="")
     def __str__(self):
@@ -155,8 +155,8 @@ class HomePage(models.Model):
         }
 
 class HomeCart(models.Model):
-    id = models.IntegerField("id", primary_key=True, max_length = 255)
-    idInPage = models.IntegerField("id in page", max_length = 255)
+    id = models.IntegerField("id", primary_key=True)
+    idInPage = models.IntegerField("id in page")
     name = models.CharField("cart name", max_length = 50)
     type = models.CharField("cart type", max_length = 20)
     order = models.IntegerField("cart order", default=10)
@@ -175,7 +175,7 @@ class HomeCart(models.Model):
         }
 
 class CartChildren(models.Model):
-    id = models.IntegerField("id", primary_key=True, max_length = 255)
+    id = models.IntegerField("id", primary_key=True)
     name = models.CharField("element name", max_length = 50)
     type = models.CharField("element type", max_length = 20)
     typeAction = models.CharField("element typeAction", max_length = 20)

@@ -23,7 +23,7 @@ start()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # re_path(r'^files/',include("files.urls")),
+    re_path(r'^files/',include("files.urls")),
     re_path(r'^api/',include("smartHomeApi.urls")),
     re_path(r'',include("client.urls")),
 ]
