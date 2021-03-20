@@ -1,5 +1,10 @@
 from django.db import models
 
+def set_to_list_dict(items):
+    item_list = list()
+    for item in items:
+        item_list.append(item.model_to_dict())
+    return item_list
 
 def genId(El)->int:
     i = 1
@@ -28,19 +33,39 @@ class User(models.Model):
     def __str__(self):
         return self.UserName
 
+class ImageBackground(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    title = models.CharField("название", max_length = 200, default="base")
+    image = models.ImageField("Изображение",upload_to="background")
+
+    def model_to_dict(self):
+        return {
+        "title":self.title,
+        "image":self.image.url,
+        }
+
+    def __str__(self):
+        return self.title
+
 class UserConfig(models.Model):
     Style = models.CharField("user name", max_length = 200, default="light")
+    auteStyle = models.BooleanField("automatic style", default=True)
+    staticBackground = models.BooleanField("static background", default=False)
+    background = models.ManyToManyField(ImageBackground,verbose_name="фон", related_name="background")
     user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key = True)
 
     def __str__(self):
         return self.Style
 
     def give(self):
-        return {"Style":self.Style}
+        return {
+        "Style":self.Style,
+        "auteStyle":self.auteStyle,
+        "staticBackground":self.staticBackground,
+        "images":set_to_list_dict(self.background.all())
+        }
 
 class ServerConfig(models.Model):
-    auteStyle = models.BooleanField("automatic style", default=True)
-    staticBackground = models.BooleanField("static background", default=False)
     updateFrequency = models.IntegerField("time update", default=10)
     mqttBroker = models.CharField("mqttBroker ip", max_length = 200, default="")
     loginMqttBroker = models.CharField("mqttBroker login", max_length = 200, default="")

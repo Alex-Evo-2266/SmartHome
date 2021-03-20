@@ -31,7 +31,7 @@ export const SocketState = ({children}) =>{
   const importCarts = useCallback(async()=>{
     try {
       const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      setInterval2(data2.server.updateFrequency)
+      setInterval2(data2.updateFrequency)
     } catch (e) {
       console.error(e);
     }

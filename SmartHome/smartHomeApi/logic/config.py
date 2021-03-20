@@ -24,8 +24,6 @@ def ServerConfigEdit(data):
     config = ServerConfig.objects.get(id=1)
     if not config:
         config = ServerConfig.objects.create(id=1)
-    config.auteStyle = data["auteStyle"]
-    config.staticBackground = data["staticBackground"]
     config.updateFrequency = data["updateFrequency"]
     config.mqttBroker = data["mqttBroker"]
     config.mqttBrokerPort = data["mqttBrokerPort"]
@@ -36,5 +34,5 @@ def ServerConfigEdit(data):
 
 def GiveServerConfig():
     config = ServerConfig.objects.all()[0]
-    server={"auteStyle":config.auteStyle,"staticBackground":config.staticBackground,"updateFrequency":config.updateFrequency,"mqttBroker":config.mqttBroker,"mqttBrokerPort":config.mqttBrokerPort,"loginMqttBroker":config.loginMqttBroker,"passwordMqttBroker":config.passwordMqttBroker}
+    server={"updateFrequency":config.updateFrequency,"mqttBroker":config.mqttBroker,"mqttBrokerPort":config.mqttBrokerPort,"loginMqttBroker":config.loginMqttBroker,"passwordMqttBroker":config.passwordMqttBroker}
     return server

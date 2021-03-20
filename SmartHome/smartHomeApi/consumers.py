@@ -12,7 +12,7 @@ import datetime
 
 class DeviceConsumer(AsyncWebsocketConsumer):
     now = datetime.datetime.now().second
-    
+
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
@@ -24,7 +24,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         )
         await self.accept()
 
-        print(self.room_group_name)
+        # print(self.room_group_name)
 
 
     async def disconnect(self, close_code):
@@ -49,11 +49,11 @@ class DeviceConsumer(AsyncWebsocketConsumer):
                 udateTime = udateTime - 60
             if udateTime > 40 and nowtime < 20:
                 udateTime = nowtime + sec
-            print(DeviceConsumer.now,udateTime,nowtime)
+            # print(DeviceConsumer.now,udateTime,nowtime)
             if udateTime > nowtime:
-                print("error")
+                # print("error")
                 return
-            print("ok")
+            # print("ok")
             return await self.channel_layer.group_send(
             self.room_group_name,
                 {

@@ -10,8 +10,6 @@ export const ServerOption = () =>{
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
   const [serverconf , setServerconf] = useState({
-    auteStyle:false,
-    staticBackground:false,
     updateFrequency: "2",
     mqttBroker:'none',
     mqttBrokerPort:"",
@@ -45,13 +43,11 @@ export const ServerOption = () =>{
     const data = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data)return;
     setServerconf({
-      auteStyle:data.server.auteStyle,
-      staticBackground:data.server.staticBackground,
-      updateFrequency:data.server.updateFrequency,
-      mqttBroker:data.server.mqttBroker||"",
-      mqttBrokerPort:data.server.mqttBrokerPort||"",
-      loginMqttBroker:data.server.loginMqttBroker||"",
-      passwordMqttBroker:data.server.passwordMqttBroker||""
+      updateFrequency:data.updateFrequency,
+      mqttBroker:data.mqttBroker||"",
+      mqttBrokerPort:data.mqttBrokerPort||"",
+      loginMqttBroker:data.loginMqttBroker||"",
+      passwordMqttBroker:data.passwordMqttBroker||""
     })
   },[request,auth.token])
 
@@ -65,22 +61,6 @@ export const ServerOption = () =>{
 
   return(
     <div className = "pagecontent">
-      <div className="configElement">
-        <p className="switchText">changing style when changing time of day</p>
-        <label className="switch">
-          <input onChange={checkedHandler} name="auteStyle" type="checkbox" checked={serverconf.auteStyle}></input>
-          <span></span>
-          <i className="indicator"></i>
-        </label>
-      </div>
-      <div className="configElement">
-        <p className="switchText">static background</p>
-        <label className="switch">
-          <input onChange={checkedHandler} name="staticBackground" type="checkbox" checked={serverconf.staticBackground}></input>
-          <span></span>
-          <i className="indicator"></i>
-        </label>
-      </div>
       <div className="configElement">
         <p className="switchText">update frequency (s)</p>
         <label className="number">

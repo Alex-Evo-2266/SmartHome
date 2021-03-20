@@ -4,11 +4,12 @@ from . import views
 urlpatterns = [
     path('auth/register',views.register),
     path('auth/login',views.login),
-    path('server/config',views.clientConfig),
+    path('server/config',views.serverConfig),
     path('server/config/edit',views.clientConfigedit),
     path('server/usersConfig/edit',views.editUsersConf),
     path('server/usersConfig',views.giveUserConf),
-    path('user/config/style/edit',views.edituserconfstyle),
+    path('user/config/edit',views.edituserconf),
+    path('user/config',views.clientConfig),
     path('user',views.giveuser),
     path('user/edit',views.edituser),
     path('devices/add',views.deviceAdd),
@@ -23,5 +24,6 @@ urlpatterns = [
     # path('media/set/<slug:name>/', views.media)
     # path('devices/all',views.allDevices),
     # path('base/fonImage',views.fonImage),
+    path('media/set/background/<str:name>',views.setBackground),
 ]
 # /api/media/set/

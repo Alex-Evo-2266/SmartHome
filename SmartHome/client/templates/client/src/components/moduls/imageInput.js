@@ -1,8 +1,10 @@
-import React, {useEffect} from 'react'
+import React, {useEffect,useContext} from 'react'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
+import {AuthContext} from '../../context/AuthContext.js'
 
 export const ImageInput = ({title, src, name, onChange=null, id}) =>{
+  const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
 
@@ -23,9 +25,10 @@ export const ImageInput = ({title, src, name, onChange=null, id}) =>{
   }
     let file = event.target.files[0]
     var data = new FormData();
-    data.append(event.target.name,file)
+    data.append("image",file)
     data.append('name',event.target.name)
-    await request(`/api/media/set/${event.target.name}`, 'POST',data,{},true)
+    // data.append('name',"image")
+    await request(`/api/media/set/background/${event.target.name}`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
 
     if(onChange){
       onChange(event)

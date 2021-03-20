@@ -2,6 +2,12 @@ import {useCallback,useEffect} from 'react';
 import {useHttp} from './http.hook'
 import defFon from '../img/fon-base.jpg'
 
+const defbacground = ()=>{
+  document.body.style = `background: url(${defFon});
+    background-size: cover;
+    background-attachment: fixed;`;
+}
+
 export const useBackground = () => {
   const {request, error, clearError} = useHttp();
 
@@ -25,6 +31,10 @@ export const useBackground = () => {
   }
 
   const fonUpdata = useCallback((data)=>{
+    let background={}
+    for (var item of data.images) {
+      background = {...background,[item.title]:item.image}
+    }
   if(data.auteStyle){
     if(backgroundType()==="night"){
       document.body.classList.add('night')
@@ -36,42 +46,46 @@ export const useBackground = () => {
   else{
     document.body.classList.add(data.style)
   }
-  if(data.staticBackground){
-    document.body.style = `background: url(/media/fon/fon-base.jpg);
+  if(data.staticBackground&&background.base){
+    document.body.style = `background: url(${background.base});
       background-size: cover;
       background-attachment: fixed;`;
     return
   }
-  document.body.style = `background: url(/media/fon/fon-${backgroundType()}.jpg);
-    background-size: cover;
-    background-attachment: fixed;`;
+  else if(background[backgroundType()]){
+    document.body.style = `background: url(${background[backgroundType()]});
+      background-size: cover;
+      background-attachment: fixed;`;
+  }
+  else{
+    defbacground()
+  }
 },[])
 
   const updataBackground = useCallback(async(token)=>{
     if(!token){
       console.error("no Autorization");
-      document.body.style = `background: url(${defFon});
-        background-size: cover;
-        background-attachment: fixed;`;
+      defbacground()
       return ;
     }
-    const data = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${token}`})
+    const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
+    console.log(data);
     let config = {
       style:"light",
       auteStyle:false,
-      staticBackground:false
+      staticBackground:false,
+      images:defFon
     }
-    if(data&&data.user){
+    if(data){
       config = {
-        style:data.user.Style||"light",
-        auteStyle:data.server.auteStyle||false,
-        staticBackground: data.server.staticBackground||false
+        style:data.Style||"light",
+        auteStyle:data.auteStyle||false,
+        staticBackground: data.staticBackground||false,
+        images:data.images
       }
     }
     else{
-      document.body.style = `background: url(${defFon});
-        background-size: cover;
-        background-attachment: fixed;`;
+      defbacground()
     }
     fonUpdata(config);
     setInterval(()=>{

@@ -1,5 +1,5 @@
 from django.conf import settings
-from ..models import User, UserConfig
+from ..models import User, UserConfig,genId
 import json
 import bcrypt
 import jwt
@@ -56,13 +56,31 @@ def editUser(id,data):
 
 def userConf(id):
     user = User.objects.get(id=id)
-    ret = {"Style":user.usersconfig.Style}
+    ret = user.give()
     return ret
-def userConfEditStyle(id, style):
+
+def userConfEdit(id, data):
     try:
         user = User.objects.get(id=id)
-        user.userconfig.Style = style
+        user.userconfig.Style = data["style"]
+        user.userconfig.auteStyle = data["auteStyle"]
+        user.userconfig.staticBackground = data["staticBackground"]
         user.userconfig.save()
+        return True
+    except Exception as e:
+        return False
+
+def Setbackground(id,background):
+    try:
+        print("d",id,background)
+        user = User.objects.get(id=id)
+        backgrounds = user.userconfig.background.all()
+        print(backgrounds,background)
+        for item in backgrounds:
+            if(item.title==background.title):
+                user.userconfig.background.remove(item)
+        print(background)
+        user.userconfig.background.add(background)
         return True
     except Exception as e:
         return False

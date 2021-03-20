@@ -1,14 +1,21 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
-from .logic.user import addUser, login as Authorization, userConfEditStyle,user,editUser
+from .logic.user import addUser, login as Authorization, userConfEdit,user,editUser,Setbackground
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from django.views.decorators.csrf import csrf_exempt
 from .logic.Cart import setPage,getPage
+from django.core.files.uploadedfile import TemporaryUploadedFile
 
-from .models import User, UserConfig,ServerConfig
+from rest_framework.views import APIView
+from rest_framework.parsers import FileUploadParser
+
+from .models import User, UserConfig,ServerConfig,ImageBackground,genId
+
+from .forms import BackgroundForm
+
 import json
 from .logic.deviceSetValue import setValue
 
@@ -21,7 +28,7 @@ def register(request):
             return HttpResponse(json.dumps({"message":"ok"}))
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
-# @csrf_exempt 
+# @csrf_exempt
 def login(request):
     if request.method=="POST" and request.body:
 
@@ -38,9 +45,14 @@ def clientConfig(request):
     data = auth(request)
     if "userId" in data:
         user = User.objects.get(id=data.get("userId"))
-        print("server")
-        server=GiveServerConfig()
-        result={"server":server,"user":user.userconfig.give()}
+        result=user.userconfig.give()
+        return HttpResponse(json.dumps(result),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def serverConfig(request):
+    data = auth(request)
+    if "userId" in data:
+        result=GiveServerConfig()
         return HttpResponse(json.dumps(result),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
@@ -64,12 +76,12 @@ def clientConfigedit(request):
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}), status=400)
 
-def edituserconfstyle(request):
+def edituserconf(request):
     try:
         if request.method=="POST" and request.body:
             user = auth(request)
             data = json.loads(request.body)
-            userConfEditStyle(user.get("userId"),data["style"])
+            userConfEdit(user.get("userId"),data)
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
         return HttpResponse(json.dumps({"message":"error"}),status=400)
     except :
@@ -151,4 +163,26 @@ def setHomeCart(request):
         data = json.loads(request.body)
         if(setPage(data)):
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def setBackground(request,name):
+    if request.method=="POST":
+        # print(name,request.FILES,request.POST)
+        usertoken = auth(request)
+        if "userId" in usertoken:
+            form = BackgroundForm(request.POST, request.FILES)
+            print(request.POST, request.FILES)
+            if form.is_valid():
+                id = genId(ImageBackground.objects.all())
+                fon = ImageBackground.objects.create(id=id)
+                if(type(request.FILES['image'])==TemporaryUploadedFile):
+                    fon.image=request.FILES['image'].temporary_file_path()
+                else:
+                    fon.image=request.FILES['image']
+                fon = form.save(commit=False)
+                fon.title = name
+                fon.id = id
+                fon.save()
+                Setbackground(usertoken.get("userId"),fon)
+                return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}),status=400)

@@ -96,6 +96,9 @@
   transform: none;
   margin: auto;
 }
+img.choice.active{
+  opacity: 0.5;
+}
 .configElement .text input{
   font-size: 24px;
   width: 90%;
