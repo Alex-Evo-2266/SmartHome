@@ -24,9 +24,9 @@ export const ServerOption = () =>{
     }
   },[error,message, clearError])
 
-  const checkedHandler = event => {
-    setServerconf({ ...serverconf, [event.target.name]: event.target.checked })
-  }
+  // const checkedHandler = event => {
+  //   setServerconf({ ...serverconf, [event.target.name]: event.target.checked })
+  // }
   const changeHandler = event => {
     setServerconf({ ...serverconf, [event.target.name]: event.target.value })
   }
@@ -61,6 +61,9 @@ export const ServerOption = () =>{
 
   return(
     <div className = "pagecontent">
+      <div className="configElement">
+        <h2>Server config</h2>
+      </div>
       <div className="configElement">
         <p className="switchText">update frequency (s)</p>
         <label className="number">

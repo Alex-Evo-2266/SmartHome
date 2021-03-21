@@ -1,5 +1,6 @@
 import React,{useContext,useEffect,useState,useCallback} from 'react'
 import {AuthContext} from '../../../context/AuthContext.js'
+import {UserContext} from '../../../context/UserContext'
 import {Loader} from '../../Loader'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -9,6 +10,8 @@ import gibridStyle from '../../../img/gibridstyle.png'
 
 export const UserOption = () =>{
   const auth = useContext(AuthContext)
+  const config = useContext(UserContext)
+
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
   const [userconf , setUserconf] = useState({
@@ -18,14 +21,13 @@ export const UserOption = () =>{
   });
 
   const updataConf = useCallback(async()=>{
-    const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    if(!data)return;
+    if(!config)return;
     setUserconf({
-      auteStyle:data.auteStyle||false,
-      staticBackground:data.staticBackground||false,
-      style:data.Style||"light",
+      auteStyle:config.auteStyle||false,
+      staticBackground:config.staticBackground||false,
+      style:config.Style||"light",
     })
-  },[request,auth.token])
+  },[config])
 
   useEffect(()=>{
     updataConf()
@@ -73,11 +75,13 @@ export const UserOption = () =>{
           <i className="indicator"></i>
         </label>
       </div>
-      <div className="configElement choice">
-        <h2>Style</h2>
-        <img alt="style night" src={nightStyle} className={`choice ${(userconf.style==="night")?"active":null}`} name="night" onClick={styleHandler}/>
-        <img alt="style gibrid" src={gibridStyle} className={`choice ${(userconf.style==="gibrid")?"active":null}`} name="gibrid" onClick={styleHandler}/>
-        <img alt="style light" src={lightStyle} className={`choice ${(userconf.style==="light")?"active":null}`} name="light" onClick={styleHandler}/>
+      <div className="configElement">
+        <p className="text">Style</p>
+        <div className="configElement choice">
+          <img alt="style night" src={nightStyle} className={`choice ${(userconf.style==="night")?"active":null}`} name="night" onClick={styleHandler}/>
+          <img alt="style gibrid" src={gibridStyle} className={`choice ${(userconf.style==="gibrid")?"active":null}`} name="gibrid" onClick={styleHandler}/>
+          <img alt="style light" src={lightStyle} className={`choice ${(userconf.style==="light")?"active":null}`} name="light" onClick={styleHandler}/>
+        </div>
       </div>
       <button onClick={userConfigHandler}>Save</button>
     </div>

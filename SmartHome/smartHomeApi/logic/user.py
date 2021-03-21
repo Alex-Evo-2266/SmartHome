@@ -1,5 +1,5 @@
 from django.conf import settings
-from ..models import User, UserConfig,genId
+from ..models import User, UserConfig,genId,MenuElement
 import json
 import bcrypt
 import jwt
@@ -70,16 +70,23 @@ def userConfEdit(id, data):
     except Exception as e:
         return False
 
+def menuConfEdit(id, data):
+    try:
+        user = User.objects.get(id=id)
+        user.menuelement_set.all().delete()
+        for item in data:
+            user.menuelement_set.create(id = genId(MenuElement.objects.all()), title = item["title"],iconClass=item["icon"],url=item["url"])
+        return True
+    except Exception as e:
+        return False
+
 def Setbackground(id,background):
     try:
-        print("d",id,background)
         user = User.objects.get(id=id)
         backgrounds = user.userconfig.background.all()
-        print(backgrounds,background)
         for item in backgrounds:
             if(item.title==background.title):
                 user.userconfig.background.remove(item)
-        print(background)
         user.userconfig.background.add(background)
         return True
     except Exception as e:

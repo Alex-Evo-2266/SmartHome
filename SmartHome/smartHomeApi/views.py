@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
-from .logic.user import addUser, login as Authorization, userConfEdit,user,editUser,Setbackground
+from .logic.user import addUser, login as Authorization, userConfEdit,menuConfEdit,user,editUser,Setbackground
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
@@ -45,7 +45,7 @@ def clientConfig(request):
     data = auth(request)
     if "userId" in data:
         user = User.objects.get(id=data.get("userId"))
-        result=user.userconfig.give()
+        result={**user.userconfig.give(),"MenuElements":user.geveConfig()}
         return HttpResponse(json.dumps(result),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
@@ -185,4 +185,13 @@ def setBackground(request,name):
                 fon.save()
                 Setbackground(usertoken.get("userId"),fon)
                 return HttpResponse(json.dumps({"message":"ok"}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def editmenu(request):
+    usertoken = auth(request)
+    if "userId" in usertoken:
+        data = json.loads(request.body)
+        print("ok",data,usertoken["userId"])
+        if menuConfEdit(usertoken["userId"],data):
+            return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}),status=400)

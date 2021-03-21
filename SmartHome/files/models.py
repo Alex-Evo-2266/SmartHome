@@ -70,16 +70,15 @@ class MovieGanre(models.Model):
         verbose_name = "Жанр"
         verbose_name_plural = "Жанры"
 
-class Movie(models.Model):
-    """фильмы"""
+class BaseMovieClass(models.Model):
     title = models.CharField("Название",max_length=150)
     tagline = models.CharField("Слоган",max_length=150, default="")
     discription = models.TextField("Описание",default="")
-    poster = models.ImageField("Постер",upload_to="files/movie/posters/")
+    poster = models.ImageField("Постер",upload_to="files/movie/posters/",null=True)
     year = models.PositiveSmallIntegerField("Дата выхода", default=2019)
     country = models.CharField("Страна",max_length=30)
-    directors = models.ManyToManyField(MovieActor, verbose_name="режиссер", related_name="film_director")
-    actors = models.ManyToManyField(MovieActor, verbose_name="актеры", related_name="film_actor")
+    directors = models.ManyToManyField(MovieActor, verbose_name="режиссер", related_name="%(class)s_film_director")
+    actors = models.ManyToManyField(MovieActor, verbose_name="актеры", related_name="%(class)s_film_actor")
     genres = models.ManyToManyField(MovieGanre, verbose_name="Жанры")
     world_premiere = models.DateField("примьера в мире", default=date.today)
     budget = models.PositiveIntegerField("Бюджет", default=0, help_text="указать сумму в доллорах")
@@ -119,10 +118,17 @@ class Movie(models.Model):
         }
 
     class Meta:
+        abstract = True
+
+
+class Movie(BaseMovieClass):
+    """фильмы"""
+
+    class Meta:
         verbose_name = "Фильм"
         verbose_name_plural = "Фильмы"
 
-class Serial(Movie):
+class Serial(BaseMovieClass):
     """сериалы"""
     count_seasons = models.PositiveSmallIntegerField("количество сезонов", default=1)
     closed = models.BooleanField("закрыт",default=False)
@@ -139,6 +145,8 @@ class Serial(Movie):
     class Meta:
         verbose_name = "Сериал"
         verbose_name_plural = "Сериалы"
+
+
 
 
 

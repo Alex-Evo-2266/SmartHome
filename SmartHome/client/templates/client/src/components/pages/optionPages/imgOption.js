@@ -1,11 +1,10 @@
 import React,{useState,useCallback,useEffect,useContext} from 'react'
-import {AuthContext} from '../../../context/AuthContext.js'
-import {useHttp} from '../../../hooks/http.hook'
+import {UserContext} from '../../../context/UserContext'
 import {ImageInput} from '../../moduls/imageInput'
 
 export const ImgOption = () =>{
-  const auth = useContext(AuthContext)
-  const {loading, request, error, clearError} = useHttp();
+  const config = useContext(UserContext)
+
   const [userconf , setUserconf] = useState({
     base:'',
     sunrise:'',
@@ -15,14 +14,13 @@ export const ImgOption = () =>{
   });
 
   const updataConf = useCallback(async()=>{
-    const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    if(!data)return;
+    if(!config||!config.images)return;
     let fon = {}
-    for (var item of data.images) {
+    for (var item of config.images) {
       fon = {...fon,[item.title]:item.image}
     }
-    setUserconf({...userconf,...fon})
-  },[request,auth.token])
+    setUserconf(prev=>{return{...prev,...fon}})
+  },[config])
 
   useEffect(()=>{
     updataConf()

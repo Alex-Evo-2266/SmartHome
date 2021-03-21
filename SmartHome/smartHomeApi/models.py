@@ -33,6 +33,9 @@ class User(models.Model):
     def __str__(self):
         return self.UserName
 
+    def geveConfig(self):
+        return set_to_list_dict(self.menuelement_set.all())
+
 class ImageBackground(models.Model):
     id = models.IntegerField("id", primary_key=True)
     title = models.CharField("название", max_length = 200, default="base")
@@ -64,6 +67,22 @@ class UserConfig(models.Model):
         "staticBackground":self.staticBackground,
         "images":set_to_list_dict(self.background.all())
         }
+
+class MenuElement(models.Model):
+    """docstring for MenuElement."""
+    id = models.IntegerField("id", primary_key=True)
+    title = models.CharField("user name", max_length = 200)
+    iconClass = models.CharField("user name", max_length = 200, default="fab fa-chrome")
+    url = models.SlugField(max_length=160, default="#")
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+
+    def model_to_dict(self):
+        return{
+        "title":self.title,
+        "iconClass":self.iconClass,
+        "url":self.url
+        }
+
 
 class ServerConfig(models.Model):
     updateFrequency = models.IntegerField("time update", default=10)

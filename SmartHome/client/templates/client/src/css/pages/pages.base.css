@@ -70,10 +70,12 @@
 .configElement.choice{
   height: 170px;
   display: flex;
+  border: none;
+  box-shadow: none;
 }
 .configElement h2{
   display: block;
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
   font-size: 40px;
   text-align: center;
@@ -89,14 +91,17 @@
   position: relative;
   padding: 0;
   left: 0;
-  top:30px;
+  /* top:30px; */
   width: 80px;
   height: 80px;
   border-radius: 50%;
   transform: none;
+  transition: .5s;
   margin: auto;
 }
-img.choice.active{
+img.choice.active,
+img.choice:hover
+{
   opacity: 0.5;
 }
 .configElement .text input{
