@@ -2,6 +2,7 @@ import React, {useContext,useState} from 'react'
 import {AddControlContext} from './AddControlContext'
 import {BackForm} from '../../moduls/backForm'
 import {AddButton} from './Control/addButton'
+import {AddSlider} from './Control/addSlider'
 
 export const AddControl = ()=>{
   const {addControl, hide} = useContext(AddControlContext)
@@ -13,6 +14,13 @@ export const AddControl = ()=>{
   }
 
   const addButton = (t)=>{
+    if(addControl.OK){
+      addControl.OK(t)
+    }
+    close()
+  }
+
+  const addSlider = (t)=>{
     if(addControl.OK){
       addControl.OK(t)
     }
@@ -37,7 +45,9 @@ export const AddControl = ()=>{
               <li onClick={()=>setTypeChild("sensor")}><span>4</span>sensor monitor</li>
             </ul>:
             (typeChild==="button")?
-            <AddButton add={addButton}/>
+            <AddButton add={addButton}/>:
+            (typeChild==="slider")?
+            <AddSlider add={addButton}/>
             :null
           }
         </div>

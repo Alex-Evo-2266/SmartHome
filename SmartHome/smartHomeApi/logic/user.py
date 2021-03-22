@@ -4,6 +4,8 @@ import json
 import bcrypt
 import jwt
 
+import smtplib
+
 
 def addUser(data):
     try:
@@ -29,14 +31,7 @@ def login(data):
 
 def user(id):
     user = User.objects.get(id=id)
-    ret = {
-        "UserName":user.UserName,
-        "UserSurname":user.UserSurname,
-        "Mobile":user.UserMobile,
-        "Email":user.UserEmail,
-        "ImageId":None
-    }
-    return ret
+    return user.model_to_dict()
 
 def editUser(id,data):
     try:
@@ -75,7 +70,7 @@ def menuConfEdit(id, data):
         user = User.objects.get(id=id)
         user.menuelement_set.all().delete()
         for item in data:
-            user.menuelement_set.create(id = genId(MenuElement.objects.all()), title = item["title"],iconClass=item["icon"],url=item["url"])
+            user.menuelement_set.create(id = genId(MenuElement.objects.all()), title = item["title"],iconClass=item["iconClass"],url=item["url"])
         return True
     except Exception as e:
         return False
@@ -91,3 +86,24 @@ def Setbackground(id,background):
         return True
     except Exception as e:
         return False
+
+def send_email(host, subject, to_addr, from_addr,from_pass, body_text):
+    """
+    Send an email
+    """
+
+    BODY = "\r\n".join((
+        "From: %s" % from_addr,
+        "To: %s" % to_addr,
+        "Subject: %s" % subject ,
+        "",
+        body_text
+    ))
+
+    server = smtplib.SMTP(host)
+    server.login(from_addr,from_pass)
+    print(from_addr, [to_addr], BODY)
+    # server = smtplib.SMTP('localhost')
+    # server.set_debuglevel(1)
+    server.sendmail(from_addr, [to_addr], BODY)
+    server.quit()

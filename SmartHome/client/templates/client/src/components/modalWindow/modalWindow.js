@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 
 export const ModalWindow = ({
   position = "fixed",
-  z=5,
+  zindex=5,
   children,
   top=240,
   left=300,
@@ -73,7 +73,7 @@ export const ModalWindow = ({
   }
 
   return(
-    <div className={`modalWindow ${className}`} style={{top:`${point.top}px`,left:`${point.left}px`,zIndex:z,position:position,...style}}>
+    <div className={`modalWindow ${className}`} style={{top:`${point.top}px`,left:`${point.left}px`,zIndex:zindex,position:position,...style}}>
       <div className="modalHeader" style={{height: `${heightToolbar}px`}} onMouseDown={(moving)?mouseDown:null} onDragStart={()=>false}>
         <h4>{title}</h4>
         {(userBtn)?<button className = "userBtn" onClick = {userBtn}><i className="fas fa-list"></i></button>:null}

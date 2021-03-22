@@ -51,6 +51,7 @@ export const Menu = ()=>{
           {
             (config&&config.MenuElements)?
             config.MenuElements.map((item,index)=>{
+              let t = item.url.indexOf("/")
               if(item.url==="/terminal"){
                 return(
                   <li key={index} onClick = {()=>(menu.menu.visible)?menu.togle():null}>
@@ -63,10 +64,17 @@ export const Menu = ()=>{
               }
               return(
                 <li key={index} onClick = {()=>(menu.menu.visible)?menu.togle():null}>
+                {
+                  (t!==0)?
+                  <a href = {item.url}>
+                    <span className = "icon"><i className={item.iconClass}></i></span>
+                    <span className = "title">{item.title}</span>
+                  </a>:
                   <NavLink to = {item.url}>
                     <span className = "icon"><i className={item.iconClass}></i></span>
                     <span className = "title">{item.title}</span>
                   </NavLink>
+                }
                 </li>
               )
             })

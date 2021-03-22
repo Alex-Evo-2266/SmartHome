@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
-from .logic.user import addUser, login as Authorization, userConfEdit,menuConfEdit,user,editUser,Setbackground
+from .logic.user import addUser,send_email, login as Authorization, userConfEdit,menuConfEdit,user,editUser,Setbackground
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from django.views.decorators.csrf import csrf_exempt
 from .logic.Cart import setPage,getPage
 from django.core.files.uploadedfile import TemporaryUploadedFile
+
 
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
@@ -194,4 +195,20 @@ def editmenu(request):
         print("ok",data,usertoken["userId"])
         if menuConfEdit(usertoken["userId"],data):
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def giveusers(request):
+    users = User.objects.all()
+    usersList = list()
+    for item in users:
+        usersList.append(item.model_to_dict())
+    return HttpResponse(json.dumps(usersList),status=200)
+
+def addNewUser(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if addUser(data):
+            # str = "user: "+data["name"]+" password: "+data["password"]
+            send_email("smtp.mail.ru","Test email from Python",data["email"],"ghbdtn2244@mail.ru","66dfghty","str test")
+            return HttpResponse(json.dumps({"message":"ok"}))
     return HttpResponse(json.dumps({"message":"error"}),status=400)

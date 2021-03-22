@@ -1,6 +1,9 @@
+@import "./menuOption.light.css";
+@import "./menuOption.night.css";
+
 .menu-component-paragraph{
   height: 60px;
-  width: 100%;
+  width: calc(100% - 2px);
   border: 1px solid #333;
   display: flex;
   position: relative;
@@ -14,7 +17,6 @@
 .menu-component-paragraph .icon,
 .menu-component-btn
 {
-  color: #fff;
   position: relative;
   display: block;
   min-width: 60px;

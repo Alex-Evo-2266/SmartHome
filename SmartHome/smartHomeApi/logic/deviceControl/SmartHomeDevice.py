@@ -189,7 +189,8 @@ class ControlDevices():
 
     def set_value(self,status)->None:
         if(type(self.device)==Variable):
-            self.device.set_value(status)
+            deviceSetStatus(self.__item["DeviceId"],"value",status)
+            # self.device.set_value(status)
 
     def set_power(self,status):
         if(type(self.device)==Bulb):

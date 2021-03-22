@@ -1,6 +1,7 @@
 import React,{useContext,useEffect,useState,useCallback} from 'react'
 import {AuthContext} from '../../../context/AuthContext.js'
 import {Loader} from '../../Loader'
+import {Link} from 'react-router-dom'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 
@@ -48,6 +49,9 @@ export const UsersOption = () =>{
 
   return(
     <div className = "pagecontent">
+      <div className="configElement">
+        <Link to={"/user/add"}>Create user</Link>
+      </div>
       <div className="configElement">
         <p className="text">secret key</p>
         <label className="text">

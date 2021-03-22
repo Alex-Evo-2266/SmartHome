@@ -5,6 +5,7 @@ import {InputNumber} from '../../../moduls/inputNumber'
 
 export const AddButton = ({add})=>{
   const {devices} = useContext(DeviceStatusContext)
+  const [allDevices, setDevices] = useState(devices.filter(item=>item.DeviceType!=="sensor"));
   const [device, setDevice] = useState({});
   const [deviceConfig, setDeviceConfig] = useState({})
   // const auth = useContext(AuthContext)
@@ -31,6 +32,10 @@ export const AddButton = ({add})=>{
     }
   },[device])
 
+  // useEffect(()=>{
+  //   setDevices
+  // },[allDevices])
+
   useEffect(()=>{
     if(!device||!device.DeviceConfig)return
     console.log(device.DeviceControl,buttonForm.typeAction);
@@ -55,7 +60,7 @@ export const AddButton = ({add})=>{
     <ul>
     {
       (!device||!device.DeviceId)?
-        devices.map((item,index)=>{
+        allDevices.map((item,index)=>{
           return(
             <li key={index} onClick={()=>setDevice(item)}><span>{index+1}</span>{item.DeviceName}</li>
           )

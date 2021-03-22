@@ -10,6 +10,7 @@ import {ScriptsPage} from './Page/ScriptsPage'
 import {NewScriptsPage} from './Page/NewScriptsPage'
 import {UsersPage} from './Page/UsersPage'
 import {AddDevicesPage} from './Page/AddDevicePage'
+import AddUser from './Page/AddUser'
 
 export const useRoutes = (isAuthenticated,level)=>{
   if(isAuthenticated){
@@ -48,6 +49,9 @@ export const useRoutes = (isAuthenticated,level)=>{
         </Route>
         <Route path="/devices/add" exact>
           <AddDevicesPage/>
+        </Route>
+        <Route path="/user/add" exact>
+          <AddUser/>
         </Route>
         <Redirect to="/home"/>
       </Switch>

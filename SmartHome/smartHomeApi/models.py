@@ -33,6 +33,17 @@ class User(models.Model):
     def __str__(self):
         return self.UserName
 
+    def model_to_dict(self):
+        return{
+            "UserId":self.id,
+            "UserName":self.UserName,
+            "UserSurname":self.UserSurname,
+            "Mobile":self.UserMobile,
+            "Email":self.UserEmail,
+            "Level":self.UserLevel,
+            "ImageId":None
+        }
+
     def geveConfig(self):
         return set_to_list_dict(self.menuelement_set.all())
 

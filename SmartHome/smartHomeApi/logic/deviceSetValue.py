@@ -5,11 +5,9 @@ from ..classes.devicesArrey import DevicesArrey
 devicesArrey = DevicesArrey()
 
 def setValue(id, type, value):
-    print(id, type, value)
     try:
         item = Device.objects.get(id=id)
         deviceDect = devicesArrey.get(id)
-        print(deviceDect)
         device = deviceDect["device"]
         def confdecod(data):
             arr2 = []
@@ -17,7 +15,6 @@ def setValue(id, type, value):
                 arr2.append(element.receiveDict())
             return arr2
         e = device
-        print(device)
         if(type=="modeTarget"):
             print("d")
             e.target_mode()
@@ -37,7 +34,7 @@ def setValue(id, type, value):
         if(type=="mode"):
             e.set_mode(value)
         if(type=="variable"):
-            print("not")
+            e.set_value(value)
         return True
     except Exception as e:
         print(e)

@@ -13,6 +13,8 @@ urlpatterns = [
     path('user',views.giveuser),
     path('user/edit',views.edituser),
     path('user/menu/edit',views.editmenu),
+    path('users/get',views.giveusers),
+    path('user/add',views.addNewUser),
     path('devices/add',views.deviceAdd),
     # path('devices/all',views.devicesGive),
     path('devices/get/<int:id>',views.deviceGive),
