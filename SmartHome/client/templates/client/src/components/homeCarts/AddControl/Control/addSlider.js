@@ -1,11 +1,10 @@
 import React, {useContext,useState,useEffect} from 'react'
 import {DeviceStatusContext} from '../../../../context/DeviceStatusContext'
 // import {AuthContext} from '../../../../context/AuthContext.js'
-import {InputNumber} from '../../../moduls/inputNumber'
 
 export const AddSlider = ({add})=>{
   const {devices} = useContext(DeviceStatusContext)
-  const [allDevices, setDevices] = useState(devices.filter(item=>(item.DeviceType!=="sensor"&&item.DeviceType!=="variable"&&item.DeviceType!=="switch")));
+  const [allDevices] = useState(devices.filter(item=>(item.DeviceType!=="sensor"&&item.DeviceType!=="variable"&&item.DeviceType!=="switch")));
   const [device, setDevice] = useState({});
   // const [deviceConfig, setDeviceConfig] = useState({})
   // const auth = useContext(AuthContext)
@@ -43,9 +42,9 @@ export const AddSlider = ({add})=>{
   //   setDeviceConfig(conf)
   // },[device,buttonForm.typeAction])
 
-  const outaction = ()=>{
-    add(buttonForm)
-  }
+  // const outaction = ()=>{
+  //   add(buttonForm)
+  // }
 
   const out = (type)=>{
     setButtonForm({...buttonForm,typeAction:type})

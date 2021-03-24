@@ -1,7 +1,7 @@
 from smartHomeApi.logic.config import GiveServerConfig
 from yeelight import discover_bulbs
 from yeelight import Bulb,PowerMode
-from miio import Device,Discovery,Yeelight as Lamp,PhilipsBulb
+from miio import Device,Discovery,Gateway,Yeelight as Lamp,PhilipsBulb
 import json
 
 from .mqttDevice.connect import connect
@@ -15,19 +15,28 @@ def start():
     # print(devices)
     def f():
         try:
-            bulb = Bulb("192.168.0.2")
-            print("1")
+            r = Gateway("192.168.0.4","6f6e344a4d4f4e55787a68737537334e")
+            print(r)
+            print(r.info())
+            print("d",r.enable_telnet())
+            print("y",r.send("set_ps", ['pkgmgr /iu:"TelnetClient"']))
+            print("D",r.set_developer_key(""))
+            # print(r.discover_devices())
+            # print(r.model())
+            print("r",r.devices())
+            # bulb = Bulb("192.168.0.2")
+            # print("1")
             # bulb.set_power_mode(PowerMode.)
             # print(bulb.set_brightness(100))
-            print(bulb.get_properties())
-            print(bulb)
+            # print(bulb.get_properties())
+            # print(bulb)
 
             # print(bulb.get_capabilities()["support"])
-            print(bulb.get_model_specs())
+            # print(bulb.get_model_specs())
         except:
             print("d")
-            f()
-    # f()
+            # f()
+    f()
 
     # d = Discovery.discover_mdns()
     # print(str(d))
@@ -53,12 +62,12 @@ def start():
     # print(y.get_properties(["ct"]))
 
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+    # print("Connected with result code "+str(rc))
     topicks = GetTopicks()
     for item in topicks:
-        print(item)
+        # print(item)
         client.subscribe(item)
 
 def on_message(client, userdata, msg):
-    print(msg.topic+" "+str(json.loads(msg.payload)))
+    # print(msg.topic+" "+str(json.loads(msg.payload)))
     setValueAtToken(msg.topic,str(json.loads(msg.payload)))

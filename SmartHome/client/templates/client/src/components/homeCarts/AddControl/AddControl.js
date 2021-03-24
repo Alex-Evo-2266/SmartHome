@@ -20,13 +20,6 @@ export const AddControl = ()=>{
     close()
   }
 
-  const addSlider = (t)=>{
-    if(addControl.OK){
-      addControl.OK(t)
-    }
-    close()
-  }
-
   if(!addControl.visible){
     return null;
   }

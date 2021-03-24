@@ -10,7 +10,7 @@ import {TriggerBlock} from '../components/moduls/programmBlock/triggerBlock'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
 import {AddScriptContext} from '../components/addScript/addScriptContext'
 import {useHistory} from 'react-router-dom'
-import {groupIfClass,actClass,triggerClass} from '../myClass.js'
+// import {groupIfClass,actClass,triggerClass} from '../myClass.js'
 
 export const NewScriptsPage = () => {
   const history = useHistory()
@@ -24,19 +24,39 @@ export const NewScriptsPage = () => {
   const[script, setScript]=useState({
     name:"",
     trigger:[],
-    if:new groupIfClass("and"),
+    if:{oper:"and",ifElement:[]},
     then:[],
     else:[]
   })
 
   const addTrigger = ()=>{
     show("triggerBlock",(none,dataDev)=>{
+      console.log(script)
       if(!dataDev||!dataDev.DeviceId)
         return
       let mas = script;
-      mas.trigger.push(new triggerClass("device",dataDev.DeviceId))
+      mas.trigger.push({type:"device",DeviseId:dataDev.DeviceId})
       setScript(mas)
     })
+  }
+
+  const deleteTrigger = (index)=>{
+    console.log(script,index);
+    if(!script||!script.trigger)
+      return
+    let mas = script;
+    mas.trigger = mas.trigger.filter((_,i)=>i!==index)
+    setScript(mas)
+    console.log(mas);
+    setCost((prev)=>!prev)
+  }
+
+  const addEl = (type)=>{
+
+  }
+
+  const deleteEl = (type,index)=>{
+
   }
 
   const changeHandler = (event)=>{
@@ -62,56 +82,16 @@ export const NewScriptsPage = () => {
   }
 
   useEffect(()=>{
-    message(error,"error")
-    return ()=>{
-      clearError();
-    }
-  },[error,message, clearError])
-
-  const updata = useCallback(async(data,index,reboot)=>{
-    if(reboot)
-      await setCost(false)
-    let e = new groupIfClass("and")
-    e.updata(data)
-    await setScript({...script,if:e})
-    await setCost(true)
+    console.log(script);
   },[script])
-
-  const updataDevice = useCallback(async()=>{
-    const data = await request('/api/devices/all', 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    setDevices(data);
-  },[request,auth.token])
-
-  const updataDev = useCallback(async(item,index1,block1)=>{
-    let s = script[block1];
-    s[index1]=item
-    setScript({...script,[block1]:s})
-  },[script])
-
-  const addEl = (block="then")=>{
-    show("deviceBlock",(none,dataDev)=>{
-      if(!dataDev||!dataDev.DeviceId)
-        return
-      let mas = script;
-      mas[block].push(new actClass("device",dataDev.DeviceId,"",null))
-      setScript(mas)
-    })
-  }
-
-  const deleteEl = async(index1,block1)=>{
-    let ar = script[block1];
-    let newar = ar.filter((item, index2)=>index2!==index1)
-    await setCost(false)
-    await setScript({...script,[block1]:newar})
-    await setCost(true)
-  }
 
   useEffect(()=>{
-    updataDevice()
-  },[updataDevice])
+    if(!cost)
+    setCost(true)
+  },[cost])
 
   return(
-    <DeviceStatusContext.Provider value={{devices:devices, updateDevice:updataDevice}}>
+    <>
       <AddScriptBase/>
       <div className = "NewScripConteiner">
       <h2>Create new script</h2>
@@ -134,7 +114,7 @@ export const NewScriptsPage = () => {
               {
                 (cost)?
                 script.trigger.map((item,index)=>{
-                  return <TriggerBlock key={index} deleteEl={deleteEl} index={index} updata={updataDev} block="trigger" deviceId={item.DeviseId}/>
+                  return <TriggerBlock key={index} deleteEl={()=>deleteTrigger(index)} index={index} block="trigger" deviceId={item.DeviseId}/>
                 }):null
               }
             </div>
@@ -145,7 +125,7 @@ export const NewScriptsPage = () => {
             </div>
             {
               (script.if.ifElement&&cost)?
-                <GroupBlock index = {"1"} type={script.if.oper} requpdata={updata} elements={script.if}/>
+                <GroupBlock index = {"1"} type={script.if.oper} elements={script.if}/>
               :null
             }
             <div className="baseBlock">
@@ -160,7 +140,7 @@ export const NewScriptsPage = () => {
             {
               (cost)?
               script.then.map((item,index)=>{
-                return <ActBlock deleteEl={deleteEl} key={index} el={item} index={index} updata={updataDev} block="then" deviceId={item.deviceId}/>
+                return <ActBlock deleteEl={()=>deleteEl("then",index)} key={index} el={item} index={index} block="then" deviceId={item.deviceId}/>
               }):null
             }
             </div>
@@ -176,7 +156,7 @@ export const NewScriptsPage = () => {
             {
               (cost)?
               script.else.map((item,index)=>{
-                return <ActBlock deleteEl={deleteEl} key={index} el={item} index={index} updata={updataDev} block="else" deviceId={item.deviceId}/>
+                return <ActBlock deleteEl={deleteEl} key={index} el={item} index={index} block="else" deviceId={item.deviceId}/>
               }):
               null
             }
@@ -184,6 +164,6 @@ export const NewScriptsPage = () => {
           </div>
         </div>
       </div>
-    </DeviceStatusContext.Provider>
+    </>
   )
 }

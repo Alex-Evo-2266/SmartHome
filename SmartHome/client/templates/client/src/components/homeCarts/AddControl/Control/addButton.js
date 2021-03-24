@@ -5,7 +5,7 @@ import {InputNumber} from '../../../moduls/inputNumber'
 
 export const AddButton = ({add})=>{
   const {devices} = useContext(DeviceStatusContext)
-  const [allDevices, setDevices] = useState(devices.filter(item=>item.DeviceType!=="sensor"));
+  const [allDevices] = useState(devices.filter(item=>item.DeviceType!=="sensor"));
   const [device, setDevice] = useState({});
   const [deviceConfig, setDeviceConfig] = useState({})
   // const auth = useContext(AuthContext)

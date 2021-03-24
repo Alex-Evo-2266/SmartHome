@@ -11,7 +11,6 @@
 }
 .NewCardElement .NewCardHeader{
   min-height: 80px;
-  background: #fff;
 }
 .NewCardElement .NewCardHeader .DeviceName p{
   font-size: 3em;
@@ -24,15 +23,8 @@
 }
 .DeviceControlLi{
   display: flex;
-  background: #fff;
   height: 50px;
   justify-content:space-between;
-}
-.DeviceControlLi:nth-child(2n+1){
-  background: #ddd;
-}
-.DeviceControlLi:nth-child(2n+2){
-  background: #fff;
 }
 .DeviceControlLi .DeviceControlLiContent{
   display: flex;
@@ -58,9 +50,4 @@ h4.offline{
   width: 100%;
   height: 50px;
   border: none;
-  background: #cdd5dc;
-}
-.NewCardElement .NewCardControl .cardControlBtn:hover{
-  background: #888;
-  color: #fff;
 }

@@ -1,0 +1,22 @@
+.light .NewCardElement .NewCardHeader{
+  background: #fff;
+}
+
+.light .DeviceControlLi{
+    background: #fff;
+    color: #000;
+}
+.light .DeviceControlLi:nth-child(2n+1){
+  background: #ddd;
+  color: #000;
+}
+.light .DeviceControlLi:nth-child(2n+2){
+  background: #fff;
+}
+.light .NewCardElement .NewCardControl .cardControlBtn{
+  background: #cdd5dc;
+}
+.light .NewCardElement .NewCardControl .cardControlBtn:hover{
+  background: #888;
+  color: #fff;
+}

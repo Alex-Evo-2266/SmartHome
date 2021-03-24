@@ -1,3 +1,6 @@
+@import "./checkbox.light.css";
+@import "./checkbox.night.css";
+
 .custom1-checkbox{
   /* position: absolute;
   top: 50%;
@@ -7,9 +10,6 @@
   width: 90px;
   height: 40px;
   border-radius: 25px;
-  background: linear-gradient(0deg, #d8d8d8, #cccccc);
-  border-top: 0.02em solid #ececec;
-  border-bottom: 0.02em solid #ececec;
 }
 .custom1-checkbox .custom1-inner{
   position: absolute;
@@ -17,9 +17,7 @@
   left: 5px;
   right: 5px;
   bottom: 5px;
-  background: linear-gradient(0deg, #a5a5a5, #717171);
   border-radius: 20px;
-  box-shadow: inset 0 0 15px rgba(0,0,0,.5);
 }
 .custom1-checkbox .custom1-inner .custom1-toggle{
   position: absolute;
@@ -28,11 +26,7 @@
   width: 33px;
   height: 33px;
   border-radius: 50%;
-  background: linear-gradient(0deg, #ccc, #e4e4e4);
-  box-shadow: 0 4px 6px rgba(0,0,0,.2);
   box-sizing: border-box;
-  border-top: 0.04em solid #ececec;
-  border-bottom: 0.01em solid #ececec;
   transition: 0.5s;
 }
 .custom1-checkbox .custom1-inner.active .custom1-toggle{
@@ -48,12 +42,10 @@
   left: 4px;
   right: 4px;
   bottom: 4px;
-  background: linear-gradient(0deg, #e4e4e4, #ccc);
   border-radius: 50%;
   text-align: center;
   font-size: 10px;
   line-height: 28px;
-  color: #a9a9a9
 }
 .custom1-checkbox .custom1-inner.active .custom1-toggle::before{
   content: 'ON';

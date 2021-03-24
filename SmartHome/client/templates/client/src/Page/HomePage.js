@@ -66,7 +66,8 @@ const importCarts = useCallback(async()=>{
     setCarts(data.page.carts)
     console.log(data.page.carts);
     const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    setInterval(data2.server.updateFrequency)
+
+    setInterval(data2.updateFrequency)
     // const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     // await setScripts(data3);
   } catch (e) {

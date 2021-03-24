@@ -4,7 +4,7 @@ import {AddScriptContext} from '../../addScript/addScriptContext'
 import {StatusValue} from './actBlockElement/statusValue'
 import {DeviceValue} from './actBlockElement/DeviseValue'
 import {TextValue} from './actBlockElement/TextValue'
-import {valueClass} from '../../../myClass.js'
+// import {valueClass} from '../../../myClass.js'
 
 export const ActBlock = ({deviceId,type,updata,index,el,block,deleteEl})=>{
   const [status, setStatus]=useState(["power"])
@@ -44,7 +44,11 @@ export const ActBlock = ({deviceId,type,updata,index,el,block,deleteEl})=>{
   const addStatus = ()=>{
     showData("statusBlock",{DeviceType:device.DeviceType},(type,deviceitem1)=>{
       let el2 = result
-      let value1 = new valueClass(type)
+      let value1 = {type,value:""}
+      if(type==="status")
+        value1.value = "on"
+      if(type==="value")
+        value1.value = "0"
       if(deviceitem1&&type==="DeviseValue"){
         setValueDevice(deviceitem1)
         value1.value = {DeviceId:deviceitem1.DeviceId,property:"power"}

@@ -9,6 +9,7 @@ import {OptionsPage} from './Page/OptionsPage'
 import {ScriptsPage} from './Page/ScriptsPage'
 import {NewScriptsPage} from './Page/NewScriptsPage'
 import {UsersPage} from './Page/UsersPage'
+import {FilesPage} from './Page/FilesPage'
 import {AddDevicesPage} from './Page/AddDevicePage'
 import AddUser from './Page/AddUser'
 

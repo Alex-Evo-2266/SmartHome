@@ -252,3 +252,41 @@ class CartChildren(models.Model):
             "deviceId":self.device.id,
             "order":self.order,
         }
+
+class Scripts(models.Model):
+    name = models.CharField("script name", max_length = 50)
+    status = models.BooleanField("статус",default=False)
+
+    def __str__(self):
+        return self.name
+
+class Value(models.Model):
+    status = models.BooleanField("математ",default=False)
+    device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
+    type = models.CharField("type value device", max_length = 50, default="")
+    value = models.CharField("type value device", max_length = 50, default="")
+    valuefirst = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True,related_name="first")
+    valuesecond = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True,related_name="second")
+
+class Triger(models.Model):
+    typeDevice = models.CharField("type value device", max_length = 50)
+    type = models.CharField("type value device", max_length = 50)
+    device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
+    script = models.ForeignKey(Scripts, on_delete = models.CASCADE)
+
+class IfBlock(models.Model):
+    type = models.CharField("type block", max_length = 50)
+    block = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True)
+    script = models.ForeignKey(Scripts, on_delete = models.CASCADE)
+
+class If(models.Model):
+    block = models.OneToOneField(IfBlock, on_delete = models.CASCADE)
+    type = models.CharField("type value device", max_length = 50)
+    device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
+    ifType = models.CharField("type if", max_length = 50)
+    value = models.OneToOneField(Value, on_delete = models.CASCADE)
+
+class Action(models.Model):
+    device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
+    type = models.CharField("type math operation", max_length = 50, default="")
+    value = models.OneToOneField(Value, on_delete = models.CASCADE)
