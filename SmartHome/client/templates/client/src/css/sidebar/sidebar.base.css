@@ -1,0 +1,58 @@
+@import "./sidebar.light.css";
+@import "./sidebar.night.css";
+
+.sidebar{
+  position: fixed;
+  height: 100vh;
+  width: 240px;
+  right: -240px;
+  top: 0;
+  transition: .5s;
+}
+.sidebar ul{
+  position: relative;
+  top: 150px;
+}
+.sidebar .toggle-sidebar{
+  transition: .5s;
+  height: 60px;
+  width: 60px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  text-align: center;
+  line-height: 60px;
+  font-size: 24px;
+  font-weight: 600;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.sidebar.active{
+  right: 0;
+}
+.sidebar.active .toggle-sidebar{
+  right: 240px;
+}
+.sidebar ul li{
+  margin: 4px 0;
+  height: 60px;
+  transition: .5s;
+}
+.sidebar ul li a{
+  text-decoration: none;
+  display: block;
+  line-height: 60px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+@media (max-width: 700px){
+  .sidebar .toggle-sidebar{
+    border-top-left-radius: 0;
+    top: 60px;
+  }
+  .sidebar{
+    height: calc(100vh - 60px);
+    top:60px;
+  }
+}

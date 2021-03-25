@@ -55,11 +55,11 @@ export const NewDeviceElement = ({id}) =>{
           }
           {
             (device.DeviceControl&&device.DeviceControl.dimmer)?
-            <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.dimmer):0} type="dimmer" conf={device.DeviceControl.dimmer}/>:null
+            <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.dimmer):0} type="dimmer" title = "brightness" conf={device.DeviceControl.dimmer}/>:null
           }
           {
             (device.DeviceControl&&device.DeviceControl.temp)?
-            <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.temp):0} type="temp" conf={device.DeviceControl.temp}/>:null
+            <Dimmer updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.temp):0} type="temp" title = "light temp" conf={device.DeviceControl.temp}/>:null
           }
           {
             (device.DeviceControl&&device.DeviceControl.color)?

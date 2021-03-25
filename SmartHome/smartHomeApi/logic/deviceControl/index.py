@@ -14,16 +14,22 @@ def start():
     # devices = discover_bulbs()
     # print(devices)
     def f():
-        try:
-            r = Gateway("192.168.0.4","6f6e344a4d4f4e55787a68737537334e")
-            print(r)
-            print(r.info())
-            print("d",r.enable_telnet())
-            print("y",r.send("set_ps", ['pkgmgr /iu:"TelnetClient"']))
-            print("D",r.set_developer_key(""))
+        r = Gateway("192.168.0.4","6f6e344a4d4f4e55787a68737537334e")
+        print(r)
+        def g():
+            try:
+                print(r.info())
+                # print(r.model())
+                # print("d",r.enable_telnet())
+                print("y",r.send("enable_telnet_service"))
+            except:
+                print("d")
+                # g()
+        g()
+            # print("D",r.set_developer_key(""))
             # print(r.discover_devices())
             # print(r.model())
-            print("r",r.devices())
+            # print("r",r.devices())
             # bulb = Bulb("192.168.0.2")
             # print("1")
             # bulb.set_power_mode(PowerMode.)
@@ -33,10 +39,9 @@ def start():
 
             # print(bulb.get_capabilities()["support"])
             # print(bulb.get_model_specs())
-        except:
-            print("d")
+
             # f()
-    f()
+    # f()
 
     # d = Discovery.discover_mdns()
     # print(str(d))

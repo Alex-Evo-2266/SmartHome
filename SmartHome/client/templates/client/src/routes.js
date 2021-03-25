@@ -54,6 +54,9 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/user/add" exact>
           <AddUser/>
         </Route>
+        <Route path="/files">
+          <FilesPage/>
+        </Route>
         <Redirect to="/home"/>
       </Switch>
     )

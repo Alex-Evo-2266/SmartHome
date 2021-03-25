@@ -1,0 +1,16 @@
+.night .sidebar{
+  background: #333;
+}
+.night .sidebar .toggle-sidebar{
+  background: #333;
+  color: #fff;
+}
+.night .sidebar ul li{
+  background: #444;
+}
+.night .sidebar ul li a{
+  color: #fff;
+}
+.night .sidebar ul li:hover{
+  background: #888;
+}

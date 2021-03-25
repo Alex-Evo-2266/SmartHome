@@ -6,6 +6,34 @@ def set_to_list_dict(items):
         item_list.append(item.model_to_dict())
     return item_list
 
+def getIdDevices(El):
+    l = list()
+    for item in El:
+        l.append(item.id)
+    return l
+
+def largestId(El):
+    l = getIdDevices(El)
+    id = 1
+    for item in l:
+        if item>id:
+            id=item
+    return id
+
+def getEmptyId(El):
+    l = list()
+    full = getIdDevices(El)
+    i = 1
+    while i<=largestId(El)+1:
+        b = True
+        for item in full:
+            if item==i:
+                b=False
+        if b:
+            l.append(i)
+        i+=1
+    return l
+
 def genId(El)->int:
     i = 1
     j = 0
@@ -128,7 +156,7 @@ class Device(models.Model):
     room = models.ForeignKey(Room, on_delete = models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.DeviceName + " " + self.DeviceControl
+        return self.DeviceName + ", " + self.DeviceControl
 
     def receiveDict(self):
         return {
@@ -240,7 +268,7 @@ class CartChildren(models.Model):
     homeCart = models.ForeignKey(HomeCart, on_delete = models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.name+" "+self.type+" "+self.typeAction
 
     def receiveDict(self):
         return {
