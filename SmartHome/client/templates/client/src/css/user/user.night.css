@@ -11,6 +11,7 @@
 .night .pagecontent label p{
   border: none;
   background: #0000;
+  color:#fff;
 }
 .night .pagecontent label input{
   border: 2px solid #333;

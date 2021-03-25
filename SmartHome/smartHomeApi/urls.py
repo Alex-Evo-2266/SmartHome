@@ -14,6 +14,7 @@ urlpatterns = [
     path('user/edit',views.edituser),
     path('user/menu/edit',views.editmenu),
     path('users/get',views.giveusers),
+    path('users/delete',views.deleteuser),
     path('user/add',views.addNewUser),
     path('devices/add',views.deviceAdd),
     # path('devices/all',views.devicesGive),

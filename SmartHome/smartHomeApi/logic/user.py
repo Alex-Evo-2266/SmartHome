@@ -14,6 +14,16 @@ def addUser(data):
         newUser.save()
         newConf = UserConfig.objects.create(user=newUser)
         newConf.save()
+        message = "login = " + data.get("name") + "\npassword = " + data.get("password")
+        send_email("Account smart home",data.get("email"),message)
+        return True
+    except:
+        return False
+
+def deleteUser(id):
+    try:
+        u = User.objects.get(id=id)
+        u.delete()
         return True
     except:
         return False
@@ -87,23 +97,49 @@ def Setbackground(id,background):
     except Exception as e:
         return False
 
-def send_email(host, subject, to_addr, from_addr,from_pass, body_text):
+def parser(str1,str2)->str:
+    str1 = str1.replace(" ","")
+    str1 = str1.replace("\n","")
+    poz = str1.find(str2)
+    if(poz!=-1):
+        lenght = len(str2)
+        str1 = str1[poz+lenght+1:]
+        return str1
+    return None
+
+def send_email(subject, to_email, message):
     """
     Send an email
     """
+    from_email = ""
+    password = ""
+    try:
+        accountfile = open("mail.txt", "r")
+        for line in accountfile:
+            clogin = parser(line,"login")
+            cpassword = parser(line,"password")
+            if clogin:
+                from_email = clogin
+            if cpassword:
+                password = cpassword
+        accountfile.close()
+    except Exception as e:
+        print("ошибка в файле ",e)
+        return False
 
-    BODY = "\r\n".join((
-        "From: %s" % from_addr,
-        "To: %s" % to_addr,
-        "Subject: %s" % subject ,
-        "",
-        body_text
-    ))
+    try:
+        BODY = "\r\n".join((
+            "From: %s" % from_email,
+            "To: %s" % to_email,
+            "Subject: %s" % subject ,
+            "",
+            message
+        ))
 
-    server = smtplib.SMTP(host)
-    server.login(from_addr,from_pass)
-    print(from_addr, [to_addr], BODY)
-    # server = smtplib.SMTP('localhost')
-    # server.set_debuglevel(1)
-    server.sendmail(from_addr, [to_addr], BODY)
-    server.quit()
+        server = smtplib.SMTP_SSL('smtp.mail.ru')
+        server.login(from_email,password)
+        server.sendmail(from_email,to_email,BODY)
+        server.quit()
+    except Exception as e:
+        print("ошибка отправки email ",e)
+        return False
