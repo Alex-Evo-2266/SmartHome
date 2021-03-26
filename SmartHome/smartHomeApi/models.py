@@ -297,8 +297,8 @@ class Value(models.Model):
     valuesecond = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True,related_name="second")
 
 class Triger(models.Model):
-    typeDevice = models.CharField("type value device", max_length = 50)
-    type = models.CharField("type value device", max_length = 50)
+    typeDevice = models.CharField("type value device", max_length = 50,default="")
+    type = models.CharField("type value device", max_length = 50,default="")
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
     script = models.ForeignKey(Scripts, on_delete = models.CASCADE)
 

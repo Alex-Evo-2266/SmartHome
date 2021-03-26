@@ -141,6 +141,7 @@ def deviceEdit(request):
 def deviceDelete(request):
     if request.method=="POST" and request.body:
         data = json.loads(request.body)
+        print(data)
         if deleteDevice(data["DeviceId"]):
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}),status=400)

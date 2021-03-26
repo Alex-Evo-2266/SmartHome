@@ -20,7 +20,8 @@ export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValu
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0]||!data)
       return false
-    let condidat = devices.filter((item)=>item.DeviceId===id)
+    let condidat = devices.filter((item)=>item&&item.DeviceId===id)
+    if(!condidat[0]) return null
     setMin(condidat[0].DeviceControl[data.typeAction].min)
     setMax(condidat[0].DeviceControl[data.typeAction].max)
     return condidat[0]
@@ -47,7 +48,7 @@ export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValu
   },[devices,data,onClick,lookForDeviceById,min,max])
 
   useEffect(()=>{
-    if(!disabled&&device.status){
+    if(!disabled&&device&&device.status){
       if(device.status==="online"){
         setDisabled(false)
       }else{
@@ -64,7 +65,7 @@ export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValu
 
   useEffect(()=>{
     if(typeof(onClick)==="function")return
-    if(!device.DeviceValue)return
+    if(!device||!device.DeviceValue)return
     setValue(Number(device.DeviceValue[data.typeAction]))
   },[device,onClick,data])
 
@@ -100,6 +101,10 @@ export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValu
       target("button",{...data,index},editBtn)
     }
   }
+
+if(!device){
+  return null
+}
 
 return(
   <div className="slider-box">

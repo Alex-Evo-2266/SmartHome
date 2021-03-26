@@ -56,38 +56,40 @@ def addDevice(data):
 
 def device(item):
     try:
-        e = devicesArrey.get(item.id)
-        if(not e):
+        element = devicesArrey.get(item.id)
+        if not element:
             dev = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
-            print("3",dev)
+            print("device",dev)
             if dev.get_device():
                 devicesArrey.addDevice(item.id,dev)
-                e = devicesArrey.get(item.id)
+                element = devicesArrey.get(item.id)
+                item.DeviceControl = str(element["device"].get_control())
+                item.save()
             else:
+                control = item.DeviceControl
+                if(control==""):
+                    control="{}"
                 return {
-                    **item.receiveDict(),
-                    "DeviceConfig":confdecod(item.configdevice_set.all()),
-                    "DeviceControl":ast.literal_eval(item.DeviceControl),
-                    "DeviceValue":None,
-                    "status":"offline"
+                **item.receiveDict(),
+                "DeviceConfig":confdecod(item.configdevice_set.all()),
+                "DeviceControl":ast.literal_eval(control),
+                "DeviceValue":None,
+                "status":"offline"
                 }
-        el = e["device"]
-        if(not item.DeviceControl):
-            item.DeviceControl = el.get_control()
-            item.save()
         return {
-            **item.receiveDict(),
-            "DeviceConfig":confdecod(item.configdevice_set.all()),
-            "DeviceControl":ast.literal_eval(item.DeviceControl),
-            "DeviceValue":el.get_value(),
-            "status":"online"
+        **item.receiveDict(),
+        "DeviceConfig":confdecod(item.configdevice_set.all()),
+        "DeviceControl":ast.literal_eval(item.DeviceControl),
+        "DeviceValue":element["device"].get_value(),
+        "status":"online"
         }
+
     except Exception as e:
         print("error device",e)
         el = devicesArrey.get(item.id)
         if(el):
             devicesArrey.delete(item.id)
-
+        return None
 
 
 def giveDevice(id):
@@ -114,7 +116,8 @@ def editDevice(data):
         dev.DeviceInformation = data["DeviceInformation"]
         dev.DeviceType = data["DeviceType"]
         dev.DeviceTypeConnect = data["DeviceTypeConnect"]
-        dev.DeviceControl = ""
+        if data["DeviceType"] != "miio":
+            dev.DeviceControl = ""
         if("RoomId" in data and data["RoomId"]):
             room = Room.objects.get(id=data["RoomId"])
             dev.room = room
@@ -137,8 +140,8 @@ def editDevice(data):
                     conf.token=item["token"]
                 conf.save()
         devicesArrey.delete(data["DeviceId"])
-        devi = ControlDevices(dev.receiveDict(),confdecod(dev.configdevice_set.all()))
-        devicesArrey.addDevice(data["DeviceId"],devi)
+        # devi = ControlDevices(dev.receiveDict(),confdecod(dev.configdevice_set.all()))
+        # devicesArrey.addDevice(data["DeviceId"],devi)
         return True
     except Exception as e:
         print(e)
@@ -146,9 +149,14 @@ def editDevice(data):
 
 def deleteDevice(id):
     try:
+        print("q",id)
         dev = Device.objects.get(id=id)
-        dev.delete()
+        print("delete",dev)
         devicesArrey.delete(id)
+        print("delete in arr")
+        dev.delete()
+        print("ok")
         return True
-    except:
+    except Exception as e:
+        print("delete device error ",e)
         return False

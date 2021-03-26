@@ -53,17 +53,15 @@ class ControlDevices():
             if(item["DeviceTypeConnect"]=="miio"):
                 ret = self.config(type="base")
                 if(item["DeviceType"]=="light"):
-                    print("b")
                     self.device = Bulb(ret["address"])
-                    print(self.device)
+                    # print(self.device)
+                    # print(self.device.get_properties())
                     conf2 = self.device.get_properties()
-                    print("1")
                     self.__control_power = True
                     self.__control_dimmer = True
                     self.__control_dimmer_min = 0
                     self.__control_dimmer_max = 100
                     conf = self.device.get_model_specs()
-                    print("2")
                     if conf["color_temp"]:
                         self.__control_temp = True
                         temp = conf["color_temp"]

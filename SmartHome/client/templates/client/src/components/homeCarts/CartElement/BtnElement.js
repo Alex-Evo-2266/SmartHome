@@ -42,7 +42,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   },[devices,data,onClick,lookForDeviceById])
 
   useEffect(()=>{
-    if(!disabled&&device.status){
+    if(!disabled&&device&&device.status){
       if(device.status==="online"){
         setDisabled(false)
       }else{

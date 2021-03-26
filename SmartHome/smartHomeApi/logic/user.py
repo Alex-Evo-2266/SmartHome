@@ -23,6 +23,8 @@ def addUser(data):
 def deleteUser(id):
     try:
         u = User.objects.get(id=id)
+        message = "Account deleted name = " + u.UserName
+        send_email("Account smart home",u.UserEmail,message)
         u.delete()
         return True
     except:

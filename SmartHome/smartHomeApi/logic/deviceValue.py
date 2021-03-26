@@ -13,22 +13,29 @@ def setValueAtToken(address,value):
     configs = ConfigDevice.objects.all()
     for item in configs:
         if item.address==address:
+            print(item.device_id)
+            print(item.type)
+            print(value)
             deviceSetStatus(item.device_id,item.type,value)
 
 
 def deviceSetStatus(id, type,value):
     try:
+        if(not value):
+            return None
         dev = Device.objects.get(id=id)
-        values = ValueDevice.objects.all()
+        # print("2")
+        values = dev.valuedevice_set.all()
         for item in values:
-            if item.device_id==id and item.type==type:
+            if item.type==type:
                 item.value = value
                 item.save()
                 return value
         newvalue = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,value=value,type=type)
         newvalue.save()
         return value
-    except:
+    except Exception as e:
+        print('set value error ',e)
         return None
 
 def GetTopicks():

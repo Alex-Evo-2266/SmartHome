@@ -17,7 +17,7 @@ export const useBackground = () => {
     let nightTime = (date<3||date>8)?17:20;
     let twilightTime = (date<3||date>8)?15:18;
     let sunriseTime = (date<3||date>8)?5:3;
-    let dayTime = (date<3||date>8)?10:7;
+    let dayTime = (date<3||date>8)?10:8;
     if(time>=sunriseTime&&time<dayTime){
       return "sunrise";
     }else if (time>=dayTime&&time<twilightTime) {
