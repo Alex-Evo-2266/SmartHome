@@ -1,4 +1,4 @@
-from ..models import Scripts, Value,Triger,IfBlock,IfGroupBlock,Action,Device,genId
+from ..models import Scripts, Value,Triger,IfBlock,IfGroupBlock,Action,Device,genId,set_to_list_dict
 
 def addscript(data):
     try:
@@ -13,6 +13,7 @@ def addscript(data):
         addelses(data["else"],script)
         return True
     except Exception as e:
+        print(e)
         return False
 
 
@@ -53,12 +54,18 @@ def addIfBlock(data,perent):
         block.device = device
         if(data["value"]):
             # addValue(data["value"])
-            block.value = addValue(data["value"])
+            addValue(data["value"],block)
         block.save()
 
-def addValue(data)->Value:
+def addValue(data,perent=None)->Value:
     print(data,"\n")
     value = Value.objects.create(id=genId(Value.objects.all()),type=data["type"])
+    if(type(perent)==IfBlock):
+        value.ifBlock = perent
+        value.save()
+    if(type(perent)==Action):
+        value.actBlock = perent
+        value.save()
     if(data["type"]=="number" or data["type"]=="text"):
         value.value = data["value"]
         value.save()
@@ -83,8 +90,7 @@ def addthens(data,script):
             device = Device.objects.get(id=item["DeviceId"])
             act = Action.objects.create(id=genId(Action.objects.all()),type="then",action=item["action"],device=device,script=script)
             if(item["value"]):
-                act.value = addValue(item["value"])
-                act.save()
+                addValue(item["value"],act)
 
 def addelses(data,script):
     print(data,"\n")
@@ -93,5 +99,44 @@ def addelses(data,script):
             device = Device.objects.get(id=item["DeviceId"])
             act = Action.objects.create(id=genId(Action.objects.all()),type="else",action=item["action"],device=device,script=script)
             if(item["value"]):
-                act.value = addValue(item["value"])
-                act.save()
+                addValue(item["value"],act)
+
+def scripts():
+    allscripts = set_to_list_dict(Scripts.objects.all())
+    print(allscripts)
+    return allscripts
+
+def script(id):
+    Script = Scripts.objects.get(id=id).model_to_dict()
+    return Script
+
+def delgroupel(data):
+    groups = data.ifgroupblock_set.all()
+    for item in groups:
+        delgroupel(item)
+    elements = data.ifblock_set.all()
+    for item in elements:
+        delvalue(item.value)
+
+def delvalue(data):
+    print(data)
+    if(not data):
+        return
+    if(data.type=="math"):
+        delvalue(data.valuefirst)
+        delvalue(data.valuesecond)
+    data.delete()
+
+def actdel(acts):
+    for item in acts:
+        delvalue(item.value)
+
+def scriptDelete(id):
+    try:
+        script = Scripts.objects.get(id=id)
+        delgroupel(script.ifgroupblock)
+        actdel(script.action_set.all())
+        script.delete()
+        return True
+    except:
+        return False

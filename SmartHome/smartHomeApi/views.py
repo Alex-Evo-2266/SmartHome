@@ -7,7 +7,7 @@ from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from django.views.decorators.csrf import csrf_exempt
 from .logic.Cart import setPage,getPage
-from .logic.script import addscript
+from .logic.script import addscript,scripts,scriptDelete,script
 from django.core.files.uploadedfile import TemporaryUploadedFile
 
 
@@ -226,4 +226,31 @@ def addScript(request):
         data = json.loads(request.body)
         if(addscript(data)):
             return HttpResponse(json.dumps({"message":"ok"}),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def getScripts(request):
+    if request.method=="GET":
+        allScripts = scripts()
+        return HttpResponse(json.dumps(allScripts),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def deleteScript(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if(scriptDelete(data["id"])):
+            return HttpResponse(json.dumps({"message":"ok"}),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def getScript(request,id):
+    if request.method=="GET":
+        Script = script(id)
+        return HttpResponse(json.dumps(Script),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def editScript(request,id):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if(scriptDelete(id)):
+            if(addscript(data)):
+                return HttpResponse(json.dumps({"message":"ok"}),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)

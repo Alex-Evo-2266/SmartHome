@@ -1,4 +1,4 @@
-import React,{useState,useContext,useEffect} from 'react'
+import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {useChecked} from '../hooks/checked.hook'
@@ -7,18 +7,20 @@ import {AddScriptBase} from '../components/addScript/addScriptBase'
 import {GroupBlock} from '../components/moduls/programmBlock/groupBlock'
 import {ActBlock} from '../components/moduls/programmBlock/actBlock'
 import {TriggerBlock} from '../components/moduls/programmBlock/triggerBlock'
+import {Loader} from '../components/Loader'
 // import {DeviceStatusContext} from '../context/DeviceStatusContext'
 import {AddScriptContext} from '../components/addScript/addScriptContext'
-import {useHistory} from 'react-router-dom'
+import {useHistory,useParams} from 'react-router-dom'
 // import {groupIfClass,actClass,triggerClass} from '../myClass.js'
 
-export const NewScriptsPage = () => {
+export const NewScriptsPage = ({edit}) => {
+  let {id} = useParams();
   const history = useHistory()
   const {USText} = useChecked()
   const auth = useContext(AuthContext)
   const {show} = useContext(AddScriptContext)
   const {message} = useMessage();
-  const {request, error, clearError} = useHttp();
+  const {loading,request, error, clearError} = useHttp();
   const[cost, setCost]=useState(true)
   const[script, setScript]=useState({
     name:"",
@@ -87,7 +89,11 @@ export const NewScriptsPage = () => {
         message("allowed characters: 1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM","error")
         return
       }
-      const data = await request('/api/script/add', 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
+      let data
+      if(edit)
+        data = await request(`/api/script/edit/${id}`, 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
+      else
+        data = await request('/api/script/add', 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
       if(data){
         history.push('/scripts')
       }
@@ -129,6 +135,67 @@ export const NewScriptsPage = () => {
     if(!cost)
     setCost(true)
   },[cost])
+
+  const givegroup = (data)=>{
+    console.log(data);
+    let cild = []
+    for (var item of data.block) {
+      cild.push(givegroup(item))
+    }
+    for (var item of data.elements) {
+      cild.push(item)
+    }
+    let g = {type:"group" ,oper:data.type,children:cild}
+    return g
+  }
+
+  const givethen = (data)=>{
+    return data.filter((item)=>{
+      if (item.type==="then"){
+        item.type = "device"
+        return true
+      }
+      return false
+    })
+  }
+
+  const giveelse = (data)=>{
+    return data.filter((item)=>{
+      if (item.type==="else"){
+        item.type = "device"
+        return true
+      }
+      return false
+    })
+  }
+
+  const giveScript = useCallback(async(idscript)=>{
+    const data = await request(`/api/script/get/${idscript}`, 'Get', null,{Authorization: `Bearer ${auth.token}`})
+    if(data){
+      console.log(data);
+      let s = script
+      s.name = data.name
+      s.if = givegroup(data.if)
+      s.trigger = data.trigger
+      s.then = givethen(data.then)
+      s.else = giveelse(data.then)
+      console.log(s);
+      setScript(s)
+      setCost(prev=>!prev)
+    }
+  },[])
+
+  useEffect(()=>{
+    if(id&&edit){
+      giveScript(id)
+    }
+  },[id])
+
+  if(loading){
+    return(
+      <Loader/>
+    )
+  }
 
   return(
     <>

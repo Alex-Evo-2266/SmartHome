@@ -3,16 +3,18 @@ import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {AuthContext} from '../../context/AuthContext.js'
 import {AddScriptContext} from '../addScript/addScriptContext'
+import {useHistory} from 'react-router-dom'
 
 export const ScriptElement = ({script,updata})=>{
+  const history = useHistory()
   const {showData} = useContext(AddScriptContext)
-  const [status, setStatus] = useState(script.ScriptStatus)
+  const [status, setStatus] = useState(script.status)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const auth = useContext(AuthContext)
 
   useEffect(()=>{
-    setStatus(script.ScriptStatus)
+    setStatus(script.status)
   },[script])
 
   useEffect(()=>{
@@ -23,23 +25,18 @@ export const ScriptElement = ({script,updata})=>{
   },[error,message, clearError])
 
   const deleteScript = async()=>{
-    await request(`/api/script/delete`, 'POST', {ScriptId:script.ScriptId},{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/delete`, 'POST', {id:script.id},{Authorization: `Bearer ${auth.token}`})
     updata()
   }
 
   const runScript = async()=>{
-    await request(`/api/script/run/${script.ScriptId}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/run/${script.id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   }
 
   const checkedHandler = async event => {
     console.log(event.target.checked);
-    if(status==="trigger"){
-      setStatus("manual")
-      await request('/api/script/set/status', 'POST', {ScriptId:script.ScriptId,ScriptStatus:"manual"},{Authorization: `Bearer ${auth.token}`})
-    }else {
-      setStatus("trigger")
-      await request('/api/script/set/status', 'POST', {ScriptId:script.ScriptId,ScriptStatus:"trigger"},{Authorization: `Bearer ${auth.token}`})
-    }
+    setStatus((prev)=>!prev)
+    await request('/api/script/set/status', 'POST', {id:script.id,status:!status},{Authorization: `Bearer ${auth.token}`})
     if(typeof(updata)==="function")
     setTimeout(function () {
       updata()
@@ -48,16 +45,16 @@ export const ScriptElement = ({script,updata})=>{
 
   return(
     <div className="scriptElement">
-      <p>{script.ScriptName}</p>
+      <p>{script.name}</p>
       <div className="scriptStatus">
         <button onClick={runScript} className="activateBtn">activate</button>
-        <button onClick={()=>showData("showScript",script)} className="showBtn">show</button>
+        <button onClick={()=>history.push(`/scripts/edit/${script.id}`)} className="showBtn">edit</button>
         <div className="switchConteiner">
         <p className="switchText">{status}</p>
         {
-          (script.ScriptTrigger&&script.ScriptTrigger[0])?
+          (script.trigger&&script.trigger[0])?
           <label className="switch">
-            <input onChange={checkedHandler} name="auteStyle" type="checkbox" checked={(status==="trigger")}></input>
+            <input onChange={checkedHandler} name="auteStyle" type="checkbox" checked={(status)}></input>
             <span></span>
             <i className="indicator"></i>
           </label>

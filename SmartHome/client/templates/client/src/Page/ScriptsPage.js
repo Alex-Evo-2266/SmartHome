@@ -28,6 +28,7 @@ export const ScriptsPage = () => {
 
   const updataScripts = useCallback(async()=>{
     const data = await request('/api/script/all', 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    console.log(data);
     setScripts(data);
     setAllScripts(data)
   },[request,auth.token])
@@ -37,7 +38,7 @@ export const ScriptsPage = () => {
       setScripts(allScripts)
       return
     }
-    let array = allScripts.filter(item => item.ScriptName.indexOf(search)!==-1)
+    let array = allScripts.filter(item => item.name.indexOf(search)!==-1)
     setScripts(array)
   }
 

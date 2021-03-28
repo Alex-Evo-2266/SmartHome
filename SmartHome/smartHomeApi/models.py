@@ -6,6 +6,12 @@ def set_to_list_dict(items):
         item_list.append(item.model_to_dict())
     return item_list
 
+def set_dict_ro_null(item):
+    print(item)
+    if(item):
+        return item.model_to_dict()
+    return None
+
 def getIdDevices(El):
     l = list()
     for item in El:
@@ -289,17 +295,15 @@ class Scripts(models.Model):
     def __str__(self):
         return self.name
 
-class Value(models.Model):
-    id = models.IntegerField("id", primary_key=True)
-    device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
-    type = models.CharField("type value device", max_length = 50, default="")
-    oper = models.CharField("operation", max_length = 50, default="")
-    value = models.CharField("type value device", max_length = 50, default="")
-    valuefirst = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True,related_name="first")
-    valuesecond = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True,related_name="second")
-
-    def __str__(self):
-        return self.type
+    def model_to_dict(self):
+        return{
+        "id":self.id,
+        "name":self.name,
+        "status":self.status,
+        "trigger":set_to_list_dict(self.triger_set.all()),
+        "if":self.ifgroupblock.model_to_dict(),
+        "then":set_to_list_dict(self.action_set.all())
+        }
 
 class Triger(models.Model):
     id = models.IntegerField("id", primary_key=True)
@@ -308,11 +312,30 @@ class Triger(models.Model):
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
     script = models.ForeignKey(Scripts, on_delete = models.CASCADE)
 
+    def model_to_dict(self):
+        return{
+        "id":self.id,
+        "action":self.action,
+        "type":self.type,
+        "DeviceId":self.device_id
+        }
+
 class IfGroupBlock(models.Model):
     id = models.IntegerField("id", primary_key=True)
     type = models.CharField("type block", max_length = 50)
     block = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True)
-    script = models.ForeignKey(Scripts, on_delete = models.CASCADE,null=True)
+    script = models.OneToOneField(Scripts, on_delete = models.CASCADE,null=True)
+
+    def model_to_dict(self):
+        return{
+        "id":self.id,
+        "type":self.type,
+        "block":set_to_list_dict(self.ifgroupblock_set.all()),
+        "elements":set_to_list_dict(self.ifblock_set.all())
+        }
+
+    def __str__(self):
+        return str(self.id)
 
 class IfBlock(models.Model):
     id = models.IntegerField("id", primary_key=True)
@@ -321,12 +344,62 @@ class IfBlock(models.Model):
     action = models.CharField("type value device", max_length = 50,default="")
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
     oper = models.CharField("operation", max_length = 50,default="==")
-    value = models.OneToOneField(Value, on_delete = models.CASCADE,null=True)
+
+    def model_to_dict(self):
+        return{
+        "id":self.id,
+        "type":self.type,
+        "action":self.action,
+        "idDevice":self.device_id,
+        "oper":self.oper,
+        "value":set_dict_ro_null(self.value)
+        }
 
 class Action(models.Model):
     id = models.IntegerField("id", primary_key=True)
     type = models.CharField("then or else", max_length = 50, default="then")
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
     action = models.CharField("action", max_length = 50, default="")
-    value = models.OneToOneField(Value, on_delete = models.CASCADE,null=True)
     script = models.ForeignKey(Scripts, on_delete = models.CASCADE,null=True)
+
+    def model_to_dict(self):
+        return{
+        "id":self.id,
+        "type":self.type,
+        "action":self.action,
+        "DeviceId":self.device_id,
+        "value":self.value.model_to_dict()
+        }
+
+class Value(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
+    type = models.CharField("type value device", max_length = 50, default="")
+    oper = models.CharField("operation", max_length = 50, default="")
+    value = models.CharField("type value device", max_length = 50, default="")
+    valuefirst = models.OneToOneField('self', on_delete = models.CASCADE,null=True,blank=True,related_name="first")
+    valuesecond = models.OneToOneField('self', on_delete = models.CASCADE,null=True,blank=True,related_name="second")
+    ifBlock = models.OneToOneField(IfBlock, on_delete = models.CASCADE,null=True)
+    actBlock = models.OneToOneField(Action, on_delete = models.CASCADE,null=True)
+
+    def __str__(self):
+        return self.type
+
+    # def delete(self, *args, **kwargs):
+    #     if(self.valuefirst):
+    #         print(self.valuefirst)
+    #         self.valuefirst.delete()
+    #     if(self.valuesecond):
+    #         self.valuesecond.delete()
+    #     super(Value, self).delete(*args, **kwargs)
+
+    def model_to_dict(self):
+        return{
+        "id":self.id,
+        "idDevice":self.device_id,
+        "type":self.type,
+        "action":self.oper,
+        "value":self.value,
+        "value1":set_dict_ro_null(self.valuefirst),
+        "value2":set_dict_ro_null(self.valuesecond)
+        }
