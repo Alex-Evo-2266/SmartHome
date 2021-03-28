@@ -1,5 +1,6 @@
 @import "./newScriptsPage.light.css";
 @import "./newScriptsPage.night.css";
+@import "./programmBlocks/base.css";
 
 .NewScripConteiner{
   margin-left: 60px;
@@ -115,7 +116,10 @@
   border-radius: 10px;
   position: relative;
   background: #222;
-  overflow-y: scroll;
+  overflow: scroll;
+}
+.progammzon::-webkit-scrollbar{
+  /* width: default; */
 }
 .triggerBlock{
   display: flex;
@@ -199,7 +203,7 @@
   position: absolute;
   bottom: 0;
   height: 30px;
-  width: 100%;
+  min-width: 100%;
   background: Purple;
   display: flex;
   justify-content: center;
@@ -216,7 +220,7 @@
   position: absolute;
   top: 0;
   height: 30px;
-  width: 100%;
+  min-width: 100%;
   background: Purple;
   display: flex;
   justify-content: center;

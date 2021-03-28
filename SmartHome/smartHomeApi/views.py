@@ -221,3 +221,6 @@ def deleteuser(request):
         if deleteUser(data["UserId"]):
             return HttpResponse(json.dumps({"message":"ok"}),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def addScript(request):
+    return HttpResponse(json.dumps({"message":"error"}),status=400)

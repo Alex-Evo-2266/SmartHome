@@ -1,22 +1,54 @@
-import React,{useContext,useState,useCallback} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import {IfBlock} from './ifBlock'
 import {AddScriptContext} from '../../addScript/addScriptContext'
 // import {ifClass,groupIfClass} from '../../../myClass.js'
 
-export const GroupBlock = ({index,type,children,elements,requpdata,deleteEl})=>{
+export const GroupBlock = ({index,type,children,data,updata,deleteEl})=>{
 const {show} = useContext(AddScriptContext)
-const [data, setData] = useState(elements)
+const [blockData/*, setData*/] = useState(data)
+
+// {type:"group" ,oper:"and",children:[],idDevice:null,action:null,value:null}
 
 const addEl = ()=>{
-
+  show("typeBlock",(typeblock,dataDev)=>{
+    if(typeblock==="groupBlockAnd"){
+      let element = blockData
+      element.children.push({type:"group" ,oper:"and",children:[],idDevice:null,action:null,value:null})
+      updata(element,index)
+    }
+    else if(typeblock==="groupBlockOr"){
+      let element = blockData
+      element.children.push({type:"group" ,oper:"or",children:[],idDevice:null,action:null,value:null})
+      updata(element,index)
+    }
+    else if(typeblock==="deviceBlock"){
+      let element = blockData
+      let act = "power"
+      if(dataDev.DeviceType==="dimmer"){
+        act = "dimmer"
+      }
+      if(dataDev.DeviceType==="variable"){
+        act = "value"
+      }
+      if(dataDev.DeviceType==="sensor"||dataDev.DeviceType==="binarySensor"||dataDev.DeviceType==="other"){
+        act = "value"
+      }
+      element.children.push({type:"device" ,oper:"==",idDevice:dataDev.DeviceId,action:act,value:""})
+      updata(element,index)
+    }
+  })
 }
 
-const devEl = ()=>{
-
+const devEl = (indexel)=>{
+  let elements = blockData
+  elements.children = elements.children.filter((_,index2)=>index2!==indexel)
+  updata(elements,index)
 }
 
-const reqUpdata = ()=>{
-
+const reqUpdata = (elementData,indexel)=>{
+  let elements = blockData
+  elements.children[indexel] = elementData
+  updata(elements,index)
 }
 
   return(
@@ -28,7 +60,7 @@ const reqUpdata = ()=>{
         </div>
         {
           (typeof(deleteEl)==="function")?
-          <div className="deleteBlock" onClick={()=>{deleteEl(index)}}>
+          <div className="deleteBlock" onClick={()=>deleteEl(index)}>
             <i className="fas fa-trash"></i>
           </div>:
           null
@@ -36,12 +68,12 @@ const reqUpdata = ()=>{
       </div>
       <div className="groupBlockConteiner">
       {
-        (data)?
-          data.ifElement.map((item,index1)=>{
-            if(typeof(item.subif.addif)==="function"){
-              return <GroupBlock index={index1} deleteEl={devEl} requpdata={reqUpdata} key={index1} type={item.subif.oper} elements={item.subif}/>
+        (blockData)?
+          blockData.children.map((item,index1)=>{
+            if(item.type==="group"){
+              return <GroupBlock index={index1} deleteEl={devEl} updata={reqUpdata} key={index1} type={item.oper} data={item}/>
             }
-            return <IfBlock key={index1} deleteEl={devEl} el={item.subif} index={index1} updata={reqUpdata} deviceId={item.subif.deviceId}/>
+            return <IfBlock key={index1} data={item} deleteEl={devEl} el={item.subif} index={index1} updata={reqUpdata} idDevice={item.idDevice}/>
           })
         :null
       }

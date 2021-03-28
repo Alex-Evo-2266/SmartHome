@@ -1,10 +1,10 @@
 import React,{useState,useEffect,useContext,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 
-export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>{
+export const ValueDeviceBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>{
   const [device, setDevice]=useState({})
   const {devices} = useContext(DeviceStatusContext)
-  const [type,setType] = useState(action??"all")
+  const [type,setType] = useState(action??"power")
   const [allTypes,setAllTypes] = useState([])
 
   const lookForDeviceById = useCallback((id)=>{
@@ -12,9 +12,15 @@ export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>
     condidat = condidat[0]
     let array = []
     if(condidat){
+      if(condidat.DeviceType==="variable"){
+        array.push("value")
+      }
       for (var key in condidat.DeviceControl) {
         if(condidat.DeviceControl[key]&&key!=="status"){
           array.push(key)
+        }
+        if(condidat.DeviceControl[key]&&key==="status"){
+          array.push("value")
         }
       }
     }
@@ -38,7 +44,6 @@ export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>
       </div>
       <div className="programm-function-block-content-item">
         <select value={type} onChange={changeSelector} name="property">
-          <option value="all">all</option>
           {
             allTypes.map((item,index)=>{
               return(

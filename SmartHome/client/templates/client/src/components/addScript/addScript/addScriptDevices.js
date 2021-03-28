@@ -34,32 +34,31 @@ export const AddScriptDevices = ({result,type})=>{
     return setFilteredDevices(devices);
   },[devices,type,filtered])
 
+  // <img alt={"type icon"} src={
+  //   (item.DeviceType==="light")?imgLight:
+  //   (item.DeviceType==="switch")?imgSwitch:
+  //   (item.DeviceType==="sensor")?imgSensor:
+  //   (item.DeviceType==="binarySensor")?imgBinarySensor:
+  //   (item.DeviceType==="dimmer")?imgDimmer:
+  //   (item.DeviceType==="ir")?imgIr:
+  //   imgUndefined
+  // }/>
+
   return(
-    <ul className="IfdeviceList">
-      <li className="deviceElement"></li>
-      <li className="deviceElement"></li>
-      <li className="deviceElement"></li>
-      {
-        filteredDevices.map((item,index)=>{
-          return(
-            <li key={index} className="deviceElement" onClick={()=>out(item)}>
-              <div className="imageConteiner">
-                <img alt={"type icon"} src={
-                  (item.DeviceType==="light")?imgLight:
-                  (item.DeviceType==="switch")?imgSwitch:
-                  (item.DeviceType==="sensor")?imgSensor:
-                  (item.DeviceType==="binarySensor")?imgBinarySensor:
-                  (item.DeviceType==="dimmer")?imgDimmer:
-                  (item.DeviceType==="ir")?imgIr:
-                  imgUndefined
-                }/>
-              </div>
-              <p>{item.DeviceName}</p>
-            </li>
-          )
-        })
-      }
-    </ul>
+    <div className="box">
+      <h2>type control element</h2>
+        <ul>
+        {
+          filteredDevices.map((item,index)=>{
+            return(
+              <li key={index} onClick={()=>out(item)}>
+                <span>{index+1}</span>{item.DeviceName}
+              </li>
+            )
+          })
+        }
+        </ul>
+      </div>
   )
 
 }

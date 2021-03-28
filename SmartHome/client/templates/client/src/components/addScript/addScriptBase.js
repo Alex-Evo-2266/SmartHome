@@ -2,9 +2,9 @@ import React, {useContext,useState} from 'react'
 import {AddScriptContext} from './addScriptContext'
 import {AddScriptDevices} from './addScript/addScriptDevices'
 import {CenterWindow} from '../modalWindow/centerWindow'
+import {BackForm} from '../moduls/backForm'
 import {IfBlock} from '../moduls/programmBlock/ifBlock'
 import {GroupBlock} from '../moduls/programmBlock/groupBlock'
-import {AddScriptStatus} from './addScript/addScriptStatus'
 import {ShowScript} from './addScript/showScript'
 
 export const AddScriptBase = ()=>{
@@ -22,14 +22,8 @@ export const AddScriptBase = ()=>{
     close()
   }
 
-  const shoseValueDevice=(item)=>{
-    if(typeof(addScript.OK)==="function")
-      addScript.OK("DeviseValue",item)
-    close()
-  }
-
   const shoseBlock = async(t)=>{
-    if(t==="deviceBlock"||t==="DeviseValue"){
+    if(t==="deviceBlock"||t==="DeviceValue"){
       setDeviceBlock(true)
       return
     }
@@ -51,56 +45,77 @@ export const AddScriptBase = ()=>{
     )
   }
 
-  if(addScript.type==="statusBlock"){
-    return (
-      <CenterWindow hide={close}>
-      {
-        (!deviceBlock)?
-        <AddScriptStatus result={shoseBlock} data={addScript.data}/>:
-        <AddScriptDevices result={shoseValueDevice} type={"if"}/>
-      }
-      </CenterWindow>
-    )
-  }
-
   if(addScript.type==="triggerBlock"){
     return (
-      <CenterWindow hide={close}>
+      <BackForm onClick={close} className="addElementBody">
         <AddScriptDevices result={shoseDevice} type={"if"}/>
-      </CenterWindow>
+      </BackForm>
     )
   }
 
   if(addScript.type==="deviceBlock"){
     return (
-      <CenterWindow hide={close}>
+      <BackForm onClick={close} className="addElementBody">
         <AddScriptDevices result={shoseDevice} type={"act"}/>
-      </CenterWindow>
+      </BackForm>
     )
   }
 
-  if(addScript.type==="typeBlock"){
-    return (
-      <CenterWindow hide={close}>
+  if(addScript.type==="addValue"||addScript.type==="addValueMath"){
+    return(
+      <BackForm onClick={close} className="addElementBody">
       {
         (!deviceBlock)?
-        <ul className="shoseBlock">
-          <li onClick={()=>shoseBlock("groupBlockAnd")}>
-            <GroupBlock type={"and"}>
-            </GroupBlock>
-          </li>
-          <li onClick={()=>shoseBlock("groupBlockOr")}>
-            <GroupBlock type={"or"}>
-            </GroupBlock>
-          </li>
-          <li onClick={()=>shoseBlock("deviceBlock")} style={{gridColumnStart:"1", gridColumnEnd:"3"}}>
-            <IfBlock/>
-          </li>
-        </ul>
+        <div className="box">
+          <h2>type value</h2>
+          <ul>
+          {
+            (addScript.type==="addValue")?
+            <li onClick={()=>shoseBlock("Text")}><span>1</span>input text</li>
+            :null
+          }
+            <li onClick={()=>shoseBlock("Number")}><span>2</span>input number</li>
+            <li onClick={()=>shoseBlock("Math")}><span>3</span>Mathematical expression</li>
+            <li onClick={()=>shoseBlock("DeviceValue")}><span>4</span>Device value</li>
+          </ul>
+        </div>:
+        <AddScriptDevices result={shoseDevice} type={"if"}/>
+      }
+      </BackForm>
+    )
+  }
+
+  // <ul className="shoseBlock">
+  //   <li onClick={()=>shoseBlock("groupBlockAnd")}>
+  //     <GroupBlock type={"and"}>
+  //     </GroupBlock>
+  //   </li>
+  //   <li onClick={()=>shoseBlock("groupBlockOr")}>
+  //     <GroupBlock type={"or"}>
+  //     </GroupBlock>
+  //   </li>
+  //   <li onClick={()=>shoseBlock("deviceBlock")} style={{gridColumnStart:"1", gridColumnEnd:"3"}}>
+  //     <IfBlock/>
+  //   </li>
+  // </ul>
+
+  if(addScript.type==="typeBlock"){
+    return (
+      <BackForm onClick={close} className="addElementBody">
+      {
+        (!deviceBlock)?
+        <div className="box">
+          <h2>type control element</h2>
+            <ul>
+              <li onClick={()=>shoseBlock("groupBlockAnd")}><span>1</span>group Block And</li>
+              <li onClick={()=>shoseBlock("groupBlockOr")}><span>2</span>group Block Or</li>
+              <li onClick={()=>shoseBlock("deviceBlock")}><span>3</span>device</li>
+            </ul>
+          </div>
         :
         <AddScriptDevices result={shoseDevice} type={"if"}/>
       }
-      </CenterWindow>
+      </BackForm>
     )
   }
   return null;

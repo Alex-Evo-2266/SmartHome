@@ -1,172 +1,155 @@
-import React,{useState,useEffect,useContext,useCallback} from 'react'
+import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 import {AddScriptContext} from '../../addScript/addScriptContext'
-import {StatusValue} from './actBlockElement/statusValue'
-import {DeviceValue} from './actBlockElement/DeviseValue'
-import {TextValue} from './actBlockElement/TextValue'
-// import {valueClass} from '../../../myClass.js'
+import {ValueDeviceBlock} from './valueDeviceBlock'
+import {TextBlock} from './textBlock'
+import {NumberBlock} from './numberBlock'
+import {MathBlock} from './mathBlock'
+// import {ifClass} from '../../../myClass.js'
 
-export const ActBlock = ({deviceId,type,updata,index,el,block,deleteEl})=>{
-  const [status, setStatus]=useState(["power"])
+export const ActBlock = ({idDevice,updata,index,data,el,deleteEl})=>{
   const [device, setDevice]=useState({})
-  const {showData} = useContext(AddScriptContext)
   const {devices} = useContext(DeviceStatusContext)
-  const [result, setResult]=useState(el)
-  const [velueDevice,setValueDevice]=useState({})
+  const {show} = useContext(AddScriptContext)
+  const [type,setType] = useState(data.action??"power")
+  const [blockData/*, setData*/] = useState(data)
+  const [allTypes,setAllTypes] = useState([])
 
 
   const lookForDeviceById = useCallback((id)=>{
     let condidat = devices.filter((item)=>item.DeviceId===id)
-    return condidat[0];
+    condidat = condidat[0]
+    let array = []
+    if(condidat){
+      if(condidat.DeviceType==="variable"){
+        array.push("value")
+      }
+      for (var key in condidat.DeviceControl) {
+        if(condidat.DeviceControl[key]&&key!=="status"){
+          array.push(key)
+        }
+      }
+    }
+    setAllTypes(array)
+    return condidat;
   },[devices])
 
-  const changeResult = useCallback((key,value)=>{
-    if(typeof(result.changeHandler)!=="function")
-      return
-    let el2 = result
-    el2.changeHandler(key,value)
-    setResult(el2)
-    return el2
-  },[result])
+  useEffect(()=>{
+    setDevice(lookForDeviceById(idDevice))
+  },[lookForDeviceById,idDevice])
 
-  const changeHandler = async event => {
-    let el2 = await changeResult(event.target.name,event.target.value)
-    updata(el2,index,block)
+const changeHandler=()=>{
+
+}
+
+const devEl=()=>{
+
+}
+
+const updataValue = (data1)=>{
+  let element = data
+  let val = element.value
+  if(blockData.value.type==="device"){
+    val = {...val, action:data1.action}
   }
-
-  const updataValue = (value)=>{
-    let el2 = result
-    el2.value.value = value
-    setResult(el2)
-    updata(el2,index,block)
+  if(blockData.value.type==="text"){
+    val = {...val, value:data1.action}
   }
+  if(blockData.value.type==="number"){
+    val = {...val, value:data1.action}
+  }
+  if(blockData.value.type==="math"){
+    val = data1
+  }
+  element.value = val
+  console.log(element.value);
+  updata({...element,index})
+}
 
-  const addStatus = ()=>{
-    showData("statusBlock",{DeviceType:device.DeviceType},(type,deviceitem1)=>{
-      let el2 = result
-      let value1 = {type,value:""}
-      if(type==="status")
-        value1.value = "on"
-      if(type==="value")
-        value1.value = "0"
-      if(deviceitem1&&type==="DeviseValue"){
-        setValueDevice(deviceitem1)
-        value1.value = {DeviceId:deviceitem1.DeviceId,property:"power"}
+const addvalue = ()=>{
+  show("addValue",(typeValue,deviceData)=>{
+    console.log(typeValue,deviceData);
+    let element = data
+    if(typeValue==="deviceBlock"){
+      let action = "power"
+      if(deviceData.DeviceType==="dimmer"){
+        action = "dimmer"
       }
-      el2.changeHandler("value",value1)
-      setResult(el2)
-      updata(el2,index,block)
-    })
+      if(deviceData.DeviceType==="variable"){
+        action = "value"
+      }
+      if(deviceData.DeviceType==="sensor"||deviceData.DeviceType==="binarySensor"||deviceData.DeviceType==="other"){
+        action = "value"
+      }
+      element = {...element, value:{type:"device",idDevice:deviceData.DeviceId,action:action}}
+    }
+    if(typeValue==="Text"){
+      element = {...element, value:{type:"text",value:""}}
+    }
+    if(typeValue==="Number"){
+      element = {...element, value:{type:"number",value:0}}
+    }
+    if(typeValue==="Math"){
+      element = {...element, value:{type:"math",value1:null,value2:null,action:"+"}}
+    }
+    updata({...element,index})
+  })
+}
+
+const deleteValue = ()=>{
+  let element = data
+  element = {...element, value:null}
+  updata({...element,index})
+}
+
+const changeSelector = event=>{
+  let element = data
+  if(event.target.name==="type"){
+    setType(event.target.value)
+    element = {...element, action:event.target.value}
   }
-
-  const deletStatus = ()=>{
-    let el2 = result
-    el2.changeHandler("value",null)
-    setResult(el2)
-    updata(el2,index,block)
-  }
-
-  useEffect(()=>{
-    setDevice(lookForDeviceById(result.DeviseId))
-  },[lookForDeviceById,result])
-
-  useEffect(()=>{
-    if(!device)return;
-    if(device.DeviceType==="light"){
-      changeResult("property","power")
-      let mas = ["power"];
-      if(device.DeviceConfig.dimmer)
-        mas.push("dimmer")
-      if(device.DeviceConfig.color)
-        mas.push("color")
-      if(device.DeviceConfig.mode)
-        mas.push("mode","togleMode")
-      setStatus(mas)
-    }
-    if(device.DeviceType==="dimmer"){
-      changeResult("property","dimmer")
-      let mas = ["dimmer"];
-      if(device.DeviceConfig.power)
-        mas.push("power")
-      setStatus(mas)
-    }
-    if(device.DeviceType==="switch"){
-      changeResult("property","power")
-      let mas = ["power"];
-      setStatus(mas)
-    }
-    if(device.DeviceType==="ir"){
-      changeResult("property","command")
-      setStatus(["command"])
-    }
-    if(device.DeviceType==="variable"){
-      // if(result.propert==="power")
-       changeResult("property","value")
-      setStatus(["value"])
-    }
-  },[device,changeResult])
+  updata({...element,index})
+}
 
   return(
-    <div className="actBlock">
-      <div className="deviceBlock">
-        <div className="nameBlock">
-          {(device)?device.DeviceName:"Name"}
-        </div>
-        <div className="stateBlock">
-          <select value={result.property} onChange={changeHandler} name="property">
-            {
-              status.map((item,index)=>{
-                return(
-                  <option key={index} value={item}>{item}</option>
-                )
-              })
-            }
-          </select>
-        </div>
+    <div className="programm-function-block-root">
+      <div className="programm-function-block-content-item programm-function-block-name">
+        {(device)?device.DeviceName:"Name"}
       </div>
-      <div className="deleteBlock" onClick={()=>{deleteEl(index,block)}}>
-        <i className="fas fa-trash"></i>
+      <div className="programm-function-block-content-item">
+        <select value={type} onChange={changeSelector} name="type">
+          {
+            allTypes.map((item,index)=>{
+              return(
+                <option key={index} value={item}>{item}</option>
+              )
+            })
+          }
+        </select>
       </div>
+      <div className="programm-function-block-content-item">
+      ==
+      </div>
+      <div className="programm-function-block-conteiner-item">
       {
-        (result.property!=="togleMode")?
-        (!result.value)?
-        <div className="addBlock" onClick={addStatus}>
+        (!blockData.value)?
+        <div className="programm-function-block-content-item add" onClick={()=>{addvalue()}}>
           <i className="fas fa-plus"></i>
-        </div>
-        :<div className="addBlock">
-          <i>{">"}</i>
-        </div>
-        :null
-      }
-      {
-        (result.value&&result.value.type==="status")?
-          <StatusValue deleteEl={deletStatus} updata={updataValue} data={result.value}/>:
-        (result.value&&result.value.type==="DeviseValue")?
-          <DeviceValue device={velueDevice} updata={updataValue} deleteEl={deletStatus} data={result.value}/>:
-        (result.value&&result.value.type==="value")?
-          <TextValue deleteEl={deletStatus} updata={updataValue} data={result.value} number={!(result.property==="power"||result.property==="command"||result.property==="value")}/>:
+        </div>:
+        (blockData.value.type==="device")?
+        <ValueDeviceBlock deviceId={blockData.value.idDevice} action={blockData.value.action} updata={updataValue} deleteEl={deleteValue}/>:
+        (blockData.value.type==="text")?
+        <TextBlock action={blockData.value.value} updata={updataValue} deleteEl={deleteValue}/>:
+        (blockData.value.type==="number")?
+        <NumberBlock action={blockData.value.value} updata={updataValue} deleteEl={deleteValue}/>:
+        (blockData.value.type==="math")?
+        <MathBlock data={blockData.value} action={blockData.value.value} updata={updataValue} deleteEl={deleteValue}/>:
         null
       }
+      </div>
+      <div className="programm-function-block-content-item delete" onClick={()=>{deleteEl(index)}}>
+        <i className="fas fa-trash"></i>
+      </div>
     </div>
   )
 }
-// <div className="valueBlock">
-//   <div className="typeBlock">
-//     {"Set in: "}
-//   </div>
-//   <div className="inputValueBlock">
-//   {
-//     (result.property==="power")?
-//     <select value={result.value} name="value" onChange={changeHandler}>
-//       <option value={"powerOn"}>On</option>
-//       <option value={"powerOff"}>Off</option>
-//       <option value={"powerTogle"}>Togle</option>
-//     </select>:
-//     (result.property==="command"||device.DeviceType==="variable")?
-//     <input type="text" value={result.value} name="value" onChange={changeHandler}/>:
-//     (result.property==="togleMode")?
-//     <p> following</p>:
-//     <input type="number" value={Number(result.value)} name="value" onChange={changeHandler}/>
-//   }
-//   </div>
-// </div>

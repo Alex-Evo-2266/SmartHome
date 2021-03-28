@@ -24,6 +24,7 @@ urlpatterns = [
     path('devices/value/set',views.deviceSetValue),
     path('homeCart/get/<int:id>',views.getHomeCart),
     path('homeCart/set',views.setHomeCart),
+    path('script/add',views.addScript),
     # path('home/value/set',views.deviceSetValue),
     # path('media/set/<slug:name>/', views.media)
     # path('devices/all',views.allDevices),
