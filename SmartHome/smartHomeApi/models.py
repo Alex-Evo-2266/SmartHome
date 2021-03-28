@@ -282,6 +282,7 @@ class CartChildren(models.Model):
         }
 
 class Scripts(models.Model):
+    id = models.IntegerField("id", primary_key=True)
     name = models.CharField("script name", max_length = 50)
     status = models.BooleanField("статус",default=False)
 
@@ -289,32 +290,43 @@ class Scripts(models.Model):
         return self.name
 
 class Value(models.Model):
-    status = models.BooleanField("математ",default=False)
+    id = models.IntegerField("id", primary_key=True)
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
     type = models.CharField("type value device", max_length = 50, default="")
+    oper = models.CharField("operation", max_length = 50, default="")
     value = models.CharField("type value device", max_length = 50, default="")
     valuefirst = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True,related_name="first")
     valuesecond = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True,related_name="second")
 
+    def __str__(self):
+        return self.type
+
 class Triger(models.Model):
-    typeDevice = models.CharField("type value device", max_length = 50,default="")
+    id = models.IntegerField("id", primary_key=True)
+    action = models.CharField("type value device", max_length = 50,default="")
     type = models.CharField("type value device", max_length = 50,default="")
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
     script = models.ForeignKey(Scripts, on_delete = models.CASCADE)
 
-class IfBlock(models.Model):
+class IfGroupBlock(models.Model):
+    id = models.IntegerField("id", primary_key=True)
     type = models.CharField("type block", max_length = 50)
     block = models.ForeignKey('self', on_delete = models.CASCADE,null=True,blank=True)
-    script = models.ForeignKey(Scripts, on_delete = models.CASCADE)
+    script = models.ForeignKey(Scripts, on_delete = models.CASCADE,null=True)
 
-class If(models.Model):
-    block = models.OneToOneField(IfBlock, on_delete = models.CASCADE)
-    type = models.CharField("type value device", max_length = 50)
+class IfBlock(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    block = models.ForeignKey(IfGroupBlock, on_delete = models.CASCADE)
+    type = models.CharField("type if", max_length = 50)
+    action = models.CharField("type value device", max_length = 50,default="")
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
-    ifType = models.CharField("type if", max_length = 50)
-    value = models.OneToOneField(Value, on_delete = models.CASCADE)
+    oper = models.CharField("operation", max_length = 50,default="==")
+    value = models.OneToOneField(Value, on_delete = models.CASCADE,null=True)
 
 class Action(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    type = models.CharField("then or else", max_length = 50, default="then")
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
-    type = models.CharField("type math operation", max_length = 50, default="")
-    value = models.OneToOneField(Value, on_delete = models.CASCADE)
+    action = models.CharField("action", max_length = 50, default="")
+    value = models.OneToOneField(Value, on_delete = models.CASCADE,null=True)
+    script = models.ForeignKey(Scripts, on_delete = models.CASCADE,null=True)

@@ -38,13 +38,6 @@ export const ActBlock = ({idDevice,updata,index,data,el,deleteEl})=>{
     setDevice(lookForDeviceById(idDevice))
   },[lookForDeviceById,idDevice])
 
-const changeHandler=()=>{
-
-}
-
-const devEl=()=>{
-
-}
 
 const updataValue = (data1)=>{
   let element = data

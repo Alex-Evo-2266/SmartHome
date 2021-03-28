@@ -1,5 +1,4 @@
-import React,{useState,useEffect,useContext,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import React,{useState,useContext} from 'react'
 import {AddScriptContext} from '../../addScript/addScriptContext'
 import {ValueDeviceBlock} from './valueDeviceBlock'
 import {TextBlock} from './textBlock'

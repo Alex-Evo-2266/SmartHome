@@ -1,5 +1,4 @@
-import React,{useState,useEffect,useContext,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import React,{useState} from 'react'
 
 export const TextBlock = ({action,updata,el,block,deleteEl})=>{
   const [value,setValue] = useState(action??"")

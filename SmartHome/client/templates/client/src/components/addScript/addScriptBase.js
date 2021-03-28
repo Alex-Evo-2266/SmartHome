@@ -3,8 +3,6 @@ import {AddScriptContext} from './addScriptContext'
 import {AddScriptDevices} from './addScript/addScriptDevices'
 import {CenterWindow} from '../modalWindow/centerWindow'
 import {BackForm} from '../moduls/backForm'
-import {IfBlock} from '../moduls/programmBlock/ifBlock'
-import {GroupBlock} from '../moduls/programmBlock/groupBlock'
 import {ShowScript} from './addScript/showScript'
 
 export const AddScriptBase = ()=>{

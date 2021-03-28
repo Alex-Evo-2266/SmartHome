@@ -1,12 +1,5 @@
 import React, {useContext,useState,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
-import imgLight from '../../../img/lightDevices.jpg';
-import imgDimmer from '../../../img/dimmerDevices.jpg';
-import imgIr from '../../../img/IR.jpg';
-import imgSensor from '../../../img/sensorDevices.jpg';
-import imgSwitch from '../../../img/switchDevices.jpg';
-import imgBinarySensor from '../../../img/binarySensorDevices.jpg';
-import imgUndefined from '../../../img/icon-sensor.png';
 
 export const AddScriptDevices = ({result,type})=>{
   const {devices} = useContext(DeviceStatusContext)

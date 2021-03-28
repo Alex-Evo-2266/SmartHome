@@ -42,14 +42,6 @@ export const IfBlock = ({idDevice,updata,index,data,el,deleteEl})=>{
     setDevice(lookForDeviceById(idDevice))
   },[lookForDeviceById,idDevice])
 
-const changeHandler=()=>{
-
-}
-
-const devEl=()=>{
-
-}
-
 const updataValue = (data1)=>{
   let element = data
   let val = element.value

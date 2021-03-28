@@ -1,4 +1,4 @@
-import React,{useState,useContext,useEffect} from 'react'
+import React,{useState,useContext} from 'react'
 import {IfBlock} from './ifBlock'
 import {AddScriptContext} from '../../addScript/addScriptContext'
 // import {ifClass,groupIfClass} from '../../../myClass.js'

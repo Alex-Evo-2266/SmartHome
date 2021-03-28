@@ -33,7 +33,7 @@ export const NewScriptsPage = () => {
       if(!dataDev||!dataDev.DeviceId)
         return
       let mas = script;
-      mas.trigger.push({type:"device",action:"all",DeviseId:dataDev.DeviceId})
+      mas.trigger.push({type:"device",action:"all",DeviceId:dataDev.DeviceId})
       setScript(mas)
     })
   }
@@ -59,7 +59,7 @@ export const NewScriptsPage = () => {
       if(dataDev.DeviceType==="variable"){
         act = "value"
       }
-      mas[type].push({type:"device",action:act,DeviseId:dataDev.DeviceId})
+      mas[type].push({type:"device",action:act,DeviceId:dataDev.DeviceId})
       setScript(mas)
     })
   }
@@ -97,7 +97,6 @@ export const NewScriptsPage = () => {
   }
 
   const updatascript=(type,data)=>{
-    console.log(type,data);
     let mas = script;
     let components = mas[type]
     let component = components[data.index]
@@ -108,16 +107,13 @@ export const NewScriptsPage = () => {
     }
     components[data.index] = component
     mas[type] = components
-    console.log(mas);
     setScript(mas)
     setCost((prev)=>!prev)
   }
 
   const updataIfBlock=(data)=>{
-    console.log(data);
     let mas = script;
     mas.if = data
-    console.log(mas);
     setScript(mas)
     setCost((prev)=>!prev)
   }
@@ -128,10 +124,6 @@ export const NewScriptsPage = () => {
       clearError();
     }
   },[error,message, clearError])
-
-  useEffect(()=>{
-    console.log(script);
-  },[script])
 
   useEffect(()=>{
     if(!cost)
@@ -162,7 +154,7 @@ export const NewScriptsPage = () => {
               {
                 (cost)?
                 script.trigger.map((item,index)=>{
-                  return <TriggerBlock key={index} index={index} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.DeviseId}/>
+                  return <TriggerBlock key={index} index={index} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.DeviceId}/>
                 }):null
               }
             </div>
@@ -188,7 +180,7 @@ export const NewScriptsPage = () => {
             {
               (cost)?
               script.then.map((item,index)=>{
-                return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then" idDevice={item.DeviseId}/>
+                return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then" idDevice={item.DeviceId}/>
               }):null
             }
             </div>
@@ -204,7 +196,7 @@ export const NewScriptsPage = () => {
             {
               (cost)?
               script.else.map((item,index)=>{
-                return <ActBlock deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else" idDevice={item.DeviseId}/>
+                return <ActBlock deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else" idDevice={item.DeviceId}/>
               }):
               null
             }

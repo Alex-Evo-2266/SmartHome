@@ -7,6 +7,7 @@ from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from django.views.decorators.csrf import csrf_exempt
 from .logic.Cart import setPage,getPage
+from .logic.script import addscript
 from django.core.files.uploadedfile import TemporaryUploadedFile
 
 
@@ -210,8 +211,6 @@ def addNewUser(request):
     if request.method=="POST" and request.body:
         data = json.loads(request.body)
         if addUser(data):
-            # str = "user: "+data["name"]+" password: "+data["password"]
-            # send_email("smtp.mail.ru","Test email from Python",data["email"],"ghbdtn2244@mail.ru","66dfghty","str test")
             return HttpResponse(json.dumps({"message":"ok"}),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
@@ -223,4 +222,8 @@ def deleteuser(request):
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
 def addScript(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if(addscript(data)):
+            return HttpResponse(json.dumps({"message":"ok"}),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
