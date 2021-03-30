@@ -219,6 +219,7 @@ class ControlDevices():
         self.set_mode(status)
 
     def set_dimmer(self, status):
+        # print(status)
         try:
             if(type(self.device)==Bulb or self.__item["DeviceTypeConnect"]=="mqtt"):
                 self.device.set_brightness(int(status))

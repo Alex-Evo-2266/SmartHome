@@ -29,6 +29,8 @@ urlpatterns = [
     path('script/get/<int:id>',views.getScript),
     path('script/edit/<int:id>',views.editScript),
     path('script/delete',views.deleteScript),
+    path('script/set/status',views.setStatusScript),
+    path('script/run/<int:id>',views.runScript),
     # path('home/value/set',views.deviceSetValue),
     # path('media/set/<slug:name>/', views.media)
     # path('devices/all',views.allDevices),

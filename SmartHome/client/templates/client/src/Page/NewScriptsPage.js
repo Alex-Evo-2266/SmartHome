@@ -108,6 +108,7 @@ export const NewScriptsPage = ({edit}) => {
     let component = components[data.index]
     for (var key in data) {
       if (key!=="index") {
+        console.log(key);
         component[key] = data[key]
       }
     }
@@ -221,7 +222,7 @@ export const NewScriptsPage = ({edit}) => {
               {
                 (cost)?
                 script.trigger.map((item,index)=>{
-                  return <TriggerBlock key={index} index={index} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.DeviceId}/>
+                  return <TriggerBlock key={index} index={index} action={item.action} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.DeviceId}/>
                 }):null
               }
             </div>

@@ -1,5 +1,4 @@
 from ..models import Device,ConfigDevice,Room,genId
-from .deviceControl.SmartHomeDevice import ControlDevices
 from ..classes.devicesArrey import DevicesArrey
 
 devicesArrey = DevicesArrey()
@@ -16,14 +15,14 @@ def setValue(id, type, value):
             return arr2
         e = device
         if(type=="modeTarget"):
-            print("d")
             e.target_mode()
             return True
+        if(type=="variable"):
+            e.set_value(value)
         value = int(value)
         if(type=="value"):
             e.set_value(value)
         if(type=="power"):
-            print("10")
             e.set_power(value)
         if(type=="dimmer"):
             e.set_dimmer(value)
@@ -33,9 +32,7 @@ def setValue(id, type, value):
             e.set_color(value)
         if(type=="mode"):
             e.set_mode(value)
-        if(type=="variable"):
-            e.set_value(value)
         return True
     except Exception as e:
-        print(e)
+        print("set value error",e)
         return None

@@ -28,6 +28,7 @@ export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>
 
   const changeSelector = event=>{
     setType(event.target.value)
+    console.log(event.target.value);
     updata({index,action:event.target.value})
   }
 

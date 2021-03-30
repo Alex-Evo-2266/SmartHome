@@ -1,4 +1,5 @@
 from ..models import Scripts, Value,Triger,IfBlock,IfGroupBlock,Action,Device,genId,set_to_list_dict
+from .runScript import runscript
 
 def addscript(data):
     try:
@@ -72,7 +73,7 @@ def addValue(data,perent=None)->Value:
     if(data["type"]=="device"):
         device = Device.objects.get(id=data["idDevice"])
         value.device = device
-        value.value = data["action"]
+        value.oper = data["action"]
         value.save()
     if(data["type"]=="math"):
         value.oper = data["action"]
@@ -137,6 +138,23 @@ def scriptDelete(id):
         delgroupel(script.ifgroupblock)
         actdel(script.action_set.all())
         script.delete()
+        return True
+    except:
+        return False
+
+def scriptsetstatus(id,status):
+    try:
+        script = Scripts.objects.get(id=id)
+        script.status = status
+        script.save()
+        return True
+    except:
+        return False
+
+def runScript(id):
+    try:
+        script = Scripts.objects.get(id=id)
+        runscript(script)
         return True
     except:
         return False

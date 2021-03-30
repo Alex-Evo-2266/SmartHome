@@ -74,5 +74,6 @@ def on_connect(client, userdata, flags, rc):
         client.subscribe(item)
 
 def on_message(client, userdata, msg):
+    # print(msg.topic,str(msg.payload.decode('utf-8')))
     # print(msg.topic+" "+str(json.loads(msg.payload)))
-    setValueAtToken(msg.topic,str(json.loads(msg.payload)))
+    setValueAtToken(msg.topic,str(msg.payload.decode('utf-8')))

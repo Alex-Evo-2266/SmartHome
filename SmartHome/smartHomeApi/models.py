@@ -385,14 +385,6 @@ class Value(models.Model):
     def __str__(self):
         return self.type
 
-    # def delete(self, *args, **kwargs):
-    #     if(self.valuefirst):
-    #         print(self.valuefirst)
-    #         self.valuefirst.delete()
-    #     if(self.valuesecond):
-    #         self.valuesecond.delete()
-    #     super(Value, self).delete(*args, **kwargs)
-
     def model_to_dict(self):
         return{
         "id":self.id,

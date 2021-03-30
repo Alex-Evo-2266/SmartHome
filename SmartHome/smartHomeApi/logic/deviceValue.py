@@ -1,4 +1,5 @@
 from ..models import Device,ConfigDevice,Room,genId,ValueDevice
+from .runScript import runScripts
 
 def devicestatus(id, type):
     dev = Device.objects.get(id=id)
@@ -9,7 +10,7 @@ def devicestatus(id, type):
     return None
 
 def setValueAtToken(address,value):
-    # print(address,value)
+    print(address,value)
     configs = ConfigDevice.objects.all()
     for item in configs:
         if item.address==address:
@@ -21,15 +22,27 @@ def setValueAtToken(address,value):
 
 def deviceSetStatus(id, type,value):
     try:
-        if(not value):
+        if(not value or type=="background"):
             return None
         dev = Device.objects.get(id=id)
         # print("2")
         values = dev.valuedevice_set.all()
+        configs = dev.configdevice_set.all()
         for item in values:
-            if item.type==type:
-                item.value = value
-                item.save()
+            if item.type==type and type!="background":
+                if(type=="power"):
+                    for item2 in configs:
+                        if(item2.type=="power"):
+                            if(value==item2.high):
+                                value="1"
+                            elif(value==item2.low):
+                                value="0"
+                            else:
+                                return None
+                if(item.value != value):
+                    item.value = value
+                    runScripts(id,type)
+                    item.save()
                 return value
         newvalue = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,value=value,type=type)
         newvalue.save()

@@ -7,7 +7,7 @@ from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from django.views.decorators.csrf import csrf_exempt
 from .logic.Cart import setPage,getPage
-from .logic.script import addscript,scripts,scriptDelete,script
+from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from django.core.files.uploadedfile import TemporaryUploadedFile
 
 
@@ -150,7 +150,7 @@ def deviceDelete(request):
 def deviceSetValue(request):
     if request.method=="POST" and request.body:
         data = json.loads(request.body)
-        print(data)
+        print("data",data)
         if setValue(data["id"],data["type"],data["status"]):
             return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
@@ -254,3 +254,14 @@ def editScript(request,id):
             if(addscript(data)):
                 return HttpResponse(json.dumps({"message":"ok"}),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def setStatusScript(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if scriptsetstatus(data["id"],data["status"]):
+            return HttpResponse(json.dumps({"message":"ok"}),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def runScript(request,id):
+    runscript(id)
+    return HttpResponse(json.dumps({"message":"ok"}),status=200)
