@@ -11,35 +11,6 @@ export const ImagesInput = ({update}) =>{
   const imgConteiner = useRef(null)
   const [filesArr,setFiles] = useState([])
 
-  // async function handleFiles(event) {
-  //   const files = event.target.files
-  //   window.URL = window.URL || window.webkitURL;
-  //   var fileList = document.getElementById(`fileList${id}`);
-  //
-  // if (!files.length) {
-  //   fileList.innerHTML = "<p>No files selected!</p>";
-  //   return;
-  // }
-  //
-  // var img = document.getElementById(`sammerDayImg${id}`);
-  // img.src = window.URL.createObjectURL(files[0]);
-  // img.onload = function() {
-  //   window.URL.revokeObjectURL(this.src);
-  // }
-  //   let file = event.target.files[0]
-    // var data = new FormData();
-    // data.append("image",file)
-    // data.append('name',event.target.name)
-    // // data.append('name',"image")
-    // await request(`/api/media/set/background/${event.target.name}`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
-  //
-  //   if(onChange){
-  //     onChange(event)
-  //   }
-  //
-  //   window.location.reload();
-  // }
-
   const byteToSize = (bytes)=>{
     const size = ["Bytes","KB","MB","GB","TB"]
     if(!bytes) return "0 Bytes"
@@ -78,7 +49,7 @@ export const ImagesInput = ({update}) =>{
     }
 
     const {name} = event.target.dataset
-    let files = filesArr.filter(file=>file.name!=name)
+    let files = filesArr.filter(file=>file.name!==name)
     setFiles(files)
     const block = imgConteiner.current.querySelector(`[data-name="${name}"]`).closest(".image-preview")
     block.classList.add("removeing")

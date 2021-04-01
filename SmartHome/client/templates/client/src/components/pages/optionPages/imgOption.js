@@ -1,5 +1,6 @@
 import React,{useState,useCallback,useEffect,useContext} from 'react'
 import {UserContext} from '../../../context/UserContext'
+import {Link} from 'react-router-dom'
 // import {ImageInput} from '../../moduls/imageInput'
 
 export const ImgOption = () =>{
@@ -17,7 +18,7 @@ export const ImgOption = () =>{
     if(!config||!config.images)return;
     let fon = {}
     for (var item of config.images) {
-      fon = {...fon,[item.title]:item.image}
+      fon = {...fon,[item.type]:item.image}
     }
     setUserconf(prev=>{return{...prev,...fon}})
   },[config])
@@ -29,6 +30,7 @@ export const ImgOption = () =>{
   return(
     <div className="configElement img">
       <h2>Background</h2>
+      <Link to="/gallery" className="button">Галерея</Link>
       <div className="card">
         <div className="imgBx">
           <img src={userconf.base} alt="base"/>

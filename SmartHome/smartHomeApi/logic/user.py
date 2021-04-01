@@ -86,18 +86,18 @@ def menuConfEdit(id, data):
         return True
     except Exception as e:
         return False
-
-def Setbackground(id,background):
-    try:
-        user = User.objects.get(id=id)
-        backgrounds = user.userconfig.background.all()
-        for item in backgrounds:
-            if(item.title==background.title):
-                user.userconfig.background.remove(item)
-        user.userconfig.background.add(background)
-        return True
-    except Exception as e:
-        return False
+# 
+# def Setbackground(id,background):
+#     try:
+#         user = User.objects.get(id=id)
+#         backgrounds = user.userconfig.background.all()
+#         for item in backgrounds:
+#             if(item.title==background.title):
+#                 user.userconfig.background.remove(item)
+#         user.userconfig.background.add(background)
+#         return True
+#     except Exception as e:
+#         return False
 
 def parser(str1,str2)->str:
     str1 = str1.replace(" ","")

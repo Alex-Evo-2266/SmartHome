@@ -4,12 +4,12 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.uploadedfile import TemporaryUploadedFile
 
-from .logic.user import addUser,send_email,deleteUser, login as Authorization, userConfEdit,menuConfEdit,user,editUser,Setbackground
+from .logic.user import addUser,send_email,deleteUser, login as Authorization, userConfEdit,menuConfEdit,user,editUser
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
 from .logic.Cart import setPage,getPage
-from .logic.gallery import getFonUrl,deleteImage
+from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
 
@@ -185,7 +185,7 @@ def setBackground(request,name):
                 fon.title = name
                 fon.id = id
                 fon.save()
-                Setbackground(usertoken.get("userId"),fon)
+                # Setbackground(usertoken.get("userId"),fon)
                 return HttpResponse(json.dumps({"message":"ok"}),status=201)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
@@ -277,4 +277,12 @@ def deleteImg(request,type):
         if(type=="fon"):
             if(deleteImage(data["id"])):
                 return HttpResponse(json.dumps({"message":"ok"}),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def linkBackground(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        datauser = auth(request)
+        if(linkbackground(data,datauser["userId"])):
+            return HttpResponse(json.dumps({"message":"ok"}),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)

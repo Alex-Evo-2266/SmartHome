@@ -1,4 +1,4 @@
-from ..models import LocalImage,set_to_list_dict
+from ..models import LocalImage,genId,set_to_list_dict,ImageBackground,UserConfig,User
 
 def getFonUrl(oldindex):
     images = LocalImage.objects.all()
@@ -18,6 +18,22 @@ def deleteImage(id):
     try:
         image = LocalImage.objects.get(id=id)
         image.delete()
+        return True
+    except Exception as e:
+        return False
+
+def linkbackground(data,id):
+    print(data,id)
+    try:
+        user = User.objects.get(id=id)
+        backgrounds = user.userconfig.background.all()
+        image = LocalImage.objects.get(id=data["id"])
+        for item in backgrounds:
+            if(item.type==data["type"]):
+                item.delete()
+                break
+        background = ImageBackground.objects.create(id=genId(ImageBackground.objects.all()),type=data["type"],image=image)
+        user.userconfig.background.add(background)
         return True
     except Exception as e:
         return False

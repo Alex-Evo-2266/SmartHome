@@ -101,6 +101,8 @@ class ImageBackground(models.Model):
     type = models.CharField("название", max_length = 200, default="base")
     image = models.ForeignKey(LocalImage, on_delete = models.SET_NULL, null=True)
 
+    def model_to_dict(self):
+        return {**self.image.model_to_dict(),"type":self.type}
 
 class UserConfig(models.Model):
     Style = models.CharField("user name", max_length = 200, default="light")

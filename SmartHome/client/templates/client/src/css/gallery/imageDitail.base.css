@@ -1,0 +1,30 @@
+.ditailImage-body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: scroll;
+}
+
+.ditailImage-box{
+  max-width: 1000px;
+  min-width: calc(100% - 100px);
+  margin: 50px;
+
+}
+.ditailImage-image{
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+}
+.ditailImage-image img{
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ditailImage-control{
+  background: #fff;
+  padding: 20px;
+}

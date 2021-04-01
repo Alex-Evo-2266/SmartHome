@@ -1,5 +1,4 @@
-import {useCallback,useEffect} from 'react';
-import {useHttp} from './http.hook'
+import {useCallback} from 'react';
 import defFon from '../img/fon-base.jpg'
 
 const defbacground = ()=>{
@@ -9,7 +8,6 @@ const defbacground = ()=>{
 }
 
 export const useBackground = () => {
-  const {request, error, clearError} = useHttp();
 
   const backgroundType = function () {
     let time = new Date().getHours();
@@ -33,7 +31,7 @@ export const useBackground = () => {
   const fonUpdata = useCallback((data)=>{
     let background={}
     for (var item of data.images) {
-      background = {...background,[item.title]:item.image}
+      background = {...background,[item.type]:item.image}
     }
   if(data.auteStyle){
     if(backgroundType()==="night"){
@@ -62,14 +60,13 @@ export const useBackground = () => {
   }
 },[])
 
-  const updataBackground = useCallback(async(token)=>{
+  const updataBackground = useCallback(async(token,userconfig)=>{
     if(!token){
       console.error("no Autorization");
       defbacground()
       return ;
     }
-    const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
-    console.log(data);
+    const data = userconfig
     let config = {
       style:"light",
       auteStyle:false,
@@ -91,15 +88,7 @@ export const useBackground = () => {
     setInterval(()=>{
       fonUpdata(config);
     }, 1000*60*30);
-  },[request,fonUpdata])
-
-  useEffect(()=>{
-    if(error)
-    console.error(error,"error")
-    return ()=>{
-      clearError();
-    }
-  },[error, clearError])
+  },[fonUpdata])
 
   return {updataBackground}
 }

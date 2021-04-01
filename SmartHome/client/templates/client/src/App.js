@@ -33,15 +33,19 @@ function App() {
     if(!token)return
     const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
     console.log(data);
+    updataBackground(token,data)
     setConfig(data)
-  },[token,request])
+  },[token,request,updataBackground])
+
+  const updatebackground = ()=>{
+    userConfig()
+  }
 
   useEffect(()=>{
     if(ready){
-      updataBackground(token)
       userConfig()
     }
-  },[ready,token,updataBackground,userConfig])
+  },[ready,userConfig])
 
   useEffect(()=>{
     if(error)
@@ -61,7 +65,7 @@ function App() {
     <AuthContext.Provider value={{
       token, login, logout, userId, userLevel, isAuthenticated
     }}>
-    <UserContext.Provider value={{...config}}>
+    <UserContext.Provider value={{...config,updateBackground:updatebackground}}>
     <SocketState>
     <AlertState>
     <MenuState>

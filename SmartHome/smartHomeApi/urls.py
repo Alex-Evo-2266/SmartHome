@@ -33,6 +33,7 @@ urlpatterns = [
     path('script/run/<int:id>',views.runScript),
     path('image/<str:type>/delete',views.deleteImg),
     path('image/<str:type>/<int:index>',views.getTenUrl),
+    path('background/set',views.linkBackground),
     # path('home/value/set',views.deviceSetValue),
     # path('media/set/<slug:name>/', views.media)
     # path('devices/all',views.allDevices),
