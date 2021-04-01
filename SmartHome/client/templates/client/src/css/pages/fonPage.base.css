@@ -1,0 +1,70 @@
+.configElement.img *{
+  box-sizing: border-box;
+}
+.configElement.img h2{
+  margin: 10px 0 0 0;
+  color: #fff;
+}
+.configElement.img{
+  background: #000;
+  border: none;
+  position: relative;
+  width: 100%;
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: repeat(auto-fit,minmax(100%,1fr));
+}
+.configElement.img .card{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  background: #fff;
+  color: #000;
+  margin: 10px 0;
+}
+.configElement.img .card:nth-child(even){
+  flex-direction: row-reverse;
+}
+.configElement.img .card .imgBx{
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background: #000;
+  overflow: hidden;
+}
+.configElement.img .card .imgBx img{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.configElement.img .card .content{
+  position: relative;
+  width: 100%;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .configElement.img{
+    padding: 20px;
+  }
+  .configElement.img .card{
+    flex-direction: column;
+  }
+  .configElement.img .card:nth-child(even){
+    flex-direction: column;
+  }
+  .configElement.img .card .imgBx,
+  .configElement.img .card .content{
+    width: 100%;
+  }
+}
+@media (max-width: 450px){
+  .configElement.img{
+    padding: 0;
+  }
+}

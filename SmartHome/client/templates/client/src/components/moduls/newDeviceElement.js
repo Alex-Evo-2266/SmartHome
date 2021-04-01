@@ -11,7 +11,6 @@ export const NewDeviceElement = ({id}) =>{
   const {devices, updateDevice} = useContext(DeviceStatusContext)
   const form = useContext(FormContext)
   const [device,setDevice] = useState({})
-  const [powerconf,setPowerconf] = useState(null)
 
   useEffect(()=>{
     if(devices){

@@ -1,11 +1,12 @@
 @import "./pages.light.css";
 @import "./pages.night.css";
+@import "./fonPage.base.css";
 
 .pages{
  position: fixed;
  left: 50%;
- transform: translateX(-50%);
- width: 80%;
+ transform: translateX(-46%);
+ width: 90%;
  height: 80%;
 }
 .pages .page{
@@ -112,7 +113,8 @@ img.choice:hover
 @media (max-width: 700px) {
   .pages{
    width: 90%;
-   height: 80%
+   height: 80%;
+   transform: translateX(-50%);
   }
   .pages .page{
     width: 100%;
@@ -136,6 +138,7 @@ img.choice:hover
 @media (max-width: 450px){
   .pages{
    width: 100%;
+
    height: calc(100% - 75px);
   }
   .pages .page{

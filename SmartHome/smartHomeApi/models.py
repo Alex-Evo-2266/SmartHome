@@ -81,19 +81,26 @@ class User(models.Model):
     def geveConfig(self):
         return set_to_list_dict(self.menuelement_set.all())
 
-class ImageBackground(models.Model):
+class LocalImage(models.Model):
     id = models.IntegerField("id", primary_key=True)
-    title = models.CharField("название", max_length = 200, default="base")
-    image = models.ImageField("Изображение",upload_to="background")
+    title = models.CharField("название", max_length = 200, default="")
+    image = models.ImageField("Изображение",upload_to="public")
 
     def model_to_dict(self):
         return {
+        "id":self.id,
         "title":self.title,
         "image":self.image.url,
         }
 
     def __str__(self):
         return self.title
+
+class ImageBackground(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    type = models.CharField("название", max_length = 200, default="base")
+    image = models.ForeignKey(LocalImage, on_delete = models.SET_NULL, null=True)
+
 
 class UserConfig(models.Model):
     Style = models.CharField("user name", max_length = 200, default="light")

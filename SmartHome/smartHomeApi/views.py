@@ -1,25 +1,23 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.uploadedfile import TemporaryUploadedFile
+
 from .logic.user import addUser,send_email,deleteUser, login as Authorization, userConfEdit,menuConfEdit,user,editUser,Setbackground
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
-from django.views.decorators.csrf import csrf_exempt
 from .logic.Cart import setPage,getPage
+from .logic.gallery import getFonUrl,deleteImage
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
-from django.core.files.uploadedfile import TemporaryUploadedFile
+from .logic.deviceSetValue import setValue
 
+from .models import User, UserConfig,ServerConfig,ImageBackground,genId,LocalImage
 
-from rest_framework.views import APIView
-from rest_framework.parsers import FileUploadParser
-
-from .models import User, UserConfig,ServerConfig,ImageBackground,genId
-
-from .forms import BackgroundForm
+from .forms import ImageForm
 
 import json
-from .logic.deviceSetValue import setValue
 
 # Create your views here.
 
@@ -174,11 +172,11 @@ def setBackground(request,name):
         # print(name,request.FILES,request.POST)
         usertoken = auth(request)
         if "userId" in usertoken:
-            form = BackgroundForm(request.POST, request.FILES)
+            form = ImageForm(request.POST, request.FILES)
             print(request.POST, request.FILES)
             if form.is_valid():
-                id = genId(ImageBackground.objects.all())
-                fon = ImageBackground.objects.create(id=id)
+                id = genId(LocalImage.objects.all())
+                fon = LocalImage.objects.create(id=id)
                 if(type(request.FILES['image'])==TemporaryUploadedFile):
                     fon.image=request.FILES['image'].temporary_file_path()
                 else:
@@ -265,3 +263,18 @@ def setStatusScript(request):
 def runScript(request,id):
     runscript(id)
     return HttpResponse(json.dumps({"message":"ok"}),status=200)
+
+def getTenUrl(request,type,index):
+    if(type=="fon"):
+        images = getFonUrl(index)
+        print("images",images)
+        return HttpResponse(json.dumps(images),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def deleteImg(request,type):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        if(type=="fon"):
+            if(deleteImage(data["id"])):
+                return HttpResponse(json.dumps({"message":"ok"}),status=200)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)

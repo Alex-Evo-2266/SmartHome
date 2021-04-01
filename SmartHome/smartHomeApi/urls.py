@@ -31,10 +31,12 @@ urlpatterns = [
     path('script/delete',views.deleteScript),
     path('script/set/status',views.setStatusScript),
     path('script/run/<int:id>',views.runScript),
+    path('image/<str:type>/delete',views.deleteImg),
+    path('image/<str:type>/<int:index>',views.getTenUrl),
     # path('home/value/set',views.deviceSetValue),
     # path('media/set/<slug:name>/', views.media)
     # path('devices/all',views.allDevices),
     # path('base/fonImage',views.fonImage),
-    path('media/set/background/<str:name>',views.setBackground),
+    path('media/set/image/<str:name>',views.setBackground),
 ]
 # /api/media/set/

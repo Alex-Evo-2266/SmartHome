@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'channels',
     'smartHomeApi',
     'client',
+    'django_cleanup',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

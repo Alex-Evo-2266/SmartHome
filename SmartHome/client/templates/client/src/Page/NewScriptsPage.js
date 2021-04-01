@@ -137,18 +137,18 @@ export const NewScriptsPage = ({edit}) => {
     setCost(true)
   },[cost])
 
-  const givegroup = (data)=>{
+  const givegroup = useCallback((data)=>{
     console.log(data);
     let cild = []
     for (var item of data.block) {
       cild.push(givegroup(item))
     }
-    for (var item of data.elements) {
-      cild.push(item)
+    for (var item2 of data.elements) {
+      cild.push(item2)
     }
     let g = {type:"group" ,oper:data.type,children:cild}
     return g
-  }
+  },[])
 
   const givethen = (data)=>{
     return data.filter((item)=>{
@@ -184,13 +184,13 @@ export const NewScriptsPage = ({edit}) => {
       setScript(s)
       setCost(prev=>!prev)
     }
-  },[])
+  },[auth.token,givegroup,request,script])
 
   useEffect(()=>{
     if(id&&edit){
       giveScript(id)
     }
-  },[id])
+  },[id,edit,giveScript])
 
   if(loading){
     return(

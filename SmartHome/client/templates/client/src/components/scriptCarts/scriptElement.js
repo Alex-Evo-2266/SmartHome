@@ -2,12 +2,10 @@ import React,{useState,useContext,useEffect} from 'react'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {AuthContext} from '../../context/AuthContext.js'
-import {AddScriptContext} from '../addScript/addScriptContext'
 import {useHistory} from 'react-router-dom'
 
 export const ScriptElement = ({script,updata})=>{
   const history = useHistory()
-  const {showData} = useContext(AddScriptContext)
   const [status, setStatus] = useState(script.status)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();

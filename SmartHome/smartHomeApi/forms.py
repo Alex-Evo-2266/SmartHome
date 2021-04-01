@@ -1,7 +1,7 @@
 from django import forms
-from .models import ImageBackground
+from .models import LocalImage
 
-class BackgroundForm(forms.ModelForm):
+class ImageForm(forms.ModelForm):
     class Meta:
-        model = ImageBackground
+        model = LocalImage
         fields = ['image']
