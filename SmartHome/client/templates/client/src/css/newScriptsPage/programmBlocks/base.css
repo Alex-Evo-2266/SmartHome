@@ -14,6 +14,16 @@
   background: #444;
   margin: 0 2px;
 }
+.programm-function-block-content-item select,
+.programm-function-block-content-item input{
+  padding: 2px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: none;
+  width: auto;
+  font-size: 14px;
+  color: #000;
+}
 .programm-function-block-content-item.delete{
   background: #f00;
 }

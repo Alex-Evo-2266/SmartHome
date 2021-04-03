@@ -36,6 +36,7 @@ export const ImageDitail = ({data,hide})=>{
           <img src={data.image} alt={data.title}/>
         </div>
         <div className="ditailImage-control">
+          <p>Name: {data.title}</p>
           <select value={fon} onChange={changeSelector}>
             <option value="base">Base</option>
             <option value="sunrise">Sunrise</option>
@@ -43,7 +44,7 @@ export const ImageDitail = ({data,hide})=>{
             <option value="twilight">Twilight</option>
             <option value="night">Night</option>
           </select>
-          <button onClick={out}>Сохранить</button>
+          <button className="button primary" onClick={out}>Cделать фоном</button>
         </div>
       </div>
     </BackForm>

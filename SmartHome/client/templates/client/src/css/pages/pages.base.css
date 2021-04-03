@@ -68,6 +68,9 @@
   background: #0000;
   position: relative;
 }
+.configElement .text input{
+  display: inline-block;
+}
 .configElement.choice{
   height: 170px;
   display: flex;

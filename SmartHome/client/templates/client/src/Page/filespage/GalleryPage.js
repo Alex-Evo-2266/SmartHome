@@ -1,10 +1,10 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {AuthContext} from '../context/AuthContext.js'
-import {useHttp} from '../hooks/http.hook'
-import {useMessage} from '../hooks/message.hook'
-import {ImagesInput} from '../components/moduls/inputImages'
-import {AlertContext} from '../components/alert/alertContext'
-import {ImageDitail} from '../components/gallery/imageDitail'
+import {AuthContext} from '../../context/AuthContext.js'
+import {useHttp} from '../../hooks/http.hook'
+import {useMessage} from '../../hooks/message.hook'
+import {ImagesInput} from '../../components/moduls/inputImages'
+import {AlertContext} from '../../components/alert/alertContext'
+import {ImageDitail} from '../../components/files/imageDitail'
 
 export const GalleryPage = () => {
   const auth = useContext(AuthContext)
@@ -72,7 +72,7 @@ export const GalleryPage = () => {
       <ImageDitail data={ditailElement} hide={()=>setVisible(false)}/>:
       null
     }
-    <div className = "conteiner opasityFon">
+    <div>
       <ImagesInput update={getTenUrl}/>
       <div className="galeryContent">
       {

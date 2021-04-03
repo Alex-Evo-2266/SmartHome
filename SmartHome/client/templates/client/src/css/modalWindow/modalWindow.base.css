@@ -16,6 +16,9 @@
   width: 20px;
   height: 90%;
   max-height: 20px;
+  padding: 0;
+  color: #000;
+  font-size: 12px;
 }
 .modalHeader button.userBtn{
   right: 30px;

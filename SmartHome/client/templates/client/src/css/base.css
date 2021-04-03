@@ -1,0 +1,36 @@
+input,
+select,
+textarea,
+button
+{
+  display: block;
+  height: 30px;
+  width: 90%;
+  color: #1E90FF;
+  position: relative;
+  border-radius: 99px;
+  border: 1px solid #1E90FF;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  font-size: 24px;
+  outline: none;
+  background: #fff;
+  transition: all 0.22s;
+  cursor: pointer;
+}
+
+textarea{
+  border-radius: 20px;
+  height: auto;
+}
+button{
+  height: 40px;
+}
+button:active{
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+button:hover{
+  cursor: pointer;
+  opacity: 0.8;
+}

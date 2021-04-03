@@ -26,5 +26,22 @@
 }
 .ditailImage-control{
   background: #fff;
-  padding: 20px;
+  padding: 5px 20px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.ditailImage-control p{
+  font-size: 24px;
+  text-align: center;
+}
+.ditailImage-control select{
+  margin: 10px;
+  display: block;
+  font-size: 24px;
+  width: 80%;
+  height: 40px;
+  border: 2px solid #333;
+
 }

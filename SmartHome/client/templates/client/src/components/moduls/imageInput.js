@@ -28,7 +28,7 @@ export const ImageInput = ({title, src, name, onChange=null, id}) =>{
     data.append("image",file)
     data.append('name',event.target.name)
     // data.append('name',"image")
-    await request(`/api/media/set/background/${event.target.name}`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
+    await request(`/api/media/set/img/${event.target.name}`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
 
     if(onChange){
       onChange(event)

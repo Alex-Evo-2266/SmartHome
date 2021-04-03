@@ -1,0 +1,34 @@
+.burger-menu{
+  margin: 50% 0 0 50%;
+  transform: translate(-50% , -50%);
+}
+.burger-menu span{
+  position: relative;
+  width: 20px;
+  height: 3px;
+  background: #fff;
+  display: block;
+  margin-bottom: 5px;
+  transition: .5s;
+}
+.burger-menu span:nth-child(1){
+  transform-origin: left;
+}
+.burger-menu span:nth-child(2){
+  transform-origin: center;
+}
+.burger-menu span:nth-child(3){
+  transform-origin: left;
+}
+
+.burger-menu.active span:nth-child(1){
+  transform: rotate(45deg);
+  left: 2px;
+}
+.burger-menu.active span:nth-child(2){
+  transform: rotate(315deg);
+  right: 3px;
+}
+.burger-menu.active span:nth-child(3){
+  transform: scaleX(0);
+}

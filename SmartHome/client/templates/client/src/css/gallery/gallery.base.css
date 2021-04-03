@@ -1,4 +1,5 @@
 @import "./imageDitail.base.css";
+@import "./moviesCard.css";
 
 .galeryContent{
   margin: 20px 10px 0;
@@ -43,6 +44,8 @@
   text-align: center;
 }
 .cartImageInput .btn{
+  width: auto;
+  display: inline-block;
   color: #42b983;
   position: relative;
   border-radius: 99px;

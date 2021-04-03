@@ -22,8 +22,13 @@
   margin: 10px;
   border-radius: 4px;
 }
-.pagecontent label input{
- padding: 8px;
+.pagecontent label input[type="text"],
+.pagecontent label input[type="tel"],
+.pagecontent label input[type="email"]
+{
+  width: auto;
+  display: inline-block;
+  padding: 8px;
  font-size: 20px;
  width: 80%;
  text-align: center;

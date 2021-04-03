@@ -5,12 +5,20 @@
   background: #333;
   color: #fff;
 }
+.light .sidebar.active .toggle-sidebar{
+  background: #1E90FF;
+}
+.light .sidebar ul{
+  background: #aaa;
+}
 .light .sidebar ul li{
-  background: #444;
+
 }
 .light .sidebar ul li a{
   color: #fff;
+  background: #444;
 }
-.light .sidebar ul li:hover{
-  background: #888;
+.light .sidebar ul li a:hover,
+.light .sidebar ul li a.active{
+  background: #1E90FF;
 }

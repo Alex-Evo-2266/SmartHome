@@ -7,7 +7,7 @@ class MovieCategory(models.Model):
     """категории"""
     name = models.CharField("Категория",max_length=150)
     discription = models.TextField("Описание",default="")
-    url = models.SlugField(max_length=160, unique=True)
+    url = models.URLField(max_length=160)
 
     def __str__(self):
         return self.name
@@ -30,7 +30,7 @@ class MovieActor(models.Model):
     date_of_birth = models.DateField("дата рождения", default=datetime.date(1999,1,1))
     discription = models.TextField("Описание",default="")
     image = models.ImageField("Изображение",upload_to="files/movie/actors/")
-    url = models.SlugField(max_length=160, unique=True, null=True, default=None)
+    url = models.URLField(max_length=160, null=True, default=None)
 
     def __str__(self):
         return self.name
@@ -54,7 +54,7 @@ class MovieGanre(models.Model):
     """жанры"""
     name = models.CharField("Название",max_length=150)
     discription = models.TextField("Описание",default="")
-    url = models.SlugField(max_length=160, unique=True)
+    url = models.URLField(max_length=160)
 
     def __str__(self):
         return self.name
@@ -85,8 +85,8 @@ class BaseMovieClass(models.Model):
     fees_in_usa = models.PositiveIntegerField("сборы в США", default=0, help_text="указать сумму в доллорах")
     fees_in_world = models.PositiveIntegerField("сборы в мире", default=0, help_text="указать сумму в доллорах")
     category = models.ForeignKey(MovieCategory, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
-    url = models.SlugField(max_length=160, unique=True, default=None, null=True)
-    localUrl = models.SlugField(max_length=160, default=None,unique=True, null=True)
+    url = models.URLField(max_length=200, default=None, null=True)
+    localUrl = models.CharField("локальная ссылка",max_length=200, default=None, null=True)
     grade = models.CharField("качество",max_length=150, default="")
     loaded = models.BooleanField("загруженно",default=False)
     draft = models.BooleanField("черновик",default=False)
@@ -156,7 +156,7 @@ class MovieShots(models.Model):
     discription = models.TextField("Описание",default="")
     image = models.ImageField("Изображение",upload_to="files/movie/shots/")
     movie = models.ForeignKey(Movie, verbose_name="фильм", on_delete=models.CASCADE)
-    url = models.SlugField(max_length=160, unique=True)
+    url = models.URLField(max_length=200)
 
     def __str__(self):
         return self.title

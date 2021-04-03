@@ -34,6 +34,7 @@ ul.elementConteiner li label .icon-box i{
 .BtnElement .deleteBtn,
 .ScriptElement .deleteBtn{
   position: absolute;
+  padding: 0;
   width: 15px;
   height: 15px;
   top: 0;
@@ -48,6 +49,7 @@ ul.elementConteiner li label .icon-box i{
 .BtnElement .editBtn,
 .ScriptElement .editBtn{
   position: absolute;
+  padding: 0;
   width: 15px;
   height: 15px;
   top: 0;

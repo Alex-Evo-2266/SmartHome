@@ -19,8 +19,10 @@ export const MenuOption = () =>{
   const [paragraphs] = useState([
     {title:"Scripts",iconClass:"fas fa-code-branch",url:"/scripts"},
     {title:"Nas",iconClass:"fas fa-hdd",url:"/nas"},
-    {title:"Files",iconClass:"fas fa-file",url:"/files"},
+    {title:"Files",iconClass:"fas fa-file",url:"/files/gallery"},
     {title:"Terminal",iconClass:"fas fa-terminal",url:"/terminal"},
+    {title:"Сhart",iconClass:"fas fa-chart-area",url:"/chart"},
+    {title:"Rooms",iconClass:"fab fa-buromobelexperte",url:"/rooms"},
   ])
 
   useEffect(()=>{

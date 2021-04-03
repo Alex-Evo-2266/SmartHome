@@ -70,7 +70,8 @@
   text-align: center;
 }
 .icon .fas,
-.icon .far
+.icon .far,
+.icon .fab
 {
   font-size: 24px;
 }

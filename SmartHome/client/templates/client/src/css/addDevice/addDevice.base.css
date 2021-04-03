@@ -26,7 +26,6 @@
   transition: 0.5s;
   animation: start-anim-conteiner 1.5s ease-out 1;
 }
-
 .conteiner-body-ul{
   display: flex;
   align-items: center;

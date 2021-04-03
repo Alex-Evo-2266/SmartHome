@@ -3,6 +3,9 @@
 .light .conteiner-body-ul .conteiner-body-li label input[type="number"]{
   border: 2px solid #76d7ff;
 }
+.conteiner-body-ul *{
+  color: #000;
+}
 .light .conteiner-body-ul .conteiner-body-li label h5
 {
     color: #000;

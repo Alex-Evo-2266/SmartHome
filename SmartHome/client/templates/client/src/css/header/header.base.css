@@ -14,6 +14,7 @@ header h1{
   margin: 0 30px;
 }
 #searchDevices{
+  width: 300px;
   display: block;
   position: relative;
   outline: none;
@@ -24,6 +25,7 @@ header h1{
   top:15px;
 }
 .searchBtn{
+  width: auto;
   position: relative;
   height: 30px;
   margin: 0 10px;
@@ -42,6 +44,7 @@ header h1{
   transform: none;
 }
 .searchBtn:hover{
+  opacity: 1;
   background: #1E90FF;
 }
 

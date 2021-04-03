@@ -1,5 +1,6 @@
 @import "./sidebar.light.css";
 @import "./sidebar.night.css";
+@import "./burger.base.css";
 
 .sidebar{
   position: fixed;
@@ -8,6 +9,7 @@
   right: -240px;
   top: 0;
   transition: .5s;
+  z-index: 4;
 }
 .sidebar ul{
   position: relative;
@@ -18,20 +20,41 @@
   height: 60px;
   width: 60px;
   position: fixed;
-  right: 0;
-  top: 0;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  transform: rotate(45deg);
   text-align: center;
   line-height: 60px;
   font-size: 24px;
   font-weight: 600;
-  border-top-left-radius: 20px;
+  /* border-top-left-radius: 20px; */
   border-bottom-left-radius: 20px;
+}
+.arrow-menu{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  left: 5px;
+  top: -5px;
+  transition: .5s;
+}
+.sidebar .toggle-sidebar div{
+  transform: rotate(-45deg);
+}
+.arrow-menu i{
+  transition: .5s;
+}
+.arrow-menu.active i{
+  transform: rotate(180deg);
 }
 .sidebar.active{
   right: 0;
 }
 .sidebar.active .toggle-sidebar{
-  right: 240px;
+  right: 210px;
 }
 .sidebar ul li{
   margin: 4px 0;
@@ -47,10 +70,10 @@
   font-weight: 500;
 }
 @media (max-width: 700px){
-  .sidebar .toggle-sidebar{
+  /* .sidebar .toggle-sidebar{
     border-top-left-radius: 0;
     top: 60px;
-  }
+  } */
   .sidebar{
     height: calc(100vh - 60px);
     top:60px;
