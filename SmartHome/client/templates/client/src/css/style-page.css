@@ -16,6 +16,15 @@
   min-height: 100vh;
   padding: 0 0 0 60px;
 }
+.whiteBacground{
+
+}
+.whiteBacground.opacity{
+  background: #fffd;
+}
+.no-pg-top{
+  padding-top: 0;
+}
 .slide-conteiner{
   overflow-y: scroll;
 }

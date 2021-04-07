@@ -137,7 +137,6 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "client","templates","client","build","static"),
-    os.path.join(BASE_DIR, "files","static"),
 ]
 
 MEDIA_URL = '/media/'

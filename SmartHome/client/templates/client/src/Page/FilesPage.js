@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import {NavLink,useLocation} from 'react-router-dom'
 import {GalleryPage} from './filespage/GalleryPage'
 import {MoviesPage} from './filespage/MoviesPage'
+import {SerialsPage} from './filespage/SerialsPage'
 
 export const FilesPage = () => {
   const [visible,setVisible] = useState(false)
@@ -12,7 +13,7 @@ export const FilesPage = () => {
       <div className={`sidebar ${(visible)?"active":""}`}>
         <div className="toggle-sidebar" onClick={()=>setVisible(prev=>!prev)}>
           <div className={`arrow-menu ${(visible)?"active":""}`}>
-            <i class="fas fa-chevron-left"></i>
+            <i className="fas fa-chevron-left"></i>
           </div>
         </div>
         <ul>
@@ -29,6 +30,8 @@ export const FilesPage = () => {
         <GalleryPage/>:
         (location.pathname==="/files/movies")?
         <MoviesPage/>:
+        (location.pathname==="/files/serials")?
+        <SerialsPage/>:
         null
       }
       </div>

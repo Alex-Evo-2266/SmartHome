@@ -1,5 +1,6 @@
 @import "./imageDitail.base.css";
 @import "./moviesCard.css";
+@import "./newMovie.css";
 
 .galeryContent{
   margin: 20px 10px 0;

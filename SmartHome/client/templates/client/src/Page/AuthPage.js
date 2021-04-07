@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {Link} from 'react-router-dom'
+// import {Link} from 'react-router-dom'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
@@ -49,7 +49,6 @@ export const AuthPage = function (){
             <p>Password</p>
             <input placeholder="•••••••" id="password" type="password" name="password" value={form.password} onChange={changeHandler} required/>
             <input type="submit" onClick={loginHandler} disabled={loading} value="Sign In"/>
-            <Link to="/register">Register</Link>
           </div>
       </div>
     </form>

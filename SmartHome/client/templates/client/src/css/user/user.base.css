@@ -23,6 +23,7 @@
   border-radius: 4px;
 }
 .pagecontent label input[type="text"],
+.pagecontent label input[type="number"],
 .pagecontent label input[type="tel"],
 .pagecontent label input[type="email"]
 {

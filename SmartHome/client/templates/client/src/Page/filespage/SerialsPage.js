@@ -3,13 +3,11 @@ import {AuthContext} from '../../context/AuthContext.js'
 import {Link} from 'react-router-dom'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
-import {useHistory} from 'react-router-dom'
 import {MovieCard} from '../../components/files/movieCard'
 
-export const MoviesPage = () => {
+export const SerialsPage = () => {
   const auth = useContext(AuthContext)
   const {message} = useMessage();
-  const {push} = useHistory()
   const {request, error, clearError} = useHttp();
   const [allmovies,setAllMovies] = useState([])
   const [movies,setMovies] = useState([])
@@ -45,10 +43,10 @@ export const MoviesPage = () => {
 
   const getMovies = useCallback(async()=>{
     try {
-      const data = await request(`/api/files/movies/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      const data = await request(`/api/files/serials/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       console.log(data);
-      if(data&&data.movies){
-        setAllMovies(data.movies)
+      if(data&&data.serials){
+        setAllMovies(data.serials)
       }
     } catch (e) {
       console.error(e);
@@ -69,8 +67,8 @@ export const MoviesPage = () => {
   return(
     <>
     <header>
-      <h1>Movies</h1>
-      <Link to="/movie/add" className="titleButtonAdd"><i className="fas fa-plus"></i></Link>
+      <h1>Serials</h1>
+      <Link to="/serial/add" className="titleButtonAdd"><i className="fas fa-plus"></i></Link>
       <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={keyd} value={search}/>
       <button onClick={searchout} className="searchBtn">Search</button>
     </header>
@@ -79,7 +77,7 @@ export const MoviesPage = () => {
         {
           movies.map((item,index)=>{
             return(
-              <MovieCard data={item} key={index} onClick={()=>push(`/movie/${item.id}`)}/>
+              <MovieCard data={item} key={index}/>
             )
           })
         }

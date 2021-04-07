@@ -69,6 +69,13 @@
   font-weight: bold;
   color: #0046cf;
 }
+.formBox-auth button,
+.formBox-auth input,
+.formBox-reg button,
+.formBox-reg input
+{
+  border-radius: 0;
+}
 .formBox-auth input
 {
   background: #ccc ;

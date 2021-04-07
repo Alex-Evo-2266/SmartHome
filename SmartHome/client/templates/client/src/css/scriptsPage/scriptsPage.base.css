@@ -36,6 +36,7 @@
 .scriptElement .scriptStatus .deleteBtn{
   height: 40px;
   width: 40px;
+  padding: 0;
   background: red;
   color:#fff;
   border: none;

@@ -11,7 +11,10 @@ import {NewScriptsPage} from './Page/NewScriptsPage'
 import {UsersPage} from './Page/UsersPage'
 import {FilesPage} from './Page/FilesPage'
 import {AddDevicesPage} from './Page/AddDevicePage'
-import {AddMoviePage} from './Page/NewMovie'
+import {AddMoviePage} from './Page/addFilesPages/NewMovie'
+import {AddActorPage} from './Page/addFilesPages/NewActors'
+import {AddGanrePage} from './Page/addFilesPages/NewGanre'
+import {MovieDitail} from './Page/filespage/movieDitail'
 import AddUser from './Page/AddUser'
 
 export const useRoutes = (isAuthenticated,level)=>{
@@ -55,11 +58,32 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/user/add" exact>
           <AddUser/>
         </Route>
+
+
+
         <Route path="/files">
           <FilesPage/>
         </Route>
-        <Route path="/movie/add">
+        <Route path="/movie/add" exact>
           <AddMoviePage/>
+        </Route>
+        <Route path="/serial/add" exact>
+          <AddMoviePage type="serial"/>
+        </Route>
+        <Route path="/actor/add" exact>
+          <AddActorPage/>
+        </Route>
+        <Route path="/ganre/add" exact>
+          <AddGanrePage/>
+        </Route>
+        <Route path="/category/add" exact>
+          <AddGanrePage type="category"/>
+        </Route>
+        <Route path="/movie/:id" exact>
+          <MovieDitail/>
+        </Route>
+        <Route path="/serial/:id" exact>
+          <MovieDitail/>
         </Route>
         <Redirect to="/home"/>
       </Switch>
@@ -69,9 +93,6 @@ export const useRoutes = (isAuthenticated,level)=>{
     <Switch>
       <Route path="/" exact>
         <AuthPage/>
-      </Route>
-      <Route path="/register" exact>
-        <RegisterPage/>
       </Route>
       <Redirect to="/"/>
     </Switch>

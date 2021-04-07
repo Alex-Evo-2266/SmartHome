@@ -55,8 +55,9 @@ export const GalleryPage = () => {
   }
 
   useEffect(()=>{
-    getTenUrl()
-  },[getTenUrl])
+    if(newUrl===0)
+      getTenUrl()
+  },[getTenUrl,newUrl])
 
   useEffect(()=>{
     message(error,"error")

@@ -14,6 +14,7 @@ class MovieCategory(models.Model):
 
     def model_to_dict(self):
         return{
+        "id":self.id,
         "name":self.name,
         "discription":self.discription,
         "url":self.url
@@ -37,6 +38,7 @@ class MovieActor(models.Model):
 
     def model_to_dict(self):
         return{
+        "id":self.id,
         "name":self.name,
         "date_of_birth":str(self.date_of_birth),
         "age":(date.today() - self.date_of_birth) // timedelta(days=365.2425),
@@ -61,6 +63,7 @@ class MovieGanre(models.Model):
 
     def model_to_dict(self):
         return{
+        "id":self.id,
         "name":self.name,
         "discription":self.discription,
         "url":self.url
@@ -96,6 +99,7 @@ class BaseMovieClass(models.Model):
 
     def model_to_dict(self):
         return {
+        "id":self.id,
         "title":self.title,
         "tagline":self.tagline,
         "discription":self.discription,

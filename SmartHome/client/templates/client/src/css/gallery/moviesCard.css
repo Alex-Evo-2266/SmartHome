@@ -1,14 +1,21 @@
 .movies-list{
+  margin-top: 30px;
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
 }
 .movie-card{
+  background: #fff;
+  margin-left: 10px;
+  margin-top: 10px;
   width: 250px;
   height: auto;
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 .movie-card::after{
   position: absolute;
@@ -38,6 +45,7 @@
 }
 .movie-card-content{
   background: #fff;
+  height: auto;
 }
 .movie-card-content h2{
   padding: 20px;
