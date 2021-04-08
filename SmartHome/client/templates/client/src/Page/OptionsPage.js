@@ -12,7 +12,7 @@ export const OptionsPage = () => {
   const location = useLocation();
 
   return(
-    <div className = "conteiner">
+    <div className = "conteiner top">
         <div className = "pages">
           <div className = {`page ${(location.pathname==="/config")?"active":""}`}>
             <UserOption/>

@@ -1,15 +1,16 @@
 @import "./imageDitail.base.css";
 @import "./moviesCard.css";
 @import "./newMovie.css";
+@import "./movieDitail.css";
 
 .galeryContent{
-  margin: 20px 10px 0;
+  /* margin: 20px 10px 0; */
   padding-bottom: 10px;
   display: grid;
   grid-template-columns: repeat(4,1fr);
   grid-auto-rows: 180px;
   position: relative;
-  width: calc(100% - 20px);
+  /* width: calc(100% - 20px); */
   grid-gap: 5px;
 }
 

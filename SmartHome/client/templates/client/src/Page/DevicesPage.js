@@ -39,7 +39,7 @@ export const DevicesPage = () => {
   }
 
   return(
-      <div className = "conteiner">
+      <div className = "conteiner top">
         <header>
           <h1>All Devices</h1>
           <NavLink to="/devices/add" className="titleButtonAdd"><i className="fas fa-plus"></i></NavLink>

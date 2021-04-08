@@ -1,5 +1,5 @@
 import React,{useState,useRef,useEffect,useCallback,useContext} from 'react'
-import {useHistory} from 'react-router-dom'
+import {useHistory,useParams} from 'react-router-dom'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {useStorage} from '../../hooks/storage.hook'
@@ -7,6 +7,7 @@ import {AuthContext} from '../../context/AuthContext.js'
 
 export const AddMoviePage = ({type="movie",edit=false}) => {
   const storegeName = (type==="movie")?"Moviestorage":"Serialstorage"
+  const {id} = useParams()
   const def = {
     title:'',
     tagline:'',
@@ -43,17 +44,23 @@ export const AddMoviePage = ({type="movie",edit=false}) => {
   const [form,setForm] = useState(def)
 
   const out = async()=>{
-    removeData(storegeName)
-    let file = poster.current
     var data = new FormData();
-    data.append("poster",file)
+    removeData(storegeName)
+    if(poster.current){
+      let file = poster.current
+      data.append("poster",file)
+    }
     for (var key in form) {
       data.append(key,form[key])
     }
-    if(type==="movie")
+    if(type==="movie"&&!edit)
       await request(`/api/files/movies/add`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
-    if(type==="serial")
+    if(type==="serial"&&!edit)
       await request(`/api/files/serials/add`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
+    if(type==="movie"&&edit)
+      await request(`/api/files/movies/edit/${id}`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
+    if(type==="serial"&&edit)
+      await request(`/api/files/serials/edit/${id}`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
     history.push(`/files/${type}s`)
   }
 
@@ -119,9 +126,48 @@ const checkedHeandler = (event)=>{
   setForm({...form,[event.target.name]:event.target.checked})
 }
 
+const getMovieData = useCallback(async()=>{
+  const data = await request(`/api/files/movie/${id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+  if(data&&data[type]){
+    let item = data[type]
+    console.log(item);
+    setForm({
+      ...form,
+      title:item.title,
+      tagline:item.tagline,
+      discription:item.discription,
+      year:item.year,
+      country:item.country,
+      regisers:item.directors && item.directors.map((item2)=>item2.id),
+      actors:item.actors && item.actors.map((item2)=>item2.id),
+      ganres:item.genres && item.genres.map((item2)=>item2.id),
+      date:item.world_premiere,
+      budget:item.budget,
+      fees_in_usa:item.fees_in_usa,
+      fees_in_world:item.fees_in_world,
+      category:item.category.id,
+      url:item.url,
+      urlLocal:item.localUrl,
+      loaded:item.loaded,
+      quality:item.grade,
+      count_seasons:item.count_seasons||0,
+      closed:item.closed||false,
+      save_seasons:item.save_seasons||0,
+    })
+    var img = imgPoster.current
+    img.src = item.poster
+  }
+},[])
+
 useEffect(()=>{
   giveData()
 },[giveData])
+
+useEffect(()=>{
+  if(edit){
+    getMovieData()
+  }
+},[edit])
 
 useEffect(()=>{
   const d = getData(storegeName)
@@ -130,7 +176,6 @@ useEffect(()=>{
 },[getData,storegeName])
 
 useEffect(()=>{
-  console.log(form);
   setData(storegeName,form)
 },[form,setData,storegeName])
 
@@ -248,10 +293,14 @@ useEffect(()=>{
         :null
       }
       <button onClick={out}>Отправить</button>
-      <button onClick={()=>{
-        removeData(storegeName)
-        setForm(def)
-      }}>Очистить</button>
+      {
+        (!edit)?
+        <button onClick={()=>{
+          removeData(storegeName)
+          setForm(def)
+        }}>Очистить</button>
+        :null
+      }
     </div>
   )
 }

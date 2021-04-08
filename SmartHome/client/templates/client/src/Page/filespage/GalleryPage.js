@@ -73,9 +73,9 @@ export const GalleryPage = () => {
       <ImageDitail data={ditailElement} hide={()=>setVisible(false)}/>:
       null
     }
-    <div>
+    <div className="top">
       <ImagesInput update={getTenUrl}/>
-      <div className="galeryContent">
+      <div className="galeryContent top">
       {
         (urls&&urls[0])?
         urls.map((item,index)=>{

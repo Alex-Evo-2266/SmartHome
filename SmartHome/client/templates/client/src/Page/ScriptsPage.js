@@ -49,7 +49,7 @@ export const ScriptsPage = () => {
   return(
     <>
       <AddScriptBase/>
-      <div className = "conteiner">
+      <div className = "conteiner top">
         <header>
           <h1>All Scripts</h1>
           <Link to = "/scripts/add" className="titleButtonAdd"><i onClick={()=>{}} className="fas fa-plus"></i></Link>

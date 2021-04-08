@@ -1,7 +1,6 @@
 input,
 select,
-textarea,
-button
+textarea
 {
   display: block;
   height: 30px;
@@ -24,15 +23,41 @@ textarea{
   border-radius: 20px;
   height: auto;
 }
-button{
-  height: 40px;
+.btn{
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.2rem;
+  display: inline-block;
+ font-weight: 400;
+ line-height: 1.5;
+ color: #212529;
+ text-align: center;
+ text-decoration: none;
+ vertical-align: middle;
+ cursor: pointer;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ user-select: none;
+ background-color: transparent;
+ border: 1px solid transparent;
+ padding: 0.375rem 0.75rem;
+ font-size: 1rem;
+ border-radius: 0.25rem;
+ color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+ transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-button:active{
-  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+button:focus{
+  color: #fff;
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+  box-shadow: 0 0 0 0.25rem rgba(49, 132, 253, 0.5);
 }
 button:hover{
-  cursor: pointer;
-  opacity: 0.8;
+  color: #fff;
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
 }
 select[multiple]{
   min-height: 100px;
@@ -40,4 +65,7 @@ select[multiple]{
 }
 input[type="range"]{
   padding: 0;
+}
+.d-in{
+  display: inline;
 }

@@ -72,7 +72,7 @@ export const SerialsPage = () => {
       <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={keyd} value={search}/>
       <button onClick={searchout} className="searchBtn">Search</button>
     </header>
-    <div className="movies">
+    <div className="movies top">
       <div className="movies-list">
         {
           movies.map((item,index)=>{

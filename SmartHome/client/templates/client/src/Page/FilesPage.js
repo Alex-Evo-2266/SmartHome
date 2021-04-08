@@ -9,7 +9,7 @@ export const FilesPage = () => {
   const location = useLocation();
 
   return(
-    <div className = "conteiner opasityFon">
+    <div className = "conteiner">
       <div className={`sidebar ${(visible)?"active":""}`}>
         <div className="toggle-sidebar" onClick={()=>setVisible(prev=>!prev)}>
           <div className={`arrow-menu ${(visible)?"active":""}`}>
@@ -24,7 +24,7 @@ export const FilesPage = () => {
           <li><NavLink to="/files/other">другое</NavLink></li>
         </ul>
       </div>
-      <div onClick={()=>setVisible(false)}>
+      <div className="opasityFon" onClick={()=>setVisible(false)}>
       {
         (location.pathname==="/files/gallery")?
         <GalleryPage/>:

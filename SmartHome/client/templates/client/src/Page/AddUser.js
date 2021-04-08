@@ -34,7 +34,7 @@ export default function AddUser(){
   }
 
   return(
-    <div className="conteiner">
+    <div className="conteiner top">
     <div className="title">
       <h1>Register Form</h1>
     </div>

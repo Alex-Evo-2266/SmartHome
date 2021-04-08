@@ -79,11 +79,28 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/category/add" exact>
           <AddGanrePage type="category"/>
         </Route>
+
+        <Route path="/movie/edit/:id">
+          <AddMoviePage edit={true}/>
+        </Route>
+        <Route path="/serial/edit/:id">
+          <AddMoviePage type="serial" edit={true}/>
+        </Route>
+        <Route path="/actor/edit/:id">
+          <AddActorPage edit={true}/>
+        </Route>
+        <Route path="/ganre/edit/:id">
+          <AddGanrePage edit={true}/>
+        </Route>
+        <Route path="/category/edit/:id">
+          <AddGanrePage type="category" edit={true}/>
+        </Route>
+
         <Route path="/movie/:id" exact>
           <MovieDitail/>
         </Route>
         <Route path="/serial/:id" exact>
-          <MovieDitail/>
+          <MovieDitail type="serial"/>
         </Route>
         <Redirect to="/home"/>
       </Switch>
