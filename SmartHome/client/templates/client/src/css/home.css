@@ -6,11 +6,31 @@
 .conteiner.home.editMode{
   transform: translateY(100px);
 }
+.conteiner.home.editMode .conteinerHome{
+  height: 140vh;
+}
 .conteinerHome{
   position: relative;
   padding: 5px;
-  width: calc(100% - 10px);
+  width: 100%;
   height: 100%;
+}
+.flexHome{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+.home-column{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 100%;
+  flex-wrap: wrap;
+  padding: 0;
+}
+.flexElement{
+  padding: 4px 2px;
 }
 .HomeGrid{
   display: grid;

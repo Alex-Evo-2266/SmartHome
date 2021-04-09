@@ -1,5 +1,5 @@
 .light .modalWindow{
-  border: 2px solid #888;
+  /* border: 2px solid #888; */
 }
 .light .modalHeader{
   background: linear-gradient(to bottom, #888, #aaa);

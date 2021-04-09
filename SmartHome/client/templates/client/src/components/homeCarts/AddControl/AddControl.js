@@ -3,6 +3,7 @@ import {AddControlContext} from './AddControlContext'
 import {BackForm} from '../../moduls/backForm'
 import {AddButton} from './Control/addButton'
 import {AddSlider} from './Control/addSlider'
+import {AddScript} from './Control/addScript'
 
 export const AddControl = ()=>{
   const {addControl, hide} = useContext(AddControlContext)
@@ -40,7 +41,9 @@ export const AddControl = ()=>{
             (typeChild==="button")?
             <AddButton add={addButton}/>:
             (typeChild==="slider")?
-            <AddSlider add={addButton}/>
+            <AddSlider add={addButton}/>:
+            (typeChild==="script")?
+            <AddScript add={addButton}/>
             :null
           }
         </div>

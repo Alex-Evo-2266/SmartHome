@@ -6,7 +6,7 @@ import {EditModeContext} from '../../context/EditMode'
 export const HomeControlCart = () =>{
   const {setMode} = useContext(EditModeContext)
   return(
-    <ModalWindow position = "relative" heightToolbar={20} z={3} top={0} left={0} width={"auto"} height={"auto"} title="controlPanel" moving={false}>
+    <ModalWindow position = "relative" heightToolbar={30} z={3} top={0} left={0} width={"auto"} height={"auto"} title="controlPanel" moving={false}>
       <ul className="elementConteiner">
         <li>
           <BtnElement switchMode={false} onClick={()=>{

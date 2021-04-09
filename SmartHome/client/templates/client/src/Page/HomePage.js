@@ -1,4 +1,4 @@
-import React,{useState,useEffect,useContext,useCallback} from 'react'
+import React,{useState,useEffect,useContext,useCallback,useRef} from 'react'
 import {HomeControlCart} from '../components/homeCarts/homeControlCart'
 import {EditToolbar} from '../components/homeCarts/EditToolbar'
 import {HomebaseCart} from '../components/homeCarts/homeBaseCart'
@@ -10,16 +10,18 @@ import {CartEdit} from '../components/homeCarts/EditCarts/CartEdit'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
+import {ScriptContext} from '../context/ScriptContext.js'
 
 export const HomePage = () => {
 
-// const heightElement = 80
 const [editMode, setEditMode] = useState(false);
 const [carts, setCarts] = useState([])
+const [sortedCarts, setSortedCarts] = useState([])
 const auth = useContext(AuthContext)
 const {message} = useMessage();
 const {request, error, clearError} = useHttp();
-// const [scripts, setScripts] = useState({})
+const conteiner = useRef(null)
+const [scripts, setScripts] = useState({})
 
 const addCart = async(type="base")=>{
   let newCart = {
@@ -64,12 +66,10 @@ const importCarts = useCallback(async()=>{
   try {
     const data = await request(`/api/homeCart/get/${1}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     setCarts(data.page.carts)
-    console.log(data.page.carts);
     const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-
     setInterval(data2.updateFrequency)
-    // const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    // await setScripts(data3);
+    const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    await setScripts(data3);
   } catch (e) {
     console.error(e);
   }
@@ -87,59 +87,87 @@ useEffect(()=>{
 },[importCarts])
 
 useEffect(()=>{
-  console.log(carts);
+  sortCard(carts)
 },[carts])
 
-// useEffect(()=>{
-//   console.log(allDevices.devices);
-// },[allDevices.devices])
-// useEffect(()=>{
-//   let elements = document.getElementsByClassName('gridElement')
-//   for (var item of elements) {
-//     if(item.firstChild.offsetHeight>heightElement){
-//       let poz = Math.floor(item.firstChild.offsetTop/heightElement)+1
-//       let size = Math.floor(item.firstChild.offsetHeight/heightElement)+1
-//       item.style = `grid-row-start:${poz}; grid-row-end:${poz+size};`
-//     }
-//   }
-// })
+function sortCard(data) {
+  let column = 4
+  let i = 1
+  let width = conteiner.current.clientWidth
+  if(width < 1000)
+    column = 3
+  if(width < 720)
+    column = 2
+  if(width < 450){
+    i=0
+    column = 1
+  }
+  let arr = []
+  for (var j = 0; j < column; j++) {
+    arr.push([])
+  }
+  for (var j = 0; j < data.length; j++) {
+    let item = data[j]
+    if(arr[i]){
+      arr[i].push({...item, index:j})
+      i++
+      if(i>=column)
+        i=0
+    }
+  }
+  setSortedCarts(arr)
+}
 
   return(
     <EditModeContext.Provider value={{setMode:setEditMode, mode:editMode,add:addCart}}>
+    <ScriptContext.Provider value={{scripts:scripts}}>
     <CartEditState>
     <AddControlState>
       <CartEdit/>
       <AddControl/>
       <EditToolbar show={editMode} save={saveCarts}/>
       <div className = {`conteiner home ${(editMode)?"editMode":""}`}>
-        <div className = "conteinerHome HomeGrid" id="homeGrid">
-          <div className = "gridElement">
-            <HomeControlCart/>
-          </div>
-          {
-            carts.map((item,index)=>{
-              return(
-                <div className = "gridElement" key={index} style={{order:item.order}}>
-                {
-                  (item.type==="base")?
-                  <HomebaseCart
-                  edit={editMode}
-                  hide={(i)=>removeCart(i)}
-                  updata={updataCart}
-                  index={index}
-                  data = {item}
-                  name={item.name}
-                  />
-                  :null
-                }
-                </div>
-              )
-            })
-          }
+        <div ref={conteiner} className = "conteinerHome flexHome">
+        {
+          sortedCarts.map((item,index)=>{
+            return(
+              <div key={index} className="home-column">
+              {
+              (index===0)?
+              <div className = "flexElement">
+                <HomeControlCart/>
+              </div>
+              :null
+              }
+              {
+                item.map((item2,index2)=>{
+                  return(
+                    <div className = "flexElement" key={index2} style={{order:item2.order}}>
+                    {
+                      (item2.type==="base")?
+                      <HomebaseCart
+                      edit={editMode}
+                      hide={(i)=>removeCart(i)}
+                      updata={updataCart}
+                      index={item2.index}
+                      data = {item2}
+                      name={item2.name}
+                      />
+                      :null
+                    }
+                    </div>
+                  )
+                })
+              }
+              </div>
+            )
+          })
+        }
         </div>
       </div>
     </AddControlState>
     </CartEditState>
+    </ScriptContext.Provider>
     </EditModeContext.Provider>
   )
 }

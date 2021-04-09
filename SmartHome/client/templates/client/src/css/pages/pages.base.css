@@ -3,18 +3,18 @@
 @import "./fonPage.base.css";
 
 .pages{
- position: fixed;
+ position: relative;
  left: 50%;
  transform: translateX(-46%);
  width: 90%;
- height: 80%;
+ height: 80vh;
 }
 .pages .page{
   border: 2px solid #1E90FF;
   display: none;
   position: relative;
   width: calc(100% - 64px);
-  height: 100%;
+  height: calc(100% - 4px);
   border-radius: 4px 0 4px 4px;
   z-index: 2;
   box-shadow: 0 0 10px #000;

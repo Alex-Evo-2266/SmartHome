@@ -81,7 +81,7 @@ export const MovieDitail = ({type="movie"})=>{
           </div>
           <div className="paragraph">
             <div className="name">режисеры</div>
-            <div className="value flex">{
+            <div className="value flex div-slider">{
               (movie&&movie.directors)?
               movie.directors.map((item,index)=>{
                 return (
@@ -117,7 +117,7 @@ export const MovieDitail = ({type="movie"})=>{
       </div>
       <div className="actors">
         <h3>Актеры</h3>
-        <div className="flex slider">{
+        <div className="flex div-slider">{
           (movie&&movie.actors)?
           movie.actors.map((item,index)=>{
             return (

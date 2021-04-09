@@ -2,12 +2,13 @@
 @import "./modalWindow.night.css";
 
 .modalWindow{
-  border-radius: 4px;
+  /* border-radius: 4px; */
   overflow: hidden;
 }
 .modalHeader{
   width: 100%;
   position: relative;
+  margin-bottom: 4px;
 }
 .modalHeader button{
   position: absolute;

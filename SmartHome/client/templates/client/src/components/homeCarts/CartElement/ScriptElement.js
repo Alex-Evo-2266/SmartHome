@@ -30,13 +30,13 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
   }
 
   const clickHandler = async()=>{
-    await request(`/api/script/run/${data.IdScript}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/run/${data.deviceId}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   }
 
   return(
     <label className={`ScriptElement ${className}`}>
       <input type="button" onClick={clickHandler} disabled={disabled}/>
-      <div className="icon-box">
+      <div className="icon-conteiner">
         <div>
         {
           (deleteBtn)?
@@ -51,9 +51,12 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
           null
         }
         </div>
-        <i className="fas fa-file-alt"></i>
+        <div className="icon-box">
+          <i className="fas fa-file-alt"></i>
+        </div>
+        <p>{data.name}</p>
       </div>
-      <p>{data.name}</p>
+
     </label>
   )
 }

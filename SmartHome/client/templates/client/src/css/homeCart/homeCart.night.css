@@ -1,7 +1,8 @@
 .night ul.elementConteiner{
-  background: linear-gradient(0deg, #000000, #111);
+  background: #444;
+  /* background: linear-gradient(0deg, #000000, #111); */
 }
-.night ul.elementConteiner::before{
+/* .night ul.elementConteiner::before{
   content: '';
   position: absolute;
   width: 100%;
@@ -10,4 +11,4 @@
   bottom: -50%;
   pointer-events: none;
   z-index: 3;
-}
+} */

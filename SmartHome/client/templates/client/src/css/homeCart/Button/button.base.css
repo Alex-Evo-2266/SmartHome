@@ -6,7 +6,7 @@ ul.elementConteiner li{
   position: relative;
   list-style: none;
   text-align: center;
-  margin: 15px;
+  margin: 6px 4px;
 }
 ul.elementConteiner li label{
   position: relative;
@@ -18,14 +18,26 @@ ul.elementConteiner li label input[type="button"]{
   cursor: pointer;
 }
 ul.elementConteiner li label .icon-box{
-  width: 60px;
   position: relative;
-  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 0;
   transition: 0.5s;
+}
+ul.elementConteiner li label .icon-conteiner{
+  width: 80px;
+  position: relative;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0;
+  transition: 0.5s;
+}
+ul.elementConteiner li label .icon-conteiner p{
+  margin-top: 5px;
 }
 ul.elementConteiner li label .icon-box i{
   font-size: 30px;

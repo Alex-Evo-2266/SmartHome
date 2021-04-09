@@ -141,7 +141,7 @@ const changeHandler = (event)=>{
   return(
     <label className={`BtnElement ${className} ${(disabled2)?"disabled":""}`}>
       <input type="checkbox" checked={value} name={name} onChange={changeHandler} disabled={disabled2}/>
-      <div className="icon-box">
+      <div className="icon-conteiner">
         <div>
         {
           (deleteBtn)?
@@ -156,7 +156,10 @@ const changeHandler = (event)=>{
           null
         }
         </div>
+        <div className="icon-box">
         {children}
+        </div>
+        <p>{device.DeviceName}</p>
       </div>
 
     </label>

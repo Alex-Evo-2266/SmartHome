@@ -44,7 +44,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
      left={0}
      title={name}
      moving={false}
-     heightToolbar={20}>
+     heightToolbar={30}>
       <ul className="elementConteiner">
       {
 

@@ -6,7 +6,7 @@ export const EditToolbar = ({show=false,save=null}) => {
   const {setMode,add} = useContext(EditModeContext)
 
   return(
-    <div className={`toolbar ${(show)?"active":""}`}>
+    <div className={`conteiner toolbar ${(show)?"active":""}`}>
       <ul className="elementConteiner top">
         <li>
           <BtnElement switchMode={false} onClick={()=>{

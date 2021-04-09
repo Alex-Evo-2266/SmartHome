@@ -48,13 +48,13 @@ textarea{
   border-color: #0d6efd;
  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-button:focus{
+.btn:focus{
   color: #fff;
   background-color: #0b5ed7;
   border-color: #0a58ca;
   box-shadow: 0 0 0 0.25rem rgba(49, 132, 253, 0.5);
 }
-button:hover{
+.btn:hover{
   color: #fff;
   background-color: #0b5ed7;
   border-color: #0a58ca;
