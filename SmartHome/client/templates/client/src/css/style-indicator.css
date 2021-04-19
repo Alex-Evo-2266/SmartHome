@@ -1,0 +1,38 @@
+.circle-indicator {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.circle-indicator svg{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  overflow: visible;
+}
+.circle-indicator p{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+}
+.circle-indicator svg circle{
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #555;
+  stroke-width: 20;
+  stroke-linecap: round;
+}
+.circle-indicator svg circle:nth-child(2){
+  stroke: rgba(255, 0, 0, 1);
+}
+.circle-indicator svg circle.circleRange-range{
+  stroke: #36f;
+  stroke-width:30;
+}
+.circle-indicator .circleRange-indicator-value{
+  transform: translate(-50%, 100%);
+}

@@ -17,6 +17,13 @@ export const EditToolbar = ({show=false,save=null}) => {
         </li>
         <li>
           <BtnElement switchMode={false} onClick={()=>{
+            add("lamp")
+          }}>
+            <i className="far fa-light"></i>
+          </BtnElement>
+        </li>
+        <li>
+          <BtnElement switchMode={false} onClick={()=>{
             if(typeof(save)==="function")
               save()
             setMode(false)

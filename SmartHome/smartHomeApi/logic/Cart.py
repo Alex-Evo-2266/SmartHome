@@ -10,19 +10,19 @@ def addHomePage(name,information="",id=None)->HomePage:
     page = HomePage.objects.create(id=genId(HomePage.objects.all()),name=name,information=information)
     return page
 
-def addCartChildren(name,type,typeAction,order,action,device,homeCart):
+def addCartChildren(name,type,typeAction,order,action,device,homeCart,width=1):
     # print(name,type,typeAction,order,action,device,homeCart)
     # print(ids)
     # if(len(ids)==1):
     #     ids.append(ids[0]+1)
     # id = ids.pop(0)
     id=genId(CartChildren.objects.all())
-    element = CartChildren.objects.create(id=id,name=name,type=type,typeAction=typeAction,order=order,device=device,action=action,homeCart=homeCart)
+    element = CartChildren.objects.create(id=id,name=name,type=type,typeAction=typeAction,width=width,order=order,device=device,action=action,homeCart=homeCart)
     element.save()
     return element
 
-def addHomeCart(id_in_page,name,type,order,homePage):
-    cart = HomeCart.objects.create(id=genId(HomeCart.objects.all()),idInPage=id_in_page,name=name,type=type,order=order,homePage=homePage)
+def addHomeCart(id_in_page,name,type,order,width,homePage):
+    cart = HomeCart.objects.create(id=genId(HomeCart.objects.all()),idInPage=id_in_page,name=name,type=type,order=order,homePage=homePage,width=width)
     return cart
 
 def delete_old_cart(new,old):
@@ -44,13 +44,14 @@ def updata_new_cart(new,old):
             if(item["mainId"]==item2.id):
                 item2.name=item["name"]
                 item2.order=item["order"]
+                item2.width=item["width"]
                 item2.save()
                 setElementCart(item["children"],item2)
 
 def add_new_cart(new,page):
     for item in new:
         if (not item["mainId"]):
-            cart = addHomeCart(item["id"],item["name"],item["type"],item["order"],page)
+            cart = addHomeCart(item["id"],item["name"],item["type"],item["order"],item["width"],page)
             setElementCart(item["children"],cart)
 
 def delete_old_cartElement(new,old):
@@ -72,13 +73,14 @@ def updata_new_cartElement(new,old):
             if(item["id"]==item2.id):
                 item2.name=item["name"]
                 item2.order=item["order"]
+                item2.width=item["width"]
                 item2.save()
 
 def add_new_cartElement(new,cart):
     for item in new:
         if (not item["id"]):
             device = Device.objects.get(id=item["deviceId"])
-            addCartChildren(item["name"],item["type"],item["typeAction"],item["order"],item["action"],device,cart)
+            addCartChildren(item["name"],item["type"],item["typeAction"],item["order"],item["action"],device,cart,item["width"])
 
 def setElementCart(data,cart):
     newelements = data

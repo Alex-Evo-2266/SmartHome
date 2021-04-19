@@ -2,6 +2,9 @@
   background: #444;
   /* background: linear-gradient(0deg, #000000, #111); */
 }
+.toolbar{
+  background: #444;
+}
 /* .night ul.elementConteiner::before{
   content: '';
   position: absolute;

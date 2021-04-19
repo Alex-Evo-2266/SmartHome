@@ -9,15 +9,35 @@ ul.elementConteiner{
   position: relative;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2,120px);
+  grid-auto-columns: 120px;
+  grid-auto-rows: 120px;
+  grid-gap: 2px;
+  /* gri */
+  /* justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
   height: 100%;
   box-sizing: border-box;
   overflow: hidden;
 }
 ul.elementConteiner.top{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   height: auto;
   padding:0;
+}
+ul.elementConteiner li{
+  margin: 0;
+}
+ul.elementConteiner.top li{
+  width: 80px;
+  height: 80px;
+}
+ul.elementConteiner li.grid-width-2{
+  grid-column-start: 1;
+  grid-column-end: 3;
 }

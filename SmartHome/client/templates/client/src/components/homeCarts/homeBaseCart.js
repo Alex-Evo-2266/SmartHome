@@ -51,7 +51,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
         (data&&data.children)?
         data.children.map((item,indexbtn)=>{
           return (
-            <li key={indexbtn} style={{order:`${item.order||"0"}`}}>
+            <li key={indexbtn} className={`grid-width-${item.width}`} style={{order:`${item.order||"0"}`}}>
             {
               (item.type==="button")?
               <BtnElement

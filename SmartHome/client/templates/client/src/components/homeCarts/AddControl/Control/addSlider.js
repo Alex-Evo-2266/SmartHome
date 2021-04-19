@@ -15,7 +15,8 @@ export const AddSlider = ({add})=>{
     typeAction:"",
     order:0,
     deviceId:null,
-    action:""
+    action:"",
+    width:2
   })
 
   useEffect(()=>{
@@ -26,7 +27,8 @@ export const AddSlider = ({add})=>{
         typeAction:"",
         order:0,
         deviceId:device.DeviceId,
-        action:""
+        action:"",
+        width:2
       })
     }
   },[device])

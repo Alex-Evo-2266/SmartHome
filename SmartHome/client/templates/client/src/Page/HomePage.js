@@ -2,6 +2,7 @@ import React,{useState,useEffect,useContext,useCallback,useRef} from 'react'
 import {HomeControlCart} from '../components/homeCarts/homeControlCart'
 import {EditToolbar} from '../components/homeCarts/EditToolbar'
 import {HomebaseCart} from '../components/homeCarts/homeBaseCart'
+import {HomelampCart} from '../components/homeCarts/homeLampCart'
 import {EditModeContext} from '../context/EditMode'
 import {CartEditState} from '../components/homeCarts/EditCarts/CartEditState'
 import {AddControlState} from '../components/homeCarts/AddControl/AddControlState'
@@ -146,6 +147,15 @@ function sortCard(data) {
                     {
                       (item2.type==="base")?
                       <HomebaseCart
+                      edit={editMode}
+                      hide={(i)=>removeCart(i)}
+                      updata={updataCart}
+                      index={item2.index}
+                      data = {item2}
+                      name={item2.name}
+                      />:
+                      (item2.type==="lamp")?
+                      <HomelampCart
                       edit={editMode}
                       hide={(i)=>removeCart(i)}
                       updata={updataCart}

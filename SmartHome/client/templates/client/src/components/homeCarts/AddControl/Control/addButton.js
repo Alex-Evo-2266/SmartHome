@@ -16,7 +16,8 @@ export const AddButton = ({add})=>{
     typeAction:"",
     order:0,
     deviceId:null,
-    action:""
+    action:"",
+    width:1
   })
 
   useEffect(()=>{
@@ -27,7 +28,8 @@ export const AddButton = ({add})=>{
         typeAction:"",
         order:0,
         deviceId:device.DeviceId,
-        action:""
+        action:"",
+        width:1
       })
     }
   },[device])
