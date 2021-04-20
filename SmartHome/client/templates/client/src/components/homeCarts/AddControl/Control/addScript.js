@@ -16,7 +16,8 @@ export const AddScript = ({add})=>{
     order:0,
     deviceId:null,
     action:"",
-    width:1
+    width:1,
+    height:1
   })
 
   const out = (item)=>{
@@ -28,7 +29,8 @@ export const AddScript = ({add})=>{
       order:0,
       deviceId:item.id,
       action:"",
-      width:1
+      width:1,
+      height:1
     })
   }
 

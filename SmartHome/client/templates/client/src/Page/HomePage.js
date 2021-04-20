@@ -31,7 +31,8 @@ const addCart = async(type="base")=>{
     name:"",
     order:"0",
     type:type,
-    children:[]
+    children:[],
+    width:2
   }
   await setCarts((prev)=>{
     let mas = prev.slice();
@@ -92,14 +93,13 @@ useEffect(()=>{
 },[carts])
 
 function sortCard(data) {
-  let column = 4
+  let column = 3
   let i = 1
   let width = conteiner.current.clientWidth
-  if(width < 1000)
-    column = 3
-  if(width < 720)
+  console.log(width);
+  if(width < 1070)
     column = 2
-  if(width < 450){
+  if(width < 800){
     i=0
     column = 1
   }

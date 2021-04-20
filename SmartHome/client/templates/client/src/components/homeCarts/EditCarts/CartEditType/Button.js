@@ -7,7 +7,9 @@ import {InputNumber} from '../../../moduls/inputNumber'
 export const ButtonEdit = () =>{
   const {cartEdit, hide} = useContext(CartEditContext)
   const [butonConf ,setButonConf] = useState({
-    order:"0"
+    order:String(cartEdit.cart.order),
+    width:cartEdit.cart.width,
+    height:cartEdit.cart.height
   })
 
   const outHandler = ()=>{
@@ -19,11 +21,19 @@ export const ButtonEdit = () =>{
 
   return(
     <BackForm onClick={hide}>
-    <ModalWindow hide={hide} title="Edit Cart" moving={false} backForm={true} style={{width:"400px",left:"50%",transform: "translateX(-50%)", top:"100px",maxHeight:"calc(100% - 200px)"}}>
+    <ModalWindow hide={hide} title="Edit Cart" moving={false} backForm={true} heightToolbar={30} styleContent={{height:"calc(100% - 30px"}} style={{width:"400px",height:"calc(100% - 200px)",left:"50%",transform: "translateX(-50%)", top:"100px",}}>
       <div className="editcart-conteiner">
         <div className="editcart-element">
           <p>button priority</p>
           <InputNumber Xten={false} Value={cartEdit.cart.order} result={(v)=>setButonConf({...butonConf,order:v})} min={0} max={500}/>
+        </div>
+        <div className="editcart-element">
+          <p>width</p>
+          <InputNumber Xten={false} Value={cartEdit.cart.width} result={(v)=>setButonConf({...butonConf,width:v})} min={1} max={4}/>
+        </div>
+        <div className="editcart-element">
+          <p>height</p>
+          <InputNumber Xten={false} Value={cartEdit.cart.height} result={(v)=>setButonConf({...butonConf,height:v})} min={1} max={4}/>
         </div>
         <button onClick = {outHandler}>Ок</button>
       </div>

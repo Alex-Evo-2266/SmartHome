@@ -285,6 +285,7 @@ class CartChildren(models.Model):
     action = models.CharField("element action", max_length = 20, default = "get")
     homeCart = models.ForeignKey(HomeCart, on_delete = models.CASCADE)
     width = models.IntegerField("width",default=1)
+    height = models.IntegerField("width",default=1)
 
     def __str__(self):
         return self.name+" "+self.type+" "+self.typeAction
@@ -298,7 +299,8 @@ class CartChildren(models.Model):
             "typeAction":self.typeAction,
             "deviceId":self.device.id,
             "order":self.order,
-            "width":self.width
+            "width":self.width,
+            "height":self.height
         }
 
 class Scripts(models.Model):

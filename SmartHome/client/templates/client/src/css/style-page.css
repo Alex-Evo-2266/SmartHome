@@ -4,6 +4,7 @@
   max-width: 1170px;
   margin-left: auto;
   margin-right: auto;
+  /* grid-column-start:  */
   /* transform: translateX(-50%); */
   /* width: calc(100% - 60px); */
   padding: 0 15px 0 75px;
@@ -14,11 +15,11 @@
 *.top{
   padding-top: 30px;
 }
-.conteiner.home
+/* .conteiner.home
 {
   min-height: calc(100vh - 30px);
   padding: 0 0 0 60px;
-}
+} */
 .conteiner.files{
   min-height: 100vh;
   padding: 0 0 0 60px;

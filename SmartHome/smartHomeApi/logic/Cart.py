@@ -10,14 +10,14 @@ def addHomePage(name,information="",id=None)->HomePage:
     page = HomePage.objects.create(id=genId(HomePage.objects.all()),name=name,information=information)
     return page
 
-def addCartChildren(name,type,typeAction,order,action,device,homeCart,width=1):
+def addCartChildren(name,type,typeAction,order,action,device,homeCart,width=1,height=1):
     # print(name,type,typeAction,order,action,device,homeCart)
     # print(ids)
     # if(len(ids)==1):
     #     ids.append(ids[0]+1)
     # id = ids.pop(0)
     id=genId(CartChildren.objects.all())
-    element = CartChildren.objects.create(id=id,name=name,type=type,typeAction=typeAction,width=width,order=order,device=device,action=action,homeCart=homeCart)
+    element = CartChildren.objects.create(id=id,name=name,type=type,typeAction=typeAction,height=height,width=width,order=order,device=device,action=action,homeCart=homeCart)
     element.save()
     return element
 
@@ -74,13 +74,14 @@ def updata_new_cartElement(new,old):
                 item2.name=item["name"]
                 item2.order=item["order"]
                 item2.width=item["width"]
+                item2.height=item["height"]
                 item2.save()
 
 def add_new_cartElement(new,cart):
     for item in new:
         if (not item["id"]):
             device = Device.objects.get(id=item["deviceId"])
-            addCartChildren(item["name"],item["type"],item["typeAction"],item["order"],item["action"],device,cart,item["width"])
+            addCartChildren(item["name"],item["type"],item["typeAction"],item["order"],item["action"],device,cart,item["width"],item["height"])
 
 def setElementCart(data,cart):
     newelements = data
