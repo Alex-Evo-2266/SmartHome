@@ -1,0 +1,21 @@
+.NewCardElement .NewCardHeader{
+  background: var(--head-v2-color);
+  color: var(--text-v1-color);
+}
+.DeviceControlLi{
+    background: var(--head-v2-color);
+    color: var(--text-v1-color);
+}
+.DeviceControlLi:nth-child(2n+1){
+  background: var(--body-v1-color);
+  color: var(--text-v3-color);
+}
+.DeviceControlLi:nth-child(2n+2){
+  background: var(--body-v3-color);
+}
+.NewCardElement .NewCardControl .cardControlBtn{
+  background: var(--body-v2-color);
+}
+.NewCardElement .NewCardControl .cardControlBtn:hover{
+  background: var(--active-v1-color);
+}

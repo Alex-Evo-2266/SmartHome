@@ -1,0 +1,32 @@
+.pagecontent p{
+  border: 1px solid var(--head-v2-color);
+  background: var(--background-v1-color);
+}
+.pagecontent label.textLabel{
+  border: 1px solid var(--head-v2-color);
+  background: var(--background-v1-color);
+  color: var(--text-v1-color);
+  /* padding-bottom: 8px; */
+}
+.pagecontent label p{
+  border: none;
+  background: #0000;
+  color:var(--text-v1-color);
+}
+.pagecontent label input{
+  border: 2px solid var(--head-v2-color);
+  color: var(--text-v1-color);
+}
+.pagecontent label p:hover{
+  box-shadow: none;
+}
+.pagecontent a,
+.pagecontent button{
+  color: var(--text-v1-color);
+  background: var(--head-v2-color);
+}
+.pagecontent a:hover,
+.pagecontent button:hover{
+  background: var(--active-v1-color);
+  color: var(--text-v2-color);
+}

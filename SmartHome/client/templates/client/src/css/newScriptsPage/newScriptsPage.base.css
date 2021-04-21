@@ -1,5 +1,6 @@
-@import "./newScriptsPage.light.css";
-@import "./newScriptsPage.night.css";
+/* @import "./newScriptsPage.light.css";
+@import "./newScriptsPage.night.css"; */
+@import "./newScriptsPage.color.css";
 @import "./programmBlocks/base.css";
 
 .NewScripConteiner{

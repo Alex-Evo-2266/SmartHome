@@ -1,5 +1,6 @@
-@import "./newDeviceCart.light.css";
-@import "./newDeviceCart.night.css";
+/* @import "./newDeviceCart.light.css";
+@import "./newDeviceCart.night.css"; */
+@import "./newDeviceCart.color.css";
 
 .NewCardElement{
   position: relative;

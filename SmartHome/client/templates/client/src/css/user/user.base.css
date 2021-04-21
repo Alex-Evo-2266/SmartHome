@@ -1,5 +1,6 @@
-@import "./user.light.css";
-@import "./user.night.css";
+/* @import "./user.light.css";
+@import "./user.night.css"; */
+@import "./user.color.css";
 
 .pagecontent{
   margin: 10px;

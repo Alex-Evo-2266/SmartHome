@@ -1,5 +1,6 @@
-@import "./form.light.css";
-@import "./form.night.css";
+/* @import "./form.light.css";
+@import "./form.night.css"; */
+@import "./form.color.css";
 .form{
   position: relative;
   width: 65%;

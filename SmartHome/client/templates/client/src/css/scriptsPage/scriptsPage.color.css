@@ -1,0 +1,6 @@
+.scriptElement{
+  background: var(--head-v2-color);
+}
+.scriptElement p{
+  color: var(--text-v1-color);
+}

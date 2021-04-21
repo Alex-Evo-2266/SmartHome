@@ -2,13 +2,13 @@
 @import "./Slider/slider.base.css";
 @import "./Sensor/sensor.base.css";
 @import "./Toolbar/toolbar.base.css";
-@import "./homeCart.light.css";
-@import "./homeCart.night.css";
+@import "./homeCart.color.css";
+/*@import "./homeCart.night.css"; */
 
 ul.elementConteiner{
   position: relative;
   margin: 0;
-  padding: 0;
+  padding: 2px 0 0 0;
   display: grid;
   grid-template-columns: repeat(4,100px);
   /* grid-auto-columns: 120px; */

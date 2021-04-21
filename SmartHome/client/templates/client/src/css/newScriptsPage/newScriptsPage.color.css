@@ -1,0 +1,14 @@
+.scriptOut input{
+  background: var(--head-v2-color);
+  color: var(--text-v1-color);
+}
+.scriptOut button{
+  background: var(--head-v2-color);
+  color:var(--text-v1-color);
+}
+.NewScripPage{
+  background: rgba(50,50,50,.5);
+}
+.scriptOut p{
+  color: var(--text-v1-color);
+}

@@ -1,0 +1,15 @@
+body.light{
+  --head-v1-color: #F0F8FF;
+  --head-v2-color: #E0FFFF;
+  --body-v1-color: #DCDCDC;
+  --body-v2-color: #D3D3D3;
+  --body-v3-color: #aaa;
+  --background-v1-color: #dddc;
+  --text-v1-color: #000;
+  --text-v2-color: #fff;
+  --text-v3-color: #000;
+  --text-v4-color: #fff;
+  --text-disabled-color: #a9a9a9;
+  --btn-v1-color: #fff;
+  --btn-v2-color: #777;
+}

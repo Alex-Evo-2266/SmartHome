@@ -1,0 +1,16 @@
+.modalHeader{
+  background: var(--head-v2-color);
+}
+.modalHeader h4{
+  color: var(--text-v1-color);
+}
+.centerWindow{
+  border: 2px solid var(--head-v2-color);
+}
+.centerWindow .centerWindowContent{
+  background: var(--head-v2-color);
+  color: var(--text-v1-color);
+}
+.IfdeviceList .deviceElement{
+  box-shadow: inset 0 0 5px #000;
+}

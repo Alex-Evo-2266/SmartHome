@@ -1,5 +1,6 @@
-@import "./header.light.css";
-@import "./header.night.css";
+/* @import "./header.light.css";
+@import "./header.night.css"; */
+@import "./header.color.css";
 header{
   height: 60px;
   position: fixed;
@@ -42,10 +43,6 @@ header h1{
 .searchBtn:active{
   box-shadow: none;
   transform: none;
-}
-.searchBtn:hover{
-  opacity: 1;
-  background: #1E90FF;
 }
 
 @media (max-width: 700px){

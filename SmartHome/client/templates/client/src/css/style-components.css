@@ -1,6 +1,8 @@
 @import "./base.css";
 @import "./style-page.css";
 
+@import "./variable/base.css";
+
 @import "./leftMenu/leftMenu.base.css";
 @import "./header/header.base.css";
 @import "./deviceCart/deviceCart.base.css";

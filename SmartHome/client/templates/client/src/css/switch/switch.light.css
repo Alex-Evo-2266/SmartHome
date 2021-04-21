@@ -1,9 +1,9 @@
 .light .switch span{
-  background: #999;
+  background: var(--body-v3-color);
 }
 .light .switch .indicator{
-  background: linear-gradient(to bottom, #fff, #aaa);
+  background: linear-gradient(to bottom, var(--head-v1-color), var(--head-v2-color));
 }
 .light .switch input:checked ~ span{
-  background: #76d7ff;
+  background: var(--active-v1-color)
 }

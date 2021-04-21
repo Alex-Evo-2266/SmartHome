@@ -1,5 +1,6 @@
-@import "./checkbox.light.css";
-@import "./checkbox.night.css";
+/* @import "./checkbox.light.css";
+@import "./checkbox.night.css"; */
+@import "./checkbox.color.css";
 
 .custom1-checkbox{
   /* position: absolute;

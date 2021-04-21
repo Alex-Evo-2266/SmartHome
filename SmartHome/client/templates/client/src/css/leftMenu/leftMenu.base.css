@@ -1,5 +1,6 @@
-@import "./leftMenu.light.css";
-@import "./leftMenu.night.css";
+/* @import "./leftMenu.light.css";
+@import "./leftMenu.night.css"; */
+@import "./leftMenu.color.css";
 .topMenu{
   display: none;
   position: fixed;
@@ -61,7 +62,7 @@
 .navigation nav ul li span.liinfo .icon,
 .menuTogle .icon
 {
-  color: #fff;
+  color: var(--text-v1-color);
   position: relative;
   display: block;
   min-width: 60px;
@@ -123,6 +124,7 @@
 .navigation nav.hide:hover{
   width: 0;
 }
+
 @media (max-width: 700px) {
   .topMenu{
     display: block;

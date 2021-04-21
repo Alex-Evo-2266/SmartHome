@@ -1,6 +1,6 @@
-@import "./modalWindow.light.css";
-@import "./modalWindow.night.css";
-
+/* @import "./modalWindow.light.css";
+@import "./modalWindow.night.css"; */
+@import "./modalWindow.color.css";
 .modalWindow{
   /* border-radius: 4px; */
   overflow: hidden;

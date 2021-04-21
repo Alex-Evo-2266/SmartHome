@@ -1,0 +1,20 @@
+.topMenu,
+.navigation nav{
+  background: var(--head-v2-color);
+}
+.navigation nav ul li:hover > a,
+.navigation nav ul li:hover > span.liinfo,
+.navigation nav ul li a.active,
+.menuTogle:hover{
+  background: var(--active-v1-color);
+  transition: 0.3s;
+}
+.night .navigation nav ul li a,
+.topMenu,
+.navigation nav,
+.navigation nav ul li a .icon,
+.navigation nav ul li a .title,
+.navigation nav ul li span.liinfo .icon,
+.menuTogle .icon{
+  color: var(--text-v1-color);
+}

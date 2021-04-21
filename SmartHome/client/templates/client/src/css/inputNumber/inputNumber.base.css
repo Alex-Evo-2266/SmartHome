@@ -1,12 +1,12 @@
-@import "./inputNumber.light.css";
-@import "./inputNumber.night.css";
-
+/* @import "./inputNumber.light.css";
+@import "./inputNumber.night.css"; */
+@import "./inputNumber.color.css";
 .InputNumber{
   margin: 5px
 }
 .InputNumber input[type="text"]{
   width: calc(100% - 12px);
-  border: 2px solid;
+  border: 2px solid var(--head-v2-color);
   font-size: 20px;
   outline: none;
   text-align: center;

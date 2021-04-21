@@ -1,23 +1,24 @@
-@import "./slider.light.css";
-@import "./slider.night.css";
+@import "./slider.color.css";
 
 .slider-box{
-  /* padding: 10px 20px 0 30px; */
   width: 100%;
   height: 100%;
-  /* border-radius: 5px; */
   align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 .slider-box .slider{
-  height: 40px;
-  width: 150px;
+  height: 30px;
+  width: calc(100% - 10px);
   display: flex;
   align-items: center;
 }
 .slider-box .slider input[type="range"]{
   height: 10px;
   width: 100%;
-  /* -webkit-appearance: none; */
   outline: none;
   border-radius: 25px;
 }
@@ -36,7 +37,9 @@
   border-radius: 50%;
 }
 .slider-box .name{
+  padding-top: 10px;
   font-size: 20px;
+  width: 100%
 }
 .slider-box .value {
   font-size: 30px;

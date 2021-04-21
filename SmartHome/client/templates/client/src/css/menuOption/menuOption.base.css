@@ -1,10 +1,11 @@
-@import "./menuOption.light.css";
-@import "./menuOption.night.css";
+/* @import "./menuOption.light.css";
+@import "./menuOption.night.css"; */
+@import "./menuOption.color.css";
 
 .menu-component-paragraph{
   height: 60px;
   width: calc(100% - 2px);
-  border: 1px solid #333;
+  border: 1px solid var(--head-v2-color);
   display: flex;
   position: relative;
 }

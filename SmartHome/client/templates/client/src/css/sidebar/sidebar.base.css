@@ -1,6 +1,7 @@
-@import "./sidebar.light.css";
-@import "./sidebar.night.css";
+/* @import "./sidebar.light.css";
+@import "./sidebar.night.css"; */
 @import "./burger.base.css";
+@import "./sidebar.color.css";
 
 .sidebar{
   position: fixed;

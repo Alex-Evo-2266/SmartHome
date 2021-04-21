@@ -1,0 +1,32 @@
+ul.elementConteiner li label .icon-conteiner{
+  background: var(--btn-v2-color);
+  box-shadow: none;
+  color: var(--text-v1-color);
+}
+ul.elementConteiner li label .icon-box i{
+  color: var(--text-v1-color);
+  transition: 0.5s;
+}
+ul.elementConteiner li label.disabled .icon-box i{
+  color: var(--head-v2-color);
+  text-shadow: none;
+}
+ul.elementConteiner li label input[type="checkbox"]:checked ~ .icon-conteiner,
+ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner{
+  background: var(--active-v1-color);
+  box-shadow: inset 0 0 5px #000
+}
+ul.elementConteiner li label input[type="checkbox"]:checked ~ .icon-conteiner i,
+ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner i{
+  color: var(--text-v1-color);
+}
+.night ul.elementConteiner li label input[type="checkbox"]:checked ~ .icon-conteiner i,
+.night ul.elementConteiner li label .icon-box i,
+.night ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner i{
+  text-shadow: 0 0 10px var(--active-v1-color),
+  0 0 10px var(--active-v1-color);
+}
+ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner,
+ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner i{
+  transition: 0.1s;
+}

@@ -1,5 +1,6 @@
-@import "./scriptsPage.light.css";
-@import "./scriptsPage.night.css";
+/* @import "./scriptsPage.light.css";
+@import "./scriptsPage.night.css"; */
+@import "./scriptsPage.color.css";
 
 .Scripts{
   padding: 40px 5px 0 5px;

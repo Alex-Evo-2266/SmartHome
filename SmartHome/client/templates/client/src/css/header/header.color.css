@@ -1,0 +1,18 @@
+header{
+  background: var(--head-v2-color);
+  color: var(--text-v1-color)
+}
+.searchBtn{
+  background: var(--head-v1-color);
+  color: var(--text-v1-color)
+}
+.titleButtonAdd{
+  background: var(--btn-v1-color);
+}
+.titleButtonAdd:hover{
+  box-shadow: inset 0 0 5px #000;
+}
+.searchBtn:hover{
+  background: var(--active-v1-color);
+  opacity: 1;
+}

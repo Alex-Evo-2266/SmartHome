@@ -1,0 +1,25 @@
+.slider-box{
+  background: var(--btn-v2-color);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.slider-box .slider input[type="range"]{
+  background: var(--head-v2-color);
+}
+.slider input::-moz-range-thumb,
+.slider input::-webkit-slider-thumb,
+.slider input::-ms-thumb{
+  border: 4px solid var(--active-v1-color);
+  background: #fff;
+  box-shadow: 0 0 10px var(--active-v1-color);
+}
+.slider input::-moz-range-progress,
+.slider input::-webkit-slider-progress,
+.slider input::-ms-progress{
+  background: var(--active-v1-color);
+}
+.slider-box .name{
+  color: var(--text-v1-color)
+}
+.slider-box .value{
+  color: var(--active-v1-color)
+}

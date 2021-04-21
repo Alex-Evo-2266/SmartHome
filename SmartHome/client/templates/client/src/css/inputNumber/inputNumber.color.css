@@ -1,0 +1,11 @@
+.InputNumber{
+  border: 2px solid var(--head-v2-color)
+}
+.InputNumber .InputNumber-btnUp,
+.InputNumber .InputNumber-btnDown{
+  background: var(--body-v1-color)
+}
+.InputNumber .InputNumber-btnUp i,
+.InputNumber .InputNumber-btnDown i{
+  color: var(--text-v1-color);
+}

@@ -2,6 +2,7 @@ import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 import {AuthContext} from '../../../context/AuthContext.js'
+import {RunText} from '../../runText'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 
@@ -108,7 +109,7 @@ if(!device){
 
 return(
   <div className="slider-box">
-    <div className="name">{device.DeviceName}.{data.typeAction}.</div>
+    <RunText className="name" id={device.DeviceSystemName} text={`${device.DeviceName}.${data.typeAction}.`}/>
     <div className="slider">
       <input
       type="range"

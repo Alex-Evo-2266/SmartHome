@@ -1,5 +1,6 @@
-@import "./addDevice.light.css";
-@import "./addDevice.night.css";
+/* @import "./addDevice.light.css";
+@import "./addDevice.night.css"; */
+@import "./addDevice.color.css";
 
 .conteiner-head{
   height: 50vh;

@@ -1,0 +1,7 @@
+@import "./light.css";
+@import "./night.css";
+
+body{
+  --active-v1-color: #1E90FF;
+  --ok-v1-color: #00d22d;
+}
