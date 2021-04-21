@@ -4,7 +4,6 @@ import {BtnElement} from './CartElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
 import {CartEditContext} from './EditCarts/CartEditContext'
 import {SliderElement} from './CartElement/SliderElement'
-import {AddControlContext} from './AddControl/AddControlContext'
 import {SensorElement} from './CartElement/SensorElement'
 import {ScriptElement} from './CartElement/ScriptElement'
 
@@ -12,10 +11,9 @@ const COLUMNS = 4
 export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   const {mode} = useContext(EditModeContext)
   const {target} = useContext(CartEditContext)
-  const {show} = useContext(AddControlContext)
-  const column = useRef(1)
-  // const row = useRef(1)
-  const map = useRef([])
+  let column = 1
+  let row = 1
+  let mapCart = []
 
   function sort(array) {
     let arr = array.slice()
@@ -30,6 +28,23 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
       }
     }
     return arr
+  }
+
+  function isPosition(x,y,width=1,height=1) {
+    for (var i = 0; i < width; i++) {
+      for (var j = 0; j < height; j++) {
+        for (var pos of mapCart) {
+          if(pos.x===(x+i)&&pos.y===(y+j))
+            return true
+        }
+      }
+    }
+
+    return false
+  }
+
+  function inBoundaries(x,width) {
+    return COLUMNS-(x-1)<width
   }
 
   const deleteElement=(index1)=>{
@@ -73,22 +88,36 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
         sort(data.children).map((item,indexbtn)=>{
 
           if(indexbtn === 0){
-            column.current = 1
-            // row.current = 1
+            column = 1
+            row = 1
           }
-          if(COLUMNS-(column.current-1)<item.width){
-            column.current = 1
-            // row.current += 1
-          }
-          let start = column.current
-          let end = column.current + item.width
-          column.current += item.width
+          do {
+            if(inBoundaries(column,item.width)){
+              column = 1
+              row += 1
+            }
+            if(isPosition(column,row,item.width,item.height)){
+              column += 1
+            }
+          } while(inBoundaries(column,item.width)||isPosition(column,row,item.width,item.height));
 
+          for (var i = column; i < column + item.width; i++) {
+            for (var j = row; j < row + item.height; j++) {
+              mapCart.push({x:i,y:j})
+            }
+          }
+          let start = column
+          let end = column + item.width
+          column += item.width
+          let ystart = row
+          let yend = row + item.height
 
           return (
             <li key={indexbtn} style={{
               gridColumnStart:start,
               gridColumnEnd:end,
+              gridRowStart:ystart,
+              gridRowEnd:yend,
             }}>
             {
               (item.type==="button")?
@@ -160,19 +189,6 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
             </li>
           )
         }):null
-      }
-      {
-        (edit)?
-        <li style={{order:`501`}}>
-          <BtnElement switchMode={false} onClick={()=>show("AddButton",async(btn)=>{
-              let mas = data.children.slice();
-              mas.push(btn)
-              updata(index,{...data,children:mas})
-          })}>
-            <i className="fas fa-plus"></i>
-          </BtnElement>
-        </li>
-        :null
       }
       </ul>
     </ModalWindow>

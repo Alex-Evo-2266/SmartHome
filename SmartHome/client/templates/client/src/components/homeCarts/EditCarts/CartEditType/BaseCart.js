@@ -1,18 +1,21 @@
 import React,{useContext,useState,useEffect} from 'react'
 import {ModalWindow} from '../../../modalWindow/modalWindow'
 import {CartEditContext} from '../CartEditContext'
+import {AddControlContext} from '../../AddControl/AddControlContext'
 import {InputNumber} from '../../../moduls/inputNumber'
 import {BackForm} from '../../../moduls/backForm'
 
 export const BaseCartEdit = () =>{
   const {cartEdit, hide} = useContext(CartEditContext)
+  const {show} = useContext(AddControlContext)
   const [cart ,setCart] = useState({
     mainId:null,
     id:null,
     name:"",
     type:"base",
     order:"0",
-    children:[]
+    children:[],
+    width:1
   })
 
   useEffect(()=>{
@@ -23,7 +26,8 @@ export const BaseCartEdit = () =>{
         name:cartEdit.cart.name,
         type:cartEdit.cart.type,
         order:cartEdit.cart.order,
-        children:cartEdit.cart.children
+        children:cartEdit.cart.children,
+        width:cartEdit.cart.width
       })
   },[cartEdit])
 
@@ -51,6 +55,12 @@ export const BaseCartEdit = () =>{
           <p>button priority</p>
           <InputNumber Xten={false} Value={cartEdit.cart.order||"0"} result={(v)=>setCart({...cart,order:v})} min={0} max={500}/>
         </div>
+        <button onClick = {()=>show("AddButton",async(btn)=>{
+                let mas = cart.children.slice();
+                mas.push(btn)
+                cartEdit.OK(cartEdit.cart.index,{...cart,children:mas})
+                hide()
+            })}>Add Control Element</button>
         <button onClick = {outHandler}>Ок</button>
       </div>
     </ModalWindow>

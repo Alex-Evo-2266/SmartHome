@@ -78,6 +78,7 @@ def updata_new_cartElement(new,old):
                 item2.save()
 
 def add_new_cartElement(new,cart):
+    print(new)
     for item in new:
         if (not item["id"]):
             device = Device.objects.get(id=item["deviceId"])
@@ -112,7 +113,8 @@ def setPage(data):
         oldcart = page.homecart_set.all()
         add_new_cart(newcarts,page)
         return True
-    except:
+    except Exception as e:
+        print("errerty",e)
         return False
 
 
