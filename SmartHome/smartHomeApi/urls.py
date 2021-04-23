@@ -8,6 +8,7 @@ urlpatterns = [
     path('server/config/edit',views.clientConfigedit),
     path('server/usersConfig/edit',views.editUsersConf),
     path('server/usersConfig',views.giveUserConf),
+    path('server/data/get',views.getServerData),
     path('user/config/edit',views.edituserconf),
     path('user/config',views.clientConfig),
     path('user',views.giveuser),

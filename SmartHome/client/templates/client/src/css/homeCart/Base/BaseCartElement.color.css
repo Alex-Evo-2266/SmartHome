@@ -1,0 +1,6 @@
+
+.baseCartElement-box{
+  background: var(--btn-v2-color);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  color: var(--text-v1-color)
+}

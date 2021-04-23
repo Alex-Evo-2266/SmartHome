@@ -13,7 +13,7 @@ export const AddSlider = ({add})=>{
     name:"",
     type:"slider",
     typeAction:"",
-    order:0,
+    order:"0",
     deviceId:null,
     action:"",
     width:2,

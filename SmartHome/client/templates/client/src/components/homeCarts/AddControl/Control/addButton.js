@@ -14,7 +14,7 @@ export const AddButton = ({add})=>{
     name:"",
     type:"button",
     typeAction:"",
-    order:0,
+    order:"0",
     deviceId:null,
     action:"",
     width:1,

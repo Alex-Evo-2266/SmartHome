@@ -15,6 +15,7 @@ import {useHttp} from './hooks/http.hook'
 import {AuthContext} from './context/AuthContext'
 import {TerminalCart} from './components/terminal/terminalCart'
 import {UserContext} from './context/UserContext'
+import {ServerConfigContext} from './context/ServerConfigContext'
 import {SocketState} from './hooks/socket.hook.js'
 import './css/style-auth.css'
 import './icon/css/all.min.css'
@@ -28,13 +29,16 @@ function App() {
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated,userLevel);
   const [config, setConfig] = useState({})
+  const [serverConfig, setServerConfig] = useState({})
 
   const userConfig = useCallback(async()=>{
     if(!token)return
     const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
-    console.log(data);
+    const serverData = await request(`/api/server/data/get`, 'GET', null,{Authorization: `Bearer ${token}`})
+    console.log(serverData);
     updataBackground(token,data)
     setConfig(data)
+    setServerConfig(serverData)
   },[token,request,updataBackground])
 
   const updatebackground = ()=>{
@@ -66,6 +70,7 @@ function App() {
       token, login, logout, userId, userLevel, isAuthenticated
     }}>
     <UserContext.Provider value={{...config,updateBackground:updatebackground}}>
+    <ServerConfigContext.Provider value={{...serverConfig}}>
     <SocketState>
     <AlertState>
     <MenuState>
@@ -89,6 +94,7 @@ function App() {
     </MenuState>
     </AlertState>
     </SocketState>
+    </ServerConfigContext.Provider>
     </UserContext.Provider>
     </AuthContext.Provider>
   );

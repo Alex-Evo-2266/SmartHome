@@ -131,8 +131,8 @@ const getMovieData = useCallback(async()=>{
   if(data&&data[type]){
     let item = data[type]
     console.log(item);
-    setForm({
-      ...form,
+    setForm((prev)=>{return{
+      ...prev,
       title:item.title,
       tagline:item.tagline,
       discription:item.discription,
@@ -153,11 +153,11 @@ const getMovieData = useCallback(async()=>{
       count_seasons:item.count_seasons||0,
       closed:item.closed||false,
       save_seasons:item.save_seasons||0,
-    })
+    }})
     var img = imgPoster.current
     img.src = item.poster
   }
-},[])
+},[request,auth.token,id,type])
 
 useEffect(()=>{
   giveData()
@@ -167,7 +167,7 @@ useEffect(()=>{
   if(edit){
     getMovieData()
   }
-},[edit])
+},[edit,getMovieData])
 
 useEffect(()=>{
   const d = getData(storegeName)

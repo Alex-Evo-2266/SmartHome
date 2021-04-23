@@ -5,10 +5,14 @@ import {EditModeContext} from '../../context/EditMode'
 
 export const HomeControlCart = () =>{
   const {setMode} = useContext(EditModeContext)
+
   return(
     <ModalWindow position = "relative" heightToolbar={30} z={3} top={0} left={0} width={"auto"} height={"auto"} title="controlPanel" moving={false}>
       <ul className="elementConteiner">
-        <li>
+        <li style={{
+          gridColumnStart:1,
+          gridColumnEnd:2,
+        }}>
           <BtnElement switchMode={false} onClick={()=>{
             setMode(true)
           }}>

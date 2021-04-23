@@ -5,6 +5,18 @@ import {AddButton} from './Control/addButton'
 import {AddSlider} from './Control/addSlider'
 import {AddScript} from './Control/addScript'
 
+const weather = {
+  id:null,
+  name:"weather",
+  type:"weather",
+  typeAction:"",
+  order:"0",
+  deviceId:null,
+  action:"",
+  width:1,
+  height:1
+}
+
 export const AddControl = ()=>{
   const {addControl, hide} = useContext(AddControlContext)
   const [typeChild, setTypeChild] = useState("");
@@ -37,6 +49,7 @@ export const AddControl = ()=>{
               <li onClick={()=>setTypeChild("script")}><span>2</span>scripts</li>
               <li onClick={()=>setTypeChild("slider")}><span>3</span>slider</li>
               <li onClick={()=>setTypeChild("sensor")}><span>4</span>sensor monitor</li>
+              <li onClick={()=>addButton(weather)}><span>5</span>weather</li>
             </ul>:
             (typeChild==="button")?
             <AddButton add={addButton}/>:

@@ -11,17 +11,13 @@ export const MovieDitail = ({type="movie"})=>{
   const {request, error, clearError} = useHttp();
   const [movie, setMovie] = useState({})
 
-  const edit = ()=>{
-
-  }
-
   const getData = useCallback(async()=>{
     const data = await request(`/api/files/movie/${id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     console.log(data);
     if(data){
       setMovie(data.movie)
     }
-  },[])
+  },[request,auth.token,id])
 
   useEffect(()=>{
     getData()
@@ -68,7 +64,7 @@ export const MovieDitail = ({type="movie"})=>{
               movie.genres.map((item,index,arr)=>{
                 return (
                   <div className="d-in" key={index}>
-                    <a href="#">{item.name}</a>
+                    <a href={(item.url&&item.url!=="-")?item.url:null}>{item.name}</a>
                     {(arr.length-1!==index)?<span>, </span>:null}
                   </div>
                 )

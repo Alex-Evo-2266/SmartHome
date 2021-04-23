@@ -1,12 +1,7 @@
 import React,{useContext,useRef,useEffect} from 'react'
 import {ModalWindow} from '../modalWindow/modalWindow'
-import {BtnElement} from './CartElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
 import {CartEditContext} from './EditCarts/CartEditContext'
-import {SliderElement} from './CartElement/SliderElement'
-import {AddControlContext} from './AddControl/AddControlContext'
-import {SensorElement} from './CartElement/SensorElement'
-import {ScriptElement} from './CartElement/ScriptElement'
 import {СircleRange} from '../circleRange/index'
 
 export const HomelampCart = ({hide,index,name,updata,data,edit=false,add}) =>{

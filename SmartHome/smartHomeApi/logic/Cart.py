@@ -81,7 +81,9 @@ def add_new_cartElement(new,cart):
     print(new)
     for item in new:
         if (not item["id"]):
-            device = Device.objects.get(id=item["deviceId"])
+            device = None
+            if (item["deviceId"]):
+                device = Device.objects.get(id=item["deviceId"])
             addCartChildren(item["name"],item["type"],item["typeAction"],item["order"],item["action"],device,cart,item["width"],item["height"])
 
 def setElementCart(data,cart):

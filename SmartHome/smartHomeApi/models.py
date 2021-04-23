@@ -291,13 +291,16 @@ class CartChildren(models.Model):
         return self.name+" "+self.type+" "+self.typeAction
 
     def receiveDict(self):
+        device = self.device
+        if(device):
+            device = device.id
         return {
             "id":self.id,
             "name":self.name,
             "type":self.type,
             "action":self.action,
             "typeAction":self.typeAction,
-            "deviceId":self.device.id,
+            "deviceId":device,
             "order":self.order,
             "width":self.width,
             "height":self.height

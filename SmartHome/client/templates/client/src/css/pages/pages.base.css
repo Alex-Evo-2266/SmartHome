@@ -20,9 +20,10 @@
   z-index: 2;
   box-shadow: 0 0 10px #000;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 .pages .page::-webkit-scrollbar{
-  width: 0;
+  /* width: 0; */
 }
 .pages .page.active{
   display: block;

@@ -105,7 +105,6 @@ export class СircleRange{
     function move(e,t) {
       if(t._move){
         let circle = t._$svg.querySelector('circle:first-child')
-        let range = t._$svg.querySelector('circle:last-child')
         let center_x = (circle.r.baseVal.value) + circle.getBoundingClientRect().left
         let center_y = (circle.r.baseVal.value) + circle.getBoundingClientRect().top
         let pos_x = e.pageX

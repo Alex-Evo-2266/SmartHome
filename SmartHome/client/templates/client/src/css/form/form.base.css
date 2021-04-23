@@ -18,10 +18,10 @@
   width: 100%;
   height: 100%;
 }
-.form *::-webkit-scrollbar
+/* .form *::-webkit-scrollbar
 {
   width: 0;
-}
+} */
 .form .pageForm.choiceDeviceType{
   height: 100%;
 }

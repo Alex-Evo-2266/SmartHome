@@ -1,14 +1,16 @@
 @import "./Button/button.base.css";
 @import "./Slider/slider.base.css";
 @import "./Sensor/sensor.base.css";
+@import "./Base/BaseCartElement.css";
 @import "./Toolbar/toolbar.base.css";
+@import "./Weather/Weather.css";
 @import "./homeCart.color.css";
 /*@import "./homeCart.night.css"; */
 
 ul.elementConteiner{
   position: relative;
   margin: 0;
-  padding: 2px 0 0 0;
+  padding: 2px;
   display: grid;
   grid-template-columns: repeat(4,100px);
   /* grid-auto-columns: 120px; */

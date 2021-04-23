@@ -42,10 +42,12 @@ const addCart = async(type="base")=>{
 }
 
 const removeCart = async(index)=>{
-  await setCarts((prev)=>{
-    let mas = prev.slice();
-    return mas.filter((item, index2)=>index2!==index)
-  })
+  message("Удалить?", "dialog", async()=>{
+    await setCarts((prev)=>{
+      let mas = prev.slice();
+      return mas.filter((item, index2)=>index2!==index)
+    })
+  },"no")
 }
 
 const updataCart = async(index,cart)=>{
@@ -96,7 +98,6 @@ function sortCard(data) {
   let column = 3
   let i = 1
   let width = conteiner.current.clientWidth
-  console.log(width);
   if(width < 1070)
     column = 2
   if(width < 800){
@@ -104,7 +105,7 @@ function sortCard(data) {
     column = 1
   }
   let arr = []
-  for (var j = 0; j < column; j++) {
+  for (var p = 0; p < column; p++) {
     arr.push([])
   }
   for (var j = 0; j < data.length; j++) {
@@ -136,7 +137,7 @@ function sortCard(data) {
               {
               (index===0)?
               <div className = "flexElement">
-                <HomeControlCart/>
+                <HomeControlCart edit={editMode}/>
               </div>
               :null
               }

@@ -6,7 +6,6 @@ import {ButtonEdit} from './CartEditType/Button'
 export const CartEdit = () =>{
   const {cartEdit} = useContext(CartEditContext)
 
-
   if(!cartEdit.visible||!cartEdit.type){
     return null;
   }

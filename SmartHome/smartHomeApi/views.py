@@ -12,6 +12,7 @@ from .logic.Cart import setPage,getPage
 from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
+from .logic.weather import Weather
 
 from .models import User, UserConfig,ServerConfig,ImageBackground,genId,LocalImage
 
@@ -286,3 +287,9 @@ def linkBackground(request):
         if(linkbackground(data,datauser["userId"])):
             return HttpResponse(json.dumps({"message":"ok"}),status=200)
     return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def getServerData(request):
+    return HttpResponse(json.dumps({
+    "message":"ok",
+    "weather":Weather()
+    }),status=200)

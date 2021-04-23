@@ -1,4 +1,4 @@
-import React,{useContext,useRef} from 'react'
+import React,{useContext} from 'react'
 import {ModalWindow} from '../modalWindow/modalWindow'
 import {BtnElement} from './CartElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
@@ -6,9 +6,12 @@ import {CartEditContext} from './EditCarts/CartEditContext'
 import {SliderElement} from './CartElement/SliderElement'
 import {SensorElement} from './CartElement/SensorElement'
 import {ScriptElement} from './CartElement/ScriptElement'
+import {WeatherElement} from './CartElement/WeatherElement'
+import {useMessage} from '../../hooks/message.hook'
 
 const COLUMNS = 4
 export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
+  const {message} = useMessage();
   const {mode} = useContext(EditModeContext)
   const {target} = useContext(CartEditContext)
   let column = 1
@@ -48,9 +51,11 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   }
 
   const deleteElement=(index1)=>{
-    let mas = data.children.slice();
-    let newBtns = mas.filter((item, index2)=>index2!==index1)
-    updata(index,{...data,children:newBtns})
+    message("Удалить?", "dialog", async()=>{
+      let mas = data.children.slice();
+      let newBtns = mas.filter((item, index2)=>index2!==index1)
+      updata(index,{...data,children:newBtns})
+    },"no")
   }
 
   const editElement = (index1,data1)=>{
@@ -183,6 +188,13 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               editBtn={
                 (edit)?editElement:null
               }
+              />:
+              (item.type==="weather")?
+              <WeatherElement
+              index={item.index}
+              data={item}
+              deleteBtn={(edit)?deleteElement:null}
+              editBtn={(edit)?editElement:null}
               />:
               null
             }
