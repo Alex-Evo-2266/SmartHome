@@ -26,7 +26,8 @@
 .pagecontent label input[type="text"],
 .pagecontent label input[type="number"],
 .pagecontent label input[type="tel"],
-.pagecontent label input[type="email"]
+.pagecontent label input[type="email"],
+.pagecontent label input[type="password"]
 {
   width: auto;
   display: inline-block;

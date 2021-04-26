@@ -26,48 +26,55 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
     index={index}
     data={data}
     >
-    <div className="weather-box">
-      <div className="city">{(serverConfig&&serverConfig.weather&&serverConfig.weather.city)||""}</div>
-      <div className={`weather-body ${(data.width>3)?"veryWide":(data.width>1)?"wide":""} ${(data.height>1)?"tall":""}`}>
-        <div className="day_anchor-div">
-          <div className="icon_color_light">{
-            icon(serverConfig&&serverConfig.weather&&serverConfig.weather.now.weather)
-          }</div>
-          {
-            (data.width>1||data.height>1)?
-            <div className="day-anchor">{(serverConfig&&serverConfig.weather&&serverConfig.weather.now.weather)||""}</div>
-            :null
-          }
+    {
+      (serverConfig&&serverConfig.weather)?
+      <div className="weather-box">
+        <div className="city">{(serverConfig&&serverConfig.weather&&serverConfig.weather.city)||""}</div>
+        <div className={`weather-body ${(data.width>3)?"veryWide":(data.width>1)?"wide":""} ${(data.height>2)?"veryTall":(data.height>1)?"tall":""}`}>
+          <div className="day_anchor-div">
+            <div className="icon_color_light">{
+              icon(serverConfig&&serverConfig.weather&&serverConfig.weather.now.weather)
+            }</div>
+            {
+              (data.width>1||data.height>1)?
+              <div className="day-anchor">{(serverConfig&&serverConfig.weather&&serverConfig.weather.now.weather)||""}</div>
+              :null
+            }
+          </div>
+          <div className="temp">{(serverConfig&& serverConfig.weather&&serverConfig.weather.now.temp)||""} C*</div>
         </div>
-        <div className="temp">{(serverConfig&& serverConfig.weather&&serverConfig.weather.now.temp)||""} C*</div>
-      </div>
-      {
-        (data.width>3&&data.height>1)?
-        <div className="forecast">
-          {
-            (serverConfig&&serverConfig.weather&&serverConfig.weather.tenDays)?
-            serverConfig.weather.tenDays.map((item,index)=>{
-              return(
-                <div key={index} className={`forecast-weather-body`}>
-                  <div className="day-name">{item.name||""}</div>
-                  <div className="day-date">{item.date||""}</div>
-                  <div className="day_anchor-div">
-                    <div className="icon_color_light">{
-                      icon(item&&item.weather)
-                    }</div>
-                    <div className="day-anchor">{item.weather||""}</div>
+        {
+          (data.width>3&&data.height>1)?
+          <div className="forecast">
+            {
+              (serverConfig&&serverConfig.weather&&serverConfig.weather.tenDays)?
+              serverConfig.weather.tenDays.map((item,index)=>{
+                return(
+                  <div key={index} className={`forecast-weather-body`}>
+                    <div className="day-name">{item.name||""}</div>
+                    <div className="day-date">{item.date||""}</div>
+                    <div className="day_anchor-div">
+                      <div className="icon_color_light">{
+                        icon(item&&item.weather)
+                      }</div>
+                      <div className="day-anchor">{item.weather||""}</div>
+                    </div>
+                    <div className="forecast-temp forecast-temp-day">{(item&&item.day)||""} C*</div>
+                    <div className="forecast-temp forecast-temp-night">{(item&&item.night)||""} C*</div>
                   </div>
-                  <div className="forecast-temp forecast-temp-day">{(item&&item.day)||""} C*</div>
-                  <div className="forecast-temp forecast-temp-night">{(item&&item.night)||""} C*</div>
-                </div>
-              )
-            })
-            :null
-          }
-        </div>
-        :null
-      }
-    </div>
+                )
+              })
+              :null
+            }
+          </div>
+          :null
+        }
+      </div>
+      :<div className="weather-box" style={{fontSize:"30px", flexDirection:"column", display:"flex", alignItems:"center", justifyContent:"center"}}>
+        <p>weather</p>
+        <p>Нет данных</p>
+      </div>
+    }
     </BaseElement>
   )
 }

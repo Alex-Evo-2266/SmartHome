@@ -2,7 +2,7 @@ import React from 'react'
 import {Switch,Route,Redirect} from 'react-router-dom'
 import {HomePage} from './Page/HomePage'
 import {AuthPage} from './Page/AuthPage'
-// import RegisterPage from './Page/RegisterPage'
+import {DitailDevicePage} from './Page/DitailDevicePage'
 import {DevicesPage} from './Page/DevicesPage'
 import {ProfilePage} from './Page/ProfilePage'
 import {OptionsPage} from './Page/OptionsPage'
@@ -58,9 +58,6 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/user/add" exact>
           <AddUser/>
         </Route>
-
-
-
         <Route path="/files">
           <FilesPage/>
         </Route>
@@ -78,6 +75,9 @@ export const useRoutes = (isAuthenticated,level)=>{
         </Route>
         <Route path="/category/add" exact>
           <AddGanrePage type="category"/>
+        </Route>
+        <Route path="/devices/ditail/:id">
+          <DitailDevicePage/>
         </Route>
 
         <Route path="/movie/edit/:id">

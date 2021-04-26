@@ -1,17 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect,useContext} from 'react'
 import {useHistory} from 'react-router-dom'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
+import {AlertContext} from '../components/alert/alertContext'
 
 export default function AddUser(){
   const history = useHistory()
   const {loading, request, error, clearError} = useHttp();
   const {message} = useMessage();
+  const {show} = useContext(AlertContext);
   const [form, setForm] = useState({
     name: '', password: '', email: '', mobile: '', key: ''
   });
 
   useEffect(()=>{
+    console.log("use");
     message(error, 'error');
     clearError();
   },[error, message, clearError])
@@ -23,13 +26,12 @@ export default function AddUser(){
   const registerHandler = async () => {
     try {
       const data = await request('/api/user/add', 'POST', {...form})
-      console.log(data);
       if(data){
         history.push('/')
-        message("user registered","ok")
+        show("user registered","ok")
       }
     } catch (e) {
-
+      console.error(e);
     }
   }
 

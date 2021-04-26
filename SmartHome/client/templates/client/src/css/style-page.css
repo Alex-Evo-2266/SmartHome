@@ -12,6 +12,10 @@
   /* overflow-y: scroll; */
 
 }
+.conteiner.fon{
+  background: var(--body-v1-color);
+  min-height: 100vh;
+}
 *.top{
   padding-top: 30px;
 }

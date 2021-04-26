@@ -38,18 +38,28 @@
   align-items: center;
   height: 30%;
 }
-.weather-body.veryWide.tall .day_anchor-div{
+.weather-body.veryWide .day_anchor-div{
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .weather-body.veryWide.tall .day_anchor-div div{
   margin: 0 5px;
+}
+.weather-body.veryWide.veryTall .day_anchor-div{
+  display: block;
 }
 .forecast{
   height: 70%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   width: 100%;
+}
+.weather-body.veryTall{
+  height: 50%;
+}
+.weather-body.veryTall + .forecast{
+  height: 50%;
 }
 .forecast .day_anchor-div{
   display: block;
@@ -69,6 +79,7 @@
   position: relative;
   margin: 10px 0;
   font-size: 20px;
+  min-width: 60px;
 }
 .day-anchor{
   margin: 5px 0;

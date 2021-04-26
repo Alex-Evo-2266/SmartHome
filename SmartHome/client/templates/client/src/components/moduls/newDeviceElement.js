@@ -76,7 +76,7 @@ export const NewDeviceElement = ({id}) =>{
         </ul>
       </div>
       <div className = "NewCardControl">
-        <button className="cardControlBtn" onClick={()=>{form.show("EditDevices",updateDevice,device.DeviceId)}}>edit</button>
+        <button className="cardControlBtn" onClick={()=>{form.show("EditDevices",updateDevice,device)}}>edit</button>
       </div>
     </div>
   )

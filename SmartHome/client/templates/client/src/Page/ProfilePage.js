@@ -18,6 +18,10 @@ export const ProfilePage = () => {
     Email:"",
     ImageId:""
   });
+  const [password, setPassword] = useState({
+    Old:"",
+    New:""
+  });
 
   useEffect(()=>{
     message(error,"error")
@@ -46,6 +50,9 @@ export const ProfilePage = () => {
   const changeHandler = event => {
     setNewuser({ ...newuser, [event.target.name]: event.target.value })
   }
+  const changePassHandler = event => {
+    setPassword({ ...password, [event.target.name]: event.target.value })
+  }
 
   const outForm = async () =>{
       const data = await request(`/api/user/edit`, 'POST', {newuser},{Authorization: `Bearer ${auth.token}`})
@@ -58,6 +65,10 @@ export const ProfilePage = () => {
         Email:data.Email,
         ImageId:data.ImageId
       });
+  }
+
+  const outPassForm = async () =>{
+    await request(`/api/user/edit/password`, 'POST', {password},{Authorization: `Bearer ${auth.token}`})
   }
 
   return(
@@ -78,6 +89,7 @@ export const ProfilePage = () => {
               <hr/>
               <NavLink to = "/config">Client settings</NavLink>
               <NavLink to = "/profile/edit">Edit profile</NavLink>
+              <NavLink to = "/profile/editPass">Edit password</NavLink>
             </div>
           </div>
           <div className = {`page ${(location.pathname==="/profile/edit")?"active":""}`}>
@@ -100,6 +112,22 @@ export const ProfilePage = () => {
               <input placeholder="Mobile" type = "tel" name = "Mobile" value = {newuser.Mobile} onChange={changeHandler}/>
             </label>
             <button onClick={outForm}>Save</button>
+            </div>
+          </div>
+          <div className = {`page ${(location.pathname==="/profile/editPass")?"active":""}`}>
+            <div className = "pagecontent">
+              <h2>Profile</h2>
+              <p>User Name: {user.UserName}</p>
+              <label className="textLabel">
+                <p>Old password</p>
+                <input placeholder="password" type = "password" name = "Old" value = {password.Old} onChange={changePassHandler}/>
+              </label>
+              <label className="textLabel">
+                <p>New password</p>
+                <input placeholder="password" type = "password" name = "New" value = {password.New} onChange={changePassHandler}/>
+              </label>
+              <hr/>
+              <button onClick={outPassForm}>Save</button>
             </div>
           </div>
           <ul className = "page-nav">

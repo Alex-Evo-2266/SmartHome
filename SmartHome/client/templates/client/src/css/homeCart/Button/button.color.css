@@ -7,10 +7,6 @@ ul.elementConteiner li label .icon-box i{
   color: var(--text-v1-color);
   transition: 0.5s;
 }
-ul.elementConteiner li label.disabled .icon-box i{
-  color: var(--head-v2-color);
-  text-shadow: none;
-}
 ul.elementConteiner li label input[type="checkbox"]:checked ~ .icon-conteiner,
 ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner{
   background: var(--active-v1-color);
@@ -29,4 +25,8 @@ ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner i{
 ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner,
 ul.elementConteiner li label input[type="button"]:active ~ .icon-conteiner i{
   transition: 0.1s;
+}
+ul.elementConteiner li label.disabled .icon-box i{
+  color: var(--head-v2-color);
+  text-shadow: none;
 }

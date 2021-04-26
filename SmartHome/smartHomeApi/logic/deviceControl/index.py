@@ -66,22 +66,6 @@ def start():
     # print(device_info.hardware_version)
     # print(y.get_properties(["ct"]))
 
-import requests,bs4
-
-res = requests.get('https://yandex.ru/pogoda/kazan')
-
-def parser(data):
-    b=bs4.BeautifulSoup(data, "html.parser")
-    card = b.select('.fact__temp-wrap')[0]
-    print(card)
-    print("")
-    temp = card.select('.fact__temp .temp__value')[0]
-    anchor = card.select('.link__condition')[0]
-    print(temp.getText(),anchor.getText())
-
-
-parser(res.text)
-
 
 def on_connect(client, userdata, flags, rc):
     # print("Connected with result code "+str(rc))

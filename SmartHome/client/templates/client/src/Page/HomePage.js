@@ -24,6 +24,21 @@ const {request, error, clearError} = useHttp();
 const conteiner = useRef(null)
 const [scripts, setScripts] = useState({})
 
+function sort(array) {
+  let arr = array.slice()
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].index = i
+  }
+  for (let i = arr.length - 1; i > 0; i--) {
+    for (let j = 0; j < i; j++) {
+      if(arr[j].order>arr[j+1].order){
+        [arr[j],arr[j+1]] = [arr[j+1],arr[j]]
+      }
+    }
+  }
+  return arr
+}
+
 const addCart = async(type="base")=>{
   let newCart = {
     mainId:null,
@@ -108,10 +123,11 @@ function sortCard(data) {
   for (var p = 0; p < column; p++) {
     arr.push([])
   }
-  for (var j = 0; j < data.length; j++) {
-    let item = data[j]
+  let sortdata = sort(data)
+  for (var j = 0; j < sortdata.length; j++) {
+    let item = sortdata[j]
     if(arr[i]){
-      arr[i].push({...item, index:j})
+      arr[i].push(item)
       i++
       if(i>=column)
         i=0

@@ -2,6 +2,7 @@ from django.conf import settings
 from ..models import User, UserConfig,genId,MenuElement
 import json
 import bcrypt
+import random
 import jwt
 
 import smtplib
@@ -10,6 +11,9 @@ import smtplib
 def addUser(data):
     try:
         hashedPass = bcrypt.hashpw(data.get("password"),bcrypt.gensalt())
+        cond = User.objects.get(UserName=data.get("name"))
+        if(cond):
+            return False
         newUser = User.objects.create(UserName=data.get("name"), UserEmail=data.get("email"), UserMobile=data.get("mobile"),UserPassword=hashedPass)
         newUser.save()
         newConf = UserConfig.objects.create(user=newUser)
@@ -60,7 +64,6 @@ def editUser(id,data):
     except:
         return False
 
-
 def userConf(id):
     user = User.objects.get(id=id)
     ret = user.give()
@@ -86,7 +89,49 @@ def menuConfEdit(id, data):
         return True
     except Exception as e:
         return False
-# 
+
+def setLevel(id, level):
+    levelList = ["low","mid","admin"]
+    try:
+        user = User.objects.get(id=id)
+        user.UserLevel = level
+        user.save()
+        message = user.UserName + " account level changed to '" + levelList[int(level)-1] + "'"
+        send_email("Account smart home",user.UserEmail,message)
+        return True
+    except Exception as e:
+        return False
+
+def editPass(id, oldpass, newpass):
+    try:
+        u = User.objects.get(id=id)
+        if bcrypt.checkpw(oldpass,u.UserPassword):
+            hashedPass = bcrypt.hashpw(newpass,bcrypt.gensalt())
+            u.UserPassword = hashedPass
+            u.save()
+            return "ok"
+        return "неверный пароль"
+    except Exception as e:
+        return "error"
+
+def newGenPass(name):
+    try:
+        user = User.objects.get(UserName = name)
+        chars = '+-/*!&$#?=@<>abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+        length = 8
+        password =''
+        for i in range(length):
+            password += random.choice(chars)
+        print(password)
+        message = "new Password for " + name + " = " + password
+        send_email("Account smart home",user.UserEmail,message)
+        hashedPass = bcrypt.hashpw(password,bcrypt.gensalt())
+        user.UserPassword = hashedPass
+        user.save()
+        return "ok"
+    except Exception as e:
+        return "error " + str(e)
+
 # def Setbackground(id,background):
 #     try:
 #         user = User.objects.get(id=id)

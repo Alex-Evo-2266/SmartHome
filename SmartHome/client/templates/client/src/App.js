@@ -32,7 +32,8 @@ function App() {
   const [serverConfig, setServerConfig] = useState({})
 
   const userConfig = useCallback(async()=>{
-    if(!token)return
+    if(!token)
+      return updataBackground()
     const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
     const serverData = await request(`/api/server/data/get`, 'GET', null,{Authorization: `Bearer ${token}`})
     console.log(serverData);

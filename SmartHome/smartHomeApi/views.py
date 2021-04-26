@@ -4,7 +4,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.uploadedfile import TemporaryUploadedFile
 
-from .logic.user import addUser,send_email,deleteUser, login as Authorization, userConfEdit,menuConfEdit,user,editUser
+from .logic.user import addUser,newGenPass,editPass,send_email,deleteUser,setLevel, login as Authorization, userConfEdit,menuConfEdit,user,editUser
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
 from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
@@ -293,3 +293,35 @@ def getServerData(request):
     "message":"ok",
     "weather":Weather()
     }),status=200)
+
+def edituserlevel(request,id):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        datauser = auth(request)
+        if(datauser["userLevel"]==3):
+            if(setLevel(id,data["level"])):
+                return HttpResponse(json.dumps({"message":"ok"}),status=200)
+        else:
+            return HttpResponse(json.dumps({"message":"error, нет прав на это действие"}),status=400)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def userEditPassword(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        data = data["password"]
+        print(data)
+        datauser = auth(request)
+        mes = editPass(datauser["userId"],data["Old"],data["New"])
+        if(mes=="ok"):
+            return HttpResponse(json.dumps({"message":"ok"}),status=200)
+        elif(mes!="error"):
+            return HttpResponse(json.dumps({"message":mes}),status=400)
+    return HttpResponse(json.dumps({"message":"error"}),status=400)
+
+def userNewPass(request):
+    if request.method=="POST" and request.body:
+        data = json.loads(request.body)
+        mes = newGenPass(data["name"])
+        if(mes == "ok"):
+            return HttpResponse(json.dumps({"message":"ok"}),status=200)
+    return HttpResponse(json.dumps({"message":mes}),status=400)

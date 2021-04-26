@@ -29,15 +29,19 @@ export const SocketState = ({children}) =>{
   },[connect])
 
   const importCarts = useCallback(async()=>{
+    if(!auth.isAuthenticated) return
+
     try {
       const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       setInterval2(data2.updateFrequency)
     } catch (e) {
       console.error(e);
     }
-  },[request,auth.token])
+  },[request,auth.token,auth.isAuthenticated])
 
   const listenChanges = useCallback(() => {
+    console.log(auth.isAuthenticated);
+    if(!auth.isAuthenticated) return
 
     socket.current = new WebSocket(
           'ws://'
@@ -73,13 +77,15 @@ export const SocketState = ({children}) =>{
             }, 10000);
         };
     };
-},[])
+},[auth.isAuthenticated])
 
 useEffect(()=>{
   listenChanges()
   importCarts()
   return () => {
-    return socket.current.close()
+    console.log(typeof(socket.current));
+    if(socket.current)
+      return socket.current.close()
   }
 },[importCarts,listenChanges])
 
@@ -89,6 +95,8 @@ useEffect(()=>{
 },[updateDevice,connect])
 
 useEffect(() => {
+  // if(!connect)return
+
   const interval2 = setTimeout(() => {
     updateDevice()
     setCost((prev)=>!prev)
@@ -99,10 +107,10 @@ useEffect(() => {
 },[cost,interval,updateDevice]);
 
 
-  if(!socket.current)
-    return(
-      <h1>error</h1>
-    )
+  // if(!socket.current)
+  //   return(
+  //     <h1>error</h1>
+  //   )
 
   return(
     <DeviceStatusContext.Provider value={{

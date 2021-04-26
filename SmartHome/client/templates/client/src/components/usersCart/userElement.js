@@ -1,12 +1,14 @@
 import React,{useContext,useEffect} from 'react'
 import userDefault from '../../img/userNuN.png'
 import {Link} from 'react-router-dom'
+import {FormContext} from '../Form/formContext'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 
 export const UserElement = ({user,updata})=>{
   const auth = useContext(AuthContext)
+  const form = useContext(FormContext)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
 
@@ -24,6 +26,12 @@ export const UserElement = ({user,updata})=>{
         <br/>Mobile: {user.Mobile}</p>
         <img alt="user icon" src={userDefault} className="userImg"/>
         <h3>{user.UserName} {user.UserSurname}</h3>
+        <div className="control">
+        {
+          (auth.userLevel===3&&auth.userId!==user.UserId)?
+          <button className="editBtn" onClick={()=>{form.show("EditUserLevel",updata,user)}}>Edit</button>:
+          null
+        }
         {
           (auth.userId===user.UserId)?
           <Link className="editBtn" to="/profile/edit">Edit</Link>:
@@ -36,6 +44,7 @@ export const UserElement = ({user,updata})=>{
           }}>delete</button>:
           null
         }
+        </div>
       </div>
     </div>
   )
