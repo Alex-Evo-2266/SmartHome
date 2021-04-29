@@ -3,9 +3,10 @@ from .mqttDevice.classDevices.device import MqttDevice
 from .mqttDevice.classDevices.light import MqttLight
 from .mqttDevice.classDevices.relay import MqttRelay
 from .mqttDevice.classDevices.sensor import MqttSensor
+from .miioDevice.classDevices.yeelight import Yeelight
 from .system.variable import Variable
 from yeelight import Bulb ,PowerMode
-from miio import Device,Yeelight,DeviceError,DeviceException
+from miio import Device,DeviceError,DeviceException
 from smartHomeApi.logic.deviceValue import deviceSetStatus
 
 def is_device(ip, token):
@@ -32,9 +33,37 @@ def model_device(ip, token):
 # def deviceObject(item,configs):
 
 
+# ret = self.config(type="base")
+# if(item["DeviceType"]=="light"):
+#     self.device = Bulb(ret["address"])
+#     # print(self.device)
+#     # print(self.device.get_properties())
+#     conf2 = self.device.get_properties()
+#     self.__control_power = True
+#     self.__control_dimmer = True
+#     self.__control_dimmer_min = 0
+#     self.__control_dimmer_max = 100
+#     conf = self.device.get_model_specs()
+#     if conf["color_temp"]:
+#         self.__control_temp = True
+#         temp = conf["color_temp"]
+#         self.__control_temp_min = temp["min"]
+#         self.__control_temp_max = temp["max"]
+#     else:
+#         self.__control_temp = False
+#     if conf["night_light"]:
+#         self.__control_mode = 2;
+#     else:
+#         self.__control_mode = 1;
+#     if conf2["rgb"]:
+#         self.__control_color = True;
+#     else:
+#         self.__control_color = False;
+# else:
+#     self.device = is_device(ret["address"],ret["token"])
+
+
 class ControlDevices():
-
-
 
     def __init__(self, item,configs):
         self.device = None
@@ -51,34 +80,8 @@ class ControlDevices():
         self.__configs = configs
         try:
             if(item["DeviceTypeConnect"]=="miio"):
-                ret = self.config(type="base")
                 if(item["DeviceType"]=="light"):
-                    self.device = Bulb(ret["address"])
-                    # print(self.device)
-                    # print(self.device.get_properties())
-                    conf2 = self.device.get_properties()
-                    self.__control_power = True
-                    self.__control_dimmer = True
-                    self.__control_dimmer_min = 0
-                    self.__control_dimmer_max = 100
-                    conf = self.device.get_model_specs()
-                    if conf["color_temp"]:
-                        self.__control_temp = True
-                        temp = conf["color_temp"]
-                        self.__control_temp_min = temp["min"]
-                        self.__control_temp_max = temp["max"]
-                    else:
-                        self.__control_temp = False
-                    if conf["night_light"]:
-                        self.__control_mode = 2;
-                    else:
-                        self.__control_mode = 1;
-                    if conf2["rgb"]:
-                        self.__control_color = True;
-                    else:
-                        self.__control_color = False;
-                else:
-                    self.device = is_device(ret["address"],ret["token"])
+                    self.device = Yeelight(**item, DeviceConfig=configs)
             elif(item["DeviceTypeConnect"]=="mqtt"):
                 if(item["DeviceType"]=="light"):
                     self.device = MqttLight(**item, DeviceConfig=configs)
@@ -90,21 +93,6 @@ class ControlDevices():
                     self.device = MqttSensor(**item, DeviceConfig=configs)
                 else:
                     self.device = MqttDevice(**item, DeviceConfig=configs)
-                for item2 in configs:
-                    if(item2["type"]=="power"):
-                        self.__control_power = True
-                    if(item2["type"]=="dimmer"):
-                        self.__control_dimmer = True
-                        self.__control_dimmer_min = item2["low"]
-                        self.__control_dimmer_max = item2["high"]
-                    if(item2["type"]=="temp"):
-                        self.__control_temp = True
-                        self.__control_temp_min = item2["low"]
-                        self.__control_temp_max = item2["high"]
-                    if(item2["type"]=="mode"):
-                        self.__control_mode = int(item2["high"])
-                    if item2["type"]=="color":
-                        self.__control_color = True;
             elif(item["DeviceTypeConnect"]=="system"):
                 if(item["DeviceType"]=="variable"):
                     self.device = Variable(**item)
@@ -115,30 +103,10 @@ class ControlDevices():
         return str(self.device)
 
     def get_device(self):
-        # забрать само устройство
         return self.device
 
     def get_control(self):
-        control = {
-        "status": True
-        }
-        if self.__item["DeviceType"]=="variable":
-            control["status"] = False
-        control["power"] = self.__control_power
-        if self.__control_dimmer :
-            control["dimmer"]={"min": self.__control_dimmer_min, "max": self.__control_dimmer_max}
-        else:
-            control["dimmer"]=False
-        if self.__control_temp :
-            control["temp"]={"min": self.__control_temp_min, "max": self.__control_temp_max}
-        else:
-            control["temp"]=False
-        control["color"] = self.__control_color
-        if type(self.__control_mode)==int and self.__control_mode > 1:
-            control["mode"] = self.__control_mode
-        else:
-            control["mode"] = None
-        return control
+        return self.device.get_control()
 
     def get_list_control(self):
         c = self.get_control()
@@ -150,34 +118,13 @@ class ControlDevices():
 
     def get_value(self, save=True):
         if(type(self.device)==Bulb):
-            val = self.device.get_properties()
-            values={
-            "power":val["power"],
-            "temp":val["ct"],
-            "color":val["rgb"],
-            "mode":val["active_mode"],
-            "background":{
-                "power":val["bg_power"],
-                "dimmer":val["bg_bright"],
-                "temp":val["bg_ct"],
-                "color":val["bg_rgb"],
-                "mode":val["nl_br"],
-                }
-            }
-            if(val["current_brightness"]):
-                values["dimmer"]=val["current_brightness"]
-            else:
-                values["dimmer"]=val["bright"]
-            for item2 in values:
-                deviceSetStatus(self.__item["DeviceId"],item2,values[item2])
-            return values
+            return self.device.get_value()
         elif self.__item["DeviceTypeConnect"]=="mqtt":
             return self.device.get_value()
         elif self.__item["DeviceTypeConnect"]=="system" and self.__item["DeviceType"]=="variable":
             return self.device.get_value()
         else:
             return None
-
 
     def config(self ,**kwargs):
         for item in self.__configs:
@@ -191,25 +138,13 @@ class ControlDevices():
             # self.device.set_value(status)
 
     def set_power(self,status):
-        if(type(self.device)==Bulb):
-            if(status==1):
-                self.device.turn_on()
-            else:
-                self.device.turn_off()
-        elif self.__item["DeviceTypeConnect"]=="mqtt":
-            if(status==1):
-                self.device.on()
-            else:
-                self.device.off()
+        if(status==1):
+            self.device.on()
+        else:
+            self.device.off()
 
     def set_mode(self, status):
-        if(type(self.device)==Bulb):
-            if(status==1):
-                self.device.set_power_mode(PowerMode.MOONLIGHT)
-            if(status==0):
-                self.device.set_power_mode(PowerMode.NORMAL)
-        elif self.__item["DeviceTypeConnect"]=="mqtt":
-            self.device.set_mode(status)
+        self.device.set_mode(status)
 
     def target_mode(self):
         status = int(self.get_value(False)["mode"])

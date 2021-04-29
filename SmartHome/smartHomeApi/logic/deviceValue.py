@@ -29,7 +29,7 @@ def deviceSetStatus(id, type,value):
         values = dev.valuedevice_set.all()
         configs = dev.configdevice_set.all()
         for item in values:
-            if item.type==type and type!="background":
+            if item.type==type:
                 if(type=="power"):
                     for item2 in configs:
                         if(item2.type=="power"):

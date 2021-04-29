@@ -3,7 +3,7 @@ from .runScript import runscript
 
 def addscript(data):
     try:
-        print(data,"\n")
+        # print(data,"\n")
         status = False
         if(len(data["trigger"])>0):
             status = True
@@ -19,19 +19,19 @@ def addscript(data):
 
 
 def addtriggers(data,script):
-    print(data,"\n")
+    # print(data,"\n")
     for item in data:
         if(item["type"]=="device"):
             device = Device.objects.get(id=item["DeviceId"])
             trigger = Triger.objects.create(id=genId(Triger.objects.all()),type=item["type"],action=item["action"],device=device,script=script)
 
 def addifs(data,script):
-    print(data,"\n")
+    # print(data,"\n")
     if(data["type"]=="group"):
         addifGroup(data,script)
 
 def addifGroup(data,perent):
-    print(data,"\n")
+    # print(data,"\n")
     group = IfGroupBlock.objects.create(id=genId(IfGroupBlock.objects.all()),type=data["oper"])
     if(type(perent)==Scripts):
         group.script = perent
@@ -48,7 +48,7 @@ def addifGroup(data,perent):
             addIfBlock(item,group)
 
 def addIfBlock(data,perent):
-    print(data,"\n")
+    # print(data,"\n")
     block = IfBlock.objects.create(id=genId(IfBlock.objects.all()),type=data["type"],oper=data["oper"],action=data["action"],block=perent)
     if(data["type"]=="device"):
         device = Device.objects.get(id=data["idDevice"])
@@ -59,7 +59,7 @@ def addIfBlock(data,perent):
         block.save()
 
 def addValue(data,perent=None)->Value:
-    print(data,"\n")
+    # print(data,"\n")
     value = Value.objects.create(id=genId(Value.objects.all()),type=data["type"])
     if(type(perent)==IfBlock):
         value.ifBlock = perent
@@ -85,7 +85,7 @@ def addValue(data,perent=None)->Value:
     return value
 
 def addthens(data,script):
-    print(data,"\n")
+    # print(data,"\n")
     for item in data:
         if(item["type"]=="device"):
             device = Device.objects.get(id=item["DeviceId"])
@@ -94,7 +94,7 @@ def addthens(data,script):
                 addValue(item["value"],act)
 
 def addelses(data,script):
-    print(data,"\n")
+    # print(data,"\n")
     for item in data:
         if(item["type"]=="device"):
             device = Device.objects.get(id=item["DeviceId"])
@@ -104,7 +104,7 @@ def addelses(data,script):
 
 def scripts():
     allscripts = set_to_list_dict(Scripts.objects.all())
-    print(allscripts)
+    # print(allscripts)
     return allscripts
 
 def script(id):
@@ -120,7 +120,7 @@ def delgroupel(data):
         delvalue(item.value)
 
 def delvalue(data):
-    print(data)
+    # print(data)
     if(not data):
         return
     if(data.type=="math"):

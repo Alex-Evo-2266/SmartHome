@@ -79,3 +79,25 @@ class MqttLight(MqttDevice):
         "color"
         ]
         return self.get_properties(prop)
+
+    def get_control(self):
+        controls = {
+        "status":True,
+        }
+        if(self.powertoken):
+            controls["power"] = True
+        if(self.brightnesstoken):
+            controls["dimmer"]={
+            "min": self.brightnessMin,
+            "max": self.brightnessMax
+            }
+        if(self.temptoken):
+            controls["temp"]={
+            "min": self.tempMin,
+            "max": self.tempMax
+            }
+        if(self.modetoken):
+            controls["mode"]=self.modecount
+        if(self.colortoken):
+            controls["color"] = True
+        return controls

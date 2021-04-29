@@ -42,3 +42,6 @@ class Variable():
 
     def controlDevice(self):
         return None
+
+    def get_control(self):
+        return {}

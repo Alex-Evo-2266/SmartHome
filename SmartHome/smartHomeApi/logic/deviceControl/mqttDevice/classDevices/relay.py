@@ -28,3 +28,11 @@ class MqttRelay(MqttDevice):
         "power"
         ]
         return self.get_properties(prop)
+
+    def get_control(self):
+        controls = {
+        "status":True,
+        }
+        if(self.powertoken):
+            controls["power"]=True
+        return controls

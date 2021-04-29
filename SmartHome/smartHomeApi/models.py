@@ -183,6 +183,12 @@ class Device(models.Model):
             "DeviceTypeConnect":self.DeviceTypeConnect,
             "RoomId":self.room_id
         }
+    def get_value(self):
+        values = self.valuedevice_set.all()
+        valuesList = list()
+        for item in values:
+            valuesList.append(item.receiveDict())
+        return valuesList
 
 class ConfigDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)

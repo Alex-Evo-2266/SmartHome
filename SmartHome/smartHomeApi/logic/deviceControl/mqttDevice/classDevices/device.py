@@ -58,3 +58,10 @@ class MqttDevice():
         if(self.commandtoken):
             arr.append("command")
         return arr
+
+    def get_control(self):
+        controls = {
+        "status":True,
+        "send":True
+        }
+        return controls
