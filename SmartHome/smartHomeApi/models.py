@@ -185,10 +185,10 @@ class Device(models.Model):
         }
     def get_value(self):
         values = self.valuedevice_set.all()
-        valuesList = list()
+        valuesDict = dict()
         for item in values:
-            valuesList.append(item.receiveDict())
-        return valuesList
+            valuesDict[item.type]=item.value
+        return valuesDict
 
 class ConfigDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)

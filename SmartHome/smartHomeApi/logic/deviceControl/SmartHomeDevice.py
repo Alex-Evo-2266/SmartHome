@@ -67,15 +67,6 @@ class ControlDevices():
 
     def __init__(self, item,configs):
         self.device = None
-        self.__control_power = None
-        self.__control_dimmer = None
-        self.__control_dimmer_min = None
-        self.__control_dimmer_max = None
-        self.__control_temp = None
-        self.__control_temp_min = None
-        self.__control_temp_max = None
-        self.__control_mode = None
-        self.__control_color = None
         self.__item = item
         self.__configs = configs
         try:
@@ -96,7 +87,8 @@ class ControlDevices():
             elif(item["DeviceTypeConnect"]=="system"):
                 if(item["DeviceType"]=="variable"):
                     self.device = Variable(**item)
-        except:
+        except Exception as e:
+            print(e)
             self.device = None
 
     def __str__(self):
@@ -117,8 +109,8 @@ class ControlDevices():
         return arr
 
     def get_value(self, save=True):
-        if(type(self.device)==Bulb):
-            return self.device.get_value()
+        if self.__item["DeviceTypeConnect"]=="miio":
+            return self.device.get_value(save)
         elif self.__item["DeviceTypeConnect"]=="mqtt":
             return self.device.get_value()
         elif self.__item["DeviceTypeConnect"]=="system" and self.__item["DeviceType"]=="variable":
@@ -148,15 +140,16 @@ class ControlDevices():
 
     def target_mode(self):
         status = int(self.get_value(False)["mode"])
+        control = self.device.get_control()["mode"]
         status += 1
-        if(status>self.__control_mode-1):
+        if(status>control-1):
             status = 0
         self.set_mode(status)
 
     def set_dimmer(self, status):
         # print(status)
         try:
-            if(type(self.device)==Bulb or self.__item["DeviceTypeConnect"]=="mqtt"):
+            if(type(self.device)==Yeelight or self.__item["DeviceTypeConnect"]=="mqtt"):
                 self.device.set_brightness(int(status))
                 return True
             return False
@@ -165,7 +158,7 @@ class ControlDevices():
 
     def set_temp(self, status):
         try:
-            if(type(self.device)==Bulb or self.__item["DeviceTypeConnect"]=="mqtt"):
+            if(type(self.device)==Yeelight or self.__item["DeviceTypeConnect"]=="mqtt"):
                 self.device.set_color_temp(int(status))
                 return True
             return False

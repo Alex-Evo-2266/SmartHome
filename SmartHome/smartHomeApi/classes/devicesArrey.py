@@ -3,6 +3,9 @@
 class DevicesArrey():
     devices = []
 
+    def __str__(self):
+        return devices
+
     def addDevice(self,id,device):
         for item in DevicesArrey.devices:
             if(item["id"]==id):

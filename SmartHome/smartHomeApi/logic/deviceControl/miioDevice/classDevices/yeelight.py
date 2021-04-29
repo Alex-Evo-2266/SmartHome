@@ -4,6 +4,7 @@ from smartHomeApi.logic.deviceValue import deviceSetStatus
 class Yeelight(Bulb):
 
     def __init__(self, *args, **kwargs):
+        self.__item = kwargs
         for item in kwargs["DeviceConfig"]:
             if item["type"]=="base":
                 self.address = item["address"]
@@ -18,7 +19,7 @@ class Yeelight(Bulb):
         self.__control_dimmer_max = 100
         if config2["color_temp"]:
             self.__control_temp = True
-            temp = conf["color_temp"]
+            temp = config2["color_temp"]
             self.__control_temp_min = temp["min"]
             self.__control_temp_max = temp["max"]
         else:
@@ -56,7 +57,7 @@ class Yeelight(Bulb):
             controls["color"] = self.__control_color
         return controls
 
-    def get_value(self):
+    def get_value(self,save=True):
         val = self.get_properties()
         values={
         "power":val["power"],
@@ -79,8 +80,10 @@ class Yeelight(Bulb):
         elif(values["power"]=="off"):
             values["power"] = 0
 
-        for item2 in values:
-            deviceSetStatus(self.__item["DeviceId"],item2,values[item2])
+        if(save):
+            for item2 in values:
+                deviceSetStatus(self.__item["DeviceId"],item2,values[item2])
+
         return values
 
     def on(self):
@@ -91,6 +94,6 @@ class Yeelight(Bulb):
 
     def set_mode(self,status):
         if(status==1):
-            self.device.set_power_mode(PowerMode.MOONLIGHT)
+            self.set_power_mode(PowerMode.MOONLIGHT)
         if(status==0):
-            self.device.set_power_mode(PowerMode.NORMAL)
+            self.set_power_mode(PowerMode.NORMAL)

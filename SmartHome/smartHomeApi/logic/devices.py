@@ -12,6 +12,8 @@ from .deviceValue import deviceSetStatus
 
 from ..classes.devicesArrey import DevicesArrey
 
+# from ..tasks import get_data_from_device,inspect
+
 import json
 import ast
 
@@ -59,6 +61,29 @@ def device(item):
         element = devicesArrey.get(item.id)
         print(element)
         status = "offline"
+
+        if not element:
+            dev = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
+            # print("dev",dev)
+            if dev.get_device():
+                devicesArrey.addDevice(item.id,dev)
+                element = devicesArrey.get(item.id)
+                item.DeviceControl = str(element["device"].get_control())
+                item.save()
+            else:
+                control = item.DeviceControl
+                if(control==""):
+                    control="{}"
+                return {
+                **item.receiveDict(),
+                "DeviceConfig":confdecod(item.configdevice_set.all()),
+                "DeviceControl":ast.literal_eval(control),
+                "DeviceValue":None,
+                "status":"offline"
+                }
+            # print(element)
+        element["device"].get_value()
+
         if element:
             status = "online"
 
@@ -99,9 +124,9 @@ def device(item):
 
     except Exception as e:
         print("error device",e)
-        # el = devicesArrey.get(item.id)
-        # if(el):
-        #     devicesArrey.delete(item.id)
+        el = devicesArrey.get(item.id)
+        if(el):
+            devicesArrey.delete(item.id)
         return None
 
 

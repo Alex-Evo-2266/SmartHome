@@ -106,6 +106,10 @@ useEffect(() => {
   }
 },[cost,interval,updateDevice]);
 
+useEffect(()=>{
+  console.log(devices);
+},[devices])
+
 
   // if(!socket.current)
   //   return(

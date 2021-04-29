@@ -67,9 +67,13 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
 
   useEffect(()=>{
     if(typeof(onClick)==="function")return
+    const {low,high} = deviceConfig
     if(device&&data&&data.typeAction==="power"&&device.DeviceValue&&device.DeviceValue.power){
-      const {low,high} = deviceConfig
-      if(!/\D/.test(device.DeviceValue.power)&&!/\D/.test(low)&&!/\D/.test(high)){
+      if(device.DeviceValue.power===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="0"))
+        setValue(false)
+      if(device.DeviceValue.power===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="1"))
+        setValue(true)
+      if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue.power)&&!/\D/.test(low)&&!/\D/.test(high))){
         let poz = Number(device.DeviceValue.power)
         let min = Number(low)
         let max = Number(high)
@@ -78,10 +82,6 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
         else
           setValue(false)
       }
-      if(device.DeviceValue.power===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="off"))
-        setValue(false)
-      if(device.DeviceValue.power===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="on"))
-        setValue(true)
     }
     if(device&&data&&data.typeAction==="mode"&&device.DeviceValue&&device.DeviceValue.mode){
       if(!data.action)data.action="0"

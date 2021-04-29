@@ -69,7 +69,7 @@ export const NewDeviceElement = ({id}) =>{
           }
           {
             (device.DeviceControl&&device.DeviceControl.mode)?
-            <Mode updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.mode):0} type="mode" conf={device.DeviceControl.mode}/>:null
+            <Mode updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue.mode):0} type="mode" conf={Number(device.DeviceControl.mode)}/>:null
           }
           </>
         }

@@ -5,6 +5,11 @@ class MqttLight(MqttDevice):
     def __init__(self, *args, **kwargs):
         self.modetoken=None
         self.modecount=None
+        self.powertoken=None
+        self.brightnesstoken=None
+        self.colortoken=None
+        self.temptoken=None
+
         super().__init__(*args, **kwargs)
         for item in self.DeviceConfig:
             if item["type"]=="power":

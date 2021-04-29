@@ -3,16 +3,18 @@ from ..classes.devicesArrey import DevicesArrey
 
 devicesArrey = DevicesArrey()
 
+# def confdecod(data):
+#     arr2 = []
+#     for element in data:
+#         arr2.append(element.receiveDict())
+#     return arr2
+
 def setValue(id, type, value):
     try:
         item = Device.objects.get(id=id)
         deviceDect = devicesArrey.get(id)
         device = deviceDect["device"]
-        def confdecod(data):
-            arr2 = []
-            for element in data:
-                arr2.append(element.receiveDict())
-            return arr2
+
         e = device
         if(type=="modeTarget"):
             e.target_mode()
