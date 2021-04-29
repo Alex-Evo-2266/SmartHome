@@ -36,13 +36,22 @@ def start():
             # print(bulb.set_brightness(100))
             # print(bulb.get_properties())
             # print(bulb)
-
+    def t():
+        def o():
+            try:
+                bulb = Bulb("192.168.0.4")
+                print(bulb)
+                print(bulb.get_properties())
+            except Exception as e:
+                print("f")
+                o()
+        o()
             # print(bulb.get_capabilities()["support"])
             # print(bulb.get_model_specs())
 
             # f()
     # f()
-
+    # t()
     # d = Discovery.discover_mdns()
     # print(str(d))
     # y = Lamp("192.168.0.2","9cd3c27490faec9bf3f32eb2f39aa617")

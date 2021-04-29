@@ -105,11 +105,7 @@ useEffect(()=>{
   importCarts()
 },[importCarts])
 
-useEffect(()=>{
-  sortCard(carts)
-},[carts])
-
-function sortCard(data) {
+const sortCard = useCallback((data)=>{
   let column = 3
   let i = 1
   let width = conteiner.current.clientWidth
@@ -134,7 +130,11 @@ function sortCard(data) {
     }
   }
   setSortedCarts(arr)
-}
+},[])
+
+useEffect(()=>{
+  sortCard(carts)
+},[carts,sortCard])
 
   return(
     <EditModeContext.Provider value={{setMode:setEditMode, mode:editMode,add:addCart}}>

@@ -84,6 +84,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
         setValue(true)
     }
     if(device&&data&&data.typeAction==="mode"&&device.DeviceValue&&device.DeviceValue.mode){
+      if(!data.action)data.action="0"
       if(data.action===device.DeviceValue.mode){
         setValue(true)
       }

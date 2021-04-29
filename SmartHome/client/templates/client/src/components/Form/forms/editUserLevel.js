@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import {AuthContext} from '../../../context/AuthContext.js'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -16,6 +16,13 @@ export const EditUserLevel = ({hide,data})=>{
     await request(`/api/users/${data.UserId}/edit/level`, 'POST', {level},{Authorization: `Bearer ${auth.token}`})
     hide();
   }
+
+  useEffect(()=>{
+    message(error,"error")
+    return ()=>{
+      clearError();
+    }
+  },[error,message, clearError])
 
   return(
     <div className = "form small">
