@@ -9,7 +9,6 @@ export const SocketState = ({children}) =>{
   const timerId = useRef(null);
 
   const listenChanges = useCallback(() => {
-    console.log(auth.isAuthenticated);
     if(!auth.isAuthenticated) return
 
     socket.current = new WebSocket(
@@ -23,9 +22,6 @@ export const SocketState = ({children}) =>{
 
     socket.current.onopen = () => {
       console.log("connect");
-      console.log(JSON.stringify({
-        'message': "all"
-      }));
         clearInterval(timerId.current);
 
         socket.current.onmessage = function(e) {
@@ -50,7 +46,6 @@ export const SocketState = ({children}) =>{
 useEffect(()=>{
   listenChanges()
   return () => {
-    console.log(typeof(socket.current));
     if(socket.current)
       return socket.current.close()
   }

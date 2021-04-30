@@ -10,7 +10,8 @@ export const Color = ({updata,title,type,conf,value}) =>{
   const changeHandler = event =>{
     setValue(event.target.value)
     setTimeout(function () {
-      updata()
+      if(typeof(updata)==='function')
+        updata()
     }, 500);
   }
 

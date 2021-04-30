@@ -34,7 +34,8 @@ export const Mode = ({updata,title,type,conf,value,idDevice}) =>{
       setValue(newvalue+1)
     }
     setTimeout(function () {
-      updata()
+      if(typeof(updata)==='function')
+        updata()
     }, 500);
   }
   if(conf===2){

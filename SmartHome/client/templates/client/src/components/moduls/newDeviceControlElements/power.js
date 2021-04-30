@@ -34,7 +34,8 @@ export const Power = ({updata,title,type,conf,value,idDevice}) =>{
       return 0
     })
     setTimeout(function () {
-      updata()
+      if(typeof(updata)==='function')
+        updata()
     }, 500);
   }
 
