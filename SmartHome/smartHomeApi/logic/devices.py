@@ -12,7 +12,7 @@ from .deviceValue import deviceSetStatus
 
 from ..classes.devicesArrey import DevicesArrey
 
-# from ..tasks import get_data_from_device,inspect
+# from ..tasks import updataDataDevice
 
 import json
 import ast
@@ -59,12 +59,10 @@ def addDevice(data):
 def device(item):
     try:
         element = devicesArrey.get(item.id)
-        print(element)
         status = "offline"
 
         if not element:
             dev = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
-            # print("dev",dev)
             if dev.get_device():
                 devicesArrey.addDevice(item.id,dev)
                 element = devicesArrey.get(item.id)
@@ -81,7 +79,6 @@ def device(item):
                 "DeviceValue":None,
                 "status":"offline"
                 }
-            # print(element)
         element["device"].get_value()
 
         if element:
@@ -135,6 +132,7 @@ def giveDevice(id):
     return device(dev)
 
 def giveDevices():
+    # updataDataDevice.delay()
     Devices = Device.objects.all()
     arr = []
     for item in Devices:

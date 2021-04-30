@@ -24,45 +24,6 @@ def model_device(ip, token):
     type = model.split(".")[0]
     return type
 
-# def config(**kwargs):
-#     for item in kwargs["configs"]:
-#         if(item["type"]==kwargs["type"]):
-#             return item
-#     return None
-
-# def deviceObject(item,configs):
-
-
-# ret = self.config(type="base")
-# if(item["DeviceType"]=="light"):
-#     self.device = Bulb(ret["address"])
-#     # print(self.device)
-#     # print(self.device.get_properties())
-#     conf2 = self.device.get_properties()
-#     self.__control_power = True
-#     self.__control_dimmer = True
-#     self.__control_dimmer_min = 0
-#     self.__control_dimmer_max = 100
-#     conf = self.device.get_model_specs()
-#     if conf["color_temp"]:
-#         self.__control_temp = True
-#         temp = conf["color_temp"]
-#         self.__control_temp_min = temp["min"]
-#         self.__control_temp_max = temp["max"]
-#     else:
-#         self.__control_temp = False
-#     if conf["night_light"]:
-#         self.__control_mode = 2;
-#     else:
-#         self.__control_mode = 1;
-#     if conf2["rgb"]:
-#         self.__control_color = True;
-#     else:
-#         self.__control_color = False;
-# else:
-#     self.device = is_device(ret["address"],ret["token"])
-
-
 class ControlDevices():
 
     def __init__(self, item,configs):

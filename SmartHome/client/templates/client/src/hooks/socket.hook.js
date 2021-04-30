@@ -1,43 +1,12 @@
 import React,{useEffect,useState,useCallback,useContext,useRef} from 'react'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
 import {AuthContext} from '../context/AuthContext.js'
-import {useHttp} from '../hooks/http.hook'
 
 export const SocketState = ({children}) =>{
   const auth = useContext(AuthContext)
-  const [cost, setCost] = useState(true)
   const [devices, setDevices] = useState([]);
   const socket = useRef(null);
   const timerId = useRef(null);
-  const [connect, setConnect] = useState(false)
-  const [interval, setInterval2] = useState(2)
-  const {request} = useHttp();
-
-  const updateDevice = useCallback(()=>{
-    if(connect){
-      try {
-        socket.current.send(JSON.stringify({
-          'message': "all"
-        }))
-      } catch (e) {
-        console.error(e.message);
-      }
-    }
-    else{
-
-    }
-  },[connect])
-
-  const importCarts = useCallback(async()=>{
-    if(!auth.isAuthenticated) return
-
-    try {
-      const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      setInterval2(data2.updateFrequency)
-    } catch (e) {
-      console.error(e);
-    }
-  },[request,auth.token,auth.isAuthenticated])
 
   const listenChanges = useCallback(() => {
     console.log(auth.isAuthenticated);
@@ -52,15 +21,15 @@ export const SocketState = ({children}) =>{
           + '/'
       )
 
-
     socket.current.onopen = () => {
       console.log("connect");
+      console.log(JSON.stringify({
+        'message': "all"
+      }));
         clearInterval(timerId.current);
-        setConnect(true)
 
         socket.current.onmessage = function(e) {
               const data = JSON.parse(e.data);
-              setCost((prev)=>!prev)
               if(data.message instanceof Array)
                 setDevices(data.message)
           };
@@ -71,7 +40,6 @@ export const SocketState = ({children}) =>{
 
         socket.current.onclose = () => {
           console.log("desconnect");
-          setConnect(false)
             timerId.current = setInterval(() => {
                 listenChanges();
             }, 10000);
@@ -81,45 +49,16 @@ export const SocketState = ({children}) =>{
 
 useEffect(()=>{
   listenChanges()
-  importCarts()
   return () => {
     console.log(typeof(socket.current));
     if(socket.current)
       return socket.current.close()
   }
-},[importCarts,listenChanges])
-
-useEffect(()=>{
-  if(connect)
-    updateDevice()
-},[updateDevice,connect])
-
-useEffect(() => {
-  // if(!connect)return
-
-  const interval2 = setTimeout(() => {
-    updateDevice()
-    setCost((prev)=>!prev)
-  }, interval*1000);
-  return () => {
-    return clearTimeout(interval2);
-  }
-},[cost,interval,updateDevice]);
-
-useEffect(()=>{
-  console.log(devices);
-},[devices])
-
-
-  // if(!socket.current)
-  //   return(
-  //     <h1>error</h1>
-  //   )
+},[listenChanges])
 
   return(
     <DeviceStatusContext.Provider value={{
-      devices:devices,
-      updateDevice
+      devices:devices
     }}>
       {children}
     </DeviceStatusContext.Provider>

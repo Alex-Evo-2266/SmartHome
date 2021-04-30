@@ -16,7 +16,6 @@ export const DevicesPage = () => {
       setDevices(allDevices.devices)
       read.current++
     }
-    console.log(allDevices.devices);
   },[allDevices.devices])
 
   const searchout = ()=>{

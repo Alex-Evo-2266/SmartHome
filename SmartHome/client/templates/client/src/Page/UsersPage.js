@@ -37,8 +37,14 @@ export const UsersPage = () => {
       setUsers(allUsers)
       return
     }
-    let array = allUsers.filter(item => item.UserName.toLowerCase().indexOf(search.toLowerCase())!==-1)
+    let array = allUsers.filter(item => (item.UserName.toLowerCase().indexOf(search.toLowerCase())!==-1)||(item.UserSurname.toLowerCase().indexOf(search.toLowerCase())!==-1))
     setUsers(array)
+  }
+
+  const keyd = (e)=>{
+    if(e.keyCode===13){
+      searchout()
+    }
   }
 
   useEffect(()=>{
@@ -61,7 +67,7 @@ export const UsersPage = () => {
             <Link to = "/config/users" className="titleButtonAdd"><i className="fas fa-cog"></i></Link>:
             null
           }
-          <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={()=>{}} value={search}/>
+          <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={keyd} value={search}/>
           <button onClick={searchout} className="searchBtn">Search</button>
         </header>
         <div className = "Users">

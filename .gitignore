@@ -1,6 +1,7 @@
 *.log
 *.pot
 *.pyc
+celerybeat-schedule
 __pycache__/
 local_settings.py
 db.sqlite3

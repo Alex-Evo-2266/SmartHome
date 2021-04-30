@@ -42,6 +42,12 @@ export const ScriptsPage = () => {
     setScripts(array)
   }
 
+  const keyd = (e)=>{
+    if(e.keyCode===13){
+      searchout()
+    }
+  }
+
   useEffect(()=>{
     updataScripts()
   },[updataScripts])
@@ -53,7 +59,7 @@ export const ScriptsPage = () => {
         <header>
           <h1>All Scripts</h1>
           <Link to = "/scripts/add" className="titleButtonAdd"><i onClick={()=>{}} className="fas fa-plus"></i></Link>
-          <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={()=>{}} value={search}/>
+          <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={keyd} value={search}/>
           <button onClick={searchout} className="searchBtn">Search</button>
         </header>
         <div className = "Scripts">

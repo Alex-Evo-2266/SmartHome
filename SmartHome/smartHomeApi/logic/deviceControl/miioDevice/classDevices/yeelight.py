@@ -76,9 +76,9 @@ class Yeelight(Bulb):
             values["dimmer"]=val["bright"]
 
         if(values["power"]=="on"):
-            values["power"] = 1
+            values["power"] = "1"
         elif(values["power"]=="off"):
-            values["power"] = 0
+            values["power"] = "0"
 
         if(save):
             for item2 in values:
