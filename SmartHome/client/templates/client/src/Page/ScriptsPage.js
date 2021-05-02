@@ -1,5 +1,6 @@
 import React,{useState,useEffect,useCallback,useContext} from 'react'
 import {Link} from 'react-router-dom'
+import {Header} from '../components/moduls/header'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
@@ -56,12 +57,9 @@ export const ScriptsPage = () => {
     <>
       <AddScriptBase/>
       <div className = "conteiner top">
-        <header>
-          <h1>All Scripts</h1>
-          <Link to = "/scripts/add" className="titleButtonAdd"><i onClick={()=>{}} className="fas fa-plus"></i></Link>
-          <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={keyd} value={search}/>
-          <button onClick={searchout} className="searchBtn">Search</button>
-        </header>
+      <Header search={searchout} name="Scripts All">
+      <Link to = "/scripts/add" className="btn"><i onClick={()=>{}} className="fas fa-plus"></i></Link>
+      </Header>
         <div className = "Scripts">
           <div className="scriptsList">
             {

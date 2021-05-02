@@ -7,6 +7,8 @@ header{
   top: 0;
   left: 60px;
   display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
   width: calc(100% - 60px);
   z-index: 4;
 }
@@ -14,8 +16,38 @@ header h1{
   padding-top: 15px;
   margin: 0 30px;
 }
-#searchDevices{
-  width: 300px;
+header .btn{
+  background: #444;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header .btn:hover,
+header .btn.active{
+  background: var(--active-v1-color);
+}
+header .controls{
+  display: flex;
+}
+header .search{
+  display: flex;
+  transition: 1s;
+}
+header .search.hide{
+  width: 0px;
+  overflow: hidden;
+}
+header .search.show + .controls{
+  display: none
+}
+
+.search input{
+  max-width: 300px;
   display: block;
   position: relative;
   outline: none;
@@ -49,7 +81,7 @@ header h1{
   header{
     z-index: 10
   }
-  #searchDevices{
+  header h1{
     display: none;
   }
   .searchBtn{

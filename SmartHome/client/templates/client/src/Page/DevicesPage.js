@@ -1,6 +1,6 @@
 import React, {useContext,useEffect,useState,useRef} from 'react'
-import {NavLink} from 'react-router-dom'
-// import {Loader} from '../components/Loader'
+import {NavLink,Link} from 'react-router-dom'
+import {Header} from '../components/moduls/header'
 import {NewDeviceElement} from '../components/moduls/newDeviceElement'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
 
@@ -8,7 +8,6 @@ export const DevicesPage = () => {
   const allDevices = useContext(DeviceStatusContext)
 
   const [devices, setDevices] = useState([]);
-  const [search, setSearch] = useState('');
   const read = useRef(0)
 
   useEffect(()=>{
@@ -18,33 +17,22 @@ export const DevicesPage = () => {
     }
   },[allDevices.devices])
 
-  const searchout = ()=>{
-    if(search===""){
+  const searchout = (data)=>{
+    if(data===""){
       setDevices(allDevices.devices)
       return
     }
-    let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(search)!==-1)
+    let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(data)!==-1)
     setDevices(array)
-  }
-
-  const searchHandler = event => {
-    setSearch(event.target.value)
-  }
-
-  const keyd = (e)=>{
-    if(e.keyCode===13){
-      searchout()
-    }
   }
 
   return(
       <div className = "conteiner top">
-        <header>
-          <h1>All Devices</h1>
-          <NavLink to="/devices/add" className="titleButtonAdd"><i className="fas fa-plus"></i></NavLink>
-          <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={keyd} value={search}/>
-          <button onClick={searchout} className="searchBtn">Search</button>
-        </header>
+        <Header search={searchout} name="Device All">
+        <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
+        <NavLink to="/devices" className="btn">All</NavLink>
+        <NavLink to="/devices/mqtt" className="btn">Mqtt</NavLink>
+        </Header>
         <div className = "Devices">
           {
             (!devices||devices.length === 0)?

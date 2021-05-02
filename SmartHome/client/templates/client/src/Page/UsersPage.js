@@ -1,4 +1,5 @@
 import React,{useState,useEffect,useCallback,useContext} from 'react'
+import {Header} from '../components/moduls/header'
 import {Link} from 'react-router-dom'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
@@ -60,16 +61,13 @@ export const UsersPage = () => {
   return(
     <>
       <div className = "conteiner top">
-        <header>
-          <h1>All Users</h1>
-          {
-            (auth.userLevel===3)?
-            <Link to = "/config/users" className="titleButtonAdd"><i className="fas fa-cog"></i></Link>:
-            null
-          }
-          <input type="search" name="search" id="searchDevices" onChange={searchHandler} onKeyDown={keyd} value={search}/>
-          <button onClick={searchout} className="searchBtn">Search</button>
-        </header>
+      <Header search={searchout} name="All Users">
+      {
+        (auth.userLevel===3)?
+        <Link to = "/config/users" className="btn"><i className="fas fa-cog"></i></Link>:
+        null
+      }
+      </Header>
         <div className = "Users">
           <div className="usersList">
             {
