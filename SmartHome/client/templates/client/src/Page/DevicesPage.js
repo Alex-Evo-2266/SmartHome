@@ -29,9 +29,9 @@ export const DevicesPage = () => {
   return(
       <div className = "conteiner top">
         <Header search={searchout} name="Device All">
+        <NavLink to="/devices" exact={true} className="btn">All</NavLink>
+        <NavLink to="/devices/mqtt" exact={true} className="btn">Mqtt</NavLink>
         <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
-        <NavLink to="/devices" className="btn">All</NavLink>
-        <NavLink to="/devices/mqtt" className="btn">Mqtt</NavLink>
         </Header>
         <div className = "Devices">
           {

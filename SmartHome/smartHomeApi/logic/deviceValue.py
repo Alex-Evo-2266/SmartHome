@@ -10,13 +10,14 @@ def devicestatus(id, type):
     return None
 
 def setValueAtToken(address,value):
-    print(address,value)
+    # print(address,value)
+    print("g")
     configs = ConfigDevice.objects.all()
     for item in configs:
         if item.address==address:
-            print(item.device_id)
-            print(item.type)
-            print(value)
+            # print(item.device_id)
+            # print(item.type)
+            # print(value)
             deviceSetStatus(item.device_id,item.type,value)
 
 

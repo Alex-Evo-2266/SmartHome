@@ -32,12 +32,10 @@ class MqttLight(MqttDevice):
                 self.modetoken = item["address"]
                 self.modecount = item["high"]
 
-    def on(self, mode=0):
+    def on(self, mode=-1):
         if(self.modetoken and self.modecount):
             if(mode>=0 and mode<int(self.modecount)):
-                self.send(self.powertoken,self.powerOn)
                 self.send(self.modetoken,mode)
-                return
         self.send(self.powertoken,self.powerOn)
 
     def off(self):

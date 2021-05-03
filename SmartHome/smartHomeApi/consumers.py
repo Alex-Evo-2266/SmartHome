@@ -58,7 +58,9 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
                 {
                 'type': 'chat_message',
-                'message': await sync_to_async(giveDevices)()
+                'message': {
+                    'device':await sync_to_async(giveDevices)(),
+                }
                 }
             )
 

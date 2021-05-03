@@ -15,6 +15,7 @@ import {AddMoviePage} from './Page/addFilesPages/NewMovie'
 import {AddActorPage} from './Page/addFilesPages/NewActors'
 import {AddGanrePage} from './Page/addFilesPages/NewGanre'
 import {MovieDitail} from './Page/filespage/movieDitail'
+import {MqttPage} from './Page/MqttTopics'
 import AddUser from './Page/AddUser'
 
 export const useRoutes = (isAuthenticated,level)=>{
@@ -78,6 +79,9 @@ export const useRoutes = (isAuthenticated,level)=>{
         </Route>
         <Route path="/devices/ditail/:id">
           <DitailDevicePage/>
+        </Route>
+        <Route path="/devices/mqtt" exact>
+          <MqttPage/>
         </Route>
 
         <Route path="/movie/edit/:id">

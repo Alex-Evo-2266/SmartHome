@@ -8,17 +8,27 @@ export const SocketState = ({children}) =>{
   const socket = useRef(null);
   const timerId = useRef(null);
 
+  const connect = useCallback(()=>{
+    try {
+      socket.current = new WebSocket(
+            'ws://'
+            // + window.location.host
+            + '127.0.0.1:5000'
+            + '/ws/smartHome/'
+            + 'devices'
+            + '/'
+        )
+    } catch (e) {
+      setTimeout(function () {
+        connect()
+      }, 500);
+    }
+  },[])
+
   const listenChanges = useCallback(() => {
     if(!auth.isAuthenticated) return
 
-    socket.current = new WebSocket(
-          'ws://'
-          // + window.location.host
-          + '127.0.0.1:5000'
-          + '/ws/smartHome/'
-          + 'devices'
-          + '/'
-      )
+    connect()
 
     socket.current.onopen = () => {
       console.log("connect");
@@ -26,8 +36,9 @@ export const SocketState = ({children}) =>{
 
         socket.current.onmessage = function(e) {
               const data = JSON.parse(e.data);
-              if(data.message instanceof Array)
-                setDevices(data.message)
+              if(data.message instanceof Object){
+                setDevices(data.message.device)
+              }
           };
 
         socket.current.onerror = () => {
@@ -41,7 +52,7 @@ export const SocketState = ({children}) =>{
             }, 10000);
         };
     };
-},[auth.isAuthenticated])
+},[auth.isAuthenticated,connect])
 
 useEffect(()=>{
   listenChanges()

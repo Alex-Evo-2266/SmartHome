@@ -66,7 +66,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   },[device,data])
 
   useEffect(()=>{
-    if(typeof(onClick)==="function")return
+    if(typeof(onClick)==="function"||disabled||device.status==="offline")return
     const {low,high} = deviceConfig
     if(device&&data&&data.typeAction==="power"&&device.DeviceValue&&device.DeviceValue.power){
       if(device.DeviceValue.power===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="0"))

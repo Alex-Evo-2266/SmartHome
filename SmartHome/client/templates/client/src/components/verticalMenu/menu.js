@@ -31,7 +31,7 @@ export const Menu = ()=>{
             </NavLink>
           </li>
           <li onClick = {()=>(menu.menu.visible)?menu.togle():null}>
-            <NavLink to = "/devices" exact>
+            <NavLink to = "/devices">
               <span className = "icon"><i className="fas fa-plug"></i></span>
               <span className = "title">Devices</span>
             </NavLink>

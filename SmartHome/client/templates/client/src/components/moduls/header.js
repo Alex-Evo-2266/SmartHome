@@ -17,13 +17,18 @@ export const Header = ({search,name,children})=>{
 
   return(
     <header>
-      <div className={`btn ${(searchtVisible)?"active":""}`} onClick={()=>setSearchVisible(prev=>!prev)}>
-        <i className="fas fa-search"></i>
-      </div>
-      <div className={`search ${(searchtVisible)?"show":"hide"}`}>
-        <input type="search" name="search" onChange={searchHandler} onKeyDown={keyd} value={searcht}/>
-        <button onClick={()=>search(searcht)} className="searchBtn">Search</button>
-      </div>
+      {
+        (search)?
+        <>
+        <div className={`btn ${(searchtVisible)?"active":""}`} onClick={()=>setSearchVisible(prev=>!prev)}>
+          <i className="fas fa-search"></i>
+        </div>
+        <div className={`search ${(searchtVisible)?"show":"hide"}`}>
+          <input type="search" name="search" onChange={searchHandler} onKeyDown={keyd} value={searcht}/>
+          <button onClick={()=>search(searcht)} className="searchBtn">Search</button>
+        </div>
+        </>:null
+      }
       <div className="controls">
       {children}
       </div>

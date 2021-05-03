@@ -1,5 +1,5 @@
 from smartHomeApi.logic.deviceValue import devicestatus
-from ..connect import connect
+from ..connect import getMqttClient
 
 class MqttDevice():
 
@@ -38,8 +38,8 @@ class MqttDevice():
         return d
 
     def send(self,topic:str, command: str):
-        client = connect()
-        print(command)
+        client = getMqttClient()
+        print(client,command)
         client.publish(topic, command)
 
     def sendCommand(self, command:str):

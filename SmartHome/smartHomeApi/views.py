@@ -13,6 +13,7 @@ from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
 from .logic.weather import Weather
+from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAll
 
 from .models import User, UserConfig,ServerConfig,ImageBackground,genId,LocalImage
 
@@ -325,3 +326,7 @@ def userNewPass(request):
         if(mes == "ok"):
             return HttpResponse(json.dumps({"message":"ok"}),status=200)
     return HttpResponse(json.dumps({"message":mes}),status=400)
+
+def getMqttDevice(request):
+    dev = getTopicksAll()
+    return HttpResponse(json.dumps({"message":"ok","device":dev}),status=200)

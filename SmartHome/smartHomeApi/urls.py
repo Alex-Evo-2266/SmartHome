@@ -26,6 +26,7 @@ urlpatterns = [
     path('devices/edit',views.deviceEdit),
     path('devices/delete',views.deviceDelete),
     path('devices/value/set',views.deviceSetValue),
+    path('devices/get/mqtt',views.getMqttDevice),
     path('homeCart/get/<int:id>',views.getHomeCart),
     path('homeCart/set',views.setHomeCart),
     path('script/add',views.addScript),
