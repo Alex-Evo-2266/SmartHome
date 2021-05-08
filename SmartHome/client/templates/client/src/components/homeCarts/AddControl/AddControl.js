@@ -27,6 +27,9 @@ export const AddControl = ()=>{
   }
 
   const addButton = (t)=>{
+    if(addControl.type === "AddLineButton"){
+      t.type = 'line-' + t.type
+    }
     if(addControl.OK){
       addControl.OK(t)
     }
@@ -37,7 +40,7 @@ export const AddControl = ()=>{
     return null;
   }
 
-  if(addControl.type === "AddButton"){
+  if(addControl.type === "AddButton"||addControl.type === "AddLineButton"){
     return (
       <BackForm onClick = {close} className="addElementBody">
         <div className="box">

@@ -15,9 +15,19 @@ export const CartEdit = () =>{
       <BaseCartEdit/>
     )
   }
+  if(cartEdit.type==="line"){
+    return(
+      <BaseCartEdit type="line"/>
+    )
+  }
   if(cartEdit.type==="button"){
     return(
       <ButtonEdit/>
+    )
+  }
+  if(cartEdit.type==="button-line"){
+    return(
+      <ButtonEdit type="button-line"/>
     )
   }
   return null;

@@ -1,6 +1,7 @@
 *.log
 *.pot
 *.pyc
+env
 celerybeat-schedule
 __pycache__/
 local_settings.py

@@ -4,12 +4,20 @@ def Weather():
     try:
         city = "kazan"
         res = requests.get('https://yandex.ru/pogoda/' + city)
-
-        b=bs4.BeautifulSoup(res.text, "html.parser")
-        card = b.find('div', class_= 'fact__temp-wrap')
-        fact_temp = card.find('div', class_='fact__temp')
-        anchor = card.find('div',class_='link__condition')
-        Days = b.find('div',class_='forecast-briefly__days').find('ul',class_="swiper-wrapper").find_all('div',class_="forecast-briefly__day")
+        print(res.text)
+        HTML=bs4.BeautifulSoup(res.text, "html.parser")
+        print(HTML)
+        card = HTML.find('div', class_= 'fact__temp-wrap')
+        print("1",card)
+        fact_temp = None
+        anchor = None
+        if(card):
+            fact_temp = card.find('div', class_='fact__temp')
+            print("2")
+            anchor = card.find('div',class_='link__condition')
+        print("r")
+        Days = HTML.find('div',class_='forecast-briefly__days').find('ul',class_="swiper-wrapper").find_all('div',class_="forecast-briefly__day")
+        print("3")
         tenDays = Days[0:5]
         daysWeather = list()
         for day in tenDays:
@@ -31,4 +39,5 @@ def Weather():
             "tenDays":daysWeather
         }
     except Exception as e:
+        print("er Wether",e)
         return None

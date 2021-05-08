@@ -3,9 +3,6 @@
   transform: translateY(0);
   position: relative;
 }
-.conteiner.home.editMode{
-  transform: translateY(100px);
-}
 .conteiner.home.editMode .conteinerHome{
   height: 140vh;
 }
@@ -64,5 +61,14 @@
   }
   .HomeGrid > div{
     margin: 5px;
+  }
+}
+@media (max-width: 440px){
+  .flexHome{
+    display: block;
+  }
+  .flexElement{
+    width: 100%;
+    padding: 4px 0;
   }
 }

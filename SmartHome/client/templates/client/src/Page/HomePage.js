@@ -1,8 +1,7 @@
 import React,{useState,useEffect,useContext,useCallback,useRef} from 'react'
-import {HomeControlCart} from '../components/homeCarts/homeControlCart'
 import {EditToolbar} from '../components/homeCarts/EditToolbar'
 import {HomebaseCart} from '../components/homeCarts/homeBaseCart'
-import {HomelampCart} from '../components/homeCarts/homeLampCart'
+import {HomeLineCart} from '../components/homeCarts/homeLineCart'
 import {EditModeContext} from '../context/EditMode'
 import {CartEditState} from '../components/homeCarts/EditCarts/CartEditState'
 import {AddControlState} from '../components/homeCarts/AddControl/AddControlState'
@@ -12,6 +11,7 @@ import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
 import {ScriptContext} from '../context/ScriptContext.js'
+import {Loader} from '../components/Loader'
 
 export const HomePage = () => {
 
@@ -20,7 +20,7 @@ const [carts, setCarts] = useState([])
 const [sortedCarts, setSortedCarts] = useState([])
 const auth = useContext(AuthContext)
 const {message} = useMessage();
-const {request, error, clearError} = useHttp();
+const {loading,request, error, clearError} = useHttp();
 const conteiner = useRef(null)
 const [scripts, setScripts] = useState({})
 
@@ -107,7 +107,7 @@ useEffect(()=>{
 
 const sortCard = useCallback((data)=>{
   let column = 3
-  let i = 1
+  let i = 0
   let width = conteiner.current.clientWidth
   if(width < 1070)
     column = 2
@@ -136,6 +136,12 @@ useEffect(()=>{
   sortCard(carts)
 },[carts,sortCard])
 
+if(carts===[]){
+  return(
+    <Loader/>
+  )
+}
+
   return(
     <EditModeContext.Provider value={{setMode:setEditMode, mode:editMode,add:addCart}}>
     <ScriptContext.Provider value={{scripts:scripts}}>
@@ -144,19 +150,12 @@ useEffect(()=>{
       <CartEdit/>
       <AddControl/>
       <EditToolbar show={editMode} save={saveCarts}/>
-      <div className = {`conteiner home ${(editMode)?"editMode":""}`}>
+      <div className = {`conteiner top home`}>
         <div ref={conteiner} className = "conteinerHome flexHome">
         {
           sortedCarts.map((item,index)=>{
             return(
               <div key={index} className="home-column">
-              {
-              (index===0)?
-              <div className = "flexElement">
-                <HomeControlCart edit={editMode}/>
-              </div>
-              :null
-              }
               {
                 item.map((item2,index2)=>{
                   return(
@@ -171,8 +170,8 @@ useEffect(()=>{
                       data = {item2}
                       name={item2.name}
                       />:
-                      (item2.type==="lamp")?
-                      <HomelampCart
+                      (item2.type==="line")?
+                      <HomeLineCart
                       edit={editMode}
                       hide={(i)=>removeCart(i)}
                       updata={updataCart}

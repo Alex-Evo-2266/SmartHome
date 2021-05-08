@@ -2,6 +2,7 @@
 @import "./header.night.css"; */
 @import "./header.color.css";
 header{
+  box-shadow: 0 0 10px #000;
   height: 60px;
   position: fixed;
   top: 0;
@@ -21,11 +22,17 @@ header .btn{
   width: 60px;
   height: 60px;
   padding: 0;
+  font-size: 24px;
   border: none;
   border-radius: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+header .btn.spec{
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 header .btn:hover,
 header .btn.active{
@@ -36,9 +43,10 @@ header .controls{
 }
 header .search{
   display: flex;
-  transition: 1s;
+  margin-left: 5px;
 }
 header .search.hide{
+  margin:0;
   width: 0px;
   overflow: hidden;
 }

@@ -5,7 +5,7 @@ import {AddControlContext} from '../../AddControl/AddControlContext'
 import {InputNumber} from '../../../moduls/inputNumber'
 import {BackForm} from '../../../moduls/backForm'
 
-export const BaseCartEdit = () =>{
+export const BaseCartEdit = ({type="base"}) =>{
   const {cartEdit, hide} = useContext(CartEditContext)
   const {show} = useContext(AddControlContext)
   const [cart ,setCart] = useState({
@@ -55,7 +55,11 @@ export const BaseCartEdit = () =>{
           <p>button priority</p>
           <InputNumber Xten={false} Value={cartEdit.cart.order||"0"} result={(v)=>setCart({...cart,order:v})} min={0} max={500}/>
         </div>
-        <button onClick = {()=>show("AddButton",async(btn)=>{
+        <button onClick = {()=>show(
+          (type==="line")?
+          "AddLineButton":
+          "AddButton",
+          async(btn)=>{
                 let mas = cart.children.slice();
                 mas.push(btn)
                 cartEdit.OK(cartEdit.cart.index,{...cart,children:mas})

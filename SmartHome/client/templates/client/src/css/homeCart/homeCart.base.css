@@ -2,7 +2,6 @@
 @import "./Slider/slider.base.css";
 @import "./Sensor/sensor.base.css";
 @import "./Base/BaseCartElement.css";
-@import "./Toolbar/toolbar.base.css";
 @import "./Weather/Weather.css";
 @import "./homeCart.color.css";
 /*@import "./homeCart.night.css"; */
@@ -42,4 +41,13 @@ ul.elementConteiner.top li{
 ul.elementConteiner li.grid-width-2{
   grid-column-start: 1;
   grid-column-end: 3;
+}
+ul.elementConteiner.line{
+  display: block;
+  padding: 0;
+}
+@media (max-width: 440px){
+  ul.elementConteiner{
+    grid-template-columns: repeat(4,auto);
+  }
 }

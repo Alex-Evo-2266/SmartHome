@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^api/files/',include("files.urls")),
     re_path(r'^api/',include("smartHomeApi.urls")),
-    re_path(r'',include("client.urls")),
+    # re_path(r'',include("client.urls")),
 ]
 
 if settings.DEBUG:

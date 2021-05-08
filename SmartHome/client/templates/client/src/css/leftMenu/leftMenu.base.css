@@ -127,12 +127,14 @@
 
 @media (max-width: 700px) {
   .topMenu{
+    box-shadow: 0 0 10px #000;
     display: block;
-    z-index: 3;
+    z-index: 10;
   }
   .navigation nav{
     width: 0;
     margin-top: 60px;
+
   }
   .navigation nav.active{
     width: 100%;

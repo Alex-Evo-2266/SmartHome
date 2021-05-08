@@ -7,7 +7,7 @@ export const useHttp = () => {
     setLoading(true);
     try {
       if(headers['X-CSRFToken']===""||!headers['X-CSRFToken'])
-        headers['X-CSRFToken'] = 'zoP8fbLHPAnLZpAx6CgpKnHnLMJVJQZzhZ7TJfh0hxUjdCUhGTitLkksprYcxZF4'
+        headers['X-CSRFToken'] = 'wse5dr6ft7yg8plivkuytrrestrytfygui'
       if(body&&!file){
         headers['Content-Type'] = 'application/json'
         body = JSON.stringify(body);

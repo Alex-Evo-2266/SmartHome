@@ -37,7 +37,10 @@ def deleteUser(id):
 def login(data):
     try:
         u = User.objects.get(UserName=data.get("name"))
+        print(u.UserPassword,data.get("password"))
         if bcrypt.checkpw(data.get("password"),u.UserPassword):
+            print(u.id)
+            print(u.UserLevel)
             encoded_jwt = jwt.encode({"userId":u.id,"userLevel":u.UserLevel},settings.SECRET_JWT_KEY,algorithm="HS256")
             result = {"token":encoded_jwt, "userId":u.id,"userLavel":u.UserLevel}
             return result

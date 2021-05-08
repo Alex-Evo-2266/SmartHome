@@ -1,18 +1,25 @@
-import React,{useContext} from 'react'
+import React,{useContext,useEffect,useState} from 'react'
 import {ModalWindow} from '../modalWindow/modalWindow'
-import {BtnElement} from './CartElement/BtnElement'
+import {BtnElement} from './CartLineElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
+import {DeviceStatusContext} from '../../context/DeviceStatusContext'
 import {CartEditContext} from './EditCarts/CartEditContext'
-import {SliderElement} from './CartElement/SliderElement'
-import {SensorElement} from './CartElement/SensorElement'
-import {ScriptElement} from './CartElement/ScriptElement'
+import {SliderElement} from './CartLineElement/SliderElement'
+import {SensorElement} from './CartLineElement/SensorElement'
+import {ScriptElement} from './CartLineElement/ScriptElement'
 import {WeatherElement} from './CartElement/WeatherElement'
+import {AuthContext} from '../../context/AuthContext.js'
+import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 
-export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
+export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   const {message} = useMessage();
+  const {devices} = useContext(DeviceStatusContext)
+  const auth = useContext(AuthContext)
+  const {request, error, clearError} = useHttp();
   const {mode} = useContext(EditModeContext)
   const {target} = useContext(CartEditContext)
+  const [act, setAct] = useState(isPowerActiv(data.children))
 
   function sort(array) {
     let arr = array.slice()
@@ -27,6 +34,43 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
       }
     }
     return arr
+  }
+
+  function isPowerAct(array) {
+    for (var item of array)
+      if(item.typeAction==="power")
+        return true
+    return false
+  }
+
+  function isPowerActiv(array) {
+    for (var item of array)
+      if(item.typeAction==="power"){
+        let condidat = devices.filter((item2)=>(item2&&item2.DeviceId===item.deviceId))
+        if(condidat[0]){
+          let congDev = condidat[0].DeviceConfig.filter((item2)=>item2&&item2.type==="power")
+          congDev = congDev[0]||{}
+          if(condidat[0]&&condidat[0].DeviceValue&&(condidat[0].DeviceValue.power===congDev.high||(condidat[0].DeviceTypeConnect!=="mqtt"&&condidat[0].DeviceValue.power==="1"))){
+            return true
+          }
+          if(condidat[0]&&condidat[0].DeviceTypeConnect==="mqtt"&&(!/\D/.test(condidat[0].DeviceValue.power)&&!/\D/.test(congDev.low)&&!/\D/.test(congDev.high))){
+            let poz = Number(condidat[0].DeviceValue.power)
+            let min = Number(congDev.low)
+            let max = Number(congDev.high)
+            if(poz>min&&poz<=max)
+              return true
+          }
+        }
+      }
+    return false
+  }
+
+  function allPower(array,value) {
+    setAct(value)
+    for (var item of array)
+      if(item.typeAction==="power")
+        request('/api/devices/value/set', 'POST', {id: item.deviceId,type:item.typeAction,status:value},{Authorization: `Bearer ${auth.token}`})
+    return false
   }
 
   const deleteElement=(index1)=>{
@@ -48,6 +92,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
     updata(index,{...data,children:mas})
   }
 
+
   return(
     <ModalWindow
      position="relative"
@@ -58,7 +103,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
      }
      userBtn={
        (mode)?
-       ()=>target("base",{...data,index},updata):null
+       ()=>target("line",{...data,index},updata):null
      }
      z={3}
      top={0}
@@ -68,9 +113,76 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
      heightToolbar={30}>
       <ul className="elementConteiner line">
       {
+        (data&&data.children&&isPowerAct(data.children))?
         <li>
-        
+          <div className="line-button">
+            <BtnElement
+            disabled={edit}
+            name="all"
+            firstValue={act}
+            onClick={(event,value)=>{
+              allPower(data.children,value)
+            }}
+            />
+          </div>
         </li>
+        :null
+      }
+      {
+        (data&&data.children)?
+        sort(data.children).map((item,index)=>{
+          return(
+            <li key={index}>
+              {
+                (item.type==="line-button")?
+                  <div className="line-button">
+                    <BtnElement
+                    index={item.index}
+                    disabled={edit}
+                    data={item}
+                    switchMode={item.typeAction==="power"}
+                    deleteBtn={
+                      (edit)?deleteElement:null
+                    }
+                    editBtn={
+                      (edit)?editElement:null
+                    }
+                    />
+                  </div>
+                :(item.type==="line-slider")?
+                  <div className="line-slider">
+                  <SliderElement
+                  index={item.index}
+                  data={item}
+                  disabled={edit}
+                  deleteBtn={
+                    (edit)?deleteElement:null
+                  }
+                  editBtn={
+                    (edit)?editElement:null
+                  }
+                  />
+                  </div>
+                  :(item.type==="line-script")?
+                    <div className="line-script">
+                    <ScriptElement
+                    index={item.index}
+                    data={item}
+                    disabled={edit}
+                    deleteBtn={
+                      (edit)?deleteElement:null
+                    }
+                    editBtn={
+                      (edit)?editElement:null
+                    }
+                    />
+                    </div>
+                :null
+              }
+            </li>
+          )
+        })
+        :null
       }
       </ul>
     </ModalWindow>

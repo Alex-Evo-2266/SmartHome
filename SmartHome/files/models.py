@@ -5,6 +5,7 @@ from datetime import date, timedelta
 
 class MovieCategory(models.Model):
     """категории"""
+    id = models.AutoField("id", primary_key=True)
     name = models.CharField("Категория",max_length=150)
     discription = models.TextField("Описание",default="")
     url = models.URLField(max_length=160)
@@ -27,6 +28,7 @@ class MovieCategory(models.Model):
 
 class MovieActor(models.Model):
     """актеры и режиссеры"""
+    id = models.AutoField("id", primary_key=True)
     name = models.CharField("Имя",max_length=150)
     date_of_birth = models.DateField("дата рождения", default=datetime.date(1999,1,1))
     discription = models.TextField("Описание",default="")
@@ -54,6 +56,7 @@ class MovieActor(models.Model):
 
 class MovieGanre(models.Model):
     """жанры"""
+    id = models.AutoField("id", primary_key=True)
     name = models.CharField("Название",max_length=150)
     discription = models.TextField("Описание",default="")
     url = models.URLField(max_length=160)
@@ -74,6 +77,7 @@ class MovieGanre(models.Model):
         verbose_name_plural = "Жанры"
 
 class BaseMovieClass(models.Model):
+    id = models.AutoField("id", primary_key=True)
     title = models.CharField("Название",max_length=150)
     tagline = models.CharField("Слоган",max_length=150, default="")
     discription = models.TextField("Описание",default="")
@@ -156,6 +160,7 @@ class Serial(BaseMovieClass):
 
 class MovieShots(models.Model):
     """кадры"""
+    id = models.AutoField("id", primary_key=True)
     title = models.CharField("Заголовок",max_length=150)
     discription = models.TextField("Описание",default="")
     image = models.ImageField("Изображение",upload_to="files/movie/shots/")

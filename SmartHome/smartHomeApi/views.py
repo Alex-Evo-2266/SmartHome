@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.files.uploadedfile import TemporaryUploadedFile
 
 from .logic.user import addUser,newGenPass,editPass,send_email,deleteUser,setLevel, login as Authorization, userConfEdit,menuConfEdit,user,editUser
@@ -30,6 +30,7 @@ def register(request):
             return HttpResponse(json.dumps({"message":"ok"}))
     return HttpResponse(json.dumps({"message":"error"}),status=400)
 
+# @csrf_protect
 # @csrf_exempt
 def login(request):
     if request.method=="POST" and request.body:
@@ -37,7 +38,9 @@ def login(request):
         data = json.loads(request.body)
         print(data)
         res = Authorization(data)
+        print(res)
         if("token" in res):
+            print("fg")
             return HttpResponse(json.dumps(res),status=200)
         else:
             return HttpResponse(json.dumps({"type":"error",**res}),status=400)

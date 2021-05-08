@@ -57,6 +57,7 @@ def genId(El)->int:
     return 1
 # Create your models here.
 class User(models.Model):
+    id = models.AutoField("id", primary_key=True)
     UserName = models.CharField("user name", max_length = 200)
     UserSurname = models.CharField("user surname", max_length = 200, default="")
     UserPassword = models.CharField("user password", max_length = 200)
@@ -105,6 +106,7 @@ class ImageBackground(models.Model):
         return {**self.image.model_to_dict(),"type":self.type}
 
 class UserConfig(models.Model):
+    # id = models.AutoField("id", primary_key=True)
     Style = models.CharField("user name", max_length = 200, default="light")
     auteStyle = models.BooleanField("automatic style", default=True)
     staticBackground = models.BooleanField("static background", default=False)
@@ -139,6 +141,7 @@ class MenuElement(models.Model):
 
 
 class ServerConfig(models.Model):
+    id = models.AutoField("id", primary_key=True)
     updateFrequency = models.IntegerField("time update", default=10)
     mqttBroker = models.CharField("mqttBroker ip", max_length = 200, default="")
     loginMqttBroker = models.CharField("mqttBroker login", max_length = 200, default="")
@@ -149,12 +152,14 @@ class ServerConfig(models.Model):
         return self.mqttBrokerPort
 
 class UsersConfig(models.Model):
+    # id = models.AutoField("id")
     registerKey = models.SlugField("regKey", max_length = 200)
 
     def __str__(self):
         return self.registerKey
 
 class Room(models.Model):
+    id = models.AutoField("id", primary_key=True)
     RoomName = models.CharField("root name", max_length = 200)
 
     def __str__(self):

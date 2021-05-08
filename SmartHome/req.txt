@@ -3,7 +3,6 @@ alabaster==0.7.12
 amqp==5.0.6
 android-backup==0.2.0
 appdirs==1.4.4
-apt-clone==0.2.1
 apturl==0.5.2
 asgiref==3.3.1
 asn1crypto==0.24.0
