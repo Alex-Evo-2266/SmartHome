@@ -1,4 +1,5 @@
-from smartHomeApi.logic.config import GiveServerConfig
+# from smartHomeApi.logic.config import GiveServerConfig
+# from smartHomeApi.serializers import ServerConfigSerializer
 import json
 
 from .mqttDevice.connect import connect

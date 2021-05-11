@@ -3,11 +3,13 @@ from django.http import HttpResponse
 from django.conf import settings
 # from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.files.uploadedfile import TemporaryUploadedFile
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .logic.user import addUser,newGenPass,editPass,send_email,deleteUser,setLevel, login as Authorization, userConfEdit,menuConfEdit,user,editUser
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
-from .logic.config import giveuserconf, editUsersConf as usersedit, ServerConfigEdit,GiveServerConfig
+from .logic.config import giveuserconf, editUsersConf as usersedit, GiveServerConfig, ServerConfigEdit
 from .logic.Cart import setPage,getPage
 from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
@@ -21,164 +23,222 @@ from .forms import ImageForm
 
 import json
 
-# Create your views here.
+# Auth views
 
-def register(request):
-    if request.method=="POST" and request.body:
+class LoginView(APIView):
+    """docstring for Login."""
+    def post(self,request):
+        data = json.loads(request.body)
+        res = Authorization(data)
+        if("token" in res):
+            return Response(res,status=200)
+        return Response(status=400)
+
+# user views
+
+class AddUserView(APIView):
+    """docstring for AddUserView."""
+    def post(self,request):
         data = json.loads(request.body)
         if addUser(data):
-            return HttpResponse(json.dumps({"message":"ok"}))
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
+        return Response(status=400)
 
-# @csrf_protect
-# @csrf_exempt
-def login(request):
-    if request.method=="POST" and request.body:
+class GetUserView(APIView):
+    """docstring for GetUser."""
+    def get(self,request):
+        data = auth(request)
+        if "userId" in data:
+            data2 = user(data.get("userId"))
+            return Response(data2)
 
+class EditUserView(APIView):
+    """docstring for EditUserView."""
+    def post(self,request):
+        datauser = auth(request)
         data = json.loads(request.body)
-        print(data)
-        res = Authorization(data)
-        print(res)
-        if("token" in res):
-            print("fg")
-            return HttpResponse(json.dumps(res),status=200)
+        if "userId" in datauser:
+            if(editUser(datauser.get("userId"),data)):
+                retData = user(datauser.get("userId"))
+                return Response(retData,status=201)
+
+class GetUsers(APIView):
+    """docstring for GetUsers."""
+    def get(self,request):
+        users = User.objects.all()
+        usersList = list()
+        for item in users:
+            usersList.append(item.model_to_dict())
+        return Response(usersList)
+
+class DeleteUser(APIView):
+    """docstring for DeleteUser."""
+    def post(self,request):
+        data = json.loads(request.body)
+        if deleteUser(data["UserId"]):
+            return Response("ok",status=200)
+
+class EditUserLevel(APIView):
+    """docstring for EditUserLevel."""
+    def post(self,request,id):
+        data = json.loads(request.body)
+        datauser = auth(request)
+        if(datauser["userLevel"]==3):
+            if(setLevel(id,data["level"])):
+                return Response("ok",status=200)
         else:
-            return HttpResponse(json.dumps({"type":"error",**res}),status=400)
-    return HttpResponse(status=400)
+            return Response({"message":"error, нет прав на это действие"},status=400)
 
-def clientConfig(request):
-    data = auth(request)
-    if "userId" in data:
-        user = User.objects.get(id=data.get("userId"))
-        result={**user.userconfig.give(),"MenuElements":user.geveConfig()}
-        return HttpResponse(json.dumps(result),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+class UserEditPassword(APIView):
+    """docstring for userEditPassword."""
+    def post(self,request):
+        data = json.loads(request.body)
+        data = data["password"]
+        datauser = auth(request)
+        mes = editPass(datauser["userId"],data["Old"],data["New"])
+        if(mes=="ok"):
+            return Response(json.dumps({"message":"ok"}),status=200)
+        elif(mes!="error"):
+            return Response(json.dumps({"message":mes}),status=400)
 
-def serverConfig(request):
-    data = auth(request)
-    if "userId" in data:
-        result=GiveServerConfig()
-        return HttpResponse(json.dumps(result),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+class UserNewPassword(APIView):
+    """docstring for User."""
+    def post(self,request):
+        data = json.loads(request.body)
+        mes = newGenPass(data["name"])
+        if(mes == "ok"):
+            return Response("ok",status=200)
 
-def editUsersConf(request):
-    if request.method=="POST" and request.body:
+# user config views
+
+class ClientConfigView(APIView):
+    """docstring for ClientConfigView."""
+    def get(self,request):
+        data = auth(request)
+        if "userId" in data:
+            user = User.objects.get(id=data.get("userId"))
+            result={**user.userconfig.get(),"MenuElements":user.getConfig()}
+            return Response(result,status=200)
+        return Response(status=400)
+
+class EditUsersConfigView(APIView):
+    """docstring for EditUserConfigView."""
+    def post(self,request):
         data = json.loads(request.body)
         if(usersedit(data)):
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
+        return Response(status=400)
 
-def giveUserConf(request):
-    ret = giveuserconf()
-    if(ret):
-        return HttpResponse(json.dumps(ret),status=200)
-    return HttpResponse(status=400)
+class GetUserConfigView(APIView):
+    """docstring for GetUserConfigView."""
+    def get(self,request):
+        ret = giveuserconf()
+        return Response(ret,status=200)
 
-def clientConfigedit(request):
-    if request.method=="POST" and request.body:
+class EditUserConfigView(APIView):
+    """docstring for EditUserConfigView."""
+    def post(self,request):
+        user = auth(request)
+        data = json.loads(request.body)
+        userConfEdit(user.get("userId"),data)
+        return Response("ok",status=201)
+
+class EditMenuView(APIView):
+    """docstring for EditMenu."""
+    def post(self,request):
+        usertoken = auth(request)
+        if "userId" in usertoken:
+            data = json.loads(request.body)
+            if menuConfEdit(usertoken["userId"],data):
+                return Response("ok",status=201)
+
+# server views
+
+class ServerConfigView(APIView):
+    """docstring for ServerConfigView."""
+    def get(self,request):
+        ret = GiveServerConfig()
+        return Response(ret)
+
+class ServerConfigEditView(APIView):
+    """docstring for ServerConfigEditView."""
+    def post(self,request):
         data = json.loads(request.body)
         if(ServerConfigEdit(data)):
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}), status=400)
+            return Response("ok",status=201)
+        return Response(status=400)
 
-def edituserconf(request):
-    try:
-        if request.method=="POST" and request.body:
-            user = auth(request)
-            data = json.loads(request.body)
-            userConfEdit(user.get("userId"),data)
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-        return HttpResponse(json.dumps({"message":"error"}),status=400)
-    except :
-        return HttpResponse(json.dumps({"message":"error"}),status=400)
+class GetServerData(APIView):
+    """docstring for getServerData."""
+    def get(self,request):
+        return Response({
+        "weather":Weather()
+        })
 
-def giveuser(request):
-    data = auth(request)
-    if "userId" in data:
-        data2 = user(data.get("userId"))
-        if(data2):
-            return HttpResponse(json.dumps(data2),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+# device views
 
-def edituser(request):
-    try:
-        if request.method=="POST" and request.body:
-            datauser = auth(request)
-            data = json.loads(request.body)
-            if "userId" in datauser:
-                if(editUser(datauser.get("userId"),data)):
-                    retData = user(datauser.get("userId"))
-                    return HttpResponse(json.dumps(retData),status=201)
-        return HttpResponse(json.dumps({"message":"error"}),status=400)
-    except:
-        return HttpResponse(json.dumps({"message":"error"}),status=400)
-
-def deviceAdd(request):
-    if request.method=="POST" and request.body:
+class AddDevice(APIView):
+    """docstring for AddDevice."""
+    def post(self,request):
         data = json.loads(request.body)
-        print(data)
         if addDevice(data):
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
 
-# def devicesGive(request):
-#     if request.method=="GET":
-#         ret = giveDevices()
-#         if(ret):
-#             return HttpResponse(json.dumps(ret),status=201)
-#     return HttpResponse(json.dumps({"message":"error"}),status=400)
-
-def deviceGive(request,id):
-    if request.method=="GET":
+class GetDevice(APIView):
+    """docstring for GetDevice."""
+    def get(self,request,id):
         ret = giveDevice(id)
-        if(ret):
-            return HttpResponse(json.dumps(ret),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+        return Response(ret)
 
-def deviceEdit(request):
-    if request.method=="POST" and request.body:
+class EditDevice(APIView):
+    """docstring for EditDevice."""
+    def post(self,request):
         data = json.loads(request.body)
         if editDevice(data):
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
 
-def deviceDelete(request):
-    if request.method=="POST" and request.body:
+class DeleteDevice(APIView):
+    """docstring for DeleteDevice."""
+    def post(self,request):
         data = json.loads(request.body)
-        print(data)
         if deleteDevice(data["DeviceId"]):
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
 
-def deviceSetValue(request):
-    if request.method=="POST" and request.body:
+class SetValueDevice(APIView):
+    """docstring for SetValueDevice."""
+    def post(self,request):
         data = json.loads(request.body)
-        print("data",data)
         if setValue(data["id"],data["type"],data["status"]):
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
 
-def getHomeCart(request,id):
-    if request.method=="GET":
+class GetMqttDevice(APIView):
+    """docstring for getMqttDevice."""
+    def get(self,request):
+        dev = getTopicksAll()
+        return Response(dev,status=200)
+
+# home page views
+class GetHomePageView(APIView):
+    """docstring for GetHomeCart."""
+    def get(self,request,id):
         page = getPage(id)
-        return HttpResponse(json.dumps({"message":"ok","page":page}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+        return Response(page)
 
-def setHomeCart(request):
-    if request.method=="POST" and request.body:
+class SetHomePage(APIView):
+    """docstring for SetHomePage."""
+    def post(self,request):
         data = json.loads(request.body)
-        # print(data)
         if(setPage(data)):
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
 
-def setBackground(request,name):
-    if request.method=="POST":
-        # print(name,request.FILES,request.POST)
+# media views
+
+class SetBackground(APIView):
+    """docstring for setBackground."""
+    def post(self,request,name):
         usertoken = auth(request)
         if "userId" in usertoken:
             form = ImageForm(request.POST, request.FILES)
-            print(request.POST, request.FILES)
             if form.is_valid():
                 id = genId(LocalImage.objects.all())
                 fon = LocalImage.objects.create(id=id)
@@ -190,146 +250,78 @@ def setBackground(request,name):
                 fon.title = name
                 fon.id = id
                 fon.save()
-                # Setbackground(usertoken.get("userId"),fon)
-                return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+                return Response("ok",status=201)
 
-def editmenu(request):
-    usertoken = auth(request)
-    if "userId" in usertoken:
-        data = json.loads(request.body)
-        print("ok",data,usertoken["userId"])
-        if menuConfEdit(usertoken["userId"],data):
-            return HttpResponse(json.dumps({"message":"ok"}),status=201)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+# script view
 
-def giveusers(request):
-    users = User.objects.all()
-    usersList = list()
-    for item in users:
-        usersList.append(item.model_to_dict())
-    return HttpResponse(json.dumps(usersList),status=200)
-
-def addNewUser(request):
-    if request.method=="POST" and request.body:
-        data = json.loads(request.body)
-        if addUser(data):
-            return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
-
-def deleteuser(request):
-    if request.method=="POST" and request.body:
-        data = json.loads(request.body)
-        if deleteUser(data["UserId"]):
-            return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
-
-def addScript(request):
-    if request.method=="POST" and request.body:
+class AddScript(APIView):
+    """docstring for AddScript."""
+    def post(self,request):
         data = json.loads(request.body)
         if(addscript(data)):
-            return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
 
-def getScripts(request):
-    if request.method=="GET":
+class GetScripts(APIView):
+    """docstring for getScript."""
+    def get(self,request):
         allScripts = scripts()
-        return HttpResponse(json.dumps(allScripts),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+        return Response(allScripts)
 
-def deleteScript(request):
-    if request.method=="POST" and request.body:
+class DeleteScript(APIView):
+    """docstring for DeleteScript."""
+    def post(self,request):
         data = json.loads(request.body)
         if(scriptDelete(data["id"])):
-            return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=201)
 
-def getScript(request,id):
-    if request.method=="GET":
+class GetScript(APIView):
+    """docstring for GetScript."""
+    def get(self,request,id):
         Script = script(id)
-        return HttpResponse(json.dumps(Script),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+        return Response(Script)
 
-def editScript(request,id):
-    if request.method=="POST" and request.body:
+class EditScript(APIView):
+    """docstring for editScript."""
+    def post(self,request):
         data = json.loads(request.body)
         if(scriptDelete(id)):
             if(addscript(data)):
-                return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+                return Response("ok",status=200)
 
-def setStatusScript(request):
-    if request.method=="POST" and request.body:
+class SetStatusScript(APIView):
+    """docstring for setStatusScript."""
+    def post(self,request):
         data = json.loads(request.body)
         if scriptsetstatus(data["id"],data["status"]):
-            return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+            return Response("ok",status=200)
 
-def runScript(request,id):
-    runscript(id)
-    return HttpResponse(json.dumps({"message":"ok"}),status=200)
+class RunScript(APIView):
+    """docstring for RunScript."""
+    def get(self,request,id):
+        runscript(id)
+        return Response("ok",status=200)
 
-def getTenUrl(request,type,index):
-    if(type=="fon"):
-        images = getFonUrl(index)
-        print("images",images)
-        return HttpResponse(json.dumps(images),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+# image view
 
-def deleteImg(request,type):
-    if request.method=="POST" and request.body:
+class GetTenUrl(APIView):
+    """docstring for GetTenUrl."""
+    def get(self,request,type,index):
+        if(type=="fon"):
+            images = getFonUrl(index)
+            return Response(images)
+
+class DeleteImage(APIView):
+    """docstring for DeleteImage."""
+    def post(self,request,type):
         data = json.loads(request.body)
         if(type=="fon"):
             if(deleteImage(data["id"])):
-                return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
+                return Response("ok",status=200)
 
-def linkBackground(request):
-    if request.method=="POST" and request.body:
+class linkBackgroundView(APIView):
+    """docstring for linkBackgroundView."""
+    def post(self,request):
         data = json.loads(request.body)
         datauser = auth(request)
         if(linkbackground(data,datauser["userId"])):
-            return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
-
-def getServerData(request):
-    return HttpResponse(json.dumps({
-    "message":"ok",
-    "weather":Weather()
-    }),status=200)
-
-def edituserlevel(request,id):
-    if request.method=="POST" and request.body:
-        data = json.loads(request.body)
-        datauser = auth(request)
-        if(datauser["userLevel"]==3):
-            if(setLevel(id,data["level"])):
-                return HttpResponse(json.dumps({"message":"ok"}),status=200)
-        else:
-            return HttpResponse(json.dumps({"message":"error, нет прав на это действие"}),status=400)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
-
-def userEditPassword(request):
-    if request.method=="POST" and request.body:
-        data = json.loads(request.body)
-        data = data["password"]
-        print(data)
-        datauser = auth(request)
-        mes = editPass(datauser["userId"],data["Old"],data["New"])
-        if(mes=="ok"):
-            return HttpResponse(json.dumps({"message":"ok"}),status=200)
-        elif(mes!="error"):
-            return HttpResponse(json.dumps({"message":mes}),status=400)
-    return HttpResponse(json.dumps({"message":"error"}),status=400)
-
-def userNewPass(request):
-    if request.method=="POST" and request.body:
-        data = json.loads(request.body)
-        mes = newGenPass(data["name"])
-        if(mes == "ok"):
-            return HttpResponse(json.dumps({"message":"ok"}),status=200)
-    return HttpResponse(json.dumps({"message":mes}),status=400)
-
-def getMqttDevice(request):
-    dev = getTopicksAll()
-    return HttpResponse(json.dumps({"message":"ok","device":dev}),status=200)
+            return Response("ok",status=200)

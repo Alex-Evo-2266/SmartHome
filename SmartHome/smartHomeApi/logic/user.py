@@ -11,7 +11,7 @@ import smtplib
 def addUser(data):
     try:
         hashedPass = bcrypt.hashpw(data.get("password"),bcrypt.gensalt())
-        cond = User.objects.get(UserName=data.get("name"))
+        cond = User.objects.filter(UserName=data.get("name"))
         if(cond):
             return False
         newUser = User.objects.create(UserName=data.get("name"), UserEmail=data.get("email"), UserMobile=data.get("mobile"),UserPassword=hashedPass)
@@ -21,7 +21,8 @@ def addUser(data):
         message = "login = " + data.get("name") + "\npassword = " + data.get("password")
         send_email("Account smart home",data.get("email"),message)
         return True
-    except:
+    except Exception as e:
+        print("error add user",e)
         return False
 
 def deleteUser(id):

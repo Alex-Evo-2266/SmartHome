@@ -6,15 +6,14 @@ export const useHttp = () => {
   const request = useCallback(async (url, method="GET", body = null, headers = {},file=false) => {
     setLoading(true);
     try {
-      if(headers['X-CSRFToken']===""||!headers['X-CSRFToken'])
-        headers['X-CSRFToken'] = 'wse5dr6ft7yg8plivkuytrrestrytfygui'
+      // if(headers['X-CSRFToken']===""||!headers['X-CSRFToken'])
+        // headers['X-CSRFToken'] = 'sV3k4hM9FR6sT6uhQjzhD3fgxhgLYG77Rtkwm19Rbd8dsVjrpVEy0LlEAfJjkZtE'
       if(body&&!file){
         headers['Content-Type'] = 'application/json'
         body = JSON.stringify(body);
       }
       const response = await fetch(url, {method, body, headers});
       const data = await response.json()
-
       if (!response.ok) {
         throw new Error(data.message||'что-то пошло не так')
       }

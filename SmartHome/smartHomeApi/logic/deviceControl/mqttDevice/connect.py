@@ -1,4 +1,5 @@
 from smartHomeApi.logic.config import GiveServerConfig
+
 import paho.mqtt.client as mqtt
 
 mqttClient = [None]
