@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.conf import settings
 # from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.files.uploadedfile import TemporaryUploadedFile
@@ -39,26 +38,36 @@ class LoginView(APIView):
 class UserView(APIView):
     """docstring for AddUserView."""
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if addUser(data):
             return Response("ok",status=201)
         return Response(status=400)
 
     def get(self,request):
-        data = auth(request)
-        if "userId" in data:
-            data2 = user(data.get("userId"))
-            return Response(data2)
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        if "userId" in authData:
+            data = user(authData.get("userId"))
+            return Response(data)
 
     def put(self,request):
-        datauser = auth(request)
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
-        if "userId" in datauser:
-            if(editUser(datauser.get("userId"),data)):
-                retData = user(datauser.get("userId"))
+        if "userId" in authData:
+            if(editUser(authData.get("userId"),data)):
+                retData = user(authData.get("userId"))
                 return Response(retData,status=201)
 
     def delete(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if deleteUser(data["UserId"]):
             return Response("ok",status=200)
@@ -66,6 +75,9 @@ class UserView(APIView):
 class UsersView(APIView):
     """docstring for GetUsers."""
     def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         users = User.objects.all()
         usersList = list()
         for item in users:
@@ -75,9 +87,11 @@ class UsersView(APIView):
 class UserLevel(APIView):
     """docstring for EditUserLevel."""
     def put(self,request,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
-        datauser = auth(request)
-        if(datauser["userLevel"]==3):
+        if(authData["userLevel"]==3):
             if(setLevel(id,data["level"])):
                 return Response("ok",status=200)
         else:
@@ -86,10 +100,12 @@ class UserLevel(APIView):
 class UserEditPassword(APIView):
     """docstring for userEditPassword."""
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         data = data["password"]
-        datauser = auth(request)
-        mes = editPass(datauser["userId"],data["Old"],data["New"])
+        mes = editPass(authData["userId"],data["Old"],data["New"])
         if(mes=="ok"):
             return Response(json.dumps({"message":"ok"}),status=200)
         elif(mes!="error"):
@@ -98,6 +114,9 @@ class UserEditPassword(APIView):
 class UserNewPassword(APIView):
     """docstring for User."""
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         mes = newGenPass(data["name"])
         if(mes == "ok"):
@@ -108,26 +127,36 @@ class UserNewPassword(APIView):
 class UserConfigView(APIView):
     """docstring for ClientConfigView."""
     def get(self,request):
-        data = auth(request)
-        if "userId" in data:
-            user = User.objects.get(id=data.get("userId"))
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        if "userId" in authData:
+            user = User.objects.get(id=authData.get("userId"))
             result={**user.userconfig.get(),"MenuElements":user.getConfig()}
             return Response(result,status=200)
         return Response(status=400)
 
     def put(self,request):
-        user = auth(request)
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
-        userConfEdit(user.get("userId"),data)
+        userConfEdit(authData.get("userId"),data)
         return Response("ok",status=201)
 
 class UsersConfigView(APIView):
     """docstring for GetUserConfigView."""
     def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         ret = giveuserconf()
         return Response(ret,status=200)
 
     def put(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if(usersedit(data)):
             return Response("ok",status=201)
@@ -136,10 +165,12 @@ class UsersConfigView(APIView):
 class MenuView(APIView):
     """docstring for MenuView."""
     def put(self,request):
-        usertoken = auth(request)
-        if "userId" in usertoken:
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        if "userId" in authData:
             data = json.loads(request.body)
-            if menuConfEdit(usertoken["userId"],data):
+            if menuConfEdit(authData["userId"],data):
                 return Response("ok",status=201)
 
 # server views
@@ -147,10 +178,16 @@ class MenuView(APIView):
 class ServerConfigView(APIView):
     """docstring for ServerConfigView."""
     def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         ret = GiveServerConfig()
         return Response(ret)
 
     def put(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if(ServerConfigEdit(data)):
             return Response("ok",status=201)
@@ -159,6 +196,9 @@ class ServerConfigView(APIView):
 class ServerData(APIView):
     """docstring for getServerData."""
     def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         return Response({
         "weather":Weather()
         })
@@ -169,21 +209,33 @@ class DeviceGetDeleteView(APIView):
     """docstring for DeviceView."""
 
     def get(self,request,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         ret = giveDevice(id)
         return Response(ret)
 
     def delete(self,request,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         if deleteDevice(id):
             return Response("ok",status=201)
 
 class DevicePutPostView(APIView):
     """docstring for DeviceView."""
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if addDevice(data):
             return Response("ok",status=201)
 
     def put(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if editDevice(data):
             return Response("ok",status=201)
@@ -191,6 +243,9 @@ class DevicePutPostView(APIView):
 class SetValueDevice(APIView):
     """docstring for SetValueDevice."""
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if setValue(data["id"],data["type"],data["status"]):
             return Response("ok",status=201)
@@ -198,6 +253,9 @@ class SetValueDevice(APIView):
 class MqttDevice(APIView):
     """docstring for getMqttDevice."""
     def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         dev = getTopicksAll()
         return Response(dev,status=200)
 
@@ -205,12 +263,18 @@ class MqttDevice(APIView):
 class GetHomePageView(APIView):
     """docstring for GetHomeCart."""
     def get(self,request,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         page = getPage(id)
         return Response(page)
 
 class SetHomePage(APIView):
     """docstring for SetHomePage."""
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if(setPage(data)):
             return Response("ok",status=201)
@@ -220,21 +284,22 @@ class SetHomePage(APIView):
 class SetBackground(APIView):
     """docstring for setBackground."""
     def post(self,request,name):
-        usertoken = auth(request)
-        if "userId" in usertoken:
-            form = ImageForm(request.POST, request.FILES)
-            if form.is_valid():
-                id = genId(LocalImage.objects.all())
-                fon = LocalImage.objects.create(id=id)
-                if(type(request.FILES['image'])==TemporaryUploadedFile):
-                    fon.image=request.FILES['image'].temporary_file_path()
-                else:
-                    fon.image=request.FILES['image']
-                fon = form.save(commit=False)
-                fon.title = name
-                fon.id = id
-                fon.save()
-                return Response("ok",status=201)
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            id = genId(LocalImage.objects.all())
+            fon = LocalImage.objects.create(id=id)
+            if(type(request.FILES['image'])==TemporaryUploadedFile):
+                fon.image=request.FILES['image'].temporary_file_path()
+            else:
+                fon.image=request.FILES['image']
+            fon = form.save(commit=False)
+            fon.title = name
+            fon.id = id
+            fon.save()
+            return Response("ok",status=201)
 
 # script view
 
@@ -242,6 +307,9 @@ class ScriptPostView(APIView):
     """docstring for ScriptView."""
 
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if(addscript(data)):
             return Response("ok",status=201)
@@ -250,28 +318,43 @@ class ScriptGetDeletePutView(APIView):
     """docstring for ScriptView."""
 
     def put(self,request,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if(scriptDelete(id)):
             if(addscript(data)):
                 return Response("ok",status=200)
 
     def get(self,request,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         Script = script(id)
         return Response(Script)
 
     def delete(self,request,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         if(scriptDelete(id)):
             return Response("ok",status=201)
 
 class GetScripts(APIView):
     """docstring for getScript."""
     def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         allScripts = scripts()
         return Response(allScripts)
 
 class SetStatusScript(APIView):
     """docstring for setStatusScript."""
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         if scriptsetstatus(data["id"],data["status"]):
             return Response("ok",status=200)
@@ -279,6 +362,9 @@ class SetStatusScript(APIView):
 class RunScript(APIView):
     """docstring for RunScript."""
     def get(self,request,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         runscript(id)
         return Response("ok",status=200)
 
@@ -287,6 +373,9 @@ class RunScript(APIView):
 class GetTenUrl(APIView):
     """docstring for GetTenUrl."""
     def get(self,request,type,index):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         if(type=="fon"):
             images = getFonUrl(index)
             return Response(images)
@@ -294,6 +383,9 @@ class GetTenUrl(APIView):
 class ImageView(APIView):
     """docstring for DeleteImage."""
     def delete(self,request,type,id):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         if(type=="fon"):
             if(deleteImage(id)):
                 return Response("ok",status=200)
@@ -301,6 +393,9 @@ class ImageView(APIView):
 class linkBackgroundView(APIView):
     """docstring for linkBackgroundView."""
     def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
         data = json.loads(request.body)
         datauser = auth(request)
         if(linkbackground(data,datauser["userId"])):

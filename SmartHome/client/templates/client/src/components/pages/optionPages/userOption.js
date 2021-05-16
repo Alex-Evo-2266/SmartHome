@@ -35,7 +35,7 @@ export const UserOption = () =>{
 
   const userConfigHandler = async()=>{
     await request(`/api/user/config`, 'PUT', userconf,{Authorization: `Bearer ${auth.token}`})
-    window.location.reload();
+    // window.location.reload();
   }
 
   const styleHandler = async(event)=>{
