@@ -19,7 +19,8 @@ export const MenuOption = () =>{
   const [paragraphs] = useState([
     {title:"Scripts",iconClass:"fas fa-code-branch",url:"/scripts"},
     {title:"Nas",iconClass:"fas fa-hdd",url:"/nas"},
-    {title:"Files",iconClass:"fas fa-file",url:"/files/gallery"},
+    // {title:"Files",iconClass:"fas fa-file",url:"/files/gallery"},
+    {title:"Gallery",iconClass:"fas fa-gallery",url:"/gallery"},
     {title:"Terminal",iconClass:"fas fa-terminal",url:"/terminal"},
     {title:"Сhart",iconClass:"fas fa-chart-area",url:"/chart"},
     {title:"Rooms",iconClass:"fab fa-buromobelexperte",url:"/rooms"},
@@ -33,7 +34,7 @@ export const MenuOption = () =>{
   },[error,message, clearError])
 
   const configHandler = async(event)=>{
-    await request(`/api/user/menu/edit`, 'POST', useBlock,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/user/menu`, 'PUT', useBlock,{Authorization: `Bearer ${auth.token}`})
     window.location.reload();
   }
 

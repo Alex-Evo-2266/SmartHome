@@ -27,7 +27,7 @@ export const UsersOption = () =>{
   }
 
   const configHandler = async(event)=>{
-    await request(`/api/server/usersConfig/edit`, 'POST', config,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/server/usersConfig`, 'PUT', config,{Authorization: `Bearer ${auth.token}`})
     window.location.reload();
   }
 

@@ -9,7 +9,7 @@ import {OptionsPage} from './Page/OptionsPage'
 import {ScriptsPage} from './Page/ScriptsPage'
 import {NewScriptsPage} from './Page/NewScriptsPage'
 import {UsersPage} from './Page/UsersPage'
-import {FilesPage} from './Page/FilesPage'
+import {GalleryPage} from './Page/GalleryPage'
 import {AddDevicesPage} from './Page/AddDevicePage'
 import {AddMoviePage} from './Page/addFilesPages/NewMovie'
 import {AddActorPage} from './Page/addFilesPages/NewActors'
@@ -59,8 +59,8 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/user/add" exact>
           <AddUser/>
         </Route>
-        <Route path="/files">
-          <FilesPage/>
+        <Route path="/gallery">
+          <GalleryPage/>
         </Route>
         <Route path="/movie/add" exact>
           <AddMoviePage/>

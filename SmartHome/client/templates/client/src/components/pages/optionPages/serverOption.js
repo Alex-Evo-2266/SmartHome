@@ -35,7 +35,7 @@ export const ServerOption = () =>{
   }
 
   const serverConfigHandler = async(event)=>{
-    request(`/api/server/config/edit`, 'POST', serverconf,{Authorization: `Bearer ${auth.token}`})
+    request(`/api/server/config`, 'PUT', serverconf,{Authorization: `Bearer ${auth.token}`})
     window.location.reload();
   }
 

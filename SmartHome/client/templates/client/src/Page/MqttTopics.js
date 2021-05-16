@@ -12,7 +12,7 @@ export const MqttPage = ()=>{
 
   const getDev = useCallback(async () => {
     try {
-      const data = await request('/api/devices/get/mqtt', 'GET')
+      const data = await request('/api/devices/mqtt', 'GET')
       if(data){
         setDeviceMqtt(data.device)
         console.log(data);

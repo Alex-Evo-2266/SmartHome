@@ -36,7 +36,7 @@ class LoginView(APIView):
 
 # user views
 
-class AddUserView(APIView):
+class UserView(APIView):
     """docstring for AddUserView."""
     def post(self,request):
         data = json.loads(request.body)
@@ -44,17 +44,13 @@ class AddUserView(APIView):
             return Response("ok",status=201)
         return Response(status=400)
 
-class GetUserView(APIView):
-    """docstring for GetUser."""
     def get(self,request):
         data = auth(request)
         if "userId" in data:
             data2 = user(data.get("userId"))
             return Response(data2)
 
-class EditUserView(APIView):
-    """docstring for EditUserView."""
-    def post(self,request):
+    def put(self,request):
         datauser = auth(request)
         data = json.loads(request.body)
         if "userId" in datauser:
@@ -62,7 +58,12 @@ class EditUserView(APIView):
                 retData = user(datauser.get("userId"))
                 return Response(retData,status=201)
 
-class GetUsers(APIView):
+    def delete(self,request):
+        data = json.loads(request.body)
+        if deleteUser(data["UserId"]):
+            return Response("ok",status=200)
+
+class UsersView(APIView):
     """docstring for GetUsers."""
     def get(self,request):
         users = User.objects.all()
@@ -71,16 +72,9 @@ class GetUsers(APIView):
             usersList.append(item.model_to_dict())
         return Response(usersList)
 
-class DeleteUser(APIView):
-    """docstring for DeleteUser."""
-    def post(self,request):
-        data = json.loads(request.body)
-        if deleteUser(data["UserId"]):
-            return Response("ok",status=200)
-
-class EditUserLevel(APIView):
+class UserLevel(APIView):
     """docstring for EditUserLevel."""
-    def post(self,request,id):
+    def put(self,request,id):
         data = json.loads(request.body)
         datauser = auth(request)
         if(datauser["userLevel"]==3):
@@ -111,7 +105,7 @@ class UserNewPassword(APIView):
 
 # user config views
 
-class ClientConfigView(APIView):
+class UserConfigView(APIView):
     """docstring for ClientConfigView."""
     def get(self,request):
         data = auth(request)
@@ -121,31 +115,27 @@ class ClientConfigView(APIView):
             return Response(result,status=200)
         return Response(status=400)
 
-class EditUsersConfigView(APIView):
-    """docstring for EditUserConfigView."""
-    def post(self,request):
-        data = json.loads(request.body)
-        if(usersedit(data)):
-            return Response("ok",status=201)
-        return Response(status=400)
-
-class GetUserConfigView(APIView):
-    """docstring for GetUserConfigView."""
-    def get(self,request):
-        ret = giveuserconf()
-        return Response(ret,status=200)
-
-class EditUserConfigView(APIView):
-    """docstring for EditUserConfigView."""
-    def post(self,request):
+    def put(self,request):
         user = auth(request)
         data = json.loads(request.body)
         userConfEdit(user.get("userId"),data)
         return Response("ok",status=201)
 
-class EditMenuView(APIView):
-    """docstring for EditMenu."""
-    def post(self,request):
+class UsersConfigView(APIView):
+    """docstring for GetUserConfigView."""
+    def get(self,request):
+        ret = giveuserconf()
+        return Response(ret,status=200)
+
+    def put(self,request):
+        data = json.loads(request.body)
+        if(usersedit(data)):
+            return Response("ok",status=201)
+        return Response(status=400)
+
+class MenuView(APIView):
+    """docstring for MenuView."""
+    def put(self,request):
         usertoken = auth(request)
         if "userId" in usertoken:
             data = json.loads(request.body)
@@ -160,15 +150,13 @@ class ServerConfigView(APIView):
         ret = GiveServerConfig()
         return Response(ret)
 
-class ServerConfigEditView(APIView):
-    """docstring for ServerConfigEditView."""
-    def post(self,request):
+    def put(self,request):
         data = json.loads(request.body)
         if(ServerConfigEdit(data)):
             return Response("ok",status=201)
         return Response(status=400)
 
-class GetServerData(APIView):
+class ServerData(APIView):
     """docstring for getServerData."""
     def get(self,request):
         return Response({
@@ -177,31 +165,27 @@ class GetServerData(APIView):
 
 # device views
 
-class AddDevice(APIView):
-    """docstring for AddDevice."""
+class DeviceGetDeleteView(APIView):
+    """docstring for DeviceView."""
+
+    def get(self,request,id):
+        ret = giveDevice(id)
+        return Response(ret)
+
+    def delete(self,request,id):
+        if deleteDevice(id):
+            return Response("ok",status=201)
+
+class DevicePutPostView(APIView):
+    """docstring for DeviceView."""
     def post(self,request):
         data = json.loads(request.body)
         if addDevice(data):
             return Response("ok",status=201)
 
-class GetDevice(APIView):
-    """docstring for GetDevice."""
-    def get(self,request,id):
-        ret = giveDevice(id)
-        return Response(ret)
-
-class EditDevice(APIView):
-    """docstring for EditDevice."""
-    def post(self,request):
+    def put(self,request):
         data = json.loads(request.body)
         if editDevice(data):
-            return Response("ok",status=201)
-
-class DeleteDevice(APIView):
-    """docstring for DeleteDevice."""
-    def post(self,request):
-        data = json.loads(request.body)
-        if deleteDevice(data["DeviceId"]):
             return Response("ok",status=201)
 
 class SetValueDevice(APIView):
@@ -211,7 +195,7 @@ class SetValueDevice(APIView):
         if setValue(data["id"],data["type"],data["status"]):
             return Response("ok",status=201)
 
-class GetMqttDevice(APIView):
+class MqttDevice(APIView):
     """docstring for getMqttDevice."""
     def get(self,request):
         dev = getTopicksAll()
@@ -254,11 +238,29 @@ class SetBackground(APIView):
 
 # script view
 
-class AddScript(APIView):
-    """docstring for AddScript."""
+class ScriptPostView(APIView):
+    """docstring for ScriptView."""
+
     def post(self,request):
         data = json.loads(request.body)
         if(addscript(data)):
+            return Response("ok",status=201)
+
+class ScriptGetDeletePutView(APIView):
+    """docstring for ScriptView."""
+
+    def put(self,request,id):
+        data = json.loads(request.body)
+        if(scriptDelete(id)):
+            if(addscript(data)):
+                return Response("ok",status=200)
+
+    def get(self,request,id):
+        Script = script(id)
+        return Response(Script)
+
+    def delete(self,request,id):
+        if(scriptDelete(id)):
             return Response("ok",status=201)
 
 class GetScripts(APIView):
@@ -266,27 +268,6 @@ class GetScripts(APIView):
     def get(self,request):
         allScripts = scripts()
         return Response(allScripts)
-
-class DeleteScript(APIView):
-    """docstring for DeleteScript."""
-    def post(self,request):
-        data = json.loads(request.body)
-        if(scriptDelete(data["id"])):
-            return Response("ok",status=201)
-
-class GetScript(APIView):
-    """docstring for GetScript."""
-    def get(self,request,id):
-        Script = script(id)
-        return Response(Script)
-
-class EditScript(APIView):
-    """docstring for editScript."""
-    def post(self,request):
-        data = json.loads(request.body)
-        if(scriptDelete(id)):
-            if(addscript(data)):
-                return Response("ok",status=200)
 
 class SetStatusScript(APIView):
     """docstring for setStatusScript."""
@@ -310,12 +291,11 @@ class GetTenUrl(APIView):
             images = getFonUrl(index)
             return Response(images)
 
-class DeleteImage(APIView):
+class ImageView(APIView):
     """docstring for DeleteImage."""
-    def post(self,request,type):
-        data = json.loads(request.body)
+    def delete(self,request,type,id):
         if(type=="fon"):
-            if(deleteImage(data["id"])):
+            if(deleteImage(id)):
                 return Response("ok",status=200)
 
 class linkBackgroundView(APIView):

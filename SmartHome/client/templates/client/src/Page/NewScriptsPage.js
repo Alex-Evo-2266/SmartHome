@@ -91,9 +91,9 @@ export const NewScriptsPage = ({edit}) => {
       }
       let data
       if(edit)
-        data = await request(`/api/script/edit/${id}`, 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
+        data = await request(`/api/script/${id}`, 'PUT', {...script},{Authorization: `Bearer ${auth.token}`})
       else
-        data = await request('/api/script/add', 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
+        data = await request('/api/script', 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
       if(data){
         history.push('/scripts')
       }
@@ -171,7 +171,7 @@ export const NewScriptsPage = ({edit}) => {
   }
 
   const giveScript = useCallback(async(idscript)=>{
-    const data = await request(`/api/script/get/${idscript}`, 'Get', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/script/${idscript}`, 'Get', null,{Authorization: `Bearer ${auth.token}`})
     if(data){
       console.log(data);
       let s = script

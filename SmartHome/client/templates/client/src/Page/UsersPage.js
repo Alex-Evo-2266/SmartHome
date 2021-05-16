@@ -27,7 +27,7 @@ export const UsersPage = () => {
   }
 
   const updataUsers = useCallback(async()=>{
-    const data = await request('/api/users/get', 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request('/api/users', 'GET', null,{Authorization: `Bearer ${auth.token}`})
     setUsers(data);
     console.log(data);
     setAllUsers(data)

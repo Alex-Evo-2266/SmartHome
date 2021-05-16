@@ -34,7 +34,7 @@ export const UserOption = () =>{
   },[updataConf])
 
   const userConfigHandler = async()=>{
-    await request(`/api/user/config/edit`, 'POST', userconf,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/user/config`, 'PUT', userconf,{Authorization: `Bearer ${auth.token}`})
     window.location.reload();
   }
 
