@@ -1,4 +1,4 @@
-*.log
+
 *.pot
 *.pyc
 env
@@ -6,6 +6,10 @@ celerybeat-schedule
 __pycache__/
 local_settings.py
 db.sqlite3
-media/
-
+media
 черновик
+MediaList
+command.sh
+TRASH
+mosquitto/data/*
+mosquitto/log/*

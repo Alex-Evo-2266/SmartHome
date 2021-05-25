@@ -33,6 +33,9 @@ def ServerConfigEdit(data):
     return True
 
 def GiveServerConfig():
-    config = ServerConfig.objects.all()[0]
-    server={"updateFrequency":config.updateFrequency,"mqttBroker":config.mqttBroker,"mqttBrokerPort":config.mqttBrokerPort,"loginMqttBroker":config.loginMqttBroker,"passwordMqttBroker":config.passwordMqttBroker}
-    return server
+    try:
+        config = ServerConfig.objects.all()[0]
+        server={"updateFrequency":config.updateFrequency,"mqttBroker":config.mqttBroker,"mqttBrokerPort":config.mqttBrokerPort,"loginMqttBroker":config.loginMqttBroker,"passwordMqttBroker":config.passwordMqttBroker}
+        return server
+    except Exception as e:
+        return {"updateFrequency":6,"mqttBroker":"0.0.0.0","mqttBrokerPort":"2000","loginMqttBroker":"admin","passwordMqttBroker":"admin"}

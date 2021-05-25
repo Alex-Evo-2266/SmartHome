@@ -7,10 +7,14 @@ from smartHomeApi.logic.deviceValue import setValueAtToken,GetTopicks
 from .mqttDevice.mqttScan import addTopic,getTopicksAll,ClearTopicks
 
 def start():
-    client = connect()
-    client.on_connect = on_connect
-    client.on_message = on_message
-    client.subscribe("#")
+    try:
+        client = connect()
+        client.on_connect = on_connect
+        client.on_message = on_message
+        client.subscribe("#")
+    except Exception as e:
+        print("ex",e)
+
 
 
 def on_connect(client, userdata, flags, rc):

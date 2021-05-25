@@ -85,13 +85,24 @@ WSGI_APPLICATION = 'SmartHome.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'djangoSmartHome',
+#         'USER': 'roothome',
+#         'PASSWORD': 'root',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangoSmartHome',
         'USER': 'roothome',
         'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
+        'HOST': 'sh_db',
         'PORT': '3306',
     }
 }
@@ -165,5 +176,12 @@ CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + str(REDIS_PORT)
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+
+MOSQUITTO_HOST = 'mosquitto'
+MOSQUITTO_PORT = 1883
+print(MOSQUITTO_HOST)
+# MOSQUITTO_USER =
+# MOSQUITTO_PASSWORD =
 
 # STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')

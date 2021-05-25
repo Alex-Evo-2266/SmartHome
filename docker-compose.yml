@@ -1,0 +1,44 @@
+version: "3.3"
+
+services:
+  sh_db:
+    image: mariadb
+    volumes:
+      - bd_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'djangoSmartHome'
+      MYSQL_USER: 'roothome'
+      MYSQL_PASSWORD: 'root'
+  redis:
+    container_name: redis
+    image: redis:5
+    ports:
+      - 6379:6379
+  mosquitto:
+    container_name: mosquitto
+    build: ./mosquitto
+    restart: always
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+    # user: '1000:1000'
+    environment:
+      - MQTT_BROKER_URL=mqtt://mosquitto
+  smart_home:
+    build: ./SmartHome
+    command: bash -c "python /usr/src/smart_home/manage.py migrate &&
+            python /usr/src/smart_home/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./SmartHome:/usr/src/smart_home
+    ports:
+      - 8000:8000
+    depends_on:
+      - sh_db
+      - mosquitto
+      - redis
+volumes:
+  bd_data:
