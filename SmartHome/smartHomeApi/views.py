@@ -8,7 +8,8 @@ from rest_framework.views import APIView
 from .logic.user import addUser,newGenPass,editPass,send_email,deleteUser,setLevel, login as Authorization, userConfEdit,menuConfEdit,user,editUser
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
-from .logic.config import giveuserconf, editUsersConf as usersedit, GiveServerConfig, ServerConfigEdit
+from .logic.config.configget import GiveServerConfig
+from .logic.config.configset import ServerConfigEdit
 from .logic.Cart import setPage,getPage
 from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
@@ -16,7 +17,7 @@ from .logic.deviceSetValue import setValue
 from .logic.weather import Weather
 from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAll
 
-from .models import User, UserConfig,ServerConfig,ImageBackground,genId,LocalImage
+from .models import User, UserConfig,ImageBackground,genId,LocalImage
 
 from .forms import ImageForm
 
@@ -143,24 +144,6 @@ class UserConfigView(APIView):
         data = json.loads(request.body)
         userConfEdit(authData.get("userId"),data)
         return Response("ok",status=201)
-
-class UsersConfigView(APIView):
-    """docstring for GetUserConfigView."""
-    def get(self,request):
-        authData = auth(request)
-        if not authData:
-            return Response(status=403)
-        ret = giveuserconf()
-        return Response(ret,status=200)
-
-    def put(self,request):
-        authData = auth(request)
-        if not authData:
-            return Response(status=403)
-        data = json.loads(request.body)
-        if(usersedit(data)):
-            return Response("ok",status=201)
-        return Response(status=400)
 
 class MenuView(APIView):
     """docstring for MenuView."""

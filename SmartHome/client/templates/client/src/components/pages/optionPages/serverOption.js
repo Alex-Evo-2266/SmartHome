@@ -10,7 +10,6 @@ export const ServerOption = () =>{
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
   const [serverconf , setServerconf] = useState({
-    updateFrequency: "2",
     mqttBroker:'none',
     mqttBrokerPort:"",
     loginMqttBroker:'',
@@ -36,14 +35,12 @@ export const ServerOption = () =>{
 
   const serverConfigHandler = async(event)=>{
     request(`/api/server/config`, 'PUT', serverconf,{Authorization: `Bearer ${auth.token}`})
-    window.location.reload();
   }
 
   const updataConf = useCallback(async()=>{
     const data = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data)return;
     setServerconf({
-      updateFrequency:data.updateFrequency,
       mqttBroker:data.mqttBroker||"",
       mqttBrokerPort:data.mqttBrokerPort||"",
       loginMqttBroker:data.loginMqttBroker||"",
@@ -63,12 +60,6 @@ export const ServerOption = () =>{
     <div className = "pagecontent">
       <div className="configElement">
         <h2>Server config</h2>
-      </div>
-      <div className="configElement">
-        <p className="switchText">update frequency (s)</p>
-        <label className="number">
-          <InputNumber min={1} max={600} Xten={true} result={(v)=>changeNumberHandler(v,"updateFrequency")} Value={serverconf.updateFrequency}/>
-        </label>
       </div>
       <div className="configElement">
         <p className="text">Mqtt broker ip</p>

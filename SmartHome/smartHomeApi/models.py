@@ -138,25 +138,6 @@ class MenuElement(models.Model):
         "url":self.url
         }
 
-
-class ServerConfig(models.Model):
-    id = models.AutoField("id", primary_key=True)
-    updateFrequency = models.IntegerField("time update", default=10)
-    mqttBroker = models.CharField("mqttBroker ip", max_length = 200, default="")
-    loginMqttBroker = models.CharField("mqttBroker login", max_length = 200, default="")
-    passwordMqttBroker = models.CharField("mqttBroker password", max_length = 200, default="")
-    mqttBrokerPort = models.CharField("mqttBroker port", max_length = 200, default="")
-
-    def __str__(self):
-        return self.mqttBrokerPort
-
-class UsersConfig(models.Model):
-    id = models.AutoField(primary_key=True)
-    registerKey = models.SlugField("regKey", max_length = 200)
-
-    def __str__(self):
-        return self.registerKey
-
 class Room(models.Model):
     id = models.AutoField("id", primary_key=True)
     RoomName = models.CharField("root name", max_length = 200)

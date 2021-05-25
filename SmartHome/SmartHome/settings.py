@@ -85,27 +85,27 @@ WSGI_APPLICATION = 'SmartHome.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'djangoSmartHome',
-#         'USER': 'roothome',
-#         'PASSWORD': 'root',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangoSmartHome',
         'USER': 'roothome',
         'PASSWORD': 'root',
-        'HOST': 'sh_db',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'djangoSmartHome',
+#         'USER': 'roothome',
+#         'PASSWORD': 'root',
+#         'HOST': 'sh_db',
+#         'PORT': '3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -154,6 +154,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "client","templates","client","build","static"),
 ]
 
+SERVER_CONFIG = os.path.join(BASE_DIR, "config","server-config.yml")
+
+TIME_UPPDATA = 6
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -178,9 +182,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 
-MOSQUITTO_HOST = 'mosquitto'
+MOSQUITTO_HOST = 'localhost'
 MOSQUITTO_PORT = 1883
-print(MOSQUITTO_HOST)
 # MOSQUITTO_USER =
 # MOSQUITTO_PASSWORD =
 

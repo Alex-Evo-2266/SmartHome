@@ -64,7 +64,7 @@ export const UsersPage = () => {
       <Header search={searchout} name="All Users">
       {
         (auth.userLevel===3)?
-        <Link to = "/config/users" className="btn"><i className="fas fa-cog"></i></Link>:
+        <Link to={"/user/add"} className="btn"><i className="fas fa-plus"></i></Link>:
         null
       }
       </Header>

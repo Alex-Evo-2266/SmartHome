@@ -35,14 +35,14 @@ export const useBackground = () => {
     }
   if(data.auteStyle){
     if(backgroundType()==="night"){
-      document.body.classList.add('night')
+      document.body.className = 'night'
     }
     else{
-      document.body.classList.add(data.style)
+      document.body.className = data.style
     }
   }
   else{
-    document.body.classList.add(data.style)
+    document.body.className = data.style
   }
   if(data.staticBackground&&background.base){
     document.body.style = `background: url(${background.base});

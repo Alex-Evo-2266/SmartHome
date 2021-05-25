@@ -10,6 +10,7 @@ devicesArrey = DevicesArrey()
 #     return arr2
 
 def setValue(id, type, value):
+    print(id, type, value)
     try:
         item = Device.objects.get(id=id)
         deviceDect = devicesArrey.get(id)
