@@ -17,6 +17,9 @@ def getFonUrl(oldindex):
 def deleteImage(id):
     try:
         image = LocalImage.objects.get(id=id)
+        back = image.imagebackground_set.all()
+        for item in back:
+            item.delete()
         image.delete()
         return True
     except Exception as e:

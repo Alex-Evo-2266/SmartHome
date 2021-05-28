@@ -38,7 +38,7 @@ export const UserElement = ({user,updata})=>{
           (auth.userLevel===3)?
           <button className="deletBtn" onClick={()=>{
             message("Delete user?","dialog",async()=>{
-              await request(`/api/users/delete`, 'POST', {UserId:user.UserId},{Authorization: `Bearer ${auth.token}`})
+              await request(`/api/user`, 'DELETE', {UserId:user.UserId},{Authorization: `Bearer ${auth.token}`})
               updata()
             },"no")
           }}>delete</button>:

@@ -35,7 +35,7 @@ function App() {
     if(!token)
       return updataBackground()
     const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
-    const serverData = await request(`/api/server/data/get`, 'GET', null,{Authorization: `Bearer ${token}`})
+    const serverData = await request(`/api/server/data`, 'GET', null,{Authorization: `Bearer ${token}`})
     console.log(serverData);
     updataBackground(token,data)
     setConfig(data)

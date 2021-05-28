@@ -119,73 +119,25 @@ def setPage(data):
         print("errerty",e)
         return False
 
-
-
-
-# def setPage(data):
-#     carts = data["carts"]
-#     oldcart = page.homecart_set.all()
-#     for olditem in oldcart:
-#         t = False
-#         for item in carts:
-#             if(olditem.id==item["mainId"]):
-#                 t = True
-#                 break
-#         if(not t):
-#             olditem.delete()
-#
-#
-#
-#     for item in carts:
-#         cart = None
-#         if(not item["mainId"]):
-#             cart = addHomeCart(item["id"],item["name"],item["type"],item["order"],page)
-#         else:
-#             cart = HomeCart.objects.get(id=item["mainId"])
-#             cart.name=item["name"]
-#             cart.order=item["order"]
-#             cart.save()
-#         elements = item["children"]
-#         for item2 in elements:
-#             # print("newitem",item2)
-#             oldelement = cart.cartchildren_set.all()
-#             print(oldelement)
-#             for olditem in oldelement:
-#                 # print("olditem",olditem)
-#                 t = False
-#                 for item3 in elements:
-#                     # print("k",item3)
-#                     if(olditem.id==item3["id"]):
-#                         t = True
-#                         break
-#                 if(not t):
-#                     olditem.delete()
-#             device = Device.objects.get(id=item2["deviceId"])
-#             element = None
-#             if(not item2["id"]):
-#                 element = addCartChildren(emptyIdCartElement,item2["name"],item2["type"],item2["typeAction"],item2["order"],item2["action"],device,cart)
-#             else:
-#                 element = CartChildren.objects.get(id=item2["id"])
-#                 element.name=item2["name"]
-#                 element.order=item2["order"]
-#                 element.save()
-#
-#     return True
-
 def getPage(id)->dict:
-    page = HomePage.objects.get(id=id)
-    pageDict = page.receiveDict()
-    carts = page.homecart_set.all()
-    cartsList = list()
-    for item in carts:
+    try:
+        page = HomePage.objects.get(id=id)
+        pageDict = page.receiveDict()
+        carts = page.homecart_set.all()
+        cartsList = list()
+        for item in carts:
 
-        cart = item.receiveDict()
-        elements = item.cartchildren_set.all()
-        elementsList = list()
-        for item2 in elements:
-            element = item2.receiveDict()
-            elementsList.append(element)
-        cart["children"]=elementsList
-        cartsList.append(cart)
-    pageDict["carts"]=cartsList
-    return pageDict
+            cart = item.receiveDict()
+            elements = item.cartchildren_set.all()
+            elementsList = list()
+            for item2 in elements:
+                element = item2.receiveDict()
+                elementsList.append(element)
+            cart["children"]=elementsList
+            cartsList.append(cart)
+        pageDict["carts"]=cartsList
+        return pageDict
+    except Exception as e:
+        return{
+            "carts":[]
+        }

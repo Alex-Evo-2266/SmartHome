@@ -53,7 +53,8 @@ def addDevice(data):
                 conf.icon=item["icon"]
             conf.save()
         return True
-    except:
+    except Exception as e:
+        print("error device add",e)
         return False
 
 def device(item):

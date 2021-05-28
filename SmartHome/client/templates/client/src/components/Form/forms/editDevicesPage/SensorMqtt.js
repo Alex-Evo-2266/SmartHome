@@ -73,13 +73,13 @@ export const SensorMqttEdit = ({deviceData,hide})=>{
       ...device,
       config:conf
     }
-    await request(`/api/devices/edit`, 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
     hide();
   }
 
   const deleteHandler = async () =>{
     message("All dependent scripts and controls will be removed along with the device. Delete?","dialog",async()=>{
-      await request(`/api/devices/delete`, 'POST', {DeviceId:device.DeviceId},{Authorization: `Bearer ${auth.token}`})
+      await request(`/api/devices/${device.DeviceId}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       hide();
     },"no")
   }

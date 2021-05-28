@@ -1,11 +1,10 @@
 
 from .logic.devices import giveDevices
-from .logic.config import GiveServerConfig
+from SmartHome.settings import TIME_UPPDATA
 
 from asgiref.sync import sync_to_async
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.views.decorators.csrf import csrf_exempt
 
 import datetime
 
@@ -40,10 +39,8 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
 
         if self.room_group_name=="chat_devices" and message=="all":
-            conf = await sync_to_async(GiveServerConfig)()
-            sec = conf["updateFrequency"]
             nowtime = datetime.datetime.now().second
-            udateTime = DeviceConsumer.now + sec
+            udateTime = DeviceConsumer.now + TIME_UPPDATA
             DeviceConsumer.now = datetime.datetime.now().second
             if udateTime >= 60:
                 udateTime = udateTime - 60

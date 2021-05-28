@@ -1,9 +1,11 @@
 from django.conf import settings
+from SmartHome.settings import SERVER_CONFIG
 from ..models import User, UserConfig,genId,MenuElement
 import json
 import bcrypt
 import random
 import jwt
+import yaml
 
 import smtplib
 
@@ -11,7 +13,7 @@ import smtplib
 def addUser(data):
     try:
         hashedPass = bcrypt.hashpw(data.get("password"),bcrypt.gensalt())
-        cond = User.objects.get(UserName=data.get("name"))
+        cond = User.objects.filter(UserName=data.get("name"))
         if(cond):
             return False
         newUser = User.objects.create(UserName=data.get("name"), UserEmail=data.get("email"), UserMobile=data.get("mobile"),UserPassword=hashedPass)
@@ -21,7 +23,8 @@ def addUser(data):
         message = "login = " + data.get("name") + "\npassword = " + data.get("password")
         send_email("Account smart home",data.get("email"),message)
         return True
-    except:
+    except Exception as e:
+        print("error add user",e)
         return False
 
 def deleteUser(id):
@@ -161,21 +164,13 @@ def send_email(subject, to_email, message):
     """
     Send an email
     """
-    from_email = ""
-    password = ""
-    try:
-        accountfile = open("mail.txt", "r")
-        for line in accountfile:
-            clogin = parser(line,"login")
-            cpassword = parser(line,"password")
-            if clogin:
-                from_email = clogin
-            if cpassword:
-                password = cpassword
-        accountfile.close()
-    except Exception as e:
-        print("ошибка в файле ",e)
-        return False
+
+    templates = None
+    with open(SERVER_CONFIG) as f:
+        templates = yaml.safe_load(f)
+    acaunt = templates["mail"]
+    from_email = acaunt["login"]
+    password = acaunt["password"]
 
     try:
         BODY = "\r\n".join((

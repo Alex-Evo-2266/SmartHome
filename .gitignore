@@ -1,8 +1,8 @@
 *.pot
 *.pyc
-__pycache__/*
 env
 celerybeat-schedule
+__pycache__/
 local_settings.py
 db.sqlite3
 media

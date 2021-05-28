@@ -18,16 +18,20 @@ from django.urls import path,include,re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from smartHomeApi.logic.deviceControl.index import start
+from .yasg import urlpatterns as doc_urls
 
 start()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include("rest_framework.urls")),
     re_path(r'^api/files/',include("files.urls")),
     re_path(r'^api/',include("smartHomeApi.urls")),
-    # re_path(r'',include("client.urls")),
+    re_path(r'',include("client.urls")),
 ]
+
+urlpatterns = doc_urls + urlpatterns
 
 if settings.DEBUG:
     print(settings.BASE_DIR)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + urlpatterns

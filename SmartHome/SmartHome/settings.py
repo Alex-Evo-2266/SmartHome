@@ -34,10 +34,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'files',
-    'channels',
-    'smartHomeApi',
-    'client',
     'django_cleanup',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'drf_yasg',
+    'files',
+    'channels',
+    'smartHomeApi',
+    'client',
+    # 'ckeditor',
+    # 'ckeditor-uploader'
 ]
 
 MIDDLEWARE = [
@@ -78,17 +82,43 @@ TEMPLATES = [
 WSGI_APPLICATION = 'SmartHome.wsgi.application'
 
 
+# docker values
+# REDIS_HOST = os.environ.get("SMARTHOME_REDIS_HOST")
+# REDIS_PORT = os.environ.get("SMARTHOME_REDIS_PORT")
+#
+# BD_HOST = os.environ.get("SMARTHOME_BD_HOST")
+# BD_PORT = os.environ.get("SMARTHOME_BD_PORT")
+# BD_NAME = os.environ.get("SMARTHOME_BD_NAME")
+# BD_USER = os.environ.get("SMARTHOME_BD_USER")
+# BD_PASSWORD = os.environ.get("SMARTHOME_BD_PASSWORD")
+#
+# SMART_HOME_HOST = os.environ.get("SMARTHOME_SOCKET_HOST")
+# SMART_HOME_PORT = os.environ.get("SMARTHOME_SOCKET_PORT")
+
+#dev no docker
+REDIS_HOST = '0.0.0.0'
+REDIS_PORT = 6379
+
+BD_HOST = 'localhost'
+BD_PORT = '3306'
+BD_NAME = 'djangoSmartHome'
+BD_USER = 'roothome'
+BD_PASSWORD = 'root'
+
+SMART_HOME_HOST = 'localhost'
+SMART_HOME_PORT = '5000'
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djangoSmartHome',
-        'USER': 'roothome',
-        'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'NAME': BD_NAME,
+        'USER': BD_USER,
+        'PASSWORD': BD_PASSWORD,
+        'HOST': BD_HOST,
+        'PORT': BD_PORT,
     }
 }
 
@@ -111,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = True
 
 
@@ -139,13 +169,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "client","templates","client","build","static"),
 ]
 
+SERVER_CONFIG = os.path.join(BASE_DIR, "config","server-config.yml")
+
+TIME_UPPDATA = 6
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-REDIS_HOST = '0.0.0.0'
-REDIS_PORT = 6379
 
 ASGI_APPLICATION = 'SmartHome.asgi.application'
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -155,11 +188,27 @@ CHANNEL_LAYERS = {
     },
 }
 
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('redis', REDIS_PORT)],
+#         },
+#     },
+# }
+
 CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + str(REDIS_PORT)
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + str(REDIS_PORT)
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+# CELERY_BROKER_URL = 'redis://redis:6379'
+# CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+# CELERY_RESULT_BACKEND = 'redis://redis:6379'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
 
 # STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')

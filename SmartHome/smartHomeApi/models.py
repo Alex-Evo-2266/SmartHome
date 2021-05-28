@@ -79,7 +79,7 @@ class User(models.Model):
             "ImageId":None
         }
 
-    def geveConfig(self):
+    def getConfig(self):
         return set_to_list_dict(self.menuelement_set.all())
 
 class LocalImage(models.Model):
@@ -106,7 +106,6 @@ class ImageBackground(models.Model):
         return {**self.image.model_to_dict(),"type":self.type}
 
 class UserConfig(models.Model):
-    # id = models.AutoField("id", primary_key=True)
     Style = models.CharField("user name", max_length = 200, default="light")
     auteStyle = models.BooleanField("automatic style", default=True)
     staticBackground = models.BooleanField("static background", default=False)
@@ -116,7 +115,7 @@ class UserConfig(models.Model):
     def __str__(self):
         return self.Style
 
-    def give(self):
+    def get(self):
         return {
         "Style":self.Style,
         "auteStyle":self.auteStyle,
@@ -138,25 +137,6 @@ class MenuElement(models.Model):
         "iconClass":self.iconClass,
         "url":self.url
         }
-
-
-class ServerConfig(models.Model):
-    id = models.AutoField("id", primary_key=True)
-    updateFrequency = models.IntegerField("time update", default=10)
-    mqttBroker = models.CharField("mqttBroker ip", max_length = 200, default="")
-    loginMqttBroker = models.CharField("mqttBroker login", max_length = 200, default="")
-    passwordMqttBroker = models.CharField("mqttBroker password", max_length = 200, default="")
-    mqttBrokerPort = models.CharField("mqttBroker port", max_length = 200, default="")
-
-    def __str__(self):
-        return self.mqttBrokerPort
-
-class UsersConfig(models.Model):
-    # id = models.AutoField("id")
-    registerKey = models.SlugField("regKey", max_length = 200)
-
-    def __str__(self):
-        return self.registerKey
 
 class Room(models.Model):
     id = models.AutoField("id", primary_key=True)

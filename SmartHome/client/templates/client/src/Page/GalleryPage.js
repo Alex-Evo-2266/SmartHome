@@ -1,10 +1,10 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {AuthContext} from '../../context/AuthContext.js'
-import {useHttp} from '../../hooks/http.hook'
-import {useMessage} from '../../hooks/message.hook'
-import {ImagesInput} from '../../components/moduls/inputImages'
-import {AlertContext} from '../../components/alert/alertContext'
-import {ImageDitail} from '../../components/files/imageDitail'
+import {AuthContext} from '../context/AuthContext.js'
+import {useHttp} from '../hooks/http.hook'
+import {useMessage} from '../hooks/message.hook'
+import {ImagesInput} from '../components/moduls/inputImages'
+import {AlertContext} from '../components/alert/alertContext'
+import {ImageDitail} from '../components/files/imageDitail'
 
 export const GalleryPage = () => {
   const auth = useContext(AuthContext)
@@ -19,7 +19,7 @@ export const GalleryPage = () => {
 
   const getTenUrl = useCallback(async(oldUrl = 0)=>{
     try {
-      const data = await request(`/api/image/fon/${oldUrl}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      const data = await request(`/api/image/fon/ten/${oldUrl}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       if(data&&data.images){
         setEnd(data.end)
         setnewUrl(oldUrl+10)
@@ -30,8 +30,7 @@ export const GalleryPage = () => {
         for (let item of data.images) {
           arr.push(item)
         }
-        if(arr.length!==urls.length)
-          setUrls(arr)
+        setUrls(arr)
       }
     } catch (e) {
       console.error(e);
@@ -40,7 +39,7 @@ export const GalleryPage = () => {
 
   const deleteImg = (id)=>{
     show("удалить изображение?","dialog",()=>{
-      request(`/api/image/fon/delete`, 'POST', {id},{Authorization: `Bearer ${auth.token}`})
+      request(`/api/image/fon/${id}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       let arr = urls.slice()
       arr = arr.filter(item=>item.id!==id)
       setUrls(arr)
@@ -67,7 +66,7 @@ export const GalleryPage = () => {
   },[error,message, clearError])
 
   return(
-    <>
+    <div className="conteiner">
     {
       (visible)?
       <ImageDitail data={ditailElement} hide={()=>setVisible(false)}/>:
@@ -97,6 +96,6 @@ export const GalleryPage = () => {
       }
       </div>
     </div>
-    </>
+    </div>
   )
 }

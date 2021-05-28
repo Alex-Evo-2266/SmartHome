@@ -27,7 +27,7 @@ export const UsersPage = () => {
   }
 
   const updataUsers = useCallback(async()=>{
-    const data = await request('/api/users/get', 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request('/api/users', 'GET', null,{Authorization: `Bearer ${auth.token}`})
     setUsers(data);
     console.log(data);
     setAllUsers(data)
@@ -64,7 +64,7 @@ export const UsersPage = () => {
       <Header search={searchout} name="All Users">
       {
         (auth.userLevel===3)?
-        <Link to = "/config/users" className="btn"><i className="fas fa-cog"></i></Link>:
+        <Link to={"/user/add"} className="btn"><i className="fas fa-plus"></i></Link>:
         null
       }
       </Header>

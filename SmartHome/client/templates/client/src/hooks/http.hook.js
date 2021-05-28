@@ -5,16 +5,25 @@ export const useHttp = () => {
   const [error, setError] = useState(null);
   const request = useCallback(async (url, method="GET", body = null, headers = {},file=false) => {
     setLoading(true);
+    let cookie = document.cookie
+    cookie = cookie.split(" ")
+    let csrf = null
+    for (var item of cookie) {
+      let cook = item.split('=')
+      if(cook[0]==="csrftoken"){
+        csrf = cook[1]
+        csrf = csrf.slice(0,-1)
+      }
+    }
     try {
       if(headers['X-CSRFToken']===""||!headers['X-CSRFToken'])
-        headers['X-CSRFToken'] = 'wse5dr6ft7yg8plivkuytrrestrytfygui'
+        headers['X-CSRFToken'] = csrf
       if(body&&!file){
         headers['Content-Type'] = 'application/json'
         body = JSON.stringify(body);
       }
       const response = await fetch(url, {method, body, headers});
       const data = await response.json()
-
       if (!response.ok) {
         throw new Error(data.message||'что-то пошло не так')
       }

@@ -53,7 +53,7 @@ export const AddDevicesPage = () => {
     try {
       clearMessage();
       console.log(form);
-      const data = await request('/api/devices/add', 'POST', {...form},{Authorization: `Bearer ${auth.token}`})
+      const data = await request('/api/devices', 'POST', {...form},{Authorization: `Bearer ${auth.token}`})
       console.log(data);
       if(data){
         history.push('/devices')

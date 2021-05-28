@@ -65,7 +65,7 @@ export const ImagesInput = ({update}) =>{
       data.append("image",file)
       data.append('name',file.name)
       const ret = await request(`/api/media/set/image/${file.name}`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
-      if(ret.message==="ok"){
+      if(ret==="ok"){
         const block = imgConteiner.current.querySelector(`[data-name="${file.name}"]`).closest(".image-preview")
         block.classList.add("removeing")
         setTimeout(function () {
@@ -75,7 +75,9 @@ export const ImagesInput = ({update}) =>{
     }
     setFiles([])
     if(typeof(update)==="function"){
-      update()
+      setTimeout(function () {
+        update()
+      }, 200);
     }
   }
 

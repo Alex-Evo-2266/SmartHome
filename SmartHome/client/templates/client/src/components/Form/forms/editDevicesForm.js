@@ -19,7 +19,7 @@ export const EditDevicesForm = (props)=>{
   const [device, setDevice] = useState();
 
   const usedevice = useCallback(async()=>{
-    const data = await request(`/api/devices/get/${props.id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/devices/${props.id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     setDevice(data);
   },[request,auth.token,props.id])
 
@@ -77,7 +77,7 @@ if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="binarySensor"){
     </div>
   )
 }
-if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="ir"){
+if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="other"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">

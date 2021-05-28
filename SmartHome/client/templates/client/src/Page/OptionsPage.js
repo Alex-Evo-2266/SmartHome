@@ -4,7 +4,6 @@ import {AuthContext} from '../context/AuthContext.js'
 import {UserOption} from '../components/pages/optionPages/userOption'
 import {ServerOption} from '../components/pages/optionPages/serverOption'
 import {ImgOption} from '../components/pages/optionPages/imgOption'
-import {UsersOption} from '../components/pages/optionPages/usersOption'
 import {MenuOption} from '../components/pages/optionPages/menuOption'
 
 export const OptionsPage = () => {
@@ -25,9 +24,6 @@ export const OptionsPage = () => {
           </div>
           <div className = {`page ${(location.pathname==="/config/menu")?"active":""}`}>
             <MenuOption/>
-          </div>
-          <div className = {`page ${(location.pathname==="/config/users")?"active":""}`}>
-            <UsersOption/>
           </div>
           <ul className = "page-nav">
             <li className = {(location.pathname==="/config")?"active":""} title="user config">
@@ -50,15 +46,6 @@ export const OptionsPage = () => {
                 <i className="fas fa-icons"></i>
               </NavLink>
             </li>
-            {
-              (auth.userLevel===3)?
-              <li className = {(location.pathname==="/config/users")?"active":""}>
-                <NavLink to = "/config/users" >
-                  <i className="fas fa-users-cog"></i>
-                </NavLink>
-              </li>
-              :null
-            }
           </ul>
         </div>
       </div>

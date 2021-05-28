@@ -25,7 +25,7 @@ export default function AddUser(){
 
   const registerHandler = async () => {
     try {
-      const data = await request('/api/user/add', 'POST', {...form})
+      const data = await request('/api/user', 'POST', {...form})
       if(data){
         history.push('/')
         show("user registered","ok")

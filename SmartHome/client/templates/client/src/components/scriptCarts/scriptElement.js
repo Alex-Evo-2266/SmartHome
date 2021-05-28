@@ -23,7 +23,7 @@ export const ScriptElement = ({script,updata})=>{
   },[error,message, clearError])
 
   const deleteScript = async()=>{
-    await request(`/api/script/delete`, 'POST', {id:script.id},{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/${script.id}`, 'DELETE',null ,{Authorization: `Bearer ${auth.token}`})
     updata()
   }
 

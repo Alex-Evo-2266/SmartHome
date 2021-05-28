@@ -13,7 +13,7 @@ export const EditUserLevel = ({hide,data})=>{
     setLevel(event.target.value)
   }
   const outHandler = async()=>{
-    await request(`/api/users/${data.UserId}/edit/level`, 'POST', {level},{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/users/${data.UserId}/level`, 'PUT', {level},{Authorization: `Bearer ${auth.token}`})
     hide();
   }
 

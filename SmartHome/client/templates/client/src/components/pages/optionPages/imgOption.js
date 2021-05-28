@@ -30,7 +30,7 @@ export const ImgOption = () =>{
   return(
     <div className="configElement img">
       <h2>Background</h2>
-      <Link to="/files/gallery" className="button">Галерея</Link>
+      <Link to="/gallery" className="button">Галерея</Link>
       <div className="card">
         <div className="imgBx">
           <img src={userconf.base} alt="base"/>
