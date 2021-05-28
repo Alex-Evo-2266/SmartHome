@@ -1,9 +1,11 @@
 from django.conf import settings
+from SmartHome.settings import SERVER_CONFIG
 from ..models import User, UserConfig,genId,MenuElement
 import json
 import bcrypt
 import random
 import jwt
+import yaml
 
 import smtplib
 
@@ -162,21 +164,13 @@ def send_email(subject, to_email, message):
     """
     Send an email
     """
-    from_email = ""
-    password = ""
-    try:
-        accountfile = open("mail.txt", "r")
-        for line in accountfile:
-            clogin = parser(line,"login")
-            cpassword = parser(line,"password")
-            if clogin:
-                from_email = clogin
-            if cpassword:
-                password = cpassword
-        accountfile.close()
-    except Exception as e:
-        print("ошибка в файле ",e)
-        return False
+
+    templates = None
+    with open(SERVER_CONFIG) as f:
+        templates = yaml.safe_load(f)
+    acaunt = templates["mail"]
+    from_email = acaunt["login"]
+    password = acaunt["password"]
 
     try:
         BODY = "\r\n".join((

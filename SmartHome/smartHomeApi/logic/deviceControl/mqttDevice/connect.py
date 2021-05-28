@@ -39,9 +39,13 @@ def connect():
 #         # print(item)
 #         client.subscribe(item)
 def desconnect():
-    client = mqttClient[0]
-    client.disconnect() # disconnect gracefully
-    client.loop_stop()
+    try:
+        client = mqttClient[0]
+        client.disconnect() # disconnect gracefully
+        client.loop_stop()
+    except Exception as e:
+        print("worning",e)
+
 
 def reconnect():
     desconnect()

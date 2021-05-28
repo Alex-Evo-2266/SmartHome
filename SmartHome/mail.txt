@@ -1,2 +1,0 @@
-login = smarthome2244@mail.ru
-password = 66dfghty

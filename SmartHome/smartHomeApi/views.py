@@ -39,7 +39,9 @@ class LoginView(APIView):
 class UserView(APIView):
     """docstring for AddUserView."""
     def post(self,request):
+        print("fgh")
         authData = auth(request)
+        print(authData)
         if not authData:
             return Response(status=403)
         data = json.loads(request.body)
@@ -212,8 +214,10 @@ class DevicePutPostView(APIView):
         if not authData:
             return Response(status=403)
         data = json.loads(request.body)
+        print(data)
         if addDevice(data):
             return Response("ok",status=201)
+        return Response("error",status=400)
 
     def put(self,request):
         authData = auth(request)

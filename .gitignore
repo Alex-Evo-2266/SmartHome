@@ -9,7 +9,11 @@ db.sqlite3
 media
 черновик
 MediaList
-command.sh
 TRASH
 mosquitto/data/*
 mosquitto/log/*
+server-config.yml
+zigbee2mqtt/log
+zigbee2mqtt/database.db
+zigbee2mqtt/state.json
+zigbee2mqtt
