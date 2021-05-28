@@ -2,7 +2,7 @@ mail:
   login: smarthome2244@mail.ru
   password: 66dfghty
 mqttBroker:
-  host: mosquitto
+  host: localhost
   password: admin
   port: '1883'
   user: admin

@@ -23,18 +23,12 @@ export const SwitchMqttEdit = ({deviceData,hide})=>{
     DeviceId:deviceData.DeviceId,
     DeviceInformation:deviceData.DeviceInformation,
     DeviceSystemName:deviceData.DeviceSystemName,
+    DeviceValueType:deviceData.DeviceValueType,
+    DeviceAddress:deviceData.DeviceAddress,
     DeviceName:deviceData.DeviceName,
     DeviceType:deviceData.DeviceType,
     DeviceTypeConnect:deviceData.DeviceTypeConnect,
     RoomId:deviceData.RoomId
-  })
-
-  const [status, setStatus] = useState({
-    type:"status",
-    address:"",
-    low:"",
-    high:"",
-    icon:""
   })
   const [power, setPower] = useState({
     type:"power",
@@ -54,9 +48,6 @@ export const SwitchMqttEdit = ({deviceData,hide})=>{
         high:item.high||"",
         icon:item.icon||""
       }
-      if(item.type==="status"){
-        setStatus(confel)
-      }
       if(item.type==="power"){
         setPower(confel)
       }
@@ -65,9 +56,6 @@ export const SwitchMqttEdit = ({deviceData,hide})=>{
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
-  }
-  const changeHandlerStatus = event => {
-    setStatus({ ...status, [event.target.name]: event.target.value })
   }
   const changeHandlerPower = event => {
     setPower({ ...power, [event.target.name]: event.target.value })
@@ -81,8 +69,6 @@ export const SwitchMqttEdit = ({deviceData,hide})=>{
   }
   const outHandler = async ()=>{
     let conf = []
-    if(status.address)
-      conf.push(status)
     if(power.address)
       conf.push(power)
     let dataout = {
@@ -122,14 +108,23 @@ export const SwitchMqttEdit = ({deviceData,hide})=>{
       </li>
       <li>
         <label>
-          <h5>information</h5>
-          <input className = "textInput" placeholder="information" id="DeviceInformation" type="text" name="DeviceInformation" value={device.DeviceInformation} onChange={changeHandler} required/>
+          <h5>Address</h5>
+          <input className = "textInput" placeholder="address" id="DeviceAddress" type="text" name="DeviceAddress" value={device.DeviceAddress} onChange={changeHandler} required/>
         </label>
       </li>
       <li>
         <label>
-          <h5>status topic</h5>
-          <input className = "textInput" placeholder="powerStatus" id="powerStatus" type="text" name="address" value={status.address} onChange={changeHandlerStatus} required/>
+          <h5>Type value</h5>
+          <select name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
+            <option value="json">json</option>
+            <option value="value">value</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label>
+          <h5>information</h5>
+          <input className = "textInput" placeholder="information" id="DeviceInformation" type="text" name="DeviceInformation" value={device.DeviceInformation} onChange={changeHandler} required/>
         </label>
       </li>
       <HidingLi title = "power config">

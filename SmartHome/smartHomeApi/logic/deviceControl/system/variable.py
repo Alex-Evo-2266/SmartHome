@@ -3,25 +3,15 @@ from ..mqttDevice.connect import connect
 
 class Variable():
 
-    def __init__(
-    self,
-    DeviceId: str = None,
-    DeviceName: str = None,
-    DeviceSystemName: str = None,
-    DeviceInformation: str = None,
-    DeviceType: str = None,
-    DeviceTypeConnect: str = None,
-    DeviceConfig: list = [],
-    RoomId:str = None
-    ):
-        self.DeviceId = DeviceId
-        self.DeviceName = DeviceName
-        self.DeviceSystemName = DeviceSystemName
-        self.DeviceInformation = DeviceInformation
-        self.DeviceType = DeviceType
-        self.DeviceTypeConnect = DeviceTypeConnect
+    def __init__(self,*args, **kwargs):
+        self.DeviceId = kwargs["DeviceId"]
+        self.DeviceName = kwargs["DeviceName"]
+        self.DeviceSystemName = kwargs["DeviceSystemName"]
+        self.DeviceInformation = kwargs["DeviceInformation"]
+        self.DeviceType = kwargs["DeviceType"]
+        self.DeviceTypeConnect = kwargs["DeviceTypeConnect"]
         self.DeviceConfig = None
-        self.RoomId = RoomId
+        self.RoomId = kwargs["RoomId"]
 
 
     def get_properties(self, properties)->dict:

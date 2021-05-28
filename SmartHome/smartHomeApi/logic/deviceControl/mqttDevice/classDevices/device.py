@@ -1,28 +1,21 @@
 from smartHomeApi.logic.deviceValue import devicestatus
 from ..connect import getMqttClient
+import json
 
 class MqttDevice():
 
-    def __init__(
-    self,
-    DeviceId: str = None,
-    DeviceName: str = None,
-    DeviceSystemName: str = None,
-    DeviceInformation: str = None,
-    DeviceType: str = None,
-    DeviceTypeConnect: str = None,
-    DeviceConfig: list = [],
-    RoomId:str = None
-    ):
-        self.DeviceId = DeviceId
-        self.DeviceName = DeviceName
-        self.DeviceSystemName = DeviceSystemName
-        self.DeviceInformation = DeviceInformation
-        self.DeviceType = DeviceType
-        self.DeviceTypeConnect = DeviceTypeConnect
-        self.DeviceConfig = DeviceConfig
-        self.RoomId = RoomId
-        for item in DeviceConfig:
+    def __init__(self, *args, **kwargs):
+        self.DeviceId = kwargs["DeviceId"]
+        self.DeviceName = kwargs["DeviceName"]
+        self.DeviceSystemName = kwargs["DeviceSystemName"]
+        self.DeviceInformation = kwargs["DeviceInformation"]
+        self.DeviceType = kwargs["DeviceType"]
+        self.DeviceTypeConnect = kwargs["DeviceTypeConnect"]
+        self.DeviceValueType = kwargs["DeviceValueType"]
+        self.DeviceConfig = kwargs["DeviceConfig"]
+        self.address = kwargs["address"]
+        self.RoomId = kwargs["RoomId"]
+        for item in self.DeviceConfig:
             if item["type"]=="status":
                 self.statustoken = item["address"]
             if item["type"]=="command":
@@ -39,8 +32,18 @@ class MqttDevice():
 
     def send(self,topic:str, command: str):
         client = getMqttClient()
-        print(client,command)
-        client.publish(topic, command)
+        if(self.DeviceValueType=="json"):
+            print(command)
+            data = dict()
+            data[topic] = command
+            data = json.dumps(data)
+            print(data)
+            client.publish(self.address+"/set", data)
+        else:
+            print(client,command)
+            alltopic = self.address + "/" + topic
+            print(alltopic)
+            client.publish(alltopic, command)
 
     def sendCommand(self, command:str):
         send(self.commandtoken,command)

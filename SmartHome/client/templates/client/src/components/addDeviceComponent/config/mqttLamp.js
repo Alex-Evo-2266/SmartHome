@@ -1,41 +1,37 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
-export const LightMqtt = ({onChange,back})=>{
+export const LightMqtt = ({onChange,back,type})=>{
 
   const [power, setPower] = useState({
     type:"power",
-    address:"",
+    address:(type==="json")?"state":"",
     low:"0",
     high:"1"
   })
   const [dimmer, setDimmer] = useState({
     type:"dimmer",
-    address:"",
+    address:(type==="json")?"brightness":"",
     low:"0",
     high:"255"
   })
-  const [status, setStatus] = useState({
-    type:"status",
-    address:""
-  })
   const [color, setColor] = useState({
     type:"color",
-    address:"",
+    address:(type==="json")?"color":"",
     low:"0",
     high:"255"
   })
   const [mode, setMode] = useState({
     type:"mode",
-    address:"",
+    address:(type==="json")?"mode":"",
     low:"0",
     high:"2"
   })
   const [temp, setTemp] = useState({
     type:"temp",
-    address:"",
-    low:"0",
-    high:"1"
+    address:(type==="json")?"color_temp":"",
+    low:"2700",
+    high:"3200"
   })
 
   const nextpage = (param)=>{
@@ -49,38 +45,32 @@ export const LightMqtt = ({onChange,back})=>{
 
   const changeHandlerPower = event => {
     setPower({ ...power, [event.target.name]: event.target.value })
-    nextpage([{ ...power, [event.target.name]: event.target.value },dimmer,color,mode,temp,status])
+    nextpage([{ ...power, [event.target.name]: event.target.value },dimmer,color,mode,temp])
   }
   const changeHandlerDimmer = event => {
     setDimmer({ ...dimmer, [event.target.name]: event.target.value })
-    nextpage([{ ...dimmer, [event.target.name]: event.target.value },power,color,mode,temp,status])
+    nextpage([{ ...dimmer, [event.target.name]: event.target.value },power,color,mode,temp])
   }
   const changeHandlerColor = event => {
     setColor({ ...color, [event.target.name]: event.target.value })
-    nextpage([{ ...color, [event.target.name]: event.target.value },dimmer,power,mode,temp,status])
+    nextpage([{ ...color, [event.target.name]: event.target.value },dimmer,power,mode,temp])
   }
   const changeHandlerMode = event => {
     setMode({ ...mode, [event.target.name]: event.target.value })
-    nextpage([{ ...mode, [event.target.name]: event.target.value },dimmer,color,power,temp,status])
+    nextpage([{ ...mode, [event.target.name]: event.target.value },dimmer,color,power,temp])
   }
   const changeHandlerTemp = event => {
     setTemp({ ...temp, [event.target.name]: event.target.value })
-    nextpage([{ ...temp, [event.target.name]: event.target.value },dimmer,color,mode,power,status])
+    nextpage([{ ...temp, [event.target.name]: event.target.value },dimmer,color,mode,power])
   }
-  const changeHandlerStatus = event => {
-    setStatus({ ...status, [event.target.name]: event.target.value })
-    nextpage([{ ...status, [event.target.name]: event.target.value },dimmer,color,mode,temp,power])
-  }
+
+  useEffect(()=>{
+    nextpage([power,dimmer,temp,color,mode])
+  },[])
 
   return(
       <div className = "config">
         <ul>
-          <li>
-            <label>
-              <h5>Enter the topic by status</h5>
-              <input className = "textInput" placeholder="topic status" id="status" type="text" name="address" value={status.address} onChange={changeHandlerStatus} required/>
-            </label>
-          </li>
           <HidingLi title = "power">
           <label>
             <h5>Enter the topic by power</h5>

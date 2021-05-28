@@ -1,17 +1,13 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
-export const RelayMqtt = ({onChange})=>{
+export const RelayMqtt = ({onChange,type})=>{
 
   const [power, setPower] = useState({
     type:"power",
-    address:"",
+    address:(type==="json")?"state":"",
     low:"0",
     high:"1"
-  })
-  const [status, setStatus] = useState({
-    type:"status",
-    address:""
   })
 
   const nextpage = (param)=>{
@@ -25,22 +21,16 @@ export const RelayMqtt = ({onChange})=>{
 
   const changeHandlerPower = event => {
     setPower({ ...power, [event.target.name]: event.target.value })
-    nextpage([{ ...power, [event.target.name]: event.target.value },status])
+    nextpage([{ ...power, [event.target.name]: event.target.value }])
   }
-  const changeHandlerStatus = event => {
-    setStatus({ ...status, [event.target.name]: event.target.value })
-    nextpage([{ ...status, [event.target.name]: event.target.value },power])
-  }
+
+  useEffect(()=>{
+    nextpage([power])
+  },[])
 
   return(
       <div className = "config">
         <ul>
-          <li>
-          <label>
-            <h5>Enter the topic by status</h5>
-            <input className = "textInput" placeholder="topic status" id="status" type="text" name="address" value={status.address} onChange={changeHandlerStatus} required/>
-          </label>
-          </li>
           <HidingLi title = "power" show = {true}>
           <label>
             <h5>Enter the topic by power</h5>

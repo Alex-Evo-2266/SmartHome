@@ -149,9 +149,12 @@ class Device(models.Model):
     id = models.IntegerField("id", primary_key=True)
     DeviceName = models.CharField("device name", max_length = 200)
     DeviceSystemName = models.SlugField("device system name", max_length = 200)
+    DeviceAddress = models.SlugField("device address", max_length = 200, default="")
+    DeviceToken = models.SlugField("device token", max_length = 200, default="")
     DeviceInformation = models.TextField("device info", default="")
     DeviceType = models.SlugField("device type", max_length = 200, default="")
     DeviceTypeConnect = models.SlugField("device connect type", max_length = 200, default="")
+    DeviceValueType = models.SlugField("device value type", max_length = 200, default="json")
     DeviceControl= models.TextField("device control", max_length = 200, default="")
     room = models.ForeignKey(Room, on_delete = models.SET_NULL, null=True)
 
@@ -166,6 +169,9 @@ class Device(models.Model):
             "DeviceInformation":self.DeviceInformation,
             "DeviceType":self.DeviceType,
             "DeviceTypeConnect":self.DeviceTypeConnect,
+            "DeviceValueType":self.DeviceValueType,
+            "DeviceAddress":self.DeviceAddress,
+            "DeviceToken":self.DeviceToken,
             "RoomId":self.room_id
         }
     def get_value(self):
@@ -175,37 +181,27 @@ class Device(models.Model):
             valuesDict[item.type]=item.value
         return valuesDict
 
-class ConfigDevice(models.Model):
+class ValueDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)
-    type = models.SlugField("device config type", max_length = 200)
-    address = models.SlugField("device config address", max_length = 200)
-    token = models.SlugField("device token", max_length = 200, default="")
+    address = models.SlugField("device config address", max_length = 200,default="")
+    type = models.SlugField("device value type", max_length = 200)
     low = models.SlugField("device config low", max_length = 200, default="0")
     high = models.SlugField("device config high", max_length = 200, default="255")
     icon = models.SlugField("device icon", max_length = 200, default="")
+    value = models.SlugField("device value value", max_length = 200)
     device = models.ForeignKey(Device, on_delete = models.CASCADE)
 
     def __str__(self):
-        return self.address +" "+ self.type
+        return self.type +" "+ self.value
 
-    def receiveDict(self):
+    def receiveDictConf(self):
         return {
             "type":self.type,
             "address":self.address,
             "low":self.low,
             "high":self.high,
             "icon":self.icon,
-            "token":self.token
         }
-
-class ValueDevice(models.Model):
-    id = models.IntegerField("id", primary_key=True)
-    type = models.SlugField("device value type", max_length = 200)
-    value = models.SlugField("device value value", max_length = 200)
-    device = models.ForeignKey(Device, on_delete = models.CASCADE)
-
-    def __str__(self):
-        return self.type +" "+ self.value
 
     def receiveDict(self):
         return {

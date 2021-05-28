@@ -1,16 +1,32 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 
-export const OtherMqtt = ({onChange,back})=>{
+export const OtherMqtt = ({onChange,back,type})=>{
 
-  const [form, setForm] = useState({
-    type:"command",
-    address:'',
-  });
+  const [form, setForm] = useState([{
+    address:"c0",
+    type:"c0"
+  }]);
+  const [count, setCount] = useState(1);
 
-  const [status, setStatus] = useState({
-    type:"status",
-    address:""
-  })
+  const addField = ()=>{
+    let arr = form.slice()
+    arr.push({
+      address:"c"+count,
+      type:"c"+count
+    })
+    setCount((prev)=>prev+1)
+    setForm(arr)
+  }
+
+  const deleteField = (index)=>{
+    let arr = form.slice()
+    arr = arr.filter((it,index2)=>index!==index2)
+    arr = arr.map((item,i)=>{
+      return {...item,type:"c"+i}
+    })
+    setCount((prev)=>prev-1)
+    setForm(arr)
+  }
 
   const nextpage = (param)=>{
     let arr = []
@@ -22,30 +38,38 @@ export const OtherMqtt = ({onChange,back})=>{
   }
 
   const changeHandler = event => {
-    setForm({ ...form, [event.target.name]: event.target.value })
-    nextpage([{ ...form, [event.target.name]: event.target.value },status])
+    let index = event.target.dataset.id
+    console.log(index);
+    let arr = form.slice()
+    let newData = { ...arr[index], [event.target.name]: event.target.value }
+    arr[index] = newData
+    setForm(arr)
+    nextpage(arr)
   }
-  const changeHandlerStatus = event => {
-    setStatus({ ...status, [event.target.name]: event.target.value })
-    nextpage([{ ...status, [event.target.name]: event.target.value },form])
-  }
+
+  useEffect(()=>{
+    nextpage(form)
+  },[])
 
   return(
       <div className = "config">
         <ul>
-          <li>
-            <label>
-              <h5>Enter the topic by status</h5>
-              <input className = "textInput" placeholder="topic status" id="status" type="text" name="address" value={status.address} onChange={changeHandlerStatus} required/>
-            </label>
-          </li>
-          <li>
-          <label>
-            <h5>Enter the topic by command</h5>
-            <input className = "textInput" placeholder="topic command" id="command" type="text" name="address" value={form.address} onChange={changeHandler} required/>
-          </label>
-          </li>
+          {
+            form.map((item,index)=>{
+              return(
+                <li key={index} data-id={index}>
+                  <label>
+                    <h5>Enter the address by command</h5>
+                    <input data-id={index} className = "textInput" placeholder="topic command" id="command" type="text" name="address" value={item.address} onChange={changeHandler} required/>
+                  </label>
+                  <button onClick={()=>deleteField(index)}>delete</button>
+                </li>
+              )
+            })
+          }
+
         </ul>
+        <button onClick={addField}>add</button>
       </div>
   )
 }

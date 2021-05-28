@@ -1,5 +1,5 @@
 from django.conf import settings
-from ..models import Device,ConfigDevice,Room,genId
+from ..models import Device,ValueDevice,Room,genId
 from .deviceControl.mqttDevice.classDevices.dimmer import MqttDimmer
 from .deviceControl.mqttDevice.classDevices.device import MqttDevice
 from .deviceControl.mqttDevice.classDevices.light import MqttLight
@@ -22,37 +22,50 @@ devicesArrey = DevicesArrey()
 
 def confdecod(data):
     arr2 = []
-    for element in data:
-        arr2.append(element.receiveDict())
+    for element in data.valuedevice_set.all():
+        arr2.append(element.receiveDictConf())
     return arr2
 
 def addDevice(data):
     try:
-        # if data.get("typeConnect")=="miio":
-        #     for item in data["config"]:
-        #         if item["type"]=="base":
-                    # confirmation = is_device(item["address"],item["token"])
-                    # if confirmation["type"]=="error":
-                    #     return False
         devices = Device.objects.all()
         for item in devices:
             if item.DeviceSystemName==data.get("systemName"):
                 return False
-        newDevice = Device.objects.create(id=genId(Device.objects.all()),DeviceName=data.get("name"), DeviceSystemName=data.get("systemName"), DeviceType=data.get("typeDevice"),DeviceTypeConnect=data.get("typeConnect"))
+        newDevice = Device.objects.create(id=genId(Device.objects.all()),DeviceName=data.get("name"), DeviceSystemName=data.get("systemName"), DeviceType=data.get("typeDevice"),DeviceTypeConnect=data.get("typeConnect"),DeviceAddress=data.get("address"),DeviceValueType=data.get("typeValue"))
+        if "token" in data:
+            newDevice.DeviceToken=data.get("token")
         newDevice.save()
-        conf = data["config"]
-        for item in conf:
-            conf = ConfigDevice.objects.create(id=genId(ConfigDevice.objects.all()),device=newDevice,type=item["type"], address=item["address"])
-            if "low" in item:
-                conf.low=item["low"]
-            if "token" in item:
-                conf.token=item["token"]
-            if "high" in item:
-                conf.high=item["high"]
-            if "icon" in item:
-                conf.icon=item["icon"]
-            conf.save()
-        return True
+        if(data.get("typeValue")=="json"):
+            conf = data["config"]
+            for item in conf:
+                val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=newDevice,type=item["type"])
+                val.value="0"
+                if "address" in item:
+                    val.address=item["address"]
+                if "low" in item:
+                    val.low=item["low"]
+                    val.value=item["low"]
+                if "high" in item:
+                    val.high=item["high"]
+                if "icon" in item:
+                    val.icon=item["icon"]
+                val.save()
+            return True
+        else:
+            conf = data["config"]
+            for item in conf:
+                val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=newDevice,type=item["type"], address=item["address"])
+                val.value="0"
+                if "low" in item:
+                    val.low=item["low"]
+                    val.value=item["low"]
+                if "high" in item:
+                    val.high=item["high"]
+                if "icon" in item:
+                    val.icon=item["icon"]
+                val.save()
+            return True
     except Exception as e:
         print("error device add",e)
         return False
@@ -63,7 +76,7 @@ def device(item):
         status = "offline"
 
         if not element:
-            dev = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
+            dev = ControlDevices(item.receiveDict(),{"address":item.DeviceAddress, "token":item.DeviceToken},confdecod(item))
             if dev.get_device():
                 devicesArrey.addDevice(item.id,dev)
                 element = devicesArrey.get(item.id)
@@ -75,7 +88,7 @@ def device(item):
                     control="{}"
                 return {
                 **item.receiveDict(),
-                "DeviceConfig":confdecod(item.configdevice_set.all()),
+                "DeviceConfig":confdecod(item),
                 "DeviceControl":ast.literal_eval(control),
                 "DeviceValue":None,
                 "status":"offline"
@@ -87,38 +100,11 @@ def device(item):
 
         return {
         **item.receiveDict(),
-        "DeviceConfig":confdecod(item.configdevice_set.all()),
+        "DeviceConfig":confdecod(item),
         "DeviceControl":ast.literal_eval(item.DeviceControl),
         "DeviceValue":item.get_value(),
         "status":status
         }
-
-        # if not element:
-        #     dev = ControlDevices(item.receiveDict(),confdecod(item.configdevice_set.all()))
-        #     print("device",dev)
-        #     if dev.get_device():
-        #         devicesArrey.addDevice(item.id,dev)
-        #         element = devicesArrey.get(item.id)
-        #         item.DeviceControl = str(element["device"].get_control())
-        #         item.save()
-        #     else:
-        #         control = item.DeviceControl
-        #         if(control==""):
-        #             control="{}"
-        #         return {
-        #         **item.receiveDict(),
-        #         "DeviceConfig":confdecod(item.configdevice_set.all()),
-        #         "DeviceControl":ast.literal_eval(control),
-        #         "DeviceValue":None,
-        #         "status":"offline"
-        #         }
-        # return {
-        # **item.receiveDict(),
-        # "DeviceConfig":confdecod(item.configdevice_set.all()),
-        # "DeviceControl":ast.literal_eval(item.DeviceControl),
-        # "DeviceValue":element["device"].get_value(),
-        # "status":"online"
-        # }
 
     except Exception as e:
         print("error device",e)
@@ -152,8 +138,13 @@ def editDevice(data):
         dev.DeviceSystemName = data["DeviceSystemName"]
         dev.DeviceInformation = data["DeviceInformation"]
         dev.DeviceType = data["DeviceType"]
+        if(data["DeviceType"]!="variable"):
+            dev.DeviceAddress = data["DeviceAddress"]
+            dev.DeviceValueType = data["DeviceValueType"]
+        if "DeviceToken" in data:
+            dev.DeviceToken = data["DeviceToken"]
         dev.DeviceTypeConnect = data["DeviceTypeConnect"]
-        if data["DeviceType"] != "miio":
+        if(data["DeviceType"] != "miio" or data["DeviceType"] != "yeelight"):
             dev.DeviceControl = ""
         if("RoomId" in data and data["RoomId"]):
             room = Room.objects.get(id=data["RoomId"])
@@ -161,24 +152,42 @@ def editDevice(data):
         if("DeviceValue" in data):
             deviceSetStatus(data["DeviceId"],"value",data["DeviceValue"])
         dev.save()
-        configs = ConfigDevice.objects.filter(device__id=data["DeviceId"])
+        vals = ValueDevice.objects.filter(device__id=data["DeviceId"])
+        print(data)
         if("config" in data):
-            for item in configs:
+            for item in vals:
                 item.delete()
-            for item in data["config"]:
-                conf = ConfigDevice.objects.create(id=genId(ConfigDevice.objects.all()),device=dev,type=item["type"], address=item["address"])
-                if "low" in item:
-                    conf.low=item["low"]
-                if "high" in item:
-                    conf.high=item["high"]
-                if "icon" in item:
-                    conf.icon=item["icon"]
-                if "token" in item:
-                    conf.token=item["token"]
-                conf.save()
+            if(data.get("DeviceValueType")=="json"):
+                conf = data["config"]
+                for item in conf:
+                    val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=item["type"])
+                    val.value="0"
+                    if "address" in item:
+                        val.address=item["address"]
+                    if "low" in item:
+                        val.low=item["low"]
+                        val.value=item["low"]
+                    if "high" in item:
+                        val.high=item["high"]
+                    if "icon" in item:
+                        val.icon=item["icon"]
+                    val.save()
+                return True
+            else:
+                conf = data["config"]
+                for item in conf:
+                    val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=item["type"], address=item["address"])
+                    val.value="0"
+                    if "low" in item:
+                        val.low=item["low"]
+                        val.value=item["low"]
+                    if "high" in item:
+                        val.high=item["high"]
+                    if "icon" in item:
+                        val.icon=item["icon"]
+                    val.save()
+                return True
         devicesArrey.delete(data["DeviceId"])
-        # devi = ControlDevices(dev.receiveDict(),confdecod(dev.configdevice_set.all()))
-        # devicesArrey.addDevice(data["DeviceId"],devi)
         return True
     except Exception as e:
         print(e)

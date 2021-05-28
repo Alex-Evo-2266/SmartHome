@@ -23,6 +23,14 @@ export const NewDeviceElement = ({id}) =>{
     return null
   }
 
+  function dictToList(dict) {
+    let arr = []
+    for (var key in dict) {
+      arr.push({type:key,value:dict[key]})
+    }
+    return arr
+  }
+
   return(
     <div className = "NewCardElement">
       <div className = "NewCardHeader">
@@ -33,6 +41,24 @@ export const NewDeviceElement = ({id}) =>{
       </div>
       <div className = "NewCardBody">
         <ul>
+        {
+          ((device.DeviceType==="sensor"||device.DeviceType==="other")&&device.DeviceValue&&device.DeviceValue)?
+          dictToList(device.DeviceValue).map((item,index)=>{
+            return(
+              <li className="DeviceControlLi" key={index}>
+                <div className="DeviceControlLiName">
+                  <p>{item.type}</p>
+                </div>
+                <div className="DeviceControlLiContent">
+                  <div className="DeviceControlLiValue">
+                    <p>{item.value}</p>
+                  </div>
+                </div>
+              </li>
+            )
+          })
+          :null
+        }
         {
           (device.DeviceTypeConnect==="system"&&device.DeviceType==="variable"&&device.DeviceValue&&device.DeviceValue.value)?
           <li className="DeviceControlLi">

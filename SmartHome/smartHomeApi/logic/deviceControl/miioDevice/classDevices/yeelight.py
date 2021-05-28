@@ -5,9 +5,7 @@ class Yeelight(Bulb):
 
     def __init__(self, *args, **kwargs):
         self.__item = kwargs
-        for item in kwargs["DeviceConfig"]:
-            if item["type"]=="base":
-                self.address = item["address"]
+        self.address = kwargs["address"]
         super().__init__(self.address)
         config1 = self.get_properties()
         config2 = self.get_model_specs()

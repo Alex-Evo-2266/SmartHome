@@ -18,29 +18,8 @@ export const SensorMqttEdit = ({deviceData,hide})=>{
       clearError();
     }
   },[error,message, clearError])
-
-  const [status, setStatus] = useState({
-    type:"status",
-    address:"",
-    low:"",
-    high:"",
-    icon:""
-  })
-  useEffect(()=>{
-    console.log(deviceData);
-    for (var item of deviceData.DeviceConfig) {
-      let confel = {
-        type:item.type,
-        address:item.address,
-        low:item.low||"",
-        high:item.high||"",
-        icon:item.icon||""
-      }
-      if(item.type==="status"){
-        setStatus(confel)
-      }
-    }
-  },[deviceData])
+  const [field, setField] = useState(deviceData.DeviceConfig||[]);
+  const [count, setCount] = useState(deviceData.DeviceConfig.length);
 
   const [device, setDevice] = useState({
     DeviceId:deviceData.DeviceId,
@@ -48,6 +27,8 @@ export const SensorMqttEdit = ({deviceData,hide})=>{
     DeviceSystemName:deviceData.DeviceSystemName,
     DeviceName:deviceData.DeviceName,
     DeviceType:deviceData.DeviceType,
+    DeviceValueType:deviceData.DeviceValueType,
+    DeviceAddress:deviceData.DeviceAddress,
     DeviceTypeConnect:deviceData.DeviceTypeConnect,
     RoomId:deviceData.RoomId,
   })
@@ -55,8 +36,13 @@ export const SensorMqttEdit = ({deviceData,hide})=>{
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
   }
-  const changeHandlerStatus = event => {
-    setStatus({ ...status, [event.target.name]: event.target.value })
+  const changeHandlerField = event => {
+    let index = event.target.dataset.id
+    console.log(index);
+    let arr = field.slice()
+    let newData = { ...arr[index], [event.target.name]: event.target.value }
+    arr[index] = newData
+    setField(arr)
   }
   const changeHandlerTest = event=>{
     if(USText(event.target.value)){
@@ -66,9 +52,7 @@ export const SensorMqttEdit = ({deviceData,hide})=>{
     message("forbidden symbols","error")
   }
   const outHandler = async ()=>{
-    let conf = []
-    if(status.address)
-      conf.push(status)
+    let conf = field
     let dataout = {
       ...device,
       config:conf
@@ -82,6 +66,23 @@ export const SensorMqttEdit = ({deviceData,hide})=>{
       await request(`/api/devices/${device.DeviceId}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       hide();
     },"no")
+  }
+
+  const addField = ()=>{
+    let arr = field.slice()
+    arr.push({
+      address:"c"+count,
+      type:"c"+count,
+      icon:""
+    })
+    setCount((prev)=>prev+1)
+    setField(arr)
+  }
+  const deleteField = (index)=>{
+    let arr = field.slice()
+    arr = arr.filter((it,index2)=>index!==index2)
+    setCount((prev)=>prev-1)
+    setField(arr)
   }
 
   return (
@@ -106,20 +107,47 @@ export const SensorMqttEdit = ({deviceData,hide})=>{
       </li>
       <li>
         <label>
+          <h5>Address</h5>
+          <input className = "textInput" placeholder="address" id="DeviceAddress" type="text" name="DeviceAddress" value={device.DeviceAddress} onChange={changeHandler} required/>
+        </label>
+      </li>
+      <li>
+        <label>
+          <h5>Type value</h5>
+          <select name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
+            <option value="json">json</option>
+            <option value="value">value</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label>
           <h5>information</h5>
           <input className = "textInput" placeholder="information" id="DeviceInformation" type="text" name="DeviceInformation" value={device.DeviceInformation} onChange={changeHandler} required/>
         </label>
       </li>
-      <HidingLi title = "sensor config" show = {true}>
-      <label>
-        <h5>topic status</h5>
-        <input className = "textInput" placeholder="topic status" id="status" type="text" name="address" value={status.address} onChange={changeHandlerStatus} required/>
-      </label>
-      <label>
-        <h5>unit</h5>
-        <input className = "textInput" placeholder="unit" id="unit" type="text" name="icon" value={status.icon} onChange={changeHandlerStatus} required/>
-      </label>
-      </HidingLi>
+      {
+        field.map((item,index)=>{
+          return(
+            <HidingLi title = "Field" show = {true} key={index}>
+            <label>
+              <h5>Enter the type</h5>
+              <input data-id={index} className = "textInput" placeholder="type" id="type" type="text" name="type" value={item.type} onChange={changeHandlerField} required/>
+            </label>
+            <label>
+              <h5>Enter the address</h5>
+              <input data-id={index} className = "textInput" placeholder="address" id="address" type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
+            </label>
+            <label>
+              <h5>Enter the unit</h5>
+              <input data-id={index} className = "textInput" placeholder="unit" id="unit" type="text" name="icon" value={item.icon} onChange={changeHandlerField} required/>
+            </label>
+            <button onClick={()=>deleteField(index)}>delete</button>
+            </HidingLi>
+          )
+        })
+      }
+      <button onClick={addField}>add</button>
       <div className="controlForm" >
         <button className="formEditBtn Delete" onClick={deleteHandler}>Delete</button>
         <button className="formEditBtn" onClick={outHandler}>Save</button>

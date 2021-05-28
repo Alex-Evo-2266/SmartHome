@@ -1,4 +1,4 @@
-from ..models import Device,ConfigDevice,Room,genId
+from ..models import Device,Room,genId
 from ..classes.devicesArrey import DevicesArrey
 
 devicesArrey = DevicesArrey()

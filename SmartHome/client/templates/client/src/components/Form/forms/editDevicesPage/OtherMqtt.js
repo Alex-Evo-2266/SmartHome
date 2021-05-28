@@ -5,7 +5,7 @@ import {useMessage} from '../../../../hooks/message.hook'
 import {AuthContext} from '../../../../context/AuthContext.js'
 import {useChecked} from '../../../../hooks/checked.hook'
 
-export const BinarySensorMqttEdit = ({deviceData,hide})=>{
+export const OtherMqttEdit = ({deviceData,hide})=>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {USText} = useChecked()
@@ -18,44 +18,29 @@ export const BinarySensorMqttEdit = ({deviceData,hide})=>{
     }
   },[error,message, clearError])
 
-  const [status, setStatus] = useState({
-    type:"status",
-    address:"",
-    low:"",
-    high:"",
-    icon:""
-  })
-  useEffect(()=>{
-    console.log(deviceData);
-    for (var item of deviceData.DeviceConfig) {
-      let confel = {
-        type:item.type,
-        address:item.address,
-        low:item.low||"",
-        high:item.high||"",
-        icon:item.icon||""
-      }
-      if(item.type==="status"){
-        setStatus(confel)
-      }
-    }
-  },[deviceData])
-
   const [device, setDevice] = useState({
     DeviceId:deviceData.DeviceId,
     DeviceInformation:deviceData.DeviceInformation,
     DeviceName:deviceData.DeviceName,
     DeviceSystemName:deviceData.DeviceSystemName,
     DeviceType:deviceData.DeviceType,
+    DeviceValueType:deviceData.DeviceValueType,
+    DeviceAddress:deviceData.DeviceAddress,
     DeviceTypeConnect:deviceData.DeviceTypeConnect,
     RoomId:deviceData.RoomId,
   })
+  const [command, setCommand] = useState(deviceData.DeviceConfig||[]);
+  const [count, setCount] = useState(deviceData.DeviceConfig.length);
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
   }
-  const changeHandlerStatus = event => {
-    setStatus({ ...status, [event.target.name]: event.target.value })
+  const changeHandlerField = event => {
+    let index = event.target.dataset.id
+    let arr = command.slice()
+    let newcom = { ...arr[index], [event.target.name]: event.target.value }
+    arr[index] = newcom
+    setCommand(arr)
   }
 const changeHandlerTest = event=>{
   if(USText(event.target.value)){
@@ -66,9 +51,7 @@ const changeHandlerTest = event=>{
 }
 
   const outHandler = async ()=>{
-    let conf = []
-    if(status.address)
-      conf.push(status)
+    let conf = command
     let dataout = {
       ...device,
       config:conf
@@ -82,6 +65,26 @@ const changeHandlerTest = event=>{
       await request(`/api/devices/${device.DeviceId}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       hide();
     },"no")
+  }
+
+  const addcom = ()=>{
+    let arr = command.slice()
+    arr.push({
+      address:"c"+count,
+      type:"c"+count
+    })
+    setCount((prev)=>prev+1)
+    setCommand(arr)
+  }
+
+  const delcom = (index)=>{
+    let arr = command.slice()
+    arr = arr.filter((it,index2)=>index!==index2)
+    arr = arr.map((item,i)=>{
+      return {...item,type:"c"+i}
+    })
+    setCount((prev)=>prev-1)
+    setCommand(arr)
   }
 
   return (
@@ -106,16 +109,45 @@ const changeHandlerTest = event=>{
       </li>
       <li>
         <label>
+          <h5>Address</h5>
+          <input className = "textInput" placeholder="address" id="DeviceAddress" type="text" name="DeviceAddress" value={device.DeviceAddress} onChange={changeHandler} required/>
+        </label>
+      </li>
+      <li>
+        <label>
+          <h5>Type value</h5>
+          <select name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
+            <option value="json">json</option>
+            <option value="value">value</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label>
           <h5>information</h5>
           <input className = "textInput" placeholder="information" id="DeviceInformation" type="text" name="DeviceInformation" value={device.DeviceInformation} onChange={changeHandler} required/>
         </label>
       </li>
-      <HidingLi title = "sensor config" show = {true}>
-      <label>
-        <h5>topic status</h5>
-        <input className = "textInput" placeholder="topic status" id="status" type="text" name="address" value={status.address} onChange={changeHandlerStatus} required/>
-      </label>
-      </HidingLi>
+      {
+        command.map((item,index)=>{
+          return(
+            <HidingLi title = {`IR config ${index}`} show = {true}>
+            <label>
+              <h5>Enter the type</h5>
+              <input data-id={index} className = "textInput" placeholder="type" id="type" type="text" name="type" value={item.type} onChange={changeHandlerField} required/>
+            </label>
+            <label>
+              <h5>Enter the address</h5>
+              <input data-id={index} className = "textInput" placeholder="address" id="address" type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
+            </label>
+            <button onClick={()=>delcom(index)}>delete</button>
+            </HidingLi>
+          )
+        })
+      }
+      <li>
+        <button onClick={addcom}>add</button>
+      </li>
       <div className="controlForm" >
         <button className="formEditBtn Delete" onClick={deleteHandler}>Delete</button>
         <button className="formEditBtn" onClick={outHandler}>Save</button>

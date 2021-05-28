@@ -26,25 +26,29 @@ def model_device(ip, token):
 
 class ControlDevices():
 
-    def __init__(self, item,configs):
+    def __init__(self, item,config,configs_value):
         self.device = None
         self.__item = item
-        self.__configs = configs
+        self.__address = config["address"]
+        self.__token = None
+        if "token" in config:
+            self.__token = config["token"]
+        self.__configs = configs_value
         try:
-            if(item["DeviceTypeConnect"]=="miio"):
+            if(item["DeviceTypeConnect"]=="yeelight"):
                 if(item["DeviceType"]=="light"):
-                    self.device = Yeelight(**item, DeviceConfig=configs)
+                    self.device = Yeelight(**item, address=self.__address, DeviceConfig=self.__configs)
             elif(item["DeviceTypeConnect"]=="mqtt"):
                 if(item["DeviceType"]=="light"):
-                    self.device = MqttLight(**item, DeviceConfig=configs)
+                    self.device = MqttLight(**item, address=self.__address, DeviceConfig=self.__configs)
                 elif(item["DeviceType"]=="switch"):
-                    self.device = MqttRelay(**item, DeviceConfig=configs)
+                    self.device = MqttRelay(**item, address=self.__address, DeviceConfig=self.__configs)
                 elif(item["DeviceType"]=="dimmer"):
-                    self.device = MqttDimmer(**item, DeviceConfig=configs)
+                    self.device = MqttDimmer(**item, address=self.__address, DeviceConfig=self.__configs)
                 elif(item["DeviceType"]=="sensor"):
-                    self.device = MqttSensor(**item, DeviceConfig=configs)
+                    self.device = MqttSensor(**item, address=self.__address, DeviceConfig=self.__configs)
                 else:
-                    self.device = MqttDevice(**item, DeviceConfig=configs)
+                    self.device = MqttDevice(**item, address=self.__address, DeviceConfig=self.__configs)
             elif(item["DeviceTypeConnect"]=="system"):
                 if(item["DeviceType"]=="variable"):
                     self.device = Variable(**item)
