@@ -9,7 +9,6 @@ import {ScriptElement} from '../components/scriptCarts/scriptElement'
 import {AddScriptBase} from '../components/addScript/addScriptBase'
 
 export const ScriptsPage = () => {
-  const [search, setSearch] = useState('')
   const [scripts, setScripts] = useState([])
   const [allScripts, setAllScripts] = useState([])
   const auth = useContext(AuthContext)
@@ -23,10 +22,6 @@ export const ScriptsPage = () => {
     }
   },[error,message, clearError])
 
-  const searchHandler = event => {
-    setSearch(event.target.value)
-  }
-
   const updataScripts = useCallback(async()=>{
     const data = await request('/api/script/all', 'GET', null,{Authorization: `Bearer ${auth.token}`})
     console.log(data);
@@ -34,19 +29,13 @@ export const ScriptsPage = () => {
     setAllScripts(data)
   },[request,auth.token])
 
-  const searchout = ()=>{
+  const searchout = (search)=>{
     if(search===""){
       setScripts(allScripts)
       return
     }
     let array = allScripts.filter(item => item.name.indexOf(search)!==-1)
     setScripts(array)
-  }
-
-  const keyd = (e)=>{
-    if(e.keyCode===13){
-      searchout()
-    }
   }
 
   useEffect(()=>{

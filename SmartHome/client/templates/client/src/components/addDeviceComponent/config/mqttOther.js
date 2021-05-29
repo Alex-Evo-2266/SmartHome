@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 
 export const OtherMqtt = ({onChange,back,type})=>{
 
@@ -46,10 +46,6 @@ export const OtherMqtt = ({onChange,back,type})=>{
     setForm(arr)
     nextpage(arr)
   }
-
-  useEffect(()=>{
-    nextpage(form)
-  },[])
 
   return(
       <div className = "config">

@@ -1,0 +1,24 @@
+@import "./tableMqtt.color.css";
+
+table.mqttTable{
+  margin-top: 15px;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 3px;
+  background: #333;
+}
+table.mqttTable tr{
+  background: #ccc;
+}
+table.mqttTable tr th{
+
+}
+table.mqttTable tr td,
+table.mqttTable tr th{
+  padding: 5px;
+  text-align: center;
+  font-weight: 600;
+}
+.mqttMessageStr{
+  padding: 5px 0;
+}

@@ -1,8 +1,7 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
-import {CartEditContext} from '../EditCarts/CartEditContext'
 import {AuthContext} from '../../../context/AuthContext.js'
-import {RunText} from '../../runText'
+// import {RunText} from '../../runText'
 import {BaseElement} from './BaseElement'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -17,7 +16,6 @@ export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValu
   const [device, setDevice] = useState({})
   const [minstate, setMin] = useState(0)
   const [maxstate, setMax] = useState(100)
-  const {target} = useContext(CartEditContext)
 
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0]||!data)
@@ -90,18 +88,6 @@ export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValu
     // // // socket.terminalMessage()
     // return
     // // setTimeout(()=>updateDevice(),500)
-  }
-
-  const deletebtn = ()=>{
-    if(typeof(deleteBtn)==="function"){
-      deleteBtn(index)
-    }
-  }
-
-  const editbtn = ()=>{
-    if(typeof(editBtn)==="function"){
-      target("button",{...data,index},editBtn)
-    }
   }
 
 if(!device){

@@ -1,23 +1,39 @@
 import React, {useContext,useState,useEffect} from 'react'
 import {FormContext} from '../Form/formContext'
 import {RunText} from '../runText'
+import {useHttp} from '../../hooks/http.hook'
+import {useMessage} from '../../hooks/message.hook'
 import {Power} from './newDeviceControlElements/power'
 import {Dimmer} from './newDeviceControlElements/dimmer'
 import {Mode} from './newDeviceControlElements/mode'
 import {Color} from './newDeviceControlElements/color'
 import {DeviceStatusContext} from '../../context/DeviceStatusContext'
+import {AuthContext} from '../../context/AuthContext.js'
 
 export const NewDeviceElement = ({id}) =>{
   const {devices, updateDevice} = useContext(DeviceStatusContext)
   const form = useContext(FormContext)
+  const auth = useContext(AuthContext)
+  const {message} = useMessage();
+  const {request, error, clearError} = useHttp();
   const [device,setDevice] = useState({})
+  const [status,setStatus] = useState(false)
 
   useEffect(()=>{
     if(devices){
       let newdev = devices.filter(item => (item&&item.DeviceId===id))[0]
       setDevice(newdev)
+      if(newdev)
+        setStatus(newdev.DeviceStatus)
     }
   },[devices,id])
+
+  useEffect(()=>{
+    message(error,"error")
+    return ()=>{
+      clearError();
+    }
+  },[error,message, clearError])
 
   if(!device){
     return null
@@ -31,9 +47,15 @@ export const NewDeviceElement = ({id}) =>{
     return arr
   }
 
+  const linc = ()=>{
+    setStatus((prev)=>!prev)
+    request('/api/devices/status/set', 'POST', {id: device.DeviceId,status:!status},{Authorization: `Bearer ${auth.token}`})
+  }
+
   return(
     <div className = "NewCardElement">
       <div className = "NewCardHeader">
+        <button onClick={linc}><i>linc</i></button>
         <div className = {`typeConnect ${device.DeviceTypeConnect||"other"}`}>
           <p>{device.DeviceTypeConnect||"other"}</p>
         </div>
@@ -74,8 +96,8 @@ export const NewDeviceElement = ({id}) =>{
           :null
         }
         {
-          (device.status==="offline")?
-          <li className="DeviceControlLi"><h4 className="offline">offline</h4></li>
+          (device.status!=="online")?
+          <li className="DeviceControlLi"><h4 className="offline">{device.status}</h4></li>
           :<>
           {
             (device.DeviceControl&&device.DeviceControl.power)?

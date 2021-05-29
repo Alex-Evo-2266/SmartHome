@@ -1,6 +1,8 @@
 import React, {useContext} from 'react'
 import {FormContext} from './formContext'
 import {EditDevicesForm} from './forms/editDevicesForm'
+import {LincDevicesForm} from './forms/lincDevicesForm'
+import {ChoiceType} from './forms/choiceType'
 import {BackForm} from '../moduls/backForm'
 import {EditUserLevel} from './forms/editUserLevel'
 
@@ -11,10 +13,10 @@ export const Form = ()=>{
     return null;
   }
 
-  const hideAndApdata = () =>{
+  const hideAndApdata = (t=null) =>{
     hide();
     if(form.OK){
-      form.OK()
+      form.OK(t)
     }
   }
 
@@ -22,6 +24,22 @@ export const Form = ()=>{
     return (
       <BackForm onClick = {hide}>
         <EditDevicesForm hide = {hideAndApdata} id = {form.data.DeviceId}/>
+      </BackForm>
+    )
+  }
+
+  if(form.type === "LinkDevices"){
+    return (
+      <BackForm onClick = {hide}>
+        <LincDevicesForm hide = {hideAndApdata} data = {form.data}/>
+      </BackForm>
+    )
+  }
+
+  if(form.type === "ChoiceType"){
+    return (
+      <BackForm onClick = {hide}>
+        <ChoiceType hide = {hideAndApdata}/>
       </BackForm>
     )
   }

@@ -30,13 +30,13 @@ def addDevice(data):
     try:
         devices = Device.objects.all()
         for item in devices:
-            if item.DeviceSystemName==data.get("systemName"):
+            if item.DeviceSystemName==data.get("DeviceSystemName"):
                 return False
-        newDevice = Device.objects.create(id=genId(Device.objects.all()),DeviceName=data.get("name"), DeviceSystemName=data.get("systemName"), DeviceType=data.get("typeDevice"),DeviceTypeConnect=data.get("typeConnect"),DeviceAddress=data.get("address"),DeviceValueType=data.get("typeValue"))
-        if "token" in data:
-            newDevice.DeviceToken=data.get("token")
+        newDevice = Device.objects.create(id=genId(Device.objects.all()),DeviceName=data.get("DeviceName"), DeviceSystemName=data.get("DeviceSystemName"), DeviceType=data.get("DeviceType"),DeviceTypeConnect=data.get("DeviceTypeConnect"),DeviceAddress=data.get("DeviceAddress"),DeviceValueType=data.get("DeviceValueType"))
+        if "DeviceToken" in data:
+            newDevice.DeviceToken=data.get("DeviceToken")
         newDevice.save()
-        if(data.get("typeValue")=="json"):
+        if(data.get("DeviceValueType")=="json"):
             conf = data["config"]
             for item in conf:
                 val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=newDevice,type=item["type"])
@@ -72,6 +72,17 @@ def addDevice(data):
 
 def device(item):
     try:
+        if(not item.DeviceStatus):
+            control = item.DeviceControl
+            if(control==""):
+                control="{}"
+            return {
+            **item.receiveDict(),
+            "DeviceConfig":confdecod(item),
+            "DeviceControl":ast.literal_eval(control),
+            "DeviceValue":None,
+            "status":"unlink"
+            }
         element = devicesArrey.get(item.id)
         status = "offline"
 
@@ -111,7 +122,20 @@ def device(item):
         el = devicesArrey.get(item.id)
         if(el):
             devicesArrey.delete(item.id)
-        return None
+        try:
+            control = item.DeviceControl
+            if(control==""):
+                control="{}"
+            return {
+            **item.receiveDict(),
+            "DeviceConfig":confdecod(item),
+            "DeviceControl":ast.literal_eval(control),
+            "DeviceValue":None,
+            "status":"offline"
+            }
+        except Exception as ex:
+            print(ex)
+            return None
 
 
 def giveDevice(id):

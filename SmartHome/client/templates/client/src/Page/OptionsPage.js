@@ -1,13 +1,11 @@
-import React,{useContext} from 'react'
+import React from 'react'
 import {NavLink,useLocation} from 'react-router-dom'
-import {AuthContext} from '../context/AuthContext.js'
 import {UserOption} from '../components/pages/optionPages/userOption'
 import {ServerOption} from '../components/pages/optionPages/serverOption'
 import {ImgOption} from '../components/pages/optionPages/imgOption'
 import {MenuOption} from '../components/pages/optionPages/menuOption'
 
 export const OptionsPage = () => {
-  const auth = useContext(AuthContext)
   const location = useLocation();
 
   return(

@@ -1,13 +1,13 @@
-import React,{useContext,useEffect,useState} from 'react'
+import React,{useContext,useState} from 'react'
 import {ModalWindow} from '../modalWindow/modalWindow'
 import {BtnElement} from './CartLineElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
 import {DeviceStatusContext} from '../../context/DeviceStatusContext'
 import {CartEditContext} from './EditCarts/CartEditContext'
 import {SliderElement} from './CartLineElement/SliderElement'
-import {SensorElement} from './CartLineElement/SensorElement'
+// import {SensorElement} from './CartLineElement/SensorElement'
 import {ScriptElement} from './CartLineElement/ScriptElement'
-import {WeatherElement} from './CartElement/WeatherElement'
+// import {WeatherElement} from './CartElement/WeatherElement'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
@@ -16,7 +16,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   const {message} = useMessage();
   const {devices} = useContext(DeviceStatusContext)
   const auth = useContext(AuthContext)
-  const {request, error, clearError} = useHttp();
+  const {request} = useHttp();
   const {mode} = useContext(EditModeContext)
   const {target} = useContext(CartEditContext)
   const [act, setAct] = useState(isPowerActiv(data.children))
@@ -46,7 +46,8 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   function isPowerActiv(array) {
     for (var item of array)
       if(item.typeAction==="power"){
-        let condidat = devices.filter((item2)=>(item2&&item2.DeviceId===item.deviceId))
+        let id = item.deviceId
+        let condidat = devices.filter((item2)=>(item2&&(item2.DeviceId===id)))
         if(condidat[0]){
           let congDev = condidat[0].DeviceConfig.filter((item2)=>item2&&item2.type==="power")
           congDev = congDev[0]||{}

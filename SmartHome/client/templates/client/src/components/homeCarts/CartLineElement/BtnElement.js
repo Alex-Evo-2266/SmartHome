@@ -1,6 +1,5 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
-import {CartEditContext} from '../EditCarts/CartEditContext'
 import {BaseElement} from './BaseElement'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -16,7 +15,6 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   const [disabled2, setDisabled] = useState(disabled)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
-  const {target} = useContext(CartEditContext)
 
   useEffect(()=>{
     if(typeof(onClick)==="function"){
@@ -99,7 +97,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
         setValue(false)
       }
     }
-  },[device,onClick,data,deviceConfig])
+  },[device,onClick,data,deviceConfig,disabled])
 
 const changeHandler = (event)=>{
   let oldvel = value
@@ -133,18 +131,6 @@ const changeHandler = (event)=>{
   return
   // setTimeout(()=>updateDevice(),500)
 }
-
-  const deletebtn = ()=>{
-    if(typeof(deleteBtn)==="function"){
-      deleteBtn(index)
-    }
-  }
-
-  const editbtn = ()=>{
-    if(typeof(editBtn)==="function"){
-      target("button",{...data,index},editBtn)
-    }
-  }
 
   if(!switchMode){
     return(

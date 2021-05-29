@@ -1,5 +1,4 @@
 import React,{useContext} from 'react'
-import {BtnElement} from './CartElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
 import {Header} from '../moduls/header'
 

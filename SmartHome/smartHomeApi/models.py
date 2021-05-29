@@ -147,6 +147,7 @@ class Room(models.Model):
 
 class Device(models.Model):
     id = models.IntegerField("id", primary_key=True)
+    DeviceStatus = models.BooleanField("статус",default=True)
     DeviceName = models.CharField("device name", max_length = 200)
     DeviceSystemName = models.SlugField("device system name", max_length = 200)
     DeviceAddress = models.SlugField("device address", max_length = 200, default="")
@@ -164,6 +165,7 @@ class Device(models.Model):
     def receiveDict(self):
         return {
             "DeviceId":self.id,
+            "DeviceStatus":self.DeviceStatus,
             "DeviceName":self.DeviceName,
             "DeviceSystemName":self.DeviceSystemName,
             "DeviceInformation":self.DeviceInformation,

@@ -11,37 +11,40 @@ def devicestatus(id, type):
     return None
 
 def setValueAtToken(address,value):
-    # print(address,value)
-    print("g")
+
+    print("g",address,value)
     devices = Device.objects.all()
     for item in devices:
         base_address = item.DeviceAddress
         if(item.DeviceValueType=="json"):
-            print(value)
-            data = json.loads(value)
-            for key in data:
-                for item2 in item.valuedevice_set.all():
-                    if(item2.address==key):
-                        return deviceSetStatus(item.id,item2.type,data[key])
+            if(base_address == address):
+                data = json.loads(value)
+                for key in data:
+                    print("key",key)
+                    for item2 in item.valuedevice_set.all():
+                        print("address",item2.address)
+                        if(item2.address==key):
+                            deviceSetStatus(item.id,item2.type,data[key])
+
         else:
             for item2 in item.valuedevice_set.all():
-                print(base_address + '/' + item2.address)
-                print(address)
                 if base_address + '/' + item2.address==address:
                     return deviceSetStatus(item.id,item2.type,value)
 
 
 def deviceSetStatus(id, type,value):
     try:
-        if(not value or type=="background"):
+        print("set",type,value)
+        if(value==None or type=="background"):
             return None
         dev = Device.objects.get(id=id)
         # print("2")
         values = dev.valuedevice_set.all()
         for item in values:
-            print(item)
+            print(item,value)
             if item.type==type:
                 if(type=="power"):
+                    value = str(value)
                     if(value==item.high):
                         value="1"
                     elif(value==item.low):

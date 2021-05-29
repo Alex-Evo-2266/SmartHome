@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
 export const RelayMqtt = ({onChange,type})=>{
@@ -23,10 +23,6 @@ export const RelayMqtt = ({onChange,type})=>{
     setPower({ ...power, [event.target.name]: event.target.value })
     nextpage([{ ...power, [event.target.name]: event.target.value }])
   }
-
-  useEffect(()=>{
-    nextpage([power])
-  },[])
 
   return(
       <div className = "config">

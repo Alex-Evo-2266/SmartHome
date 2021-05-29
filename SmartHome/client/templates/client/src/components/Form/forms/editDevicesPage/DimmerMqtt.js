@@ -6,7 +6,7 @@ import {AuthContext} from '../../../../context/AuthContext.js'
 import {useChecked} from '../../../../hooks/checked.hook'
 
 
-export const DimmerMqttEdit = ({deviceData,hide})=>{
+export const DimmerMqttEdit = ({deviceData,hide,type="edit"})=>{
   const auth = useContext(AuthContext)
   const {USText} = useChecked()
   const {message} = useMessage();
@@ -46,6 +46,7 @@ export const DimmerMqttEdit = ({deviceData,hide})=>{
   })
 
   useEffect(()=>{
+    if(!deviceData||!deviceData.DeviceConfig)return
     console.log(deviceData);
     for (var item of deviceData.DeviceConfig) {
       let confel = {
@@ -90,7 +91,10 @@ export const DimmerMqttEdit = ({deviceData,hide})=>{
       ...device,
       config:conf
     }
-    await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
+    if(type==="edit")
+      await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
+    else if(type==="link")
+      await request('/api/devices', 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
     hide();
   }
 
@@ -171,7 +175,11 @@ export const DimmerMqttEdit = ({deviceData,hide})=>{
       </label>
       </HidingLi>
       <div className="controlForm" >
+      {
+        (type==="edit")?
         <button className="formEditBtn Delete" onClick={deleteHandler}>Delete</button>
+        :null
+      }
         <button className="formEditBtn" onClick={outHandler}>Save</button>
       </div>
     </ul>

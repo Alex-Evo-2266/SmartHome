@@ -44,6 +44,7 @@ class MqttDevice():
             alltopic = self.address + "/" + topic
             print(alltopic)
             client.publish(alltopic, command)
+            print("f")
 
     def sendCommand(self, command:str):
         send(self.commandtoken,command)

@@ -6,7 +6,7 @@ import {AuthContext} from '../../../../context/AuthContext.js'
 import {useChecked} from '../../../../hooks/checked.hook'
 
 
-export const LightMqttEdit = ({deviceData,hide})=>{
+export const LightMqttEdit = ({deviceData,hide,type="edit"})=>{
   const auth = useContext(AuthContext)
   const {USText} = useChecked()
   const {message} = useMessage();
@@ -67,6 +67,7 @@ export const LightMqttEdit = ({deviceData,hide})=>{
   })
 
   useEffect(()=>{
+    if(!deviceData||!deviceData.DeviceConfig)return
     console.log(deviceData);
     for (var item of deviceData.DeviceConfig) {
       let confel = {
@@ -135,7 +136,10 @@ export const LightMqttEdit = ({deviceData,hide})=>{
       ...device,
       config:conf
     }
-    await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
+    if(type==="edit")
+      await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
+    else if(type==="link")
+      await request('/api/devices', 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
     hide();
   }
 
@@ -254,7 +258,11 @@ export const LightMqttEdit = ({deviceData,hide})=>{
       </label>
       </HidingLi>
       <div className="controlForm" >
-        <button className="formEditBtn Delete" onClick={deleteHandler}>Delete</button>
+        {
+          (type==="edit")?
+          <button className="formEditBtn Delete" onClick={deleteHandler}>Delete</button>
+          :null
+        }
         <button className="formEditBtn" onClick={outHandler}>Save</button>
       </div>
     </ul>

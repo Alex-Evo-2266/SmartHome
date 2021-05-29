@@ -8,7 +8,6 @@ import {Loader} from '../components/Loader'
 import {UserElement} from '../components/usersCart/userElement'
 
 export const UsersPage = () => {
-  const [search, setSearch] = useState('')
   const [users, setUsers] = useState([])
   const [allUsers, setAllUsers] = useState([])
   const auth = useContext(AuthContext)
@@ -22,10 +21,6 @@ export const UsersPage = () => {
     }
   },[error,message, clearError])
 
-  const searchHandler = event => {
-    setSearch(event.target.value)
-  }
-
   const updataUsers = useCallback(async()=>{
     const data = await request('/api/users', 'GET', null,{Authorization: `Bearer ${auth.token}`})
     setUsers(data);
@@ -33,19 +28,13 @@ export const UsersPage = () => {
     setAllUsers(data)
   },[request,auth.token])
 
-  const searchout = ()=>{
+  const searchout = (search)=>{
     if(search===""){
       setUsers(allUsers)
       return
     }
     let array = allUsers.filter(item => (item.UserName.toLowerCase().indexOf(search.toLowerCase())!==-1)||(item.UserSurname.toLowerCase().indexOf(search.toLowerCase())!==-1))
     setUsers(array)
-  }
-
-  const keyd = (e)=>{
-    if(e.keyCode===13){
-      searchout()
-    }
   }
 
   useEffect(()=>{

@@ -15,9 +15,9 @@ from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
 from .logic.weather import Weather
-from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAll
+from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc
 
-from .models import User, UserConfig,ImageBackground,genId,LocalImage
+from .models import User, UserConfig,ImageBackground,genId,LocalImage,Device
 
 from .forms import ImageForm
 
@@ -237,13 +237,27 @@ class SetValueDevice(APIView):
         if setValue(data["id"],data["type"],data["status"]):
             return Response("ok",status=201)
 
+class SetStatusDevice(APIView):
+    """docstring for SetStatusDevice."""
+    def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        data = json.loads(request.body)
+        print(data)
+        dev = Device.objects.get(id=data["id"])
+        dev.DeviceStatus = data["status"]
+        dev.save()
+        return Response("ok",status=201)
+
+
 class MqttDevice(APIView):
     """docstring for getMqttDevice."""
     def get(self,request):
         authData = auth(request)
         if not authData:
             return Response(status=403)
-        dev = getTopicksAll()
+        dev = getTopicksAndLinc()
         return Response(dev,status=200)
 
 # home page views

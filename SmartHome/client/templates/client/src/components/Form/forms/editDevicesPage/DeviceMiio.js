@@ -1,11 +1,10 @@
 import React, {useState,useEffect,useContext} from 'react'
-import {HidingLi} from '../../../hidingLi.js'
 import {useHttp} from '../../../../hooks/http.hook'
 import {useMessage} from '../../../../hooks/message.hook'
 import {AuthContext} from '../../../../context/AuthContext.js'
 import {useChecked} from '../../../../hooks/checked.hook'
 
-export const DeviceMiioEdit = ({deviceData,hide})=>{
+export const DeviceMiioEdit = ({deviceData,hide,type="edit"})=>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {USText} = useChecked()
@@ -46,7 +45,10 @@ const changeHandlerTest = event=>{
       ...device,
       config:conf
     }
-    await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
+    if(type==="edit")
+      await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
+    else if(type==="link")
+      await request('/api/devices', 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
     hide();
   }
 
@@ -90,7 +92,11 @@ const changeHandlerTest = event=>{
         </label>
       </li>
       <div className="controlForm" >
+      {
+        (type==="edit")?
         <button className="formEditBtn Delete" onClick={deleteHandler}>Delete</button>
+        :null
+      }
         <button className="formEditBtn" onClick={outHandler}>Save</button>
       </div>
     </ul>

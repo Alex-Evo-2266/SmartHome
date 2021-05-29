@@ -2,7 +2,6 @@ import React,{useContext,useState,useEffect,useCallback} from 'react'
 import {AuthContext} from '../../../context/AuthContext.js'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
-import {InputNumber} from '../../moduls/inputNumber'
 import {Loader} from '../../Loader'
 
 export const ServerOption = () =>{
@@ -28,9 +27,6 @@ export const ServerOption = () =>{
   // }
   const changeHandler = event => {
     setServerconf({ ...serverconf, [event.target.name]: event.target.value })
-  }
-  const changeNumberHandler = (Number,key) => {
-    setServerconf({ ...serverconf, [key]: Number })
   }
 
   const serverConfigHandler = async(event)=>{

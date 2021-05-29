@@ -1,5 +1,4 @@
 import React,{useState} from 'react'
-import {NavLink} from 'react-router-dom'
 
 export const Header = ({search,name,children})=>{
   const [searcht, setSearch] = useState('');

@@ -92,7 +92,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
         setValue(false)
       }
     }
-  },[device,onClick,data,deviceConfig])
+  },[device,onClick,data,deviceConfig,disabled])
 
 const changeHandler = (event)=>{
   let oldvel = value

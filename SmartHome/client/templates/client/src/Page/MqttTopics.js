@@ -5,6 +5,7 @@ import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
+import {MQTTElement} from '../components/moduls/mqttCards/mqttCard'
 
 export const MqttPage = ()=>{
   const auth = useContext(AuthContext)
@@ -16,13 +17,13 @@ export const MqttPage = ()=>{
     try {
       const data = await request('/api/devices/mqtt', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       if(data){
-        setDeviceMqtt(data.device)
+        setDeviceMqtt(data)
         console.log(data);
       }
     } catch (e) {
 
     }
-  },[request])
+  },[request,auth.token])
 
   useEffect(()=>{
     message(error, 'error');
@@ -42,10 +43,17 @@ export const MqttPage = ()=>{
         <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
       </Header>
       {
-        (loading)?
+        (loading||!deviceMqtt)?
         <Loader/>:
-        <div className="">
-
+        <div className="top">
+          <table className="mqttTable">
+            <tr><th>Адресс</th><th>Сообщения</th><th>связанные устройства</th><th>Управление</th></tr>
+            {
+              deviceMqtt.map((item,index)=>{
+                return <MQTTElement key={index} data = {item}/>
+              })
+            }
+          </table>
         </div>
       }
     </div>

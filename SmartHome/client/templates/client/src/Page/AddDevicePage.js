@@ -1,4 +1,4 @@
-import React,{useContext,useState,useEffect} from 'react'
+import React,{useContext,useState,useEffect,useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 import {AuthContext} from '../context/AuthContext.js'
 import {SelectioEnlementImg} from '../components/addDeviceComponent/selectioEnlementImg'
@@ -18,7 +18,6 @@ import imgDimmer from '../img/dimmerDevices.jpg';
 import imgOther from '../img/otherDevice.jpg';
 import imgSensor from '../img/sensorDevices.jpg';
 import imgSwitch from '../img/switchDevices.jpg';
-import imgBinarySensor from '../img/binarySensorDevices.jpg';
 import imgVariable from '../img/variable.png'
 import imgYeelight from '../img/yeelight.jpg'
 import imgJSON from '../img/json.png'
@@ -31,14 +30,14 @@ export const AddDevicesPage = () => {
   const {message, clearMessage} = useMessage();
   const {request, error, clearError} = useHttp();
   const [form, setForm] = useState({
-    typeConnect: '',
-    typeDevice: '',
-    typeValue: 'json',
-    name: '',
-    address:'',
-    systemName:'',
+    DeviceTypeConnect: '',
+    DeviceType: '',
+    DeviceValueType: 'json',
+    DeviceName: '',
+    DeviceAddress:'',
+    DeviceSystemName:'',
     config:[],
-    token:''
+    DeviceToken:''
   });
 
   useEffect(()=>{
@@ -53,7 +52,7 @@ export const AddDevicesPage = () => {
   },[error,message, clearError])
 
   const outHandler = async () => {
-    // if(typeConnect)
+    // if(DeviceTypeConnect)
     try {
       clearMessage();
       console.log(form);
@@ -69,32 +68,34 @@ export const AddDevicesPage = () => {
 
   const typeConnectHandler = event => {
     if(event.target.title === "variable")
-      setForm({ ...form, typeConnect: "system",typeDevice: event.target.title })
-    else if(form.typeDevice==="variable")
-      setForm({ ...form, typeConnect: event.target.title,typeDevice: "" })
+      setForm({ ...form, DeviceTypeConnect: "system",DeviceType: event.target.title })
+    else if(form.DeviceType==="variable")
+      setForm({ ...form, DeviceTypeConnect: event.target.title,DeviceType: "" })
     else
-      setForm({ ...form, typeConnect: event.target.title })
+      setForm({ ...form, DeviceTypeConnect: event.target.title })
 
   }
 
   const typeDeviceHandler = async event => {
-      await setForm({ ...form, typeDevice: event.target.title})
+      await setForm({ ...form, DeviceType: event.target.title})
   }
 
   const typeValueHandler = async event => {
-      await setForm({ ...form, typeValue: event.target.title})
+      await setForm({ ...form, DeviceValueType: event.target.title})
   }
   const tokenHandler = async event => {
-      await setForm({ ...form, token: event.target.value})
+      await setForm({ ...form, DeviceToken: event.target.value})
   }
 
-  const confHandler = confs => {
-    setForm({ ...form, config: confs})
-  }
+  const confHandler = useCallback((confs) => {
+    setForm((prev)=> {
+      return { ...prev, config: confs}
+    })
+  },[])
 
   const changeHandler = event => {
-    if(event.target.name==="typeDevice"&&event.target.value==="variable"){
-      setForm({ ...form,typeDevice:"variable", typeConnect: "system"})
+    if(event.target.name==="DeviceType"&&event.target.value==="variable"){
+      setForm({ ...form,DeviceType:"variable", DeviceTypeConnect: "system"})
       return
     }
     setForm({ ...form, [event.target.name]: event.target.value })
@@ -118,108 +119,108 @@ export const AddDevicesPage = () => {
           <li className="conteiner-body-li">
             <label>
               <h5>Enter the device name</h5>
-              <input className = "textInput" placeholder="name" id="name" type="text" name="name" value={form.name} onChange={changeHandler} required/>
+              <input className = "textInput" placeholder="name" id="DeviceName" type="text" name="DeviceName" value={form.DeviceName} onChange={changeHandler} required/>
             </label>
           </li>
           <li className="conteiner-body-li">
             <label>
               <h5>Enter the device System name</h5>
-              <input className = "textInput" placeholder="system name" id="SystemName" type="text" name="systemName" value={form.sysyemName} onChange={changeHandlerTest} required/>
+              <input className = "textInput" placeholder="system name" id="DeviceSystemName" type="text" name="DeviceSystemName" value={form.DeviceSystemName} onChange={changeHandlerTest} required/>
             </label>
           </li>
-          <AnimationLi className="conteiner-body-li" show={form.systemName&&form.name}>
+          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName}>
             <ul className="selectioEnlementUl">
               <li>
-                <SelectioEnlementImg active={(form.typeConnect==="miio")} onClick={typeConnectHandler} width="100px" height="100px" title = "Miio device" name="miio" src={imgMiio}/>
+                <SelectioEnlementImg active={(form.DeviceTypeConnect==="miio")} onClick={typeConnectHandler} width="100px" height="100px" title = "Miio device" name="miio" src={imgMiio}/>
               </li>
               <li>
-                <SelectioEnlementImg active={(form.typeConnect==="yeelight")} onClick={typeConnectHandler} width="100px" height="100px" title = "Yeelight device" name="yeelight" src={imgYeelight}/>
+                <SelectioEnlementImg active={(form.DeviceTypeConnect==="yeelight")} onClick={typeConnectHandler} width="100px" height="100px" title = "Yeelight device" name="yeelight" src={imgYeelight}/>
               </li>
               <li>
-                <SelectioEnlementImg active={(form.typeConnect==="mqtt")} onClick={typeConnectHandler} width="100px" height="100px" title="Mqtt device" name="mqtt" src={imgMqtt}/>
+                <SelectioEnlementImg active={(form.DeviceTypeConnect==="mqtt")} onClick={typeConnectHandler} width="100px" height="100px" title="Mqtt device" name="mqtt" src={imgMqtt}/>
               </li>
               <li>
-                <SelectioEnlementImg active={(form.typeConnect==="system")} onClick={typeConnectHandler} width="100px" height="100px" title="variable" name="variable" src={imgVariable}/>
+                <SelectioEnlementImg active={(form.DeviceTypeConnect==="system")} onClick={typeConnectHandler} width="100px" height="100px" title="variable" name="variable" src={imgVariable}/>
               </li>
             </ul>
           </AnimationLi>
-          <AnimationLi className="conteiner-body-li" show={form.systemName&&form.name&&form.typeConnect&&form.typeConnect!=="system"}>
+          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceTypeConnect&&form.DeviceTypeConnect!=="system"}>
             <label>
               <h5>Enter the device address</h5>
-              <input className = "textInput" placeholder="address" id="Address" type="text" name="address" value={form.address} onChange={changeHandler} required/>
+              <input className = "textInput" placeholder="address" id="DeviceAddress" type="text" name="DeviceAddress" value={form.DeviceAddress} onChange={changeHandler} required/>
             </label>
           </AnimationLi>
-          <AnimationLi className="conteiner-body-li" show={form.systemName&&form.name&&form.typeConnect&&form.typeConnect!=="system"&&form.address}>
+          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceTypeConnect&&form.DeviceTypeConnect!=="system"&&form.DeviceAddress}>
             <ul className="selectioEnlementUl">
             {
-              (form.typeConnect==="yeelight"||form.typeConnect==="mqtt"||form.typeConnect==="miio")?
+              (form.DeviceTypeConnect==="yeelight"||form.DeviceTypeConnect==="mqtt"||form.DeviceTypeConnect==="miio")?
               <li>
-                <SelectioEnlementImg active={(form.typeDevice==="light")} onClick={typeDeviceHandler} width="100px" height="100px" title = "light device" name="light" src={imgLight}/>
+                <SelectioEnlementImg active={(form.DeviceType==="light")} onClick={typeDeviceHandler} width="100px" height="100px" title = "light device" name="light" src={imgLight}/>
               </li>
               :null
             }
             {
-              (form.typeConnect==="mqtt")?
+              (form.DeviceTypeConnect==="mqtt")?
               <li>
-                <SelectioEnlementImg active={(form.typeDevice==="switch")} onClick={typeDeviceHandler} width="100px" height="100px" title="switch device" name="switch" src={imgSwitch}/>
+                <SelectioEnlementImg active={(form.DeviceType==="switch")} onClick={typeDeviceHandler} width="100px" height="100px" title="switch device" name="switch" src={imgSwitch}/>
               </li>
               :null
             }
             {
-              (form.typeConnect==="mqtt")?
+              (form.DeviceTypeConnect==="mqtt")?
               <li>
-                <SelectioEnlementImg active={(form.typeDevice==="dimmer")} onClick={typeDeviceHandler} width="100px" height="100px" title = "dimmer device" name="dimmer" src={imgDimmer}/>
+                <SelectioEnlementImg active={(form.DeviceType==="dimmer")} onClick={typeDeviceHandler} width="100px" height="100px" title = "dimmer device" name="dimmer" src={imgDimmer}/>
               </li>
               :null
             }
             {
-              (form.typeConnect==="mqtt")?
+              (form.DeviceTypeConnect==="mqtt")?
               <li>
-                <SelectioEnlementImg active={(form.typeDevice==="sensor")} onClick={typeDeviceHandler} width="100px" height="100px" title="sensor device" name="sensor" src={imgSensor}/>
+                <SelectioEnlementImg active={(form.DeviceType==="sensor")} onClick={typeDeviceHandler} width="100px" height="100px" title="sensor device" name="sensor" src={imgSensor}/>
               </li>
               :null
             }
             {
-              (form.typeConnect==="mqtt")?
+              (form.DeviceTypeConnect==="mqtt")?
               <li>
-                <SelectioEnlementImg active={(form.typeDevice==="other")} onClick={typeDeviceHandler} width="100px" height="100px" title="other device" name="other" src={imgOther}/>
+                <SelectioEnlementImg active={(form.DeviceType==="other")} onClick={typeDeviceHandler} width="100px" height="100px" title="other device" name="other" src={imgOther}/>
               </li>
               :null
             }
             </ul>
           </AnimationLi>
-          <AnimationLi className="conteiner-body-li" show={form.systemName&&form.name&&form.typeConnect&&form.typeDevice&&form.typeConnect!=="system"&&form.typeConnect==="mqtt"}>
+          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceTypeConnect&&form.DeviceType&&form.DeviceTypeConnect!=="system"&&form.DeviceTypeConnect==="mqtt"}>
             <ul className="selectioEnlementUl">
               <li>
-                <SelectioEnlementImg active={(form.typeValue==="json")} onClick={typeValueHandler} width="100px" height="100px" title = "json" name="json" src={imgJSON}/>
+                <SelectioEnlementImg active={(form.DeviceValueType==="json")} onClick={typeValueHandler} width="100px" height="100px" title = "json" name="json" src={imgJSON}/>
               </li>
               <li>
-                <SelectioEnlementImg active={(form.typeValue==="value")} onClick={typeValueHandler} width="100px" height="100px" title = "value" name="value" src={imgValue}/>
+                <SelectioEnlementImg active={(form.DeviceValueType==="value")} onClick={typeValueHandler} width="100px" height="100px" title = "value" name="value" src={imgValue}/>
               </li>
             </ul>
           </AnimationLi>
-          <AnimationLi className="conteiner-body-li" show={form.systemName&&form.name&&form.typeDevice&&form.typeDevice!=="variable"&&form.typeConnect==="mqtt"&&form.typeValue}>
+          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceType&&form.DeviceType!=="variable"&&form.DeviceTypeConnect==="mqtt"&&form.DeviceValueType}>
             {
-              (form.typeConnect==="mqtt"&&form.typeDevice==="light")?
-              <LightMqtt onChange={confHandler} type={form.typeValue}/>:
-              (form.typeConnect==="mqtt"&&form.typeDevice==="switch")?
-              <RelayMqtt onChange={confHandler} type={form.typeValue}/>:
-              (form.typeConnect==="mqtt"&&form.typeDevice==="dimmer")?
-              <DimmerMqtt onChange={confHandler} type={form.typeValue}/>:
-              (form.typeConnect==="mqtt"&&form.typeDevice==="sensor")?
-              <SensorMqtt onChange={confHandler} type={form.typeValue}/>:
-              (form.typeConnect==="mqtt"&&form.typeDevice==="other")?
-              <OtherMqtt onChange={confHandler} type={form.typeValue}/>:
+              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="light")?
+              <LightMqtt onChange={confHandler}/>:
+              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="switch")?
+              <RelayMqtt onChange={confHandler}/>:
+              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="dimmer")?
+              <DimmerMqtt onChange={confHandler}/>:
+              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="sensor")?
+              <SensorMqtt onChange={confHandler}/>:
+              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="other")?
+              <OtherMqtt onChange={confHandler}/>:
               null
             }
           </AnimationLi>
-          <AnimationLi className="conteiner-body-li" show={form.systemName&&form.name&&form.typeDevice&&form.typeDevice!=="variable"&&form.typeConnect==="miio"&&form.typeValue}>
+          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceType&&form.DeviceType!=="variable"&&form.DeviceTypeConnect==="miio"&&form.DeviceValueType}>
               <label>
                 <h5>Enter the device token</h5>
-                <input className = "textInput" placeholder="token" id="Token" type="text" name="token" value={form.token} onChange={tokenHandler} required/>
+                <input className = "textInput" placeholder="token" id="DeviceToken" type="text" name="DeviceToken" value={form.DeviceToken} onChange={tokenHandler} required/>
               </label>
           </AnimationLi>
-          <AnimationLi className="conteiner-body-li" show={form.systemName&&form.name&&form.address&&form.typeDevice&&(form.typeConnect==="yeelight"||form.typeDevice==="variable"||(form.typeConnect==="miio"&&form.token)||(form.typeConnect&&form.config[0]&&form.config[0].address))}>
+          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceAddress&&form.DeviceType&&(form.DeviceTypeConnect==="yeelight"||form.DeviceType==="variable"||(form.DeviceTypeConnect==="miio"&&form.DeviceToken)||(form.DeviceTypeConnect&&form.config[0]&&form.config[0].address))}>
             <button className="btnOut" onClick={outHandler}>Save</button>
           </AnimationLi>
         </ul>

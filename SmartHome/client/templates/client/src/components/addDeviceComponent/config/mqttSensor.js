@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
 export const SensorMqtt = ({onChange,back,type})=>{
@@ -45,10 +45,6 @@ export const SensorMqtt = ({onChange,back,type})=>{
     setForm(arr)
     nextpage(arr)
   }
-
-  useEffect(()=>{
-    nextpage(form)
-  },[])
 
   return(
       <div className = "config">

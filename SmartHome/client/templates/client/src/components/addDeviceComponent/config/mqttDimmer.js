@@ -1,35 +1,32 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useCallback} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
-export const DimmerMqtt = ({onChange=()=>{},type})=>{
+export const DimmerMqtt = ({onChange=null})=>{
 
   const [power, setPower] = useState({
     type:"power",
-    address:(type==="json")?"state":"",
+    address:"",
     low:"0",
     high:"1"
   })
   const [dimmer, setDimmer] = useState({
     type:"dimmer",
-    address:(type==="json")?"brightness":"",
+    address:"",
     low:"0",
     high:"255"
   })
 
 
 
-  const nextpage = (param)=>{
+  const nextpage = useCallback((param)=>{
     let arr = []
     for (var item of param) {
       if(item.address)
         arr.push(item)
     }
-    onChange(arr)
-  }
-
-  useEffect(()=>{
-    nextpage([power,dimmer])
-  },[])
+    if(typeof(onChange)==='function')
+      onChange(arr)
+  },[onChange])
 
   const changeHandlerPower = event => {
     setPower({ ...power, [event.target.name]: event.target.value })

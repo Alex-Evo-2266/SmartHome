@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 import {HidingLi} from '../../hidingLi.js'
 
 export const LightMqtt = ({onChange,back,type})=>{
@@ -63,10 +63,6 @@ export const LightMqtt = ({onChange,back,type})=>{
     setTemp({ ...temp, [event.target.name]: event.target.value })
     nextpage([{ ...temp, [event.target.name]: event.target.value },dimmer,color,mode,power])
   }
-
-  useEffect(()=>{
-    nextpage([power,dimmer,temp,color,mode])
-  },[])
 
   return(
       <div className = "config">

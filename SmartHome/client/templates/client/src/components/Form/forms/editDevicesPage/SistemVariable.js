@@ -5,7 +5,7 @@ import {AuthContext} from '../../../../context/AuthContext.js'
 import {useChecked} from '../../../../hooks/checked.hook'
 
 
-export const SistemVariableEdit = ({deviceData,hide})=>{
+export const SistemVariableEdit = ({deviceData,hide,type="edit"})=>{
   const auth = useContext(AuthContext)
   const {USText} = useChecked()
   const {message} = useMessage();
@@ -39,7 +39,10 @@ export const SistemVariableEdit = ({deviceData,hide})=>{
     message("forbidden symbols","error")
   }
   const outHandler = async ()=>{
-    await request(`/api/devices`, 'PUT', {...device},{Authorization: `Bearer ${auth.token}`})
+    if(type==="edit")
+      await request(`/api/devices`, 'PUT', {...device},{Authorization: `Bearer ${auth.token}`})
+    else if(type==="link")
+      await request('/api/devices', 'POST', {...device},{Authorization: `Bearer ${auth.token}`})
     hide();
   }
 
@@ -87,7 +90,11 @@ export const SistemVariableEdit = ({deviceData,hide})=>{
         </label>
       </li>
       <div className="controlForm" >
+      {
+        (type==="edit")?
         <button className="formEditBtn Delete" onClick={deleteHandler}>Delete</button>
+        :null
+      }
         <button className="formEditBtn" onClick={outHandler}>Save</button>
       </div>
     </ul>
