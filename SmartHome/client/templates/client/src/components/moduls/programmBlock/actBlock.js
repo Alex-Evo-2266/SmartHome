@@ -11,7 +11,7 @@ export const ActBlock = ({idDevice,updata,index,data,el,deleteEl})=>{
   const [device, setDevice]=useState({})
   const {devices} = useContext(DeviceStatusContext)
   const {show} = useContext(AddScriptContext)
-  const [type,setType] = useState(data.action??"power")
+  const [type,setType] = useState(data.action??"")
   const [blockData/*, setData*/] = useState(data)
   const [allTypes,setAllTypes] = useState([])
 
@@ -21,13 +21,8 @@ export const ActBlock = ({idDevice,updata,index,data,el,deleteEl})=>{
     condidat = condidat[0]
     let array = []
     if(condidat){
-      if(condidat.DeviceType==="variable"){
-        array.push("value")
-      }
-      for (var key in condidat.DeviceControl) {
-        if(condidat.DeviceControl[key]&&key!=="status"){
-          array.push(key)
-        }
+      for (var item of condidat.DeviceConfig) {
+        array.push(item.type)
       }
     }
     setAllTypes(array)

@@ -1,10 +1,9 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
-import {CartEditContext} from '../EditCarts/CartEditContext'
+import {BaseElement} from './BaseElement'
 
 export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   const {devices} = useContext(DeviceStatusContext)
-  const {target} = useContext(CartEditContext)
   const [device, setDevice] = useState({})
 
   const lookForDeviceById = useCallback((id)=>{
@@ -16,19 +15,17 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   },[devices])
 
   useEffect(()=>{
-    setDevice(lookForDeviceById(data.IdDevice))
+    if(!data||!data.deviceId)
+      return
+    setDevice(lookForDeviceById(data.deviceId))
   },[devices,data,onClick,lookForDeviceById])
 
-
-  const deletebtn = ()=>{
-    if(typeof(deleteBtn)==="function"){
-      deleteBtn(index)
-    }
-  }
-
-  const editbtn = ()=>{
-    if(typeof(editBtn)==="function"){
-      target("button",{...data,index},editBtn)
+  const itemField = ()=>{
+    if(!device||!device.DeviceConfig||!data.typeAction)return
+    for (var item of device.DeviceConfig) {
+      if(item.type===data.typeAction){
+        return item
+      }
     }
   }
 
@@ -36,25 +33,13 @@ if(!device||!device.DeviceId){
   return null;
 }
 return(
-  <div className="sensor-box">
+  <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
     <div className="sensor">
       <p className= "sensor-name">{device.DeviceName}</p>
-      <p className= "sensor-value">{`${device.DeviceValue.status.value} ${device.DeviceConfig.unit||""}`}</p>
+      <p className= "sensor-value">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
     </div>
     <div className="delete-box">
-    {
-      (deleteBtn)?
-      <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
-      null
-    }
-    {
-      (editBtn)?
-      <button className="editBtn" onClick={editbtn}>
-        <i className="fas fa-list i-cost"></i>
-      </button>:
-      null
-    }
     </div>
-  </div>
+  </BaseElement>
 )
 }

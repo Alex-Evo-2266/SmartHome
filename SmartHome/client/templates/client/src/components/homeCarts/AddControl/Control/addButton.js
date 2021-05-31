@@ -1,14 +1,11 @@
-import React, {useContext,useState,useEffect} from 'react'
+import React, {useContext,useState,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../../context/DeviceStatusContext'
-// import {AuthContext} from '../../../../context/AuthContext.js'
-import {InputNumber} from '../../../moduls/inputNumber'
 
 export const AddButton = ({add})=>{
   const {devices} = useContext(DeviceStatusContext)
   const [allDevices] = useState(devices.filter(item=>item.DeviceType!=="sensor"));
   const [device, setDevice] = useState({});
   const [deviceConfig, setDeviceConfig] = useState({})
-  // const auth = useContext(AuthContext)
   const [buttonForm, setButtonForm] = useState({
     id:null,
     name:"",
@@ -20,6 +17,23 @@ export const AddButton = ({add})=>{
     width:1,
     height:1
   })
+
+  const up = (steploc=1)=>{
+    let n = Number(buttonForm.action)
+    if(n>=Number(deviceConfig.max))
+      return setButtonForm({...buttonForm,action:deviceConfig.max})
+    if(n+steploc>Number(deviceConfig.max))
+      return setButtonForm({...buttonForm,action:deviceConfig.max})
+    return setButtonForm({...buttonForm,action:n+steploc})
+  }
+  const down = (steploc=1)=>{
+    let n = Number(buttonForm.action)
+    if(n<=Number(deviceConfig.min))
+      return setButtonForm({...buttonForm,action:deviceConfig.min})
+    if(n-steploc<Number(deviceConfig.min))
+      return setButtonForm({...buttonForm,action:deviceConfig.min})
+    return setButtonForm({...buttonForm,action:n-steploc})
+  }
 
   useEffect(()=>{
     if(device){
@@ -40,16 +54,29 @@ export const AddButton = ({add})=>{
   //   setDevices
   // },[allDevices])
 
-  useEffect(()=>{
-    if(!device||!device.DeviceConfig)return
-    console.log(device.DeviceControl,buttonForm.typeAction);
-    let conf = device.DeviceControl[buttonForm.typeAction]
-    if(buttonForm.typeAction==="mode"){
-      setDeviceConfig({min:0,max:conf-1})
-      return
+  const itemField = useCallback(()=>{
+    if(!device||!device.DeviceConfig||!buttonForm.typeAction)return
+    for (var item of device.DeviceConfig) {
+      if(item.type===buttonForm.typeAction){
+        return item
+      }
     }
-    setDeviceConfig(conf)
-  },[device,buttonForm.typeAction])
+  },[buttonForm.typeAction,device])
+
+  useEffect(()=>{
+    let item = itemField()
+    if(!device||!device.DeviceConfig||!item)return
+    const {low} = item
+    if(item.typeControl === "range"){
+      setButtonForm((prev)=>{return{...prev,action:low}})
+      return setDeviceConfig({min:low,max:item.high})
+    }
+    if(item.typeControl === "number"){
+      setButtonForm((prev)=>{return{...prev,action:0}})
+      return setDeviceConfig({min:0,max:item.high-1})
+    }
+    return
+  },[device,buttonForm.typeAction,itemField])
 
   const outaction = ()=>{
     add(buttonForm)
@@ -60,65 +87,90 @@ export const AddButton = ({add})=>{
     add({...buttonForm,typeAction:type})
   }
 
-  return (
-    <ul>
-    {
-      (!device||!device.DeviceId)?
-        allDevices.map((item,index)=>{
+  if(!device||!device.DeviceId){
+    return(
+      <ul>
+        {
+          allDevices.map((item,index)=>{
+            return(
+              <li key={index} onClick={()=>setDevice(item)}><span>{index+1}</span>{item.DeviceName}</li>
+            )
+          })
+        }
+      </ul>
+    )
+  }
+  if (!buttonForm.typeAction) {
+    return(
+      <ul>
+      {
+        device.DeviceConfig.map((item,index)=>{
+          if(item.typeControl==="number"&&item.type==="mode"&&device.DeviceType!=="other"){
+            return(
+              <div key={index}>
+                <li onClick={()=>setButtonForm({...buttonForm,typeAction:"mode"})}>mode</li>
+                <li onClick={()=>out("modeTarget")}>target mode</li>
+              </div>
+            )
+          }
           return(
-            <li key={index} onClick={()=>setDevice(item)}><span>{index+1}</span>{item.DeviceName}</li>
+            <li key={index} onClick={()=>{
+              if(item.typeControl==="boolean")
+                out(item.type)
+              else if(device.DeviceType==="variable")
+                setButtonForm({...buttonForm,typeAction:"variable"})
+              else
+                setButtonForm({...buttonForm,typeAction:item.type})
+            }}>{item.type}</li>
           )
-        }):
-        (!buttonForm.typeAction)?
-        <>
-          {
-            (device.DeviceControl&&device.DeviceControl.power)?
-            <li onClick={()=>out("power")}>power</li>:
-            null
-          }
-          {
-            (device.DeviceControl&&device.DeviceControl.dimmer)?
-            <li onClick={()=>setButtonForm({...buttonForm,typeAction:"dimmer"})}>dimmer</li>:
-            null
-          }
-          {
-            (device.DeviceControl&&device.DeviceControl.temp)?
-            <li onClick={()=>setButtonForm({...buttonForm,typeAction:"temp"})}>temp</li>:
-            null
-          }
-          {
-            (device.DeviceControl&&device.DeviceControl.color)?
-            <li onClick={()=>setButtonForm({...buttonForm,typeAction:"color"})}>collor</li>:
-            null
-          }
-          {
-            (device.DeviceControl&&device.DeviceControl.mode)?
-            <>
-              <li onClick={()=>setButtonForm({...buttonForm,typeAction:"mode"})}>mode</li>
-              <li onClick={()=>out("modeTarget")}>target mode</li>
-            </>:
-            null
-          }
-          {
-            (device.DeviceType==="variable")?
-            <>
-              <li onClick={()=>setButtonForm({...buttonForm,typeAction:"variable"})}>variable</li>
-            </>:
-            null
-          }
-        </>:
-        (deviceConfig)?
-        <li className="noAnim">
-          <InputNumber min={deviceConfig.min} max={deviceConfig.max} Xten={true} result={(v)=>setButtonForm({...buttonForm,action:v})} Value={buttonForm.action}/>
-          <button onClick={outaction}>Ok</button>
-        </li>:
-        (buttonForm.typeAction==="variable")?
+        })
+      }
+      </ul>
+    )
+  }
+  if (itemField()&&itemField().typeControl==="text"&&buttonForm.typeAction) {
+    return(
+      <ul>
         <li className="noAnim">
           <input value={buttonForm.action} onChange={(event)=>setButtonForm({...buttonForm,action:event.target.value})}/>
           <button onClick={outaction}>Ok</button>
-        </li>:
-        null
-    }
+        </li>
+      </ul>
+    )
+  }
+  if(buttonForm.typeAction==="variable"){
+    return(
+      <ul>
+        <li className="noAnim">
+          <input value={buttonForm.action} onChange={(event)=>setButtonForm({...buttonForm,action:event.target.value})}/>
+          <button onClick={outaction}>Ok</button>
+        </li>
+      </ul>
+    )
+  }
+  if(deviceConfig){
+    return(
+      <ul>
+        <li className="noAnim">
+          <div className = "InputNumber">
+            <input type="text" readOnly value={buttonForm.action}/>
+            <div className="InputNumber-btnConteiner">
+              <div className="InputNumber-btnDown" onClick={()=>down(1)}><i className="fas fa-angle-left"></i></div>
+              <div className="InputNumber-btnUp" onClick={()=>up(1)}><i className="fas fa-angle-right"></i></div>
+            </div>
+            <div className="InputNumber-btnConteiner">
+              <div className="InputNumber-btnDown" onClick={()=>down(10)}><i className="fas fa-angle-double-left"></i></div>
+              <div className="InputNumber-btnUp" onClick={()=>up(10)}><i className="fas fa-angle-double-right"></i></div>
+            </div>
+          </div>
+          <button onClick={outaction}>Ok</button>
+        </li>
+      </ul>
+    )
+  }
+
+  return (
+    <ul>
     </ul>
   )
 }

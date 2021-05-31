@@ -21,7 +21,7 @@ export const Mode = ({updata,title,type,conf,value,idDevice}) =>{
   },[error,message, clearError])
 
   const outValue = async(v)=>{
-    await request('/api/devices/value/set', 'POST', {id: idDevice,type:"mode",status:v},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/devices/value/set', 'POST', {id: idDevice,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   const clickHandler = event =>{
@@ -42,7 +42,7 @@ export const Mode = ({updata,title,type,conf,value,idDevice}) =>{
     return(
       <li className="DeviceControlLi">
         <div className="DeviceControlLiName">
-          <p>{title||"mode"}</p>
+          <p>{title||type}</p>
         </div>
         <div className="DeviceControlLiContent">
           <div className="DeviceLiControl">

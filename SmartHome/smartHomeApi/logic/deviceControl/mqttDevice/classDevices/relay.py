@@ -11,10 +11,10 @@ class MqttRelay(MqttDevice):
                 self.powerOff = item["low"]
 
     def on(self, mode=0):
-        self.send(self.powertoken,self.powerOn)
+        self.send(self.powertoken,"1")
 
     def off(self):
-        self.send(self.powertoken,self.powerOff)
+        self.send(self.powertoken,"0")
 
     def controlDevice(self):
         arr = MqttDevice.controlDevice(self)
@@ -30,9 +30,7 @@ class MqttRelay(MqttDevice):
         return self.get_properties(prop)
 
     def get_control(self):
-        controls = {
-        "status":True,
-        }
+        controls = dict()
         if(self.powertoken):
             controls["power"]=True
         return controls

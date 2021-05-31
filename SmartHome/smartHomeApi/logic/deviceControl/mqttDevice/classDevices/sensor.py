@@ -25,7 +25,5 @@ class MqttSensor(MqttDevice):
         return self.get_properties(prop)
 
     def get_control(self):
-        controls = {
-        "status":True,
-        }
+        controls = {}
         return controls

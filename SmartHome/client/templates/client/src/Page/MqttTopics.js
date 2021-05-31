@@ -47,12 +47,18 @@ export const MqttPage = ()=>{
         <Loader/>:
         <div className="top">
           <table className="mqttTable">
-            <tr><th>Адресс</th><th>Сообщения</th><th>связанные устройства</th><th>Управление</th></tr>
+            <thead><tr><th>Адресс</th><th>Сообщения</th><th>связанные устройства</th><th>Управление</th></tr></thead>
+            <tbody>
             {
               deviceMqtt.map((item,index)=>{
-                return <MQTTElement key={index} data = {item}/>
+                return (
+                  <tr key={index}>
+                    <MQTTElement data = {item}/>
+                  </tr>
+                )
               })
             }
+            </tbody>
           </table>
         </div>
       }

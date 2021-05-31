@@ -4,7 +4,10 @@ export const OtherMqtt = ({onChange,back,type})=>{
 
   const [form, setForm] = useState([{
     address:"c0",
-    type:"c0"
+    type:"c0",
+    typeControl:"text",
+    low:"0",
+    high:"100"
   }]);
   const [count, setCount] = useState(1);
 
@@ -12,7 +15,10 @@ export const OtherMqtt = ({onChange,back,type})=>{
     let arr = form.slice()
     arr.push({
       address:"c"+count,
-      type:"c"+count
+      type:"c"+count,
+      typeControl:"text",
+      low:"0",
+      high:"100"
     })
     setCount((prev)=>prev+1)
     setForm(arr)
@@ -55,15 +61,42 @@ export const OtherMqtt = ({onChange,back,type})=>{
               return(
                 <li key={index} data-id={index}>
                   <label>
-                    <h5>Enter the address by command</h5>
-                    <input data-id={index} className = "textInput" placeholder="topic command" id="command" type="text" name="address" value={item.address} onChange={changeHandler} required/>
+                    <h5>Enter the type</h5>
+                    <input data-id={index} className = "textInput" placeholder="type" id="type" type="text" name="type" value={item.type} onChange={changeHandler} required/>
                   </label>
+                  <label>
+                    <h5>Enter the address</h5>
+                    <input data-id={index} className = "textInput" placeholder="address" id="address" type="text" name="address" value={item.address} onChange={changeHandler} required/>
+                  </label>
+                  <label>
+                    <h5>Type</h5>
+                    <select data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandler}>
+                      <option value="boolean">boolean</option>
+                      <option value="text">text</option>
+                      <option value="number">number</option>
+                      <option value="range">range</option>
+                      <option value="sensor">sensor</option>
+                    </select>
+                  </label>
+                  {
+                    (item.typeControl==="range"||item.typeControl==="boolean")?
+                    <>
+                    <label>
+                      <h5>Enter the min</h5>
+                      <input data-id={index} className = "textInput" placeholder="min Dimmer" id="minDimmer" type={(item.typeControl==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandler} required/>
+                    </label>
+                    <label>
+                      <h5>Enter the max</h5>
+                      <input data-id={index} className = "textInput" placeholder="max Dimmer" id="maxDimmer" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandler} required/>
+                    </label>
+                    </>
+                    :null
+                  }
                   <button onClick={()=>deleteField(index)}>delete</button>
                 </li>
               )
             })
           }
-
         </ul>
         <button onClick={addField}>add</button>
       </div>

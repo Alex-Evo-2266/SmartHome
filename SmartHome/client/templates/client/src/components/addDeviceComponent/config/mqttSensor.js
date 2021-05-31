@@ -6,7 +6,8 @@ export const SensorMqtt = ({onChange,back,type})=>{
   const [form, setForm] = useState([{
     address:"c0",
     type:"c0",
-    icon:""
+    icon:"",
+    typeControl:"sensor"
   }]);
   const [count, setCount] = useState(1);
 
@@ -15,7 +16,8 @@ export const SensorMqtt = ({onChange,back,type})=>{
     arr.push({
       address:"c"+count,
       type:"c"+count,
-      icon:""
+      icon:"",
+      typeControl:"sensor"
     })
     setCount((prev)=>prev+1)
     setForm(arr)

@@ -34,9 +34,7 @@ class Yeelight(Bulb):
             self.__control_color = False;
 
     def get_control(self):
-        controls = {
-        "status":True,
-        }
+        controls = dict()
         if(self.__control_power):
             controls["power"] = self.__control_power
         if(self.__control_dimmer):

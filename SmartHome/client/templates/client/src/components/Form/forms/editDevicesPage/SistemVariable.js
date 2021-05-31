@@ -19,12 +19,12 @@ export const SistemVariableEdit = ({deviceData,hide,type="edit"})=>{
   },[error,message, clearError])
 
   const [device, setDevice] = useState({
-    DeviceId:deviceData.DeviceId,
-    DeviceName:deviceData.DeviceName,
-    DeviceInformation:deviceData.DeviceInformation,
-    DeviceSystemName:deviceData.DeviceSystemName,
-    DeviceType:deviceData.DeviceType,
-    DeviceTypeConnect:deviceData.DeviceTypeConnect,
+    DeviceId:deviceData.DeviceId||0,
+    DeviceName:deviceData.DeviceName||"",
+    DeviceInformation:deviceData.DeviceInformation||"",
+    DeviceSystemName:deviceData.DeviceSystemName||"",
+    DeviceType:deviceData.DeviceType||"variable",
+    DeviceTypeConnect:deviceData.DeviceTypeConnect||"system",
     DeviceValue:(deviceData.DeviceValue&&deviceData.DeviceValue.value)?deviceData.DeviceValue.value:""
   })
 
@@ -38,7 +38,18 @@ export const SistemVariableEdit = ({deviceData,hide,type="edit"})=>{
     }
     message("forbidden symbols","error")
   }
+  function valid() {
+    if(
+      !device.DeviceSystemName||
+      !device.DeviceName||
+      !device.DeviceType
+    ){return false}
+    return true
+  }
   const outHandler = async ()=>{
+    if(!valid()){
+      return message("не все поля заполнены","error")
+    }
     if(type==="edit")
       await request(`/api/devices`, 'PUT', {...device},{Authorization: `Bearer ${auth.token}`})
     else if(type==="link")

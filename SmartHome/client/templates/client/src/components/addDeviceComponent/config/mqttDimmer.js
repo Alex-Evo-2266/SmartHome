@@ -7,13 +7,15 @@ export const DimmerMqtt = ({onChange=null})=>{
     type:"power",
     address:"",
     low:"0",
-    high:"1"
+    high:"1",
+    typeControl:"boolean"
   })
   const [dimmer, setDimmer] = useState({
     type:"dimmer",
     address:"",
     low:"0",
-    high:"255"
+    high:"255",
+    typeControl:"range"
   })
 
 

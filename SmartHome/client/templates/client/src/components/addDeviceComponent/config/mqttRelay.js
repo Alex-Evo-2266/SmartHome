@@ -7,7 +7,8 @@ export const RelayMqtt = ({onChange,type})=>{
     type:"power",
     address:(type==="json")?"state":"",
     low:"0",
-    high:"1"
+    high:"1",
+    typeControl:"boolean"
   })
 
   const nextpage = (param)=>{

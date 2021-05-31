@@ -20,14 +20,14 @@ export const SwitchMqttEdit = ({deviceData,hide,type="edit"})=>{
   },[error,message, clearError])
 
   const [device, setDevice] = useState({
-    DeviceId:deviceData.DeviceId,
-    DeviceInformation:deviceData.DeviceInformation,
-    DeviceSystemName:deviceData.DeviceSystemName,
-    DeviceValueType:deviceData.DeviceValueType,
-    DeviceAddress:deviceData.DeviceAddress,
-    DeviceName:deviceData.DeviceName,
-    DeviceType:deviceData.DeviceType,
-    DeviceTypeConnect:deviceData.DeviceTypeConnect,
+    DeviceId:deviceData.DeviceId||0,
+    DeviceInformation:deviceData.DeviceInformation||"",
+    DeviceSystemName:deviceData.DeviceSystemName||"",
+    DeviceValueType:deviceData.DeviceValueType||"json",
+    DeviceAddress:deviceData.DeviceAddress||"",
+    DeviceName:deviceData.DeviceName||"",
+    DeviceType:deviceData.DeviceType||"switch",
+    DeviceTypeConnect:deviceData.DeviceTypeConnect||"mqtt",
     RoomId:deviceData.RoomId
   })
   const [power, setPower] = useState({
@@ -35,7 +35,8 @@ export const SwitchMqttEdit = ({deviceData,hide,type="edit"})=>{
     address:"",
     low:"",
     high:"",
-    icon:""
+    icon:"",
+    typeControl:"boolean"
   })
 
   useEffect(()=>{
@@ -47,9 +48,11 @@ export const SwitchMqttEdit = ({deviceData,hide,type="edit"})=>{
         address:item.address,
         low:item.low||"",
         high:item.high||"",
-        icon:item.icon||""
+        icon:item.icon||"",
+        typeControl:""
       }
       if(item.type==="power"){
+        confel.typeControl = "boolean"
         setPower(confel)
       }
     }
@@ -68,7 +71,22 @@ export const SwitchMqttEdit = ({deviceData,hide,type="edit"})=>{
     }
     message("forbidden symbols","error")
   }
+  function valid() {
+    if(
+      !device.DeviceSystemName||
+      !device.DeviceValueType||
+      !device.DeviceAddress||
+      !device.DeviceName||
+      !device.DeviceType||
+      !device.DeviceTypeConnect
+    ){return false}
+    if(!power||!power.type||!power.address)return false
+    return true
+  }
   const outHandler = async ()=>{
+    if(!valid()){
+      return message("не все поля заполнены","error")
+    }
     let conf = []
     if(power.address)
       conf.push(power)

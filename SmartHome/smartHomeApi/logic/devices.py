@@ -50,6 +50,8 @@ def addDevice(data):
                     val.high=item["high"]
                 if "icon" in item:
                     val.icon=item["icon"]
+                if "typeControl" in item:
+                    val.typeControl=item["typeControl"]
                 val.save()
             return True
         else:
@@ -64,6 +66,8 @@ def addDevice(data):
                     val.high=item["high"]
                 if "icon" in item:
                     val.icon=item["icon"]
+                if "typeControl" in item:
+                    val.typeControl=item["typeControl"]
                 val.save()
             return True
     except Exception as e:
@@ -195,6 +199,8 @@ def editDevice(data):
                         val.high=item["high"]
                     if "icon" in item:
                         val.icon=item["icon"]
+                    if "typeControl" in item:
+                        val.typeControl=item["typeControl"]
                     val.save()
                 return True
             else:
@@ -209,6 +215,8 @@ def editDevice(data):
                         val.high=item["high"]
                     if "icon" in item:
                         val.icon=item["icon"]
+                    if "typeControl" in item:
+                        val.typeControl=item["typeControl"]
                     val.save()
                 return True
         devicesArrey.delete(data["DeviceId"])

@@ -36,27 +36,28 @@ class MqttLight(MqttDevice):
         if(self.modetoken and self.modecount):
             if(mode>=0 and mode<int(self.modecount)):
                 self.send(self.modetoken,mode)
-        self.send(self.powertoken,self.powerOn)
+        self.send(self.powertoken,"1")
 
     def off(self):
-        self.send(self.powertoken,self.powerOff)
+        self.send(self.powertoken,"0")
 
     def set_brightness(self, lavel):
         if(lavel>=int(self.brightnessMin) and lavel<=int(self.brightnessMax)):
             print(self.brightnesstoken)
-            self.send(self.brightnesstoken,lavel)
+            self.send(self.brightnesstoken,str(lavel))
 
     def set_color_temp(self, lavel):
         if(lavel>=int(self.tempMin) and lavel<=int(self.tempMax)):
-            self.send(self.temptoken,lavel)
+            self.send(self.temptoken,str(lavel))
 
     def set_rgb(self,lavel):
         if(lavel>=self.colorMin and lavel<=self.colorMax):
-            self.send(self.colortoken,lavel)
+            self.send(self.colortoken,str(lavel))
 
     def set_mode(self,lavel):
+        print(lavel)
         if(lavel>=0 and lavel<int(self.modecount)):
-            self.send(self.modetoken,lavel)
+            self.send(self.modetoken,str(lavel))
 
     def controlDevice(self):
         arr = MqttDevice.controlDevice(self)
@@ -84,9 +85,7 @@ class MqttLight(MqttDevice):
         return self.get_properties(prop)
 
     def get_control(self):
-        controls = {
-        "status":True,
-        }
+        controls = dict()
         if(self.powertoken):
             controls["power"] = True
         if(self.brightnesstoken):

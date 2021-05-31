@@ -7,7 +7,7 @@ function sortDevice(data) {
   let arr = []
   for (var item of data) {
     for (var item2 of item.DeviceConfig) {
-      if(item2.typeControl==="range"){
+      if(item2.typeControl==="sensor"){
         arr.push(item)
         break
       }
@@ -16,7 +16,7 @@ function sortDevice(data) {
   return arr
 }
 
-export const AddSlider = ({add})=>{
+export const AddSensor = ({add})=>{
   const {devices} = useContext(DeviceStatusContext)
   const [allDevices] = useState(sortDevice(devices));
   const [device, setDevice] = useState({});
@@ -25,12 +25,12 @@ export const AddSlider = ({add})=>{
   const [buttonForm, setButtonForm] = useState({
     id:null,
     name:"",
-    type:"slider",
+    type:"sensor",
     typeAction:"",
     order:"0",
     deviceId:null,
     action:"",
-    width:2,
+    width:1,
     height:1
   })
 
@@ -38,12 +38,12 @@ export const AddSlider = ({add})=>{
     if(device){
       setButtonForm({id:null,
         name:device.DeviceName,
-        type:"slider",
+        type:"sensor",
         typeAction:"",
         order:0,
         deviceId:device.DeviceId,
         action:"",
-        width:2,
+        width:1,
         height:1
       })
     }
@@ -55,7 +55,7 @@ export const AddSlider = ({add})=>{
   }
 
   function sortField(items) {
-    return items.filter((item)=>item.typeControl==="range")
+    return items.filter((item)=>item.typeControl==="sensor")
   }
 
   if(!allDevices){

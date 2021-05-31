@@ -12,7 +12,7 @@ devicesArrey = DevicesArrey()
 def setValue(id, type, value):
     print(id, type, value)
     try:
-        item = Device.objects.get(id=id)
+        # item = Device.objects.get(id=id)
         deviceDect = devicesArrey.get(id)
         device = deviceDect["device"]
 
@@ -22,20 +22,27 @@ def setValue(id, type, value):
             return True
         if(type=="variable"):
             e.set_value(value)
-        value = int(value)
+            return True
         if(type=="value"):
-            e.set_value(value)
+            e.set_value(int(value))
+            return True
         if(type=="power"):
-            e.set_power(value)
+            e.set_power(int(value))
+            return True
         if(type=="dimmer"):
-            e.set_dimmer(value)
+            e.set_dimmer(int(value))
+            return True
         if(type=="temp"):
-            e.set_temp(value)
+            e.set_temp(int(value))
+            return True
         if(type=="color"):
-            e.set_color(value)
+            e.set_color(int(value))
+            return True
         if(type=="mode"):
-            e.set_mode(value)
+            e.set_mode(int(value))
+            return True
+        e.set_status(type,value)
         return True
-    except Exception as e:
-        print("set value error",e)
+    except Exception as ex:
+        print("set value error",ex)
         return None

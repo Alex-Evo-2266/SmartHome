@@ -19,14 +19,14 @@ export const OtherMqttEdit = ({deviceData,hide,type="edit"})=>{
   },[error,message, clearError])
 
   const [device, setDevice] = useState({
-    DeviceId:deviceData.DeviceId,
-    DeviceInformation:deviceData.DeviceInformation,
-    DeviceName:deviceData.DeviceName,
-    DeviceSystemName:deviceData.DeviceSystemName,
-    DeviceType:deviceData.DeviceType,
-    DeviceValueType:deviceData.DeviceValueType,
-    DeviceAddress:deviceData.DeviceAddress,
-    DeviceTypeConnect:deviceData.DeviceTypeConnect,
+    DeviceId:deviceData.DeviceId||0,
+    DeviceInformation:deviceData.DeviceInformation||"",
+    DeviceName:deviceData.DeviceName||"",
+    DeviceSystemName:deviceData.DeviceSystemName||"",
+    DeviceType:deviceData.DeviceType||"other",
+    DeviceValueType:deviceData.DeviceValueType||"json",
+    DeviceAddress:deviceData.DeviceAddress||"",
+    DeviceTypeConnect:deviceData.DeviceTypeConnect||"mqtt",
     RoomId:deviceData.RoomId,
   })
   const [command, setCommand] = useState(deviceData.DeviceConfig||[]);
@@ -50,7 +50,25 @@ const changeHandlerTest = event=>{
   message("forbidden symbols","error")
 }
 
+  function valid() {
+    if(
+      !device.DeviceSystemName||
+      !device.DeviceValueType||
+      !device.DeviceAddress||
+      !device.DeviceName||
+      !device.DeviceType||
+      !device.DeviceTypeConnect
+    ){return false}
+    if(!command||!command[0]){return false}
+    for (var item of command) {
+      if(!item||!item.type||!item.address){return false}
+    }
+    return true
+  }
   const outHandler = async ()=>{
+    if(!valid()){
+      return message("не все поля заполнены","error")
+    }
     let conf = command
     let dataout = {
       ...device,
@@ -74,7 +92,10 @@ const changeHandlerTest = event=>{
     let arr = command.slice()
     arr.push({
       address:"c"+count,
-      type:"c"+count
+      type:"c"+count,
+      typeControl: "text",
+      low:"0",
+      high:"100"
     })
     setCount((prev)=>prev+1)
     setCommand(arr)
@@ -134,15 +155,39 @@ const changeHandlerTest = event=>{
       {
         command.map((item,index)=>{
           return(
-            <HidingLi title = {`IR config ${index}`} show = {true}>
+            <HidingLi key={index} title = {`IR config ${index}`} show = {true}>
             <label>
               <h5>Enter the type</h5>
-              <input data-id={index} className = "textInput" placeholder="type" id="type" type="text" name="type" value={item.type} onChange={changeHandlerField} required/>
+              <input data-id={index} className = "textInput" placeholder="type" type="text" name="type" value={item.type} onChange={changeHandlerField} required/>
             </label>
             <label>
               <h5>Enter the address</h5>
-              <input data-id={index} className = "textInput" placeholder="address" id="address" type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
+              <input data-id={index} className = "textInput" placeholder="address" type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
             </label>
+            <label>
+              <h5>Type</h5>
+              <select data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandlerField}>
+                <option value="boolean">boolean</option>
+                <option value="text">text</option>
+                <option value="number">number</option>
+                <option value="range">range</option>
+                <option value="sensor">sensor</option>
+              </select>
+            </label>
+            {
+              (item.typeControl==="range"||item.typeControl==="boolean")?
+              <>
+              <label>
+                <h5>Enter the min</h5>
+                <input data-id={index} className = "textInput" placeholder="min Dimmer" id="minDimmer" type={(item.typeControl==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandlerField} required/>
+              </label>
+              <label>
+                <h5>Enter the max</h5>
+                <input data-id={index} className = "textInput" placeholder="max Dimmer" id="maxDimmer" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
+              </label>
+              </>
+              :null
+            }
             <button onClick={()=>delcom(index)}>delete</button>
             </HidingLi>
           )

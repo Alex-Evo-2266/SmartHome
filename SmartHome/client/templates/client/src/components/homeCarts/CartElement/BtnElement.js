@@ -6,13 +6,14 @@ import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
 
-export const BtnElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,switchMode=true,deleteBtn}) =>{
+export const BtnElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
   const {devices} = useContext(DeviceStatusContext)
   const auth = useContext(AuthContext)
   const [value, setValue]=useState(firstValue)
   const [device, setDevice] = useState({})
   const [deviceConfig, setDeviceConfig] = useState({})
   const [disabled2, setDisabled] = useState(disabled)
+  const [switchMode, setSwitchMode] = useState(false)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const {target} = useContext(CartEditContext)
@@ -41,8 +42,21 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
     setDevice(lookForDeviceById(data.deviceId))
   },[devices,data,onClick,lookForDeviceById])
 
+  const itemField = useCallback(()=>{
+    if(!device||!device.DeviceConfig)return
+    for (var item of device.DeviceConfig) {
+      if(item.type===data.typeAction){
+        return item
+      }
+    }
+  },[data.typeAction,device])
+
   useEffect(()=>{
     if(!disabled&&device&&device.status){
+      let item = itemField()
+      if(item&&item.typeControl==="boolean"){
+        setSwitchMode(true)
+      }
       if(device.status==="online"){
         setDisabled(false)
       }else{
@@ -55,7 +69,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
     }else if(!disabled&&devices.length) {
       setDisabled(false)
     }
-  },[device,disabled,devices])
+  },[device,disabled,devices,itemField])
 
   useEffect(()=>{
     if(!device||!device.DeviceConfig||!data)return
@@ -67,14 +81,14 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
 
   useEffect(()=>{
     if(typeof(onClick)==="function"||disabled||device.status==="offline")return
-    const {low,high} = deviceConfig
-    if(device&&data&&data.typeAction==="power"&&device.DeviceValue&&device.DeviceValue.power){
-      if(device.DeviceValue.power===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="0"))
+    const {low,high,typeControl} = deviceConfig
+    if(device&&typeControl==="boolean"&&device.DeviceValue&&device.DeviceValue[deviceConfig.type]){
+      if(device.DeviceValue[deviceConfig.type]===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.type]==="0"))
         setValue(false)
-      if(device.DeviceValue.power===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue.power==="1"))
+      if(device.DeviceValue[deviceConfig.type]===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.type]==="1"))
         setValue(true)
-      if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue.power)&&!/\D/.test(low)&&!/\D/.test(high))){
-        let poz = Number(device.DeviceValue.power)
+      if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue[deviceConfig.type])&&!/\D/.test(low)&&!/\D/.test(high))){
+        let poz = Number(device.DeviceValue[deviceConfig.type])
         let min = Number(low)
         let max = Number(high)
         if(poz>min&&poz<=max)
@@ -83,9 +97,9 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
           setValue(false)
       }
     }
-    if(device&&data&&data.typeAction==="mode"&&device.DeviceValue&&device.DeviceValue.mode){
+    if(device&&typeControl==="number"&&device.DeviceValue&&device.DeviceValue[deviceConfig.type]){
       if(!data.action)data.action="0"
-      if(data.action===device.DeviceValue.mode){
+      if(data.action===device.DeviceValue[deviceConfig.type]){
         setValue(true)
       }
       else {
@@ -106,24 +120,23 @@ const changeHandler = (event)=>{
 
   if(!data||!device)
     return
-  if(data.typeAction==="power")
-      outValue(device.DeviceId,!oldvel)
-  if(data.typeAction==="dimmer")
-      outValue(device.DeviceId,data.action)
-  if(data.typeAction==="temp")
-      outValue(device.DeviceId,data.action)
-  if(data.typeAction==="color")
-      outValue(device.DeviceId,data.action)
-  if(data.typeAction==="mode")
-      outValue(device.DeviceId,data.action)
+  // if(data.typeAction==="variable")
+  //     return outValue(device.DeviceId,data.action)
   if(data.typeAction==="modeTarget")
-      outValue(device.DeviceId,"target")
-  if(data.typeAction==="variable")
-      outValue(device.DeviceId,data.action)
+      return outValue(device.DeviceId,"target")
+  if(deviceConfig.typeControl==="boolean")
+      return outValue(device.DeviceId,!oldvel)
+  if(deviceConfig.typeControl==="range")
+      return outValue(device.DeviceId,data.action)
+  if(deviceConfig.typeControl==="text")
+      return outValue(device.DeviceId,data.action)
+  if(deviceConfig.typeControl==="number")
+      return outValue(device.DeviceId,data.action)
+  return outValue(device.DeviceId,data.action)
   // if(data.type==="ir")
   //     socket.terminalMessage(`device ${device.DeviceSystemName} send ${data.value}`)
   // // socket.terminalMessage()
-  return
+  // return
   // setTimeout(()=>updateDevice(),500)
 }
 

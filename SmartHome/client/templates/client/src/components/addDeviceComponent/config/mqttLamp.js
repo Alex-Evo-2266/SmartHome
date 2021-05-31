@@ -7,31 +7,36 @@ export const LightMqtt = ({onChange,back,type})=>{
     type:"power",
     address:(type==="json")?"state":"",
     low:"0",
-    high:"1"
+    high:"1",
+    typeControl:"boolean"
   })
   const [dimmer, setDimmer] = useState({
     type:"dimmer",
     address:(type==="json")?"brightness":"",
     low:"0",
-    high:"255"
+    high:"255",
+    typeControl:"range"
   })
   const [color, setColor] = useState({
     type:"color",
     address:(type==="json")?"color":"",
     low:"0",
-    high:"255"
+    high:"255",
+    typeControl:"range"
   })
   const [mode, setMode] = useState({
     type:"mode",
     address:(type==="json")?"mode":"",
     low:"0",
-    high:"2"
+    high:"2",
+    typeControl:"number"
   })
   const [temp, setTemp] = useState({
     type:"temp",
     address:(type==="json")?"color_temp":"",
     low:"2700",
-    high:"3200"
+    high:"3200",
+    typeControl:"range"
   })
 
   const nextpage = (param)=>{

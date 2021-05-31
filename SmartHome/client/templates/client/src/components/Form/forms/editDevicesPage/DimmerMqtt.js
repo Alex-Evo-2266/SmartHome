@@ -20,14 +20,14 @@ export const DimmerMqttEdit = ({deviceData,hide,type="edit"})=>{
   },[error,message, clearError])
 
   const [device, setDevice] = useState({
-    DeviceId:deviceData.DeviceId,
-    DeviceInformation:deviceData.DeviceInformation,
-    DeviceSystemName:deviceData.DeviceSystemName,
-    DeviceName:deviceData.DeviceName,
-    DeviceValueType:deviceData.DeviceValueType,
-    DeviceAddress:deviceData.DeviceAddress,
-    DeviceType:deviceData.DeviceType,
-    DeviceTypeConnect:deviceData.DeviceTypeConnect,
+    DeviceId:deviceData.DeviceId||0,
+    DeviceInformation:deviceData.DeviceInformation||"",
+    DeviceSystemName:deviceData.DeviceSystemName||"",
+    DeviceName:deviceData.DeviceName||"",
+    DeviceValueType:deviceData.DeviceValueType||"json",
+    DeviceAddress:deviceData.DeviceAddress||"",
+    DeviceType:deviceData.DeviceType||"dimmer",
+    DeviceTypeConnect:deviceData.DeviceTypeConnect||"mqtt",
     RoomId:deviceData.RoomId,
   })
   const [power, setPower] = useState({
@@ -35,14 +35,16 @@ export const DimmerMqttEdit = ({deviceData,hide,type="edit"})=>{
     address:"",
     low:"",
     high:"",
-    icon:""
+    icon:"",
+    typeControl:"boolean"
   })
   const [dimmer, setDimmer] = useState({
     type:"dimmer",
     address:"",
     low:"",
     high:"",
-    icon:""
+    icon:"",
+    typeControl:"range"
   })
 
   useEffect(()=>{
@@ -54,12 +56,15 @@ export const DimmerMqttEdit = ({deviceData,hide,type="edit"})=>{
         address:item.address,
         low:item.low||"",
         high:item.high||"",
-        icon:item.icon||""
+        icon:item.icon||"",
+        typeControl:""
       }
       if(item.type==="power"){
+        confel.typeControl = "boolean"
         setPower(confel)
       }
       if(item.type==="dimmer"){
+        confel.typeControl = "range"
         setDimmer(confel)
       }
     }
@@ -81,7 +86,22 @@ export const DimmerMqttEdit = ({deviceData,hide,type="edit"})=>{
     }
     message("forbidden symbols","error")
   }
+  function valid() {
+    if(
+      !device.DeviceSystemName||
+      !device.DeviceValueType||
+      !device.DeviceAddress||
+      !device.DeviceName||
+      !device.DeviceType||
+      !device.DeviceTypeConnect
+    ){return false}
+    if(!dimmer||!dimmer.type||!dimmer.address)return false
+    return true
+  }
   const outHandler = async ()=>{
+    if(!valid()){
+      return message("не все поля заполнены","error")
+    }
     let conf = []
     if(power.address)
       conf.push(power)
@@ -167,11 +187,11 @@ export const DimmerMqttEdit = ({deviceData,hide,type="edit"})=>{
       </label>
       <label>
         <h5>max light</h5>
-        <input className = "textInput" placeholder="maxLight" id="maxLight" type="text" name="high" value={dimmer.high} onChange={changeHandlerDimmer} required/>
+        <input className = "textInput" placeholder="maxLight" id="maxLight" type="number" name="high" value={dimmer.high} onChange={changeHandlerDimmer} required/>
       </label>
       <label>
         <h5>min light</h5>
-        <input className = "textInput" placeholder="minLight" id="minLight" type="text" name="low" value={dimmer.low} onChange={changeHandlerDimmer} required/>
+        <input className = "textInput" placeholder="minLight" id="minLight" type="number" name="low" value={dimmer.low} onChange={changeHandlerDimmer} required/>
       </label>
       </HidingLi>
       <div className="controlForm" >

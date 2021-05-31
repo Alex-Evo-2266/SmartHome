@@ -1,11 +1,11 @@
-import React,{useContext,useState} from 'react'
+import React,{useContext,useState,useEffect,useCallback} from 'react'
 import {ModalWindow} from '../modalWindow/modalWindow'
 import {BtnElement} from './CartLineElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
 import {DeviceStatusContext} from '../../context/DeviceStatusContext'
 import {CartEditContext} from './EditCarts/CartEditContext'
 import {SliderElement} from './CartLineElement/SliderElement'
-// import {SensorElement} from './CartLineElement/SensorElement'
+import {SensorElement} from './CartLineElement/SensorElement'
 import {ScriptElement} from './CartLineElement/ScriptElement'
 // import {WeatherElement} from './CartElement/WeatherElement'
 import {AuthContext} from '../../context/AuthContext.js'
@@ -21,29 +21,9 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   const {target} = useContext(CartEditContext)
   const [act, setAct] = useState(isPowerActiv(data.children))
 
-  function sort(array) {
-    let arr = array.slice()
-    for (var i = 0; i < arr.length; i++) {
-      arr[i].index = i
-    }
-    for (let i = arr.length - 1; i > 0; i--) {
-      for (let j = 0; j < i; j++) {
-        if(arr[j].order>arr[j+1].order){
-          [arr[j],arr[j+1]] = [arr[j+1],arr[j]]
-        }
-      }
-    }
-    return arr
-  }
+  const isPowerActivcallback = useCallback(isPowerActiv,[devices])
 
-  function isPowerAct(array) {
-    for (var item of array)
-      if(item.typeAction==="power")
-        return true
-    return false
-  }
-
-  function isPowerActiv(array) {
+  function isPowerActiv(array){
     for (var item of array)
       if(item.typeAction==="power"){
         let id = item.deviceId
@@ -63,6 +43,35 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
           }
         }
       }
+    return false
+  }
+
+  useEffect(()=>{
+    setAct(isPowerActivcallback(data.children))
+  },[isPowerActivcallback,data.children])
+
+  function sort(array) {
+    let arr = array.slice()
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].index = i
+    }
+    for (let i = arr.length - 1; i > 0; i--) {
+      for (let j = 0; j < i; j++) {
+        if(arr[j].order>arr[j+1].order){
+          [arr[j],arr[j+1]] = [arr[j+1],arr[j]]
+        }
+      }
+    }
+    return arr
+  }
+
+  function isPowerAct(array) {
+    let countpower = 0
+    for (var item of array)
+      if(item.typeAction==="power")
+        countpower++
+      if(countpower>=2)
+        return true
     return false
   }
 
@@ -120,6 +129,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
             <BtnElement
             disabled={edit}
             name="all"
+            baseswitchMode={true}
             firstValue={act}
             onClick={(event,value)=>{
               allPower(data.children,value)
@@ -141,7 +151,6 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     index={item.index}
                     disabled={edit}
                     data={item}
-                    switchMode={item.typeAction==="power"}
                     deleteBtn={
                       (edit)?deleteElement:null
                     }
@@ -178,6 +187,20 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     }
                     />
                     </div>
+                    :(item.type==="line-sensor")?
+                      <div className="line-sensor">
+                      <SensorElement
+                      index={item.index}
+                      data={item}
+                      disabled={edit}
+                      deleteBtn={
+                        (edit)?deleteElement:null
+                      }
+                      editBtn={
+                        (edit)?editElement:null
+                      }
+                      />
+                      </div>
                 :null
               }
             </li>

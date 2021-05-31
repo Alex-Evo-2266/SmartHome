@@ -89,6 +89,10 @@ class ControlDevices():
                 return item
         return None
 
+    def set_status(self,type,status):
+        if self.__item["DeviceTypeConnect"]=="mqtt" and self.__item["DeviceType"]=="other":
+            self.device.sendCommand(type,status)
+
     def set_value(self,status)->None:
         if(type(self.device)==Variable):
             deviceSetStatus(self.__item["DeviceId"],"value",status)
@@ -107,7 +111,7 @@ class ControlDevices():
         status = int(self.get_value(False)["mode"])
         control = self.device.get_control()["mode"]
         status += 1
-        if(status>control-1):
+        if(status>int(control)-1):
             status = 0
         self.set_mode(status)
 

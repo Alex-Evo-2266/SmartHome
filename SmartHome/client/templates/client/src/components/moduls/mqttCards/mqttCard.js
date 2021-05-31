@@ -60,7 +60,9 @@ export const MQTTElement = ({data}) =>{
   let message
 
   let mes = data.message
-  mes = JSON.parse(mes)
+  try {
+    mes = JSON.parse(mes)
+  }catch(e){}
   if(typeof(mes)==="object"){
     message = dictToList(mes)
   }else{
@@ -72,7 +74,6 @@ export const MQTTElement = ({data}) =>{
   function Decice() {
     let devices = []
     if(data.lincs){
-      console.log(data.lincs);
       for (var item of data.lincs) {
         let dev = item.device
         let field
@@ -93,12 +94,15 @@ export const MQTTElement = ({data}) =>{
         topicComponents.pop()
       let address = topicComponents.join('/')
       let conf = []
+      let typeControl = "text"
+      if(ret==="sensor"){
+        typeControl = "sensor"
+      }
       for (var item of message) {
         let ctype = baseAddressList[item.type]
         if(!ctype)
           ctype = item.type
         let cMinMax = baseMinMax[ctype]
-        console.log(cMinMax);
         if(!cMinMax){
           cMinMax = baseMinMax["base"]
         }
@@ -111,7 +115,8 @@ export const MQTTElement = ({data}) =>{
           address:caddress,
           low:clow,
           high:chigh,
-          icon:cicon||""
+          icon:cicon||"",
+          typeControl:typeControl
         }
         conf.push(confel)
       }
@@ -126,7 +131,7 @@ export const MQTTElement = ({data}) =>{
   }
 
   return(
-    <tr>
+    <>
       <td>{data.topic}</td>
       <td>{
         message.map((item,index)=>{
@@ -141,6 +146,6 @@ export const MQTTElement = ({data}) =>{
         })
       }</td>
       <td><button onClick={lincDecice}>связать</button></td>
-    </tr>
+    </>
   )
 }

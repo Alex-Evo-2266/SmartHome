@@ -57,7 +57,12 @@ def deviceSetStatus(id, type,value):
                     item.save()
                 return value
         print('not value error')
-        val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=type)
+        typeControl = "boolean"
+        if(type=="dimmer" or type=="color" or type=="temp"):
+            typeControl = "range"
+        if(type=="mode"):
+            typeControl = "number"
+        val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=type,typeControl=typeControl)
         val.value=value
         val.save()
         return True

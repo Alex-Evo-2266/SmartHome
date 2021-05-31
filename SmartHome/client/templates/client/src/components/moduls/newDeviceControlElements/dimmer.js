@@ -46,13 +46,7 @@ export const Dimmer = ({updata,title,type,conf,value,idDevice}) =>{
         <p>{newvalue||""}</p>
       </div>
       <div className="DeviceLiControl">
-      {
-        (type==="dimmer")?
-        <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler}/>:
-        (type==="temp")?
-        <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler}/>:
-        null
-      }
+      <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler}/>
       </div>
       </div>
     </li>

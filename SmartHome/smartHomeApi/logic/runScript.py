@@ -120,8 +120,9 @@ def actiondev(data):
         device = item.device
         val = getvalue(item.value)
         if(device.DeviceType=="variable" and item.action=="value"):
-            return setValue(device.id,"variable",val)
-        return setValue(device.id,item.action,val)
+            setValue(device.id,"variable",val)
+        else:
+            setValue(device.id,item.action,val)
 
 def lockforScript(idDevice,type):
     device = Device.objects.get(id=idDevice)

@@ -15,14 +15,14 @@ class MqttDimmer(MqttDevice):
                 self.brightnessMin = int(item["low"])
 
     def on(self, mode=0):
-        self.send(self.powertoken,self.powerOn)
+        self.send(self.powertoken,"1")
 
     def off(self):
-        self.send(self.powertoken,self.powerOff)
+        self.send(self.powertoken,"0")
 
     def set_brightness(self, lavel):
         if(lavel>=self.brightnessMin and lavel<self.brightnessMax):
-            self.send(self.brightnesstoken,lavel)
+            self.send(self.brightnesstoken,str(lavel))
 
     def controlDevice(self):
         arr = MqttDevice.controlDevice(self)
@@ -41,9 +41,7 @@ class MqttDimmer(MqttDevice):
         return self.get_properties(prop)
 
     def get_control(self):
-        controls = {
-        "status":True,
-        }
+        controls = dict()
         if(self.powertoken):
             controls["power"]=True
         if(self.brightnesstoken):

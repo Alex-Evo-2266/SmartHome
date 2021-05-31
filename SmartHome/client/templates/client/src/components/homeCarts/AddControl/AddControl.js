@@ -4,6 +4,7 @@ import {BackForm} from '../../moduls/backForm'
 import {AddButton} from './Control/addButton'
 import {AddSlider} from './Control/addSlider'
 import {AddScript} from './Control/addScript'
+import {AddSensor} from './Control/addSensor'
 
 const weather = {
   id:null,
@@ -59,7 +60,9 @@ export const AddControl = ()=>{
             (typeChild==="slider")?
             <AddSlider add={addButton}/>:
             (typeChild==="script")?
-            <AddScript add={addButton}/>
+            <AddScript add={addButton}/>:
+            (typeChild==="sensor")?
+            <AddSensor add={addButton}/>
             :null
           }
         </div>

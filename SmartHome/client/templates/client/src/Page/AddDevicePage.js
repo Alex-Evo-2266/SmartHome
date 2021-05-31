@@ -95,7 +95,14 @@ export const AddDevicesPage = () => {
 
   const changeHandler = event => {
     if(event.target.name==="DeviceType"&&event.target.value==="variable"){
-      setForm({ ...form,DeviceType:"variable", DeviceTypeConnect: "system"})
+      setForm({ ...form,DeviceType:"variable", DeviceTypeConnect: "system",config:[
+        {
+          address:"",
+          type:"value",
+          icon:"",
+          typeControl:"text"
+        }
+      ]})
       return
     }
     setForm({ ...form, [event.target.name]: event.target.value })

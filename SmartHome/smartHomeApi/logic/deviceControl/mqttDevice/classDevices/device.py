@@ -15,11 +15,6 @@ class MqttDevice():
         self.DeviceConfig = kwargs["DeviceConfig"]
         self.address = kwargs["address"]
         self.RoomId = kwargs["RoomId"]
-        for item in self.DeviceConfig:
-            if item["type"]=="status":
-                self.statustoken = item["address"]
-            if item["type"]=="command":
-                self.commandtoken = item["address"]
 
 
     def get_properties(self, properties):
@@ -30,12 +25,39 @@ class MqttDevice():
                     d = {**d,item:devicestatus(self.DeviceId, item)}
         return d
 
-    def send(self,topic:str, command: str):
+    def send(self,topic:str, command:str):
         client = getMqttClient()
+        print(type(command))
+        typeMessage = "text"
+        min = 0
+        max = 1
+        message = ""
+        for item in self.DeviceConfig:
+            print(topic,item["address"])
+            if(item["address"]==topic):
+                typeMessage = item["typeControl"]
+                min = item["low"]
+                max = item["high"]
+        print(typeMessage)
+        if(typeMessage=="boolean"):
+            if(int(command)==1):
+                message = max
+            else:
+                message = min
+        elif(typeMessage=="range"):
+            print(command,max,type(min))
+            if(int(command)>int(max)):
+                message = int(max)
+            elif(int(command)<int(min)):
+                message = int(min)
+            else:
+                message = command
+        else:
+            message = command
+        print(message)
         if(self.DeviceValueType=="json"):
-            print(command)
             data = dict()
-            data[topic] = command
+            data[topic] = message
             data = json.dumps(data)
             print(data)
             client.publish(self.address+"/set", data)
@@ -43,11 +65,15 @@ class MqttDevice():
             print(client,command)
             alltopic = self.address + "/" + topic
             print(alltopic)
-            client.publish(alltopic, command)
+            client.publish(alltopic, message)
             print("f")
 
-    def sendCommand(self, command:str):
-        send(self.commandtoken,command)
+    def sendCommand(self,type:str, command:str):
+        for item in self.DeviceConfig:
+            if(item["type"]==type):
+                self.send(item["address"],command)
+                return
+
 
     def get_value(self):
         prop=[
@@ -57,15 +83,11 @@ class MqttDevice():
 
     def controlDevice(self):
         arr = list()
-        if(self.statustoken):
-            arr.append("status")
-        if(self.commandtoken):
-            arr.append("command")
         return arr
 
     def get_control(self):
-        controls = {
-        "status":True,
-        "send":True
-        }
+        print(self.DeviceConfig)
+        controls = dict()
+        for item in self.DeviceConfig:
+            controls[item["type"]]=True
         return controls
