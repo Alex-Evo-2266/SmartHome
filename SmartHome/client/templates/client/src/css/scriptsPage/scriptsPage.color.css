@@ -1,6 +1,11 @@
 .scriptElement{
-  background: var(--head-v2-color);
+  background: var(--content-color);
 }
 .scriptElement p{
-  color: var(--text-v1-color);
+  color: var(--text-color);
+}
+.scriptElement .scriptStatus button,
+{
+  background: var(--content-color);
+  filter: brightness(var(--btn));
 }

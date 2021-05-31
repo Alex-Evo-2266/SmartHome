@@ -4,9 +4,11 @@
 
 .menu-component-paragraph{
   height: 60px;
-  width: calc(100% - 2px);
-  border: 1px solid var(--head-v2-color);
+  width: 100%;
+  border-top: 1px solid var(--head-color);
+  border-bottom: 1px solid var(--head-color);
   display: flex;
+  z-index: 0;
   position: relative;
 }
 .menu-component-paragraph p{

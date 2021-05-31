@@ -1,20 +1,21 @@
 .NewCardElement .NewCardHeader{
-  background: var(--head-v2-color);
-  color: var(--text-v1-color);
+  background: var(--head-color);
+  color: var(--text-color);
 }
 .DeviceControlLi{
-    background: var(--head-v2-color);
-    color: var(--text-v1-color);
+    background: var(--head-color);
+    color: var(--text-color);
 }
 .DeviceControlLi:nth-child(2n+1){
-  background: var(--body-v1-color);
-  color: var(--text-v3-color);
+  background: var(--content-color);
+  color: var(--text-color);
 }
 .DeviceControlLi:nth-child(2n+2){
-  background: var(--body-v3-color);
+  background: var(--content-darken-color);
+  /* filter: brightness(50%); */
 }
 .NewCardElement .NewCardControl .cardControlBtn{
-  background: var(--body-v2-color);
+  background: var(--head-color);
 }
 .NewCardElement .NewCardControl .cardControlBtn:hover{
   background: var(--active-v1-color);

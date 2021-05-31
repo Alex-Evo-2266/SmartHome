@@ -1,15 +1,12 @@
+
 body.night{
-  --head-v1-color: #696969;
-  --head-v2-color: #333;
-  --body-v1-color: #808080;
-  --body-v2-color: #696969;
-  --body-v3-color: #505050;
-  --background-v1-color: #111c;
-  --text-v1-color: #fff;
-  --text-v2-color: #000;
-  --text-v3-color: #000;
-  --text-v4-color: #fff;
-  --text-disabled-color: #a9a9a9;
-  --btn-v1-color: #fff;
-  --btn-v2-color: #444;
+  --head-color: #444;
+  --content-color: #808080;
+  --text-color:#fff;
+  --btn:120%;
+  --gradient: linear-gradient(to bottom, #333, #555);
+  --background:#808080d0;
+
+  --content-darken-color: #606060;
+  --head-darken-color: #353535;
 }

@@ -38,6 +38,7 @@
  border-radius: 2px;
  background: #0000;
  outline: none;
+ margin: 10px;
 }
 .pagecontent button{
   position: relative;

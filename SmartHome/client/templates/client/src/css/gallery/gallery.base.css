@@ -37,7 +37,7 @@
 }
 .cartImageInput {
   border-radius: 6px;
-  background: #fff;
+  background: var(--content-color);
   padding: 1rem;
   margin: 0 20px;
   box-shadow: 2px 3px 10px rgba(0,0,0,.2);
@@ -48,23 +48,24 @@
 .cartImageInput .btn{
   width: auto;
   display: inline-block;
-  color: #1E90FF;
+  color: var(--active-v1-color);
   position: relative;
   border-radius: 99px;
-  border: 1px solid #1E90FF;
+  border: 1px solid var(--active-v1-color);
   text-decoration: none;
   text-transform: uppercase;
   padding: 0.5rem 1.5rem;
   font-weight: 700;
   outline: none;
-  background: #fff;
+  background: var(--content-color);
+  /* filter: brightness(var(--btn)); */
   transition: all 0.22s;
   cursor: pointer;
   margin-right: 1rem;
 }
 .cartImageInput .btn.primary{
-  background: #1E90FF;
-  color: #fff;
+  background: var(--active-v1-color);
+  color: var(--content-color);
 }
 .cartImageInput .btn:active{
   box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);

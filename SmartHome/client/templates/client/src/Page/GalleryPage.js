@@ -91,7 +91,7 @@ export const GalleryPage = () => {
       }
       {
         (!end)?
-        <button className="btn" onClick={()=>getTenUrl(newUrl)}>ещё</button>:
+        <button className="btn2" onClick={()=>getTenUrl(newUrl)}>ещё</button>:
         null
       }
       </div>

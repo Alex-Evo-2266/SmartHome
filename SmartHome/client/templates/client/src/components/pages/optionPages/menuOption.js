@@ -109,7 +109,7 @@ export const MenuOption = () =>{
       :null
     }
     <div className = "pagecontent">
-      <div className="configElement">
+      <div className="configElement block">
         <MenuComponent name="Home" icon="fas fa-home" def={true}/>
         <MenuComponent name="Devices" icon="fas fa-plug" def={true}/>
         <MenuComponent name="Profile" icon="fas fa-user-circle" def={true}/>

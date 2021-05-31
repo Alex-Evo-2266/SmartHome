@@ -77,7 +77,7 @@ export const UserOption = () =>{
           <i className="indicator"></i>
         </label>
       </div>
-      <div className="configElement">
+      <div className="configElement block">
         <p className="text">Style</p>
         <div className="configElement choice">
           <img alt="style night" src={nightStyle} className={`choice ${(userconf.style==="night")?"active":null}`} name="night" onClick={styleHandler}/>

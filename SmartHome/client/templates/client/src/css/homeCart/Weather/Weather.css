@@ -68,7 +68,7 @@
   font-size: 13px;
   position: relative;
   left: 0;
-  border-top: 1px solid var(--body-v2-color);
+  border-top: 1px solid var(--content-color);
   /* border: 1px solid var(--body-v2-color); */
 }
 .day_anchor-div i{

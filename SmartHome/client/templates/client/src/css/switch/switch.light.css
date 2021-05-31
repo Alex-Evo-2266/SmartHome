@@ -1,9 +1,14 @@
 .light .switch span{
-  background: var(--body-v3-color);
+  background: var(--content-color);
+  filter: brightness(var(--btn));
 }
 .light .switch .indicator{
-  background: linear-gradient(to bottom, var(--head-v1-color), var(--head-v2-color));
+  /* background: linear-gradient(to bottom, var(--head-v1-color), var(--head-v2-color)); */
+  background: var(--gradient);
+  /* filter: brightness(var(--btn) + var(--btn)); */
 }
-.light .switch input:checked ~ span{
-  background: var(--active-v1-color)
+.switch input:checked ~ span{
+  background: var(--active-v1-color);
+  filter: brightness(100%);
+
 }

@@ -1,32 +1,33 @@
 .pagecontent p{
-  border: 1px solid var(--head-v2-color);
-  background: var(--background-v1-color);
+  border: 1px solid var(--head-color);
+  background: var(--content-color);
 }
 .pagecontent label.textLabel{
-  border: 1px solid var(--head-v2-color);
-  background: var(--background-v1-color);
-  color: var(--text-v1-color);
+  border: 1px solid var(--head-color);
+  background: var(--content-color);
+  color: var(--text-color);
   /* padding-bottom: 8px; */
 }
 .pagecontent label p{
   border: none;
   background: #0000;
-  color:var(--text-v1-color);
+  color:var(--text-color);
 }
 .pagecontent label input{
-  border: 2px solid var(--head-v2-color);
-  color: var(--text-v1-color);
+  border: 2px solid var(--head-color);
+  color: var(--text-color);
 }
 .pagecontent label p:hover{
   box-shadow: none;
 }
 .pagecontent a,
 .pagecontent button{
-  color: var(--text-v1-color);
-  background: var(--head-v2-color);
+  color: var(--text-color);
+  background: var(--head-color);
+  filter: brightness(var(--btn));
 }
 .pagecontent a:hover,
 .pagecontent button:hover{
   background: var(--active-v1-color);
-  color: var(--text-v2-color);
+  color: var(--text-color);
 }

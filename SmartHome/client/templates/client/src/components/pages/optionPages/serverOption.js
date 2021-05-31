@@ -54,10 +54,10 @@ export const ServerOption = () =>{
 
   return(
     <div className = "pagecontent">
-      <div className="configElement">
+      <div className="configElement block">
         <h2>Server config</h2>
       </div>
-      <div className="configElement">
+      <div className="configElement block">
         <p className="text">Mqtt broker ip</p>
         <label className="text">
           <input placeholder="IP Mqtt broker" onChange={changeHandler} name="mqttBroker" type="text" value={serverconf.mqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>

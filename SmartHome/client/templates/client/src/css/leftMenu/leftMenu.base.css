@@ -62,7 +62,6 @@
 .navigation nav ul li span.liinfo .icon,
 .menuTogle .icon
 {
-  color: var(--text-v1-color);
   position: relative;
   display: block;
   min-width: 60px;

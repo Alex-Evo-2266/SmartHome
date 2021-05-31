@@ -51,7 +51,7 @@
 .BtnElementLine{
   display: grid;
   grid-template-columns: 1fr 2fr 2fr 1fr;
-  background: var(--btn-v2-color);
+  background: var(--content-darken-color);
 }
 .BtnElementLine .name{
   grid-column-start: 2;

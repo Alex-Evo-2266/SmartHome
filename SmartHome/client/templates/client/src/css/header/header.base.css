@@ -18,10 +18,11 @@ header h1{
   margin: 0 30px;
 }
 header .btn{
-  background: #444;
   width: 60px;
   height: 60px;
   padding: 0;
+  text-decoration: none;
+  outline: none;
   font-size: 24px;
   border: none;
   border-radius: 0;
@@ -33,10 +34,6 @@ header .btn.spec{
   position: absolute;
   top: 0;
   right: 0;
-}
-header .btn:hover,
-header .btn.active{
-  background: var(--active-v1-color);
 }
 header .controls{
   display: flex;
@@ -87,7 +84,8 @@ header .search.show + .controls{
 
 @media (max-width: 700px){
   header{
-    z-index: 10
+    z-index: 10;
+    box-shadow: none;
   }
   header h1{
     display: none;

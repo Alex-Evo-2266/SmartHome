@@ -47,7 +47,7 @@ export const NewDeviceElement = ({id}) =>{
   return(
     <div className = "NewCardElement">
       <div className = "NewCardHeader">
-        <button onClick={linc}><i>linc</i></button>
+        <button className={(device.DeviceStatus)?"active":""} onClick={linc}><i>linc</i></button>
         <div className = {`typeConnect ${device.DeviceTypeConnect||"other"}`}>
           <p>{device.DeviceTypeConnect||"other"}</p>
         </div>

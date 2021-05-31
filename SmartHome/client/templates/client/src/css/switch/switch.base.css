@@ -67,4 +67,5 @@
 }
 .switchText{
   width: calc(100% - 120px);
+  padding: 5px;
 }
