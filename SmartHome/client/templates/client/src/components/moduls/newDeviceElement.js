@@ -82,7 +82,7 @@ export const NewDeviceElement = ({id}) =>{
                 </li>
               )
             }
-            if(item.typeControl==="sensor"){
+            if(item.typeControl==="sensor"||item.typeControl==="booleanSensor"){
               return(
                 <li className="DeviceControlLi" key={index}>
                   <div className="DeviceControlLiName">

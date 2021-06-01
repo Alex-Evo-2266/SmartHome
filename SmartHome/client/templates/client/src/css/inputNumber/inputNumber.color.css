@@ -1,11 +1,12 @@
 .InputNumber{
-  border: 2px solid var(--head-v2-color)
+  border: none
 }
 .InputNumber .InputNumber-btnUp,
 .InputNumber .InputNumber-btnDown{
-  background: var(--body-v1-color)
+  background: var(--content-color);
+  filter: brightness(var(--btn));
 }
 .InputNumber .InputNumber-btnUp i,
 .InputNumber .InputNumber-btnDown i{
-  color: var(--text-v1-color);
+  color: var(--text-color);
 }

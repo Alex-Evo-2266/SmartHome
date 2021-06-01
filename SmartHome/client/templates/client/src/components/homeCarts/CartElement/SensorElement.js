@@ -1,5 +1,6 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import {RunText} from '../../runText'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 
 export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
@@ -10,7 +11,6 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0])
       return false
-    console.log(devices);
     let condidat = devices.filter((item)=>item.DeviceId===id)
     return condidat[0]
   },[devices])
@@ -26,6 +26,15 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
     }
   }
 
+  const getTypeField = ()=>{
+    if(!device)return "sensorBase"
+    for (var item of device.DeviceConfig) {
+      if(data.typeAction === item.type){
+        return item.typeControl
+      }
+    }
+    return "sensorBase"
+  }
 
   const deletebtn = ()=>{
     if(typeof(deleteBtn)==="function"){
@@ -40,8 +49,62 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   }
 
 if(!device||!device.DeviceId){
+  console.log("wtf");
   return null;
 }
+if(getTypeField()==="sensor"){
+  return(
+    <div className="SensorElement">
+      <div className="icon-conteiner">
+        <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
+        <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
+
+        <p className= "sensor-value">{device.DeviceValue[data.typeAction]}</p>
+        <p className= "sensor-unit">{getConfrg(data.typeAction).unit||""}</p>
+      </div>
+      <div className="delete-box">
+      {
+        (deleteBtn)?
+        <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
+        null
+      }
+      {
+        (editBtn)?
+        <button className="editBtn" onClick={editbtn}>
+          <i className="fas fa-list i-cost"></i>
+        </button>:
+        null
+      }
+      </div>
+    </div>
+  )
+}
+if(getTypeField()==="booleanSensor"){
+  return(
+    <div className="SensorElement">
+      <div className="icon-conteiner">
+        <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
+        <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
+        <div className={`valueIndicator ${(getConfrg(data.typeAction).high.toLowerCase()===device.DeviceValue[data.typeAction].toLowerCase())?"true":"false"}`}></div>
+      </div>
+      <div className="delete-box">
+      {
+        (deleteBtn)?
+        <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
+        null
+      }
+      {
+        (editBtn)?
+        <button className="editBtn" onClick={editbtn}>
+          <i className="fas fa-list i-cost"></i>
+        </button>:
+        null
+      }
+      </div>
+    </div>
+  )
+}
+
 return(
   <div className="SensorElement BtnElement">
     <div className="icon-conteiner">

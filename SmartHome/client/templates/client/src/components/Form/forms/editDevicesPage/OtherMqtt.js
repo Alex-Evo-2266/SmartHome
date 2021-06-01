@@ -140,7 +140,7 @@ const changeHandlerTest = event=>{
       <li>
         <label>
           <h5>Type value</h5>
-          <select name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
+          <select className = "textInput" name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
             <option value="json">json</option>
             <option value="value">value</option>
           </select>
@@ -166,16 +166,17 @@ const changeHandlerTest = event=>{
             </label>
             <label>
               <h5>Type</h5>
-              <select data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandlerField}>
+              <select className = "textInput" data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandlerField}>
                 <option value="boolean">boolean</option>
                 <option value="text">text</option>
                 <option value="number">number</option>
                 <option value="range">range</option>
                 <option value="sensor">sensor</option>
+                <option value="booleanSensor">booleanSensor</option>
               </select>
             </label>
             {
-              (item.typeControl==="range"||item.typeControl==="boolean")?
+              (item.typeControl==="range"||item.typeControl==="boolean"||item.typeControl==="booleanSensor")?
               <>
               <label>
                 <h5>Enter the min</h5>
@@ -188,13 +189,15 @@ const changeHandlerTest = event=>{
               </>
               :null
             }
-            <button onClick={()=>delcom(index)}>delete</button>
+            <label>
+              <button className="delField" onClick={()=>delcom(index)}>delete</button>
+            </label>
             </HidingLi>
           )
         })
       }
       <li>
-        <button onClick={addcom}>add</button>
+        <button className="addField" onClick={addcom}>add</button>
       </li>
       <div className="controlForm" >
       {

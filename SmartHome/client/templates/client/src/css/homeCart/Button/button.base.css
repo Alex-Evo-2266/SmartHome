@@ -24,13 +24,15 @@ ul.elementConteiner li label .icon-box{
   border-radius: 0;
   transition: 0.5s;
 }
-ul.elementConteiner li label .icon-conteiner{
+.BtnElement .icon-conteiner{
+  justify-content: center;
+}
+ul.elementConteiner li .icon-conteiner{
   width: 100%;
   position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   border-radius: 0;
   transition: 0.5s;

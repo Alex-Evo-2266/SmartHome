@@ -1,4 +1,4 @@
-ul.elementConteiner li label .icon-conteiner{
+ul.elementConteiner li .icon-conteiner{
   background: var(--content-darken-color);
   box-shadow: none;
   color: var(--text-color);

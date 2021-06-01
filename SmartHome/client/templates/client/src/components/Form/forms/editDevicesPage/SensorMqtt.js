@@ -95,6 +95,8 @@ export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
       address:"c"+count,
       type:"c"+count,
       icon:"",
+      min:"false",
+      max:"true",
       typeControl:"sensor"
     })
     setCount((prev)=>prev+1)
@@ -136,7 +138,7 @@ export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
       <li>
         <label>
           <h5>Type value</h5>
-          <select name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
+          <select className = "textInput" name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
             <option value="json">json</option>
             <option value="value">value</option>
           </select>
@@ -161,9 +163,30 @@ export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
               <input data-id={index} className = "textInput" placeholder="address" type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
             </label>
             <label>
+              <h5>Type</h5>
+              <select className = "textInput" data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandlerField}>
+                <option value="sensor">sensor</option>
+                <option value="booleanSensor">booleanSensor</option>
+              </select>
+            </label>
+            <label>
               <h5>Enter the unit</h5>
               <input data-id={index} className = "textInput" placeholder="unit" type="text" name="icon" value={item.icon} onChange={changeHandlerField} required/>
             </label>
+            {
+              (item.typeControl==="booleanSensor")?
+              <>
+              <label>
+                <h5>Enter the min</h5>
+                <input data-id={index} className = "textInput" placeholder="min Dimmer" id="minDimmer" type={(item.typeControl==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandlerField} required/>
+              </label>
+              <label>
+                <h5>Enter the max</h5>
+                <input data-id={index} className = "textInput" placeholder="max Dimmer" id="maxDimmer" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
+              </label>
+              </>
+              :null
+            }
             <button onClick={()=>deleteField(index)}>delete</button>
             </HidingLi>
           )

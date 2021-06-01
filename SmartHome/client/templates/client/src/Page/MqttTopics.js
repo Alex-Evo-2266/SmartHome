@@ -15,10 +15,11 @@ export const MqttPage = ()=>{
 
   const getDev = useCallback(async () => {
     try {
-      const data = await request('/api/devices/mqtt', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+      let data = await request('/api/devices/mqtt', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       if(data){
-        setDeviceMqtt(data)
         console.log(data);
+/* временный костыль -->>*/data = data.filter((item)=>(item.topic!=="zigbee2mqtt/bridge/devices"&&item.topic!=="zigbee2mqtt/bridge/config"&&item.topic!=="zigbee2mqtt/bridge/info"))
+        setDeviceMqtt(data)
       }
     } catch (e) {
 

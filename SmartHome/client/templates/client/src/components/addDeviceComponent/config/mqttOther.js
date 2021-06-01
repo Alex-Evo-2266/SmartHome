@@ -70,16 +70,17 @@ export const OtherMqtt = ({onChange,back,type})=>{
                   </label>
                   <label>
                     <h5>Type</h5>
-                    <select data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandler}>
+                    <select className = "textInput" data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandler}>
                       <option value="boolean">boolean</option>
                       <option value="text">text</option>
                       <option value="number">number</option>
                       <option value="range">range</option>
                       <option value="sensor">sensor</option>
+                      <option value="booleanSensor">booleanSensor</option>
                     </select>
                   </label>
                   {
-                    (item.typeControl==="range"||item.typeControl==="boolean")?
+                    (item.typeControl==="range"||item.typeControl==="boolean"||item.typeControl==="booleanSensor")?
                     <>
                     <label>
                       <h5>Enter the min</h5>
@@ -92,13 +93,15 @@ export const OtherMqtt = ({onChange,back,type})=>{
                     </>
                     :null
                   }
-                  <button onClick={()=>deleteField(index)}>delete</button>
+                  <div className="hr">
+                    <button className="delField" onClick={()=>deleteField(index)}>delete</button>
+                  </div>
                 </li>
               )
             })
           }
         </ul>
-        <button onClick={addField}>add</button>
+        <button className="addField" onClick={addField}>add</button>
       </div>
   )
 }

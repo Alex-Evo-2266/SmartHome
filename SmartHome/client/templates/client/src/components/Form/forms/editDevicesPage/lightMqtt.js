@@ -205,7 +205,7 @@ export const LightMqttEdit = ({deviceData,hide,type="edit"})=>{
       <li>
         <label>
           <h5>Type value</h5>
-          <select name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
+          <select className = "textInput" name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
             <option value="json">json</option>
             <option value="value">value</option>
           </select>

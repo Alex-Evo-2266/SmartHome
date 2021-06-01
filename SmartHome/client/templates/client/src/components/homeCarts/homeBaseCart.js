@@ -166,7 +166,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                 (edit)?editElement:null
               }
               />:
-              (item.type==="sensor")?
+              (item.type==="sensor"||item.type==="booleanSensor")?
               <SensorElement
               index={item.index}
               data={item}

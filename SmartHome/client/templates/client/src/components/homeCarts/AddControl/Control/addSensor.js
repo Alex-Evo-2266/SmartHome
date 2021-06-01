@@ -7,7 +7,7 @@ function sortDevice(data) {
   let arr = []
   for (var item of data) {
     for (var item2 of item.DeviceConfig) {
-      if(item2.typeControl==="sensor"){
+      if(item2.typeControl==="sensor"||item2.typeControl==="booleanSensor"){
         arr.push(item)
         break
       }
@@ -49,13 +49,13 @@ export const AddSensor = ({add})=>{
     }
   },[device])
 
-  const out = (type)=>{
-    setButtonForm({...buttonForm,typeAction:type})
-    add({...buttonForm,typeAction:type})
+  const out = (item)=>{
+    setButtonForm({...buttonForm,typeAction:item.type,type:item.typeControl})
+    add({...buttonForm,typeAction:item.type,type:item.typeControl})
   }
 
   function sortField(items) {
-    return items.filter((item)=>item.typeControl==="sensor")
+    return items.filter((item)=>item.typeControl==="sensor"||item.typeControl==="booleanSensor")
   }
 
   if(!allDevices){
@@ -73,7 +73,7 @@ export const AddSensor = ({add})=>{
         }):
         (!buttonForm.typeAction&&device.DeviceConfig)?
           sortField(device.DeviceConfig).map((item,index)=>{
-            return <li key={index} onClick={()=>out(item.type)}>{item.type}</li>
+            return <li key={index} onClick={()=>out(item)}>{item.type}</li>
           })
           :null
     }

@@ -1,16 +1,26 @@
 /* @import "./sensor.color.css"; */
 
-.sensor-box{
-  padding: 5px;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  align-items: center;
-}
-.sensor-box .sensor{
+.SensorElement{
   height: 100%;
-  width: 150px;
-  align-items: center;
 }
-.sensor-box .sensor p{
+.SensorElement .icon-conteiner{
+  justify-content: flex-start;
+}
+.sensor-name{
   font-size: 20px;
+}
+.sensor-value{
+  font-size: 40px;
+}
+.valueIndicator{
+  width: calc(100% - 10px);
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid var(--head-color)
+}
+.valueIndicator.true{
+  background: var(--ok-v1-color);
+}
+.valueIndicator.false{
+  background: #f00;
 }
