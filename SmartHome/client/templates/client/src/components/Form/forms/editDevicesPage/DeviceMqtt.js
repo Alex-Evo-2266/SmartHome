@@ -3,14 +3,36 @@ import {HidingLi} from '../../../hidingLi.js'
 import {useHttp} from '../../../../hooks/http.hook'
 import {useMessage} from '../../../../hooks/message.hook'
 import {AuthContext} from '../../../../context/AuthContext.js'
+import {getConf} from '../../../addDeviceComponent/config/defaultTypeDevConfig'
 import {useChecked} from '../../../../hooks/checked.hook'
 
-
-export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
+export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
   const auth = useContext(AuthContext)
-  const {USText} = useChecked()
   const {message} = useMessage();
+  const {USText} = useChecked()
+  const [configForm, setConfigForm] = useState(getConf(deviceData.DeviceType||"other"));
   const {request, error, clearError} = useHttp();
+
+  const validCountField = (data)=>{
+    if(!deviceData.DeviceType||deviceData.DeviceType==="other"||deviceData.DeviceType==="sensor")return data
+    let data1 = getConf(deviceData.DeviceType||"other").config.slice()
+    let newdata = []
+    for (var item of data1) {
+      let validef = false
+      for (var item2 of data) {
+        if(item.type===item2.type){
+          validef = true
+          newdata.push(item2)
+        }
+      }
+      if(!validef){
+        let newField = item
+        newField.address = ""
+        newdata.push(newField)
+      }
+    }
+    return newdata
+  }
 
   useEffect(()=>{
     message(error,"error")
@@ -18,39 +40,43 @@ export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
       clearError();
     }
   },[error,message, clearError])
-  const [field, setField] = useState(deviceData.DeviceConfig||[]);
-  const [count, setCount] = useState(deviceData.DeviceConfig.length);
+
+  useEffect(()=>{
+    setConfigForm(getConf(deviceData.DeviceType))
+  },[deviceData.DeviceType])
 
   const [device, setDevice] = useState({
     DeviceId:deviceData.DeviceId||0,
     DeviceInformation:deviceData.DeviceInformation||"",
-    DeviceSystemName:deviceData.DeviceSystemName||"",
     DeviceName:deviceData.DeviceName||"",
-    DeviceType:deviceData.DeviceType||"sensor",
+    DeviceSystemName:deviceData.DeviceSystemName||"",
+    DeviceType:deviceData.DeviceType||"other",
     DeviceValueType:deviceData.DeviceValueType||"json",
     DeviceAddress:deviceData.DeviceAddress||"",
     DeviceTypeConnect:deviceData.DeviceTypeConnect||"mqtt",
     RoomId:deviceData.RoomId,
   })
+  const [field, setField] = useState(validCountField(deviceData.DeviceConfig||[]));
+  const [count, setCount] = useState(deviceData.DeviceConfig.length);
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
   }
   const changeHandlerField = event => {
     let index = event.target.dataset.id
-    console.log(index);
     let arr = field.slice()
-    let newData = { ...arr[index], [event.target.name]: event.target.value }
-    arr[index] = newData
+    let newcom = { ...arr[index], [event.target.name]: event.target.value }
+    arr[index] = newcom
     setField(arr)
   }
-  const changeHandlerTest = event=>{
-    if(USText(event.target.value)){
-      changeHandler(event)
-      return ;
-    }
-    message("forbidden symbols","error")
+const changeHandlerTest = event=>{
+  if(USText(event.target.value)){
+    changeHandler(event)
+    return ;
   }
+  message("forbidden symbols","error")
+}
+
   function valid() {
     if(
       !device.DeviceSystemName||
@@ -62,7 +88,20 @@ export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
     ){return false}
     if(!field||!field[0]){return false}
     for (var item of field) {
-      if(!item||!item.type||!item.address){return false}
+      if(item&&item.type&&item.address){return true}
+    }
+    return false
+  }
+  const validFields = ()=>{
+    let arrType = []
+    for (var item of field) {
+      for (var item2 of arrType) {
+        if(item.type === item2){
+          message("повторяющиеся поля","error")
+          return false
+        }
+      }
+      arrType.push(item.type)
     }
     return true
   }
@@ -70,7 +109,14 @@ export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
     if(!valid()){
       return message("не все поля заполнены","error")
     }
-    let conf = field
+    if(!validFields()){
+      return
+    }
+    let conf = []
+    for (var item of field) {
+      if(item.address)
+        conf.push(item)
+    }
     let dataout = {
       ...device,
       config:conf
@@ -89,22 +135,25 @@ export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
     },"no")
   }
 
-  const addField = ()=>{
+  const addcom = ()=>{
     let arr = field.slice()
     arr.push({
-      address:"c"+count,
-      type:"c"+count,
-      icon:"",
-      min:"false",
-      max:"true",
-      typeControl:"sensor"
+      address:"field"+count,
+      type:"field"+count,
+      typeControl:"text",
+      low:"0",
+      high:"100"
     })
     setCount((prev)=>prev+1)
     setField(arr)
   }
-  const deleteField = (index)=>{
+
+  const delcom = (index)=>{
     let arr = field.slice()
     arr = arr.filter((it,index2)=>index!==index2)
+    arr = arr.map((item,i)=>{
+      return {...item,type:"c"+i}
+    })
     setCount((prev)=>prev-1)
     setField(arr)
   }
@@ -153,46 +202,78 @@ export const SensorMqttEdit = ({deviceData,hide,type="edit"})=>{
       {
         field.map((item,index)=>{
           return(
-            <HidingLi title = "Field" show = {true} key={index}>
-            <label>
-              <h5>Enter the type</h5>
-              <input data-id={index} className = "textInput" placeholder="type" type="text" name="type" value={item.type} onChange={changeHandlerField} required/>
-            </label>
+            <HidingLi key={index} title = {item.type}>
+            {
+              (configForm.editType)?
+              <label>
+                <h5>Enter the type</h5>
+                <input data-id={index} className = "textInput" placeholder="type" type="text" name="type" value={item.type} onChange={changeHandlerField} required/>
+              </label>:null
+            }
             <label>
               <h5>Enter the address</h5>
               <input data-id={index} className = "textInput" placeholder="address" type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
             </label>
-            <label>
-              <h5>Type</h5>
-              <select className = "textInput" data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandlerField}>
-                <option value="sensor">sensor</option>
-                <option value="booleanSensor">booleanSensor</option>
-              </select>
-            </label>
-            <label>
-              <h5>Enter the unit</h5>
-              <input data-id={index} className = "textInput" placeholder="unit" type="text" name="icon" value={item.icon} onChange={changeHandlerField} required/>
-            </label>
             {
-              (item.typeControl==="booleanSensor")?
+              (configForm.editTypeControl)?
+              <label>
+                <h5>Type</h5>
+                <select className = "textInput" data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandlerField}>
+                {
+                  (configForm.typeControl==="control"||configForm.typeControl==="all")?
+                  <>
+                  <option value="boolean">boolean</option>
+                  <option value="text">text</option>
+                  <option value="number">number</option>
+                  <option value="range">range</option>
+                  </>:null
+                }
+                {
+                  (configForm.typeControl==="sensor"||configForm.typeControl==="all")?
+                  <>
+                  <option value="sensor">sensor</option>
+                  <option value="booleanSensor">booleanSensor</option>
+                  </>:null
+                }
+                </select>
+              </label>:null
+            }
+            {
+              (item.typeControl==="range"||item.typeControl==="boolean"||item.typeControl==="booleanSensor")?
               <>
               <label>
                 <h5>Enter the min</h5>
-                <input data-id={index} className = "textInput" placeholder="min Dimmer" id="minDimmer" type={(item.typeControl==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandlerField} required/>
+                <input data-id={index} className = "textInput" placeholder="min" type={(item.typeControl==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandlerField} required/>
               </label>
               <label>
                 <h5>Enter the max</h5>
-                <input data-id={index} className = "textInput" placeholder="max Dimmer" id="maxDimmer" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
+                <input data-id={index} className = "textInput" placeholder="max" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
               </label>
-              </>
+              </>:
+              (item.typeControl==="number")?
+              <label>
+                <h5>Enter the coutn</h5>
+                <input data-id={index} className = "textInput" placeholder="count" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
+              </label>
               :null
             }
-            <button onClick={()=>deleteField(index)}>delete</button>
+            {
+              (configForm.editCountField)?
+              <label>
+                <button className="delField" onClick={()=>delcom(index)}>delete</button>
+              </label>:null
+            }
             </HidingLi>
           )
         })
       }
-      <button onClick={addField}>add</button>
+      {
+        (configForm.editCountField)?
+        <li>
+          <button className="addField" onClick={addcom}>add</button>
+        </li>
+        :null
+      }
       <div className="controlForm" >
       {
         (type==="edit")?

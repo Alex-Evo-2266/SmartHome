@@ -21,7 +21,7 @@ export const ChoiceType = ({hide})=>{
         <SelectioEnlementImg onClick={typeDeviceHandler} width="100px" height="100px" title = "light device" name="light" src={imgLight}/>
       </li>
       <li>
-        <SelectioEnlementImg onClick={typeDeviceHandler} width="100px" height="100px" title="switch device" name="switch" src={imgSwitch}/>
+        <SelectioEnlementImg onClick={typeDeviceHandler} width="100px" height="100px" title="relay device" name="relay" src={imgSwitch}/>
       </li>
       <li>
         <SelectioEnlementImg onClick={typeDeviceHandler} width="100px" height="100px" title = "dimmer device" name="dimmer" src={imgDimmer}/>

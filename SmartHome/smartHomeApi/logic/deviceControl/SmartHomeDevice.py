@@ -1,8 +1,4 @@
-from .mqttDevice.classDevices.dimmer import MqttDimmer
 from .mqttDevice.classDevices.device import MqttDevice
-from .mqttDevice.classDevices.light import MqttLight
-from .mqttDevice.classDevices.relay import MqttRelay
-from .mqttDevice.classDevices.sensor import MqttSensor
 from .miioDevice.classDevices.yeelight import Yeelight
 from .system.variable import Variable
 from yeelight import Bulb ,PowerMode
@@ -39,16 +35,7 @@ class ControlDevices():
                 if(item["DeviceType"]=="light"):
                     self.device = Yeelight(**item, address=self.__address, DeviceConfig=self.__configs)
             elif(item["DeviceTypeConnect"]=="mqtt"):
-                if(item["DeviceType"]=="light"):
-                    self.device = MqttLight(**item, address=self.__address, DeviceConfig=self.__configs)
-                elif(item["DeviceType"]=="switch"):
-                    self.device = MqttRelay(**item, address=self.__address, DeviceConfig=self.__configs)
-                elif(item["DeviceType"]=="dimmer"):
-                    self.device = MqttDimmer(**item, address=self.__address, DeviceConfig=self.__configs)
-                elif(item["DeviceType"]=="sensor"):
-                    self.device = MqttSensor(**item, address=self.__address, DeviceConfig=self.__configs)
-                else:
-                    self.device = MqttDevice(**item, address=self.__address, DeviceConfig=self.__configs)
+                self.device = MqttDevice(**item, address=self.__address, DeviceConfig=self.__configs)
             elif(item["DeviceTypeConnect"]=="system"):
                 if(item["DeviceType"]=="variable"):
                     self.device = Variable(**item)
@@ -76,6 +63,8 @@ class ControlDevices():
     def get_value(self, save=True):
         if self.__item["DeviceTypeConnect"]=="miio":
             return self.device.get_value(save)
+        if self.__item["DeviceTypeConnect"]=="yeelight":
+            return self.device.get_value(save)
         elif self.__item["DeviceTypeConnect"]=="mqtt":
             return self.device.get_value()
         elif self.__item["DeviceTypeConnect"]=="system" and self.__item["DeviceType"]=="variable":
@@ -90,49 +79,15 @@ class ControlDevices():
         return None
 
     def set_status(self,type,status):
-        if self.__item["DeviceTypeConnect"]=="mqtt" and self.__item["DeviceType"]=="other":
-            self.device.sendCommand(type,status)
+        print("setStatus",type,status)
+        if self.__item["DeviceTypeConnect"]=="yeelight":
+            self.device.runCommand(type,status)
+        if self.__item["DeviceTypeConnect"]=="mqtt":
+            self.device.runCommand(type,status)
 
     def set_value(self,status)->None:
         if(type(self.device)==Variable):
             deviceSetStatus(self.__item["DeviceId"],"value",status)
             # self.device.set_value(status)
-
-    def set_power(self,status):
-        if(status==1):
-            self.device.on()
-        else:
-            self.device.off()
-
-    def set_mode(self, status):
-        self.device.set_mode(status)
-
-    def target_mode(self):
-        status = int(self.get_value(False)["mode"])
-        control = self.device.get_control()["mode"]
-        status += 1
-        if(status>int(control)-1):
-            status = 0
-        self.set_mode(status)
-
-    def set_dimmer(self, status):
-        # print(status)
-        try:
-            if(type(self.device)==Yeelight or self.__item["DeviceTypeConnect"]=="mqtt"):
-                self.device.set_brightness(int(status))
-                return True
-            return False
-        except:
-            return False
-
-    def set_temp(self, status):
-        try:
-            if(type(self.device)==Yeelight or self.__item["DeviceTypeConnect"]=="mqtt"):
-                self.device.set_color_temp(int(status))
-                return True
-            return False
-        except:
-            return False
-
-
+            
     # def __str__(self)

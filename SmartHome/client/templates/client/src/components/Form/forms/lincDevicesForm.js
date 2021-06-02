@@ -1,11 +1,7 @@
 import React, {useEffect,useState} from 'react'
 import {Loader} from '../../Loader'
-import {LightMqttEdit} from './editDevicesPage/lightMqtt'
-import {SwitchMqttEdit} from './editDevicesPage/SwitchMqtt'
-import {SensorMqttEdit} from './editDevicesPage/SensorMqtt'
-import {OtherMqttEdit} from './editDevicesPage/OtherMqtt.js'
+import {DeviceMqttEdit} from './editDevicesPage/DeviceMqtt.js'
 import {DeviceMiioEdit} from './editDevicesPage/DeviceMiio.js'
-import {DimmerMqttEdit} from './editDevicesPage/DimmerMqtt.js'
 import {SistemVariableEdit} from './editDevicesPage/SistemVariable.js'
 
 export const LincDevicesForm = (props)=>{
@@ -20,48 +16,11 @@ if(!device){
     <Loader/>
   )
 }
-
-if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="light"){
+if(device.DeviceTypeConnect==="mqtt"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
-        <LightMqttEdit deviceData = {device} hide={props.hide} type="link"/>
-      </div>
-    </div>
-  )
-}
-if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="switch"){
-  return(
-    <div className = "form">
-      <div className="editDevicesForm moreInput">
-        <SwitchMqttEdit deviceData = {device} hide={props.hide} type="link"/>
-      </div>
-    </div>
-  )
-}
-if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="sensor"){
-  return(
-    <div className = "form">
-      <div className="editDevicesForm moreInput">
-        <SensorMqttEdit deviceData = {device} hide={props.hide} type="link"/>
-      </div>
-    </div>
-  )
-}
-if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="other"){
-  return(
-    <div className = "form">
-      <div className="editDevicesForm moreInput">
-        <OtherMqttEdit deviceData = {device} hide={props.hide} type="link"/>
-      </div>
-    </div>
-  )
-}
-if(device.DeviceTypeConnect==="mqtt"&&device.DeviceType==="dimmer"){
-  return(
-    <div className = "form">
-      <div className="editDevicesForm moreInput">
-        <DimmerMqttEdit deviceData = {device} hide={props.hide} type="link"/>
+        <DeviceMqttEdit deviceData = {device} hide={props.hide} type="link"/>
       </div>
     </div>
   )

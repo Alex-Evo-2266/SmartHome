@@ -82,6 +82,29 @@ class Yeelight(Bulb):
 
         return values
 
+    def runCommand(self,type,command):
+        print(type,command)
+        if type=="power":
+            if(command==1):
+                self.turn_on()
+            else:
+                self.turn_off()
+        elif type=="dimmer":
+            self.set_brightness(int(command))
+        elif type=="temp":
+            self.set_color_temp(int(command))
+        elif type=="color":
+            print("WTF")
+        elif type=="modeTarget":
+            status = int(self.get_value(False)["mode"])
+            control = self.__control_mode
+            status += 1
+            if(status>int(control)-1):
+                status = 0
+            self.set_mode(status)
+        elif type=="mode":
+            self.set_mode(int(command))
+
     def on(self):
         self.turn_on()
 

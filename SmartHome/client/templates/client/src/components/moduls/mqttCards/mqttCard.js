@@ -2,10 +2,10 @@ import React,{useContext} from 'react'
 import {FormContext} from '../../Form/formContext'
 
 const baseAddressList = {
-  state:"power",
-  power:"power",
-  dimmer:"dimmer",
-  brightness:"dimmer",
+  state:"state",
+  power:"state",
+  dimmer:"brightness",
+  brightness:"brightness",
   color: "color",
   temp: "temp",
   color_temp: "temp",
@@ -16,38 +16,43 @@ const baseMinMax = {
     min:"0",
     max:"255",
     icon:'',
+    typeControl:"text"
   },
-  power:{
+  state:{
     min:"0",
     max:"1",
     icon:"",
+    typeControl:"boolean"
   },
-  dimmer:{
+  brightness:{
     min:"0",
     max:"100",
     icon:'',
+    typeControl:"range"
   },
   color:{
     min:"1600",
     max:"3600",
     icon:"",
+    typeControl:"range",
   },
   temp:{
     min:"0",
     max:"40",
     icon:"",
+    typeControl:"range",
   },
   mode:{
     min:"0",
     max:"2",
-    icon:''
+    icon:'',
+    typeControl:"number"
   }
 }
 
 
 export const MQTTElement = ({data}) =>{
   const form = useContext(FormContext)
-
 
   function dictToList(dict) {
     let arr = []
@@ -58,10 +63,11 @@ export const MQTTElement = ({data}) =>{
   }
 
   let message
-
+  let typeMessage = 'value'
   let mes = data.message
   try {
     mes = JSON.parse(mes)
+    typeMessage = 'json'
   }catch(e){}
   if(typeof(mes)==="object"){
     message = dictToList(mes)
@@ -110,6 +116,7 @@ export const MQTTElement = ({data}) =>{
         let clow = cMinMax.min
         let chigh = cMinMax.max
         let cicon = cMinMax.icon
+        typeControl = cMinMax.typeControl||typeControl
         let confel = {
           type:ctype,
           address:caddress,
@@ -124,7 +131,7 @@ export const MQTTElement = ({data}) =>{
         DeviceTypeConnect: "mqtt",
         DeviceType: ret,
         DeviceAddress: address,
-        DeviceValueType: 'json',
+        DeviceValueType: typeMessage,
         DeviceConfig: conf
       })
     })

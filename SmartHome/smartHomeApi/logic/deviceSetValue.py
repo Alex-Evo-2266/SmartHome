@@ -26,21 +26,7 @@ def setValue(id, type, value):
         if(type=="value"):
             e.set_value(int(value))
             return True
-        if(type=="power"):
-            e.set_power(int(value))
-            return True
-        if(type=="dimmer"):
-            e.set_dimmer(int(value))
-            return True
-        if(type=="temp"):
-            e.set_temp(int(value))
-            return True
-        if(type=="color"):
-            e.set_color(int(value))
-            return True
-        if(type=="mode"):
-            e.set_mode(int(value))
-            return True
+
         e.set_status(type,value)
         return True
     except Exception as ex:

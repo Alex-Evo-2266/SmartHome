@@ -68,7 +68,7 @@ class MqttDevice():
             client.publish(alltopic, message)
             print("f")
 
-    def sendCommand(self,type:str, command:str):
+    def runCommand(self,type:str, command:str):
         for item in self.DeviceConfig:
             if(item["type"]==type):
                 self.send(item["address"],command)

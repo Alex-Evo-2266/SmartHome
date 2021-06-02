@@ -2,11 +2,7 @@ import React,{useContext,useState,useEffect,useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 import {AuthContext} from '../context/AuthContext.js'
 import {SelectioEnlementImg} from '../components/addDeviceComponent/selectioEnlementImg'
-import {LightMqtt} from '../components/addDeviceComponent/config/mqttLamp'
-import {RelayMqtt} from '../components/addDeviceComponent/config/mqttRelay'
-import {DimmerMqtt} from '../components/addDeviceComponent/config/mqttDimmer'
-import {SensorMqtt} from '../components/addDeviceComponent/config/mqttSensor'
-import {OtherMqtt} from '../components/addDeviceComponent/config/mqttOther'
+import {DeviceMqtt} from '../components/addDeviceComponent/config/mqttDevices'
 import {AnimationLi} from '../components/animationLi.js'
 import {useHttp} from '../hooks/http.hook'
 import {useChecked} from '../hooks/checked.hook'
@@ -51,11 +47,27 @@ export const AddDevicesPage = () => {
     }
   },[error,message, clearError])
 
+  const validFields = ()=>{
+    let arrType = []
+    for (var item of form.config) {
+      for (var item2 of arrType) {
+        if(item.type === item2){
+          message("повторяющиеся поля","error")
+          return false
+        }
+      }
+      arrType.push(item.type)
+    }
+    return true
+  }
+
   const outHandler = async () => {
     // if(DeviceTypeConnect)
     try {
       clearMessage();
       console.log(form);
+      if(!validFields())
+        return
       const data = await request('/api/devices', 'POST', {...form},{Authorization: `Bearer ${auth.token}`})
       console.log(data);
       if(data){
@@ -66,9 +78,17 @@ export const AddDevicesPage = () => {
     }
   }
 
+
   const typeConnectHandler = event => {
     if(event.target.title === "variable")
-      setForm({ ...form, DeviceTypeConnect: "system",DeviceType: event.target.title })
+      setForm({ ...form, DeviceTypeConnect: "system",DeviceType: event.target.title,config:[
+        {
+          address:"",
+          type:"value",
+          icon:"",
+          typeControl:"text"
+        }
+      ]})
     else if(form.DeviceType==="variable")
       setForm({ ...form, DeviceTypeConnect: event.target.title,DeviceType: "" })
     else
@@ -169,7 +189,7 @@ export const AddDevicesPage = () => {
             {
               (form.DeviceTypeConnect==="mqtt")?
               <li>
-                <SelectioEnlementImg active={(form.DeviceType==="switch")} onClick={typeDeviceHandler} width="100px" height="100px" title="switch device" name="switch" src={imgSwitch}/>
+                <SelectioEnlementImg active={(form.DeviceType==="relay")} onClick={typeDeviceHandler} width="100px" height="100px" title="relay device" name="relay" src={imgSwitch}/>
               </li>
               :null
             }
@@ -206,26 +226,17 @@ export const AddDevicesPage = () => {
               </li>
             </ul>
           </AnimationLi>
-          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceType&&form.DeviceType!=="variable"&&form.DeviceTypeConnect==="mqtt"&&form.DeviceValueType}>
+          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceType&&form.DeviceType!=="variable"}>
             {
-              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="light")?
-              <LightMqtt onChange={confHandler}/>:
-              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="switch")?
-              <RelayMqtt onChange={confHandler}/>:
-              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="dimmer")?
-              <DimmerMqtt onChange={confHandler}/>:
-              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="sensor")?
-              <SensorMqtt onChange={confHandler}/>:
-              (form.DeviceTypeConnect==="mqtt"&&form.DeviceType==="other")?
-              <OtherMqtt onChange={confHandler}/>:
-              null
-            }
-          </AnimationLi>
-          <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceType&&form.DeviceType!=="variable"&&form.DeviceTypeConnect==="miio"&&form.DeviceValueType}>
+              (form.DeviceTypeConnect==="mqtt")?
+              <DeviceMqtt onChange={confHandler} type={form.DeviceType}/>:
+              (form.DeviceTypeConnect==="miio")?
               <label>
                 <h5>Enter the device token</h5>
                 <input className = "textInput" placeholder="token" id="DeviceToken" type="text" name="DeviceToken" value={form.DeviceToken} onChange={tokenHandler} required/>
               </label>
+              :null
+            }
           </AnimationLi>
           <AnimationLi className="conteiner-body-li" show={form.DeviceSystemName&&form.DeviceName&&form.DeviceAddress&&form.DeviceType&&(form.DeviceTypeConnect==="yeelight"||form.DeviceType==="variable"||(form.DeviceTypeConnect==="miio"&&form.DeviceToken)||(form.DeviceTypeConnect&&form.config[0]&&form.config[0].address))}>
             <button className="btnOut" onClick={outHandler}>Save</button>

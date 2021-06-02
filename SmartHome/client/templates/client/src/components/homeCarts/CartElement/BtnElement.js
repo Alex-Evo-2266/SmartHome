@@ -125,7 +125,7 @@ const changeHandler = (event)=>{
   if(data.typeAction==="modeTarget")
       return outValue(device.DeviceId,"target")
   if(deviceConfig.typeControl==="boolean")
-      return outValue(device.DeviceId,!oldvel)
+      return outValue(device.DeviceId,(oldvel)?0:1)
   if(deviceConfig.typeControl==="range")
       return outValue(device.DeviceId,data.action)
   if(deviceConfig.typeControl==="text")
