@@ -63,7 +63,7 @@ export const NewDeviceElement = ({id}) =>{
               return <Power key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue&&(device.DeviceValue[item.type]==="1"))?1:0} type={item.type}/>
             }
             if(item.typeControl==="range"){
-              return <Dimmer key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.type]):0} type={item.type} title = {item.address} conf={{min:item.low,max:item.high}}/>
+              return <Dimmer key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.type]):0} type={item.type} title = {item.type} conf={{min:item.low,max:item.high}}/>
             }
             if(item.typeControl==="number"){
               return <Mode key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.type]):0} type={item.type} conf={Number(item.high)}/>

@@ -137,23 +137,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               editBtn={
                 (edit)?editElement:null
               }
-              >
-                {
-                  (item.typeAction==="power")?
-                  <i className="fas fa-power-off"></i>:
-                  (item.typeAction==="dimmer")?
-                  <i className="fas fa-sun"></i>:
-                  (item.typeAction==="temp")?
-                  <i className="fas fa-adjust"></i>:
-                  (item.typeAction==="color")?
-                  <i className="fas fa-palette"></i>:
-                  (item.typeAction==="mode")?
-                  <i>M {item.action}</i>:
-                  (item.typeAction==="ir")?
-                  <i className="fas fa-tv"></i>:
-                  <i>M</i>
-                }
-              </BtnElement>:
+              />:
               (item.type==="slider")?
               <SliderElement
               index={item.index}

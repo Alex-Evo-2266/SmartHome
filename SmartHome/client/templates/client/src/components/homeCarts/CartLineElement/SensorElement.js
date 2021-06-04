@@ -29,17 +29,55 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
     }
   }
 
+  const getTypeField = ()=>{
+    if(!device)return "sensorBase"
+    for (var item of device.DeviceConfig) {
+      if(data.typeAction === item.type){
+        return item.typeControl
+      }
+    }
+    return "sensorBase"
+  }
+
 if(!device||!device.DeviceId){
   return null;
 }
-return(
-  <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
-    <div className="sensor">
-      <p className= "sensor-name">{device.DeviceName}</p>
-      <p className= "sensor-value">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
+if(getTypeField()==="sensor"){
+  return(
+    <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
+    <div className="icon">
+      <div className="circle">
+      {
+        (itemField()&&itemField().icon)?
+        <i className={itemField().icon}></i>:
+        <i className="fas fa-circle-notch"></i>
+      }
+      </div>
     </div>
-    <div className="delete-box">
+        <p className= "sensor-name">{device.DeviceName}</p>
+        <p className= "state">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
+    </BaseElement>
+  )
+}
+if(getTypeField()==="booleanSensor"){
+  return(
+    <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
+    <div className="icon">
+      <div className="circle">
+      {
+        (itemField()&&itemField().icon)?
+        <i className={itemField().icon}></i>:
+        <i className="fas fa-circle-notch"></i>
+      }
+      </div>
     </div>
-  </BaseElement>
-)
+        <p className= "sensor-name">{device.DeviceName}</p>
+        <div className="control">
+          <p className= "state">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
+        </div>
+    </BaseElement>
+  )
+}
+return null
+
 }

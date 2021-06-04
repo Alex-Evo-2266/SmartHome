@@ -21,11 +21,13 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
   }
 
   return(
-    <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
-      <div onClick={clickHandler}>
-        <div className="icon"></div>
-        <p className="name">{data.name}</p>
+    <BaseElement onClick={clickHandler} editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
+      <div className="icon icon-btn">
+        <div className="circle">
+          <i className="far fa-file-alt"></i>
+        </div>
       </div>
+      <p className="name">{data.name}</p>
     </BaseElement>
   )
 }

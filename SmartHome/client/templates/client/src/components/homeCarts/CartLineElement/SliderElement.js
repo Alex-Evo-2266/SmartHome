@@ -31,6 +31,15 @@ export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValu
     await request('/api/devices/value/set', 'POST', {id: data.deviceId,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
+  const itemField = useCallback(()=>{
+    if(!device||!device.DeviceConfig||!data)return
+    for (var item of device.DeviceConfig) {
+      if(item.type===data.typeAction){
+        return item
+      }
+    }
+  },[data,device])
+
   useEffect(()=>{
     message(error,"error")
     return ()=>{
@@ -96,19 +105,29 @@ if(!device){
 
 return(
   <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
-      <div className="icon"></div>
+    <div className="icon">
+      <div className="circle">
+      {
+        (itemField()&&itemField().icon)?
+        <i className={itemField().icon}></i>:
+        <i className="fas fa-circle-notch"></i>
+      }
+      </div>
+    </div>
       <p className="name">{data.name}</p>
-      <div className="control">{value}</div>
-      <input
-      className="control-big"
-      type="range"
-      min={minstate}
-      max={maxstate}
-      value={value}
-      onChange={changeHandler}
-      onMouseUp={mouseUp}
-      disabled={disabled2}
-      />
+      <div className="flex">
+        <input
+        className="control-big"
+        type="range"
+        min={minstate}
+        max={maxstate}
+        value={value}
+        onChange={changeHandler}
+        onMouseUp={mouseUp}
+        disabled={disabled2}
+        />
+        <div className="state">{value}</div>
+      </div>
   </BaseElement>
 )
 }

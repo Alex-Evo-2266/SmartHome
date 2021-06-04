@@ -45,6 +45,8 @@ def addDevice(data):
                     val.high=item["high"]
                 if "icon" in item:
                     val.icon=item["icon"]
+                if "unit" in item:
+                    val.unit=item["unit"]
                 if "typeControl" in item:
                     val.typeControl=item["typeControl"]
                 val.save()
@@ -61,6 +63,8 @@ def addDevice(data):
                     val.high=item["high"]
                 if "icon" in item:
                     val.icon=item["icon"]
+                if "unit" in item:
+                    val.unit=item["unit"]
                 if "typeControl" in item:
                     val.typeControl=item["typeControl"]
                 val.save()
@@ -194,6 +198,8 @@ def editDevice(data):
                         val.high=item["high"]
                     if "icon" in item:
                         val.icon=item["icon"]
+                    if "unit" in item:
+                        val.unit=item["unit"]
                     if "typeControl" in item:
                         val.typeControl=item["typeControl"]
                     val.save()
@@ -210,6 +216,8 @@ def editDevice(data):
                         val.high=item["high"]
                     if "icon" in item:
                         val.icon=item["icon"]
+                    if "unit" in item:
+                        val.unit=item["unit"]
                     if "typeControl" in item:
                         val.typeControl=item["typeControl"]
                     val.save()

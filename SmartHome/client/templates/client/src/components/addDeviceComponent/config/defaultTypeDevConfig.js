@@ -6,35 +6,40 @@ export const data = {
         type:"state",
         typeControl:"boolean",
         low:"0",
-        high:"1"
+        high:"1",
+        icon:""
       },
       {
         address:"",
         type:"brightness",
         typeControl:"range",
         low:"0",
-        high:"100"
+        high:"100",
+        icon:""
       },
       {
         address:"",
         type:"color",
         typeControl:"range",
         low:"0",
-        high:"255"
+        high:"255",
+        icon:""
       },
       {
         address:"",
         type:"temp",
         typeControl:"range",
         low:"2600",
-        high:"3200"
+        high:"3200",
+        icon:""
       },
       {
         address:"",
         type:"mode",
         typeControl:"number",
         low:"0",
-        high:"2"
+        high:"2",
+        icon:""
       },
     ],
     editCountField:false,
@@ -49,7 +54,8 @@ export const data = {
         type:"state",
         typeControl:"boolean",
         low:"0",
-        high:"1"
+        high:"1",
+        icon:""
       },
     ],
     editCountField:false,
@@ -64,14 +70,16 @@ export const data = {
         type:"state",
         typeControl:"boolean",
         low:"0",
-        high:"1"
+        high:"1",
+        icon:""
       },
       {
         address:"brightness",
         type:"brightness",
         typeControl:"range",
         low:"0",
-        high:"100"
+        high:"100",
+        icon:""
       },
     ],
     editCountField:false,
@@ -84,9 +92,10 @@ export const data = {
       {
         address:"sn1",
         type:"sn1",
-        typeControl:"text",
+        typeControl:"sensor",
         low:"0",
-        high:"100"
+        high:"100",
+        icon:""
       }
     ],
     editCountField:true,
@@ -101,7 +110,8 @@ export const data = {
         type:"field0",
         typeControl:"text",
         low:"0",
-        high:"100"
+        high:"100",
+        icon:""
       }
     ],
     editCountField:true,

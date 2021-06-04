@@ -12,7 +12,6 @@ def devicestatus(id, type):
 
 def setValueAtToken(address,value):
 
-    print("g",address,value)
     devices = Device.objects.all()
     for item in devices:
         base_address = item.DeviceAddress
@@ -20,9 +19,7 @@ def setValueAtToken(address,value):
             if(base_address == address):
                 data = json.loads(value)
                 for key in data:
-                    print("key",key)
                     for item2 in item.valuedevice_set.all():
-                        print("address",item2.address)
                         if(item2.address==key):
                             deviceSetStatus(item.id,item2.type,data[key])
 
@@ -34,14 +31,12 @@ def setValueAtToken(address,value):
 
 def deviceSetStatus(id, type,value):
     try:
-        print("set",type,value)
         if(value==None or type=="background"):
             return None
         dev = Device.objects.get(id=id)
         # print("2")
         values = dev.valuedevice_set.all()
         for item in values:
-            print(item,value)
             if item.type==type:
                 if(type=="power"):
                     value = str(value)
@@ -57,14 +52,8 @@ def deviceSetStatus(id, type,value):
                     item.save()
                 return value
         print('not value error')
-        typeControl = "boolean"
-        if(type=="dimmer" or type=="color" or type=="temp"):
-            typeControl = "range"
-        if(type=="mode"):
-            typeControl = "number"
-        val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=type,typeControl=typeControl)
-        val.value=value
-        val.save()
+
+
         return True
     except Exception as e:
         print('set value error ',e)

@@ -191,6 +191,7 @@ class ValueDevice(models.Model):
     high = models.SlugField("device config high", max_length = 200, default="255")
     icon = models.SlugField("device icon", max_length = 200, default="")
     value = models.SlugField("device value value", max_length = 200)
+    unit = models.CharField("unit", max_length = 10,default="")
     typeControl = models.SlugField("device value value", max_length = 200,default="boolean")
     device = models.ForeignKey(Device, on_delete = models.CASCADE)
 
@@ -204,6 +205,7 @@ class ValueDevice(models.Model):
             "low":self.low,
             "high":self.high,
             "icon":self.icon,
+            "unit":self.unit,
             "typeControl":self.typeControl
         }
 

@@ -21,7 +21,9 @@ export const DeviceMqtt = ({onChange,back,type})=>{
       type:"field"+count,
       typeControl:(configForm.typeControl==="sensor")?"sensor":"text",
       low:"0",
-      high:"100"
+      high:"100",
+      icon:"",
+      unit:""
     })
     setCount((prev)=>prev+1)
     setForm(arr)
@@ -118,6 +120,17 @@ export const DeviceMqtt = ({onChange,back,type})=>{
                       <input data-id={index} className = "textInput" placeholder="max" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandler} required/>
                     </label>
                     :null
+                  }
+                  <label>
+                    <h5>Enter the icon</h5>
+                    <input data-id={index} className = "textInput" placeholder="icon" name="icon" value={item.icon} onChange={changeHandler} required/>
+                  </label>
+                  {
+                    (item.typeControl==="range"||item.typeControl==="sensor")?
+                    <label>
+                      <h5>Enter the unit</h5>
+                      <input data-id={index} className = "textInput" placeholder="unit" name="unit" value={item.unit} onChange={changeHandler} required/>
+                    </label>:null
                   }
                   {
                     (configForm.editCountField)?

@@ -1,7 +1,7 @@
 import React,{useContext} from 'react'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 
-export const BaseElement = ({children,deleteBtn,editBtn,index,data}) =>{
+export const BaseElement = ({children,deleteBtn,editBtn,index,data,onClick}) =>{
   const {target} = useContext(CartEditContext)
 
   const deletebtn = ()=>{
@@ -33,7 +33,7 @@ export const BaseElement = ({children,deleteBtn,editBtn,index,data}) =>{
           null
         }
       </div>
-      <div className="BtnElementLine">
+      <div className="ElementLine" onClick={onClick}>
       {children}
       </div>
     </div>

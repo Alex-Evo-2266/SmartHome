@@ -68,7 +68,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   function isPowerAct(array) {
     let countpower = 0
     for (var item of array)
-      if(item.typeAction==="power")
+      if(item.typeAction==="power"||item.typeAction==="state")
         countpower++
       if(countpower>=2)
         return true
@@ -131,6 +131,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
             name="all"
             baseswitchMode={true}
             firstValue={act}
+            icon="fas fa-power-off"
             onClick={(event,value)=>{
               allPower(data.children,value)
             }}
@@ -187,7 +188,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     }
                     />
                     </div>
-                    :(item.type==="line-sensor")?
+                    :(item.type==="line-sensor"||item.type==="line-booleanSensor")?
                       <div className="line-sensor">
                       <SensorElement
                       index={item.index}

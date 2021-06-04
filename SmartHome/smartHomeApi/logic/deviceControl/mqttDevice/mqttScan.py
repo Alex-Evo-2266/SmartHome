@@ -1,5 +1,6 @@
 from smartHomeApi.models import Device,ValueDevice
 mqttTopics = []
+zigbeetopik = "zigbee2mqtt"
 
 def getIdTopic(topic):
     for item in mqttTopics:
@@ -23,11 +24,14 @@ def getTopicksAll():
 
 def getTopicksAndLinc():
     topics = getTopicksAll()
+    newArr = list()
     for item in topics:
         topic = item["topic"]
         last = topic.split('/')[-1]
         first = topic.split('/')[0:-1]
         first = "/".join(first)
+        if ("/".join(topic.split('/')[0:2])=='/'.join([zigbeetopik,"bridge"]) and last!="state"):
+            continue
         lincs = list()
         for device in Device.objects.all():
             if device.DeviceValueType=="json":
@@ -45,7 +49,8 @@ def getTopicksAndLinc():
         item["lincs"] = lincs
         if(last == "set"):
             item["set"] = True
-    return topics
+        newArr.append(item)
+    return newArr
 
 def ClearTopicks():
     mqttTopics = []

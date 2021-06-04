@@ -48,24 +48,24 @@
   position: relative;
   top: -2px;
 }
-.BtnElementLine{
+.ElementLine{
   display: grid;
-  grid-template-columns: 1fr 2fr 2fr 1fr;
+  grid-template-columns: 1fr 3fr 3fr;
   background: var(--content-darken-color);
 }
-.BtnElementLine .name{
+.ElementLine .name{
   grid-column-start: 2;
   grid-row-start: 1;
 }
-.BtnElementLine .icon{
+.ElementLine .icon{
   grid-column-start: 1;
   grid-row-start: 1;
 }
-.BtnElementLine .control-big{
+.ElementLine .control-big{
   grid-column-start: 3;
   grid-row-start: 1;
 }
-.BtnElementLine .control{
-  grid-column-start: 4;
-  grid-row-start: 1;
+.flex{
+  display: flex;
+  justify-content: space-between;
 }

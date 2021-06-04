@@ -98,6 +98,9 @@ export const MQTTElement = ({data}) =>{
       let topicComponents = data.topic.split('/')
       if(topicComponents[topicComponents.length-1]==="set")
         topicComponents.pop()
+      if(typeMessage==="value"){
+        topicComponents.pop()
+      }
       let address = topicComponents.join('/')
       let conf = []
       let typeControl = "text"

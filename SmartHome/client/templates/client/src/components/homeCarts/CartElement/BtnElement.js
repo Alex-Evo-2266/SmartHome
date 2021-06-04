@@ -171,7 +171,19 @@ const changeHandler = (event)=>{
         }
         </div>
         <div className="icon-box">
-        {children}
+        {
+          (children)?
+          children:
+          <div className="icon">
+            <div className="circle">
+            {
+              (itemField()&&itemField().icon)?
+              <i className={itemField().icon}></i>:
+              <i className="fas fa-circle-notch"></i>
+            }
+            </div>
+          </div>
+        }
         </div>
         <p>{device.DeviceName}</p>
       </div>

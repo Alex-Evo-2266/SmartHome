@@ -1,6 +1,8 @@
 @import "./button.color.css";
 
-
+ul.elementConteiner.line li{
+  margin: 1px 0;
+}
 ul.elementConteiner li{
   position: relative;
   list-style: none;
@@ -87,16 +89,17 @@ ul.elementConteiner li label .icon-box i{
 .editBtn:hover{
   box-shadow: inset 0 0 5px #000;
 }
-.BtnElementLine{
+.ElementLine{
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 2px 5px;
   min-height: 50px;
+  color: var(--text-color);
 }
-.BtnElementLine p{
+.ElementLine p{
   font-size: 20px;
-  color: var(--text-v1-color);
+  color: var(--text-color);
 }
 .baseCartElement-line .deleteBtn{
   position: absolute;
@@ -128,4 +131,40 @@ ul.elementConteiner li label .icon-box i{
   border-radius: 5px;
   font-size: 10px;
   color: #fff;
+}
+.ElementLine .control{
+  position: relative;
+  height: 42px;
+}
+.ElementLine .control .right-control{
+  position: absolute;
+  right: 0;
+}
+.ElementLine .icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ElementLine .icon .circle{
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.ElementLine .icon.icon-btn .circle{
+  background: var(--head-color);
+}
+.ElementLine .icon .circle i{
+  position: absolute;
+  left: 50%;
+  transform: translateX(calc(-50% + 1px));
+}
+.ElementLine:hover .icon.icon-btn .circle{
+  cursor: pointer;
+}
+.ElementLine:hover .icon.icon-btn .circle{
+  box-shadow: inset 0 0 5px #000;
 }

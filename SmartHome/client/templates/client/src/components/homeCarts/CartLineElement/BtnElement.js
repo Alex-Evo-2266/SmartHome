@@ -6,7 +6,7 @@ import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
 
-export const BtnElement = ({baseswitchMode=false,data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
+export const BtnElement = ({baseswitchMode=false,data,icon,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
   const {devices} = useContext(DeviceStatusContext)
   const auth = useContext(AuthContext)
   const [value, setValue]=useState(firstValue)
@@ -141,21 +141,43 @@ const changeHandler = (event)=>{
 }
   if(!switchMode){
     return(
-      <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
-        <div className="icon"></div>
+      <BaseElement onClick={changeHandler} editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
+        <div className="icon icon-btn">
+          <div className="circle">
+          {
+            (icon)?
+            <i className={icon}></i>:
+            (itemField()&&itemField().icon)?
+            <i className={itemField().icon}></i>:
+            <i className="fas fa-circle-notch"></i>
+          }
+          </div>
+        </div>
         <p className="name">{(device&&device.DeviceName)?device.DeviceName:(name||"btn")}</p>
-        <button className="control" onClick={changeHandler}>d</button>
+        <p className="state">{data.action}</p>
       </BaseElement>
     )
   }
 
   return(
     <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
-      <div className="icon"></div>
+    <div className="icon">
+      <div className="circle">
+      {
+        (itemField()&&itemField().icon)?
+        <i className={itemField().icon}></i>:
+        <i className="fas fa-circle-notch"></i>
+      }
+      </div>
+    </div>
       <p className="name">{(device&&device.DeviceName)?device.DeviceName:(name||"btn")}</p>
-      <div className="control custom1-checkbox">
-        <div className={`custom1-inner ${(value)?"active":""}`} name={name} onClick={(disabled2)?()=>{}:changeHandler} disabled={disabled2} >
-          <div className="custom1-toggle"></div>
+      <div className="control">
+        <div className="right-control">
+          <div className="custom1-checkbox">
+            <div className={`custom1-inner ${(value)?"active":""}`} name={name} onClick={(disabled2)?()=>{}:changeHandler} disabled={disabled2} >
+              <div className="custom1-toggle"></div>
+            </div>
+          </div>
         </div>
       </div>
     </BaseElement>
