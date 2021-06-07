@@ -3,6 +3,7 @@ from .miioDevice.classDevices.yeelight import Yeelight
 from .system.variable import Variable
 from yeelight import Bulb ,PowerMode
 from miio import Device,DeviceError,DeviceException
+# from smartHomeApi.logic.runScript import runScripts
 from smartHomeApi.logic.deviceValue import deviceSetStatus
 
 def is_device(ip, token):
@@ -61,6 +62,7 @@ class ControlDevices():
         return arr
 
     def get_value(self, save=True):
+        # runScripts(self.__item["DeviceId"],"all")
         if self.__item["DeviceTypeConnect"]=="miio":
             return self.device.get_value(save)
         if self.__item["DeviceTypeConnect"]=="yeelight":
@@ -89,5 +91,5 @@ class ControlDevices():
         if(type(self.device)==Variable):
             deviceSetStatus(self.__item["DeviceId"],"value",status)
             # self.device.set_value(status)
-            
+
     # def __str__(self)

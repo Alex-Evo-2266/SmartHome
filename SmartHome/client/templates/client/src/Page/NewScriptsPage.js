@@ -6,6 +6,7 @@ import {AuthContext} from '../context/AuthContext.js'
 import {AddScriptBase} from '../components/addScript/addScriptBase'
 import {GroupBlock} from '../components/moduls/programmBlock/groupBlock'
 import {ActBlock} from '../components/moduls/programmBlock/actBlock'
+import {ActScript} from '../components/moduls/programmBlock/actScript'
 import {TriggerBlock} from '../components/moduls/programmBlock/triggerBlock'
 import {Loader} from '../components/Loader'
 // import {DeviceStatusContext} from '../context/DeviceStatusContext'
@@ -50,19 +51,37 @@ export const NewScriptsPage = ({edit}) => {
   }
 
   const addActBlock = (type)=>{
-    show("deviceBlock",(none,dataDev)=>{
-      if(!dataDev||!dataDev.DeviceId)
-        return
-      let mas = script;
-      let act = "power"
-      if(dataDev.DeviceType==="dimmer"){
-        act = "dimmer"
-      }
-      if(dataDev.DeviceType==="variable"){
-        act = "value"
-      }
-      mas[type].push({type:"device",action:act,DeviceId:dataDev.DeviceId})
-      setScript(mas)
+    show("typeAct",(_,typeAct)=>{
+      console.log(typeAct);
+      setTimeout(function () {
+        if(typeAct==="device"){
+          console.log("fg");
+          show("deviceBlock",(_,dataDev)=>{
+            if(!dataDev||!dataDev.DeviceId)
+              return
+            let mas = script;
+            let act = "power"
+            if(dataDev.DeviceType==="dimmer"){
+              act = "dimmer"
+            }
+            if(dataDev.DeviceType==="variable"){
+              act = "value"
+            }
+            mas[type].push({type:"device",action:act,DeviceId:dataDev.DeviceId})
+            setScript(mas)
+          })
+        }
+        if(typeAct==="script"){
+          show("scriptBlock",(_,datascr)=>{
+            console.log(datascr);
+            if(!datascr||!datascr.id)
+              return
+            let mas = script;
+            mas[type].push({type:"script",action:"run",DeviceId:datascr.id})
+            setScript(mas)
+          })
+        }
+      }, 100);
     })
   }
 
@@ -153,7 +172,7 @@ export const NewScriptsPage = ({edit}) => {
   const givethen = (data)=>{
     return data.filter((item)=>{
       if (item.type==="then"){
-        item.type = "device"
+        item.type = item.typeAct
         return true
       }
       return false
@@ -163,7 +182,7 @@ export const NewScriptsPage = ({edit}) => {
   const giveelse = (data)=>{
     return data.filter((item)=>{
       if (item.type==="else"){
-        item.type = "device"
+        item.type = item.typeAct
         return true
       }
       return false
@@ -191,6 +210,10 @@ export const NewScriptsPage = ({edit}) => {
       giveScript(id)
     }
   },[id,edit,giveScript])
+
+  useEffect(()=>{
+    console.log(script);
+  },[script])
 
   if(loading){
     return(
@@ -248,7 +271,12 @@ export const NewScriptsPage = ({edit}) => {
             {
               (cost)?
               script.then.map((item,index)=>{
-                return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then" idDevice={item.DeviceId}/>
+                if(item.type==="device"){
+                  return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then" idDevice={item.DeviceId}/>
+                }
+                if(item.type==="script"){
+                  return <ActScript deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then" idDevice={item.DeviceId}/>
+                }
               }):null
             }
             </div>
@@ -264,7 +292,12 @@ export const NewScriptsPage = ({edit}) => {
             {
               (cost)?
               script.else.map((item,index)=>{
-                return <ActBlock deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else" idDevice={item.DeviceId}/>
+                if(item.type==="device"){
+                  return <ActBlock deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else" idDevice={item.DeviceId}/>
+                }
+                if(item.type==="script"){
+                  return <ActScript deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else" idDevice={item.DeviceId}/>
+                }
               }):
               null
             }

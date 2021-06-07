@@ -323,8 +323,12 @@ class ScriptGetDeletePutView(APIView):
         if not authData:
             return Response(status=403)
         data = json.loads(request.body)
+        print("erty",id)
+        print(data)
         if(scriptDelete(id)):
+            print("delete")
             if(addscript(data)):
+                print("create")
                 return Response("ok",status=200)
 
     def get(self,request,id):

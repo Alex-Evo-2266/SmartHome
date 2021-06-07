@@ -115,14 +115,18 @@ def getvalue(data):
     return None;
 
 def actiondev(data):
-    print(data)
+    print("data",data)
     for item in data:
         device = item.device
-        val = getvalue(item.value)
-        if(device.DeviceType=="variable" and item.action=="value"):
-            setValue(device.id,"variable",val)
+        if(device):
+            val = getvalue(item.value)
+            if(device.DeviceType=="variable" and item.action=="value"):
+                setValue(device.id,"variable",val)
+            else:
+                setValue(device.id,item.action,val)
         else:
-            setValue(device.id,item.action,val)
+            scr = item.scriptAct
+            runscript(scr)
 
 def lockforScript(idDevice,type):
     device = Device.objects.get(id=idDevice)

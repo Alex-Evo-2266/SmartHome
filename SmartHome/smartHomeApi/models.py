@@ -371,16 +371,34 @@ class Action(models.Model):
     id = models.IntegerField("id", primary_key=True)
     type = models.CharField("then or else", max_length = 50, default="then")
     device = models.ForeignKey(Device, on_delete = models.SET_NULL, null=True)
+    scriptAct = models.ForeignKey(Scripts, on_delete = models.SET_NULL, null=True,default=None,related_name="actionScript")
     action = models.CharField("action", max_length = 50, default="")
     script = models.ForeignKey(Scripts, on_delete = models.CASCADE,null=True)
 
     def model_to_dict(self):
+        idact = None
+        typeAct = "device"
+        if(self.scriptAct_id):
+            idact = self.scriptAct_id
+            typeAct = "script"
+        else:
+            idact = self.device_id
+            typeAct = "device"
+
+        val = None
+        try:
+            val = self.value.model_to_dict()
+        except Exception as e:
+            print("fg")
+
+
         return{
         "id":self.id,
         "type":self.type,
         "action":self.action,
-        "DeviceId":self.device_id,
-        "value":self.value.model_to_dict()
+        "DeviceId":idact,
+        "value":val,
+        "typeAct":typeAct
         }
 
 class Value(models.Model):

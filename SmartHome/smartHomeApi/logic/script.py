@@ -3,7 +3,7 @@ from .runScript import runscript
 
 def addscript(data):
     try:
-        # print(data,"\n")
+        print("ertyuiop",data,"\n")
         status = False
         if(len(data["trigger"])>0):
             status = True
@@ -92,6 +92,9 @@ def addthens(data,script):
             act = Action.objects.create(id=genId(Action.objects.all()),type="then",action=item["action"],device=device,script=script)
             if(item["value"]):
                 addValue(item["value"],act)
+        if(item["type"]=="script"):
+            scriptact = Scripts.objects.get(id=item["DeviceId"])
+            act = Action.objects.create(id=genId(Action.objects.all()),type="then",action=item["action"],device=None,script=script,scriptAct=scriptact)
 
 def addelses(data,script):
     # print(data,"\n")
@@ -101,6 +104,9 @@ def addelses(data,script):
             act = Action.objects.create(id=genId(Action.objects.all()),type="else",action=item["action"],device=device,script=script)
             if(item["value"]):
                 addValue(item["value"],act)
+        if(item["type"]=="script"):
+            scriptact = Scripts.objects.get(id=item["DeviceId"])
+            act = Action.objects.create(id=genId(Action.objects.all()),type="else",action=item["action"],device=None,script=script,scriptAct=scriptact)
 
 def scripts():
     allscripts = set_to_list_dict(Scripts.objects.all())
@@ -112,31 +118,52 @@ def script(id):
     return Script
 
 def delgroupel(data):
-    groups = data.ifgroupblock_set.all()
-    for item in groups:
-        delgroupel(item)
-    elements = data.ifblock_set.all()
-    for item in elements:
-        delvalue(item.value)
+    try:
+        print("1.1")
+        groups = data.ifgroupblock_set.all()
+        print("1.2")
+        for item in groups:
+            delgroupel(item)
+        print("1.3")
+        elements = data.ifblock_set.all()
+        print("1.4")
+        for item in elements:
+            print(item.value)
+            delvalue(item.value)
+        print("1.5")
+    except Exception as e:
+        print(e)
 
 def delvalue(data):
     # print(data)
+    print("1.4.1",data)
     if(not data):
         return
+    print("1.4.2")
     if(data.type=="math"):
         delvalue(data.valuefirst)
         delvalue(data.valuesecond)
+    print("1.4.3")
     data.delete()
+    print("1.4.4")
+
 
 def actdel(acts):
     for item in acts:
-        delvalue(item.value)
+        try:
+            delvalue(item.value)
+        except Exception as e:
+            print(e)
 
 def scriptDelete(id):
     try:
+        print("0")
         script = Scripts.objects.get(id=id)
+        print(script)
         delgroupel(script.ifgroupblock)
+        print("1")
         actdel(script.action_set.all())
+        print("2")
         script.delete()
         return True
     except:

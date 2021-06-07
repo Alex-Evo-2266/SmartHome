@@ -4,6 +4,9 @@ import {AddScriptDevices} from './addScript/addScriptDevices'
 import {CenterWindow} from '../modalWindow/centerWindow'
 import {BackForm} from '../moduls/backForm'
 import {ShowScript} from './addScript/showScript'
+import {TypeAct} from './addScript/typeAct'
+import {AddScriptsAct} from './addScript/addActScript'
+
 
 export const AddScriptBase = ()=>{
   const {addScript, hide} = useContext(AddScriptContext)
@@ -51,10 +54,26 @@ export const AddScriptBase = ()=>{
     )
   }
 
+  if(addScript.type==="typeAct"){
+    return (
+      <BackForm onClick={close} className="addElementBody">
+        <TypeAct result={shoseDevice}/>
+      </BackForm>
+    )
+  }
+
   if(addScript.type==="deviceBlock"){
     return (
       <BackForm onClick={close} className="addElementBody">
         <AddScriptDevices result={shoseDevice} type={"act"}/>
+      </BackForm>
+    )
+  }
+
+  if(addScript.type==="scriptBlock"){
+    return (
+      <BackForm onClick={close} className="addElementBody">
+        <AddScriptsAct result={shoseDevice} type={"act"}/>
       </BackForm>
     )
   }

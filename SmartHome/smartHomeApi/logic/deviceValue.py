@@ -29,7 +29,7 @@ def setValueAtToken(address,value):
                     return deviceSetStatus(item.id,item2.type,value)
 
 
-def deviceSetStatus(id, type,value):
+def deviceSetStatus(id, type,value,script=True):
     try:
         if(value==None or type=="background"):
             return None
@@ -48,8 +48,9 @@ def deviceSetStatus(id, type,value):
                         return None
                 if(item.value != value):
                     item.value = value
-                    runScripts(id,type)
                     item.save()
+                    if(script):
+                        runScripts(id,type)
                 return value
         print('not value error')
 
