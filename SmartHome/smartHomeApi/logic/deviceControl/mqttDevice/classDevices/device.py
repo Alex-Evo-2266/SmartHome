@@ -21,7 +21,7 @@ class MqttDevice():
         d = dict()
         for item in properties:
             for item2 in self.DeviceConfig:
-                if(item == item2["type"]):
+                if(item == item2["name"]):
                     d = {**d,item:devicestatus(self.DeviceId, item)}
         return d
 
@@ -33,15 +33,15 @@ class MqttDevice():
         message = ""
         for item in self.DeviceConfig:
             if(item["address"]==topic):
-                typeMessage = item["typeControl"]
+                typeMessage = item["type"]
                 min = item["low"]
                 max = item["high"]
-        if(typeMessage=="boolean"):
+        if(typeMessage=="binary"):
             if(int(command)==1):
                 message = max
             else:
                 message = min
-        elif(typeMessage=="range"):
+        elif(typeMessage=="number"):
             if(int(command)>int(max)):
                 message = int(max)
             elif(int(command)<int(min)):
@@ -61,7 +61,8 @@ class MqttDevice():
 
     def runCommand(self,type:str, command:str):
         for item in self.DeviceConfig:
-            if(item["type"]==type):
+            print("fg")
+            if(item["name"]==type):
                 self.send(item["address"],command)
                 return
 
@@ -79,5 +80,5 @@ class MqttDevice():
     def get_control(self):
         controls = dict()
         for item in self.DeviceConfig:
-            controls[item["type"]]=True
+            controls[item["name"]]=True
         return controls

@@ -13,7 +13,7 @@ export const ValueDeviceBlock = ({deviceId,action,updata,index,el,block,deleteEl
     let array = []
     if(condidat){
       for (var item of condidat.DeviceConfig) {
-        array.push(item.type)
+        array.push(item.name)
       }
     }
     setAllTypes(array)

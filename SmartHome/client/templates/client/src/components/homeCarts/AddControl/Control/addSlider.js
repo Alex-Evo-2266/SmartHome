@@ -7,7 +7,7 @@ function sortDevice(data) {
   let arr = []
   for (var item of data) {
     for (var item2 of item.DeviceConfig) {
-      if(item2.typeControl==="range"){
+      if(item2.type==="number"&&item2.control){
         arr.push(item)
         break
       }
@@ -55,7 +55,7 @@ export const AddSlider = ({add})=>{
   }
 
   function sortField(items) {
-    return items.filter((item)=>item.typeControl==="range")
+    return items.filter((item)=>item.type==="number"&&item.control)
   }
 
   if(!allDevices){
@@ -73,7 +73,7 @@ export const AddSlider = ({add})=>{
         }):
         (!buttonForm.typeAction&&device.DeviceConfig)?
           sortField(device.DeviceConfig).map((item,index)=>{
-            return <li key={index} onClick={()=>out(item.type)}>{item.type}</li>
+            return <li key={index} onClick={()=>out(item.name)}>{item.name}</li>
           })
           :null
     }

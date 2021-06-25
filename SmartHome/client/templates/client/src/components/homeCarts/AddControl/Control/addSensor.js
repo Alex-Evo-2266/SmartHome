@@ -3,22 +3,10 @@ import {DeviceStatusContext} from '../../../../context/DeviceStatusContext'
 import {Loader} from '../../../Loader'
 
 // import {AuthContext} from '../../../../context/AuthContext.js'
-function sortDevice(data) {
-  let arr = []
-  for (var item of data) {
-    for (var item2 of item.DeviceConfig) {
-      if(item2.typeControl==="sensor"||item2.typeControl==="booleanSensor"){
-        arr.push(item)
-        break
-      }
-    }
-  }
-  return arr
-}
 
 export const AddSensor = ({add})=>{
   const {devices} = useContext(DeviceStatusContext)
-  const [allDevices] = useState(sortDevice(devices));
+  const [allDevices] = useState(devices);
   const [device, setDevice] = useState({});
   // const [deviceConfig, setDeviceConfig] = useState({})
   // const auth = useContext(AuthContext)
@@ -50,12 +38,8 @@ export const AddSensor = ({add})=>{
   },[device])
 
   const out = (item)=>{
-    setButtonForm({...buttonForm,typeAction:item.type,type:item.typeControl})
-    add({...buttonForm,typeAction:item.type,type:item.typeControl})
-  }
-
-  function sortField(items) {
-    return items.filter((item)=>item.typeControl==="sensor"||item.typeControl==="booleanSensor")
+    setButtonForm({...buttonForm,typeAction:item.name,type:`sensor-${item.type}`})
+    add({...buttonForm,typeAction:item.name,type:`sensor-${item.type}`})
   }
 
   if(!allDevices){
@@ -72,8 +56,8 @@ export const AddSensor = ({add})=>{
           )
         }):
         (!buttonForm.typeAction&&device.DeviceConfig)?
-          sortField(device.DeviceConfig).map((item,index)=>{
-            return <li key={index} onClick={()=>out(item)}>{item.type}</li>
+          device.DeviceConfig.map((item,index)=>{
+            return <li key={index} onClick={()=>out(item)}>{item.name}</li>
           })
           :null
     }

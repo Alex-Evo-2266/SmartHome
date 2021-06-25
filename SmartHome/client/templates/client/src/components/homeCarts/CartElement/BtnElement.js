@@ -45,7 +45,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   const itemField = useCallback(()=>{
     if(!device||!device.DeviceConfig)return
     for (var item of device.DeviceConfig) {
-      if(item.type===data.typeAction){
+      if(item.name===data.typeAction){
         return item
       }
     }
@@ -54,7 +54,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   useEffect(()=>{
     if(!disabled&&device&&device.status){
       let item = itemField()
-      if(item&&item.typeControl==="boolean"){
+      if(item&&item.type==="binary"){
         setSwitchMode(true)
       }
       if(device.status==="online"){
@@ -74,7 +74,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   useEffect(()=>{
     if(!device||!device.DeviceConfig||!data)return
     const {typeAction} = data
-    let conf = device.DeviceConfig.filter((item)=>item.type===typeAction)
+    let conf = device.DeviceConfig.filter((item)=>item.name===typeAction)
     if(conf.length)
       setDeviceConfig(conf[0])
   },[device,data])
@@ -82,13 +82,13 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   useEffect(()=>{
     if(typeof(onClick)==="function"||disabled||device.status==="offline")return
     const {low,high,typeControl} = deviceConfig
-    if(device&&typeControl==="boolean"&&device.DeviceValue&&device.DeviceValue[deviceConfig.type]){
-      if(device.DeviceValue[deviceConfig.type]===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.type]==="0"))
+    if(device&&typeControl==="boolean"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
+      if(device.DeviceValue[deviceConfig.name]===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="0"))
         setValue(false)
-      if(device.DeviceValue[deviceConfig.type]===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.type]==="1"))
+      if(device.DeviceValue[deviceConfig.name]===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="1"))
         setValue(true)
-      if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue[deviceConfig.type])&&!/\D/.test(low)&&!/\D/.test(high))){
-        let poz = Number(device.DeviceValue[deviceConfig.type])
+      if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
+        let poz = Number(device.DeviceValue[deviceConfig.name])
         let min = Number(low)
         let max = Number(high)
         if(poz>min&&poz<=max)
@@ -97,9 +97,9 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
           setValue(false)
       }
     }
-    if(device&&typeControl==="number"&&device.DeviceValue&&device.DeviceValue[deviceConfig.type]){
+    if(device&&typeControl==="number"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
       if(!data.action)data.action="0"
-      if(data.action===device.DeviceValue[deviceConfig.type]){
+      if(data.action===device.DeviceValue[deviceConfig.name]){
         setValue(true)
       }
       else {
@@ -124,13 +124,11 @@ const changeHandler = (event)=>{
   //     return outValue(device.DeviceId,data.action)
   if(data.typeAction==="modeTarget")
       return outValue(device.DeviceId,"target")
-  if(deviceConfig.typeControl==="boolean")
+  if(deviceConfig.type==="binary")
       return outValue(device.DeviceId,(oldvel)?0:1)
-  if(deviceConfig.typeControl==="range")
+  if(deviceConfig.type==="number")
       return outValue(device.DeviceId,data.action)
-  if(deviceConfig.typeControl==="text")
-      return outValue(device.DeviceId,data.action)
-  if(deviceConfig.typeControl==="number")
+  if(deviceConfig.type==="text")
       return outValue(device.DeviceId,data.action)
   return outValue(device.DeviceId,data.action)
   // if(data.type==="ir")

@@ -69,6 +69,10 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
     updata(index,{...data,children:mas})
   }
 
+  const splitType = (type)=>{
+    return type.split("-")
+  }
+
   return(
     <ModalWindow
      position="relative"
@@ -150,7 +154,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                 (edit)?editElement:null
               }
               />:
-              (item.type==="sensor"||item.type==="booleanSensor")?
+              (splitType(item.type)[0]==="sensor")?
               <SensorElement
               index={item.index}
               data={item}

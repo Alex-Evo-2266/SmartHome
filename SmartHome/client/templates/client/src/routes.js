@@ -16,6 +16,7 @@ import {AddActorPage} from './Page/addFilesPages/NewActors'
 import {AddGanrePage} from './Page/addFilesPages/NewGanre'
 import {MovieDitail} from './Page/filespage/movieDitail'
 import {MqttPage} from './Page/MqttTopics'
+import {ZigbeePage} from './Page/ZigbeePage'
 import AddUser from './Page/AddUser'
 
 export const useRoutes = (isAuthenticated,level)=>{
@@ -80,8 +81,11 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/devices/ditail/:id">
           <DitailDevicePage/>
         </Route>
-        <Route path="/devices/mqtt" exact>
+        <Route path="/mqtt" exact>
           <MqttPage/>
+        </Route>
+        <Route path="/zigbee2mqtt" exact>
+          <ZigbeePage/>
         </Route>
 
         <Route path="/movie/edit/:id">

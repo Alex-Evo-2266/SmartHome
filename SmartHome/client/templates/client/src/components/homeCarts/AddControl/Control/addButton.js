@@ -1,9 +1,33 @@
 import React, {useContext,useState,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../../context/DeviceStatusContext'
 
+function filtred(data) {
+  let condidats = data.filter(item=>item.DeviceType!=="sensor")
+  let filtredData = []
+  for (var item of condidats) {
+    for (var item2 of item.DeviceConfig) {
+      if(item2.control){
+        filtredData.push(item)
+        break
+      }
+    }
+  }
+  return filtredData
+}
+
+function filtredField(data) {
+  let filtredData = []
+  for (var item of data) {
+    if(item.control){
+      filtredData.push(item)
+    }
+  }
+  return filtredData
+}
+
 export const AddButton = ({add})=>{
   const {devices} = useContext(DeviceStatusContext)
-  const [allDevices] = useState(devices.filter(item=>item.DeviceType!=="sensor"));
+  const [allDevices] = useState(filtred(devices));
   const [device, setDevice] = useState({});
   const [deviceConfig, setDeviceConfig] = useState({})
   const [buttonForm, setButtonForm] = useState({
@@ -57,7 +81,7 @@ export const AddButton = ({add})=>{
   const itemField = useCallback(()=>{
     if(!device||!device.DeviceConfig||!buttonForm.typeAction)return
     for (var item of device.DeviceConfig) {
-      if(item.type===buttonForm.typeAction){
+      if(item.name===buttonForm.typeAction){
         return item
       }
     }
@@ -67,14 +91,14 @@ export const AddButton = ({add})=>{
     let item = itemField()
     if(!device||!device.DeviceConfig||!item)return
     const {low} = item
-    if(item.typeControl === "range"){
+    if(item.type === "number"){
       setButtonForm((prev)=>{return{...prev,action:low}})
       return setDeviceConfig({min:low,max:item.high})
     }
-    if(item.typeControl === "number"){
-      setButtonForm((prev)=>{return{...prev,action:0}})
-      return setDeviceConfig({min:0,max:item.high-1})
-    }
+    // if(item.type === "number"){
+    //   setButtonForm((prev)=>{return{...prev,action:0}})
+    //   return setDeviceConfig({min:0,max:item.high-1})
+    // }
     return
   },[device,buttonForm.typeAction,itemField])
 
@@ -104,8 +128,8 @@ export const AddButton = ({add})=>{
     return(
       <ul>
       {
-        device.DeviceConfig.map((item,index)=>{
-          if(item.typeControl==="number"&&item.type==="mode"&&device.DeviceType!=="other"){
+        filtredField(device.DeviceConfig).map((item,index)=>{
+          if(item.type==="number"&&item.name==="mode"&&device.DeviceType!=="other"){
             return(
               <div key={index}>
                 <li onClick={()=>setButtonForm({...buttonForm,typeAction:"mode"})}>mode</li>
@@ -115,13 +139,13 @@ export const AddButton = ({add})=>{
           }
           return(
             <li key={index} onClick={()=>{
-              if(item.typeControl==="boolean")
-                out(item.type)
+              if(item.type==="binary")
+                out(item.name)
               else if(device.DeviceType==="variable")
                 setButtonForm({...buttonForm,typeAction:"variable"})
               else
-                setButtonForm({...buttonForm,typeAction:item.type})
-            }}>{item.type}</li>
+                setButtonForm({...buttonForm,typeAction:item.name})
+            }}>{item.name}</li>
           )
         })
       }

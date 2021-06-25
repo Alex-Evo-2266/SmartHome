@@ -7,13 +7,11 @@ def createValue(id,type,min=0,max=1,icon=""):
     valuesdb = dev.valuedevice_set.all()
     isField = True
     for item in valuesdb:
-        if item.type == type:
+        if item.name == type:
             isField=False
     if(isField):
-        typeControl = "boolean"
+        typeControl = "binary"
         if(type=="brightness" or type=="color" or type=="temp" or type=="bg_brightness" or type=="bg_temp" or type=="bg_color"):
-            typeControl = "range"
-        if(type=="mode" or type=="bg_mode"):
             typeControl = "number"
         val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=type,typeControl=typeControl,high=max,low=min,icon=icon)
         val.save()
@@ -58,7 +56,7 @@ class Yeelight(Bulb):
         if self.__is_dimmer:
             createValue(self.__item["DeviceId"],"brightness",self.__dimmer_min,self.__dimmer_max,"far fa-sun")
         if self.__is_night_light:
-            createValue(self.__item["DeviceId"],"mode",0,2,"fab fa-medium-m")
+            createValue(self.__item["DeviceId"],"mode",0,1,"fab fa-medium-m")
         if self.__is_color_temp:
             createValue(self.__item["DeviceId"],"temp",self.__temp_min,self.__temp_max,"fas fa-adjust")
         if self.__is_color:

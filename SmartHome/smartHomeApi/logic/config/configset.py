@@ -1,6 +1,7 @@
 import yaml
 from SmartHome.settings import SERVER_CONFIG
-from ..deviceControl.mqttDevice.connect import reconnect
+from ..deviceControl.mqttDevice.connect import reconnect,publish
+from ..deviceControl.mqttDevice.mqttScan import ClearTopicks
 
 def ServerConfigEdit(data):
     templates = None
@@ -13,8 +14,16 @@ def ServerConfigEdit(data):
         "user":data["loginMqttBroker"],
         "password":data["passwordMqttBroker"]
     }
+    zigbee = {
+        "topic":data["zigbee2mqttTopic"]
+    }
+    zigbee2mqttTopic = templates["zigbee2mqtt"]
+    zigbee2mqttTopic = zigbee2mqttTopic["topic"]
     templates["mqttBroker"] = mqtt
+    templates["zigbee2mqtt"] = zigbee
     with open(SERVER_CONFIG, 'w') as f:
         yaml.dump(templates, f, default_flow_style=False)
+    ClearTopicks()
     reconnect()
+    publish(zigbee2mqttTopic + "/bridge/request/options",'{"options": {"mqtt": {"base_topic":"'+ data["zigbee2mqttTopic"] +'"}}}')
     return True

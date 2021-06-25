@@ -15,14 +15,13 @@ export const MqttPage = ()=>{
 
   const getDev = useCallback(async () => {
     try {
-      let data = await request('/api/devices/mqtt', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+      let data = await request('/api/mqtt', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       if(data){
         console.log(data);
-/* временный костыль -->>*/data = data.filter((item)=>(item.topic!=="zigbee2mqtt/bridge/devices"&&item.topic!=="zigbee2mqtt/bridge/config"&&item.topic!=="zigbee2mqtt/bridge/info"))
         setDeviceMqtt(data)
       }
     } catch (e) {
-
+      console.error(e);
     }
   },[request,auth.token])
 
@@ -35,13 +34,15 @@ export const MqttPage = ()=>{
     getDev()
   },[getDev])
 
+  function clearMqtt() {
+    request('/api/mqtt/clear', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+  }
+
   return (
     <div className="conteiner">
-      <Header name="Device Mqtt">
-        <NavLink to="/devices" exact className="btn">All</NavLink>
-        <NavLink to="/devices/mqtt" exact className="btn">Mqtt</NavLink>
+      <Header name="Mqtt">
         <button onClick={getDev} className="btn"><i className="fas fa-undo"></i></button>
-        <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
+        <button onClick={clearMqtt} className="btn"><i className="fas fa-trash"></i></button>
       </Header>
       {
         (loading||!deviceMqtt)?

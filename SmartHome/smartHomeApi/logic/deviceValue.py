@@ -6,7 +6,7 @@ def devicestatus(id, type):
     dev = Device.objects.get(id=id)
     value = dev.valuedevice_set.all()
     for item in value:
-        if item.type==type:
+        if item.name==type:
             return item.value
     return None
 
@@ -21,12 +21,12 @@ def setValueAtToken(address,value):
                 for key in data:
                     for item2 in item.valuedevice_set.all():
                         if(item2.address==key):
-                            deviceSetStatus(item.id,item2.type,data[key])
+                            deviceSetStatus(item.id,item2.name,data[key])
 
         else:
             for item2 in item.valuedevice_set.all():
                 if base_address + '/' + item2.address==address:
-                    return deviceSetStatus(item.id,item2.type,value)
+                    return deviceSetStatus(item.id,item2.name,value)
 
 
 def deviceSetStatus(id, type,value,script=True):
@@ -37,7 +37,7 @@ def deviceSetStatus(id, type,value,script=True):
         # print("2")
         values = dev.valuedevice_set.all()
         for item in values:
-            if item.type==type:
+            if item.name==type:
                 if(type=="power"):
                     value = str(value)
                     if(value==item.high):

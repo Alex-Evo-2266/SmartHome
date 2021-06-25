@@ -13,8 +13,8 @@ export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>
     let array = []
     if(condidat){
       for (var item of condidat.DeviceConfig) {
-        if(item.type){
-          array.push(item.type)
+        if(item.name){
+          array.push(item.name)
         }
       }
     }

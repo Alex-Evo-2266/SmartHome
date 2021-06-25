@@ -23,8 +23,14 @@ export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValu
       return false
     let condidat = devices.filter((item)=>item&&item.DeviceId===id)
     if(!condidat[0]) return null
-    setMin(condidat[0].DeviceControl[data.typeAction].min)
-    setMax(condidat[0].DeviceControl[data.typeAction].max)
+    let conf
+    for (var item of condidat[0].DeviceConfig) {
+      if(item.name===data.typeAction){
+        conf = item
+      }
+    }
+    setMin(conf.low)
+    setMax(conf.high)
     return condidat[0]
   },[devices,data])
 

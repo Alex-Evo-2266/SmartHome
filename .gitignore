@@ -11,8 +11,8 @@ MediaList
 TRASH
 mosquitto/data/*
 mosquitto/log/*
-server-config.yml
 
+server-config.yml
 zigbee2mqtt/database.db
 zigbee2mqtt/log
 zigbee2mqtt/state.json

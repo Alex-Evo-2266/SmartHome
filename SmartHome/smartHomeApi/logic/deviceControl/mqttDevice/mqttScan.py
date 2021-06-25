@@ -1,13 +1,18 @@
 from smartHomeApi.models import Device,ValueDevice
+from smartHomeApi.logic.config.configget import getConfig
+from ..zigbee.zigbeeDevices import decodeZigbeeDevices
+import ast
+import json
 mqttTopics = []
-zigbeetopik = "zigbee2mqtt"
 
 def getIdTopic(topic):
+    global mqttTopics
     for item in mqttTopics:
         if(item["topic"]==topic):
             return mqttTopics.index(item)
 
 def addTopic(topic,message):
+    global mqttTopics
     t = {
         "topic":topic,
         "message":message
@@ -20,6 +25,7 @@ def addTopic(topic,message):
     return t
 
 def getTopicksAll():
+    global mqttTopics
     return mqttTopics
 
 def getTopicksAndLinc():
@@ -30,8 +36,10 @@ def getTopicksAndLinc():
         last = topic.split('/')[-1]
         first = topic.split('/')[0:-1]
         first = "/".join(first)
-        if ("/".join(topic.split('/')[0:2])=='/'.join([zigbeetopik,"bridge"]) and last!="state"):
-            continue
+        zigbee = getConfig("zigbee2mqtt")
+        if ("/".join(topic.split('/')[0:2])=='/'.join([zigbee["topic"],"bridge"]) and last!="state"):
+            if(last=="devices"):
+                decodeZigbeeDevices(json.loads(item["message"]))
         lincs = list()
         for device in Device.objects.all():
             if device.DeviceValueType=="json":
@@ -50,7 +58,9 @@ def getTopicksAndLinc():
         if(last == "set"):
             item["set"] = True
         newArr.append(item)
+
     return newArr
 
 def ClearTopicks():
+    global mqttTopics
     mqttTopics = []

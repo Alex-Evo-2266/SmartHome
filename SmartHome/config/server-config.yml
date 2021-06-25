@@ -6,3 +6,5 @@ mqttBroker:
   password: admin
   port: '1883'
   user: admin
+zigbee2mqtt:
+  topic: zigbee2mqtt

@@ -20,7 +20,7 @@ export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
     for (var item of data1) {
       let validef = false
       for (var item2 of data) {
-        if(item.type===item2.type){
+        if(item.name===item2.name){
           validef = true
           newdata.push(item2)
         }
@@ -59,6 +59,10 @@ export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
   const [field, setField] = useState(validCountField(deviceData.DeviceConfig||[]));
   const [count, setCount] = useState(deviceData.DeviceConfig.length);
 
+  useEffect(()=>{
+    console.log(field);
+  },[field])
+
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
   }
@@ -69,6 +73,15 @@ export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
     arr[index] = newcom
     setField(arr)
   }
+
+  const changeHandlerFieldChek = event => {
+    let index = event.target.dataset.id
+    let arr = field.slice()
+    let newcom = { ...arr[index], [event.target.name]: event.target.checked }
+    arr[index] = newcom
+    setField(arr)
+  }
+
 const changeHandlerTest = event=>{
   if(USText(event.target.value)){
     changeHandler(event)
@@ -96,12 +109,12 @@ const changeHandlerTest = event=>{
     let arrType = []
     for (var item of field) {
       for (var item2 of arrType) {
-        if(item.type === item2){
+        if(item.name === item2){
           message("повторяющиеся поля","error")
           return false
         }
       }
-      arrType.push(item.type)
+      arrType.push(item.name)
     }
     return true
   }
@@ -139,10 +152,12 @@ const changeHandlerTest = event=>{
     let arr = field.slice()
     arr.push({
       address:"field"+count,
-      type:"field"+count,
-      typeControl:"text",
+      name:"field"+count,
+      type:"text",
       low:"0",
       high:"100",
+      values:"",
+      control:true,
       icon:"",
       unit:""
     })
@@ -204,12 +219,12 @@ const changeHandlerTest = event=>{
       {
         field.map((item,index)=>{
           return(
-            <HidingLi key={index} title = {item.type}>
+            <HidingLi key={index} title = {item.name}>
             {
               (configForm.editType)?
               <label>
                 <h5>Enter the type</h5>
-                <input data-id={index} className = "textInput" placeholder="type" type="text" name="type" value={item.type} onChange={changeHandlerField} required/>
+                <input data-id={index} className = "textInput" placeholder="type" type="text" name="name" value={item.name} onChange={changeHandlerField} required/>
               </label>:null
             }
             <label>
@@ -220,42 +235,34 @@ const changeHandlerTest = event=>{
               (configForm.editTypeControl)?
               <label>
                 <h5>Type</h5>
-                <select className = "textInput" data-id={index} name="typeControl" value={item.typeControl} onChange={changeHandlerField}>
-                {
-                  (configForm.typeControl==="control"||configForm.typeControl==="all")?
-                  <>
-                  <option value="boolean">boolean</option>
+                <select className = "textInput" data-id={index} name="type" value={item.type} onChange={changeHandlerField}>
+                  <option value="binary">binary</option>
                   <option value="text">text</option>
                   <option value="number">number</option>
-                  <option value="range">range</option>
-                  </>:null
-                }
-                {
-                  (configForm.typeControl==="sensor"||configForm.typeControl==="all")?
-                  <>
-                  <option value="sensor">sensor</option>
-                  <option value="booleanSensor">booleanSensor</option>
-                  </>:null
-                }
+                  <option value="enum">enum</option>
                 </select>
               </label>:null
             }
+            <label>
+              <h5>Enter the control</h5>
+              <input data-id={index} type="checkbox" className = "textInput" placeholder="unit" name="control" checked={Boolean(item.control)} onChange={changeHandlerFieldChek} required/>
+            </label>
             {
-              (item.typeControl==="range"||item.typeControl==="boolean"||item.typeControl==="booleanSensor")?
+              (item.type==="number"||item.type==="binary")?
               <>
               <label>
                 <h5>Enter the min</h5>
-                <input data-id={index} className = "textInput" placeholder="min" type={(item.typeControl==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandlerField} required/>
+                <input data-id={index} className = "textInput" placeholder="min" type={(item.type==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandlerField} required/>
               </label>
               <label>
                 <h5>Enter the max</h5>
-                <input data-id={index} className = "textInput" placeholder="max" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
+                <input data-id={index} className = "textInput" placeholder="max" type={(item.type==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
               </label>
               </>:
-              (item.typeControl==="number")?
+              (item.type==="enum")?
               <label>
-                <h5>Enter the coutn</h5>
-                <input data-id={index} className = "textInput" placeholder="count" type={(item.typeControl==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
+                <h5>Enter the enum</h5>
+                <input data-id={index} className = "textInput" placeholder="enum" type="text" name="values" value={item.values} onChange={changeHandler} required/>
               </label>
               :null
             }
@@ -264,7 +271,7 @@ const changeHandlerTest = event=>{
               <input data-id={index} className = "textInput" placeholder="icon" name="icon" value={item.icon} onChange={changeHandlerField} required/>
             </label>
             {
-              (item.typeControl==="range"||item.typeControl==="sensor")?
+              (item.type==="number")?
               <label>
                 <h5>Enter the unit</h5>
                 <input data-id={index} className = "textInput" placeholder="unit" name="unit" value={item.unit} onChange={changeHandlerField} required/>

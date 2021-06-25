@@ -16,37 +16,38 @@ const baseMinMax = {
     min:"0",
     max:"255",
     icon:'',
-    typeControl:"text"
+    type:"text",
+
   },
   state:{
     min:"0",
     max:"1",
     icon:"",
-    typeControl:"boolean"
+    type:"boolean"
   },
   brightness:{
     min:"0",
     max:"100",
     icon:'',
-    typeControl:"range"
+    type:"range"
   },
   color:{
     min:"1600",
     max:"3600",
     icon:"",
-    typeControl:"range",
+    type:"range",
   },
   temp:{
     min:"0",
     max:"40",
     icon:"",
-    typeControl:"range",
+    type:"range",
   },
   mode:{
     min:"0",
     max:"2",
     icon:'',
-    typeControl:"number"
+    type:"number"
   }
 }
 
@@ -56,8 +57,16 @@ export const MQTTElement = ({data}) =>{
 
   function dictToList(dict) {
     let arr = []
+    console.log(dict);
     for (var key in dict) {
-      arr.push({type:key,value:dict[key]})
+      let val = dict[key]
+      if(typeof(dict[key])==="object"||typeof(dict[key])==="boolean"){
+        val = JSON.stringify(val)
+      }
+      if(val.length>100){
+        val = "..."
+      }
+      arr.push({name:key,value:val})
     }
     return arr
   }
@@ -72,9 +81,12 @@ export const MQTTElement = ({data}) =>{
   if(typeof(mes)==="object"){
     message = dictToList(mes)
   }else{
+    if(typeof(mes)==="boolean"){
+      mes = JSON.stringify(mes)
+    }
     let topicComponents = data.topic.split('/')
     let field = topicComponents.pop()
-    message = [{type:field,value:mes}]
+    message = [{name:field,value:mes}]
   }
 
   function Decice() {
@@ -84,7 +96,7 @@ export const MQTTElement = ({data}) =>{
         let dev = item.device
         let field
         if(dev.DeviceValueType!=="json" && item.field){
-          field = item.field.type
+          field = item.field.name
         }
         devices.push(`${dev.DeviceSystemName}${(field)?`.${field}`:''}`)
       }
@@ -104,29 +116,27 @@ export const MQTTElement = ({data}) =>{
       let address = topicComponents.join('/')
       let conf = []
       let typeControl = "text"
-      if(ret==="sensor"){
-        typeControl = "sensor"
-      }
       for (var item of message) {
-        let ctype = baseAddressList[item.type]
+        let ctype = baseAddressList[item.name]
         if(!ctype)
-          ctype = item.type
+          ctype = item.name
         let cMinMax = baseMinMax[ctype]
         if(!cMinMax){
           cMinMax = baseMinMax["base"]
         }
-        let caddress = item.type
+        let caddress = item.name
         let clow = cMinMax.min
         let chigh = cMinMax.max
         let cicon = cMinMax.icon
-        typeControl = cMinMax.typeControl||typeControl
+        typeControl = cMinMax.type||typeControl
         let confel = {
-          type:ctype,
+          name:ctype,
           address:caddress,
           low:clow,
           high:chigh,
           icon:cicon||"",
-          typeControl:typeControl
+          type:typeControl,
+          control:(ret!=="sensor")
         }
         conf.push(confel)
       }
@@ -145,7 +155,7 @@ export const MQTTElement = ({data}) =>{
       <td>{data.topic}</td>
       <td>{
         message.map((item,index)=>{
-          return <p className="mqttMessageStr" key={index}>{item.type}: {item.value}</p>
+          return <p className="mqttMessageStr" key={index}>{item.name}: {item.value}</p>
         })
       }</td>
       <td>{

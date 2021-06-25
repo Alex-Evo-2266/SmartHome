@@ -51,12 +51,12 @@ export const AddDevicesPage = () => {
     let arrType = []
     for (var item of form.config) {
       for (var item2 of arrType) {
-        if(item.type === item2){
+        if(item.name === item2){
           message("повторяющиеся поля","error")
           return false
         }
       }
-      arrType.push(item.type)
+      arrType.push(item.name)
     }
     return true
   }

@@ -12,7 +12,8 @@ export const ServerOption = () =>{
     mqttBroker:'none',
     mqttBrokerPort:"",
     loginMqttBroker:'',
-    passwordMqttBroker:''
+    passwordMqttBroker:'',
+    zigbee2mqttTopic:''
   });
 
   useEffect(()=>{
@@ -40,7 +41,8 @@ export const ServerOption = () =>{
       mqttBroker:data.mqttBroker||"",
       mqttBrokerPort:data.mqttBrokerPort||"",
       loginMqttBroker:data.loginMqttBroker||"",
-      passwordMqttBroker:data.passwordMqttBroker||""
+      passwordMqttBroker:data.passwordMqttBroker||"",
+      zigbee2mqttTopic:data.zigbee2mqttTopic||""
     })
   },[request,auth.token])
 
@@ -73,6 +75,12 @@ export const ServerOption = () =>{
         <p className="text">Mqtt password</p>
         <label className="text">
           <input placeholder="password Mqtt broker" onChange={changeHandler} name="passwordMqttBroker" type="text" value={serverconf.passwordMqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
+        </label>
+      </div>
+      <div className="configElement block">
+        <p className="text">Zigbee2mqtt topic</p>
+        <label className="text">
+          <input placeholder="password Mqtt broker" onChange={changeHandler} name="zigbee2mqttTopic" type="text" value={serverconf.zigbee2mqttTopic} disabled = {(serverconf.mqttBroker==="none")}></input>
         </label>
       </div>
       <button onClick={serverConfigHandler}>Save</button>

@@ -9,8 +9,10 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   const [device, setDevice] = useState({})
 
   const lookForDeviceById = useCallback((id)=>{
+    console.log(id);
     if(!devices||!devices[0])
       return false
+
     let condidat = devices.filter((item)=>item.DeviceId===id)
     return condidat[0]
   },[devices])
@@ -21,19 +23,19 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
 
   function getConfrg(key) {
     for (var item of device.DeviceConfig) {
-      if(item.type === key)
+      if(item.name === key)
         return item
     }
   }
 
   const getTypeField = ()=>{
-    if(!device)return "sensorBase"
+    if(!device)return "text"
     for (var item of device.DeviceConfig) {
-      if(data.typeAction === item.type){
-        return item.typeControl
+      if(data.typeAction === item.name){
+        return item.type
       }
     }
-    return "sensorBase"
+    return "text"
   }
 
   const deletebtn = ()=>{
@@ -52,7 +54,7 @@ if(!device||!device.DeviceId){
   console.log("wtf");
   return null;
 }
-if(getTypeField()==="sensor"){
+if(getTypeField()==="number"||getTypeField()==="text"){
   return(
     <div className="SensorElement">
       <div className="icon-conteiner">
@@ -79,7 +81,7 @@ if(getTypeField()==="sensor"){
     </div>
   )
 }
-if(getTypeField()==="booleanSensor"){
+if(getTypeField()==="binary"){
   return(
     <div className="SensorElement">
       <div className="icon-conteiner">

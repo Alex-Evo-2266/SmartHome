@@ -59,38 +59,38 @@ export const NewDeviceElement = ({id}) =>{
           (device.status!=="online")?
           <li className="DeviceControlLi"><h4 className="offline">{device.status}</h4></li>
           :device.DeviceConfig.map((item,index)=>{
-            if(item.typeControl==="boolean"){
-              return <Power key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue&&(device.DeviceValue[item.type]==="1"))?1:0} type={item.type}/>
+            if(item.type==="binary" && item.control){
+              return <Power key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue&&(device.DeviceValue[item.name]==="1"))?1:0} type={item.name}/>
             }
-            if(item.typeControl==="range"){
-              return <Dimmer key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.type]):0} type={item.type} title = {item.type} conf={{min:item.low,max:item.high}}/>
+            if(item.type==="number"&& item.control){
+              return <Dimmer key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.name]):0} type={item.name} title = {item.name} conf={{min:item.low,max:item.high}}/>
             }
-            if(item.typeControl==="number"){
-              return <Mode key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.type]):0} type={item.type} conf={Number(item.high)}/>
+            if(item.type==="number"&& item.control){
+              return <Mode key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.name]):0} type={item.name} conf={Number(item.high)}/>
             }
-            if(item.typeControl==="text"){
+            if(item.type==="text"&& item.control){
               return(
                 <li className="DeviceControlLi" key={index}>
                   <div className="DeviceControlLiName">
-                    <p>{item.type}</p>
+                    <p>{item.name}</p>
                   </div>
                   <div className="DeviceControlLiContent">
                     <div className="DeviceControlLiValue">
-                      <p>{device.DeviceValue[item.type]}</p>
+                      <p>{device.DeviceValue[item.name]}</p>
                     </div>
                   </div>
                 </li>
               )
             }
-            if(item.typeControl==="sensor"||item.typeControl==="booleanSensor"){
+            if(!item.control){
               return(
                 <li className="DeviceControlLi" key={index}>
                   <div className="DeviceControlLiName">
-                    <p>{item.type}</p>
+                    <p>{item.name}</p>
                   </div>
                   <div className="DeviceControlLiContent">
                     <div className="DeviceControlLiValue">
-                      <p>{device.DeviceValue[item.type]}</p>
+                      <p>{device.DeviceValue[item.name]}</p>
                     </div>
                   </div>
                 </li>

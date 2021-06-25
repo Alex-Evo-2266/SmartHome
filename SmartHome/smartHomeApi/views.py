@@ -8,14 +8,16 @@ from rest_framework.views import APIView
 from .logic.user import addUser,newGenPass,editPass,send_email,deleteUser,setLevel, login as Authorization, userConfEdit,menuConfEdit,user,editUser
 from .logic.auth import auth
 from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
-from .logic.config.configget import GiveServerConfig
+from .logic.config.configget import GiveServerConfig,readConfig
 from .logic.config.configset import ServerConfigEdit
 from .logic.Cart import setPage,getPage
 from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
 from .logic.weather import Weather
-from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc
+from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopicks
+from .logic.deviceControl.zigbee.zigbee import reboot
+from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices
 
 from .models import User, UserConfig,ImageBackground,genId,LocalImage,Device
 
@@ -250,6 +252,7 @@ class SetStatusDevice(APIView):
         dev.save()
         return Response("ok",status=201)
 
+# mqtt
 
 class MqttDevice(APIView):
     """docstring for getMqttDevice."""
@@ -259,6 +262,38 @@ class MqttDevice(APIView):
             return Response(status=403)
         dev = getTopicksAndLinc()
         return Response(dev,status=200)
+
+class MqttClear(APIView):
+    """docstring for MqttClear."""
+
+    def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        ClearTopicks()
+        return Response("ok",status=201)
+
+# zigbee2mqtt
+class Zigbee2mqttReboot(APIView):
+    """docstring for Zigbee2mqttReboot."""
+    def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        config = readConfig()
+        zigbeeConf = config["zigbee2mqtt"]
+        reboot(zigbeeConf["topic"])
+        return Response("ok",status=201)
+
+class Zigbee2mqttDevice(APIView):
+    """docstring for Zigbee2mqttDevice."""
+    def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        return Response(getzigbeeDevices())
+
+
 
 # home page views
 class GetHomePageView(APIView):

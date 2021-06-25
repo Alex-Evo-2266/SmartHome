@@ -42,7 +42,7 @@ def ifblock(data):
             device = data.device
             values = device.valuedevice_set.all()
             for item in values:
-                if(item.type == data.action):
+                if(item.name == data.action):
                     if(data.value):
                         val = getvalue(data.value)
                         rval = item.value
@@ -89,7 +89,7 @@ def getvalue(data):
         device = data.device
         values = device.valuedevice_set.all()
         for item in values:
-            if(item.type == data.oper):
+            if(item.name == data.oper):
                 val = item.value
                 if(val=="on"):
                     val="1"

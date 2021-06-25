@@ -15,34 +15,39 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   },[devices])
 
   useEffect(()=>{
+    console.log(device);
+  },[device])
+
+  useEffect(()=>{
     if(!data||!data.deviceId)
       return
+    console.log("1");
     setDevice(lookForDeviceById(data.deviceId))
   },[devices,data,onClick,lookForDeviceById])
 
   const itemField = ()=>{
     if(!device||!device.DeviceConfig||!data.typeAction)return
     for (var item of device.DeviceConfig) {
-      if(item.type===data.typeAction){
+      if(item.name===data.typeAction){
         return item
       }
     }
   }
 
   const getTypeField = ()=>{
-    if(!device)return "sensorBase"
+    if(!device)return "text"
     for (var item of device.DeviceConfig) {
-      if(data.typeAction === item.type){
-        return item.typeControl
+      if(data.typeAction === item.name){
+        return item.type
       }
     }
-    return "sensorBase"
+    return "text"
   }
 
 if(!device||!device.DeviceId){
   return null;
 }
-if(getTypeField()==="sensor"){
+if(getTypeField()==="text"||getTypeField()==="number"){
   return(
     <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
     <div className="icon">
@@ -59,7 +64,7 @@ if(getTypeField()==="sensor"){
     </BaseElement>
   )
 }
-if(getTypeField()==="booleanSensor"){
+if(getTypeField()==="binary"){
   return(
     <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
     <div className="icon">

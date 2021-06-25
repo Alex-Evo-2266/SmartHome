@@ -34,7 +34,7 @@ def addDevice(data):
         if(data.get("DeviceValueType")=="json"):
             conf = data["config"]
             for item in conf:
-                val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=newDevice,type=item["type"])
+                val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=newDevice,name=item["name"])
                 val.value="0"
                 if "address" in item:
                     val.address=item["address"]
@@ -45,16 +45,20 @@ def addDevice(data):
                     val.high=item["high"]
                 if "icon" in item:
                     val.icon=item["icon"]
+                if "values" in item:
+                    val.values=item["values"]
+                if "control" in item:
+                    val.control=item["control"]
                 if "unit" in item:
                     val.unit=item["unit"]
-                if "typeControl" in item:
-                    val.typeControl=item["typeControl"]
+                if "type" in item:
+                    val.type=item["type"]
                 val.save()
             return True
         else:
             conf = data["config"]
             for item in conf:
-                val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=newDevice,type=item["type"], address=item["address"])
+                val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=newDevice,name=item["name"], address=item["address"])
                 val.value="0"
                 if "low" in item:
                     val.low=item["low"]
@@ -63,10 +67,14 @@ def addDevice(data):
                     val.high=item["high"]
                 if "icon" in item:
                     val.icon=item["icon"]
+                if "control" in item:
+                    val.control=item["control"]
+                if "values" in item:
+                    val.values=item["values"]
                 if "unit" in item:
                     val.unit=item["unit"]
-                if "typeControl" in item:
-                    val.typeControl=item["typeControl"]
+                if "type" in item:
+                    val.type=item["type"]
                 val.save()
             return True
     except Exception as e:
@@ -187,7 +195,7 @@ def editDevice(data):
             if(data.get("DeviceValueType")=="json"):
                 conf = data["config"]
                 for item in conf:
-                    val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=item["type"])
+                    val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,name=item["name"])
                     val.value="0"
                     if "address" in item:
                         val.address=item["address"]
@@ -198,16 +206,20 @@ def editDevice(data):
                         val.high=item["high"]
                     if "icon" in item:
                         val.icon=item["icon"]
+                    if "values" in item:
+                        val.values=item["values"]
                     if "unit" in item:
                         val.unit=item["unit"]
-                    if "typeControl" in item:
-                        val.typeControl=item["typeControl"]
+                    if "control" in item:
+                        val.control=item["control"]
+                    if "type" in item:
+                        val.type=item["type"]
                     val.save()
                 return True
             else:
                 conf = data["config"]
                 for item in conf:
-                    val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=item["type"], address=item["address"])
+                    val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,name=item["name"], address=item["address"])
                     val.value="0"
                     if "low" in item:
                         val.low=item["low"]
@@ -216,10 +228,14 @@ def editDevice(data):
                         val.high=item["high"]
                     if "icon" in item:
                         val.icon=item["icon"]
+                    if "values" in item:
+                        val.values=item["values"]
                     if "unit" in item:
                         val.unit=item["unit"]
-                    if "typeControl" in item:
-                        val.typeControl=item["typeControl"]
+                    if "control" in item:
+                        val.control=item["control"]
+                    if "type" in item:
+                        val.type=item["type"]
                     val.save()
                 return True
         devicesArrey.delete(data["DeviceId"])

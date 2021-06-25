@@ -3,42 +3,52 @@ export const data = {
     config:[
       {
         address:"",
-        type:"state",
-        typeControl:"boolean",
+        name:"state",
+        type:"binary",
         low:"0",
         high:"1",
+        values:"",
+        control:true,
         icon:""
       },
       {
         address:"",
-        type:"brightness",
-        typeControl:"range",
+        name:"brightness",
+        type:"number",
         low:"0",
         high:"100",
+        values:"",
+        control:true,
         icon:""
       },
       {
         address:"",
-        type:"color",
-        typeControl:"range",
+        name:"color",
+        type:"number",
         low:"0",
         high:"255",
+        values:"",
+        control:true,
         icon:""
       },
       {
         address:"",
-        type:"temp",
-        typeControl:"range",
+        name:"temp",
+        type:"number",
         low:"2600",
         high:"3200",
+        values:"",
+        control:true,
         icon:""
       },
       {
         address:"",
-        type:"mode",
-        typeControl:"number",
+        name:"mode",
+        type:"binary",
         low:"0",
-        high:"2",
+        high:"1",
+        values:"",
+        control:true,
         icon:""
       },
     ],
@@ -51,10 +61,12 @@ export const data = {
     config:[
       {
         address:"",
-        type:"state",
-        typeControl:"boolean",
+        name:"state",
+        type:"binary",
         low:"0",
         high:"1",
+        values:"",
+        control:true,
         icon:""
       },
     ],
@@ -67,18 +79,22 @@ export const data = {
     config:[
       {
         address:"",
-        type:"state",
-        typeControl:"boolean",
+        name:"state",
+        type:"binary",
         low:"0",
         high:"1",
+        values:"",
+        control:true,
         icon:""
       },
       {
         address:"brightness",
-        type:"brightness",
-        typeControl:"range",
+        name:"brightness",
+        type:"number",
         low:"0",
         high:"100",
+        values:"",
+        control:true,
         icon:""
       },
     ],
@@ -91,10 +107,12 @@ export const data = {
     config:[
       {
         address:"sn1",
-        type:"sn1",
-        typeControl:"sensor",
+        name:"sn1",
+        type:"number",
         low:"0",
         high:"100",
+        values:"",
+        control:false,
         icon:""
       }
     ],
@@ -107,10 +125,12 @@ export const data = {
     config:[
       {
         address:"field0",
-        type:"field0",
-        typeControl:"text",
+        name:"field0",
+        type:"text",
         low:"0",
         high:"100",
+        values:"",
+        control:true,
         icon:""
       }
     ],

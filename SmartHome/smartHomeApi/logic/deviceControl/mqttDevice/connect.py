@@ -53,3 +53,7 @@ def reconnect():
 
 def getMqttClient():
     return mqttClient[0]
+
+def publish(topic,message=""):
+    client = mqttClient[0]
+    client.publish(topic, message)

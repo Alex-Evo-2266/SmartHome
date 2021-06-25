@@ -180,38 +180,42 @@ class Device(models.Model):
         values = self.valuedevice_set.all()
         valuesDict = dict()
         for item in values:
-            valuesDict[item.type]=item.value
+            valuesDict[item.name]=item.value
         return valuesDict
 
 class ValueDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)
     address = models.SlugField("device config address", max_length = 200,default="")
-    type = models.SlugField("device value type", max_length = 200)
-    low = models.SlugField("device config low", max_length = 200, default="0")
-    high = models.SlugField("device config high", max_length = 200, default="255")
+    name = models.SlugField("device value name", max_length = 200,default="null")
+    low = models.SlugField("device config low", max_length = 200, default="")
+    high = models.SlugField("device config high", max_length = 200, default="")
+    values = models.CharField("values", max_length = 200, default="")
     icon = models.SlugField("device icon", max_length = 200, default="")
     value = models.SlugField("device value value", max_length = 200)
     unit = models.CharField("unit", max_length = 10,default="")
-    typeControl = models.SlugField("device value value", max_length = 200,default="boolean")
+    control = models.BooleanField("управление",default=True)
+    type = models.SlugField("device value value", max_length = 200,default="binary")
     device = models.ForeignKey(Device, on_delete = models.CASCADE)
 
     def __str__(self):
-        return self.type +" "+ self.value
+        return self.name +" "+ self.value
 
     def receiveDictConf(self):
         return {
-            "type":self.type,
+            "name":self.name,
             "address":self.address,
             "low":self.low,
             "high":self.high,
+            "values":self.values,
             "icon":self.icon,
             "unit":self.unit,
-            "typeControl":self.typeControl
+            "type":self.type,
+            "control":self.control
         }
 
     def receiveDict(self):
         return {
-            "type":self.type,
+            "name":self.name,
             "value":self.value,
         }
 
