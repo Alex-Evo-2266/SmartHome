@@ -150,7 +150,7 @@ if(carts===[]){
       <CartEdit/>
       <AddControl/>
       <EditToolbar show={editMode} save={saveCarts}/>
-      <div className = {`conteiner top home`}>
+      <div className = {`conteiner top bottom home`}>
         <div ref={conteiner} className = "conteinerHome flexHome">
         {
           sortedCarts.map((item,index)=>{

@@ -35,8 +35,12 @@ class DeviceConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        message = ""
+        try:
+            text_data_json = json.loads(text_data)
+            message = text_data_json['message']
+        except Exception as e:
+            print("no json")
 
         if self.room_group_name=="chat_devices" and message=="all":
             nowtime = datetime.datetime.now().second

@@ -1,11 +1,18 @@
 @import "./tableMqtt.color.css";
 
+.mqttTableDiv{
+  margin: 0;
+  padding: 0;
+  width: calc(100% - 10px);
+  overflow: scroll;
+}
 table.mqttTable{
   margin-top: 15px;
   width: 100%;
   border-collapse: separate;
   border-spacing: 3px;
   background: #333;
+
 }
 table.mqttTable tr{
   background: #ccc;

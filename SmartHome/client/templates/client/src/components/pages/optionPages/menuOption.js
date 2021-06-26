@@ -6,6 +6,7 @@ import {Loader} from '../../Loader'
 import {MenuComponent} from './menuOptionComponents/component'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
+import {menuField} from '../../verticalMenu/data.menu.js'
 
 export const MenuOption = () =>{
   const auth = useContext(AuthContext)
@@ -16,17 +17,6 @@ export const MenuOption = () =>{
   const {loading, request, error, clearError} = useHttp();
   const [useBlock,setUseBlock] = useState([])
   const [noUseBlock,setNoUseBlock] = useState([])
-  const [paragraphs] = useState([
-    {title:"Scripts",iconClass:"fas fa-code-branch",url:"/scripts"},
-    {title:"Nas",iconClass:"fas fa-hdd",url:"/nas"},
-    {title:"MQTT",iconClass:"fas fa-network-wired",url:"/mqtt"},
-    {title:"zigbee2mqtt",iconClass:"fas fa-network-wired",url:"/zigbee2mqtt"},
-    // {title:"Files",iconClass:"fas fa-file",url:"/files/gallery"},
-    {title:"Gallery",iconClass:"fas fa-images",url:"/gallery"},
-    {title:"Terminal",iconClass:"fas fa-terminal",url:"/terminal"},
-    {title:"Сhart",iconClass:"fas fa-chart-area",url:"/chart"},
-    {title:"Rooms",iconClass:"fab fa-buromobelexperte",url:"/rooms"},
-  ])
 
   useEffect(()=>{
     message(error,"error")
@@ -44,7 +34,7 @@ export const MenuOption = () =>{
 
   const updataConf = useCallback(async()=>{
     if(!config||!config.MenuElements)return;
-    let newarr = paragraphs
+    let newarr = menuField
     let newarr2 = config.MenuElements
     for (var item of config.MenuElements) {
       let y = item
@@ -52,7 +42,7 @@ export const MenuOption = () =>{
     }
     setNoUseBlock(newarr)
     setUseBlock(newarr2)
-  },[config,paragraphs])
+  },[config,menuField])
 
   useEffect(()=>{
   },[config,useBlock])
@@ -73,7 +63,7 @@ export const MenuOption = () =>{
   const deleteParagraph = (title,icon,url)=>{
     let usearr = useBlock
     let nousearr = noUseBlock
-    for (var item of paragraphs) {
+    for (var item of menuField) {
       if(item.title === title){
         nousearr.push({title,iconClass:icon,url})
         usearr = usearr.filter((item)=>item.title!==title)

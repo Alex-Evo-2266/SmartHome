@@ -86,6 +86,8 @@ header .search.show + .controls{
   header{
     z-index: 10;
     box-shadow: none;
+    left: 0;
+    width: 100%;
   }
   header h1{
     display: none;

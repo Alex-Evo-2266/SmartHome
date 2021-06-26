@@ -19,6 +19,9 @@
 *.top{
   padding-top: 60px;
 }
+*.bottom{
+  padding-bottom: 90px;
+}
 /* .conteiner.home
 {
   min-height: calc(100vh - 30px);
@@ -45,10 +48,10 @@
 } */
 @media (max-width: 700px){
   .conteiner{
-    padding: 70px 0 0 0;
+    padding-left: 0;
     width: 100%;
   }
   .conteiner.home{
-    padding:0;
+    padding-top:0;
   }
 }
