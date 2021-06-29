@@ -83,6 +83,19 @@ if(getTypeField()==="binary"){
     </BaseElement>
   )
 }
-return null
-
+return (
+  <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
+    <div className="icon">
+      <div className="circle">
+      {
+        (itemField()&&itemField().icon)?
+        <i className={itemField().icon}></i>:
+        <i className="fas fa-circle-notch"></i>
+      }
+      </div>
+    </div>
+    <p className= "sensor-name">{device.DeviceName}</p>
+    <p className= "state">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
+  </BaseElement>
+)
 }

@@ -72,7 +72,7 @@ export const GalleryPage = () => {
       <ImageDitail data={ditailElement} hide={()=>setVisible(false)}/>:
       null
     }
-    <div className="top">
+    <div className="top bottom">
       <ImagesInput update={getTenUrl}/>
       <div className="galeryContent top">
       {

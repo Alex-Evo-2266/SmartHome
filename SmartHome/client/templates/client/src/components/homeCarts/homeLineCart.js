@@ -7,6 +7,7 @@ import {CartEditContext} from './EditCarts/CartEditContext'
 import {SliderElement} from './CartLineElement/SliderElement'
 import {SensorElement} from './CartLineElement/SensorElement'
 import {ScriptElement} from './CartLineElement/ScriptElement'
+import {EnumElement} from './CartLineElement/EnumElement'
 // import {WeatherElement} from './CartElement/WeatherElement'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
@@ -91,6 +92,10 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
     },"no")
   }
 
+  const splitType = (type)=>{
+    return type.split("-")
+  }
+
   const editElement = (index1,data1)=>{
     console.log(data1);
     if(!data1||!data1.order||!data1.width||!data1.height)
@@ -146,7 +151,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
           return(
             <li key={index}>
               {
-                (item.type==="line-button")?
+                (item.type==="button")?
                   <div className="line-button">
                     <BtnElement
                     index={item.index}
@@ -159,8 +164,22 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                       (edit)?editElement:null
                     }
                     />
+                  </div>:
+                  (item.type==="enum")?
+                  <div className="line-slider">
+                  <EnumElement
+                  index={item.index}
+                  disabled={edit}
+                  data={item}
+                  deleteBtn={
+                    (edit)?deleteElement:null
+                  }
+                  editBtn={
+                    (edit)?editElement:null
+                  }
+                  />
                   </div>
-                :(item.type==="line-slider")?
+                :(item.type==="slider")?
                   <div className="line-slider">
                   <SliderElement
                   index={item.index}
@@ -174,7 +193,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                   }
                   />
                   </div>
-                  :(item.type==="line-script")?
+                  :(item.type==="script")?
                     <div className="line-script">
                     <ScriptElement
                     index={item.index}
@@ -188,7 +207,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     }
                     />
                     </div>
-                    :(item.type==="line-sensor"||item.type==="line-booleanSensor")?
+                    :(splitType(item.type)[0]==="sensor")?
                       <div className="line-sensor">
                       <SensorElement
                       index={item.index}

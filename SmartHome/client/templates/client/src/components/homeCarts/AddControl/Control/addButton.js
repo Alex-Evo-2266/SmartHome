@@ -82,6 +82,7 @@ export const AddButton = ({add})=>{
     if(!device||!device.DeviceConfig||!buttonForm.typeAction)return
     for (var item of device.DeviceConfig) {
       if(item.name===buttonForm.typeAction){
+        console.log("data",item);
         return item
       }
     }
@@ -109,6 +110,12 @@ export const AddButton = ({add})=>{
   const out = (type)=>{
     setButtonForm({...buttonForm,typeAction:type})
     add({...buttonForm,typeAction:type})
+  }
+
+  const valuesDecod = (data)=>{
+    let newstr = data.split(" ").join("");
+    let arr1 = newstr.split(",")
+    return arr1
   }
 
   if(!device||!device.DeviceId){
@@ -152,7 +159,7 @@ export const AddButton = ({add})=>{
       </ul>
     )
   }
-  if (itemField()&&itemField().typeControl==="text"&&buttonForm.typeAction) {
+  if (itemField()&&itemField().type==="text"&&buttonForm.typeAction) {
     return(
       <ul>
         <li className="noAnim">
@@ -167,6 +174,28 @@ export const AddButton = ({add})=>{
       <ul>
         <li className="noAnim">
           <input value={buttonForm.action} onChange={(event)=>setButtonForm({...buttonForm,action:event.target.value})}/>
+          <button onClick={outaction}>Ok</button>
+        </li>
+      </ul>
+    )
+  }
+  if(itemField()&&itemField().type==="enum"&&buttonForm.typeAction){
+    if(!buttonForm.action){
+      setButtonForm({...buttonForm,action:"targetField"})
+    }
+    return(
+      <ul>
+        <li className="noAnim">
+          <select name="" value={buttonForm.action} onChange={(event)=>setButtonForm({...buttonForm,action:event.target.value})}>
+          <option value="targetField">targetField</option>
+          {
+            valuesDecod(itemField().values).map((item,index)=>{
+              return(
+                <option key={index} value={item}>{item}</option>
+              )
+            })
+          }
+          </select>
           <button onClick={outaction}>Ok</button>
         </li>
       </ul>

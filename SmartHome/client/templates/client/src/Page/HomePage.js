@@ -105,13 +105,13 @@ useEffect(()=>{
   importCarts()
 },[importCarts])
 
-const sortCard = useCallback((data)=>{
+const sortCard = useCallback((data,width)=>{
+  console.log("c");
   let column = 3
   let i = 0
-  let width = conteiner.current.clientWidth
-  if(width < 1070)
+  if(width < 1300)
     column = 2
-  if(width < 800){
+  if(width < 900){
     i=0
     column = 1
   }
@@ -133,8 +133,24 @@ const sortCard = useCallback((data)=>{
 },[])
 
 useEffect(()=>{
-  sortCard(carts)
-},[carts,sortCard])
+  sortCard(carts,conteiner.current.clientWidth)
+},[sortCard,carts])
+
+useEffect(()=>{
+  window.addEventListener("resize",resizeThrottler)
+  var resizeTimeout;
+  function resizeThrottler(event) {
+    if ( !resizeTimeout ) {
+      resizeTimeout = setTimeout(function() {
+        resizeTimeout = null;
+        sortCard(carts,event.target.innerWidth)
+       }, 66);
+    }
+  }
+  return ()=>{
+    window.removeEventListener("resize", resizeThrottler);
+  }
+},[sortCard,carts])
 
 if(carts===[]){
   return(

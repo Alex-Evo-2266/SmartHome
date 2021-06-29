@@ -6,6 +6,7 @@ import {useMessage} from '../../hooks/message.hook'
 import {Power} from './newDeviceControlElements/power'
 import {Dimmer} from './newDeviceControlElements/dimmer'
 import {Mode} from './newDeviceControlElements/mode'
+import {Enum} from './newDeviceControlElements/enum'
 // import {Color} from './newDeviceControlElements/color'
 import {DeviceStatusContext} from '../../context/DeviceStatusContext'
 import {AuthContext} from '../../context/AuthContext.js'
@@ -67,6 +68,9 @@ export const NewDeviceElement = ({id}) =>{
             }
             if(item.type==="number"&& item.control){
               return <Mode key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.name]):0} type={item.name} conf={Number(item.high)}/>
+            }
+            if(item.type==="enum"&& item.control){
+              return <Enum key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?device.DeviceValue[item.name]:0} type={item.name} conf={item.values}/>
             }
             if(item.type==="text"&& item.control){
               return(

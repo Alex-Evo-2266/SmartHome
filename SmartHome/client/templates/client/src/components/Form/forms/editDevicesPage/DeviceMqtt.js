@@ -262,7 +262,7 @@ const changeHandlerTest = event=>{
               (item.type==="enum")?
               <label>
                 <h5>Enter the enum</h5>
-                <input data-id={index} className = "textInput" placeholder="enum" type="text" name="values" value={item.values} onChange={changeHandler} required/>
+                <input data-id={index} className = "textInput" placeholder="enum" type="text" name="values" value={item.values} onChange={changeHandlerField} required/>
               </label>
               :null
             }

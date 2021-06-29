@@ -5,6 +5,7 @@ import {AddButton} from './Control/addButton'
 import {AddSlider} from './Control/addSlider'
 import {AddScript} from './Control/addScript'
 import {AddSensor} from './Control/addSensor'
+import {AddEnum} from './Control/addEnum'
 
 const weather = {
   id:null,
@@ -28,9 +29,9 @@ export const AddControl = ()=>{
   }
 
   const addButton = (t)=>{
-    if(addControl.type === "AddLineButton"){
-      t.type = 'line-' + t.type
-    }
+    // if(addControl.type === "AddLineButton"){
+    //   t.type = 'line-' + t.type
+    // }
     if(addControl.OK){
       addControl.OK(t)
     }
@@ -53,7 +54,8 @@ export const AddControl = ()=>{
               <li onClick={()=>setTypeChild("script")}><span>2</span>scripts</li>
               <li onClick={()=>setTypeChild("slider")}><span>3</span>slider</li>
               <li onClick={()=>setTypeChild("sensor")}><span>4</span>sensor monitor</li>
-              <li onClick={()=>addButton(weather)}><span>5</span>weather</li>
+              <li onClick={()=>setTypeChild("enum")}><span>5</span>enum</li>
+              <li onClick={()=>addButton(weather)}><span>6</span>weather</li>
             </ul>:
             (typeChild==="button")?
             <AddButton add={addButton}/>:
@@ -62,7 +64,9 @@ export const AddControl = ()=>{
             (typeChild==="script")?
             <AddScript add={addButton}/>:
             (typeChild==="sensor")?
-            <AddSensor add={addButton}/>
+            <AddSensor add={addButton}/>:
+            (typeChild==="enum")?
+            <AddEnum add={addButton}/>
             :null
           }
         </div>

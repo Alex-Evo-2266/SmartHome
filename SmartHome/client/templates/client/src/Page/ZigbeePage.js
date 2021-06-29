@@ -32,7 +32,7 @@ export const ZigbeePage = ()=>{
   },[zigbeeDevice])
 
   return (
-    <div className="conteiner">
+    <div className="conteiner bottom">
       <Header name="Zigbee2mqtt">
         <button onClick={rebootStik} className="btn"><i className="fas fa-undo"></i></button>
       </Header>

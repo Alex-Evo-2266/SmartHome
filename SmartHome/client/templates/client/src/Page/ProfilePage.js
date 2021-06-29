@@ -72,7 +72,7 @@ export const ProfilePage = () => {
   }
 
   return(
-    <div className = "conteiner top">
+    <div className = "conteiner top bottom">
         <div className = "pages">
         {
           (loading)?

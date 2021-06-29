@@ -5,6 +5,7 @@ import {EditModeContext} from '../../context/EditMode'
 import {CartEditContext} from './EditCarts/CartEditContext'
 import {SliderElement} from './CartElement/SliderElement'
 import {SensorElement} from './CartElement/SensorElement'
+import {EnumElement} from './CartElement/EnumElement'
 import {ScriptElement} from './CartElement/ScriptElement'
 import {WeatherElement} from './CartElement/WeatherElement'
 import {useMessage} from '../../hooks/message.hook'
@@ -170,6 +171,18 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               index={item.index}
               data={item}
               disabled={edit}
+              deleteBtn={
+                (edit)?deleteElement:null
+              }
+              editBtn={
+                (edit)?editElement:null
+              }
+              />:
+              (item.type==="enum")?
+              <EnumElement
+              index={item.index}
+              disabled={edit}
+              data={item}
               deleteBtn={
                 (edit)?deleteElement:null
               }

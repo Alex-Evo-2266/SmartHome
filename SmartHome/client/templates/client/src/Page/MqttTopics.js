@@ -39,7 +39,7 @@ export const MqttPage = ()=>{
   }
 
   return (
-    <div className="conteiner">
+    <div className="conteiner bottom">
       <Header name="Mqtt">
         <button onClick={getDev} className="btn"><i className="fas fa-undo"></i></button>
         <button onClick={clearMqtt} className="btn"><i className="fas fa-trash"></i></button>

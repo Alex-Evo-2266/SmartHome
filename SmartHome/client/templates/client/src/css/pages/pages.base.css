@@ -9,10 +9,13 @@
  transform: translateX(-46%);
  width: 90%;
  height: 80vh;
+ padding-bottom: 90px;
 }
 .pages .page{
   display: none;
   position: relative;
+  left: 0;
+  top: 0;
   width: calc(100% - 64px);
   height: calc(100% - 4px);
   border-radius: 4px 0 4px 4px;
@@ -122,6 +125,7 @@ img.choice:hover
   .pages .page{
     width: 100%;
     top:60px;
+    left: 0;
     height: calc(100% - 60px);
     border-radius: 0 4px 4px 4px;
   }
