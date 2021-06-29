@@ -1,0 +1,34 @@
+else:
+- DeviceId: 5
+  action: field0text
+  type: device
+  value:
+    type: text
+    value: 'off'
+if:
+  action: null
+  children:
+  - action: field2
+    idDevice: 7
+    oper: '>'
+    type: device
+    value:
+      type: number
+      value: '50'
+  idDevice: null
+  oper: and
+  type: group
+  value: null
+name: test3
+status: true
+then:
+- DeviceId: 5
+  action: field0text
+  type: device
+  value:
+    type: text
+    value: tr
+trigger:
+- DeviceId: 7
+  action: field0
+  type: device

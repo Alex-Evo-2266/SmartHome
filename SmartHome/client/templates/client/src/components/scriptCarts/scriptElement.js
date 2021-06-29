@@ -23,18 +23,18 @@ export const ScriptElement = ({script,updata})=>{
   },[error,message, clearError])
 
   const deleteScript = async()=>{
-    await request(`/api/script/${script.id}`, 'DELETE',null ,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/${script.name}`, 'DELETE',null ,{Authorization: `Bearer ${auth.token}`})
     updata()
   }
 
   const runScript = async()=>{
-    await request(`/api/script/run/${script.id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/run/${script.name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   }
 
   const checkedHandler = async event => {
     console.log(event.target.checked);
     setStatus((prev)=>!prev)
-    await request('/api/script/set/status', 'POST', {id:script.id,status:!status},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/script/set/status', 'POST', {name:script.name,status:!status},{Authorization: `Bearer ${auth.token}`})
     if(typeof(updata)==="function")
     setTimeout(function () {
       updata()
@@ -46,7 +46,7 @@ export const ScriptElement = ({script,updata})=>{
       <p>{script.name}</p>
       <div className="scriptStatus">
         <button onClick={runScript} className="activateBtn">activate</button>
-        <button onClick={()=>history.push(`/scripts/edit/${script.id}`)} className="showBtn">edit</button>
+        <button onClick={()=>history.push(`/scripts/edit/${script.name}`)} className="showBtn">edit</button>
         <div className="switchConteiner">
         <p className="switchText">{status}</p>
         {

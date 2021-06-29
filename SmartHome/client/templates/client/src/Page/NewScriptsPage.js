@@ -156,54 +156,21 @@ export const NewScriptsPage = ({edit}) => {
     setCost(true)
   },[cost])
 
-  const givegroup = useCallback((data)=>{
-    console.log(data);
-    let cild = []
-    for (var item of data.block) {
-      cild.push(givegroup(item))
-    }
-    for (var item2 of data.elements) {
-      cild.push(item2)
-    }
-    let g = {type:"group" ,oper:data.type,children:cild}
-    return g
-  },[])
-
-  const givethen = (data)=>{
-    return data.filter((item)=>{
-      if (item.type==="then"){
-        item.type = item.typeAct
-        return true
-      }
-      return false
-    })
-  }
-
-  const giveelse = (data)=>{
-    return data.filter((item)=>{
-      if (item.type==="else"){
-        item.type = item.typeAct
-        return true
-      }
-      return false
-    })
-  }
-
   const giveScript = useCallback(async(idscript)=>{
     const data = await request(`/api/script/${idscript}`, 'Get', null,{Authorization: `Bearer ${auth.token}`})
     if(data){
       console.log(data);
-      let s = script
+      let s = {}
       s.name = data.name
-      s.if = givegroup(data.if)
+      s.if = data.if
       s.trigger = data.trigger
-      s.then = givethen(data.then)
-      s.else = giveelse(data.then)
+      s.then = data.then
+      s.else = data.else
       console.log(s);
       setScript(s)
       setCost(prev=>!prev)
     }
-  },[auth.token,givegroup,request,script])
+  },[auth.token,request])
 
   useEffect(()=>{
     if(id&&edit){

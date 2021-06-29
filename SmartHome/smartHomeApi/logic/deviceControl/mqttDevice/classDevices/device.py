@@ -51,6 +51,7 @@ class MqttDevice():
         else:
             message = command
         if(self.DeviceValueType=="json"):
+            print(message)
             data = dict()
             data[topic] = message
             data = json.dumps(data)
@@ -61,7 +62,7 @@ class MqttDevice():
 
     def runCommand(self,type:str, command:str):
         for item in self.DeviceConfig:
-            print("fg")
+            print("fg",type,command)
             if(item["name"]==type):
                 self.send(item["address"],command)
                 return

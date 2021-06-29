@@ -170,6 +170,7 @@ STATICFILES_DIRS = [
 ]
 
 SERVER_CONFIG = os.path.join(BASE_DIR, "config","server-config.yml")
+SCRIPTS_DIR = os.path.join(BASE_DIR, "config","scripts")
 
 TIME_UPPDATA = 6
 
