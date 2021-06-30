@@ -12,9 +12,7 @@ export const IfBlock = ({idDevice,updata,index,data,deleteEl})=>{
   const [device, setDevice]=useState({})
   const {devices} = useContext(DeviceStatusContext)
   const {showData} = useContext(AddScriptContext)
-  // const [type,setType] = useState(data.action??"")
   const [action,setAction] = useState(data.oper??"==")
-  // const [blockData/*, setData*/] = useState(data)
   const [field,setField] = useState({})
 
   const lookForDeviceById = useCallback((id)=>{
@@ -104,20 +102,16 @@ if(Object.keys(device).length == 0 || Object.keys(field).length == 0){
       </div>
       <div className="programm-function-block-content-item">
       <select value={action} onChange={changeSelector} name="oper">
+        <option value="==">==</option>
+        <option value="!=">!=</option>
         {
-          (field.name==="power")?
+          (field.type==="number")?
           <>
-            <option value="==">==</option>
-            <option value="!=">!=</option>
-          </>:
-          <>
-            <option value="==">==</option>
-            <option value="!=">!=</option>
             <option value=">=">{">="}</option>
             <option value="<=">{"<="}</option>
             <option value=">">{">"}</option>
             <option value="<">{"<"}</option>
-          </>
+          </>:null
         }
       </select>
       </div>
@@ -128,7 +122,7 @@ if(Object.keys(device).length == 0 || Object.keys(field).length == 0){
           <i className="fas fa-plus"></i>
         </div>:
         (data.value.type==="device")?
-        <ValueDeviceBlock data={data.value} updata={updataValue} deleteEl={deleteValue}/>:
+        <ValueDeviceBlock data={data.value} type={field.type} updata={updataValue} deleteEl={deleteValue}/>:
         (data.value.type==="text")?
         <TextBlock data={data.value} updata={updataValue} deleteEl={deleteValue}/>:
         (data.value.type==="number")?

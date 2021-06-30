@@ -62,7 +62,7 @@ export const MathBlock = ({data,updata,block,deleteEl})=>{
           <i className="fas fa-plus"></i>
         </div>:
         (data.value1.type==="device")?
-        <ValueDeviceBlock data={data.value1} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
+        <ValueDeviceBlock data={data.value1} type="number" updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
         (data.value1.type==="text")?
         <TextBlock data={data.value1} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
         (data.value1.type==="number")?
@@ -87,7 +87,7 @@ export const MathBlock = ({data,updata,block,deleteEl})=>{
           <i className="fas fa-plus"></i>
         </div>:
         (data.value2.type==="device")?
-        <ValueDeviceBlock data={data.value2} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
+        <ValueDeviceBlock data={data.value2} type="number" updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
         (data.value2.type==="text")?
         <TextBlock data={data.value2} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
         (data.value2.type==="number")?

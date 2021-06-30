@@ -114,25 +114,11 @@ export const AddScriptBase = ()=>{
           }
           </ul>
         </div>:
-        <AddScriptDevices result={shoseDevice} type={"if"}/>
+        <AddScriptDevices result={shoseDevice} type={"if"} typeDev={addScript.data.type}/>
       }
       </BackForm>
     )
   }
-
-  // <ul className="shoseBlock">
-  //   <li onClick={()=>shoseBlock("groupBlockAnd")}>
-  //     <GroupBlock type={"and"}>
-  //     </GroupBlock>
-  //   </li>
-  //   <li onClick={()=>shoseBlock("groupBlockOr")}>
-  //     <GroupBlock type={"or"}>
-  //     </GroupBlock>
-  //   </li>
-  //   <li onClick={()=>shoseBlock("deviceBlock")} style={{gridColumnStart:"1", gridColumnEnd:"3"}}>
-  //     <IfBlock/>
-  //   </li>
-  // </ul>
 
   if(addScript.type==="typeBlock"){
     return (

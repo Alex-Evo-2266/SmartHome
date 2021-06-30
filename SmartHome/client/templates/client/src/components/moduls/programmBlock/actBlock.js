@@ -107,7 +107,7 @@ if(Object.keys(device).length == 0 || Object.keys(field).length == 0){
           <i className="fas fa-plus"></i>
         </div>:
         (data.value.type==="device")?
-        <ValueDeviceBlock data={data.value} updata={updataValue} deleteEl={deleteValue}/>:
+        <ValueDeviceBlock data={data.value} type={field.type} updata={updataValue} deleteEl={deleteValue}/>:
         (data.value.type==="text")?
         <TextBlock data={data.value} updata={updataValue} deleteEl={deleteValue}/>:
         (data.value.type==="number")?

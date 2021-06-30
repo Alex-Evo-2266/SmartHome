@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useContext,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 
-export const ValueDeviceBlock = ({data,updata,index,deleteEl,block})=>{
+export const ValueDeviceBlock = ({data,updata,index,type,deleteEl,block})=>{
   const [device, setDevice]=useState({})
   const {devices} = useContext(DeviceStatusContext)
   const [field,setField] = useState({})
@@ -15,7 +15,6 @@ export const ValueDeviceBlock = ({data,updata,index,deleteEl,block})=>{
   }
 
   useEffect(()=>{
-    console.log(data);
     setDevice(lookForDeviceById(data.idDevice))
     setField(lookForField(lookForDeviceById(data.idDevice),data.action))
   },[lookForDeviceById,data])
@@ -24,6 +23,14 @@ export const ValueDeviceBlock = ({data,updata,index,deleteEl,block})=>{
     setField(lookForField(lookForDeviceById(data.idDevice),data.action))
     updata({index,action:event.target.value})
   }
+
+  const filtredOption = (options)=>options.filter((item)=>(
+    (type==="number"&&(item.type==="number"||item.type==="binary"))||
+    (type==="binary"&&item.type==="binary")||
+    (type==="text")||
+    (type==="enum"&&item.type==="enum")||
+    (!type)
+  ))
 
   if(Object.keys(device).length == 0 || Object.keys(field).length == 0){
     return null
@@ -37,7 +44,7 @@ export const ValueDeviceBlock = ({data,updata,index,deleteEl,block})=>{
       <div className="programm-function-block-content-item">
         <select value={field.name} onChange={changeSelector} name="property">
           {
-            device.DeviceConfig.map((item,index)=>{
+            filtredOption(device.DeviceConfig).map((item,index)=>{
               return(
                 <option key={index} value={item.name}>{item.name}</option>
               )
