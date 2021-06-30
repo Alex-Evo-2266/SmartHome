@@ -4,10 +4,9 @@ import {ValueDeviceBlock} from './valueDeviceBlock'
 import {TextBlock} from './textBlock'
 import {NumberBlock} from './numberBlock'
 
-export const MathBlock = ({data,updata,el,block,deleteEl})=>{
+export const MathBlock = ({data,updata,block,deleteEl})=>{
   const [type,setType] = useState(data.action??"+")
-  const [blockData/*, setData*/] = useState(data)
-  const {show} = useContext(AddScriptContext)
+  const {showData} = useContext(AddScriptContext)
 
 
   const changeSelector = event=>{
@@ -18,56 +17,39 @@ export const MathBlock = ({data,updata,el,block,deleteEl})=>{
   }
 
   const addvalue = (v)=>{
-    show("addValueMath",(typeValue,deviceData)=>{
+    showData("addValue",{type:"number"},(typeValue,deviceData)=>{
       let element = data
-      if(typeValue==="deviceBlock"){
-        let action = "power"
-        if(deviceData.DeviceType==="dimmer"){
-          action = "dimmer"
-        }
-        if(deviceData.DeviceType==="variable"){
-          action = "value"
-        }
-        if(deviceData.DeviceType==="sensor"||deviceData.DeviceType==="binarySensor"||deviceData.DeviceType==="other"){
-          action = "value"
-        }
-        element = {...element, [v]:{type:"device",idDevice:deviceData.DeviceId,action:action}}
-      }
-      if(typeValue==="Text"){
+      if(typeValue==="deviceBlock")
+        element = {...element, [v]:{type:"device",idDevice:deviceData.DeviceId,action:deviceData.DeviceConfig[0].name}}
+      if(typeValue==="Text")
         element = {...element, [v]:{type:"text",value:""}}
-      }
-      if(typeValue==="Number"){
+      if(typeValue==="Number")
         element = {...element, [v]:{type:"number",value:0}}
-      }
-      if(typeValue==="Math"){
+      if(typeValue==="Math")
         element = {...element, [v]:{type:"math",value1:null,value2:null,action:"+"}}
-      }
       updata(element)
     })
   }
 
   const updataValue = (data1,v)=>{
-    let element = blockData
+    let element = data
     let val = element[v]
-    if(val.type==="device"){
+    if(data[v].type==="device")
       val = {...val, action:data1.action}
-    }
-    if(val.type==="text"){
+    if(data[v].type==="text")
       val = {...val, value:data1.action}
-    }
-    if(val.type==="number"){
+    if(data[v].type==="number")
       val = {...val, value:data1.action}
-    }
-    if(val.type==="math"){
+    if(data[v].type==="enum")
+      val = {...val, value:data1.action}
+    if(data[v].type==="math")
       val = data1
-    }
     element[v] = val
     updata(element)
   }
 
   const deleteValue = (v)=>{
-    let element = data
-    element = {...element, [v]:null}
+    let element = {...data, [v]:null}
     updata(element)
   }
 
@@ -75,18 +57,18 @@ export const MathBlock = ({data,updata,el,block,deleteEl})=>{
     <div className="programm-function-block-root">
       <div className="programm-function-block-conteiner-item">
       {
-        (!blockData.value1)?
+        (!data.value1)?
         <div className="programm-function-block-content-item add" onClick={()=>{addvalue("value1")}}>
           <i className="fas fa-plus"></i>
         </div>:
-        (blockData.value1.type==="device")?
-        <ValueDeviceBlock deviceId={blockData.value1.idDevice} action={blockData.value1.action} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
-        (blockData.value1.type==="text")?
-        <TextBlock action={blockData.value1.value} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
-        (blockData.value1.type==="number")?
-        <NumberBlock action={blockData.value1.value} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
-        (blockData.value1.type==="math")?
-        <MathBlock data={blockData.value1} action={blockData.value1.value} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
+        (data.value1.type==="device")?
+        <ValueDeviceBlock data={data.value1} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
+        (data.value1.type==="text")?
+        <TextBlock data={data.value1} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
+        (data.value1.type==="number")?
+        <NumberBlock data={data.value1} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
+        (data.value1.type==="math")?
+        <MathBlock data={data.value1} updata={(d)=>updataValue(d,"value1")} deleteEl={()=>deleteValue("value1")}/>:
         null
       }
       </div>
@@ -100,18 +82,18 @@ export const MathBlock = ({data,updata,el,block,deleteEl})=>{
       </div>
       <div className="programm-function-block-conteiner-item">
       {
-        (!blockData.value2)?
+        (!data.value2)?
         <div className="programm-function-block-content-item add" onClick={()=>{addvalue("value2")}}>
           <i className="fas fa-plus"></i>
         </div>:
-        (blockData.value2.type==="device")?
-        <ValueDeviceBlock deviceId={blockData.value2.idDevice} action={blockData.value2.action} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
-        (blockData.value2.type==="text")?
-        <TextBlock action={blockData.value2.value} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
-        (blockData.value2.type==="number")?
-        <NumberBlock action={blockData.value2.value} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
-        (blockData.value2.type==="math")?
-        <MathBlock data={blockData.value2} action={blockData.value2.value} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
+        (data.value2.type==="device")?
+        <ValueDeviceBlock data={data.value2} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
+        (data.value2.type==="text")?
+        <TextBlock data={data.value2} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
+        (data.value2.type==="number")?
+        <NumberBlock data={data.value2} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
+        (data.value2.type==="math")?
+        <MathBlock data={data.value2} updata={(d)=>updataValue(d,"value2")} deleteEl={()=>deleteValue("value2")}/>:
         null
       }
       </div>

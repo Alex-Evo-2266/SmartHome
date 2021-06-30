@@ -3,100 +3,82 @@ import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 import {AddScriptContext} from '../../addScript/addScriptContext'
 import {ValueDeviceBlock} from './valueDeviceBlock'
 import {TextBlock} from './textBlock'
+import {EnumBlock} from './enumBlock'
 import {NumberBlock} from './numberBlock'
 import {MathBlock} from './mathBlock'
-// import {ifClass} from '../../../myClass.js'
 
-export const ActBlock = ({idDevice,updata,index,data,el,deleteEl})=>{
+export const ActBlock = ({updata,index,data,deleteEl})=>{
   const [device, setDevice]=useState({})
   const {devices} = useContext(DeviceStatusContext)
-  const {show} = useContext(AddScriptContext)
-  const [type,setType] = useState(data.action??"")
-  const [blockData/*, setData*/] = useState(data)
-  const [allTypes,setAllTypes] = useState([])
-
+  const {showData} = useContext(AddScriptContext)
+  const [field,setField] = useState({})
 
   const lookForDeviceById = useCallback((id)=>{
-    let condidat = devices.filter((item)=>item.DeviceId===id)
-    condidat = condidat[0]
-    let array = []
-    if(condidat){
-      for (var item of condidat.DeviceConfig) {
-        array.push(item.name)
-      }
-    }
-    setAllTypes(array)
-    return condidat;
+    return devices.filter((item)=>item.DeviceId===id)[0]
   },[devices])
 
+  const lookForField = (device,name)=>{
+    return device.DeviceConfig.filter((item)=>item.name===name)[0]
+  }
+
+  const valuesDecod = (data)=> data.split(" ").join("").split(",")
+
   useEffect(()=>{
-    setDevice(lookForDeviceById(idDevice))
-  },[lookForDeviceById,idDevice])
+    setDevice(lookForDeviceById(data.DeviceId))
+    setField(lookForField(lookForDeviceById(data.DeviceId),data.action))
+  },[lookForDeviceById,data])
 
+  const changeSelector = (event)=>{
+    let element = {...data, [event.target.name]:event.target.value}
+    if(event.target.name==="action")
+      setField(lookForField(lookForDeviceById(data.DeviceId),element.action))
+    updata({...element,index})
+  }
 
-const updataValue = (data1)=>{
-  let element = data
-  let val = element.value
-  if(blockData.value.type==="device"){
-    val = {...val, action:data1.action}
+  const updataValue = (data1)=>{
+    let element = data
+    let val = element.value
+    if(data.value.type==="device")
+      val = {...val, action:data1.action}
+    if(data.value.type==="text")
+      val = {...val, value:data1.action}
+    if(data.value.type==="number")
+      val = {...val, value:data1.action}
+    if(data.value.type==="enum")
+      val = {...val, value:data1.action}
+    if(data.value.type==="math")
+      val = data1
+    element.value = val
+    updata({...element,index})
   }
-  if(blockData.value.type==="text"){
-    val = {...val, value:data1.action}
-  }
-  if(blockData.value.type==="number"){
-    val = {...val, value:data1.action}
-  }
-  if(blockData.value.type==="math"){
-    val = data1
-  }
-  element.value = val
-  console.log(element.value);
-  updata({...element,index})
-}
+
 
 const addvalue = ()=>{
-  show("addValue",(typeValue,deviceData)=>{
-    console.log(typeValue,deviceData);
+  showData("addValue",{type:field.type},(typeValue,deviceData)=>{
     let element = data
-    if(typeValue==="deviceBlock"){
-      let action = "power"
-      if(deviceData.DeviceType==="dimmer"){
-        action = "dimmer"
-      }
-      if(deviceData.DeviceType==="variable"){
-        action = "value"
-      }
-      if(deviceData.DeviceType==="sensor"||deviceData.DeviceType==="binarySensor"||deviceData.DeviceType==="other"){
-        action = "value"
-      }
-      element = {...element, value:{type:"device",idDevice:deviceData.DeviceId,action:action}}
-    }
-    if(typeValue==="Text"){
+    if(typeValue==="deviceBlock")
+      element = {...element, value:{type:"device",idDevice:deviceData.DeviceId,action:deviceData.DeviceConfig[0].name}}
+    if(typeValue==="Text")
       element = {...element, value:{type:"text",value:""}}
-    }
-    if(typeValue==="Number"){
+    if(typeValue==="Number")
       element = {...element, value:{type:"number",value:0}}
-    }
-    if(typeValue==="Math"){
+    if(typeValue==="Math")
       element = {...element, value:{type:"math",value1:null,value2:null,action:"+"}}
-    }
+    if(typeValue==="Enum"&&field.type==="binary")
+      element = {...element, value:{type:"enum",value:"low"}}
+    if(typeValue==="Enum"&&field.type==="enum")
+      element = {...element, value:{type:"enum",value:valuesDecod(field.values)[0]}}
     updata({...element,index})
   })
 }
 
 const deleteValue = ()=>{
-  let element = data
-  element = {...element, value:null}
+  let element = {...data, value:null}
   updata({...element,index})
 }
 
-const changeSelector = event=>{
-  let element = data
-  if(event.target.name==="type"){
-    setType(event.target.value)
-    element = {...element, action:event.target.value}
-  }
-  updata({...element,index})
+if(Object.keys(device).length == 0 || Object.keys(field).length == 0){
+  return null
 }
 
   return(
@@ -105,11 +87,11 @@ const changeSelector = event=>{
         {(device)?device.DeviceName:"Name"}
       </div>
       <div className="programm-function-block-content-item">
-        <select value={type} onChange={changeSelector} name="type">
+        <select value={field.name} onChange={changeSelector} name="action">
           {
-            allTypes.map((item,index)=>{
+            device.DeviceConfig.map((item,index)=>{
               return(
-                <option key={index} value={item}>{item}</option>
+                <option key={index} value={item.name}>{item.name}</option>
               )
             })
           }
@@ -120,18 +102,22 @@ const changeSelector = event=>{
       </div>
       <div className="programm-function-block-conteiner-item">
       {
-        (!blockData.value)?
+        (!data.value)?
         <div className="programm-function-block-content-item add" onClick={()=>{addvalue()}}>
           <i className="fas fa-plus"></i>
         </div>:
-        (blockData.value.type==="device")?
-        <ValueDeviceBlock deviceId={blockData.value.idDevice} action={blockData.value.action} updata={updataValue} deleteEl={deleteValue}/>:
-        (blockData.value.type==="text")?
-        <TextBlock action={blockData.value.value} updata={updataValue} deleteEl={deleteValue}/>:
-        (blockData.value.type==="number")?
-        <NumberBlock action={blockData.value.value} updata={updataValue} deleteEl={deleteValue}/>:
-        (blockData.value.type==="math")?
-        <MathBlock data={blockData.value} action={blockData.value.value} updata={updataValue} deleteEl={deleteValue}/>:
+        (data.value.type==="device")?
+        <ValueDeviceBlock data={data.value} updata={updataValue} deleteEl={deleteValue}/>:
+        (data.value.type==="text")?
+        <TextBlock data={data.value} updata={updataValue} deleteEl={deleteValue}/>:
+        (data.value.type==="number")?
+        <NumberBlock data={data.value} updata={updataValue} deleteEl={deleteValue}/>:
+        (data.value.type==="math")?
+        <MathBlock data={data.value} updata={updataValue} deleteEl={deleteValue}/>:
+        (data.value.type==="enum"&&field.type==="enum")?
+        <EnumBlock data={data.value} values={valuesDecod(field.values)} updata={updataValue} deleteEl={deleteValue}/>:
+        (data.value.type==="enum"&&field.type==="binary")?
+        <EnumBlock data={data.value} values={["high","low","togle"]} updata={updataValue} deleteEl={deleteValue}/>:
         null
       }
       </div>

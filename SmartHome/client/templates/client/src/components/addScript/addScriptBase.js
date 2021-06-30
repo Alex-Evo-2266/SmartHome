@@ -79,6 +79,7 @@ export const AddScriptBase = ()=>{
   }
 
   if(addScript.type==="addValue"||addScript.type==="addValueMath"){
+    console.log("shose",addScript.data);
     return(
       <BackForm onClick={close} className="addElementBody">
       {
@@ -87,13 +88,30 @@ export const AddScriptBase = ()=>{
           <h2>type value</h2>
           <ul>
           {
-            (addScript.type==="addValue")?
+            (addScript.type==="addValue"&&addScript.data.type==="text")?
             <li onClick={()=>shoseBlock("Text")}><span>1</span>input text</li>
             :null
           }
+          {
+            (addScript.data.type==="number" || addScript.type==="addValueMath")?
             <li onClick={()=>shoseBlock("Number")}><span>2</span>input number</li>
+            :null
+          }
+          {
+            (addScript.type==="addValueMath" || addScript.data.type==="number")?
             <li onClick={()=>shoseBlock("Math")}><span>3</span>Mathematical expression</li>
+            :null
+          }
+          {
+            (addScript.data.type!=="enum")?
             <li onClick={()=>shoseBlock("DeviceValue")}><span>4</span>Device value</li>
+            :null
+          }
+          {
+            (addScript.data.type==="enum" || addScript.data.type==="binary")?
+            <li onClick={()=>shoseBlock("Enum")}><span>3</span>state value</li>
+            :null
+          }
           </ul>
         </div>:
         <AddScriptDevices result={shoseDevice} type={"if"}/>

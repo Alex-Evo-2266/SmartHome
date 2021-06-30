@@ -23,16 +23,7 @@ const addEl = ()=>{
     }
     else if(typeblock==="deviceBlock"){
       let element = blockData
-      let act = "power"
-      if(dataDev.DeviceType==="dimmer"){
-        act = "dimmer"
-      }
-      if(dataDev.DeviceType==="variable"){
-        act = "value"
-      }
-      if(dataDev.DeviceType==="sensor"||dataDev.DeviceType==="binarySensor"||dataDev.DeviceType==="other"){
-        act = "value"
-      }
+      let act = dataDev.DeviceConfig[0].name
       element.children.push({type:"device" ,oper:"==",idDevice:dataDev.DeviceId,action:act,value:""})
       updata(element,index)
     }
@@ -73,7 +64,7 @@ const reqUpdata = (elementData,indexel)=>{
             if(item.type==="group"){
               return <GroupBlock index={index1} deleteEl={devEl} updata={reqUpdata} key={index1} type={item.oper} data={item}/>
             }
-            return <IfBlock key={index1} data={item} deleteEl={devEl} el={item.subif} index={index1} updata={reqUpdata} idDevice={item.idDevice}/>
+            return <IfBlock key={index1} data={item} deleteEl={devEl} index={index1} updata={reqUpdata} idDevice={item.idDevice}/>
           })
         :null
       }

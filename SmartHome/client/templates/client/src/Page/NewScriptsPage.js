@@ -52,21 +52,13 @@ export const NewScriptsPage = ({edit}) => {
 
   const addActBlock = (type)=>{
     show("typeAct",(_,typeAct)=>{
-      console.log(typeAct);
       setTimeout(function () {
         if(typeAct==="device"){
-          console.log("fg");
           show("deviceBlock",(_,dataDev)=>{
             if(!dataDev||!dataDev.DeviceId)
               return
             let mas = script;
-            let act = "power"
-            if(dataDev.DeviceType==="dimmer"){
-              act = "dimmer"
-            }
-            if(dataDev.DeviceType==="variable"){
-              act = "value"
-            }
+            let act = dataDev.DeviceConfig[0].name
             mas[type].push({type:"device",action:act,DeviceId:dataDev.DeviceId})
             setScript(mas)
           })
@@ -74,10 +66,10 @@ export const NewScriptsPage = ({edit}) => {
         if(typeAct==="script"){
           show("scriptBlock",(_,datascr)=>{
             console.log(datascr);
-            if(!datascr||!datascr.id)
+            if(!datascr||!datascr.name)
               return
             let mas = script;
-            mas[type].push({type:"script",action:"run",DeviceId:datascr.id})
+            mas[type].push({type:"script",action:"run",DeviceId:datascr.name})
             setScript(mas)
           })
         }
@@ -123,11 +115,10 @@ export const NewScriptsPage = ({edit}) => {
 
   const updatascript=(type,data)=>{
     let mas = script;
-    let components = mas[type]
+    let components = mas[type].slice()
     let component = components[data.index]
     for (var key in data) {
       if (key!=="index") {
-        console.log(key);
         component[key] = data[key]
       }
     }
@@ -239,10 +230,10 @@ export const NewScriptsPage = ({edit}) => {
               (cost)?
               script.then.map((item,index)=>{
                 if(item.type==="device"){
-                  return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then" idDevice={item.DeviceId}/>
+                  return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
                 }
                 if(item.type==="script"){
-                  return <ActScript deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then" idDevice={item.DeviceId}/>
+                  return <ActScript deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
                 }
               }):null
             }
@@ -260,10 +251,10 @@ export const NewScriptsPage = ({edit}) => {
               (cost)?
               script.else.map((item,index)=>{
                 if(item.type==="device"){
-                  return <ActBlock deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else" idDevice={item.DeviceId}/>
+                  return <ActBlock deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else"/>
                 }
                 if(item.type==="script"){
-                  return <ActScript deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else" idDevice={item.DeviceId}/>
+                  return <ActScript deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else"/>
                 }
               }):
               null
