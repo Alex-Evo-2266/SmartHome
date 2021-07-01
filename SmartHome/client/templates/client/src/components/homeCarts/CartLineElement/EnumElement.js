@@ -107,7 +107,7 @@ const changeHandler = (event)=>{
         </div>
       </div>
         <p className="name">{data.name}</p>
-        <div className="flex">
+
         {
           (deviceConfig&&deviceConfig.values)?
           <select value={value} onChange={changeHandler}>
@@ -121,8 +121,6 @@ const changeHandler = (event)=>{
           </select>
           :null
         }
-          <div className="state">{value}</div>
-        </div>
     </BaseElement>
   )
 }

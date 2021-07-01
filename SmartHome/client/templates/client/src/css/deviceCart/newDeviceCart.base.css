@@ -50,6 +50,14 @@
 .DeviceLiControl{
   position: relative;
 }
+.DeviceLiControl select{
+  font-size: 18px;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+  min-width: 100px;
+  text-align: center;
+}
 .DeviceControlLiName{
   display: flex;
   align-items: center;

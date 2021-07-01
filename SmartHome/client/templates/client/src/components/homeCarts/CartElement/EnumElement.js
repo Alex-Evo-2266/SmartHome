@@ -109,7 +109,7 @@ const changeHandler = (event)=>{
   }
 
   return(
-    <label className={`BtnElement ${className} ${(disabled2)?"disabled":""}`}>
+    <label className={`EnumElement ${className} ${(disabled2)?"disabled":""}`}>
       <div className="icon-conteiner">
         <div>
         {

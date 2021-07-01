@@ -2,6 +2,7 @@
 @import "./Slider/slider.base.css";
 @import "./Sensor/sensor.base.css";
 @import "./Base/BaseCartElement.css";
+@import "./Enum/enum.base.css";
 @import "./Weather/Weather.css";
 @import "./homeCart.color.css";
 /*@import "./homeCart.night.css"; */

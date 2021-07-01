@@ -1,0 +1,19 @@
+.EnumElement select{
+  font-size: 18px;
+  width: calc(100% - 10px);
+  border: none;
+  border-radius: 2px;
+  outline: none;
+}
+.EnumElement .icon-box-enum{
+  width: 100%;
+}
+.EnumElement .icon-box-enum .icon{
+  padding: 4px;
+}
+.ElementLine select{
+  font-size: 18px;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+}
