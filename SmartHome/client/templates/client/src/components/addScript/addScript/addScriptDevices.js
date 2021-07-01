@@ -1,7 +1,7 @@
 import React, {useContext,useState,useEffect,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 
-export const AddScriptDevices = ({result,type})=>{
+export const AddScriptDevices = ({result,type,typeDev=null})=>{
   const {devices} = useContext(DeviceStatusContext)
   const [filteredDevices,setFilteredDevices] = useState([])
 
@@ -10,32 +10,27 @@ export const AddScriptDevices = ({result,type})=>{
       result(item)
   }
 
-  const filtered = useCallback((typeDev)=>{
-    let condidat
-    if(typeDev==="statusDev")
-      condidat = devices.filter((item)=>item.DeviceType!=="ir")
-    if(typeDev==="actDev")
-      condidat = devices.filter((item)=>(item.DeviceType!=="sensor"&&item.DeviceType!=="binarySensor"))
-    return condidat;
+  const filtered = useCallback(()=>{
+      setFilteredDevices(devices.filter((item)=>{
+        let flag = false
+        for (var item2 of item.DeviceConfig) {
+          if(
+            (typeDev==="number"&&(item2.type==="number"||item2.type==="binary"))||
+            (typeDev==="binary"&&item2.type==="binary")||
+            (typeDev==="text")||
+            (typeDev==="enum"&&item2.type==="enum")||
+            (!typeDev)
+          )flag = true
+          if(flag&&(type!=="act"||item2.control))
+            return true
+        }
+        return false
+      }))
   },[devices])
 
   useEffect(()=>{
-    if(type==="if")
-      return setFilteredDevices(filtered("statusDev"))
-    if(type==="act")
-      return setFilteredDevices(filtered("actDev"))
-    return setFilteredDevices(devices);
-  },[devices,type,filtered])
-
-  // <img alt={"type icon"} src={
-  //   (item.DeviceType==="light")?imgLight:
-  //   (item.DeviceType==="switch")?imgSwitch:
-  //   (item.DeviceType==="sensor")?imgSensor:
-  //   (item.DeviceType==="binarySensor")?imgBinarySensor:
-  //   (item.DeviceType==="dimmer")?imgDimmer:
-  //   (item.DeviceType==="ir")?imgIr:
-  //   imgUndefined
-  // }/>
+    filtered()
+  },[filtered])
 
   return(
     <div className="box">

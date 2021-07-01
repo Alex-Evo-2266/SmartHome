@@ -238,6 +238,7 @@ class SetValueDevice(APIView):
         data = json.loads(request.body)
         if setValue(data["id"],data["type"],data["status"]):
             return Response("ok",status=201)
+        return Response("err",status=400)
 
 class SetStatusDevice(APIView):
     """docstring for SetStatusDevice."""
@@ -353,31 +354,28 @@ class ScriptPostView(APIView):
 class ScriptGetDeletePutView(APIView):
     """docstring for ScriptView."""
 
-    def put(self,request,id):
+    def put(self,request,name):
         authData = auth(request)
         if not authData:
             return Response(status=403)
         data = json.loads(request.body)
-        print("erty",id)
-        print(data)
-        if(scriptDelete(id)):
-            print("delete")
+        if(scriptDelete(name)):
             if(addscript(data)):
-                print("create")
                 return Response("ok",status=200)
 
-    def get(self,request,id):
+    def get(self,request,name):
         authData = auth(request)
         if not authData:
             return Response(status=403)
-        Script = script(id)
+        fullname = name + ".yml"
+        Script = script(fullname)
         return Response(Script)
 
-    def delete(self,request,id):
+    def delete(self,request,name):
         authData = auth(request)
         if not authData:
             return Response(status=403)
-        if(scriptDelete(id)):
+        if(scriptDelete(name)):
             return Response("ok",status=201)
 
 class GetScripts(APIView):
@@ -396,16 +394,16 @@ class SetStatusScript(APIView):
         if not authData:
             return Response(status=403)
         data = json.loads(request.body)
-        if scriptsetstatus(data["id"],data["status"]):
+        if scriptsetstatus(data["name"],data["status"]):
             return Response("ok",status=200)
 
 class RunScript(APIView):
     """docstring for RunScript."""
-    def get(self,request,id):
+    def get(self,request,name):
         authData = auth(request)
         if not authData:
             return Response(status=403)
-        runscript(id)
+        runscript(name)
         return Response("ok",status=200)
 
 # image view

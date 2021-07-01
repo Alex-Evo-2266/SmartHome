@@ -38,6 +38,7 @@ ul.elementConteiner li .icon-conteiner{
   align-items: center;
   border-radius: 0;
   transition: 0.5s;
+  justify-content: center;
 }
 ul.elementConteiner li label .icon-conteiner p{
   margin-top: 5px;

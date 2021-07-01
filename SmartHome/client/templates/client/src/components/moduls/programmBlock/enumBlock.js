@@ -1,15 +1,11 @@
 import React,{useState} from 'react'
 
-export const TextBlock = ({data,updata,block,deleteEl})=>{
-  const [value,setValue] = useState(data.value??"")
-  const [delay, setDelay] = useState()
+export const EnumBlock = ({data,updata,block,deleteEl,values=[]})=>{
+  const [value,setValue] = useState(data.value)
 
   const changeHandler = event=>{
-    clearTimeout(delay)
     setValue(event.target.value)
-    setDelay(setTimeout(function () {
-      updata({action:event.target.value})
-    }, 2000))
+    updata({action:event.target.value})
   }
 
   return(
@@ -18,7 +14,15 @@ export const TextBlock = ({data,updata,block,deleteEl})=>{
         value
       </div>
       <div className="programm-function-block-content-item">
-        <input type="text" onChange={changeHandler} value={value}/>
+        <select onChange={changeHandler} value={value}>
+        {
+          values.map((item,index)=>{
+            return(
+              <option key={index} value={item}>{item}</option>
+            )
+          })
+        }
+        </select>
       </div>
       <div className="programm-function-block-content-item delete" onClick={()=>{deleteEl()}}>
         <i className="fas fa-trash"></i>

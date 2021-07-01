@@ -11,11 +11,6 @@ def addHomePage(name,information="",id=None)->HomePage:
     return page
 
 def addCartChildren(name,type,typeAction,order,action,device,homeCart,width=1,height=1):
-    # print(name,type,typeAction,order,action,device,homeCart)
-    # print(ids)
-    # if(len(ids)==1):
-    #     ids.append(ids[0]+1)
-    # id = ids.pop(0)
     id=genId(CartChildren.objects.all())
     element = CartChildren.objects.create(id=id,name=name,type=type,typeAction=typeAction,height=height,width=width,order=order,device=device,action=action,homeCart=homeCart)
     element.save()
@@ -82,7 +77,7 @@ def add_new_cartElement(new,cart):
     for item in new:
         if (not item["id"]):
             device = None
-            if (item["deviceId"]):
+            if (("deviceId" in item) and item["deviceId"]):
                 device = Device.objects.get(id=item["deviceId"])
             addCartChildren(item["name"],item["type"],item["typeAction"],item["order"],item["action"],device,cart,item["width"],item["height"])
 

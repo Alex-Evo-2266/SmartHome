@@ -1,32 +1,39 @@
 import React,{useState,useEffect,useContext,useCallback} from 'react'
 import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
 
-export const ValueDeviceBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>{
+export const ValueDeviceBlock = ({data,updata,index,type,deleteEl,block})=>{
   const [device, setDevice]=useState({})
   const {devices} = useContext(DeviceStatusContext)
-  const [type,setType] = useState(action??"power")
-  const [allTypes,setAllTypes] = useState([])
+  const [field,setField] = useState({})
 
   const lookForDeviceById = useCallback((id)=>{
-    let condidat = devices.filter((item)=>item.DeviceId===id)
-    condidat = condidat[0]
-    let array = []
-    if(condidat){
-      for (var item of condidat.DeviceConfig) {
-        array.push(item.name)
-      }
-    }
-    setAllTypes(array)
-    return condidat;
+    return devices.filter((item)=>item.DeviceId===id)[0]
   },[devices])
 
+  const lookForField = (device,name)=>{
+    return device.DeviceConfig.filter((item)=>item.name===name)[0]
+  }
+
   useEffect(()=>{
-    setDevice(lookForDeviceById(deviceId))
-  },[lookForDeviceById,deviceId])
+    setDevice(lookForDeviceById(data.idDevice))
+    setField(lookForField(lookForDeviceById(data.idDevice),data.action))
+  },[lookForDeviceById,data])
 
   const changeSelector = event=>{
-    setType(event.target.value)
+    setField(lookForField(lookForDeviceById(data.idDevice),data.action))
     updata({index,action:event.target.value})
+  }
+
+  const filtredOption = (options)=>options.filter((item)=>(
+    (type==="number"&&(item.type==="number"||item.type==="binary"))||
+    (type==="binary"&&item.type==="binary")||
+    (type==="text")||
+    (type==="enum"&&item.type==="enum")||
+    (!type)
+  ))
+
+  if(Object.keys(device).length == 0 || Object.keys(field).length == 0){
+    return null
   }
 
   return(
@@ -35,11 +42,11 @@ export const ValueDeviceBlock = ({deviceId,action,updata,index,el,block,deleteEl
         {(device)?device.DeviceName:"Name"}
       </div>
       <div className="programm-function-block-content-item">
-        <select value={type} onChange={changeSelector} name="property">
+        <select value={field.name} onChange={changeSelector} name="property">
           {
-            allTypes.map((item,index)=>{
+            filtredOption(device.DeviceConfig).map((item,index)=>{
               return(
-                <option key={index} value={item}>{item}</option>
+                <option key={index} value={item.name}>{item.name}</option>
               )
             })
           }

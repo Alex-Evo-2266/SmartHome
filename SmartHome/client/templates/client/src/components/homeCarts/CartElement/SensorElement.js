@@ -87,7 +87,7 @@ if(getTypeField()==="binary"){
       <div className="icon-conteiner">
         <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
         <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
-        <div className={`valueIndicator ${(getConfrg(data.typeAction).high.toLowerCase()===device.DeviceValue[data.typeAction].toLowerCase())?"true":"false"}`}></div>
+        <div className={`valueIndicator ${(device.DeviceValue[data.typeAction]==="1")?"true":"false"}`}></div>
       </div>
       <div className="delete-box">
       {

@@ -1,0 +1,35 @@
+else: []
+if:
+  action: null
+  children:
+  - action: field0
+    idDevice: 7
+    oper: '>='
+    type: device
+    value:
+      type: number
+      value: '60'
+  idDevice: null
+  oper: and
+  type: group
+  value: null
+name: testnew
+status: true
+then:
+- DeviceId: 5
+  action: field2number
+  type: device
+  value:
+    action: '*'
+    type: math
+    value1:
+      action: field1binary
+      idDevice: 5
+      type: device
+    value2:
+      type: number
+      value: '10'
+trigger:
+- DeviceId: 5
+  action: field1binary
+  type: device

@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
-export const NumberBlock = ({action,updata,el,block,deleteEl})=>{
-  const [value,setValue] = useState(Number(action)??0)
+export const NumberBlock = ({data,updata,block,deleteEl})=>{
+  const [value,setValue] = useState(Number(data.value)??0)
   const [delay, setDelay] = useState()
 
   const changeHandler = event=>{
