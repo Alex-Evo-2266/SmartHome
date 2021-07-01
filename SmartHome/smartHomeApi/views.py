@@ -238,6 +238,7 @@ class SetValueDevice(APIView):
         data = json.loads(request.body)
         if setValue(data["id"],data["type"],data["status"]):
             return Response("ok",status=201)
+        return Response("err",status=400)
 
 class SetStatusDevice(APIView):
     """docstring for SetStatusDevice."""

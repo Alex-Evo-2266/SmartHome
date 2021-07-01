@@ -215,6 +215,7 @@ class ValueDevice(models.Model):
 
     def receiveDict(self):
         return {
+            "id":self.id,
             "name":self.name,
             "value":self.value,
         }

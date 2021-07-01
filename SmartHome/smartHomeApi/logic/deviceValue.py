@@ -11,7 +11,6 @@ def devicestatus(id, type):
     return None
 
 def setValueAtToken(address,value):
-
     devices = Device.objects.all()
     for item in devices:
         base_address = item.DeviceAddress
@@ -34,16 +33,14 @@ def deviceSetStatus(id, type,value,script=True):
         if(value==None or type=="background"):
             return None
         dev = Device.objects.get(id=id)
-        # print("2")
         values = dev.valuedevice_set.all()
         for item in values:
             if item.name==type:
-                if(type=="power"):
-                    value = str(value)
+                if(item.type=="binary"):
                     if(value==item.high):
-                        value="1"
+                        value = "1";
                     elif(value==item.low):
-                        value="0"
+                        value = "0";
                     else:
                         return None
                 if(item.value != value):
@@ -51,10 +48,8 @@ def deviceSetStatus(id, type,value,script=True):
                     item.save()
                     if(script):
                         runScripts(id,type)
-                return value
+        return value
         print('not value error')
-
-
         return True
     except Exception as e:
         print('set value error ',e)

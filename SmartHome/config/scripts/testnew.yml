@@ -23,7 +23,7 @@ then:
     action: '*'
     type: math
     value1:
-      action: field0text
+      action: field1binary
       idDevice: 5
       type: device
     value2:

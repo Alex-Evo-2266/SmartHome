@@ -17,16 +17,16 @@ def setValue(id, type, value):
         device = deviceDect["device"]
 
         e = device
-        if(type=="modeTarget"):
-            e.target_mode()
-            return True
-        if(type=="variable"):
-            e.set_value(value)
-            return True
-        if(type=="value"):
-            e.set_value(int(value))
-            return True
-
+        # if(type=="modeTarget"):
+        #     e.target_mode()
+        #     return True
+        # if(type=="variable"):
+        #     e.set_value(value)
+        #     return True
+        # if(type=="value"):
+        #     e.set_value(int(value))
+        #     return True
+        print("p0")
         e.set_status(type,value)
         return True
     except Exception as ex:

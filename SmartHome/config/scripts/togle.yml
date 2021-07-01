@@ -1,20 +1,7 @@
-else:
-- DeviceId: 4
-  action: state
-  type: device
-  value:
-    type: enum
-    value: low
+else: []
 if:
   action: null
-  children:
-  - action: state
-    idDevice: 4
-    oper: ==
-    type: device
-    value:
-      type: enum
-      value: low
+  children: []
   idDevice: null
   oper: and
   type: group
@@ -27,5 +14,5 @@ then:
   type: device
   value:
     type: enum
-    value: high
+    value: togle
 trigger: []
