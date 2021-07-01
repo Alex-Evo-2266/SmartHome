@@ -6,7 +6,7 @@ import {AuthContext} from '../../../context/AuthContext.js'
 export const AddScriptsAct = ({result,type})=>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
-  const {loading,request, error, clearError} = useHttp();
+  const {request, error, clearError} = useHttp();
   const [scripts,setScripts] = useState([])
 
   useEffect(()=>{

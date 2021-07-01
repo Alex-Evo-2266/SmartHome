@@ -42,7 +42,7 @@ export const MenuOption = () =>{
     }
     setNoUseBlock(newarr)
     setUseBlock(newarr2)
-  },[config,menuField])
+  },[config])
 
   useEffect(()=>{
   },[config,useBlock])

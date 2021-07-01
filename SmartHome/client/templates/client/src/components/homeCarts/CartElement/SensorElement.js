@@ -9,7 +9,6 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   const [device, setDevice] = useState({})
 
   const lookForDeviceById = useCallback((id)=>{
-    console.log(id);
     if(!devices||!devices[0])
       return false
 
@@ -51,7 +50,6 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   }
 
 if(!device||!device.DeviceId){
-  console.log("wtf");
   return null;
 }
 if(getTypeField()==="number"||getTypeField()==="text"){

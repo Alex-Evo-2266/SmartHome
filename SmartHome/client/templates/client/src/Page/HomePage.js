@@ -106,7 +106,6 @@ useEffect(()=>{
 },[importCarts])
 
 const sortCard = useCallback((data,width)=>{
-  console.log("c");
   let column = 3
   let i = 0
   if(width < 1300)

@@ -20,7 +20,6 @@ export const AddScript = ({add})=>{
     add({
       id:null,
       name:item.name,
-      deviceId:null,
       type:"script",
       typeAction:"",
       order:0,

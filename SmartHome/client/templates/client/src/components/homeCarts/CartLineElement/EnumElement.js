@@ -13,7 +13,6 @@ export const EnumElement = ({data,className,index,children,name,onClick,disabled
   const [device, setDevice] = useState({})
   const [deviceConfig, setDeviceConfig] = useState({})
   const [disabled2, setDisabled] = useState(disabled)
-  const [switchMode, setSwitchMode] = useState(false)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
 
@@ -76,12 +75,10 @@ export const EnumElement = ({data,className,index,children,name,onClick,disabled
 
   useEffect(()=>{
     if(typeof(onClick)==="function"||!deviceConfig||!deviceConfig.name||!device||!device.DeviceValue||disabled||device.status==="offline")return;
-    console.log("er",device,deviceConfig);
     setValue(device.DeviceValue[deviceConfig.name])
   },[device,onClick,data,deviceConfig,disabled])
 
 const changeHandler = (event)=>{
-  let oldvel = value
   setValue(event.target.value)
 
   if(!data||!device)
@@ -110,7 +107,7 @@ const changeHandler = (event)=>{
 
         {
           (deviceConfig&&deviceConfig.values)?
-          <select value={value} onChange={changeHandler}>
+          <select value={value} onChange={changeHandler} disabled={disabled2}>
           {
             valuesDecod(deviceConfig.values).map((item,index)=>{
               return(

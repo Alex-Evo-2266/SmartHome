@@ -1,7 +1,4 @@
-import React,{useContext,useEffect,useState,useCallback} from 'react'
-import {useHttp} from '../../../hooks/http.hook'
-import {AuthContext} from '../../../context/AuthContext.js'
-import {useMessage} from '../../../hooks/message.hook'
+import React from 'react'
 
 export const ActScript = ({updata,index,data,deleteEl})=>{
 

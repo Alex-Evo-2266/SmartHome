@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 def set_to_list_dict(items):
     item_list = list()
@@ -222,9 +223,9 @@ class ValueDevice(models.Model):
 
 class ValueListDevice(models.Model):
     id = models.IntegerField("id", primary_key=True)
-    type = models.SlugField("device value list type", max_length = 200)
-    value = models.SlugField("device value list value", max_length = 200)
-    date = models.DateTimeField("device value element date")
+    name = models.SlugField("device name field", max_length = 200)
+    value = models.SlugField("device value list value", max_length = 200,default="")
+    date = models.DateTimeField("device value element date", auto_now=True)
     device = models.ForeignKey(Device, on_delete = models.CASCADE)
 
     def __str__(self):
@@ -232,7 +233,7 @@ class ValueListDevice(models.Model):
 
     def receiveDict(self):
         return {
-            "type":self.type,
+            "name":self.name,
             "value":self.value,
             "date":self.date
         }

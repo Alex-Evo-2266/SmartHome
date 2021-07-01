@@ -3,7 +3,6 @@ import {NavLink,Link,useHistory,useLocation} from 'react-router-dom'
 import {MenuContext} from './menuContext'
 import {AuthContext} from '../../context/AuthContext.js'
 import {UserContext} from '../../context/UserContext'
-import {AlertContext} from '../alert/alertContext.js'
 import {TerminalContext} from '../terminal/terminalContext.js'
 import {menuField} from './data.menu.js'
 
@@ -14,7 +13,6 @@ export const Menu = ()=>{
   const config = useContext(UserContext)
   const auth = useContext(AuthContext)
   const terminal = useContext(TerminalContext)
-  const {hide} = useContext(AlertContext)
   // const [visible, setVisible] = useState(false)
   const bot_menu = useRef(null)
   const [visiblesub, setVisiblesub] = useState(false)
@@ -30,7 +28,8 @@ export const Menu = ()=>{
       for (var item2 of menuField) {
         if(item.title===item2.title){
           a = true
-          arr2 = arr2.filter((item3)=>item3.title!==item.title)
+          let element = item
+          arr2 = arr2.filter((item3)=>item3.title!==element.title)
           break
         }
       }
@@ -47,7 +46,7 @@ export const Menu = ()=>{
       setField(data.include)
       setotherField(data.other)
     }
-  },[config])
+  },[config,giveField])
 
 const togleVisible=()=>{
   if(!visiblesub)
@@ -88,10 +87,6 @@ useEffect(()=>{
     window.removeEventListener("resize", resizeThrottler);
   }
 },[])
-
-useEffect(()=>{
-  console.log(sizeWidth);
-},[sizeWidth])
 
 useEffect(()=>{
   if(bot_menu.current){

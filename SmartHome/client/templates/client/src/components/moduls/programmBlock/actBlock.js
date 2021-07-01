@@ -77,7 +77,7 @@ const deleteValue = ()=>{
   updata({...element,index})
 }
 
-if(Object.keys(device).length == 0 || Object.keys(field).length == 0){
+if(Object.keys(device).length === 0 || Object.keys(field).length === 0){
   return null
 }
 

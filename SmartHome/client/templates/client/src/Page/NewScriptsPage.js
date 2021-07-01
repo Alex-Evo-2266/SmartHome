@@ -9,10 +9,8 @@ import {ActBlock} from '../components/moduls/programmBlock/actBlock'
 import {ActScript} from '../components/moduls/programmBlock/actScript'
 import {TriggerBlock} from '../components/moduls/programmBlock/triggerBlock'
 import {Loader} from '../components/Loader'
-// import {DeviceStatusContext} from '../context/DeviceStatusContext'
 import {AddScriptContext} from '../components/addScript/addScriptContext'
 import {useHistory,useParams} from 'react-router-dom'
-// import {groupIfClass,actClass,triggerClass} from '../myClass.js'
 
 export const NewScriptsPage = ({edit}) => {
   let {id} = useParams();
@@ -235,6 +233,7 @@ export const NewScriptsPage = ({edit}) => {
                 if(item.type==="script"){
                   return <ActScript deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
                 }
+                return null
               }):null
             }
             </div>
@@ -256,6 +255,7 @@ export const NewScriptsPage = ({edit}) => {
                 if(item.type==="script"){
                   return <ActScript deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else"/>
                 }
+                return null
               }):
               null
             }

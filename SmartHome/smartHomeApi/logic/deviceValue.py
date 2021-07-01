@@ -1,5 +1,6 @@
-from ..models import Device,Room,genId,ValueDevice
+from ..models import Device,Room,genId,ValueDevice,ValueListDevice
 from .runScript import runScripts
+from datetime import datetime
 import json
 
 def devicestatus(id, type):
@@ -43,6 +44,7 @@ def deviceSetStatus(id, type,value,script=True):
                         value = "0";
                     else:
                         return None
+                ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=type,value=value,device=dev)
                 if(item.value != value):
                     item.value = value
                     item.save()

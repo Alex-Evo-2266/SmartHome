@@ -9,19 +9,13 @@ export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0])
       return false
-    console.log(devices);
     let condidat = devices.filter((item)=>item.DeviceId===id)
     return condidat[0]
   },[devices])
 
   useEffect(()=>{
-    console.log(device);
-  },[device])
-
-  useEffect(()=>{
     if(!data||!data.deviceId)
       return
-    console.log("1");
     setDevice(lookForDeviceById(data.deviceId))
   },[devices,data,onClick,lookForDeviceById])
 

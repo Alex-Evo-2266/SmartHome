@@ -26,7 +26,7 @@ export const AddScriptDevices = ({result,type,typeDev=null})=>{
         }
         return false
       }))
-  },[devices])
+  },[devices,type,typeDev])
 
   useEffect(()=>{
     filtered()
