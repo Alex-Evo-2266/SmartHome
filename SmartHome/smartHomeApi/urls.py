@@ -16,6 +16,7 @@ urlpatterns = [
     path('devices',views.DevicePutPostView.as_view()),
     path('devices/value/set',views.SetValueDevice.as_view()),
     path('devices/status/set',views.SetStatusDevice.as_view()),
+    path('charts/get',views.GetCharts.as_view()),
     path('mqtt',views.MqttDevice.as_view()),
     path('mqtt/clear',views.MqttClear.as_view()),
     path('zigbee2mqtt/reboot',views.Zigbee2mqttReboot.as_view()),

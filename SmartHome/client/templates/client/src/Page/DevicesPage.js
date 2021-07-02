@@ -1,5 +1,5 @@
 import React, {useContext,useEffect,useState,useRef} from 'react'
-import {NavLink,Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {Header} from '../components/moduls/header'
 import {NewDeviceElement} from '../components/moduls/newDeviceElement'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
@@ -29,7 +29,6 @@ export const DevicesPage = () => {
   return(
       <div className = "conteiner top bottom">
         <Header search={searchout} name="Device All">
-        <NavLink to="/devices" exact={true} className="btn">All</NavLink>
         <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
         </Header>
         <div className = "Devices">

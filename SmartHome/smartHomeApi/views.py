@@ -18,6 +18,7 @@ from .logic.weather import Weather
 from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopicks
 from .logic.deviceControl.zigbee.zigbee import reboot
 from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices
+from .logic.charts import getCharts
 
 from .models import User, UserConfig,ImageBackground,genId,LocalImage,Device
 
@@ -252,6 +253,16 @@ class SetStatusDevice(APIView):
         dev.DeviceStatus = data["status"]
         dev.save()
         return Response("ok",status=201)
+
+# Charts
+class GetCharts(APIView):
+    """docstring for GetCharts."""
+    def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        charts = getCharts()
+        return Response(charts,status=200)
 
 # mqtt
 

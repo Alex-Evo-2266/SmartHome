@@ -14,6 +14,7 @@ import {AddDevicesPage} from './Page/AddDevicePage'
 import {AddMoviePage} from './Page/addFilesPages/NewMovie'
 import {AddActorPage} from './Page/addFilesPages/NewActors'
 import {AddGanrePage} from './Page/addFilesPages/NewGanre'
+import {ChartsPage} from './Page/ChartPage'
 import {MovieDitail} from './Page/filespage/movieDitail'
 import {MqttPage} from './Page/MqttTopics'
 import {ZigbeePage} from './Page/ZigbeePage'
@@ -63,6 +64,12 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/gallery">
           <GalleryPage/>
         </Route>
+        <Route path="/chart">
+          <ChartsPage/>
+        </Route>
+
+
+
         <Route path="/movie/add" exact>
           <AddMoviePage/>
         </Route>
@@ -78,6 +85,8 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/category/add" exact>
           <AddGanrePage type="category"/>
         </Route>
+
+
         <Route path="/devices/ditail/:id">
           <DitailDevicePage/>
         </Route>

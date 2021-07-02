@@ -233,6 +233,7 @@ class ValueListDevice(models.Model):
 
     def receiveDict(self):
         return {
+            "device":self.device.DeviceSystemName,
             "name":self.name,
             "value":self.value,
             "date":self.date
