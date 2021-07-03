@@ -1,0 +1,29 @@
+canvas.chart{
+  border: 1px solid #000;
+
+}
+.chartCart{
+  background: #fff;
+}
+
+.chartContent{
+  position: relative;
+}
+
+.chart-tooltip{
+  position: absolute;
+    display: none;
+    max-width: 200px;
+    min-width: 120px;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #dfe6eb;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.05);
+    background: #fff;
+    color: #000;
+    overflow: hidden;
+    z-index: 3;
+
+    top: 50px;
+    left: 100px;
+}

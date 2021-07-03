@@ -2,7 +2,7 @@ from ..models import ValueListDevice,Device
 from datetime import datetime,timedelta
 
 def blankSheet(values):
-    newVal = {"time_line":[]}
+    newVal = dict()
     for item in values:
         if(not(item.device.DeviceSystemName in newVal)):
             newVal[item.device.DeviceSystemName] = dict()
@@ -49,21 +49,22 @@ def timesort(data):
 
 def formData(data,time,data2):
     newVal = data
-    newVal["time_line"] = time
+    timeStamp = list()
     for item in time:
         index = time.index(item)
         for item2 in data2:
             if(item==item2["date"]):
                 newVal[item2["device"]][item2["name"]].append(item2["value"])
         for key in newVal:
-            if(key != "time_line"):
-                for key2 in newVal[key]:
-                    if(len(newVal[key][key2])-1 < index):
-                        if(index==0):
-                            newVal[key][key2].append(None)
-                        else:
-                            newVal[key][key2].append(newVal[key][key2][len(newVal[key][key2])-1])
-    return newVal
+            for key2 in newVal[key]:
+                if(len(newVal[key][key2])-1 < index):
+                    if(index==0):
+                        newVal[key][key2].append(None)
+                    else:
+                        newVal[key][key2].append(newVal[key][key2][len(newVal[key][key2])-1])
+    for item in time:
+        timeStamp.append(item.timestamp() * 1000)
+    return {"time_line":timeStamp,"lines":newVal}
 
 def getCharts():
     values = ValueListDevice.objects.all()
