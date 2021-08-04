@@ -1,6 +1,6 @@
 mail:
-  login: smarthome2244@mail.ru
-  password: 66dfghty
+  login: ''
+  password: ''
 mqttBroker:
   host: localhost
   password: admin
