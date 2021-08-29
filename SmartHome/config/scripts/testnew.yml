@@ -2,13 +2,13 @@ else: []
 if:
   action: null
   children:
-  - action: field0
-    idDevice: 7
-    oper: '>='
+  - action: field1binary
+    idDevice: 5
+    oper: ==
     type: device
     value:
-      type: number
-      value: '60'
+      type: enum
+      value: high
   idDevice: null
   oper: and
   type: group
@@ -16,19 +16,9 @@ if:
 name: testnew
 status: true
 then:
-- DeviceId: 5
-  action: field2number
-  type: device
-  value:
-    action: '*'
-    type: math
-    value1:
-      action: field1binary
-      idDevice: 5
-      type: device
-    value2:
-      type: number
-      value: '10'
+- DeviceId: togle
+  action: run
+  type: script
 trigger:
 - DeviceId: 5
   action: field1binary

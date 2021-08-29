@@ -1,29 +1,101 @@
-canvas.chart{
-  border: 1px solid #000;
 
-}
-.chartCart{
+.device-chart-card{
+  margin: 5px;
   background: #fff;
+  overflow: hidden;
 }
-
-.chartContent{
-  position: relative;
+.device-chart-card h2{
+  text-align: center;
 }
+.device-chart-card .content{
+  display: flex;
+  min-height: 400px;
+}
+.canvasConteiner{
+  width: 70%
+}
+.controlCanvasConteiner{
+  width: 30%;
+  background: var(--content-color);
+  box-shadow: 0 0 10px #000;
+  padding: 5px;
+  border-left: 2px solid #555;
+  z-index: 2;
+}
+.controlCanvasConteiner button{
+ outline: none;
+ border: none;
+ border-radius: 5px;
+ padding: 10px;
+ background: #999;
+ width: 80%;
+ margin: 5px 0;
+ margin-left: 50%;
+ transform: translate(calc(-50% - 2px),-2px);
+ box-shadow: 2px 2px 10px #000;
+ transition: .2s;
 
-.chart-tooltip{
-  position: absolute;
-    display: none;
-    max-width: 200px;
-    min-width: 120px;
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #dfe6eb;
-    box-shadow: 1px 1px 1px rgba(0,0,0,.05);
-    background: #fff;
-    color: #000;
-    overflow: hidden;
-    z-index: 3;
-
-    top: 50px;
-    left: 100px;
+}
+.controlCanvasConteiner button:hover
+{
+  transform: translate(-50%,0);
+  box-shadow: none;
+}
+.controlCanvasConteiner button.active,
+.controlCanvasConteiner button:active{
+  box-shadow: inset 0 0 10px #000;
+  transform: translate(-50%,0);
+}
+.controlCanvasConteiner .ChartZoom{
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  box-shadow: 0 0 5px #000;
+  border-radius: 20px;
+  margin: 10px 0;
+}
+.controlCanvasConteiner .ChartZoom li{
+  background: #777;
+  width: 100%;
+  padding: 10px;
+  border-top: 2px solid #555;
+  border-bottom: 2px solid #555;
+  text-align: center;
+}
+.controlCanvasConteiner .ChartZoom li:last-child{
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-right: 2px solid #555;
+}
+.controlCanvasConteiner .ChartZoom li:first-child{
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-left: 2px solid #555;
+}
+.controlCanvasConteiner .ChartZoom li:hover,
+.controlCanvasConteiner .ChartZoom li.active{
+  box-shadow: inset 0 0 5px #000;
+}
+.NoContent{
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+}
+.historyList{
+  height: 100%;
+  width: 100%;
+}
+.historyList .title{
+  font-size: 2.5em;
+  font-weight: 800;
+  padding: 0;
+}
+.historyList .historyItem{
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 5px;
+  font-size: 1.3em;
 }

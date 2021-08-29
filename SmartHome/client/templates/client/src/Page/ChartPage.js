@@ -3,7 +3,7 @@ import {useHttp} from '../hooks/http.hook'
 import {Header} from '../components/moduls/header'
 import {AuthContext} from '../context/AuthContext.js'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
-import {DeviceChart} from  '../components/chart/DeviceChart'
+import {DeviceHistory} from  '../components/history/DeviceHistory'
 
 const corectedData=(data)=>{
   let datetimes = data.charts.time_line.slice()
@@ -35,7 +35,7 @@ export const ChartsPage = () => {
   const importCharts = useCallback(async()=>{
     try {
       const data = await request(`/api/charts/get`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      setCharts(corectedData(data))
+      setCharts(data.charts)
     } catch (e) {
       console.error(e);
     }
@@ -65,7 +65,7 @@ export const ChartsPage = () => {
           {
             (devices)?
             devices.map((item,index)=>{
-              return <DeviceChart data={charts} device={item} key={index}/>
+              return <DeviceHistory data={charts} device={item} key={index}/>
             })
             :null
           }

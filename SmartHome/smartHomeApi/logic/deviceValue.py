@@ -44,12 +44,11 @@ def deviceSetStatus(id, type,value,script=True):
                         value = "0";
                     else:
                         return None
-                if(item.value != value):
-                    item.value = value
-                    item.save()
-                    ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=type,value=value,device=dev)
-                    if(script):
-                        runScripts(id,type)
+                item.value = value
+                item.save()
+                ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=type,value=value,device=dev)
+                if(script):
+                    runScripts(id,type)
         return value
         print('not value error')
         return True
