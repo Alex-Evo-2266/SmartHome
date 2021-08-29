@@ -2,13 +2,12 @@
 @import "./pages.night.css"; */
 @import "./fonPage.base.css";
 @import "./pages.color.css";
+@import "./miniWindow/style.css";
 
 .pages{
  position: relative;
- left: 50%;
- transform: translateX(-46%);
- width: 90%;
- height: 80vh;
+ width: 100%;
+ height: 100vh;
  padding-bottom: 90px;
 }
 .pages .page{
@@ -16,11 +15,11 @@
   position: relative;
   left: 0;
   top: 0;
-  width: calc(100% - 64px);
-  height: calc(100% - 4px);
+  width: 100%;
+  height: 100%;
   border-radius: 4px 0 4px 4px;
   z-index: 2;
-  box-shadow: 0 0 10px #000;
+  /* box-shadow: 0 0 10px #000; */
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -62,7 +61,7 @@
   transform: translate(-50%, -50%);
 }
 .configElement{
-  background: #0000;
+  background: var(--color-glass);
   min-height: 70px;
   display: flex;
   margin: 10px 0;
@@ -74,11 +73,34 @@
 .configElement .text input{
   display: inline-block;
 }
-.configElement.choice{
-  height: 170px;
-  display: flex;
+.StyleChoice{
+  display: grid;
   border: none;
   box-shadow: none;
+  grid-template-columns: repeat(4,1fr);
+  grid-gap: 2px;
+  grid-auto-rows: 1fr
+}
+.choiceElement{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  transition: .5s;
+  position: relative;
+}
+.choiceElement::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #0000;
+  z-index: 3;
+}
+.choiceElement i{
+  font-size: 2.5em;
 }
 .configElement h2{
   display: block;
@@ -96,20 +118,12 @@
 }
 .configElement img.choice{
   position: relative;
-  padding: 0;
   left: 0;
-  /* top:30px; */
   width: 80px;
   height: 80px;
   border-radius: 50%;
   transform: none;
   transition: .5s;
-  margin: auto;
-}
-img.choice.active,
-img.choice:hover
-{
-  opacity: 0.5;
 }
 .configElement .text input{
   font-size: 24px;

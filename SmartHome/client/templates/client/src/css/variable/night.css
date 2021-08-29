@@ -1,12 +1,12 @@
 
 body.night{
-  --head-color: #444;
-  --content-color: #808080;
-  --text-color:#fff;
-  --btn:120%;
-  --gradient: linear-gradient(to bottom, #333, #555);
-  --background:#808080d0;
-
-  --content-darken-color: #606060;
-  --head-darken-color: #353535;
+  --color-darken: #444;
+  --color-normal: #666;
+  --color-glass: #6667;
+  --color-light: #888;
+  --text-color-darken-fon: #fff;
+  --text-color-light-fon: #000;
+  --btn-color-darken: #555;
+  --btn-color-normal: #777;
+  --btn-color-light: #999;
 }

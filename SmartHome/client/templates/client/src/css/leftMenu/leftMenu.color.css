@@ -1,6 +1,6 @@
 .topMenu,
 .navigation nav{
-  background: var(--head-color);
+  background: var(--color-darken);
 }
 .navigation nav ul li:hover > a,
 .navigation nav ul li:hover > span.liinfo,
@@ -16,5 +16,5 @@
 .navigation nav ul li a .title,
 .navigation nav ul li span.liinfo .icon,
 .menuTogle .icon{
-  color: var(--text-color);
+  color: var(--text-color-darken-fon)
 }

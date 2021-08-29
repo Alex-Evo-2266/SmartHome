@@ -5,6 +5,7 @@ import {LincDevicesForm} from './forms/lincDevicesForm'
 import {ChoiceType} from './forms/choiceType'
 import {BackForm} from '../moduls/backForm'
 import {EditUserLevel} from './forms/editUserLevel'
+import {CreateStyle} from './forms/CreateStyle'
 
 export const Form = ()=>{
   const {form, hide} = useContext(FormContext)
@@ -48,6 +49,14 @@ export const Form = ()=>{
     return (
       <BackForm onClick = {hide}>
         <EditUserLevel hide = {hideAndApdata} data = {form.data}/>
+      </BackForm>
+    )
+  }
+
+  if(form.type === "CreateStyle"){
+    return (
+      <BackForm onClick = {hide}>
+        <CreateStyle hide = {hideAndApdata} ret={form.OK}/>
       </BackForm>
     )
   }

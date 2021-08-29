@@ -1,27 +1,23 @@
 header{
-  background: var(--head-color);
-  color: var(--text-color)
+  background: var(--color-darken);
+  color: var(--text-color-darken-fon)
 }
 .searchBtn{
-  background: var(--head-color);
-  filter: brightness(var(--btn));
-  color: var(--text-color)
+  background: var(--btn-color-darken);
+  color: var(--text-color-darken-fon)
 }
 header .btn{
-  background: var(--head-color);
-  filter: brightness(var(--btn));
-  color: var(--text-color);
+  background: var(--btn-color-darken);
+  color: var(--text-color-darken-fon);
 }
 header .btn:hover,
 header .btn.active{
   background: var(--active-v1-color);
-  filter: brightness(100%);
 }
 .titleButtonAdd:hover{
   box-shadow: inset 0 0 5px #000;
 }
 .searchBtn:hover{
   background: var(--active-v1-color);
-  filter: brightness(100%);
   opacity: 1;
 }

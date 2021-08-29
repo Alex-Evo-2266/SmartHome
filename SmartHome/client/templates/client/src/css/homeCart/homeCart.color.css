@@ -1,6 +1,6 @@
 ul.elementConteiner{
-  background: var(--content-color);
+  background: var(--color-normal);
 }
 .toolbar{
-  background: var(--content-color);
+  background: var(--color-normal);
 }

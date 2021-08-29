@@ -19,6 +19,7 @@ from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopi
 from .logic.deviceControl.zigbee.zigbee import reboot
 from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices
 from .logic.charts import getCharts
+from .logic.style import addstyle, getStyles, getStyle
 
 from .models import User, UserConfig,ImageBackground,genId,LocalImage,Device
 
@@ -138,7 +139,9 @@ class UserConfigView(APIView):
             return Response(status=403)
         if "userId" in authData:
             user = User.objects.get(id=authData.get("userId"))
-            result={**user.userconfig.get(),"MenuElements":user.getConfig()}
+            userconfig = user.userconfig.get()
+            print(userconfig)
+            result={**userconfig,"MenuElements":user.getConfig(), "StyleColor":getStyle(userconfig["Style"] + ".yml")}
             return Response(result,status=200)
         return Response(status=400)
 
@@ -160,6 +163,26 @@ class MenuView(APIView):
             data = json.loads(request.body)
             if menuConfEdit(authData["userId"],data):
                 return Response("ok",status=201)
+
+class CreateStyle(APIView):
+    """docstring for CreateStyle."""
+    def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        data = json.loads(request.body)
+        res = addstyle(data)
+        if(res["status"] == "ok"):
+            return Response("ok",status=201)
+        return Response(res,status=400)
+
+class Style(APIView):
+    """docstring for CreateStyle."""
+    def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        return Response(getStyles(),status=200)
 
 # server views
 

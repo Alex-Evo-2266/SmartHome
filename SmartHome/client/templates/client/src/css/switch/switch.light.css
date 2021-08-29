@@ -7,8 +7,3 @@
   background: var(--gradient);
   /* filter: brightness(var(--btn) + var(--btn)); */
 }
-.switch input:checked ~ span{
-  background: var(--active-v1-color);
-  filter: brightness(100%);
-
-}

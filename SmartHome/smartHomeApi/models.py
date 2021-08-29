@@ -107,7 +107,7 @@ class ImageBackground(models.Model):
         return {**self.image.model_to_dict(),"type":self.type}
 
 class UserConfig(models.Model):
-    Style = models.CharField("user name", max_length = 200, default="light")
+    Style = models.CharField("style", max_length = 200, default="light")
     auteStyle = models.BooleanField("automatic style", default=True)
     staticBackground = models.BooleanField("static background", default=False)
     background = models.ManyToManyField(ImageBackground,verbose_name="фон", related_name="background")

@@ -1,6 +1,6 @@
 .form{
-  background: var(--content-color);
-  color: var(--text-color)
+  background: var(--color-normal);
+  color: var(--text-color-light-fon);
 }
 .form .formFooter{
   background: var(--active-v1-color);
@@ -9,16 +9,16 @@
   background: var(--active-v1-color);
   font-weight: bold;
   font-size: 16px;
-  color: var(--text-color);
+  color: var(--text-color-light-fon);
 }
 .form .FormControlBtn:hover{
   box-shadow: inset 0 0 5px #000;
 }
 .formContent ul.devicesList li{
-  background: var(--content-color);
+  background: var(--color-normal);
 }
 .formContent label h5{
-  color: var(--text-color);
+  color: var(--text-color-light-fon);
 }
 .editDevice li .textInput{
   background: #fff;

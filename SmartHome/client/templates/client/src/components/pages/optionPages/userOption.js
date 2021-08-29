@@ -2,6 +2,8 @@ import React,{useContext,useEffect,useState,useCallback} from 'react'
 import {AuthContext} from '../../../context/AuthContext.js'
 import {UserContext} from '../../../context/UserContext'
 import {Loader} from '../../Loader'
+import {StyleIcon} from './castomIcon/styleIcon'
+import {FormContext} from '../../Form/formContext'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 import lightStyle from '../../../img/lightstyle.png'
@@ -11,6 +13,7 @@ import gibridStyle from '../../../img/gibridstyle.png'
 export const UserOption = () =>{
   const auth = useContext(AuthContext)
   const config = useContext(UserContext)
+  const form = useContext(FormContext)
 
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
@@ -19,6 +22,7 @@ export const UserOption = () =>{
     staticBackground:false,
     style:"light"
   });
+  const [styles , setStyles] = useState([]);
 
   const updataConf = useCallback(async()=>{
     if(!config)return;
@@ -27,6 +31,8 @@ export const UserOption = () =>{
       staticBackground:config.staticBackground||false,
       style:config.Style||"light",
     })
+    const data = await request(`/api/user/styles`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    setStyles(data)
   },[config])
 
   useEffect(()=>{
@@ -41,11 +47,16 @@ export const UserOption = () =>{
   }
 
   const styleHandler = async(event)=>{
-    setUserconf({ ...userconf, style:event.target.name })
+    console.log(event);
+    setUserconf({ ...userconf, style:event.target.dataset.name })
   }
 
   const checkedHandler = event => {
     setUserconf({ ...userconf, [event.target.name]: event.target.checked })
+  }
+
+  const createStyle = () => {
+    form.show("CreateStyle");
   }
 
   useEffect(()=>{
@@ -79,10 +90,25 @@ export const UserOption = () =>{
       </div>
       <div className="configElement block">
         <p className="text">Style</p>
-        <div className="configElement choice">
-          <img alt="style night" src={nightStyle} className={`choice ${(userconf.style==="night")?"active":null}`} name="night" onClick={styleHandler}/>
-          <img alt="style gibrid" src={gibridStyle} className={`choice ${(userconf.style==="gibrid")?"active":null}`} name="gibrid" onClick={styleHandler}/>
-          <img alt="style light" src={lightStyle} className={`choice ${(userconf.style==="light")?"active":null}`} name="light" onClick={styleHandler}/>
+        <div className="StyleChoice">
+          <div className={`choiceElement ${(userconf.style==="night")?"active":null}`} data-name="night" onClick={styleHandler}>
+            <StyleIcon colors={{c1:"#333", c2:"#555", c3: "#777"}}/>
+          </div>
+          <div className={`choiceElement ${(userconf.style==="light")?"active":null}`} data-name="light" onClick={styleHandler}>
+            <StyleIcon colors={{c1:"#aebfda", c2:"#999", c3: "#ddd"}}/>
+          </div>
+          {
+            styles.map((item)=>{
+              return(
+                <div className={`choiceElement ${(userconf.style===item.name)?"active":null}`} data-name={item.name} onClick={styleHandler}>
+                  <StyleIcon colors={item}/>
+                </div>
+              )
+            })
+          }
+          <div className="choiceElement" onClick={createStyle}>
+            <i class="fas fa-plus"></i>
+          </div>
         </div>
       </div>
       <button onClick={userConfigHandler}>Save</button>

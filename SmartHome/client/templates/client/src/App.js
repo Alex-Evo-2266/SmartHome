@@ -37,6 +37,7 @@ function App() {
     const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
     const serverData = await request(`/api/server/data`, 'GET', null,{Authorization: `Bearer ${token}`})
     console.log(serverData);
+    console.log(data);
     updataBackground(token,data)
     setConfig(data)
     setServerConfig(serverData)

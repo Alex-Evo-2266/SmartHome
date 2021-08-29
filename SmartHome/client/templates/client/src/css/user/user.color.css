@@ -22,9 +22,8 @@
 }
 .pagecontent a,
 .pagecontent button{
-  color: var(--text-color);
-  background: var(--head-color);
-  filter: brightness(var(--btn));
+  color: var(--text-color-darken-fon);
+  background: var(--color-glass);
 }
 .pagecontent a:hover,
 .pagecontent button:hover{

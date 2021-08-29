@@ -1,10 +1,52 @@
 import {useCallback} from 'react';
 import defFon from '../img/fon-base.jpg'
 
+function LightenDarkenColor(col, amt) {
+
+    var usePound = false;
+
+    if (col[0] == "#") {
+        col = col.slice(1);
+        usePound = true;
+    }
+
+    var num = parseInt(col,16);
+
+    var r = (num >> 16) + amt;
+
+    if (r > 255) r = 255;
+    else if  (r < 0) r = 0;
+
+    var b = ((num >> 8) & 0x00FF) + amt;
+
+    if (b > 255) b = 255;
+    else if  (b < 0) b = 0;
+
+    var g = (num & 0x0000FF) + amt;
+
+    if (g > 255) g = 255;
+    else if (g < 0) g = 0;
+
+    return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
+
+}
+
 const defbacground = ()=>{
   document.body.style = `background: url(${defFon});
     background-size: cover;
     background-attachment: fixed;`;
+}
+
+function setColors(data) {
+  document.body.style.setProperty('--color-darken',data.c1)
+  document.body.style.setProperty('--color-normal',data.c2)
+  document.body.style.setProperty('--color-glass',"#aaa9")
+  document.body.style.setProperty('--color-light',data.c3)
+  document.body.style.setProperty('--text-color-darken-fon',"#fff")
+  document.body.style.setProperty('--text-color-light-fon',"#000")
+  document.body.style.setProperty('--btn-color-darken',LightenDarkenColor(data.c1,20))
+  document.body.style.setProperty('--btn-color-normal',LightenDarkenColor(data.c2,20))
+  document.body.style.setProperty('--btn-color-light',LightenDarkenColor(data.c3,20))
 }
 
 export const useBackground = () => {
@@ -71,14 +113,20 @@ export const useBackground = () => {
       style:"light",
       auteStyle:false,
       staticBackground:false,
-      images:defFon
+      images:defFon,
+      colors:{
+        c1:"#333",
+        c2:"#555",
+        c3:"#777"
+      }
     }
     if(data){
       config = {
         style:data.Style||"light",
         auteStyle:data.auteStyle||false,
         staticBackground: data.staticBackground||false,
-        images:data.images
+        images:data.images,
+        colors:data.StyleColor
       }
     }
     else{

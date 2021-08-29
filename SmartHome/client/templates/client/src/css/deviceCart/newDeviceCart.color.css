@@ -1,21 +1,22 @@
 .NewCardElement .NewCardHeader{
-  background: var(--head-color);
-  color: var(--text-color);
+  background: var(--color-darken);
+  color: var(--text-color-darken-fon);
 }
 .DeviceControlLi{
-    background: var(--head-color);
-    color: var(--text-color);
+    background: var(--color-darken);
+    color: var(--text-color-darken-fon);
 }
 .DeviceControlLi:nth-child(2n+1){
-  background: var(--content-color);
-  color: var(--text-color);
+  background: var(--color-light);
+  color: var(--text-color-light-fon);
 }
 .DeviceControlLi:nth-child(2n+2){
-  background: var(--content-darken-color);
+  background: var(--color-normal);
   /* filter: brightness(50%); */
 }
 .NewCardElement .NewCardControl .cardControlBtn{
-  background: var(--head-color);
+  background: var(--btn-color-darken);
+  color: var(--text-color-darken-fon);
 }
 .NewCardElement .NewCardControl .cardControlBtn:hover{
   background: var(--active-v1-color);
