@@ -1,3 +1,3 @@
-# SmartHome
+# SmartHomePython
 
-I decided to rewrite the backend to python
+Проект системы "умный дом" на Django и React.
