@@ -10,8 +10,7 @@ import {TerminalState} from './components/terminal/terminalState'
 import {AddScriptState} from './components/addScript/addScriptState'
 import {useRoutes} from './routes.js'
 import {useAuth} from './hooks/auth.hook.js'
-import {useBackground} from './hooks/background.hook.js'
-import {useHttp} from './hooks/http.hook'
+import {CastomizeStyle} from './components/UserStyle/StyleState.hook.js'
 import {AuthContext} from './context/AuthContext'
 import {TerminalCart} from './components/terminal/terminalCart'
 import {UserContext} from './context/UserContext'
@@ -24,42 +23,8 @@ import './css/style-components.css'
 
 function App() {
   const {token, login, logout, userId, userLevel,ready} = useAuth();
-  const {request, error, clearError} = useHttp();
-  const {updataBackground} = useBackground(token);
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated,userLevel);
-  const [config, setConfig] = useState({})
-  const [serverConfig, setServerConfig] = useState({})
-
-  const userConfig = useCallback(async()=>{
-    if(!token)
-      return updataBackground()
-    const data = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
-    const serverData = await request(`/api/server/data`, 'GET', null,{Authorization: `Bearer ${token}`})
-    console.log(serverData);
-    console.log(data);
-    updataBackground(token,data)
-    setConfig(data)
-    setServerConfig(serverData)
-  },[token,request,updataBackground])
-
-  const updatebackground = ()=>{
-    userConfig()
-  }
-
-  useEffect(()=>{
-    if(ready){
-      userConfig()
-    }
-  },[ready,userConfig])
-
-  useEffect(()=>{
-    if(error)
-      console.error(error);
-    return ()=>{
-      clearError();
-    }
-  },[error, clearError])
 
   if (!ready) {
     return(
@@ -71,10 +36,9 @@ function App() {
     <AuthContext.Provider value={{
       token, login, logout, userId, userLevel, isAuthenticated
     }}>
-    <UserContext.Provider value={{...config,updateBackground:updatebackground}}>
-    <ServerConfigContext.Provider value={{...serverConfig}}>
     <SocketState>
     <AlertState>
+    <CastomizeStyle token={token} ready={ready}>
     <MenuState>
     <FormState>
     <TerminalState>
@@ -94,10 +58,9 @@ function App() {
     </TerminalState>
     </FormState>
     </MenuState>
+    </CastomizeStyle>
     </AlertState>
     </SocketState>
-    </ServerConfigContext.Provider>
-    </UserContext.Provider>
     </AuthContext.Provider>
   );
 }

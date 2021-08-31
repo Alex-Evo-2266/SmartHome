@@ -3,6 +3,7 @@ import {AuthContext} from '../../../context/AuthContext.js'
 import {UserContext} from '../../../context/UserContext'
 import {Loader} from '../../Loader'
 import {StyleIcon} from './castomIcon/styleIcon'
+import {StyleContext} from '../../UserStyle/StyleContext'
 import {FormContext} from '../../Form/formContext'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -13,6 +14,7 @@ import gibridStyle from '../../../img/gibridstyle.png'
 export const UserOption = () =>{
   const auth = useContext(AuthContext)
   const config = useContext(UserContext)
+  const {styles, updateBackground} = useContext(StyleContext)
   const form = useContext(FormContext)
 
   const {message} = useMessage();
@@ -22,7 +24,6 @@ export const UserOption = () =>{
     staticBackground:false,
     style:"light"
   });
-  const [styles , setStyles] = useState([]);
 
   const updataConf = useCallback(async()=>{
     if(!config)return;
@@ -31,8 +32,6 @@ export const UserOption = () =>{
       staticBackground:config.staticBackground||false,
       style:config.Style||"light",
     })
-    const data = await request(`/api/user/styles`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    setStyles(data)
   },[config])
 
   useEffect(()=>{
@@ -41,13 +40,13 @@ export const UserOption = () =>{
 
   const userConfigHandler = async()=>{
     await request(`/api/user/config`, 'PUT', userconf,{Authorization: `Bearer ${auth.token}`})
-    setTimeout(function () {
-      config.updateBackground()
-    }, 200);
+    updateBackground()
+    // setTimeout(function () {
+    //
+    // }, 200);
   }
 
   const styleHandler = async(event)=>{
-    console.log(event);
     setUserconf({ ...userconf, style:event.target.dataset.name })
   }
 
@@ -69,7 +68,7 @@ export const UserOption = () =>{
   if(loading){
     return <Loader/>
   }
-
+console.log(styles);
   return(
     <div className = "pagecontent">
       <div className="configElement">
@@ -91,23 +90,17 @@ export const UserOption = () =>{
       <div className="configElement block">
         <p className="text">Style</p>
         <div className="StyleChoice">
-          <div className={`choiceElement ${(userconf.style==="night")?"active":null}`} data-name="night" onClick={styleHandler}>
-            <StyleIcon colors={{c1:"#333", c2:"#555", c3: "#777"}}/>
-          </div>
-          <div className={`choiceElement ${(userconf.style==="light")?"active":null}`} data-name="light" onClick={styleHandler}>
-            <StyleIcon colors={{c1:"#aebfda", c2:"#999", c3: "#ddd"}}/>
-          </div>
           {
-            styles.map((item)=>{
+            styles?.map((item, index)=>{
               return(
-                <div className={`choiceElement ${(userconf.style===item.name)?"active":null}`} data-name={item.name} onClick={styleHandler}>
+                <div key={index} className={`choiceElement ${(userconf.style===item.name)?"active":null}`} data-name={item.name} onClick={styleHandler}>
                   <StyleIcon colors={item}/>
                 </div>
               )
             })
           }
           <div className="choiceElement" onClick={createStyle}>
-            <i class="fas fa-plus"></i>
+            <i className="fas fa-plus"></i>
           </div>
         </div>
       </div>

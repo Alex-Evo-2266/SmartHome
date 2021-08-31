@@ -119,7 +119,7 @@ class UserConfig(models.Model):
     def get(self):
         return {
         "Style":self.Style,
-        "auteStyle":self.auteStyle,
+        "autoStyle":self.auteStyle,
         "staticBackground":self.staticBackground,
         "images":set_to_list_dict(self.background.all())
         }

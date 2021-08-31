@@ -141,7 +141,7 @@ class UserConfigView(APIView):
             user = User.objects.get(id=authData.get("userId"))
             userconfig = user.userconfig.get()
             print(userconfig)
-            result={**userconfig,"MenuElements":user.getConfig(), "StyleColor":getStyle(userconfig["Style"] + ".yml")}
+            result={**userconfig,"MenuElements":user.getConfig()}
             return Response(result,status=200)
         return Response(status=400)
 
