@@ -92,7 +92,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
   return(
     <UserContext.Provider value={{...config}}>
       <ServerConfigContext.Provider value={{...serverConfig}}>
-        <StyleContext.Provider value={{styles:styles,updateBackground:update}}>
+        <StyleContext.Provider value={{styles:styles,updateConfig:update}}>
           {children}
         </StyleContext.Provider>
       </ServerConfigContext.Provider>

@@ -1,4 +1,5 @@
 import React,{useContext,useEffect,useState,useCallback} from 'react'
+import {Link} from 'react-router-dom'
 import {AuthContext} from '../../../context/AuthContext.js'
 import {UserContext} from '../../../context/UserContext'
 import {Loader} from '../../Loader'
@@ -68,7 +69,6 @@ export const UserOption = () =>{
   if(loading){
     return <Loader/>
   }
-console.log(styles);
   return(
     <div className = "pagecontent">
       <div className="configElement">
@@ -99,9 +99,9 @@ console.log(styles);
               )
             })
           }
-          <div className="choiceElement" onClick={createStyle}>
+          <Link className="choiceElement" to={"/config/style"}>
             <i className="fas fa-plus"></i>
-          </div>
+          </Link>
         </div>
       </div>
       <button onClick={userConfigHandler}>Save</button>

@@ -81,10 +81,10 @@ export const useCastomStyle = () => {
       return defstyle()
     if(!colors.c1)
       colors.c1 = "#333";
-    if(!colors.c1)
-      colors.c1 = "#555";
-    if(!colors.c1)
-      colors.c1 = "#777";
+    if(!colors.c2)
+      colors.c2 = "#555";
+    if(!colors.c3)
+      colors.c3 = "#777";
     setColors(colors)
   }
 
