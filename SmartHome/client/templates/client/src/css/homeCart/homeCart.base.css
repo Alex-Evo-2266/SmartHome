@@ -5,7 +5,6 @@
 @import "./Enum/enum.base.css";
 @import "./Weather/Weather.css";
 @import "./homeCart.color.css";
-/*@import "./homeCart.night.css"; */
 
 ul.elementConteiner{
   position: relative;

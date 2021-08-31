@@ -1,6 +1,9 @@
 
 .baseCartElement-box{
-  background: var(--color-darken);
+  background: var(--color-light);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   color: var(--text-color-darken-fon)
+}
+.line-el{
+  background: var(--color-light);
 }

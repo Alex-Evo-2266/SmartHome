@@ -1,5 +1,3 @@
-/* @import "./checkbox.light.css";
-@import "./checkbox.night.css"; */
 @import "./checkbox.color.css";
 
 .custom1-checkbox{
@@ -38,6 +36,7 @@
 }
 .custom1-checkbox .custom1-inner .custom1-toggle::before{
   content: 'OFF';
+  color: var(--text-color-darken-fon);
   position: absolute;
   top: 4px;
   left: 4px;
@@ -50,5 +49,5 @@
 }
 .custom1-checkbox .custom1-inner.active .custom1-toggle::before{
   content: 'ON';
-  color: #00d22d
+  color: var(--ok-v1-color)
 }

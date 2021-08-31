@@ -130,7 +130,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
       {
         (data&&data.children&&isPowerAct(data.children))?
         <li>
-          <div className="line-button">
+          <div className="line-el">
             <BtnElement
             disabled={edit}
             name="all"
@@ -152,7 +152,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
             <li key={index}>
               {
                 (item.type==="button")?
-                  <div className="line-button">
+                  <div className="line-el">
                     <BtnElement
                     index={item.index}
                     disabled={edit}
@@ -166,7 +166,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     />
                   </div>:
                   (item.type==="enum")?
-                  <div className="line-slider">
+                  <div className="line-el">
                   <EnumElement
                   index={item.index}
                   disabled={edit}
@@ -180,7 +180,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                   />
                   </div>
                 :(item.type==="slider")?
-                  <div className="line-slider">
+                  <div className="line-el">
                   <SliderElement
                   index={item.index}
                   data={item}
@@ -194,7 +194,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                   />
                   </div>
                   :(item.type==="script")?
-                    <div className="line-script">
+                    <div className="line-el">
                     <ScriptElement
                     index={item.index}
                     data={item}
@@ -208,7 +208,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     />
                     </div>
                     :(splitType(item.type)[0]==="sensor")?
-                      <div className="line-sensor">
+                      <div className="line-el">
                       <SensorElement
                       index={item.index}
                       data={item}

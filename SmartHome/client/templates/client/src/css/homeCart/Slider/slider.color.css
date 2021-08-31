@@ -1,9 +1,9 @@
 .slider-box{
-  background: var(--content-darken-color);
+  background: var(--color-light);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 .slider-box .slider input[type="range"]{
-  background: var(--head-color);
+  background: var(--color-normal);
 }
 .slider input::-moz-range-thumb,
 .slider input::-webkit-slider-thumb,
@@ -18,7 +18,7 @@
   background: var(--active-v1-color);
 }
 .slider-box .name{
-  color: var(--text-color)
+  color: var(--text-color-darken-fon)
 }
 .slider-box .value{
   color: var(--active-v1-color)
