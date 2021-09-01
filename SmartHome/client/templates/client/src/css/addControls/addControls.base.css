@@ -6,13 +6,13 @@
 }
 .addElementBody .box{
   width: 300px;
-  border-bottom:20px solid var(--head-color);
+  border-bottom:20px solid var(--color-darken);
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
 .addElementBody .box h2{
-  color: var(--text-color);
-  background: var(--head-color);
+  color: var(--text-color-darken-fon);
+  background: var(--color-darken);
   padding: 10px 10px;
   font-size: 20px;
   width: calc(100% - 20px);

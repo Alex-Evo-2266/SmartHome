@@ -2,14 +2,14 @@
   position: relative;
   width: 100%;
   max-height: 100%;
-  background: var(--content-color);
+  background: var(--color-normal);
   overflow-y: scroll;
 }
 .editcart-conteiner p{
   padding: 10px;
   text-align: center;
   font-size: 20px;
-  color: var(--text-color);
+  color: var(--text-color-darken-fon);
 }
 .editcart-conteiner .editcart-element{
   padding: 10px;
@@ -29,9 +29,8 @@
 }
 .editcart-conteiner button{
   border: none;
-  background: var(--content-color);
-  color: var(--text-color);
-  filter: brightness(var(--btn));
+  background: var(--btn-color-normal);
+  color: var(--text-color-darken-fon);
   height: 30px;
   margin: 10px;
   width: calc(100% - 20px);
@@ -46,9 +45,8 @@
 }
 .buttonGrid button{
   border: none;
-  background: var(--content-color);
-  color: var(--text-color);
-  filter: brightness(var(--btn));
+  background: var(--btn-color-normal);
+  color: var(--text-color-darken-fon);
   border-radius: 4px;
   transition: 0.5s;
 }
@@ -57,7 +55,7 @@
   box-shadow: inset 0 0 5px #000;
 }
 .childrenList{
-  background: var(--content-color);
+  background: var(--color-normal);
   position: absolute;
   top: 0;
   left: -100%;

@@ -3,10 +3,9 @@
 }
 .InputNumber .InputNumber-btnUp,
 .InputNumber .InputNumber-btnDown{
-  background: var(--content-color);
-  filter: brightness(var(--btn));
+  background: var(--color-light);
 }
 .InputNumber .InputNumber-btnUp i,
 .InputNumber .InputNumber-btnDown i{
-  color: var(--text-color);
+  color: var(--text-color-darken-fon);
 }

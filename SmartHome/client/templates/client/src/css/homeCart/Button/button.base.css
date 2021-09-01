@@ -47,38 +47,31 @@ ul.elementConteiner li label .icon-box i{
   font-size: 30px;
   /* color: #222; */
 }
-.BtnElement .deleteBtn,
-.ScriptElement .deleteBtn{
-  position: absolute;
+.delete-box .deleteBtn{
   padding: 0;
-  width: 15px;
-  height: 15px;
+  width: 100%;
+  height: 100%;
   top: 0;
   right: 0;
   background: red;
   border: none;
   text-align: center;
-  border-radius: 5px;
-  font-size: 18px;
+  font-size: 50px;
   color: #fff;
 }
-.BtnElement .editBtn,
-.ScriptElement .editBtn{
-  position: absolute;
+.delete-box .editBtn{
   padding: 0;
-  width: 15px;
-  height: 15px;
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
   background: grey;
   border: none;
   text-align: center;
-  border-radius: 5px;
-  font-size: 10px;
+  font-size: 25px;
   color: #fff;
 }
-.BtnElement .icon-box button i.i-cost,
-.ScriptElement .icon-box button i.i-cost{
+.delete-box .icon-box button i.i-cost{
   font-size: 10px;
   color: #fff;
   text-align: center;
@@ -101,37 +94,6 @@ ul.elementConteiner li label .icon-box i{
 .ElementLine p{
   font-size: 20px;
   color: var(--text-color-darken-fon);
-}
-.baseCartElement-line .deleteBtn{
-  position: absolute;
-  /* position: relative; */
-  padding: 0;
-  width: 20px;
-  height: 20px;
-  top: 0;
-  right: calc(50% + 10px);
-  background: red;
-  border: none;
-  text-align: center;
-  border-radius: 5px;
-  font-size: 18px;
-  color: #fff;
-}
-
-.baseCartElement-line .editBtn{
-  position: absolute;
-  /* position: relative; */
-  padding: 0;
-  width: 20px;
-  height: 20px;
-  top: 0;
-  right: calc(50% - 10px);
-  background: grey;
-  border: none;
-  text-align: center;
-  border-radius: 5px;
-  font-size: 10px;
-  color: #fff;
 }
 .ElementLine .control{
   position: relative;

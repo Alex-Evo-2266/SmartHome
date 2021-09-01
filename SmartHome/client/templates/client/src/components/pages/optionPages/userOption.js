@@ -15,7 +15,7 @@ import gibridStyle from '../../../img/gibridstyle.png'
 export const UserOption = () =>{
   const auth = useContext(AuthContext)
   const config = useContext(UserContext)
-  const {styles, updateBackground} = useContext(StyleContext)
+  const {styles, updateConfig} = useContext(StyleContext)
   const form = useContext(FormContext)
 
   const {message} = useMessage();
@@ -29,7 +29,7 @@ export const UserOption = () =>{
   const updataConf = useCallback(async()=>{
     if(!config)return;
     setUserconf({
-      auteStyle:config.auteStyle||false,
+      auteStyle:config.autoStyle||false,
       staticBackground:config.staticBackground||false,
       style:config.Style||"light",
     })
@@ -41,7 +41,7 @@ export const UserOption = () =>{
 
   const userConfigHandler = async()=>{
     await request(`/api/user/config`, 'PUT', userconf,{Authorization: `Bearer ${auth.token}`})
-    updateBackground()
+    updateConfig()
     // setTimeout(function () {
     //
     // }, 200);

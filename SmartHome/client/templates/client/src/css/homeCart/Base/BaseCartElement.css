@@ -10,36 +10,6 @@
   position: relative;
   overflow: hidden;
 }
-.baseCartElement-box .deleteBtn{
-  position: absolute;
-  padding: 0;
-  width: 15px;
-  height: 15px;
-  z-index: 2;
-  top: 0;
-  right: 0;
-  background: red;
-  border: none;
-  text-align: center;
-  border-radius: 5px;
-  font-size: 18px;
-  color: #fff;
-}
-.baseCartElement-box .editBtn{
-  position: absolute;
-  padding: 0;
-  width: 15px;
-  z-index: 2;
-  height: 15px;
-  top: 0;
-  left: 0;
-  background: grey;
-  border: none;
-  text-align: center;
-  border-radius: 5px;
-  font-size: 10px;
-  color: #fff;
-}
 .baseCartElement-box .icon-box button i.i-cost{
   font-size: 10px;
   color: #fff;

@@ -248,6 +248,14 @@
   border: none;
   border-left: 3px solid var(--color-normal);
 }
+.submenu .subMenuContent ul li a.active,
+.submenu .subMenuContent ul li button.active{
+  border-left: 3px solid var(--active-v1-color);
+}
+.submenu .subMenuContent ul li:hover,
+.submenu .subMenuContent ul li:hover{
+  background: var(--active-v1-color);
+}
 .submenu .subMenuContent ul{
   position: relative;
   top: 0;

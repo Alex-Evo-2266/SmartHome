@@ -28,7 +28,7 @@ export const MenuOption = () =>{
   const configHandler = async(event)=>{
     await request(`/api/user/menu`, 'PUT', useBlock,{Authorization: `Bearer ${auth.token}`})
     setTimeout(function () {
-      config.updateBackground()
+      config.updateConfig()
     }, 200);
   }
 
@@ -92,11 +92,24 @@ export const MenuOption = () =>{
     <>
     {
       (visible)?
-      <ModalWindow hide={()=>setVisible(false)} title="add" zindex={6}>
-        <input id="titlelink" type = "text" name = "title"/>
-        <input id="titleicon" type = "text" name = "icon"/>
-        <input id="titleurl" type = "text" name = "url"/>
-        <input type = "button" value="сохранить" onClick={addlink}/>
+      <ModalWindow hide={()=>setVisible(false)} title="add" zindex={6} className="createLinkWindow">
+        <div className="createLink">
+          <div className="fieldLinc">
+            <p>title</p>
+            <input id="titlelink" type = "text" name = "title"/>
+          </div>
+          <div className="fieldLinc">
+            <p>icon</p>
+            <input id="titleicon" type = "text" name = "icon"/>
+          </div>
+          <div className="fieldLinc">
+            <p>url</p>
+            <input id="titleurl" type = "text" name = "url"/>
+          </div>
+          <div className="fieldLinc">
+            <input type = "button" value="сохранить" onClick={addlink}/>
+          </div>
+        </div>
       </ModalWindow>
       :null
     }

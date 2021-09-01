@@ -20,7 +20,7 @@
   }
 }
 .conteiner-body{
-  background: var(--content-color);
+  background: var(--color-normal);
   min-height: 100vh;
   padding: 10px 0;
   position: relative;

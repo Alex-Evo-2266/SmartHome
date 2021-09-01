@@ -19,7 +19,9 @@ export const BaseElement = ({children,deleteBtn,editBtn,index,data}) =>{
 
   return(
     <div className="baseCartElement-box">
-      <div>
+    {
+      (deleteBtn || editBtn)?
+      <div className="delete-box">
       {
         (deleteBtn)?
         <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
@@ -29,10 +31,12 @@ export const BaseElement = ({children,deleteBtn,editBtn,index,data}) =>{
         (editBtn)?
         <button className="editBtn" onClick={editbtn}>
           <i className="fas fa-list i-cost"></i>
-          </button>:
-          null
-        }
+        </button>:
+        null
+      }
       </div>
+      :null
+    }
       {children}
     </div>
   )

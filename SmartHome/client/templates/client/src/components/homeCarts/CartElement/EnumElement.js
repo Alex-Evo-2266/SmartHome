@@ -108,7 +108,9 @@ const changeHandler = (event)=>{
   return(
     <label className={`EnumElement ${className} ${(disabled2)?"disabled":""}`}>
       <div className="icon-conteiner">
-        <div>
+      {
+        (deleteBtn || editBtn)?
+        <div className="delete-box">
         {
           (deleteBtn)?
           <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
@@ -122,6 +124,8 @@ const changeHandler = (event)=>{
           null
         }
         </div>
+        :null
+      }
         <div className="icon-box-enum">
           <div className="icon">
             <div className="circle">

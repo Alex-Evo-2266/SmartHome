@@ -128,20 +128,24 @@ return(
       />
     </div>
     <div className="value">{value}</div>
-    <div className="delete-box">
     {
-      (deleteBtn)?
-      <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
-      null
+      (deleteBtn || editBtn)?
+      <div className="delete-box">
+      {
+        (deleteBtn)?
+        <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
+        null
+      }
+      {
+        (editBtn)?
+        <button className="editBtn" onClick={editbtn}>
+          <i className="fas fa-list i-cost"></i>
+        </button>:
+        null
+      }
+      </div>
+      :null
     }
-    {
-      (editBtn)?
-      <button className="editBtn" onClick={editbtn}>
-        <i className="fas fa-list i-cost"></i>
-      </button>:
-      null
-    }
-    </div>
   </div>
 )
 }

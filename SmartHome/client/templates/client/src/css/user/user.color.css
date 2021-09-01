@@ -1,21 +1,21 @@
 .pagecontent p{
-  border: 1px solid var(--head-color);
-  background: var(--content-color);
+  border: 1px solid var(--color-darken);
+  background: var(--color-normal);
 }
 .pagecontent label.textLabel{
-  border: 1px solid var(--head-color);
-  background: var(--content-color);
-  color: var(--text-color);
+  border: 1px solid var(--color-darken);
+  background: var(--color-normal);
+  color: var(--text-color-light-fon);
   /* padding-bottom: 8px; */
 }
 .pagecontent label p{
   border: none;
   background: #0000;
-  color:var(--text-color);
+  color:var(--text-color-light-fon);
 }
 .pagecontent label input{
-  border: 2px solid var(--head-color);
-  color: var(--text-color);
+  border: 2px solid var(--color-darken);
+  color: var(--text-color-darken-fon);
 }
 .pagecontent label p:hover{
   box-shadow: none;
@@ -28,5 +28,5 @@
 .pagecontent a:hover,
 .pagecontent button:hover{
   background: var(--active-v1-color);
-  color: var(--text-color);
+  color: var(--text-color-light-fon);
 }

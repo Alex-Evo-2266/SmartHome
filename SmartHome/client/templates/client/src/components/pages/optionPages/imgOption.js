@@ -28,56 +28,60 @@ export const ImgOption = () =>{
   },[updataConf])
 
   return(
-    <div className="configElement img">
-      <h2>Background</h2>
-      <Link to="/gallery" className="btn2">Галерея</Link>
-      <div className="card">
-        <div className="imgBx">
-          <img src={userconf.base} alt="base"/>
-        </div>
-        <div className="content">
-          <div>
-            <h3>Base</h3>
+    <div className = "pagecontent">
+      <div className="configElement block">
+        <h2>Background</h2>
+      </div>
+      <Link to="/gallery" className="btn">Галерея</Link>
+      <div className="configElement img">
+        <div className="card">
+          <div className="imgBx">
+            <img src={userconf.base} alt="base"/>
+          </div>
+          <div className="content">
+            <div>
+              <h3>Base</h3>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="card">
-        <div className="imgBx">
-          <img src={userconf.sunrise} alt="sunrise"/>
-        </div>
-        <div className="content">
-          <div>
-            <h3>Sunrise</h3>
+        <div className="card">
+          <div className="imgBx">
+            <img src={userconf.sunrise} alt="sunrise"/>
+          </div>
+          <div className="content">
+            <div>
+              <h3>Sunrise</h3>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="card">
-        <div className="imgBx">
-          <img src={userconf.day} alt="day"/>
-        </div>
-        <div className="content">
-          <div>
-            <h3>Day</h3>
+        <div className="card">
+          <div className="imgBx">
+            <img src={userconf.day} alt="day"/>
+          </div>
+          <div className="content">
+            <div>
+              <h3>Day</h3>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="card">
-        <div className="imgBx">
-          <img src={userconf.twilight} alt="twilight"/>
-        </div>
-        <div className="content">
-          <div>
-            <h3>Twilight</h3>
+        <div className="card">
+          <div className="imgBx">
+            <img src={userconf.twilight} alt="twilight"/>
+          </div>
+          <div className="content">
+            <div>
+              <h3>Twilight</h3>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="card">
-        <div className="imgBx">
-          <img src={userconf.night} alt="night"/>
-        </div>
-        <div className="content">
-          <div>
-            <h3>Night</h3>
+        <div className="card">
+          <div className="imgBx">
+            <img src={userconf.night} alt="night"/>
+          </div>
+          <div className="content">
+            <div>
+              <h3>Night</h3>
+            </div>
           </div>
         </div>
       </div>

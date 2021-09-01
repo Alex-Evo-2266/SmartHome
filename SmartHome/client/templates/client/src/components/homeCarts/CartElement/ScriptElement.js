@@ -37,7 +37,9 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
     <label className={`ScriptElement ${className}`}>
       <input type="button" onClick={clickHandler} disabled={disabled}/>
       <div className="icon-conteiner">
-        <div>
+      {
+        (deleteBtn || editBtn)?
+        <div className="delete-box">
         {
           (deleteBtn)?
           <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
@@ -51,6 +53,8 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
           null
         }
         </div>
+        :null
+      }
         <div className="icon-box">
           <i className="fas fa-file-alt"></i>
         </div>

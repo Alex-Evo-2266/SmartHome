@@ -1,26 +1,24 @@
 .conteiner-body-ul .conteiner-body-li,
 .conteiner-body-ul .conteiner-body-li label input[type="text"],
 .conteiner-body-ul .conteiner-body-li label input[type="number"]{
-  border: 2px solid var(--head-color);
+  border: 2px solid var(--color-darken);
 }
 .conteiner-body-ul .conteiner-body-li label h5,
 .conteiner-head h2{
-    color: var(--text-color);
+    color: var(--text-color-darken-fon);
 }
 .conteiner-body-ul .conteiner-body-li label input[type="text"],
 .conteiner-body-ul .conteiner-body-li label input[type="number"]{
-  background: var(--content-color);
+  background: var(--color-normal);
 }
 .conteiner-body{
-  background: var(--content-color);
+  background: var(--color-normal);
 }
 .conteiner-body-li label{
-  border-top: 2px solid var(--head-color);
-  border-bottom: 2px solid var(--head-color);
+  border-top: 2px solid var(--color-darken);
+  border-bottom: 2px solid var(--color-darken);
 }
 .conteiner-body-ul .conteiner-body-li label input[type="text"]::-webkit-input-placeholder,
 .conteiner-body-ul .conteiner-body-li label input[type="text"]::-moz-placeholder{
-  color: var(--text-color);
-  filter: brightness(var(--btn));
-
+  color: var(--text-color-darken-fon);
 }

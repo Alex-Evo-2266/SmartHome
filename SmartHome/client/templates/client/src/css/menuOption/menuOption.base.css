@@ -5,8 +5,8 @@
 .menu-component-paragraph{
   height: 60px;
   width: 100%;
-  border-top: 1px solid var(--head-color);
-  border-bottom: 1px solid var(--head-color);
+  border-top: 1px solid var(--color-darken);
+  border-bottom: 1px solid var(--color-darken);
   display: flex;
   z-index: 0;
   position: relative;
@@ -33,4 +33,35 @@
 .menu-component-btn{
   position: absolute;
   right: 0;
+}
+.createLinkWindow{
+  width: 50%;
+}
+.createLinkWindow .modalContent{
+  background: var(--color-normal);
+}
+.createLink{
+  width: 100%;
+}
+.fieldLinc{
+  border-bottom: 1px solid var(--color-darken);
+  border-top: 1px solid var(--color-darken);
+}
+.createLink p{
+  width: 100%;
+  text-align: center;
+  color: var(--text-color-darken-fon);
+  font-size: 20px;
+}
+.createLink input{
+  display: block;
+  font-size: 1.8em;
+  outline: none;
+  width: 90%;
+  margin: 10px auto;
+  text-align: center;
+  box-shadow: inset 0 0 5px #000;
+  background: #ddd;
+  border: none;
+  border-radius: 4px;
 }

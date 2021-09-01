@@ -55,31 +55,3 @@
   width: 100%;
   height: 15px;
 }
-.delete-box .deleteBtn{
-  position: absolute;
-  padding: 0;
-  width: 15px;
-  height: 15px;
-  top: 0;
-  right: 0;
-  background: red;
-  border: none;
-  text-align: center;
-  font-size: 18px;
-  color: #fff;
-  border-radius: 5px;
-}
-.delete-box .editBtn{
-  position: absolute;
-  padding: 0;
-  width: 15px;
-  height: 15px;
-  top: 0;
-  left: 0;
-  background: grey;
-  border: none;
-  text-align: center;
-  font-size: 10px;
-  color: #fff;
-  border-radius: 5px;
-}

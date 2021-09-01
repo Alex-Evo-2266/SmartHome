@@ -154,7 +154,9 @@ const changeHandler = (event)=>{
     <label className={`BtnElement ${className} ${(disabled2)?"disabled":""}`}>
       <input type="checkbox" checked={value} name={name} onChange={changeHandler} disabled={disabled2}/>
       <div className="icon-conteiner">
-        <div>
+      {
+        (deleteBtn || editBtn)?
+        <div className="delete-box">
         {
           (deleteBtn)?
           <button className="deleteBtn" onClick={deletebtn}>&times;</button>:
@@ -168,6 +170,8 @@ const changeHandler = (event)=>{
           null
         }
         </div>
+        :null
+      }
         <div className="icon-box">
         {
           (children)?

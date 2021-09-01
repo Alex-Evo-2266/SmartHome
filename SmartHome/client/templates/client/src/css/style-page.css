@@ -44,7 +44,7 @@
   padding-top: 0;
 }
 .slide-conteiner{
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 /* body::-webkit-scrollbar{
   width: 0;
