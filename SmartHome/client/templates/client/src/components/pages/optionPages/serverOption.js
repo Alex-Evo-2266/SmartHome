@@ -13,7 +13,9 @@ export const ServerOption = () =>{
     mqttBrokerPort:"",
     loginMqttBroker:'',
     passwordMqttBroker:'',
-    zigbee2mqttTopic:''
+    zigbee2mqttTopic:'',
+    emailLogin:'',
+    emailPass:''
   });
 
   useEffect(()=>{
@@ -36,13 +38,16 @@ export const ServerOption = () =>{
 
   const updataConf = useCallback(async()=>{
     const data = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    console.log(data);
     if(!data)return;
     setServerconf({
       mqttBroker:data.mqttBroker||"",
       mqttBrokerPort:data.mqttBrokerPort||"",
       loginMqttBroker:data.loginMqttBroker||"",
       passwordMqttBroker:data.passwordMqttBroker||"",
-      zigbee2mqttTopic:data.zigbee2mqttTopic||""
+      zigbee2mqttTopic:data.zigbee2mqttTopic||"",
+      emailLogin:data.emailLogin||"",
+      emailPass:data.emailPass||"",
     })
   },[request,auth.token])
 
@@ -81,6 +86,16 @@ export const ServerOption = () =>{
         <p className="text">Zigbee2mqtt topic</p>
         <label className="text">
           <input placeholder="password Mqtt broker" onChange={changeHandler} name="zigbee2mqttTopic" type="text" value={serverconf.zigbee2mqttTopic} disabled = {(serverconf.mqttBroker==="none")}></input>
+        </label>
+      </div>
+      <div className="configElement block">
+        <p className="text">Server email login</p>
+        <label className="text">
+          <input placeholder="Server email login" onChange={changeHandler} name="emailLogin" type="email" value={serverconf.emailLogin}/>
+        </label>
+        <p className="text">Server email password</p>
+        <label className="text">
+          <input placeholder="Server email password" onChange={changeHandler} name="emailPass" type="text" value={serverconf.emailPass}/>
         </label>
       </div>
       <button onClick={serverConfigHandler}>Save</button>

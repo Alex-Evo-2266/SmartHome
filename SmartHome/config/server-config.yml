@@ -1,6 +1,6 @@
 mail:
-  login: ''
-  password: ''
+  login: df@mail.ru
+  password: '12345'
 mqttBroker:
   host: localhost
   password: admin

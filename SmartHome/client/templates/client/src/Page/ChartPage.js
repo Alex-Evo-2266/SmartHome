@@ -5,26 +5,26 @@ import {AuthContext} from '../context/AuthContext.js'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
 import {DeviceHistory} from  '../components/history/DeviceHistory'
 
-const corectedData=(data)=>{
-  let datetimes = data.charts.time_line.slice()
-  let oldDate = null
-  for (var i = 0; i < datetimes.length; i++) {
-    if(oldDate&&datetimes[i] - oldDate !== 500){
-      let newTime = datetimes[i]
-      newTime=newTime-500
-      let index = data.charts.time_line.indexOf(datetimes[i])
-      for (var key in data.charts.lines) {
-        for (var key2 in data.charts.lines[key]) {
-          let el = data.charts.lines[key][key2][index-1]
-          data.charts.lines[key][key2].splice(index,0,el)
-        }
-      }
-      data.charts.time_line.splice(index,0,newTime)
-    }
-    oldDate = datetimes[i]
-  }
-  return data.charts
-}
+// const corectedData=(data)=>{
+//   let datetimes = data.charts.time_line.slice()
+//   let oldDate = null
+//   for (var i = 0; i < datetimes.length; i++) {
+//     if(oldDate&&datetimes[i] - oldDate !== 500){
+//       let newTime = datetimes[i]
+//       newTime=newTime-500
+//       let index = data.charts.time_line.indexOf(datetimes[i])
+//       for (var key in data.charts.lines) {
+//         for (var key2 in data.charts.lines[key]) {
+//           let el = data.charts.lines[key][key2][index-1]
+//           data.charts.lines[key][key2].splice(index,0,el)
+//         }
+//       }
+//       data.charts.time_line.splice(index,0,newTime)
+//     }
+//     oldDate = datetimes[i]
+//   }
+//   return data.charts
+// }
 
 export const ChartsPage = () => {
   const {devices} = useContext(DeviceStatusContext)

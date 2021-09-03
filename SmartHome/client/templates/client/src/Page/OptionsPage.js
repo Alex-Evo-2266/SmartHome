@@ -1,5 +1,5 @@
 import React from 'react'
-import {NavLink, Link, useLocation} from 'react-router-dom'
+import {NavLink, useLocation} from 'react-router-dom'
 import {Header} from '../components/moduls/header'
 import {UserOption} from '../components/pages/optionPages/userOption'
 import {ServerOption} from '../components/pages/optionPages/serverOption'

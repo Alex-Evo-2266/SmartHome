@@ -17,10 +17,15 @@ def ServerConfigEdit(data):
     zigbee = {
         "topic":data["zigbee2mqttTopic"]
     }
+    email = {
+        "login":data["emailLogin"],
+        "password":data["emailPass"]
+    }
     zigbee2mqttTopic = templates["zigbee2mqtt"]
     zigbee2mqttTopic = zigbee2mqttTopic["topic"]
     templates["mqttBroker"] = mqtt
     templates["zigbee2mqtt"] = zigbee
+    templates["mail"] = email
     with open(SERVER_CONFIG, 'w') as f:
         yaml.dump(templates, f, default_flow_style=False)
     ClearTopicks()

@@ -3,7 +3,7 @@ import defFon from '../img/fon-base.jpg'
 
 function LightenDarkenColor(col, amt) {
     var usePound = false;
-    if (col[0] == "#") {
+    if (col[0] === "#") {
         col = col.slice(1);
         usePound = true;
     }
@@ -82,7 +82,7 @@ const backgroundType = function () {
 
 export const useCastomStyle = () => {
 
-  const setStyle = (colors)=>{
+  const setStyle = useCallback((colors)=>{
     if(!colors)
       return defstyle()
     if(!colors.c1)
@@ -96,31 +96,31 @@ export const useCastomStyle = () => {
     if(!colors.ok)
       colors.ok = "#00d22d";
     setColors(colors)
-  }
+  },[])
 
-  const setBackground = (url)=>{
+  const setBackground = useCallback((url)=>{
     if(!url)
       return defbacground()
     document.body.style = `background: url(${url});
       background-size: cover;
       background-attachment: fixed;`;
-  }
+  },[])
 
-  const adaptiveBackground = (images)=>{
+  const adaptiveBackground = useCallback((images)=>{
     if(!images)
       return defbacground()
     console.log(backgroundType());
     setBackground(getimage(images,backgroundType()).image)
-  }
+  },[setBackground])
 
-  const avtoNightStyle = (style,nightStyle)=>{
+  const avtoNightStyle = useCallback((style,nightStyle)=>{
     if(!style || !nightStyle)
       return defstyle()
     if(backgroundType() === "night")
       setStyle(nightStyle)
     else
       setStyle(style)
-  }
+  },[setStyle])
 
   return {setStyle, setBackground, adaptiveBackground, avtoNightStyle}
 }

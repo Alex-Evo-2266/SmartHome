@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import {generateDatabyDevice,getOption} from './utils'
+import {getOption} from './utils'
 import {NoContent} from './scrins/noContent'
 import {HistoryList} from './scrins/HistoryList'
 

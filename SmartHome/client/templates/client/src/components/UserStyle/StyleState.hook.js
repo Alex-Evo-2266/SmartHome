@@ -46,7 +46,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
     setConfig(dataUserConf)
     setServerConfig(serverData)
     return {dataStyles, dataUserConf, serverData}
-  },[])
+  },[request,token])
 
   const updataStyle = useCallback(async() => {
     if(!token)
@@ -66,7 +66,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
       setStyle(style)
 
 
-  },[token,getData])
+  },[token,getData,adaptiveBackground,avtoNightStyle,setStyle,setBackground])
 
   const update = ()=>{
     setFlag(true);

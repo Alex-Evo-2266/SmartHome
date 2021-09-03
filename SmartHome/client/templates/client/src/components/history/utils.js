@@ -50,14 +50,14 @@ export const generateDatabyDevice=(data,device)=>{
   return newData
 }
 
-function castomZip(arr1, arr2) {
-  const min = (arr1.length<arr2.length)?arr1.length:arr2.length
-  let arrdict = []
-  for (var i = 0; i < min; i++) {
-    arrdict[i] = { x: new Date(arr1[i]), y: arr2[i] }
-  }
-  return arrdict
-}
+// function castomZip(arr1, arr2) {
+//   const min = (arr1.length<arr2.length)?arr1.length:arr2.length
+//   let arrdict = []
+//   for (var i = 0; i < min; i++) {
+//     arrdict[i] = { x: new Date(arr1[i]), y: arr2[i] }
+//   }
+//   return arrdict
+// }
 
 export function toDate(timestamp) {
   const shortMonths = [

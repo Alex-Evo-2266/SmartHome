@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import {UserContext} from '../context/UserContext'
 import {StyleContext} from '../components/UserStyle/StyleContext'
 import {useHttp} from '../hooks/http.hook'
@@ -25,8 +25,8 @@ export const EditStylePage = () => {
   const config = useContext(UserContext)
   const {styles,updateConfig} = useContext(StyleContext)
   const {message} = useMessage();
-  const {loading, request, error, clearError} = useHttp();
-  const {setStyle, avtoNightStyle, adaptiveBackground, setBackground} = useCastomStyle()
+  const {request, error, clearError} = useHttp();
+  const {setStyle} = useCastomStyle()
   const [style, setStyle1] = useState(getColors(styles,config.Style))
 
   const colorHandler = (event)=>{
@@ -41,8 +41,14 @@ export const EditStylePage = () => {
   const out = ()=>{
     setStyle(getColors(styles,config.Style))
     history.goBack();
-
   }
+
+  useEffect(()=>{
+    message(error,"error")
+    return ()=>{
+      clearError();
+    }
+  },[error,message, clearError])
 
   const createStyle = async() =>{
     if(!style.name)

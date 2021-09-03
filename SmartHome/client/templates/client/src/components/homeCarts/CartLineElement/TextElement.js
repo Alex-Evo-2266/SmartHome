@@ -93,12 +93,6 @@ const outHandler = (event)=>{
   return outValue(device.DeviceId,outvalue)
 }
 
-  const valuesDecod = (data)=>{
-    let newstr = data.split(" ").join("")
-    let arr1 = newstr.split(",")
-    return arr1
-  }
-
   return(
     <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
       <div className="icon">

@@ -1,11 +1,9 @@
 import React,{useContext,useEffect,useState,useCallback} from 'react'
-import {Link} from 'react-router-dom'
 import {AuthContext} from '../../../context/AuthContext.js'
 import {UserContext} from '../../../context/UserContext'
 import {Loader} from '../../Loader'
 import {StyleIcon} from './castomIcon/styleIcon'
 import {StyleContext} from '../../UserStyle/StyleContext'
-import {FormContext} from '../../Form/formContext'
 import {Select} from '../../select/select'
 import {useHistory} from 'react-router-dom'
 import {useHttp} from '../../../hooks/http.hook'
@@ -16,7 +14,6 @@ export const UserOption = () =>{
   const config = useContext(UserContext)
   const history = useHistory()
   const {styles, updateConfig} = useContext(StyleContext)
-  const form = useContext(FormContext)
 
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
@@ -54,10 +51,6 @@ export const UserOption = () =>{
 
   const checkedHandler = event => {
     setUserconf({ ...userconf, [event.target.name]: event.target.checked })
-  }
-
-  const createStyle = () => {
-    form.show("CreateStyle");
   }
 
   useEffect(()=>{
@@ -98,7 +91,7 @@ export const UserOption = () =>{
           {
             styles?.map((item, index)=>{
               return(
-                <div  key={index} onClick={(mode)?()=>{}:()=>{}} className={`choiceElement ${(mode)?"deleted":""} ${(userconf.style===item.name)?"active":null}`} data-name={item.name} onClick={styleHandler}>
+                <div  key={index} onClick={(mode)?()=>{}:styleHandler} className={`choiceElement ${(mode)?"deleted":""} ${(userconf.style===item.name)?"active":null}`} data-name={item.name}>
                   <StyleIcon colors={item}/>
                 </div>
               )

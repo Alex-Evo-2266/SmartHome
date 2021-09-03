@@ -12,7 +12,6 @@ TRASH
 mosquitto/data/*
 mosquitto/log/*
 makefile
-server-config.yml
 whileCost
 zigbee2mqtt/database.db
 zigbee2mqtt/log

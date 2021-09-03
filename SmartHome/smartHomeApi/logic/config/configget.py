@@ -25,13 +25,24 @@ def GiveServerConfig():
             templates = yaml.safe_load(f)
         mqttBroker = templates["mqttBroker"]
         zigbeeBroker = templates["zigbee2mqtt"]
+        mail = templates["mail"]
         server={
             "mqttBroker":mqttBroker["host"],
             "mqttBrokerPort":mqttBroker["port"],
             "loginMqttBroker":mqttBroker["user"],
             "passwordMqttBroker":mqttBroker["password"],
-            "zigbee2mqttTopic":zigbeeBroker["topic"]
+            "zigbee2mqttTopic":zigbeeBroker["topic"],
+            "emailLogin":mail["login"],
+            "emailPass":mail["password"]
         }
         return server
     except Exception as e:
-        return {"mqttBroker":"0.0.0.0","mqttBrokerPort":"1883","loginMqttBroker":"admin","passwordMqttBroker":"admin","zigbee2mqttTopic":"zigbee2mqtt"}
+        return {
+        "mqttBroker":"0.0.0.0",
+        "mqttBrokerPort":"1883",
+        "loginMqttBroker":"admin",
+        "passwordMqttBroker":"admin",
+        "zigbee2mqttTopic":"zigbee2mqtt",
+        "emailLogin":'',
+        "emailPass":''
+        }

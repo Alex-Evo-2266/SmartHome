@@ -1,6 +1,5 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import {StyleIcon} from '../../pages/optionPages/castomIcon/styleIcon'
-import {SelectioEnlementImg} from '../../addDeviceComponent/selectioEnlementImg'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
@@ -8,7 +7,7 @@ import {AuthContext} from '../../../context/AuthContext.js'
 export const CreateStyle = ({hide})=>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
-  const {loading, request, error, clearError} = useHttp();
+  const {request, error, clearError} = useHttp();
   const [style, setStyle] = useState({
     name: '',
     c1: "#303030",
@@ -26,6 +25,13 @@ export const CreateStyle = ({hide})=>{
     await request(`/api/user/style/add`, 'POST', style,{Authorization: `Bearer ${auth.token}`})
     hide();
   }
+
+  useEffect(()=>{
+    message(error,"error")
+    return ()=>{
+      clearError();
+    }
+  },[error,message, clearError])
 
   return(
     <div className="form">
