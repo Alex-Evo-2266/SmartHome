@@ -6,20 +6,21 @@ import {Loader} from '../../Loader'
 import {StyleIcon} from './castomIcon/styleIcon'
 import {StyleContext} from '../../UserStyle/StyleContext'
 import {FormContext} from '../../Form/formContext'
+import {Select} from '../../select/select'
+import {useHistory} from 'react-router-dom'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
-import lightStyle from '../../../img/lightstyle.png'
-import nightStyle from '../../../img/nightstyle.png'
-import gibridStyle from '../../../img/gibridstyle.png'
 
 export const UserOption = () =>{
   const auth = useContext(AuthContext)
   const config = useContext(UserContext)
+  const history = useHistory()
   const {styles, updateConfig} = useContext(StyleContext)
   const form = useContext(FormContext)
 
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
+  const [mode , setMode] = useState(false)
   const [userconf , setUserconf] = useState({
     auteStyle:false,
     staticBackground:false,
@@ -88,20 +89,21 @@ export const UserOption = () =>{
         </label>
       </div>
       <div className="configElement block">
-        <p className="text">Style</p>
+        <p className="switchText">Style</p>
+        <Select className="editstyle" title={<i className="fas fa-bars"></i>}>
+          <li className="selectElement" onClick={()=>history.push("/config/style")}>create</li>
+          <li className="selectElement" onClick={()=>setMode(true)}>detete</li>
+        </Select>
         <div className="StyleChoice">
           {
             styles?.map((item, index)=>{
               return(
-                <div key={index} className={`choiceElement ${(userconf.style===item.name)?"active":null}`} data-name={item.name} onClick={styleHandler}>
+                <div  key={index} onClick={(mode)?()=>{}:()=>{}} className={`choiceElement ${(mode)?"deleted":""} ${(userconf.style===item.name)?"active":null}`} data-name={item.name} onClick={styleHandler}>
                   <StyleIcon colors={item}/>
                 </div>
               )
             })
           }
-          <Link className="choiceElement" to={"/config/style"}>
-            <i className="fas fa-plus"></i>
-          </Link>
         </div>
       </div>
       <button onClick={userConfigHandler}>Save</button>

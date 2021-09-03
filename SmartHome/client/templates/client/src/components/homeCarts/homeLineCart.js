@@ -8,6 +8,7 @@ import {SliderElement} from './CartLineElement/SliderElement'
 import {SensorElement} from './CartLineElement/SensorElement'
 import {ScriptElement} from './CartLineElement/ScriptElement'
 import {EnumElement} from './CartLineElement/EnumElement'
+import {TextElement} from './CartLineElement/TextElement'
 // import {WeatherElement} from './CartElement/WeatherElement'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
@@ -178,8 +179,22 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     (edit)?editElement:null
                   }
                   />
-                  </div>
-                :(item.type==="slider")?
+                  </div>:
+                  (item.type==="text")?
+                  <div className="line-el">
+                  <TextElement
+                  index={item.index}
+                  disabled={edit}
+                  data={item}
+                  deleteBtn={
+                    (edit)?deleteElement:null
+                  }
+                  editBtn={
+                    (edit)?editElement:null
+                  }
+                  />
+                  </div>:
+                  (item.type==="slider")?
                   <div className="line-el">
                   <SliderElement
                   index={item.index}

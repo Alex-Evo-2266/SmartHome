@@ -27,6 +27,7 @@
 @import "./tableMqtt/tableMqtt.base.css";
 @import "./chart/chart.base.css";
 @import "./styleEdit/styleEdit.base.css";
+@import "./select/select.css";
 
 
 @import "./runText.css";

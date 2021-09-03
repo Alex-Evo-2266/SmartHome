@@ -1,0 +1,91 @@
+.castomSelect{
+  position: absolute;
+  z-index: 10;
+}
+.editstyle{
+  right: 10px;
+  top: 10px;
+}
+.selectElement{
+  min-width: 150px;
+  font-size: 20px;
+}
+.selectHeader{
+  height: 25px;
+  font-size: 20px;
+  padding: 5px;
+  background: var(--color-darken);
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.editstyle .selectHeader{
+  height: 25px;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.selectContent{
+  position: absolute;
+  top: 33px;
+  right: 0;
+  border: 2px solid var(--color-darken);
+  font-size: 20px;
+  background: var(--color-normal);
+  overflow: hidden;
+}
+.selectContent > *{
+  padding: 5px;
+  transition: .5s;
+}
+.selectContent > *:hover{
+  background: var(--active-v1-color);
+}
+.castomSelect .selectContent{
+  max-height: 0;
+  max-width: 0;
+  border: none;
+}
+.castomSelect .selectContent.hide{
+  animation: closeSelect 1s ;
+  max-height: 0;
+  max-width: 0;
+  border: none;
+}
+.castomSelect .selectContent.show{
+  animation: openSelect 1s;
+  max-height: 100px;
+  border: 2px solid var(--color-darken);
+  max-width: 164px;
+}
+@keyframes openSelect {
+  0%{
+    max-height: 0;
+    max-width: 0;
+    border: none;
+  }
+  1%{
+    border: 2px solid var(--color-darken);
+  }
+  100%{
+    max-height: 100px;
+    max-width: 164px;
+  }
+}
+@keyframes closeSelect {
+  100%{
+    max-height: 0;
+    max-width: 0;
+    border: none;
+  }
+  99%{
+    border: 2px solid var(--color-darken);
+  }
+  0%{
+    max-height: 100px;
+    max-width: 164px;
+    border: 2px solid var(--color-darken);
+  }
+}

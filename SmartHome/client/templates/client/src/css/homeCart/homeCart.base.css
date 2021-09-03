@@ -3,6 +3,7 @@
 @import "./Sensor/sensor.base.css";
 @import "./Base/BaseCartElement.css";
 @import "./Enum/enum.base.css";
+@import "./Text/text.base.css";
 @import "./Weather/Weather.css";
 @import "./homeCart.color.css";
 

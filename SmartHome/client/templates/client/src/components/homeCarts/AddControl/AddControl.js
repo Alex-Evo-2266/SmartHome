@@ -6,6 +6,7 @@ import {AddSlider} from './Control/addSlider'
 import {AddScript} from './Control/addScript'
 import {AddSensor} from './Control/addSensor'
 import {AddEnum} from './Control/addEnum'
+import {AddText} from './Control/addText'
 
 const weather = {
   id:null,
@@ -55,7 +56,13 @@ export const AddControl = ()=>{
               <li onClick={()=>setTypeChild("slider")}><span>3</span>slider</li>
               <li onClick={()=>setTypeChild("sensor")}><span>4</span>sensor monitor</li>
               <li onClick={()=>setTypeChild("enum")}><span>5</span>enum</li>
-              <li onClick={()=>addButton(weather)}><span>6</span>weather</li>
+              {
+                (addControl.type === "AddButton")?
+                <li onClick={()=>addButton(weather)}><span>6</span>weather</li>:
+                (addControl.type === "AddLineButton")?
+                <li onClick={()=>setTypeChild("text")}><span>6</span>text</li>:
+                null
+              }
             </ul>:
             (typeChild==="button")?
             <AddButton add={addButton}/>:
@@ -66,7 +73,9 @@ export const AddControl = ()=>{
             (typeChild==="sensor")?
             <AddSensor add={addButton}/>:
             (typeChild==="enum")?
-            <AddEnum add={addButton}/>
+            <AddEnum add={addButton}/>:
+            (typeChild==="text")?
+            <AddText add={addButton}/>
             :null
           }
         </div>

@@ -65,7 +65,7 @@ export const EditStylePage = () => {
           </div>
           <div className="opasityfield">
             <p>opasity</p>
-            <input type="checkbox" value={style?.opasiryc1} name="opasiryc1" onChange={opasityHandler}/>
+            <input type="checkbox" checked={style?.opasiryc1} name="opasiryc1" onChange={opasityHandler}/>
           </div>
         </div>
         <div className="boxFieldColor">
@@ -75,7 +75,7 @@ export const EditStylePage = () => {
           </div>
           <div className="opasityfield">
             <p>opasity</p>
-            <input type="checkbox" value={style?.opasiryc2} name="opasiryc2" onChange={opasityHandler}/>
+            <input type="checkbox" checked={style?.opasiryc2} name="opasiryc2" onChange={opasityHandler}/>
           </div>
         </div>
         <div className="boxFieldColor">
@@ -85,7 +85,7 @@ export const EditStylePage = () => {
           </div>
           <div className="opasityfield">
             <p>opasity</p>
-            <input type="checkbox" value={style?.opasiryc3} name="opasiryc3" onChange={opasityHandler}/>
+            <input type="checkbox" checked={style?.opasiryc3} name="opasiryc3" onChange={opasityHandler}/>
           </div>
         </div>
         <div className="boxFieldColor">
@@ -95,7 +95,7 @@ export const EditStylePage = () => {
           </div>
           <div className="opasityfield">
             <p>opasity</p>
-            <input type="checkbox" value={style?.opasiryActive} name="opasiryActive" onChange={opasityHandler}/>
+            <input type="checkbox" checked={style?.opasiryActive} name="opasiryActive" onChange={opasityHandler}/>
           </div>
         </div>
         <div className="boxFieldColor">
@@ -105,7 +105,7 @@ export const EditStylePage = () => {
           </div>
           <div className="opasityfield">
             <p>opasity</p>
-            <input type="checkbox" value={style?.opasiryOk} name="opasiryOk" onChange={opasityHandler}/>
+            <input type="checkbox" checked={style?.opasiryOk} name="opasiryOk" onChange={opasityHandler}/>
           </div>
         </div>
       </div>

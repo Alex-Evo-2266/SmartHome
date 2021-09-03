@@ -92,6 +92,15 @@
   background: #0000;
   z-index: 3;
 }
+
+.choiceElement.deleted:hover::after{
+  content: 'x';
+  line-height: 82px;
+  text-align: center;
+  align-items: center;
+  font-size: 30px;
+  background: #F009;
+}
 .choiceElement i{
   font-size: 2.5em;
 }
