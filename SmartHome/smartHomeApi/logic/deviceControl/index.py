@@ -31,3 +31,9 @@ def start():
     s = threading.Thread(target=datasend)
     s.daemon = True
     s.start()
+<<<<<<< HEAD
+=======
+    # loop = asyncio.get_event_loop()
+    # loop.run_until__complete(test())
+    # loop.close();
+>>>>>>> df4dc7537ccd435d2595c8a8b01cc6e379a2d1c8

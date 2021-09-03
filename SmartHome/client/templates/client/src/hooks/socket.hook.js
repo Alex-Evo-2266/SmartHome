@@ -36,8 +36,8 @@ export const SocketState = ({children}) =>{
 
         socket.current.onmessage = function(e) {
               const data = JSON.parse(e.data);
+              // console.log(data.message);
               if(data.message instanceof Object){
-                //console.log(data.message.device);
                 setDevices(data.message.device)
               }
           };
