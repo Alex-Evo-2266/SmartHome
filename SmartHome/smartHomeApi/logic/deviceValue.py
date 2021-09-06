@@ -2,6 +2,7 @@ from ..models import Device,Room,genId,ValueDevice,ValueListDevice
 from .runScript import runScripts
 from datetime import datetime
 import json
+import threading
 
 def devicestatus(id, type):
     dev = Device.objects.get(id=id)
@@ -21,13 +22,12 @@ def setValueAtToken(address,value):
                 for key in data:
                     for item2 in item.valuedevice_set.all():
                         if(item2.address==key):
-                            deviceSetStatus(item.id,item2.name,data[key])
+                            deviceSetStatusThread(item.id,item2.name,data[key])
 
         else:
             for item2 in item.valuedevice_set.all():
                 if base_address + '/' + item2.address==address:
-                    return deviceSetStatus(item.id,item2.name,value)
-
+                    return deviceSetStatusThread(item.id,item2.name,value)
 
 def deviceSetStatus(id, type,value,script=True):
     try:
@@ -44,17 +44,29 @@ def deviceSetStatus(id, type,value,script=True):
                         value = "0";
                     else:
                         return None
-                item.value = value
-                item.save()
-                ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=type,value=value,device=dev)
+                if(item.value != value):
+                    try:
+                        item.value = value
+                        item.save()
+                        # print("save",dev.DeviceName)
+                        ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=type,value=value,device=dev)
+                    except Exception as e:
+                        print('error write list',e)
+                # print("active",dev.DeviceName)
                 if(script):
                     runScripts(id,type)
+                print("end",dev.DeviceName)
         return value
         print('not value error')
         return True
     except Exception as e:
         print('set value error ',e)
         return None
+
+def deviceSetStatusThread(id, type,value,script=True):
+    s = threading.Thread(target=deviceSetStatus, args=(id, type,value,script))
+    s.daemon = True
+    s.start()
 
 def GetTopicks():
     arr = []

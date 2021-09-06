@@ -3,7 +3,7 @@ from ..models import Device,ValueDevice,Room,genId
 from .deviceControl.SmartHomeDevice import ControlDevices
 from yeelight import BulbException
 # from DeviceControl.miioDevice.control import is_device,lamp
-from .deviceValue import deviceSetStatus
+from .deviceValue import deviceSetStatusThread
 
 from ..classes.devicesArrey import DevicesArrey
 
@@ -96,7 +96,6 @@ def device(item):
             }
         element = devicesArrey.get(item.id)
         status = "offline"
-
         if not element:
             dev = ControlDevices(item.receiveDict(),{"address":item.DeviceAddress, "token":item.DeviceToken},confdecod(item))
             if dev.get_device():
@@ -116,7 +115,6 @@ def device(item):
                 "status":"offline"
                 }
         element["device"].get_value()
-
         if element:
             status = "online"
 
@@ -185,7 +183,7 @@ def editDevice(data):
             room = Room.objects.get(id=data["RoomId"])
             dev.room = room
         if("DeviceValue" in data):
-            deviceSetStatus(data["DeviceId"],"value",data["DeviceValue"])
+            deviceSetStatusThread(data["DeviceId"],"value",data["DeviceValue"])
         dev.save()
         vals = ValueDevice.objects.filter(device__id=data["DeviceId"])
         print(data)

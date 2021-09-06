@@ -1,5 +1,5 @@
 from yeelight import Bulb,PowerMode
-from smartHomeApi.logic.deviceValue import deviceSetStatus
+from smartHomeApi.logic.deviceValue import deviceSetStatusThread
 from smartHomeApi.models import Device,Room,genId,ValueDevice
 
 def createValue(id,type,min=0,max=1,icon=""):
@@ -13,7 +13,7 @@ def createValue(id,type,min=0,max=1,icon=""):
         typeControl = "binary"
         if(type=="brightness" or type=="color" or type=="temp" or type=="bg_brightness" or type=="bg_temp" or type=="bg_color"):
             typeControl = "number"
-        val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,type=type,typeControl=typeControl,high=max,low=min,icon=icon)
+        val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,name=type,type=typeControl,high=max,low=min,icon=icon)
         val.save()
 
 class Yeelight(Bulb):
@@ -116,22 +116,33 @@ class Yeelight(Bulb):
             values["power"] = "0"
         if(save):
             for item2 in values:
-                deviceSetStatus(self.__item["DeviceId"],item2,values[item2])
+                deviceSetStatusThread(self.__item["DeviceId"],item2,values[item2])
 
         return values
 
     def runCommand(self,type,command):
         # print(type,command)
+        dev = Device.objects.get(id=self.__item["DeviceId"])
+        valuesdb = dev.valuedevice_set.get(name = type)
+
         if type=="power":
+            valuesdb.value = command
+            valuesdb.save()
             if(command==1):
                 self.turn_on()
             else:
                 self.turn_off()
         elif type=="brightness":
+            valuesdb.value = command
+            valuesdb.save()
             self.set_brightness(int(command))
         elif type=="temp":
+            valuesdb.value = command
+            valuesdb.save()
             self.set_color_temp(int(command))
         elif type=="color":
+            valuesdb.value = command
+            valuesdb.save()
             print("WTF")
         elif type=="modeTarget":
             status = int(self.get_value(False)["mode"])
@@ -139,8 +150,12 @@ class Yeelight(Bulb):
             status += 1
             if(status>int(control)-1):
                 status = 0
+            valuesdb.value = status
+            valuesdb.save()
             self.set_mode(status)
         elif type=="mode":
+            valuesdb.value = command
+            valuesdb.save()
             self.set_mode(int(command))
 
     def on(self):

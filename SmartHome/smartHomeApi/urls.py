@@ -13,6 +13,7 @@ urlpatterns = [
     path('user/edit/password',views.UserEditPassword.as_view()),
     path('user/newpass',views.UserNewPassword.as_view()),
     path('user/style/add',views.CreateStyle.as_view()),
+    path('user/style/remove',views.RemoveStyle.as_view()),
     path('user/styles',views.Style.as_view()),
     path('devices/<int:id>',views.DeviceGetDeleteView.as_view()),
     path('devices',views.DevicePutPostView.as_view()),

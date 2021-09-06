@@ -45,6 +45,11 @@ export const UserOption = () =>{
     // }, 200);
   }
 
+  const deleteStyle = async (event)=>{
+    await request(`/api/user/style/remove`, 'DELETE', {name:event.target.dataset.name}, {Authorization: `Bearer ${auth.token}`})
+    updateConfig();
+  }
+
   const styleHandler = async(event)=>{
     setUserconf({ ...userconf, style:event.target.dataset.name })
   }
@@ -85,13 +90,17 @@ export const UserOption = () =>{
         <p className="switchText">Style</p>
         <Select className="editstyle" title={<i className="fas fa-bars"></i>}>
           <li className="selectElement" onClick={()=>history.push("/config/style")}>create</li>
-          <li className="selectElement" onClick={()=>setMode(true)}>detete</li>
+          <li className={`selectElement ${(mode)?"active":""}`} onClick={()=>setMode(!mode)}>detete</li>
         </Select>
         <div className="StyleChoice">
           {
             styles?.map((item, index)=>{
               return(
-                <div  key={index} onClick={(mode)?()=>{}:styleHandler} className={`choiceElement ${(mode)?"deleted":""} ${(userconf.style===item.name)?"active":null}`} data-name={item.name}>
+                <div
+                key={index}
+                onClick={(mode && (item.name !== "light" && item.name !== "night"))?deleteStyle:styleHandler}
+                className={`choiceElement ${(mode && (item.name !== "light" && item.name !== "night"))?"deleted":""} ${(userconf.style===item.name)?"active":null}`}
+                data-name={item.name}>
                   <StyleIcon colors={item}/>
                 </div>
               )

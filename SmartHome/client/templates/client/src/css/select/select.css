@@ -20,6 +20,9 @@
   top: 0;
   right: 0;
 }
+.selectHeader.active{
+  background: var(--active-v1-color);
+}
 .editstyle .selectHeader{
   height: 25px;
   width: 25px;
@@ -48,6 +51,9 @@
   max-width: 0;
   border: none;
 }
+.selectElement.active{
+  background: var(--active-v1-color);
+}
 .castomSelect .selectContent.hide{
   animation: closeSelect 1s ;
   max-height: 0;
@@ -57,7 +63,7 @@
 .castomSelect .selectContent.show{
   animation: openSelect 1s;
   max-height: 100px;
-  border: 2px solid var(--color-darken);
+  border: 2px solid var(--active-v1-color);
   max-width: 164px;
 }
 @keyframes openSelect {

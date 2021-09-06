@@ -10,7 +10,7 @@ export const Select = ({className, title, children})=>{
       selectRef.current.classList.remove("show")
       selectRef.current.classList.add("hide")
       setTimeout(function () {
-        selectRef.current.classList.remove("hide")
+        selectRef.current?.classList?.remove("hide")
       }, 1000);
     }
     else
@@ -22,8 +22,8 @@ export const Select = ({className, title, children})=>{
 
   return(
     <div className={`castomSelect ${className}`}>
-      <div className="selectHeader" onClick={togle}>{title}</div>
-      <ul ref={selectRef} className={`selectContent`}>
+      <div className={`selectHeader ${(visible)?"active":""}`} onClick={togle}>{title}</div>
+      <ul ref={selectRef} className={`selectContent`} onClick={togle}>
       {children}
       </ul>
     </div>

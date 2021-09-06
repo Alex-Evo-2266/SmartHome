@@ -1,0 +1,35 @@
+else: []
+if:
+  action: null
+  children:
+  - action: action
+    idDevice: 6
+    oper: ==
+    type: device
+    value:
+      type: enum
+      value: rotate_right
+  idDevice: null
+  oper: and
+  type: group
+  value: null
+name: testdeg1
+status: true
+then:
+- DeviceId: 4
+  action: brightness
+  type: device
+  value:
+    action: +
+    type: math
+    value1:
+      action: brightness
+      idDevice: 4
+      type: device
+    value2:
+      type: number
+      value: '10'
+trigger:
+- DeviceId: 6
+  action: action
+  type: device

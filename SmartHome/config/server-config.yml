@@ -1,3 +1,5 @@
+base:
+  timeSend: 6
 mail:
   login: df@mail.ru
   password: '12345'

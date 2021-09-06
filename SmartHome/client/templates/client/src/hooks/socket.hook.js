@@ -13,7 +13,7 @@ export const SocketState = ({children}) =>{
       socket.current = new WebSocket(
             'ws://'
             // + window.location.host
-            + '127.0.0.1:5001'
+            + '127.0.0.1:5000'
             + '/ws/smartHome/'
             + 'devices'
             + '/'
@@ -36,7 +36,7 @@ export const SocketState = ({children}) =>{
 
         socket.current.onmessage = function(e) {
               const data = JSON.parse(e.data);
-              // console.log(data.message);
+              console.log(data.message);
               if(data.message instanceof Object){
                 setDevices(data.message.device)
               }

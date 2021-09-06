@@ -33,3 +33,10 @@ def getStyle(name):
     with open(path) as f:
         templates = yaml.safe_load(f)
     return templates
+
+def removeStyle(name):
+    templates = None
+    name = name + ".yml"
+    path = os.path.join(STYLES_DIR,name)
+    print(path)
+    os.remove(path)

@@ -2,24 +2,27 @@ else: []
 if:
   action: null
   children:
-  - action: field1binary
-    idDevice: 5
+  - action: action
+    idDevice: 6
     oper: ==
     type: device
     value:
       type: enum
-      value: high
+      value: slide
   idDevice: null
   oper: and
   type: group
   value: null
-name: testnew
+name: tst5
 status: true
 then:
-- DeviceId: togle
-  action: run
-  type: script
+- DeviceId: 4
+  action: state
+  type: device
+  value:
+    type: enum
+    value: togle
 trigger:
-- DeviceId: 5
-  action: field1binary
+- DeviceId: 6
+  action: action
   type: device

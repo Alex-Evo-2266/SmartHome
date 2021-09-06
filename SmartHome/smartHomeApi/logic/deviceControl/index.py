@@ -6,7 +6,7 @@ from asgiref.sync import async_to_sync
 import threading
 import time
 
-def sendDeployments():
+def sendDeviceData():
     type = "chat_devices"
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
@@ -22,7 +22,7 @@ def sendDeployments():
 def datasend():
     while True:
         time.sleep(6)
-        sendDeployments()
+        sendDeviceData()
 
 
 def start():

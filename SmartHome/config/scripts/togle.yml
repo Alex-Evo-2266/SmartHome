@@ -1,7 +1,20 @@
-else: []
+else:
+- DeviceId: 8
+  action: power
+  type: device
+  value:
+    type: enum
+    value: low
 if:
   action: null
-  children: []
+  children:
+  - action: power
+    idDevice: 8
+    oper: ==
+    type: device
+    value:
+      type: enum
+      value: low
   idDevice: null
   oper: and
   type: group
@@ -9,10 +22,10 @@ if:
 name: togle
 status: false
 then:
-- DeviceId: 4
-  action: state
+- DeviceId: 8
+  action: power
   type: device
   value:
     type: enum
-    value: togle
+    value: high
 trigger: []

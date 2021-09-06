@@ -19,7 +19,7 @@ from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopi
 from .logic.deviceControl.zigbee.zigbee import reboot
 from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices
 from .logic.charts import getCharts
-from .logic.style import addstyle, getStyles, getStyle
+from .logic.style import addstyle, getStyles, getStyle,removeStyle
 
 from .models import User, UserConfig,ImageBackground,genId,LocalImage,Device
 
@@ -183,6 +183,17 @@ class Style(APIView):
         if not authData:
             return Response(status=403)
         return Response(getStyles(),status=200)
+
+class RemoveStyle(APIView):
+    """docstring for CreateStyle."""
+    def delete(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        data = json.loads(request.body)
+        removeStyle(data["name"])
+        return Response("ok",status=200)
+
 
 # server views
 

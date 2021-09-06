@@ -1,4 +1,4 @@
-from smartHomeApi.logic.deviceValue import devicestatus,deviceSetStatus
+from smartHomeApi.logic.deviceValue import devicestatus,deviceSetStatusThread
 from ..mqttDevice.connect import connect
 
 class Variable():
@@ -22,7 +22,7 @@ class Variable():
         return d
 
     def set_value(self,value):
-        return deviceSetStatus(self.DeviceId,"value",value)
+        return deviceSetStatusThread(self.DeviceId,"value",value)
 
     def get_value(self):
         prop=[

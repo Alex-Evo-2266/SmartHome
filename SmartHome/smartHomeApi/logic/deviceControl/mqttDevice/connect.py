@@ -8,8 +8,9 @@ mqttClient = [None]
 
 def connect():
     def on_message(client, userdata, msg):
+        print(msg.topic,str(msg.payload.decode('utf-8')))
         setValueAtToken(msg.topic,str(msg.payload.decode('utf-8')))
-        addTopic(msg.topic,str(msg.payload.decode('utf-8')))
+        # addTopic(msg.topic,str(msg.payload.decode('utf-8')))
     try:
         conf = GiveServerConfig()
         client = mqtt.Client()

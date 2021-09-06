@@ -4,7 +4,7 @@ from .system.variable import Variable
 from yeelight import Bulb ,PowerMode
 from miio import Device,DeviceError,DeviceException
 # from smartHomeApi.logic.runScript import runScripts
-from smartHomeApi.logic.deviceValue import deviceSetStatus
+from smartHomeApi.logic.deviceValue import deviceSetStatusThread
 
 def is_device(ip, token):
     try:
@@ -89,7 +89,7 @@ class ControlDevices():
 
     def set_value(self,status)->None:
         if(type(self.device)==Variable):
-            deviceSetStatus(self.__item["DeviceId"],"value",status)
+            deviceSetStatusThread(self.__item["DeviceId"],"value",status)
             # self.device.set_value(status)
 
     # def __str__(self)
