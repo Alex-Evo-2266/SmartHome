@@ -14,12 +14,8 @@
   grid-gap: 5px;
 }
 
-.light .opasityFon{
-  background: rgba(255, 255, 255, 0.5);
-  min-height: 100vh;
-}
-.night .opasityFon{
-  background: rgba(0, 0, 0, 0.5);
+.opasityFon{
+  background: var(--color-glass);
   min-height: 100vh;
 }
 
@@ -37,13 +33,19 @@
 }
 .cartImageInput {
   border-radius: 6px;
-  background: var(--content-color);
+  background: var(--color-normal);
   padding: 1rem;
   margin: 0 20px;
   box-shadow: 2px 3px 10px rgba(0,0,0,.2);
 }
 .cartImageInput h2{
   text-align: center;
+}
+.galeryContent{
+  color: var(--text-color-darken-fon);
+}
+.cartImageInput{
+  color: var(--text-color-darken-fon);
 }
 .cartImageInput .btn{
   width: auto;
@@ -57,7 +59,7 @@
   padding: 0.5rem 1.5rem;
   font-weight: 700;
   outline: none;
-  background: var(--content-color);
+  background: var(--color-normal);
   /* filter: brightness(var(--btn)); */
   transition: all 0.22s;
   cursor: pointer;
@@ -65,7 +67,7 @@
 }
 .cartImageInput .btn.primary{
   background: var(--active-v1-color);
-  color: var(--content-color);
+  color: var(--color-normal);
 }
 .cartImageInput .btn:active{
   box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
@@ -109,7 +111,7 @@
   right: 0;
   top:0;
   font-weight: bold;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--color-glass);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,7 +130,7 @@
   right: 0;
   left: 0;
   font-size: 0.8rem;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--color-glass);
   display: flex;
   align-items: center;
   justify-content: space-between;
