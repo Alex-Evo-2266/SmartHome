@@ -211,7 +211,22 @@ class ValueDevice(models.Model):
             "icon":self.icon,
             "unit":self.unit,
             "type":self.type,
-            "control":self.control
+            "control":self.control,
+            "value":self.value
+        }
+        
+    def toDict(self):
+        return {
+            "name":self.name,
+            "address":self.address,
+            "low":self.low,
+            "high":self.high,
+            "values":self.values,
+            "icon":self.icon,
+            "unit":self.unit,
+            "type":self.type,
+            "control":self.control,
+            "value":self.value
         }
 
     def receiveDict(self):

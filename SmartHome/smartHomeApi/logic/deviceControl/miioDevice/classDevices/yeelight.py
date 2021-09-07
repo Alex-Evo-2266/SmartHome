@@ -24,7 +24,8 @@ class Yeelight(Bulb):
         super().__init__(self.address)
         config1 = self.get_properties()
         config2 = self.get_model_specs()
-
+        print(config1)
+        print(config2)
         # field_init
         self.__is_power = True
         self.__is_dimmer = True
@@ -91,6 +92,7 @@ class Yeelight(Bulb):
 
     def get_value(self,save=True):
         val = self.get_properties()
+        print(val)
         values={
         "power":val["power"],
         "temp":val["ct"],

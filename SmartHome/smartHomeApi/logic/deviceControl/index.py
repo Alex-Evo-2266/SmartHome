@@ -6,6 +6,16 @@ from asgiref.sync import async_to_sync
 import threading
 import time
 
+class Test(object):
+    """docstring for test."""
+
+    def __init__(self):
+        self.arg = "arg"
+
+    def gety(self):
+        return self.arg
+
+
 def sendDeviceData():
     type = "chat_devices"
     channel_layer = get_channel_layer()
@@ -27,6 +37,9 @@ def datasend():
 
 def start():
     connect()
+
+    r = Test()
+    print(r.gety())
 
     s = threading.Thread(target=datasend)
     s.daemon = True
