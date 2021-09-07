@@ -1,8 +1,9 @@
 from smartHomeApi.models import Device,Room,genId,ValueDevice
+from .DeviceElement import DeviceElement
 
 def look_for_param(arr:list, val):
     for item in arr:
-        if(param is item && item.name == val):
+        if("name" is item and item.name == val):
             return(item)
     return None
 
@@ -42,19 +43,21 @@ class BaseDevice(object):
 
     def set_value(self, name, status):
         value = look_for_param(self.values, name)
-        value.value = status
+        if(value):
+            value.value = status
 
     def save(self):
         dev = Device.objects.get(id=self.id)
         values = dev.valuedevice_set.all()
         for item in values:
             value = look_for_param(self.values, item.name)
-            item.value = value.value
-            item.save()
+            if(value):
+                item.value = value.value
+                item.save()
 
-    def get_All_Info(self):
+    def get_Base_Info(self):
         res = {
-        "DeviceAddress": self.address,
+        "DeviceAddress": self.coreAddress,
         "DeviceId": self.id,
         "DeviceInformation": self.info,
         "DeviceName": self.name,
@@ -73,3 +76,7 @@ class BaseDevice(object):
             vals[item.name] = item.value
         res["DeviceConfig"] = values
         res["DeviceValue"] = vals
+        return res
+
+    def get_All_Info(self):
+        return self.get_Base_Info()

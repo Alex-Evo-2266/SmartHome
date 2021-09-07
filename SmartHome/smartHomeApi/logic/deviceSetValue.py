@@ -12,7 +12,7 @@ def setValue(id, type, value):
 
         e = device
         print("p0")
-        e.set_status(type,value)
+        e.set_value(type,value)
         return True
     except Exception as ex:
         print("set value error",ex)

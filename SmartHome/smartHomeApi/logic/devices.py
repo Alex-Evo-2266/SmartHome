@@ -9,6 +9,9 @@ from ..classes.devicesArrey import DevicesArrey
 
 # from ..tasks import updataDataDevice
 
+from .deviceControl.miioDevice.Yeelight import Yeelight
+from .deviceControl.mqttDevice.MQTTDevice import MQTTDevice
+
 import json
 import ast
 
@@ -82,47 +85,35 @@ def addDevice(data):
         return False
 
 def device(item):
+    id = item.id
+    typeConnect = item.DeviceTypeConnect
+    dev = None
+    status = "offline"
     try:
-        if(not item.DeviceStatus):
-            control = item.DeviceControl
-            if(control==""):
-                control="{}"
-            return {
-            **item.receiveDict(),
-            "DeviceConfig":confdecod(item),
-            # "DeviceControl":ast.literal_eval(control),
-            "DeviceValue":None,
-            "status":"unlink"
-            }
-        element = devicesArrey.get(item.id)
-        status = "offline"
-        if not element:
-            dev = ControlDevices(item.receiveDict(),{"address":item.DeviceAddress, "token":item.DeviceToken},confdecod(item))
-            if dev.get_device():
-                devicesArrey.addDevice(item.id,dev)
-                element = devicesArrey.get(item.id)
-                item.DeviceControl = str(element["device"].get_control())
-                item.save()
-            else:
-                control = item.DeviceControl
-                if(control==""):
-                    control="{}"
+        element = devicesArrey.get(id)
+        print("p1")
+        if(not element):
+            if(typeConnect == "yeelight"):
+                dev = Yeelight(id=id)
+            if(typeConnect == "mqtt"):
+                dev = MQTTDevice(id=id)
+            if(not dev.get_device()):
                 return {
-                **item.receiveDict(),
-                "DeviceConfig":confdecod(item),
-                # "DeviceControl":ast.literal_eval(control),
-                "DeviceValue":None,
+                **dev.get_Base_Info(),
                 "status":"offline"
                 }
-        element["device"].get_value()
-        if element:
+            devicesArrey.addDevice(id,dev)
+            print("p2")
+
+        else:
+            print("2alt")
+
             status = "online"
+            dev = element["device"]
+        print("p3",item.DeviceName)
 
         return {
-        **item.receiveDict(),
-        "DeviceConfig":confdecod(item),
-        # "DeviceControl":ast.literal_eval(item.DeviceControl),
-        "DeviceValue":item.get_value(),
+        **dev.get_All_Info(),
         "status":status
         }
 
@@ -130,21 +121,80 @@ def device(item):
         print("error device",e)
         el = devicesArrey.get(item.id)
         if(el):
+            dev = el['device']
             devicesArrey.delete(item.id)
-        try:
-            control = item.DeviceControl
-            if(control==""):
-                control="{}"
             return {
-            **item.receiveDict(),
-            "DeviceConfig":confdecod(item),
-            # "DeviceControl":ast.literal_eval(control),
-            "DeviceValue":None,
-            "status":"offline"
+                **dev.get_Base_Info(),
+                "status":"offline"
             }
-        except Exception as ex:
-            print(ex)
-            return None
+        return None
+
+
+
+
+    # try:
+    #     if(not item.DeviceStatus):
+    #         control = item.DeviceControl
+    #         if(control==""):
+    #             control="{}"
+    #         return {
+    #         **item.receiveDict(),
+    #         "DeviceConfig":confdecod(item),
+    #         # "DeviceControl":ast.literal_eval(control),
+    #         "DeviceValue":None,
+    #         "status":"unlink"
+    #         }
+    #     element = devicesArrey.get(item.id)
+    #     status = "offline"
+    #     if not element:
+    #         dev = ControlDevices(item.receiveDict(),{"address":item.DeviceAddress, "token":item.DeviceToken},confdecod(item))
+    #         if dev.get_device():
+    #             devicesArrey.addDevice(item.id,dev)
+    #             element = devicesArrey.get(item.id)
+    #             item.DeviceControl = str(element["device"].get_control())
+    #             item.save()
+    #         else:
+    #             control = item.DeviceControl
+    #             if(control==""):
+    #                 control="{}"
+    #             return {
+    #             **item.receiveDict(),
+    #             "DeviceConfig":confdecod(item),
+    #             # "DeviceControl":ast.literal_eval(control),
+    #             "DeviceValue":None,
+    #             "status":"offline"
+    #             }
+    #     element["device"].get_value()
+    #     if element:
+    #         status = "online"
+    #
+    #     return {
+    #     **item.receiveDict(),
+    #     "DeviceConfig":confdecod(item),
+    #     # "DeviceControl":ast.literal_eval(item.DeviceControl),
+    #     "DeviceValue":item.get_value(),
+    #     "status":status
+    #     }
+    #
+    # except Exception as e:
+    #     print("error device",e)
+    #     el = devicesArrey.get(item.id)
+    #     if(el):
+    #         devicesArrey.delete(item.id)
+    #     try:
+    #         control = item.DeviceControl
+    #         if(control==""):
+    #             control="{}"
+    #         return {
+    #         **item.receiveDict(),
+    #         "DeviceConfig":confdecod(item),
+    #         # "DeviceControl":ast.literal_eval(control),
+    #         "DeviceValue":None,
+    #         "status":"offline"
+    #         }
+    #     except Exception as ex:
+    #         print(ex)
+    #         return None
 
 
 def giveDevice(id):

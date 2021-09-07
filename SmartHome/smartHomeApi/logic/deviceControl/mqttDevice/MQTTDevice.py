@@ -6,13 +6,13 @@ from .connect import getMqttClient
 
 def look_for_param(arr:list, val):
     for item in arr:
-        if(param is item && item.name == val):
+        if("name" is item and item.name == val):
             return(item)
     return None
 
 def look_for_by_topic(arr:list, val):
     for item in arr:
-        if(param is item && item.address == val):
+        if("address" is item and item.address == val):
             return(item)
     return None
 
@@ -21,7 +21,7 @@ def look_for_by_topic(arr:list, val):
 class MQTTDevice(BaseDevice):
 
     def __init__(self, *args, **kwargs):
-        super(, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def update_value(self, *args, **kwargs):
         topic = kwargs["topic"]
@@ -29,6 +29,9 @@ class MQTTDevice(BaseDevice):
 
         val = look_for_by_topic(self.values, topic)
         val.value = value
+
+    def get_device(self):
+        return True
 
     def set_value(self, name, status):
         client = getMqttClient()
@@ -52,9 +55,9 @@ class MQTTDevice(BaseDevice):
             data = dict()
             data[val.topic] = message
             data = json.dumps(data)
-            client.publish(self.address+"/set", data)
+            client.publish(self.coreAddress+"/set", data)
         else:
-            alltopic = self.address + "/" + val.topic
+            alltopic = self.coreAddress + "/" + val.topic
             client.publish(alltopic, message)
 
         super().set_value(name, status)
