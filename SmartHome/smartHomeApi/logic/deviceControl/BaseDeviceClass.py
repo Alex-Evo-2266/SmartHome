@@ -51,3 +51,25 @@ class BaseDevice(object):
             value = look_for_param(self.values, item.name)
             item.value = value.value
             item.save()
+
+    def get_All_Info(self):
+        res = {
+        "DeviceAddress": self.address,
+        "DeviceId": self.id,
+        "DeviceInformation": self.info,
+        "DeviceName": self.name,
+        "DeviceStatus": self.status,
+        "DeviceSystemName":self.systemName,
+        "DeviceToken":self.token,
+        "DeviceType":self.type,
+        "DeviceTypeConnect": self.typeConnect,
+        "RoomId": None,
+        "DeviceValueType":self.valueType,
+        }
+        values = []
+        vals = dict()
+        for item in self.values:
+            values.append(item.getDict())
+            vals[item.name] = item.value
+        res["DeviceConfig"] = values
+        res["DeviceValue"] = vals

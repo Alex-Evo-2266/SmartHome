@@ -90,7 +90,7 @@ def device(item):
             return {
             **item.receiveDict(),
             "DeviceConfig":confdecod(item),
-            "DeviceControl":ast.literal_eval(control),
+            # "DeviceControl":ast.literal_eval(control),
             "DeviceValue":None,
             "status":"unlink"
             }
@@ -110,7 +110,7 @@ def device(item):
                 return {
                 **item.receiveDict(),
                 "DeviceConfig":confdecod(item),
-                "DeviceControl":ast.literal_eval(control),
+                # "DeviceControl":ast.literal_eval(control),
                 "DeviceValue":None,
                 "status":"offline"
                 }
@@ -121,7 +121,7 @@ def device(item):
         return {
         **item.receiveDict(),
         "DeviceConfig":confdecod(item),
-        "DeviceControl":ast.literal_eval(item.DeviceControl),
+        # "DeviceControl":ast.literal_eval(item.DeviceControl),
         "DeviceValue":item.get_value(),
         "status":status
         }
@@ -138,7 +138,7 @@ def device(item):
             return {
             **item.receiveDict(),
             "DeviceConfig":confdecod(item),
-            "DeviceControl":ast.literal_eval(control),
+            # "DeviceControl":ast.literal_eval(control),
             "DeviceValue":None,
             "status":"offline"
             }

@@ -36,7 +36,7 @@ class Yeelight(BaseDevice):
             print("yeelight initialize error",e)
             self.device = None
 
-    def update_value(self):
+    def update_value(self, *args, **kwargs):
         values = self.device.get_properties()
         state = look_for_param(self.values, "state")
         if(state && "power" is values):
@@ -73,6 +73,9 @@ class Yeelight(BaseDevice):
         if(type == "temp"):
             self.set_color_temp(int(status))
         if(type == "mode"):
-            self.set_mode(int(status))
+            if(int(status)==1):
+                self.set_power_mode(PowerMode.MOONLIGHT)
+            if(int(status)==0):
+                self.set_power_mode(PowerMode.NORMAL)
 
         super().set_value(name, status)
