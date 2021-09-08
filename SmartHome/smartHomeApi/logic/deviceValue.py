@@ -3,6 +3,9 @@ from .runScript import runScripts
 from datetime import datetime
 import json
 import threading
+from ..classes.devicesArrey import DevicesArrey
+
+devicesArrey = DevicesArrey()
 
 def devicestatus(id, type):
     dev = Device.objects.get(id=id)
@@ -13,28 +16,32 @@ def devicestatus(id, type):
     return None
 
 def setValueAtToken(address,value):
-    devices = Device.objects.all()
+    devices = devicesArrey.all()
     for item in devices:
-        base_address = item.DeviceAddress
-        if(item.DeviceValueType=="json"):
+        dev = item["device"]
+        if(dev.typeConnect != "mqtt"):
+            continue
+        base_address = dev.coreAddress
+        if(dev.valueType=="json"):
             if(base_address == address):
                 data = json.loads(value)
                 for key in data:
-                    for item2 in item.valuedevice_set.all():
+                    for item2 in dev.values:
                         if(item2.address==key):
-                            deviceSetStatusThread(item.id,item2.name,data[key])
+                            deviceSetStatusThread(dev.id,item2.name,data[key])
 
         else:
-            for item2 in item.valuedevice_set.all():
+            for item2 in dev.values:
                 if base_address + '/' + item2.address==address:
-                    return deviceSetStatusThread(item.id,item2.name,value)
+                    return deviceSetStatusThread(dev.id,item2.name,value)
 
 def deviceSetStatus(id, type,value,script=True):
     try:
         if(value==None or type=="background"):
             return None
-        dev = Device.objects.get(id=id)
-        values = dev.valuedevice_set.all()
+        dev = devicesArrey.get(id)
+        dev = dev["device"]
+        values = dev.values
         for item in values:
             if item.name==type:
                 if(item.type=="binary"):
@@ -47,15 +54,12 @@ def deviceSetStatus(id, type,value,script=True):
                 if(item.value != value):
                     try:
                         item.value = value
-                        item.save()
-                        # print("save",dev.DeviceName)
-                        ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=type,value=value,device=dev)
+                        # ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=type,value=value,device_id=dev.id)
                     except Exception as e:
                         print('error write list',e)
-                # print("active",dev.DeviceName)
                 if(script):
                     runScripts(id,type)
-                print("end",dev.DeviceName)
+                print("end",dev.name)
         return value
         print('not value error')
         return True

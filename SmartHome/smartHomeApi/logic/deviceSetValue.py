@@ -9,9 +9,7 @@ def setValue(id, type, value):
     try:
         deviceDect = devicesArrey.get(id)
         device = deviceDect["device"]
-
         e = device
-        print("p0")
         e.set_value(type,value)
         return True
     except Exception as ex:

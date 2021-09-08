@@ -20,6 +20,9 @@ class DeviceElement(object):
         self.values = getParams(kwargs, "values")
         self.value = getParams(kwargs, "value")
 
+    def __str__(self):
+        return str(self.name)
+
     def getDict(self):
         return {
         "name": self.name,

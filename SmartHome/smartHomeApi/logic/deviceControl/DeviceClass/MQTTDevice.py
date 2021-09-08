@@ -2,17 +2,17 @@ from smartHomeApi.logic.deviceValue import deviceSetStatusThread
 from smartHomeApi.models import Device,Room,genId,ValueDevice
 from ..BaseDeviceClass import BaseDevice
 from ..DeviceElement import DeviceElement
-from .connect import getMqttClient
+from ..mqttDevice.connect import getMqttClient
 
 def look_for_param(arr:list, val):
     for item in arr:
-        if("name" is item and item.name == val):
+        if(item.name == val):
             return(item)
     return None
 
 def look_for_by_topic(arr:list, val):
     for item in arr:
-        if("address" is item and item.address == val):
+        if(item.address == val):
             return(item)
     return None
 
@@ -36,6 +36,7 @@ class MQTTDevice(BaseDevice):
     def set_value(self, name, status):
         client = getMqttClient()
         message = ""
+        print("f")
         val = look_for_param(self.values, name)
         if(val.type=="binary"):
             if(int(status)==1):
@@ -53,11 +54,11 @@ class MQTTDevice(BaseDevice):
             message = status
         if(self.valueType=="json"):
             data = dict()
-            data[val.topic] = message
+            data[val.address] = message
             data = json.dumps(data)
             client.publish(self.coreAddress+"/set", data)
         else:
-            alltopic = self.coreAddress + "/" + val.topic
+            alltopic = self.coreAddress + "/" + val.address
             client.publish(alltopic, message)
 
         super().set_value(name, status)

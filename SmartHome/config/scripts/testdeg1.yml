@@ -16,7 +16,7 @@ if:
 name: testdeg1
 status: true
 then:
-- DeviceId: 4
+- DeviceId: 8
   action: brightness
   type: device
   value:
@@ -24,7 +24,7 @@ then:
     type: math
     value1:
       action: brightness
-      idDevice: 4
+      idDevice: 8
       type: device
     value2:
       type: number

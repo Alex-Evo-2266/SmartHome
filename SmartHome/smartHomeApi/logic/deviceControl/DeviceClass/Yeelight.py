@@ -6,7 +6,7 @@ from ..DeviceElement import DeviceElement
 
 def look_for_param(arr:list, val):
     for item in arr:
-        if(("name" is item) and (item.name == val)):
+        if(item.name == val):
             return(item)
     return None
 
@@ -21,16 +21,16 @@ class Yeelight(BaseDevice):
         try:
             values = self.device.get_properties()
             minmaxValue = self.device.get_model_specs()
-            if(not look_for_param(self.values, "state") and "power" is values):
-                val = 0
+            if(not look_for_param(self.values, "state") and "power" in values):
+                val = "0"
                 if(values["power"] == "on"):
-                    val = 1
+                    val = "1"
                 self.values.append(DeviceElement(name="state", control=True, high=1, low=0, type="binary", icon="fas fa-power-off", value=val))
-            if(not look_for_param(self.values, "brightness") and "current_brightness" is values):
+            if(not look_for_param(self.values, "brightness") and "current_brightness" in values):
                 self.values.append(DeviceElement(name="brightness", control=True, high=100, low=0, type="number", icon="far fa-sun", value=values["current_brightness"]))
-            if(not look_for_param(self.values, "mode") and "active_mode" is values):
+            if(not look_for_param(self.values, "mode") and "active_mode" in values):
                 self.values.append(DeviceElement(name="mode", control=True, high=values["color_mode"], low=0, type="binary", icon="fab fa-medium-m", value=values["active_mode"]))
-            if(not look_for_param(self.values, "temp") and "ct" is values):
+            if(not look_for_param(self.values, "temp") and "ct" in values):
                 self.values.append(DeviceElement(name="temp", control=True, high=minmaxValue["color_temp"]["max"], low=minmaxValue["color_temp"]["min"], type="number", icon="fas fa-adjust", value=values["ct"]))
         except Exception as e:
             print("yeelight initialize error",e)
@@ -38,21 +38,20 @@ class Yeelight(BaseDevice):
 
     def update_value(self, *args, **kwargs):
         values = self.device.get_properties()
-        print(values)
         state = look_for_param(self.values, "state")
-        if(state and "power" is values):
-            val = 0
+        if(state and "power" in values):
+            val = "0"
             if(values["power"] == "on"):
-                val = 1
+                val = "1"
             state.value = val
         brightness = look_for_param(self.values, "brightness")
-        if(brightness and "current_brightness" is values):
+        if(brightness and "current_brightness" in values):
             brightness.value = values["current_brightness"]
         mode = look_for_param(self.values, "mode")
-        if(mode and "active_mode" is values):
+        if(mode and "active_mode" in values):
             mode.value = values["active_mode"]
         temp = look_for_param(self.values, "temp")
-        if(temp and "ct" is values):
+        if(temp and "ct" in values):
             temp.value = values["ct"]
 
 
@@ -66,7 +65,6 @@ class Yeelight(BaseDevice):
 
     def set_value(self, name, status):
         if(name == "state"):
-            print(name,status)
             if(status==1):
                 self.device.turn_on()
             else:

@@ -1,6 +1,6 @@
 else:
 - DeviceId: 8
-  action: power
+  action: state
   type: device
   value:
     type: enum
@@ -8,7 +8,7 @@ else:
 if:
   action: null
   children:
-  - action: power
+  - action: state
     idDevice: 8
     oper: ==
     type: device
@@ -23,7 +23,7 @@ name: togle
 status: false
 then:
 - DeviceId: 8
-  action: power
+  action: state
   type: device
   value:
     type: enum

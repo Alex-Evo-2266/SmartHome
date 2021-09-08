@@ -3,6 +3,9 @@ from ..models import Device
 from SmartHome.settings import SCRIPTS_DIR
 import os, sys
 import yaml
+from ..classes.devicesArrey import DevicesArrey
+
+devicesArrey = DevicesArrey()
 
 
 def runScripts(idDevice,type):
@@ -53,8 +56,9 @@ def ifblock(data):
     try:
         if(data["type"]=="device"):
             idDev = data["idDevice"]
-            device = Device.objects.get(id=idDev)
-            values = device.valuedevice_set.all()
+            device = devicesArrey.get(idDev)
+            device = device["device"]
+            values = device.values
             for item in values:
                 if(item.name == data["action"]):
                     if(data["value"]):
@@ -96,7 +100,7 @@ def getvalue(data,option):
     oldValue = None
     if(("device" in option) and ("field" in option)):
         field = None
-        for item in option["device"].valuedevice_set.all():
+        for item in option["device"].values:
             if(item.name==option["field"]):
                 type = item.type
                 oldValue = item.value
@@ -133,8 +137,9 @@ def getvalue(data,option):
             return v1//v2
     if(data["type"]== "device"):
         IDdevice = data["idDevice"]
-        device = Device.objects.get(id=IDdevice)
-        values = device.valuedevice_set.all()
+        device = devicesArrey.get(IDdevice)
+        device = device["device"]
+        values = device.values
         for item in values:
             if(item.name == data["action"]):
                 val = item.value
@@ -144,7 +149,8 @@ def actiondev(data):
     for item in data:
         if(item["type"]=="device"):
             IDdevice = item["DeviceId"]
-            device = Device.objects.get(id=IDdevice)
+            device = devicesArrey.get(IDdevice)
+            device = device["device"]
             val = getvalue(item["value"],{"device":device,"field":item["action"]})
             setValue(device.id,item["action"],val)
         elif(item["type"]=="script"):
@@ -157,7 +163,8 @@ def actiondev(data):
             print("oh")
 
 def lockforScript(idDevice,type):
-    device = Device.objects.get(id=idDevice)
+    device = devicesArrey.get(idDevice)
+    device = device["device"]
     fileList = os.listdir(SCRIPTS_DIR)
     listscripts = list()
     if type=="variable":

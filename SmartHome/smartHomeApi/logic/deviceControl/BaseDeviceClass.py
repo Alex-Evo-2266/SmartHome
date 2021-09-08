@@ -3,7 +3,7 @@ from .DeviceElement import DeviceElement
 
 def look_for_param(arr:list, val):
     for item in arr:
-        if("name" is item and item.name == val):
+        if(item.name == val):
             return(item)
     return None
 
