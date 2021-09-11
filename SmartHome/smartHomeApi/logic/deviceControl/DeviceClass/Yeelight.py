@@ -1,5 +1,4 @@
 from yeelight import Bulb,PowerMode
-from smartHomeApi.logic.deviceValue import deviceSetStatusThread
 from smartHomeApi.models import Device,Room,genId,ValueDevice
 from ..BaseDeviceClass import BaseDevice
 from ..DeviceElement import DeviceElement
@@ -64,6 +63,8 @@ class Yeelight(BaseDevice):
         return super().get_values()
 
     def set_value(self, name, status):
+        status = super().set_value(name, status)
+
         if(name == "state"):
             if(status==1):
                 self.device.turn_on()
@@ -79,7 +80,6 @@ class Yeelight(BaseDevice):
             if(int(status)==0):
                 self.device.set_power_mode(PowerMode.NORMAL)
 
-        super().set_value(name, status)
 
     def get_All_Info(self):
         self.update_value()

@@ -1,13 +1,9 @@
 from django.conf import settings
 from ..models import Device,ValueDevice,Room,genId
-from .deviceControl.SmartHomeDevice import ControlDevices
 from yeelight import BulbException
-# from DeviceControl.miioDevice.control import is_device,lamp
-from .deviceValue import deviceSetStatusThread
 
 from ..classes.devicesArrey import DevicesArrey
 
-# from ..tasks import updataDataDevice
 
 from .deviceControl.DeviceClass.Yeelight import Yeelight
 from .deviceControl.DeviceClass.MQTTDevice import MQTTDevice

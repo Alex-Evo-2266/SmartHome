@@ -28,12 +28,12 @@ def setValueAtToken(address,value):
                 for key in data:
                     for item2 in dev.values:
                         if(item2.address==key):
-                            deviceSetStatusThread(dev.id,item2.name,data[key])
+                            deviceSetStatus(dev.id,item2.name,data[key])
 
         else:
             for item2 in dev.values:
                 if base_address + '/' + item2.address==address:
-                    return deviceSetStatusThread(dev.id,item2.name,value)
+                    return deviceSetStatus(dev.id,item2.name,value)
 
 def deviceSetStatus(id, type,value,script=True):
     try:
@@ -54,7 +54,6 @@ def deviceSetStatus(id, type,value,script=True):
                 if(item.value != value):
                     try:
                         item.value = value
-                        # ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=type,value=value,device_id=dev.id)
                     except Exception as e:
                         print('error write list',e)
                 if(script):
@@ -67,10 +66,10 @@ def deviceSetStatus(id, type,value,script=True):
         print('set value error ',e)
         return None
 
-def deviceSetStatusThread(id, type,value,script=True):
-    s = threading.Thread(target=deviceSetStatus, args=(id, type,value,script))
-    s.daemon = True
-    s.start()
+# def deviceSetStatusThread(id, type,value,script=True):
+#     s = threading.Thread(target=deviceSetStatus, args=(id, type,value,script))
+#     s.daemon = True
+#     s.start()
 
 def GetTopicks():
     arr = []

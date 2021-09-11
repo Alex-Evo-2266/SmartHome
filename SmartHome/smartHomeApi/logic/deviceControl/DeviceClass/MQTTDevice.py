@@ -1,4 +1,3 @@
-from smartHomeApi.logic.deviceValue import deviceSetStatusThread
 from smartHomeApi.models import Device,Room,genId,ValueDevice
 from ..BaseDeviceClass import BaseDevice
 from ..DeviceElement import DeviceElement
@@ -34,9 +33,10 @@ class MQTTDevice(BaseDevice):
         return True
 
     def set_value(self, name, status):
+        super().set_value(name, status)
+
         client = getMqttClient()
         message = ""
-        print("f")
         val = look_for_param(self.values, name)
         if(val.type=="binary"):
             if(int(status)==1):
@@ -60,5 +60,3 @@ class MQTTDevice(BaseDevice):
         else:
             alltopic = self.coreAddress + "/" + val.address
             client.publish(alltopic, message)
-
-        super().set_value(name, status)

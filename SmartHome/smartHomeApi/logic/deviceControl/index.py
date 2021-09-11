@@ -5,16 +5,21 @@ from smartHomeApi.logic.devices import giveDevices
 from asgiref.sync import async_to_sync
 import threading
 import time
+from smartHomeApi.classes.devicesArrey import DevicesArrey
 
-class Test(object):
-    """docstring for test."""
+devicesArrey = DevicesArrey()
 
-    def __init__(self):
-        self.arg = "arg"
 
-    def gety(self):
-        return self.arg
+def saveData():
+    devices = devicesArrey.all()
+    for item in devices:
+        dev = item["device"]
+        dev.save()
 
+def datasave():
+    while True:
+        time.sleep(120)
+        saveData()
 
 def sendDeviceData():
     type = "chat_devices"
@@ -38,9 +43,10 @@ def datasend():
 def start():
     connect()
 
-    r = Test()
-    print(r.gety())
-
     s = threading.Thread(target=datasend)
     s.daemon = True
     s.start()
+
+    s2 = threading.Thread(target=datasave)
+    s2.daemon = True
+    s2.start()

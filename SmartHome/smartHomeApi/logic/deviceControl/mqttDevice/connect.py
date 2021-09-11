@@ -8,11 +8,8 @@ mqttClient = [None]
 
 def connect():
     def on_message(client, userdata, msg):
-        print("p0",msg.topic,str(msg.payload.decode('utf-8')))
         setValueAtToken(msg.topic,str(msg.payload.decode('utf-8')))
-        print("p1")
-        # addTopic(msg.topic,str(msg.payload.decode('utf-8')))
-        print("p2")
+        addTopic(msg.topic,str(msg.payload.decode('utf-8')))
     try:
         conf = GiveServerConfig()
         client = mqtt.Client()
@@ -26,21 +23,6 @@ def connect():
     except Exception as e:
         print("ex",e)
 
-
-    # try:
-    #     client = connect()
-    #     client.on_message = on_message
-    #     client.subscribe("#")
-    # except Exception as e:
-    #     print("ex",e)
-
-
-# def on_connect(client, userdata, flags, rc):
-#     # print("Connected with result code "+str(rc))
-#     topicks = GetTopicks()
-#     for item in topicks:
-#         # print(item)
-#         client.subscribe(item)
 def desconnect():
     try:
         client = mqttClient[0]
