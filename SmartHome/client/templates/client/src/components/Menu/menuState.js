@@ -1,10 +1,17 @@
-import React, {useReducer} from 'react'
+import React, {useReducer, useCallback} from 'react'
 import {MenuContext} from './menuContext'
 import {menuReducer} from './menuReducer'
-import {SHOW_MENU, HIDE_MENU} from '../types'
+import {SHOW_MENU, HIDE_MENU, EDIT_MENU} from '../types'
 
 export const MenuState = ({children}) =>{
   const [state, dispatch] = useReducer(menuReducer,{visible:false})
+
+  const setData = useCallback((title="",specialAction={},buttons=[]) =>{
+    dispatch({
+      type:EDIT_MENU,
+      payload: {title,specialAction,buttons}
+    })
+  },[])
 
   const show = () =>{
     dispatch({
@@ -33,7 +40,7 @@ export const MenuState = ({children}) =>{
 
   return(
     <MenuContext.Provider
-    value={{show, hide, togle, menu: state}}>
+    value={{show, hide, togle,setData, menu: state}}>
       {children}
     </MenuContext.Provider>
   )

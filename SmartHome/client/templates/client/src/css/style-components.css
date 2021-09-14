@@ -3,8 +3,8 @@
 
 @import "./variable/base.css";
 
-@import "./leftMenu/leftMenu.base.css";
-@import "./header/header.base.css";
+@import "./Menu/leftMenu.base.css";
+/* @import "./header/header.base.css"; */
 @import "./deviceCart/deviceCart.base.css";
 @import "./hidingLi/hidingLi.base.css";
 @import "./form/form.base.css";

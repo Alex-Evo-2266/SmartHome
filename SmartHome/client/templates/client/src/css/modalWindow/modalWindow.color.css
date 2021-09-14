@@ -1,14 +1,14 @@
 .modalHeader{
-  background: var(--color-darken);
+  background: var(--color-base);
 }
 .modalHeader h4{
   color: var(--text-color-darken-fon);
 }
 .centerWindow{
-  border: 2px solid var(--color-darken);
+  border: 2px solid var(--color-base);
 }
 .centerWindow .centerWindowContent{
-  background: var(--darken-color);
+  background: var(--color-base);
   color: var(--text-color-darken-fon);
 }
 .IfdeviceList .deviceElement{

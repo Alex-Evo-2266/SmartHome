@@ -1,22 +1,17 @@
 .NewCardElement .NewCardHeader{
-  background: var(--color-darken);
-  color: var(--text-color-darken-fon);
+  background: var(--color-normal);
+  color: var(--text-color-normal-fon);
 }
 .DeviceControlLi{
-    background: var(--color-darken);
-    color: var(--text-color-darken-fon);
+    background: var(--color-normal);
+    color: var(--text-color-normal-fon);
 }
-.DeviceControlLi:nth-child(2n+1){
-  background: var(--color-light);
-  color: var(--text-color-light-fon);
-}
-.DeviceControlLi:nth-child(2n+2){
+.DeviceControlLi{
   background: var(--color-normal);
-  /* filter: brightness(50%); */
 }
 .NewCardElement .NewCardControl .cardControlBtn{
-  background: var(--btn-color-darken);
-  color: var(--text-color-darken-fon);
+  background: var(--color-normal);
+  color: var(--text-color-normal-fon);
 }
 .NewCardElement .NewCardControl .cardControlBtn:hover{
   background: var(--active-v1-color);

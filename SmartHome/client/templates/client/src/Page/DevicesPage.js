@@ -1,11 +1,14 @@
 import React, {useContext,useEffect,useState,useRef} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import {Header} from '../components/moduls/header'
 import {NewDeviceElement} from '../components/moduls/newDeviceElement'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
+import {MenuContext} from '../components/Menu/menuContext'
 
 export const DevicesPage = () => {
+  const history = useHistory()
   const allDevices = useContext(DeviceStatusContext)
+  const {setData} = useContext(MenuContext)
 
   const [devices, setDevices] = useState([]);
   const read = useRef(0)
@@ -15,7 +18,15 @@ export const DevicesPage = () => {
       setDevices(allDevices.devices)
       read.current++
     }
+
   },[allDevices.devices])
+
+  useEffect(()=>{
+    setData("Device All",{
+      type: "add",
+      action:()=>history.push("/devices/add")
+    })
+  },[setData])
 
   const searchout = (data)=>{
     if(data===""){
@@ -25,12 +36,12 @@ export const DevicesPage = () => {
     let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(data)!==-1)
     setDevices(array)
   }
-
+  // <Header search={searchout} name="Device All">
+  // <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
+  // </Header>
   return(
       <div className = "conteiner top bottom">
-        <Header search={searchout} name="Device All">
-        <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
-        </Header>
+
         <div className = "Devices">
           {
             (!devices||devices.length === 0)?

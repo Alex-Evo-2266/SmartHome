@@ -4,6 +4,7 @@ import {AuthContext} from '../context/AuthContext.js'
 import {SelectioEnlementImg} from '../components/addDeviceComponent/selectioEnlementImg'
 import {DeviceMqtt} from '../components/addDeviceComponent/config/mqttDevices'
 import {AnimationLi} from '../components/animationLi.js'
+import {MenuContext} from '../components/Menu/menuContext'
 import {useHttp} from '../hooks/http.hook'
 import {useChecked} from '../hooks/checked.hook'
 import {useMessage} from '../hooks/message.hook'
@@ -21,6 +22,7 @@ import imgValue from '../img/val.png'
 
 export const AddDevicesPage = () => {
   const auth = useContext(AuthContext)
+  const {setData} = useContext(MenuContext)
   const history = useHistory()
   const {USText} = useChecked()
   const {message, clearMessage} = useMessage();
@@ -37,8 +39,8 @@ export const AddDevicesPage = () => {
   });
 
   useEffect(()=>{
-    console.log(form);
-  },[form])
+    setData("Add device")
+  },[setData])
 
   useEffect(()=>{
     message(error,"error")

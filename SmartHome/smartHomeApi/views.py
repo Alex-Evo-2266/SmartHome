@@ -121,9 +121,9 @@ class UserEditPassword(APIView):
 class UserNewPassword(APIView):
     """docstring for User."""
     def post(self,request):
-        authData = auth(request)
-        if not authData:
-            return Response(status=403)
+        # authData = auth(request)
+        # if not authData:
+        #     return Response(status=403)
         data = json.loads(request.body)
         mes = newGenPass(data["name"])
         if(mes == "ok"):

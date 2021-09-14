@@ -1,0 +1,32 @@
+.menuTogleBtn{
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+.menuTogleBtn:active{
+  color: var(--active-color);
+}
+.contextmenu{
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  border-radius: 4px;
+  box-shadow: 0 0 5px #000;
+  background: var(--color-normal);
+}
+.contextmenu.show{
+  display: block;
+}
+.contextmenuElement{
+  padding: 5px;
+  min-width: 100px;
+  text-align: right;
+  cursor: pointer;
+}
+.contextmenuElement:hover{
+  background: var(--color-normal);
+  filter: brightness(80%);
+}

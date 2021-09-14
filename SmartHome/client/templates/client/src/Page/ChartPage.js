@@ -2,6 +2,7 @@ import React, {useContext,useEffect,useState,useCallback} from 'react'
 import {useHttp} from '../hooks/http.hook'
 import {Header} from '../components/moduls/header'
 import {AuthContext} from '../context/AuthContext.js'
+import {MenuContext} from '../components/Menu/menuContext'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
 import {DeviceHistory} from  '../components/history/DeviceHistory'
 
@@ -27,6 +28,7 @@ import {DeviceHistory} from  '../components/history/DeviceHistory'
 // }
 
 export const ChartsPage = () => {
+  const {setData} = useContext(MenuContext)
   const {devices} = useContext(DeviceStatusContext)
   const auth = useContext(AuthContext)
   const {request} = useHttp();
@@ -40,6 +42,10 @@ export const ChartsPage = () => {
       console.error(e);
     }
   },[request,auth.token])
+
+  useEffect(()=>{
+    setData("Add user")
+  },[setData])
 
   useEffect(()=>{
     importCharts()

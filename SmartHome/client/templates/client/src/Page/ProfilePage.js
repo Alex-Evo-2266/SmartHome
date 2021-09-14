@@ -130,18 +130,6 @@ export const ProfilePage = () => {
               <button onClick={outPassForm}>Save</button>
             </div>
           </div>
-          <ul className = "page-nav">
-            <li className = {(location.pathname==="/profile")?"active":""}>
-              <NavLink to = "/profile" exact >
-                <i className="fas fa-user"></i>
-              </NavLink>
-            </li>
-            <li className = {(location.pathname==="/profile/edit")?"active":""}>
-              <NavLink to = "/profile/edit" >
-                <i className="fas fa-user-cog"></i>
-              </NavLink>
-            </li>
-          </ul>
           </>
         }
         </div>

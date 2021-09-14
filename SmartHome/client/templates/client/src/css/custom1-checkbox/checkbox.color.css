@@ -1,21 +1,20 @@
 .custom1-checkbox{
-  background: linear-gradient(0deg, var(--btn-color-darken), var(--color-darken));
-  /* background: var(--color-darken); */
-  border-top: 0.02em solid var(--color-darken);
-  border-bottom: 0.02em solid var(--btn-color-darken);
+  background: linear-gradient(0deg, var(--btn-color-base), var(--color-base));
+  border-top: 0.02em solid var(--color-base);
+  border-bottom: 0.02em solid var(--btn-color-base);
 }
 .custom1-checkbox .custom1-inner{
-  background: linear-gradient(0deg, var(--btn-color-normal), var(--color-normal));
+  background: linear-gradient(0deg, var(--btn-color-base), var(--color-base));
   box-shadow: inset 0 0 15px rgba(0,0,0,.5);
 }
 .custom1-checkbox .custom1-inner .custom1-toggle{
-  background: linear-gradient(to bottom, var(--btn-color-darken), var(--color-darken));
+  background: linear-gradient(to bottom, var(--btn-color-base), var(--color-base));
   box-shadow: 0 4px 6px rgba(0,0,0,.2);
-  border-top: 0.04em solid var(--btn-color-darken);
-  border-bottom: 0.01em solid var(--color-darken);
+  border-top: 0.04em solid var(--btn-color-base);
+  border-bottom: 0.01em solid var(--color-base);
 }
 .custom1-checkbox .custom1-inner .custom1-toggle::before{
-  background: linear-gradient(to bottom, var(--color-darken), var(--btn-color-darken));
+  background: linear-gradient(to bottom, var(--color-base), var(--btn-color-base));
   color: var(--text-color-light-fon);
 }
 .custom1-checkbox .custom1-inner.active{

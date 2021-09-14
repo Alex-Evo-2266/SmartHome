@@ -1,0 +1,143 @@
+@import "./leftMenu.color.css";
+
+.topMenu{
+  width: 100%;
+  height: 56px;
+  background: var(--color-base);
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 0 0 10px #000;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.topMenu .burger{
+  width: 56px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+}
+.topMenu h2{
+  font-size: 24px;
+  position: absolute;
+  left: 88px;
+}
+.navigationRail{
+  position: fixed;
+  width: 56px;
+  height: calc(100vh - 56px);
+  background: var(--color-normal);
+  box-shadow: 0 0 10px #000;
+  top: 56px;
+  left: 0;
+  z-index: 98;
+  padding-top: 8px;
+  overflow: hidden;
+  transition: .5s;
+}
+.navigationRail.active{
+  width: 256px;
+  overflow-y: scroll;
+}
+.topMenu .tabs{
+  display: flex;
+  height: 100%;
+}
+.topMenu .tabs .tabButton{
+  min-width: 90px;
+  font-size: 24px;
+  line-height: 56px;
+  display: flex;
+  justify-content: center;
+  border-bottom: none;
+  padding: 0 5px;
+  color: var(--text-color-no-active-fon);
+}
+.topMenu .tabs .tabButton.active{
+  color: var(--text-color-active-fon);
+  border-bottom: 2px solid var(--text-color-active-fon);
+}
+.specialActionButtonContainer{
+  margin-bottom: 8px;
+  padding: 7px;
+  position: sticky;
+}
+.specialActionButton{
+  background: var(--color-base);
+  height: 40px;
+  width: 40px;
+  border-radius: 25px;
+  color: var(--text-color-active-fon);
+  display: flex;
+  /* justify-content: center; */
+  overflow: hidden;
+  align-items: center;
+  font-size: 24px;
+  box-shadow: 0 0 10px -2px #000;
+  transition: .5s;
+}
+.specialActionButton:hover{
+  box-shadow: none
+}
+.specialActionButton.big{
+  justify-content: flex-start;
+  width: 90%;
+}
+.specialActionButton i{
+  min-width: 40px;
+  text-align: center;
+  line-height: 40px;
+}
+.navigationRail ul li{
+  height: 56px;
+  font-size: 24px;
+  position: relative;
+  width: 256px
+}
+.navigationRail ul li a{
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-color-normal-fon);
+}
+.navigationRail ul li a.active{
+  color: var(--color-base);
+}
+.navigationRail ul li a i{
+  width: 56px;
+  text-align: center;
+  line-height: 56px;
+}
+.navigationRail ul li a span{
+  margin-left: 5px;
+}
+.dividers{
+  width: 100%;
+  height: 1px;
+  background: var(--text-color-normal-fon);
+}
+.navigationRail .profifileConteiner{
+  height: 56px;
+  color: var(--text-color-normal-fon);
+  display: flex;
+  width: 100%;
+}
+.navigationRail .profifileConteiner .out{
+  width: 56px;
+  line-height: 56px;
+  font-size: 24px;
+  text-align: center;
+}
+.navigationRail .profifileConteiner .profile{
+  height: 56px;
+  display: inline-block;
+}
+.navigationRail .bottomField{
+  position: relative;
+  bottom: 0;
+}

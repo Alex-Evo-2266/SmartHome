@@ -12,6 +12,7 @@ import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
 import {ScriptContext} from '../context/ScriptContext.js'
 import {Loader} from '../components/Loader'
+import {MenuContext} from '../components/Menu/menuContext'
 
 export const HomePage = () => {
 
@@ -19,6 +20,7 @@ const [editMode, setEditMode] = useState(false);
 const [carts, setCarts] = useState([])
 const [sortedCarts, setSortedCarts] = useState([])
 const auth = useContext(AuthContext)
+const {setData} = useContext(MenuContext)
 const {message} = useMessage();
 const {request, error, clearError} = useHttp();
 const conteiner = useRef(null)
@@ -105,6 +107,23 @@ useEffect(()=>{
   importCarts()
 },[importCarts])
 
+useEffect(()=>{
+  if(!editMode){
+    setData("Home",{
+      type: "config",
+      action:()=>setEditMode(true)
+    })
+  }else{
+    setData("Home",{
+      type: "ok",
+      action:()=>{
+        saveCarts()
+        setEditMode(false)
+      }
+    })
+  }
+},[setData,editMode])
+
 const sortCard = useCallback((data,width)=>{
   let column = 3
   let i = 0
@@ -151,6 +170,8 @@ useEffect(()=>{
   }
 },[sortCard,carts])
 
+// <EditToolbar show={editMode} save={saveCarts}/>
+
 if(carts===[]){
   return(
     <Loader/>
@@ -164,7 +185,7 @@ if(carts===[]){
     <AddControlState>
       <CartEdit/>
       <AddControl/>
-      <EditToolbar show={editMode} save={saveCarts}/>
+
       <div className = {`conteiner top bottom home`}>
         <div ref={conteiner} className = "conteinerHome flexHome">
         {

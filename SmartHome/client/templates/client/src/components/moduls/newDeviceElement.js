@@ -7,6 +7,7 @@ import {Power} from './newDeviceControlElements/power'
 import {Dimmer} from './newDeviceControlElements/dimmer'
 import {Mode} from './newDeviceControlElements/mode'
 import {Enum} from './newDeviceControlElements/enum'
+import {Menu} from '../dopmenu/menu'
 // import {Color} from './newDeviceControlElements/color'
 import {DeviceStatusContext} from '../../context/DeviceStatusContext'
 import {AuthContext} from '../../context/AuthContext.js'
@@ -48,12 +49,22 @@ export const NewDeviceElement = ({id}) =>{
   return(
     <div className = "NewCardElement">
       <div className = "NewCardHeader">
-        <button className={(device.DeviceStatus)?"active":""} onClick={linc}><i>linc</i></button>
         <div className = {`typeConnect ${device.DeviceTypeConnect||"other"}`}>
           <p>{device.DeviceTypeConnect||"other"}</p>
         </div>
         <RunText className="DeviceName" id={device.DeviceSystemName} text={device.DeviceName||"NuN"}/>
+        <Menu buttons={[
+          {
+            title:"edit",
+            active:()=>{form.show("EditDevices",updateDevice,device)}
+          },
+          {
+            title:(device.DeviceStatus)?"unlinc":"linc",
+            active:linc
+          }
+        ]}/>
       </div>
+      <div className="dividers"></div>
       <div className = "NewCardBody">
         <ul>
         {
@@ -104,9 +115,6 @@ export const NewDeviceElement = ({id}) =>{
           })
         }
         </ul>
-      </div>
-      <div className = "NewCardControl">
-        <button className="cardControlBtn" onClick={()=>{form.show("EditDevices",updateDevice,device)}}>edit</button>
       </div>
     </div>
   )

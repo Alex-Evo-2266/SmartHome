@@ -46,19 +46,20 @@ const getimage = (images, name)=>{
 }
 
 function setColors(data) {
-  document.body.style.setProperty('--color-darken',(data.opasiryc1)?data.c1 + "90":data.c1)
-  document.body.style.setProperty('--color-normal',(data.opasiryc2)?data.c2 + "90":data.c2)
+  document.body.style.setProperty('--color-base',(data.opasiryc1)?data.c1 + "95":data.c1)
+  document.body.style.setProperty('--color-normal',(data.opasiryc2)?data.c2 + "95":data.c2)
   document.body.style.setProperty('--color-glass',data.c2 + "90")
-  document.body.style.setProperty('--color-light',(data.opasiryc3)?data.c3 + "90":data.c3)
   document.body.style.setProperty('--text-color-darken-fon',"#fff")
-  document.body.style.setProperty('--text-color-light-fon',"#000")
+  document.body.style.setProperty('--text-color-light-fon',"#5e6367")
+  document.body.style.setProperty('--text-color-normal-fon',"#5e6367")
+  document.body.style.setProperty('--text-color-no-active-fon',"#bbb")
+  document.body.style.setProperty('--text-color-activ-fon',"#fff")
   document.body.style.setProperty('--active-v1-color',(data.opasiryActive)?data.active + "90":data.active)
   document.body.style.setProperty('--ok-v1-color',(data.opasiryOk)?data.ok + "90":data.ok)
   document.body.style.setProperty('--active-v2-color',LightenDarkenColor(data.active,25))
   document.body.style.setProperty('--ok-v2-color',LightenDarkenColor(data.ok,25))
-  document.body.style.setProperty('--btn-color-darken',LightenDarkenColor(data.c1,25))
+  document.body.style.setProperty('--btn-color-base',LightenDarkenColor(data.c1,25))
   document.body.style.setProperty('--btn-color-normal',LightenDarkenColor(data.c2,25))
-  document.body.style.setProperty('--btn-color-light',LightenDarkenColor(data.c3,25))
 }
 
 const backgroundType = function () {

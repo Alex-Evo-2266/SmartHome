@@ -3,8 +3,10 @@ import {useHistory} from 'react-router-dom'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AlertContext} from '../components/alert/alertContext'
+import {MenuContext} from '../components/Menu/menuContext'
 
 export default function AddUser(){
+  const {setData} = useContext(MenuContext)
   const history = useHistory()
   const {loading, request, error, clearError} = useHttp();
   const {message} = useMessage();
@@ -12,6 +14,10 @@ export default function AddUser(){
   const [form, setForm] = useState({
     name: '', password: '', email: '', mobile: '', key: ''
   });
+
+  useEffect(()=>{
+    setData("Add user")
+  },[setData])
 
   useEffect(()=>{
     console.log("use");

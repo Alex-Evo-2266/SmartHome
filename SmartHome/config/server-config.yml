@@ -1,8 +1,8 @@
 base:
   timeSend: 6
 mail:
-  login: df@mail.ru
-  password: '12345'
+  login: smarthome2244@mail.ru
+  password: '66dfghty'
 mqttBroker:
   host: localhost
   password: admin

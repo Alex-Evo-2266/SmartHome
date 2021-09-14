@@ -118,7 +118,7 @@ ul.elementConteiner li label .icon-box i{
   position: relative;
 }
 .ElementLine .icon.icon-btn .circle{
-  background: var(--head-color);
+  background: var(--color-base);
 }
 .ElementLine .icon .circle i{
   position: absolute;
