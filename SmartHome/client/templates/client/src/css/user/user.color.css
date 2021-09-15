@@ -27,6 +27,6 @@
 }
 .pagecontent a:hover,
 .pagecontent button:hover{
-  background: var(--active-v1-color);
-  color: var(--text-color-light-fon);
+  background: var(--btn-color-active);
+  color: var(--text-color-active-fon);
 }

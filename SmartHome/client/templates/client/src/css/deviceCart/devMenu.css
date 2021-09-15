@@ -6,7 +6,7 @@
   cursor: pointer;
 }
 .menuTogleBtn:active{
-  color: var(--active-color);
+  color: var(--color-active);
 }
 .contextmenu{
   display: none;

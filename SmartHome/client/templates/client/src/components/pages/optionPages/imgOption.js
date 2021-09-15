@@ -32,7 +32,9 @@ export const ImgOption = () =>{
       <div className="configElement block">
         <h2>Background</h2>
       </div>
-      <Link to="/gallery" className="btn">Галерея</Link>
+      <div className="configElement block">
+        <Link to="/gallery" className="button normalSelection">Gallery</Link>
+      </div>
       <div className="configElement img">
         <div className="card">
           <div className="imgBx">

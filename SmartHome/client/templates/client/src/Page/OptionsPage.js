@@ -13,7 +13,7 @@ export const OptionsPage = () => {
   const location = useLocation();
 
   useEffect(()=>{
-    setData("Options",null,[
+    setData("Setings",null,[
       {
         title:"user",
         action:()=>history.push("/config"),
@@ -38,7 +38,7 @@ export const OptionsPage = () => {
   },[setData,location.pathname])
 
   return(
-    <div className = "conteiner top bottom">
+    <div className = "fullScrinContainer">
       <div className = "pages">
         <div className = {`page ${(location.pathname==="/config")?"active":""}`}>
           <UserOption/>

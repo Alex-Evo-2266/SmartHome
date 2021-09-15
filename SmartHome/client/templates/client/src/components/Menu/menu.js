@@ -131,7 +131,7 @@ if(sizeWidth>700){
         insluedField.map((item,index)=>{
           let t = item.url.indexOf("/")
           return(
-            <li>
+            <li key={index}>
             {
               (t!==0)?
               <a href = {item.url}>
@@ -158,7 +158,7 @@ if(sizeWidth>700){
         otherField.map((item,index)=>{
           let t = item.url.indexOf("/")
           return(
-            <li>
+            <li key={index}>
             {
               (t!==0)?
               <a href = {item.url}>

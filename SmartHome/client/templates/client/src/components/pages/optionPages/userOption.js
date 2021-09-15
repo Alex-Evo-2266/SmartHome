@@ -86,6 +86,7 @@ export const UserOption = () =>{
           <i className="indicator"></i>
         </label>
       </div>
+      <div className="dividers"></div>
       <div className="configElement block">
         <p className="switchText">Style</p>
         <Select className="editstyle" title={<i className="fas fa-bars"></i>}>
@@ -108,7 +109,10 @@ export const UserOption = () =>{
           }
         </div>
       </div>
-      <button onClick={userConfigHandler}>Save</button>
+      <div className="dividers"></div>
+      <div className="configElement">
+        <button className="normalSelection button" onClick={userConfigHandler}>Save</button>
+      </div>
     </div>
 )
 }

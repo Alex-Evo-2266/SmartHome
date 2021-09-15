@@ -14,7 +14,7 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
+  min-height: calc(100vh - 56px);
   border-radius: 4px 0 4px 4px;
   z-index: 2;
   overflow-x: hidden;
@@ -55,10 +55,46 @@
 }
 .configElement{
   background: var(--color-glass);
-  min-height: 70px;
+  min-height: 48px;
   display: flex;
-  margin: 10px 0;
+  font-size: 10px;
+  margin: 10px 15px;
   position: relative;
+}
+.input-data{
+  height: 40px;
+  width: 100%;
+  position: relative;
+  font-size: 17px;
+}
+.input-data input{
+  height: 100%;
+  width: 100%;
+  border: none;
+  font-size: 20px;
+  border-bottom: 2px solid silver;
+  color: var(--text-color-normal-fon);
+  background: #0000;
+  outline: none;
+}
+.input-data input:focus ~ label,
+.input-data input:valid ~ label{
+  transform: translateY(-20px);
+  font-size: 15px;
+}
+.input-data input:focus ~ label{
+  color: var(--color-active);
+}
+.input-data input:focus{
+  border-bottom: 2px solid var(--color-active);
+}
+.input-data label{
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  color: silver;
+  pointer-events: none;
+  transition: 0.3s;
 }
 .configElement.block{
   display: block;

@@ -3,6 +3,7 @@ import {AuthContext} from '../../../context/AuthContext.js'
 import {UserContext} from '../../../context/UserContext'
 import {ModalWindow} from '../../modalWindow/modalWindow'
 import {Loader} from '../../Loader'
+import {StyleContext} from '../../UserStyle/StyleContext'
 import {MenuComponent} from './menuOptionComponents/component'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -11,6 +12,7 @@ import {menuField} from '../../Menu/data.menu.js'
 export const MenuOption = () =>{
   const auth = useContext(AuthContext)
   const config = useContext(UserContext)
+  const {styles, updateConfig} = useContext(StyleContext)
 
   const {message} = useMessage();
   const [visible,setVisible] = useState(false)
@@ -28,7 +30,7 @@ export const MenuOption = () =>{
   const configHandler = async(event)=>{
     await request(`/api/user/menu`, 'PUT', useBlock,{Authorization: `Bearer ${auth.token}`})
     setTimeout(function () {
-      config.updateConfig()
+      updateConfig()
     }, 200);
   }
 
@@ -92,56 +94,78 @@ export const MenuOption = () =>{
     <>
     {
       (visible)?
-      <ModalWindow hide={()=>setVisible(false)} title="add" zindex={6} className="createLinkWindow">
+      <ModalWindow moving={false} hide={()=>setVisible(false)} title="add" zindex={6} className="createLinkWindow">
         <div className="createLink">
-          <div className="fieldLinc">
-            <p>title</p>
-            <input id="titlelink" type = "text" name = "title"/>
+          <div className="configElement">
+            <div className="input-data">
+              <input required id="titlelink" type = "text" name = "title"/>
+              <label>title</label>
+            </div>
           </div>
-          <div className="fieldLinc">
-            <p>icon</p>
-            <input id="titleicon" type = "text" name = "icon"/>
+          <div className="configElement">
+            <div className="input-data">
+              <input required id="titleicon" type = "text" name = "icon"/>
+              <label>icon</label>
+            </div>
           </div>
-          <div className="fieldLinc">
-            <p>url</p>
-            <input id="titleurl" type = "text" name = "url"/>
+          <div className="configElement">
+            <div className="input-data">
+              <input required id="titleurl" type = "text" name = "url"/>
+              <label>title</label>
+            </div>
           </div>
-          <div className="fieldLinc">
-            <input type = "button" value="сохранить" onClick={addlink}/>
+          <div className="configElement">
+            <button className="normalSelection button" onClick={addlink}>Save</button>
           </div>
         </div>
       </ModalWindow>
       :null
     }
     <div className = "pagecontent">
-      <div className="configElement block">
+      <div className="configElement">
         <MenuComponent name="Home" icon="fas fa-home" def={true}/>
+      </div>
+      <div className="configElement">
         <MenuComponent name="Devices" icon="fas fa-plug" def={true}/>
+      </div>
+      <div className="configElement">
         <MenuComponent name="Profile" icon="fas fa-user-circle" def={true}/>
-        <MenuComponent name="Option" icon="fas fa-cog" def={true}/>
+      </div>
+      <div className="configElement">
+        <MenuComponent name="Setings" icon="fas fa-cogs" def={true}/>
+      </div>
         {
           useBlock.map((item,index)=>{
             return(
+              <div className="configElement">
               <MenuComponent key={index} name={item.title} url={item.url} icon={item.iconClass} onClick={deleteParagraph} use={true}/>
+              </div>
             )
           })
         }
+        <div className="configElement">
+
         <div className="menu-component-paragraph" onClick={()=>setVisible(true)}>
           <p>Создать ссылку</p>
           <div className="menu-component-btn">
             <i className="fas fa-plus-circle" style={{color:"#aaa"}}></i>
           </div>
         </div>
-        <br/><hr/><br/>
+        </div>
+        <div className="dividers"></div>
         {
           noUseBlock.map((item,index)=>{
             return(
-              <MenuComponent key={index} name={item.title} url={item.url} onClick={addParagraph} icon={item.iconClass}/>
+              <div className="configElement">
+                <MenuComponent key={index} name={item.title} url={item.url} onClick={addParagraph} icon={item.iconClass}/>
+              </div>
             )
           })
         }
+      <div className="dividers"></div>
+      <div className="configElement">
+        <button className="normalSelection button" onClick={configHandler}>Save</button>
       </div>
-      <button onClick={configHandler}>Save</button>
     </div>
     </>
 )

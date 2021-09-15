@@ -6,7 +6,7 @@ export const Menu = ({buttons=[]}) =>{
   return(
     <>
     <div className="menuTogleBtn" onClick={()=>setVisible(!visible)}>
-      <i class="fas fa-ellipsis-v"></i>
+      <i className="fas fa-ellipsis-v"></i>
     </div>
     <div onClick={()=>setVisible(false)} className={`contextmenu ${(visible)?"show":"hide"}`}>
       {

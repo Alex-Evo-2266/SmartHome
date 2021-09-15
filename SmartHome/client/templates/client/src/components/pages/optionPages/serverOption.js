@@ -61,44 +61,63 @@ export const ServerOption = () =>{
 
   return(
     <div className = "pagecontent">
-      <div className="configElement block">
-        <h2>Server config</h2>
+      <div className="configElement">
+        <p className="text">Mqtt broker</p>
       </div>
-      <div className="configElement block">
-        <p className="text">Mqtt broker ip</p>
-        <label className="text">
-          <input placeholder="IP Mqtt broker" onChange={changeHandler} name="mqttBroker" type="text" value={serverconf.mqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
-        </label>
-        <p className="text">Mqtt broker port</p>
-        <label className="text">
-          <input placeholder="Port Mqtt broker" onChange={changeHandler} name="mqttBrokerPort" type="number" value={serverconf.mqttBrokerPort} disabled = {(serverconf.mqttBroker==="none")}></input>
-        </label>
-        <p className="text">Mqtt login</p>
-        <label className="text">
-          <input placeholder="login Mqtt broker" onChange={changeHandler} name="loginMqttBroker" type="text" value={serverconf.loginMqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
-        </label>
-        <p className="text">Mqtt password</p>
-        <label className="text">
-          <input placeholder="password Mqtt broker" onChange={changeHandler} name="passwordMqttBroker" type="text" value={serverconf.passwordMqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
-        </label>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="mqttBroker" type="text" value={serverconf.mqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
+          <label>ip</label>
+        </div>
       </div>
-      <div className="configElement block">
-        <p className="text">Zigbee2mqtt topic</p>
-        <label className="text">
-          <input placeholder="password Mqtt broker" onChange={changeHandler} name="zigbee2mqttTopic" type="text" value={serverconf.zigbee2mqttTopic} disabled = {(serverconf.mqttBroker==="none")}></input>
-        </label>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="mqttBrokerPort" type="number" value={serverconf.mqttBrokerPort} disabled = {(serverconf.mqttBroker==="none")}></input>
+          <label>port</label>
+        </div>
       </div>
-      <div className="configElement block">
-        <p className="text">Server email login</p>
-        <label className="text">
-          <input placeholder="Server email login" onChange={changeHandler} name="emailLogin" type="email" value={serverconf.emailLogin}/>
-        </label>
-        <p className="text">Server email password</p>
-        <label className="text">
-          <input placeholder="Server email password" onChange={changeHandler} name="emailPass" type="text" value={serverconf.emailPass}/>
-        </label>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="loginMqttBroker" type="text" value={serverconf.loginMqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
+          <label>login</label>
+        </div>
       </div>
-      <button onClick={serverConfigHandler}>Save</button>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="passwordMqttBroker" type="text" value={serverconf.passwordMqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
+          <label>password</label>
+        </div>
+      </div>
+      <div className="dividers"></div>
+      <div className="configElement">
+        <p className="text">Zigbee2mqtt</p>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="zigbee2mqttTopic" type="text" value={serverconf.zigbee2mqttTopic} disabled = {(serverconf.mqttBroker==="none")}></input>
+          <label>topic</label>
+        </div>
+      </div>
+      <div className="dividers"></div>
+      <div className="configElement">
+        <p className="text">Server email</p>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="emailLogin" type="email" value={serverconf.emailLogin}/>
+          <label>login</label>
+        </div>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="emailPass" type="text" value={serverconf.emailPass}/>
+          <label>password</label>
+        </div>
+      </div>
+      <div className="dividers"></div>
+      <div className="configElement">
+        <button className="normalSelection button" onClick={serverConfigHandler}>Save</button>
+      </div>
     </div>
 )
 }
