@@ -21,11 +21,16 @@
 }
 .conteiner-body{
   background: var(--color-normal);
+  color: var(--text-color-normal-fon);
   min-height: 100vh;
   padding: 10px 0;
   position: relative;
   transition: 0.5s;
   animation: start-anim-conteiner 1.5s ease-out 1;
+}
+.conteiner-body h2{
+  font-size: 2.5em;
+  text-align: center;
 }
 .conteiner-body-ul{
   display: flex;

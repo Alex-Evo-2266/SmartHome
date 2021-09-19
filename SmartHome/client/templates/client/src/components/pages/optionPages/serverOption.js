@@ -115,8 +115,8 @@ export const ServerOption = () =>{
         </div>
       </div>
       <div className="dividers"></div>
-      <div className="configElement">
-        <button className="normalSelection button" onClick={serverConfigHandler}>Save</button>
+      <div className="configElement block">
+        <button style={{width: "100%"}} className="normalSelection button" onClick={serverConfigHandler}>Save</button>
       </div>
     </div>
 )

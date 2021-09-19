@@ -4,16 +4,19 @@ import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {ImagesInput} from '../components/moduls/inputImages'
 import {AlertContext} from '../components/alert/alertContext'
+import {MenuContext} from '../components/Menu/menuContext'
 import {ImageDitail} from '../components/files/imageDitail'
 
 export const GalleryPage = () => {
   const auth = useContext(AuthContext)
+  const {setData} = useContext(MenuContext)
   const {show,hide} = useContext(AlertContext);
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const [visible,setVisible] = useState(false)
   const [end,setEnd] = useState(false)
   const [urls,setUrls] = useState([])
+  const [addVisible,setaddVisible] = useState(false)
   const [newUrl,setnewUrl] = useState(0)
   const [ditailElement,setDitailElement] = useState({})
 
@@ -65,6 +68,21 @@ export const GalleryPage = () => {
     }
   },[error,message, clearError])
 
+  useEffect(()=>{
+    if(addVisible){
+      setData("Gallery",{
+        type: "close",
+        action:()=>setaddVisible(false)
+      })
+    }
+    else {
+      setData("Gallery",{
+        type: "add",
+        action:()=>setaddVisible(true)
+      })
+    }
+  },[setData,addVisible])
+
   return(
     <div className="conteiner">
     {
@@ -72,9 +90,13 @@ export const GalleryPage = () => {
       <ImageDitail data={ditailElement} hide={()=>setVisible(false)}/>:
       null
     }
-    <div className="top bottom">
+    <div className="">
+    {
+      (addVisible)?
       <ImagesInput update={getTenUrl}/>
-      <div className="galeryContent top">
+      :null
+    }
+      <div className="galeryContent">
       {
         (urls&&urls[0])?
         urls.map((item,index)=>{

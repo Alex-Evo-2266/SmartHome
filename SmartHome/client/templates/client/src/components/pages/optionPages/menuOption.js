@@ -163,8 +163,8 @@ export const MenuOption = () =>{
           })
         }
       <div className="dividers"></div>
-      <div className="configElement">
-        <button className="normalSelection button" onClick={configHandler}>Save</button>
+      <div className="configElement block">
+        <button style={{width: "100%"}} className="normalSelection button" onClick={configHandler}>Save</button>
       </div>
     </div>
     </>

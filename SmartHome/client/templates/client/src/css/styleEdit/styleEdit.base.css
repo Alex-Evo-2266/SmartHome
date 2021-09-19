@@ -1,14 +1,15 @@
 .editStylePanel{
   width: 80%;
   height: 100px;
-  background: var(--color-darken);
+  background: var(--color-base);
   position: fixed;
+  color: var(--text-color-base-fon);
   box-shadow: 0 0 10px #000;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   z-index: 100;
   display: flex;
 }

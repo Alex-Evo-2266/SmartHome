@@ -1,17 +1,20 @@
 import React,{useState,useEffect,useCallback,useContext} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import {Header} from '../components/moduls/header'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
 import {Loader} from '../components/Loader'
 import {ScriptElement} from '../components/scriptCarts/scriptElement'
+import {MenuContext} from '../components/Menu/menuContext'
 import {AddScriptBase} from '../components/addScript/addScriptBase'
 
 export const ScriptsPage = () => {
   const [scripts, setScripts] = useState([])
+  const history = useHistory()
   const [allScripts, setAllScripts] = useState([])
   const auth = useContext(AuthContext)
+  const {setData} = useContext(MenuContext)
   const {message} = useMessage();
   const {loading,request, error, clearError} = useHttp();
 
@@ -24,7 +27,6 @@ export const ScriptsPage = () => {
 
   const updataScripts = useCallback(async()=>{
     const data = await request('/api/script/all', 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    console.log(data);
     setScripts(data);
     setAllScripts(data)
   },[request,auth.token])
@@ -39,6 +41,16 @@ export const ScriptsPage = () => {
   }
 
   useEffect(()=>{
+    setData("Scripts All",{
+      type: "add",
+      action:()=>history.push("/scripts/add")
+    },
+    [],
+    searchout
+  )
+  },[setData])
+
+  useEffect(()=>{
     updataScripts()
   },[updataScripts])
 
@@ -46,9 +58,6 @@ export const ScriptsPage = () => {
     <>
       <AddScriptBase/>
       <div className = "conteiner top bottom">
-      <Header search={searchout} name="Scripts All">
-      <Link to = "/scripts/add" className="btn"><i onClick={()=>{}} className="fas fa-plus"></i></Link>
-      </Header>
         <div className = "Scripts">
           <div className="scriptsList">
             {

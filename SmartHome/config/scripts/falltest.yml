@@ -1,0 +1,28 @@
+else: []
+if:
+  action: null
+  children:
+  - action: action
+    idDevice: 6
+    oper: ==
+    type: device
+    value:
+      type: enum
+      value: fall
+  idDevice: null
+  oper: and
+  type: group
+  value: null
+name: falltest
+status: true
+then:
+- DeviceId: 8
+  action: state
+  type: device
+  value:
+    type: enum
+    value: togle
+trigger:
+- DeviceId: 6
+  action: action
+  type: device

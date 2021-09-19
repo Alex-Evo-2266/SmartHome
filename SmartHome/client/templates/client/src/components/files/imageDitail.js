@@ -1,7 +1,7 @@
 import React,{useEffect,useState,useContext} from 'react'
 import {BackForm} from '../moduls/backForm'
 import {AuthContext} from '../../context/AuthContext.js'
-import {UserContext} from '../../context/UserContext.js'
+import {StyleContext} from '../UserStyle/StyleContext'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 
@@ -10,7 +10,8 @@ export const ImageDitail = ({data,hide})=>{
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const auth = useContext(AuthContext)
-  const {updateBackground} = useContext(UserContext)
+  const {styles, updateConfig} = useContext(StyleContext)
+
 
   const changeSelector = (event)=>{
     setFon(event.target.value)
@@ -18,7 +19,7 @@ export const ImageDitail = ({data,hide})=>{
 
   const out = async()=>{
     await request(`/api/background/set`, 'POST', {id:data.id,type:fon},{Authorization: `Bearer ${auth.token}`})
-    updateBackground()
+    updateConfig()
     hide()
   }
 
@@ -37,6 +38,8 @@ export const ImageDitail = ({data,hide})=>{
         </div>
         <div className="ditailImage-control">
           <p>Name: {data.title}</p>
+          <div className="dividers"></div>
+          <div className="input-data">
           <select value={fon} onChange={changeSelector}>
             <option value="base">Base</option>
             <option value="sunrise">Sunrise</option>
@@ -44,7 +47,8 @@ export const ImageDitail = ({data,hide})=>{
             <option value="twilight">Twilight</option>
             <option value="night">Night</option>
           </select>
-          <button className="button primary" onClick={out}>Cделать фоном</button>
+          </div>
+          <button className="button normalSelection" onClick={out}>Cделать фоном</button>
         </div>
       </div>
     </BackForm>

@@ -25,6 +25,8 @@ export const Menu = ()=>{
   });
   const bot_menu = useRef(null)
   const [visiblesub, setVisiblesub] = useState(false)
+  const [search, setSearch] = useState("")
+  const [searchtVisible, setSearchtVisible] = useState(false)
   const [insluedField, setField] = useState([])
   const [otherField, setotherField] = useState([])
   const [sizeWidth, setSizeWidth] = useState(window.innerWidth)
@@ -73,6 +75,16 @@ console.log(auth);
     });
   },[request,auth.token])
 
+  const searchHandler = event => {
+    setSearch(event.target.value)
+  }
+
+  const keyd = (e)=>{
+    if(e.keyCode===13&&typeof(menu.menu.search)==="function"){
+      menu.menu.search(search)
+    }
+  }
+
   useEffect(()=>{
     updataUser()
   },[updataUser])
@@ -94,7 +106,26 @@ if(sizeWidth>700){
           })
         }
       </div>
+      {
+        (menu.menu.search)?
+        <div className="search" onClick={()=>setSearchtVisible(!searchtVisible)}>
+          <i className="fas fa-search"></i>
+        </div>:
+        null
+      }
     </div>
+    {
+      (menu.menu.search)?
+      <div className={`searchConteainer ${(searchtVisible)?"show":"hide"}`}>
+        <div className={`search`}>
+          <button onClick={()=>setSearchtVisible(false)} className="searchBtn">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <input placeholder="search" type="search" name="search" onChange={searchHandler} onKeyDown={keyd} value={search}/>
+        </div>
+      </div>:
+      null
+    }
     <div className={`navigationRail ${(menu.menu.visible)?"active":""}`}>
     {
       (menu.menu.specialAction?.type)?
@@ -195,6 +226,10 @@ if(sizeWidth>700){
     </>
   )
 }
+else {
+  return null
+}
+
 
 // if(sizeWidth>700){
 //   bot_menu.current = null

@@ -140,10 +140,8 @@ export const AddDevicesPage = () => {
 
   return(
     <div className = "conteiner slide-conteiner">
-      <div className="conteiner-head">
-        <h2>Adding devices</h2>
-      </div>
       <div className="conteiner-body">
+        <h2>Adding devices</h2>
         <ul className="conteiner-body-ul">
           <li className="conteiner-body-li">
             <label>

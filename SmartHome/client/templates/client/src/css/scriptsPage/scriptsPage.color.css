@@ -1,5 +1,6 @@
 .scriptElement{
   background: var(--color-normal);
+  color: var(--text-color-normal-fon);
 }
 .scriptElement p{
   color: var(--text-color-darken-fon);

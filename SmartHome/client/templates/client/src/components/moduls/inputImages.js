@@ -92,14 +92,16 @@ export const ImagesInput = ({update}) =>{
   return(
     <div className="cartImageInput">
       <h2>Загрузить изображение</h2>
-      <button className="btn" onClick={()=>inputRef.current.click()}>открыть</button>
-      {
-        (filesArr&&filesArr[0])?
-        <button className="btn primary" onClick={sendFile}>загрузить</button>:
-        null
-      }
       <input ref={inputRef} multiple={true} type="file" id="fileElem" accept="image/*" onChange={handleFiles}/>
       <div ref={imgConteiner} className="fileList" onClick={imgClick}></div>
+      <div className="btnConteiner">
+      {
+        (filesArr&&filesArr[0])?
+        <button className="highSelection button" onClick={sendFile}>загрузить</button>:
+        null
+      }
+      <button style={{marginLeft: "10px"}} className="normalSelection button" onClick={()=>inputRef.current.click()}>открыть</button>
+      </div>
     </div>
   )
 }

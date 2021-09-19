@@ -13,6 +13,9 @@
   align-items: center;
   justify-content: center;
 }
+.topMenu > *{
+  z-index: 99;
+}
 .topMenu .burger{
   width: 56px;
   font-size: 24px;
@@ -20,6 +23,16 @@
   justify-content: center;
   position: absolute;
   left: 0;
+  cursor: pointer;
+}
+.topMenu .search{
+  width: 56px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  cursor: pointer;
 }
 .topMenu h2{
   font-size: 24px;
@@ -34,7 +47,7 @@
   box-shadow: 0 0 10px #000;
   top: 56px;
   left: 0;
-  z-index: 98;
+  z-index: 97;
   padding-top: 8px;
   overflow: hidden;
   transition: .5s;
@@ -55,6 +68,7 @@
   justify-content: center;
   border-bottom: none;
   padding: 0 5px;
+  cursor: pointer;
   color: var(--text-color-base-fon);
 }
 .topMenu .tabs .tabButton.active{
@@ -140,4 +154,46 @@
 .navigationRail .bottomField{
   position: relative;
   bottom: 0;
+}
+.searchConteainer{
+  position: fixed;
+  height: 56px;
+  width: 100%;
+  background: var(--color-base);
+  left: 0;
+  top: 0;
+  transition: .5s;
+  z-index: 100;
+  display: none;
+}
+.searchConteainer.show{
+  /* top: 56px; */
+  display: block;
+}
+.searchConteainer .search{
+  display: flex;
+}
+.searchConteainer .searchBtn{
+  height: 56px;
+  width: 56px;
+  border: none;
+  background: #0000;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-color-base-fon);
+}
+.searchConteainer input{
+  height: 56px;
+  width: calc(100% - 56px);
+  border: none;
+  background: #0000;
+  font-size: 25px;
+  cursor: pointer;
+  color: var(--text-color-base-fon);
+  outline: none;
+}
+.searchConteainer input::-ms-clear,
+.searchConteainer input::-webkit-search-cancel-button
+{
+  display: none;
 }

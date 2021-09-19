@@ -110,8 +110,8 @@ export const UserOption = () =>{
         </div>
       </div>
       <div className="dividers"></div>
-      <div className="configElement">
-        <button className="normalSelection button" onClick={userConfigHandler}>Save</button>
+      <div className="configElement block">
+        <button style={{width: "100%"}} className="normalSelection button" onClick={userConfigHandler}>Save</button>
       </div>
     </div>
 )

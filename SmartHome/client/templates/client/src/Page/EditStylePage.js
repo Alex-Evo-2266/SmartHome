@@ -86,16 +86,6 @@ export const EditStylePage = () => {
         </div>
         <div className="boxFieldColor">
           <div className="colorfield">
-            <p>color 3</p>
-            <input type="color" value={style?.c3} name="c3" onChange={colorHandler}/>
-          </div>
-          <div className="opasityfield">
-            <p>opasity</p>
-            <input type="checkbox" checked={style?.opasiryc3} name="opasiryc3" onChange={opasityHandler}/>
-          </div>
-        </div>
-        <div className="boxFieldColor">
-          <div className="colorfield">
             <p>color active</p>
             <input type="color" value={style?.active} name="active" onChange={colorHandler}/>
           </div>
@@ -109,9 +99,11 @@ export const EditStylePage = () => {
             <p>color ok</p>
             <input type="color" value={style?.ok} name="ok" onChange={colorHandler}/>
           </div>
-          <div className="opasityfield">
-            <p>opasity</p>
-            <input type="checkbox" checked={style?.opasiryOk} name="opasiryOk" onChange={opasityHandler}/>
+        </div>
+        <div className="boxFieldColor">
+          <div className="colorfield">
+            <p>color error</p>
+            <input type="color" value={style?.error} name="c3" onChange={colorHandler}/>
           </div>
         </div>
       </div>

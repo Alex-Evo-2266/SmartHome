@@ -1,4 +1,4 @@
 li.hidingLi{
-  background: var(--color-darken);
-  color: var(--text-color-darken-fon);
+  background: var(--color-base);
+  color: var(--text-color-base-fon);
 }

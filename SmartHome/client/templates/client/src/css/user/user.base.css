@@ -42,11 +42,9 @@
 button.button.highSelection,
 a.button.highSelection{
   position: relative;
-  width: 80%;
-  left: 50%;
   top: 15px;
-  transform: translateX(-50%);
   border: none;
+  min-width: 64px;
   background: var(--color-active);
   color: var(--text-color-active-fon);
   text-decoration: none;
@@ -66,12 +64,10 @@ button.button.normalSelection,
 a.button.normalSelection{
   padding: 0;
   position: relative;
-  width: 80%;
   display: block;
   text-align: center;
-  left: 50%;
+  min-width: 64px;
   top: 15px;
-  transform: translateX(-50%);
   border: 2px solid var(--color-active);
   color: var(--text-color-normal-fon);
   text-decoration: none;

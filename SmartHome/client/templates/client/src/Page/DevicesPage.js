@@ -21,14 +21,8 @@ export const DevicesPage = () => {
 
   },[allDevices.devices])
 
-  useEffect(()=>{
-    setData("Device All",{
-      type: "add",
-      action:()=>history.push("/devices/add")
-    })
-  },[setData])
-
   const searchout = (data)=>{
+    console.log(data);
     if(data===""){
       setDevices(allDevices.devices)
       return
@@ -36,6 +30,16 @@ export const DevicesPage = () => {
     let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(data)!==-1)
     setDevices(array)
   }
+
+  useEffect(()=>{
+    setData("Device All",{
+      type: "add",
+      action:()=>history.push("/devices/add")
+    },
+    [],
+    searchout
+  )
+  },[setData])
   // <Header search={searchout} name="Device All">
   // <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
   // </Header>

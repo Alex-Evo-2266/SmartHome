@@ -69,6 +69,8 @@ function setColors(data) {
   document.body.style.setProperty('--color-base',(data.opasiryc1)?data.c1 + "dd":data.c1)
   document.body.style.setProperty('--color-normal',(data.opasiryc2)?data.c2 + "dd":data.c2)
   document.body.style.setProperty('--color-active',data.active)
+  document.body.style.setProperty('--color-error',data.error)
+  document.body.style.setProperty('--color-ok',data.ok)
 
 
   document.body.style.setProperty('--btn-color-base',LightenDarkenColor(data.c1,25))
