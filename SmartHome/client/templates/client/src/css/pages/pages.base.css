@@ -15,7 +15,6 @@
   top: 0;
   width: 100%;
   min-height: calc(100vh - 56px);
-  border-radius: 4px 0 4px 4px;
   z-index: 2;
   overflow-x: hidden;
 }
@@ -54,7 +53,6 @@
   transform: translate(-50%, -50%);
 }
 .configElement{
-  background: var(--color-glass);
   min-height: 48px;
   display: flex;
   font-size: 10px;

@@ -19,7 +19,7 @@
   min-height: 100vh;
 }
 *.top{
-  padding-top: 60px;
+  padding-top: 56px;
 }
 @media (max-width: 700px){
   *.bottom{

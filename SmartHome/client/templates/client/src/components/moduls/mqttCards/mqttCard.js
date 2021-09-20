@@ -155,7 +155,7 @@ export const MQTTElement = ({data}) =>{
       <td>{data.topic}</td>
       <td>{
         message.map((item,index)=>{
-          return <p className="mqttMessageStr" key={index}>{item.name}: {item.value}</p>
+          return <span className="mqttMessageStr" key={index}>{item.name}: {item.value}, </span>
         })
       }</td>
       <td>{

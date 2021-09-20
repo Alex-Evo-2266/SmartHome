@@ -2,7 +2,7 @@
 @import "./switch.color.css";
 
 .switch{
-  position: absolute;
+  position: relative;
   margin: 5px 0;
   right: 0;
   top: 0;

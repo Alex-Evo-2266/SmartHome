@@ -9,13 +9,15 @@
 table.mqttTable{
   margin-top: 15px;
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 3px;
-  background: #333;
-
+  border-collapse: collapse;
+  border: 1px solid var(--color-base);
+  background: var(--color-base);
 }
 table.mqttTable tr{
-  background: #ccc;
+  background: var(--color-normal);
+  border-bottom: 1px solid var(--color-base);
+  border-top: 1px solid var(--color-base);
+  color: var(--text-color-normal-fon);
 }
 table.mqttTable tr th{
 
@@ -28,4 +30,13 @@ table.mqttTable tr th{
 }
 .mqttMessageStr{
   padding: 5px 0;
+}
+table.mqttTable thead tr{
+  height: 56px
+}
+table.mqttTable tbody tr{
+  min-height: 52px
+}
+table.mqttTable tbody tr:hover{
+  background: var(--btn-color-normal);
 }

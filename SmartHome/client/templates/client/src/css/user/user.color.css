@@ -1,11 +1,8 @@
-.pagecontent p{
-  border: 1px solid var(--color-darken);
-  background: var(--color-normal);
-}
+
 .pagecontent label.textLabel{
-  border: 1px solid var(--color-darken);
+  border: 1px solid var(--color-base);
   background: var(--color-normal);
-  color: var(--text-color-light-fon);
+  color: var(--text-color-normal-fon);
   /* padding-bottom: 8px; */
 }
 .pagecontent label p{

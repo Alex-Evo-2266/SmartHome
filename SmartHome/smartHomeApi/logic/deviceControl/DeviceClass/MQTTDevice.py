@@ -2,6 +2,7 @@ from smartHomeApi.models import Device,Room,genId,ValueDevice
 from ..BaseDeviceClass import BaseDevice
 from ..DeviceElement import DeviceElement
 from ..mqttDevice.connect import getMqttClient
+import json
 
 def look_for_param(arr:list, val):
     for item in arr:
@@ -34,7 +35,6 @@ class MQTTDevice(BaseDevice):
 
     def set_value(self, name, status):
         super().set_value(name, status)
-
         client = getMqttClient()
         message = ""
         val = look_for_param(self.values, name)

@@ -5,12 +5,14 @@ import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {MQTTElement} from '../components/moduls/mqttCards/mqttCard'
+import {MenuContext} from '../components/Menu/menuContext'
 
 export const MqttPage = ()=>{
   const auth = useContext(AuthContext)
   const [deviceMqtt,setDeviceMqtt] = useState([])
   const {loading, request, error, clearError} = useHttp();
   const {message} = useMessage();
+  const {setData} = useContext(MenuContext)
 
   const getDev = useCallback(async () => {
     try {
@@ -33,6 +35,13 @@ export const MqttPage = ()=>{
     getDev()
   },[getDev])
 
+  useEffect(()=>{
+    setData("MQTT",
+    null,
+    [],
+  )
+  },[setData])
+
   function clearMqtt() {
     request('/api/mqtt/clear', 'GET',null,{Authorization: `Bearer ${auth.token}`})
   }
@@ -49,7 +58,10 @@ export const MqttPage = ()=>{
         <div className="top">
           <div className="mqttTableDiv">
             <table className="mqttTable">
-              <thead><tr><th>Адресс</th><th>Сообщения</th><th>связанные устройства</th><th>Управление</th></tr></thead>
+              <thead>
+                <tr><th>Адресс</th><th>Сообщения</th><th>связанные устройства</th><th>Управление</th></tr>
+                <tr><th>Адресс</th><th>Сообщения</th><th>связанные устройства</th><th>Управление</th></tr>
+              </thead>
               <tbody>
               {
                 deviceMqtt.map((item,index)=>{
