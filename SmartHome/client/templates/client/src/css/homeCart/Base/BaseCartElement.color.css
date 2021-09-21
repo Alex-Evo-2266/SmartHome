@@ -1,4 +1,9 @@
-
+.baseElement{
+  background: var(--color-base);
+}
+.baseElement.dragOver{
+  border-left: 2px solid #aaaa;
+}
 .baseCartElement-box{
   background: var(--color-base);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);

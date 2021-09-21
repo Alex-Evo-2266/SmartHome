@@ -54,7 +54,7 @@ if(!device||!device.DeviceId){
 }
 if(getTypeField()==="number"||getTypeField()==="text"){
   return(
-    <div className="SensorElement">
+    <div className="SensorElement baseElement">
       <div className="icon-conteiner">
         <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
         <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
@@ -85,7 +85,7 @@ if(getTypeField()==="number"||getTypeField()==="text"){
 }
 if(getTypeField()==="binary"){
   return(
-    <div className="SensorElement">
+    <div className="SensorElement baseElement">
       <div className="icon-conteiner">
         <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
         <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
@@ -114,7 +114,7 @@ if(getTypeField()==="binary"){
 }
 
 return(
-  <div className="SensorElement BtnElement">
+  <div className="SensorElement BtnElement baseElement">
     <div className="icon-conteiner">
       <p className= "sensor-value-name">{data.typeAction}</p>
       <p className= "sensor-value">{`${device.DeviceValue[data.typeAction]} ${getConfrg(data.typeAction).unit||""}`}</p>

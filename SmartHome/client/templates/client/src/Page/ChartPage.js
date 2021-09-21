@@ -44,7 +44,7 @@ export const ChartsPage = () => {
   },[request,auth.token])
 
   useEffect(()=>{
-    setData("Add user")
+    setData("Chart")
   },[setData])
 
   useEffect(()=>{

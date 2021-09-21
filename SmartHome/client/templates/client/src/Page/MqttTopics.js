@@ -36,10 +36,7 @@ export const MqttPage = ()=>{
   },[getDev])
 
   useEffect(()=>{
-    setData("MQTT",
-    null,
-    [],
-  )
+    setData("MQTT")
   },[setData])
 
   function clearMqtt() {

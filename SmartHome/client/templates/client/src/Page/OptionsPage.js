@@ -13,28 +13,30 @@ export const OptionsPage = () => {
   const location = useLocation();
 
   useEffect(()=>{
-    setData("Setings",null,[
-      {
-        title:"user",
-        action:()=>history.push("/config"),
-        active:(location.pathname==="/config")
-      },
-      {
-        title:"server",
-        action:()=>history.push("/config/server"),
-        active:(location.pathname==="/config/server")
-      },
-      {
-        title:"image",
-        action:()=>history.push("/config/image"),
-        active:(location.pathname==="/config/image")
-      },
-      {
-        title:"menu",
-        action:()=>history.push("/config/menu"),
-        active:(location.pathname==="/config/menu")
-      }
-    ])
+    setData("Setings",{
+      buttons:[
+        {
+          title:"user",
+          action:()=>history.push("/config"),
+          active:(location.pathname==="/config")
+        },
+        {
+          title:"server",
+          action:()=>history.push("/config/server"),
+          active:(location.pathname==="/config/server")
+        },
+        {
+          title:"image",
+          action:()=>history.push("/config/image"),
+          active:(location.pathname==="/config/image")
+        },
+        {
+          title:"menu",
+          action:()=>history.push("/config/menu"),
+          active:(location.pathname==="/config/menu")
+        }
+      ]
+    })
   },[setData,location.pathname])
 
   return(

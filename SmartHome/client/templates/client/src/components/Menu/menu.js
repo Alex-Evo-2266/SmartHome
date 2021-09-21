@@ -126,6 +126,13 @@ if(sizeWidth>700){
       </div>:
       null
     }
+    {
+      (menu.menu.toolbar)?
+      <div className="toolbar">
+        
+      </div>:
+      null
+    }
     <div className={`navigationRail ${(menu.menu.visible)?"active":""}`}>
     {
       (menu.menu.specialAction?.type)?
