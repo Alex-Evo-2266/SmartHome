@@ -1,6 +1,5 @@
-import React, {useContext,useEffect,useState,useRef} from 'react'
-import {Link, useHistory} from 'react-router-dom'
-import {Header} from '../components/moduls/header'
+import React, {useContext,useEffect,useState,useCallback} from 'react'
+import {useHistory} from 'react-router-dom'
 import {NewDeviceElement} from '../components/moduls/newDeviceElement'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
 import {MenuContext} from '../components/Menu/menuContext'
@@ -11,25 +10,20 @@ export const DevicesPage = () => {
   const {setData} = useContext(MenuContext)
 
   const [devices, setDevices] = useState([]);
-  const read = useRef(0)
+  const [serchData, setSerchData] = useState("");
 
   useEffect(()=>{
-    if(read.current<3){
-      setDevices(allDevices.devices)
-      read.current++
-    }
-
-  },[allDevices.devices])
-
-  const searchout = (data)=>{
-    console.log(data);
-    if(data===""){
+    if(serchData===""){
       setDevices(allDevices.devices)
       return
     }
-    let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(data)!==-1)
+    let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(serchData)!==-1)
     setDevices(array)
-  }
+  },[allDevices.devices,serchData])
+
+  const searchout = useCallback((data)=>{
+    setSerchData(data)
+  },[])
 
   useEffect(()=>{
     setData("Device All",{
@@ -39,10 +33,8 @@ export const DevicesPage = () => {
       },
       search:searchout
     })
-  },[setData])
-  // <Header search={searchout} name="Device All">
-  // <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
-  // </Header>
+  },[setData,history,searchout])
+
   return(
       <div className = "conteiner top bottom">
 

@@ -30,7 +30,6 @@ export const Menu = ()=>{
   const [insluedField, setField] = useState([])
   const [otherField, setotherField] = useState([])
   const [sizeWidth, setSizeWidth] = useState(window.innerWidth)
-console.log(auth);
   const giveField=useCallback((data)=>{
     let arr1 = []
     let arr2 = menuField
@@ -119,7 +118,7 @@ if(sizeWidth>700){
       <div className={`searchConteainer ${(searchtVisible)?"show":"hide"}`}>
         <div className={`search`}>
           <button onClick={()=>setSearchtVisible(false)} className="searchBtn">
-            <i class="fas fa-arrow-left"></i>
+            <i className="fas fa-arrow-left"></i>
           </button>
           <input placeholder="search" type="search" name="search" onChange={searchHandler} onKeyDown={keyd} value={search}/>
         </div>
@@ -129,7 +128,7 @@ if(sizeWidth>700){
     {
       (menu.menu.toolbar)?
       <div className="toolbar">
-        
+
       </div>:
       null
     }

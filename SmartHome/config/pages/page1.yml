@@ -11,7 +11,7 @@ cards:
   height: 1
   id: 1
   name: test
-  poz: 5
+  poz: 13
   type: test
   typeAction: null
   width: 1
@@ -19,7 +19,7 @@ cards:
   height: 1
   id: 5
   name: test
-  poz: 2
+  poz: 10
   type: test
   typeAction: null
   width: 1
@@ -35,7 +35,7 @@ cards:
   height: 1
   id: 2
   name: test
-  poz: 4
+  poz: 6
   type: test
   typeAction: null
   width: 1

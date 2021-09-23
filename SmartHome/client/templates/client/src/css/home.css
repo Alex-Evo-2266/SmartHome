@@ -40,6 +40,18 @@
   grid-auto-rows: 100px;
   padding-bottom: 100px;
 }
+
+.homeSegmentContainer{
+  display: flex;
+  position: relative;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.homeSegment{
+  display: grid;
+}
+
 @media (max-width: 1000px){
   .HomeGrid{
     grid-template-columns: repeat(3 , 1fr);

@@ -5,24 +5,14 @@ export const BaseElement = ({
   children,
   index,
   data,
-  onDragStart,
-  onDragLeave,
-  onDragEnd,
-  onDragOver,
-  onDrop,
+  dataType,
   onClick=()=>{}}) =>{
   const {target} = useContext(CartEditContext)
 
   return(
     <div
     className="baseElement"
-    draggable={true}
-    onDragStart={onDragStart}
-    onDragLeave={onDragLeave}
-    onDragEnd={onDragEnd}
-    onDragOver={onDragOver}
-    onDrop={onDrop}
-    data-el='drag'
+    data-type={dataType}
     >
       <div className="Element" onClick={onClick}>
       {children}
