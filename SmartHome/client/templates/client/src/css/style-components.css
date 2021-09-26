@@ -6,6 +6,7 @@
 @import "./Menu/leftMenu.base.css";
 /* @import "./header/header.base.css"; */
 @import "./deviceCart/deviceCart.base.css";
+@import "./infoCard/infoCard.css";
 @import "./hidingLi/hidingLi.base.css";
 @import "./form/form.base.css";
 @import "./homeCart/homeCart.base.css";
@@ -61,7 +62,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 50;
 }
 
 .btn{

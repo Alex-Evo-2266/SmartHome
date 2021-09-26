@@ -33,16 +33,14 @@ export const DevicesPage = () => {
 
   useEffect(()=>{
     setData("Device All",{
-      type: "add",
-      action:()=>history.push("/devices/add")
-    },
-    [],
-    searchout
-  )
+      specialAction:{
+        type: "add",
+        action:()=>history.push("/devices/add")
+      },
+      search: searchout
+    })
   },[setData])
-  // <Header search={searchout} name="Device All">
-  // <Link to="/devices/add" className="btn"><i className="fas fa-plus"></i></Link>
-  // </Header>
+
   return(
       <div className = "conteiner top bottom">
 

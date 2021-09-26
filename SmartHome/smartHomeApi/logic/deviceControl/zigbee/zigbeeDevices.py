@@ -1,4 +1,5 @@
 zigbeeDevices = []
+from smartHomeApi.logic.config.configget import getConfig
 
 def addzigbeeDevices(id,data):
     global zigbeeDevices
@@ -20,6 +21,7 @@ def getzigbeeDevices():
     return zigbeeDevices
 
 def decodeZigbeeDevices(data):
+    config = getConfig("zigbee2mqtt")
     # print(data)
     for item in data:
         # print("1",item,"\n")
@@ -27,6 +29,7 @@ def decodeZigbeeDevices(data):
         dev = dict()
         dev["name"] = item["friendly_name"]
         dev["address"] = item["ieee_address"]
+        dev["allAddress"] = config["topic"]+"/"+item["ieee_address"]
         dev["type"] = item["type"]
         if "power_source" in item:
             dev["power_source"] = item["power_source"]

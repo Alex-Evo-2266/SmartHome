@@ -21,7 +21,7 @@
 .ElementLine{
   display: grid;
   grid-template-columns: 1fr 3fr 3fr;
-  background: var(--darken-color);
+  background: var(--color-base);
 }
 .ElementLine .name{
   grid-column-start: 2;

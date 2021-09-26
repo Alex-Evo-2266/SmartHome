@@ -2,7 +2,7 @@
 .baseCartElement-box{
   background: var(--color-base);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  color: var(--text-color-darken-fon)
+  color: var(--text-color-base-fon)
 }
 .line-el{
   background: var(--color-base);

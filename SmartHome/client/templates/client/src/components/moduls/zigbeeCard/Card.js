@@ -16,6 +16,7 @@ export const ZigbeeElement = ({data}) =>{
       if(item.values){
         values = item.values.join(", ")
       }
+      console.log(item.value_off,item.value_on);
       let confel = {
         name:item.name,
         address:item.property,
@@ -32,7 +33,7 @@ export const ZigbeeElement = ({data}) =>{
     form.show("LinkDevices",null,{
       DeviceTypeConnect: "mqtt",
       DeviceType: "other",
-      DeviceAddress: data.address,
+      DeviceAddress: data.allAddress,
       DeviceValueType: "json",
       DeviceConfig: conf
     })

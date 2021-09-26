@@ -4,7 +4,7 @@ import {UserContext} from '../../../context/UserContext'
 import {Loader} from '../../Loader'
 import {StyleIcon} from './castomIcon/styleIcon'
 import {StyleContext} from '../../UserStyle/StyleContext'
-import {Select} from '../../select/select'
+import {Menu} from '../../dopmenu/menu'
 import {useHistory} from 'react-router-dom'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -89,10 +89,16 @@ export const UserOption = () =>{
       <div className="dividers"></div>
       <div className="configElement block">
         <p className="switchText">Style</p>
-        <Select className="editstyle" title={<i className="fas fa-bars"></i>}>
-          <li className="selectElement" onClick={()=>history.push("/config/style")}>create</li>
-          <li className={`selectElement ${(mode)?"active":""}`} onClick={()=>setMode(!mode)}>detete</li>
-        </Select>
+        <Menu buttons={[
+          {
+            title:"create",
+            active:()=>history.push("/config/style")
+          },
+          {
+            title:"detete",
+            active:()=>setMode(!mode)
+          }
+        ]}/>
         <div className="StyleChoice">
           {
             styles?.map((item, index)=>{

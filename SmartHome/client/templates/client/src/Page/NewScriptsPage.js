@@ -10,10 +10,12 @@ import {ActScript} from '../components/moduls/programmBlock/actScript'
 import {TriggerBlock} from '../components/moduls/programmBlock/triggerBlock'
 import {Loader} from '../components/Loader'
 import {AddScriptContext} from '../components/addScript/addScriptContext'
+import {MenuContext} from '../components/Menu/menuContext'
 import {useHistory,useParams} from 'react-router-dom'
 
 export const NewScriptsPage = ({edit}) => {
   let {id} = useParams();
+  const {setData} = useContext(MenuContext)
   const history = useHistory()
   const {USText} = useChecked()
   const auth = useContext(AuthContext)
@@ -168,7 +170,7 @@ export const NewScriptsPage = ({edit}) => {
   },[id,edit,giveScript])
 
   useEffect(()=>{
-    console.log(script);
+    setData("New Scrip")
   },[script])
 
   if(loading){

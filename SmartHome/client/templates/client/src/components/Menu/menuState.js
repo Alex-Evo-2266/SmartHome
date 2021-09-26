@@ -6,10 +6,10 @@ import {SHOW_MENU, HIDE_MENU, EDIT_MENU} from '../types'
 export const MenuState = ({children}) =>{
   const [state, dispatch] = useReducer(menuReducer,{visible:false})
 
-  const setData = useCallback((title="",specialAction={},buttons=[],search=null) =>{
+  const setData = useCallback((title="",options) =>{
     dispatch({
       type:EDIT_MENU,
-      payload: {title,specialAction,buttons,search}
+      payload: {title,...options}
     })
   },[])
 

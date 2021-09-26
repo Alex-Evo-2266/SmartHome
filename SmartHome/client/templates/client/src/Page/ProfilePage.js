@@ -3,10 +3,12 @@ import {NavLink,useLocation} from 'react-router-dom'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
+import {MenuContext} from '../components/Menu/menuContext'
 import {Loader} from '../components/Loader'
 
 export const ProfilePage = () => {
   const auth = useContext(AuthContext)
+  const {setData} = useContext(MenuContext)
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
   const location = useLocation();

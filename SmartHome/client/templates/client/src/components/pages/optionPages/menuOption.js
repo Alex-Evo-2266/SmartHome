@@ -137,7 +137,7 @@ export const MenuOption = () =>{
         {
           useBlock.map((item,index)=>{
             return(
-              <div className="configElement">
+              <div key={index} className="configElement">
               <MenuComponent key={index} name={item.title} url={item.url} icon={item.iconClass} onClick={deleteParagraph} use={true}/>
               </div>
             )
@@ -156,7 +156,7 @@ export const MenuOption = () =>{
         {
           noUseBlock.map((item,index)=>{
             return(
-              <div className="configElement">
+              <div key={index} className="configElement">
                 <MenuComponent key={index} name={item.title} url={item.url} onClick={addParagraph} icon={item.iconClass}/>
               </div>
             )

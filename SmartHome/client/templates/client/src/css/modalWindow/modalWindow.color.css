@@ -2,14 +2,14 @@
   background: var(--color-base);
 }
 .modalHeader h4{
-  color: var(--text-color-darken-fon);
+  color: var(--text-color-base-fon);
 }
 .centerWindow{
   border: 2px solid var(--color-base);
 }
 .centerWindow .centerWindowContent{
   background: var(--color-base);
-  color: var(--text-color-darken-fon);
+  color: var(--text-color-base-fon);
 }
 .IfdeviceList .deviceElement{
   box-shadow: inset 0 0 5px #000;

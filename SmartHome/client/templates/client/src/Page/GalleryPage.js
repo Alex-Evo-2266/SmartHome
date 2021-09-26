@@ -71,14 +71,18 @@ export const GalleryPage = () => {
   useEffect(()=>{
     if(addVisible){
       setData("Gallery",{
-        type: "close",
-        action:()=>setaddVisible(false)
+        specialAction:{
+          type: "close",
+          action:()=>setaddVisible(false)
+        }
       })
     }
     else {
       setData("Gallery",{
-        type: "add",
-        action:()=>setaddVisible(true)
+        specialAction:{
+          type: "add",
+          action:()=>setaddVisible(true)
+        }
       })
     }
   },[setData,addVisible])

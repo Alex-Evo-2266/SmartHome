@@ -103,7 +103,7 @@ export const EditStylePage = () => {
         <div className="boxFieldColor">
           <div className="colorfield">
             <p>color error</p>
-            <input type="color" value={style?.error} name="c3" onChange={colorHandler}/>
+            <input type="color" value={style?.error} name="error" onChange={colorHandler}/>
           </div>
         </div>
       </div>

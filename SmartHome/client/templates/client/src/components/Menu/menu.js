@@ -7,6 +7,8 @@ import {UserContext} from '../../context/UserContext'
 import {FloatingButton} from '../floatingButton'
 import {TerminalContext} from '../terminal/terminalContext.js'
 import {menuField} from './data.menu.js'
+import {Menu as DopMenu} from '../dopmenu/menu'
+
 
 export const Menu = ()=>{
   const location = useLocation();
@@ -30,7 +32,7 @@ export const Menu = ()=>{
   const [insluedField, setField] = useState([])
   const [otherField, setotherField] = useState([])
   const [sizeWidth, setSizeWidth] = useState(window.innerWidth)
-console.log(auth);
+
   const giveField=useCallback((data)=>{
     let arr1 = []
     let arr2 = menuField
@@ -101,11 +103,12 @@ if(sizeWidth>700){
         {
           menu.menu.buttons?.map((item, index)=>{
             return(
-              <div className={`tabButton ${(item.active)?"active":""}`} onClick={item.action}>{item.title}</div>
+              <div key={index} className={`tabButton ${(item.active)?"active":""}`} onClick={item.action}>{item.title}</div>
             )
           })
         }
       </div>
+      <div className="controlConteiner">
       {
         (menu.menu.search)?
         <div className="search" onClick={()=>setSearchtVisible(!searchtVisible)}>
@@ -113,13 +116,19 @@ if(sizeWidth>700){
         </div>:
         null
       }
+      {
+        (menu.menu.dopmenu)?
+          <DopMenu buttons={menu.menu.dopmenu}/>
+        :null
+      }
+      </div>
     </div>
     {
       (menu.menu.search)?
       <div className={`searchConteainer ${(searchtVisible)?"show":"hide"}`}>
         <div className={`search`}>
           <button onClick={()=>setSearchtVisible(false)} className="searchBtn">
-            <i class="fas fa-arrow-left"></i>
+            <i className="fas fa-arrow-left"></i>
           </button>
           <input placeholder="search" type="search" name="search" onChange={searchHandler} onKeyDown={keyd} value={search}/>
         </div>

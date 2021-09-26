@@ -344,11 +344,11 @@ class Zigbee2mqttDevice(APIView):
 # home page views
 class GetHomePageView(APIView):
     """docstring for GetHomeCart."""
-    def get(self,request,id):
+    def get(self,request,name):
         authData = auth(request)
         if not authData:
             return Response(status=403)
-        page = getPage(id)
+        page = getPage(name)
         return Response(page)
 
 class SetHomePage(APIView):

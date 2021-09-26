@@ -42,12 +42,12 @@ export const ScriptsPage = () => {
 
   useEffect(()=>{
     setData("Scripts All",{
-      type: "add",
-      action:()=>history.push("/scripts/add")
-    },
-    [],
-    searchout
-  )
+      specialAction:{
+        type: "add",
+        action:()=>history.push("/scripts/add")
+      },
+      search: searchout
+    })
   },[setData])
 
   useEffect(()=>{

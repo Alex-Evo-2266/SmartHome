@@ -3,11 +3,13 @@ import {Header} from '../components/moduls/header'
 import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
+import {MenuContext} from '../components/Menu/menuContext'
 import {ZigbeeElement} from '../components/moduls/zigbeeCard/Card'
 
 export const ZigbeePage = ()=>{
   const auth = useContext(AuthContext)
   const [device,setDevice] = useState([])
+  const {setData} = useContext(MenuContext)
   const {loading, request} = useHttp();
 
   const rebootStik = () => {
@@ -28,11 +30,19 @@ export const ZigbeePage = ()=>{
     zigbeeDevice()
   },[zigbeeDevice])
 
+  useEffect(()=>{
+    setData("Zigbee",{
+      dopmenu: [
+        {
+          title:"update",
+          active:zigbeeDevice
+        }
+      ]
+    })
+  },[setData,zigbeeDevice])
+
   return (
     <div className="conteiner bottom">
-      <Header name="Zigbee2mqtt">
-        <button onClick={rebootStik} className="btn"><i className="fas fa-undo"></i></button>
-      </Header>
       {
         (loading)?
         <Loader/>:

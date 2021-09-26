@@ -89,11 +89,11 @@ ul.elementConteiner li label .icon-box i{
   align-items: center;
   padding: 2px 5px;
   min-height: 50px;
-  color: var(--text-color-darken-fon);
+  color: var(--text-color-base-fon);
 }
 .ElementLine p{
   font-size: 20px;
-  color: var(--text-color-darken-fon);
+  color: var(--text-color-base-fon);
 }
 .ElementLine .control{
   position: relative;

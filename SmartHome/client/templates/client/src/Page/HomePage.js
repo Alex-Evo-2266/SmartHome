@@ -85,7 +85,8 @@ const saveCarts = async()=>{
 
 const importCarts = useCallback(async()=>{
   try {
-    const data = await request(`/api/homeCart/get/${1}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/homeCart/get/${"page1"}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    console.log(data);
     setCarts(data.carts)
     const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     setInterval(data2.updateFrequency)
@@ -110,15 +111,19 @@ useEffect(()=>{
 useEffect(()=>{
   if(!editMode){
     setData("Home",{
-      type: "config",
-      action:()=>setEditMode(true)
+      specialAction: {
+        type: "config",
+        action:()=>setEditMode(true)
+      }
     })
   }else{
     setData("Home",{
-      type: "ok",
-      action:()=>{
-        saveCarts()
-        setEditMode(false)
+      specialAction:{
+        type: "ok",
+        action:()=>{
+          saveCarts()
+          setEditMode(false)
+        }
       }
     })
   }

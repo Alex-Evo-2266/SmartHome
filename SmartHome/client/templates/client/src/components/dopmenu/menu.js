@@ -5,6 +5,11 @@ export const Menu = ({buttons=[]}) =>{
 
   return(
     <>
+    {
+      (visible)?
+      <div className="backGlass" onClick={()=>setVisible(false)}></div>
+      :null
+    }
     <div className="menuTogleBtn" onClick={()=>setVisible(!visible)}>
       <i className="fas fa-ellipsis-v"></i>
     </div>
