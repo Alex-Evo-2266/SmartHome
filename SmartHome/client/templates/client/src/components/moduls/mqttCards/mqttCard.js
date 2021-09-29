@@ -23,7 +23,7 @@ const baseMinMax = {
     min:"0",
     max:"1",
     icon:"",
-    type:"boolean"
+    type:"binary"
   },
   brightness:{
     min:"0",
@@ -52,7 +52,7 @@ const baseMinMax = {
 }
 
 
-export const MQTTElement = ({data}) =>{
+export const MQTTElement = ({data, onClickMessage}) =>{
   const form = useContext(FormContext)
 
   function dictToList(dict) {
@@ -60,7 +60,7 @@ export const MQTTElement = ({data}) =>{
     console.log(dict);
     for (var key in dict) {
       let val = dict[key]
-      if(typeof(dict[key])==="object"||typeof(dict[key])==="boolean"){
+      if(typeof(dict[key])==="object"||typeof(dict[key])==="binary"){
         val = JSON.stringify(val)
       }
       if(val.length>100){
@@ -81,7 +81,7 @@ export const MQTTElement = ({data}) =>{
   if(typeof(mes)==="object"){
     message = dictToList(mes)
   }else{
-    if(typeof(mes)==="boolean"){
+    if(typeof(mes)==="binary"){
       mes = JSON.stringify(mes)
     }
     let topicComponents = data.topic.split('/')
@@ -153,7 +153,7 @@ export const MQTTElement = ({data}) =>{
   return(
     <>
       <td>{data.topic}</td>
-      <td>{
+      <td onClick={(e)=>onClickMessage({...e,typeMessage})}>{
         message.map((item,index)=>{
           return <span className="mqttMessageStr" key={index}>{item.name}: {item.value}, </span>
         })

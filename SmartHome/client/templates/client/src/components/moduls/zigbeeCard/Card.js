@@ -1,10 +1,19 @@
 import React,{useContext} from 'react'
 import {FormContext} from '../../Form/formContext'
 import {RunText} from '../../runText'
+import {Menu} from '../../dopmenu/menu'
+// import {AuthContext} from '../../../context/AuthContext.js'
+// import {useHttp} from '../../../hooks/http.hook'
 
 
 export const ZigbeeElement = ({data}) =>{
+  // const auth = useContext(AuthContext)
+  // const {loading, request} = useHttp();
   const form = useContext(FormContext)
+
+  // const rebootStik = () => {
+  //   request('/api/zigbee2mqtt/reboot', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+  // }
 
   const linc = ()=>{
     let conf = []
@@ -39,6 +48,28 @@ export const ZigbeeElement = ({data}) =>{
     })
   }
 
+  function buttons() {
+    let arr = [
+      {
+        title:"rename",
+        active:()=>{}
+      }
+    ]
+    if(data.exposes){
+      arr.push({
+        title:"linc",
+        active:linc
+      })
+    }
+    // if(data.type==="Coordinator"){
+    //   arr.push({
+    //     title:"linc",
+    //     active:linc
+    //   })
+    //}
+    return arr
+  }
+
   return(
     <div className = "NewCardElement">
       <div className = "NewCardHeader">
@@ -49,7 +80,13 @@ export const ZigbeeElement = ({data}) =>{
           <p>{data.address}</p>
         </div>
         <RunText className="DeviceName" id={data.name} text={data.name||"NuN"}/>
+        <Menu buttons={buttons()}/>
       </div>
+      {
+        (data.exposes)?
+        <div className="dividers"></div>
+        :null
+      }
       <div className = "NewCardBody">
         <ul>
         {(data.exposes)?
@@ -69,9 +106,6 @@ export const ZigbeeElement = ({data}) =>{
           }):null
         }
         </ul>
-      </div>
-      <div className = "NewCardControl">
-        <button className="cardControlBtn" onClick={()=>{linc()}}>linc</button>
       </div>
     </div>
   )

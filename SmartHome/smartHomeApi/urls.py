@@ -23,6 +23,7 @@ urlpatterns = [
     path('mqtt',views.MqttDevice.as_view()),
     path('mqtt/clear',views.MqttClear.as_view()),
     path('zigbee2mqtt/reboot',views.Zigbee2mqttReboot.as_view()),
+    path('zigbee2mqtt/permit_join',views.Zigbee2mqttPermJoin.as_view()),
     path('zigbee2mqtt/devices',views.Zigbee2mqttDevice.as_view()),
     path('homeCart/get/<str:name>',views.GetHomePageView.as_view()),
     path('homeCart/set',views.SetHomePage.as_view()),
@@ -32,7 +33,7 @@ urlpatterns = [
     path('script/set/status',views.SetStatusScript.as_view()),
     path('script/run/<str:name>',views.RunScript.as_view()),
     path('image/<str:type>/<int:id>',views.ImageView.as_view()),
-    path('image/<str:type>/ten/<int:index>',views.GetTenUrl.as_view()),
+    path('image/<str:type>/el/<int:index>',views.GetTenUrl.as_view()),
     path('background/set',views.linkBackgroundView.as_view()),
     path('media/set/image/<str:name>',views.SetBackground.as_view()),
 ]

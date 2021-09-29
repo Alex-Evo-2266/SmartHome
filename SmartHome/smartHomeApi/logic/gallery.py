@@ -2,9 +2,9 @@ from ..models import LocalImage,genId,set_to_list_dict,ImageBackground,UserConfi
 
 def getFonUrl(oldindex):
     images = LocalImage.objects.all()
-    images2 = images[oldindex:oldindex+10]
+    images2 = images[oldindex:oldindex+30]
     end=True
-    if(len(images)>oldindex+10):
+    if(len(images)>oldindex+30):
         end=False
     for item in images2:
         users = item.imagebackground_set.all()

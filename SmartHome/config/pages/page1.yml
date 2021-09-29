@@ -10,6 +10,16 @@ carts:
     type: weather
     typeAction: ''
     width: 1
+  - action: ''
+    deviceId: 9
+    height: 1
+    id: null
+    index: 1
+    name: "\u0434\u0430\u0442\u0447\u0438\u043A \u0441\u0432\u0435\u0442\u0430"
+    order: 0
+    type: sensor-number
+    typeAction: illuminance_lux
+    width: 2
   id: 1
   index: 0
   mainId: 1

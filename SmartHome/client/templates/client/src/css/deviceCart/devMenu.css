@@ -27,8 +27,13 @@
   line-height: 40px;
   text-align: right;
   cursor: pointer;
+  white-space: nowrap;
 }
 .contextmenuElement:hover{
   background: var(--color-normal);
   filter: brightness(80%);
+}
+.contextmenuElement .state{
+  width: 10px;
+  padding: 0 5px;
 }

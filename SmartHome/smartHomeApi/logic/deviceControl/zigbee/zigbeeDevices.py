@@ -1,5 +1,9 @@
 zigbeeDevices = []
+permit_join = False
 from smartHomeApi.logic.config.configget import getConfig
+
+# def zigbeeInfoSearch(topic, message):
+#
 
 def addzigbeeDevices(id,data):
     global zigbeeDevices
@@ -20,6 +24,10 @@ def getzigbeeDevices():
     global zigbeeDevices
     return zigbeeDevices
 
+def getPermitJoin():
+    global permit_join
+    return permit_join
+
 def decodeZigbeeDevices(data):
     config = getConfig("zigbee2mqtt")
     # print(data)
@@ -29,7 +37,7 @@ def decodeZigbeeDevices(data):
         dev = dict()
         dev["name"] = item["friendly_name"]
         dev["address"] = item["ieee_address"]
-        dev["allAddress"] = config["topic"]+"/"+item["ieee_address"]
+        dev["allAddress"] = config["topic"]+"/"+item["friendly_name"]
         dev["type"] = item["type"]
         if "power_source" in item:
             dev["power_source"] = item["power_source"]
@@ -44,3 +52,8 @@ def decodeZigbeeDevices(data):
         addzigbeeDevices(dev["address"],dev)
         # print(item["friendly_name"])
         # d = item["definition"]
+
+def decodeZigbeeConfig(data):
+    print(data["permit_join"])
+    global permit_join
+    permit_join = data["permit_join"]

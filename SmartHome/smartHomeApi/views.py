@@ -16,8 +16,8 @@ from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,
 from .logic.deviceSetValue import setValue
 from .logic.weather import Weather
 from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopicks
-from .logic.deviceControl.zigbee.zigbee import reboot
-from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices
+from .logic.deviceControl.zigbee.zigbee import reboot, permission_join
+from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices, getPermitJoin
 from .logic.charts import getCharts
 from .logic.style import addstyle, getStyles, getStyle,removeStyle
 
@@ -330,6 +330,24 @@ class Zigbee2mqttReboot(APIView):
         zigbeeConf = config["zigbee2mqtt"]
         reboot(zigbeeConf["topic"])
         return Response("ok",status=201)
+
+class Zigbee2mqttPermJoin(APIView):
+    """docstring for Zigbee2mqttReboot."""
+    def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        data = json.loads(request.body)
+        config = readConfig()
+        zigbeeConf = config["zigbee2mqtt"]
+        permission_join(zigbeeConf["topic"],data["state"])
+        return Response("ok",status=201)
+
+    def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        return Response(getPermitJoin(),status=201)
 
 class Zigbee2mqttDevice(APIView):
     """docstring for Zigbee2mqttDevice."""

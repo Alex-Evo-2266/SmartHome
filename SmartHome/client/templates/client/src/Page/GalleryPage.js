@@ -22,10 +22,10 @@ export const GalleryPage = () => {
 
   const getTenUrl = useCallback(async(oldUrl = 0)=>{
     try {
-      const data = await request(`/api/image/fon/ten/${oldUrl}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      const data = await request(`/api/image/fon/el/${oldUrl}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       if(data&&data.images){
         setEnd(data.end)
-        setnewUrl(oldUrl+10)
+        setnewUrl(oldUrl+30)
         let arr = urls.slice()
         if(newUrl>oldUrl){
           arr = []

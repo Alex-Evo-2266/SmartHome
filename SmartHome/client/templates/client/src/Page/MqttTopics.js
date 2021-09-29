@@ -122,7 +122,11 @@ export const MqttPage = ()=>{
           <div className="field">{ditail.topic}</div>
           <div className="field">
             <pre>
-              {JSON.stringify(JSON.parse(ditail.message), undefined, 4)}
+              {
+                (ditail?.event?.typeMessage==="json")?
+                JSON.stringify(JSON.parse(ditail.item.message), undefined, 4):
+                ditail.item.message
+              }
             </pre>
           </div>
           <div className="field">{Decice(ditail)}</div>
@@ -158,8 +162,8 @@ export const MqttPage = ()=>{
               {
                 deviceMqtt.map((item,index)=>{
                   return (
-                    <tr key={index} onClick={()=>setDitail(item)}>
-                      <MQTTElement data = {item}/>
+                    <tr key={index}>
+                      <MQTTElement data = {item} onClickMessage={(event)=>setDitail({event,item})}/>
                     </tr>
                   )
                 })

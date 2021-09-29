@@ -141,6 +141,7 @@ def giveDevices():
 
 def editDevice(data):
     try:
+        print(data)
         devices = Device.objects.all()
         for item in devices:
             if item.DeviceSystemName==data.get("DeviceSystemName") and item.id != data["DeviceId"]:
@@ -164,58 +165,37 @@ def editDevice(data):
         if("DeviceValue" in data):
             deviceSetStatusThread(data["DeviceId"],"value",data["DeviceValue"])
         dev.save()
+
+        print(devicesArrey.all())
+        devicesArrey.delete(data["DeviceId"])
+
         vals = ValueDevice.objects.filter(device__id=data["DeviceId"])
-        print(data)
         if("config" in data):
             for item in vals:
                 item.delete()
-            if(data.get("DeviceValueType")=="json"):
-                conf = data["config"]
-                for item in conf:
-                    val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,name=item["name"])
-                    val.value="0"
-                    if "address" in item:
-                        val.address=item["address"]
-                    if "low" in item:
-                        val.low=item["low"]
-                        val.value=item["low"]
-                    if "high" in item:
-                        val.high=item["high"]
-                    if "icon" in item:
-                        val.icon=item["icon"]
-                    if "values" in item:
-                        val.values=item["values"]
-                    if "unit" in item:
-                        val.unit=item["unit"]
-                    if "control" in item:
-                        val.control=item["control"]
-                    if "type" in item:
-                        val.type=item["type"]
-                    val.save()
-                return True
-            else:
-                conf = data["config"]
-                for item in conf:
-                    val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,name=item["name"], address=item["address"])
-                    val.value="0"
-                    if "low" in item:
-                        val.low=item["low"]
-                        val.value=item["low"]
-                    if "high" in item:
-                        val.high=item["high"]
-                    if "icon" in item:
-                        val.icon=item["icon"]
-                    if "values" in item:
-                        val.values=item["values"]
-                    if "unit" in item:
-                        val.unit=item["unit"]
-                    if "control" in item:
-                        val.control=item["control"]
-                    if "type" in item:
-                        val.type=item["type"]
-                    val.save()
-                return True
-        devicesArrey.delete(data["DeviceId"])
+            conf = data["config"]
+            for item in conf:
+                val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,name=item["name"])
+                val.value="0"
+                if "address" in item:
+                    val.address=item["address"]
+                if "low" in item:
+                    val.low=item["low"]
+                    val.value=item["low"]
+                if "high" in item:
+                    val.high=item["high"]
+                if "icon" in item:
+                    val.icon=item["icon"]
+                if "values" in item:
+                    val.values=item["values"]
+                if "unit" in item:
+                    val.unit=item["unit"]
+                if "control" in item:
+                    val.control=item["control"]
+                if "type" in item:
+                    val.type=item["type"]
+                val.save()
+            return True
         return True
     except Exception as e:
         print(e)

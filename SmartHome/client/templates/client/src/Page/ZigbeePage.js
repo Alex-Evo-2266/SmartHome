@@ -9,11 +9,17 @@ import {ZigbeeElement} from '../components/moduls/zigbeeCard/Card'
 export const ZigbeePage = ()=>{
   const auth = useContext(AuthContext)
   const [device,setDevice] = useState([])
+  const [permitJoin,setPermitJoin] = useState(false)
   const {setData} = useContext(MenuContext)
   const {loading, request} = useHttp();
 
   const rebootStik = () => {
     request('/api/zigbee2mqtt/reboot', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+  }
+
+  const pairing = (state) => {
+    setPermitJoin(state)
+    request('/api/zigbee2mqtt/permit_join', 'POST',{state},{Authorization: `Bearer ${auth.token}`})
   }
 
   const zigbeeDevice = useCallback(async () => {
@@ -23,6 +29,9 @@ export const ZigbeePage = ()=>{
         console.log(data);
         setDevice(data)
       }
+      let data2 = await request('/api/zigbee2mqtt/permit_join', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+      console.log(data2);
+      setPermitJoin(data2)
     } catch (e) {}
   },[request,auth.token])
 
@@ -31,15 +40,28 @@ export const ZigbeePage = ()=>{
   },[zigbeeDevice])
 
   useEffect(()=>{
+    console.log(permitJoin);
+  },[permitJoin])
+
+  useEffect(()=>{
     setData("Zigbee",{
       dopmenu: [
         {
           title:"update",
           active:zigbeeDevice
-        }
+        },
+        {
+          title:"reboot",
+          active:rebootStik
+        },
+        {
+          title:"pairing mode",
+          check:permitJoin,
+          active:()=>pairing(!permitJoin)
+        },
       ]
     })
-  },[setData,zigbeeDevice])
+  },[setData,zigbeeDevice,permitJoin])
 
   return (
     <div className="conteiner bottom">

@@ -18,7 +18,8 @@ export const Menu = ({buttons=[]}) =>{
         buttons.map((item, index)=>{
           return(
             <div key={index} className="contextmenuElement" onClick={item.active}>
-            {item.title}
+              <span className="state">{(item.check)?<i className="fas fa-check"></i>:null}</span>
+              <span className="content">{item.title}</span>
             </div>
           )
         })
