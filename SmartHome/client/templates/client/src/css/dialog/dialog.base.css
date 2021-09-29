@@ -1,0 +1,33 @@
+.dialogCoteiner{
+  margin-top: 50%;
+  margin-left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  z-index: 51;
+  background: var(--color-normal);
+  position: fixed;
+  box-shadow: 0 0 10px #000;
+  border-radius: 4px;
+  color: var(--text-color-normal-fon);
+  padding-left: 24px;
+}
+.dialogHeader{
+  height: 64px;
+  font-size: 24px;
+  line-height: 64px;
+}
+.dialogFooter{
+  height: 52px;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 4px;
+}
+.dialogFooter button{
+  margin: 8px 4px;
+}
+.dialogBody{
+  padding-right: 24px;
+}
+.dialogBody .input-data{
+  margin-top: 4px;
+}

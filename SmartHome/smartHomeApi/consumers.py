@@ -1,5 +1,4 @@
 
-from .logic.devices import giveDevices
 from SmartHome.settings import TIME_UPPDATA
 
 from asgiref.sync import sync_to_async

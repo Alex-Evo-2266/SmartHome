@@ -1,6 +1,6 @@
 from smartHomeApi.models import Device,ValueDevice
 from smartHomeApi.logic.config.configget import getConfig
-from ..zigbee.zigbeeDevices import decodeZigbeeDevices, decodeZigbeeConfig
+# from ..zigbee.zigbeeDevices import decodeZigbeeDevices, decodeZigbeeConfig
 import ast
 import json
 mqttTopics = []
@@ -17,15 +17,6 @@ def addTopic(topic,message):
         "topic":topic,
         "message":message
     }
-    zigbee = getConfig("zigbee2mqtt")
-    last = topic.split('/')[-1]
-    first = topic.split('/')[0:-1]
-    first = "/".join(first)
-    if ("/".join(topic.split('/')[0:2])=='/'.join([zigbee["topic"],"bridge"]) and last!="state"):
-        if(last=="devices"):
-            decodeZigbeeDevices(json.loads(message))
-        if(last=="info"):
-            decodeZigbeeConfig(json.loads(message))
     id = getIdTopic(topic)
     if(id != None):
         mqttTopics[id] = t

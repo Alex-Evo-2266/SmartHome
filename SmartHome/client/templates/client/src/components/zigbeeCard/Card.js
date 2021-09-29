@@ -2,18 +2,20 @@ import React,{useContext} from 'react'
 import {FormContext} from '../Form/formContext'
 import {RunText} from '../runText'
 import {Menu} from '../dopmenu/menu'
-// import {AuthContext} from '../../../context/AuthContext.js'
-// import {useHttp} from '../../../hooks/http.hook'
+import {DialogWindowContext} from '../dialogWindow/dialogWindowContext'
+import {AuthContext} from '../../context/AuthContext.js'
+import {useHttp} from '../../hooks/http.hook'
 
 
 export const ZigbeeElement = ({data}) =>{
-  // const auth = useContext(AuthContext)
-  // const {loading, request} = useHttp();
+  const auth = useContext(AuthContext)
+  const {loading, request} = useHttp();
   const form = useContext(FormContext)
+  const {show} = useContext(DialogWindowContext)
 
-  // const rebootStik = () => {
-  //   request('/api/zigbee2mqtt/reboot', 'GET',null,{Authorization: `Bearer ${auth.token}`})
-  // }
+  const rename = (newName) => {
+    request('/api/zigbee2mqtt/rename', 'POST',{name:data.name,newName},{Authorization: `Bearer ${auth.token}`})
+  }
 
   const linc = ()=>{
     let conf = []
@@ -49,24 +51,24 @@ export const ZigbeeElement = ({data}) =>{
   }
 
   function buttons() {
-    let arr = [
-      {
-        title:"rename",
-        active:()=>{}
-      }
-    ]
+    let arr = []
     if(data.exposes){
       arr.push({
         title:"linc",
         active:linc
       })
     }
-    // if(data.type==="Coordinator"){
-    //   arr.push({
-    //     title:"linc",
-    //     active:linc
-    //   })
-    //}
+    if(data.type!=="Coordinator"){
+      arr.push({
+        title:"rename",
+        active:()=>show("text",{
+          title:"Rename",
+          text:"input new name",
+          placeholder:"new name",
+          action:rename
+        })
+      })
+    }
     return arr
   }
 

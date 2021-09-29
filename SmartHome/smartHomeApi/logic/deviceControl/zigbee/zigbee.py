@@ -7,3 +7,8 @@ def reboot(zigbeetopik):
 def permission_join(zigbeetopik,state:bool):
     topic = zigbeetopik + "/bridge/request/permit_join"
     publish(topic,state)
+
+def zigbeeDeviceRename(zigbeetopik, name, newName):
+    topic = zigbeetopik + "/bridge/request/device/rename"
+    message = '{"from": "' + name + '", "to": "' + newName + '"}'
+    publish(topic,message)

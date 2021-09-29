@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 
 from .logic.user import addUser,newGenPass,editPass,send_email,deleteUser,setLevel, login as Authorization, userConfEdit,menuConfEdit,user,editUser
 from .logic.auth import auth
-from .logic.devices import addDevice,giveDevice,editDevice,deleteDevice
+from .logic.getDevices import giveDevice
+from .logic.editDevice import addDevice, editDevice, deleteDevice
 from .logic.config.configget import GiveServerConfig,readConfig
 from .logic.config.configset import ServerConfigEdit
 from .logic.Cart import setPage,getPage
@@ -16,7 +17,7 @@ from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,
 from .logic.deviceSetValue import setValue
 from .logic.weather import Weather
 from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopicks
-from .logic.deviceControl.zigbee.zigbee import reboot, permission_join
+from .logic.deviceControl.zigbee.zigbee import reboot, permission_join, zigbeeDeviceRename
 from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices, getPermitJoin
 from .logic.charts import getCharts
 from .logic.style import addstyle, getStyles, getStyle,removeStyle
@@ -357,6 +358,22 @@ class Zigbee2mqttDevice(APIView):
             return Response(status=403)
         return Response(getzigbeeDevices())
 
+class Zigbee2mqttRename(APIView):
+    """docstring for Zigbee2mqttDevice."""
+    def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        try:
+            data = json.loads(request.body)
+            print(data)
+            config = readConfig()
+            zigbeeConf = config["zigbee2mqtt"]
+            zigbeeDeviceRename(zigbeeConf["topic"],data["name"],data["newName"])
+            return Response("ok",status=201)
+        except Exception as e:
+            print(e)
+            return Response(status=400)
 
 
 # home page views

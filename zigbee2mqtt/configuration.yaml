@@ -8,7 +8,7 @@ serial:
   port: /dev/ttyACM0
 devices:
   '0x00158d0005884fb7':
-    friendly_name: '0x00158d0005884fb7'
+    friendly_name: temp1
   '0x00158d0005427bff':
     friendly_name: '0x00158d0005427bff'
   '0x00158d0002a1d0ac':

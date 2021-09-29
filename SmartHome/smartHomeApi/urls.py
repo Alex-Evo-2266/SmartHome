@@ -25,6 +25,7 @@ urlpatterns = [
     path('zigbee2mqtt/reboot',views.Zigbee2mqttReboot.as_view()),
     path('zigbee2mqtt/permit_join',views.Zigbee2mqttPermJoin.as_view()),
     path('zigbee2mqtt/devices',views.Zigbee2mqttDevice.as_view()),
+    path('zigbee2mqtt/rename',views.Zigbee2mqttRename.as_view()),
     path('homeCart/get/<str:name>',views.GetHomePageView.as_view()),
     path('homeCart/set',views.SetHomePage.as_view()),
     path('script/all',views.GetScripts.as_view()),

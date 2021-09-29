@@ -1,7 +1,7 @@
 from .mqttDevice.connect import connect
 import asyncio
 from channels.layers import get_channel_layer
-from smartHomeApi.logic.devices import giveDevices
+from smartHomeApi.logic.getDevices import giveDevices
 from asgiref.sync import async_to_sync
 import threading
 import time

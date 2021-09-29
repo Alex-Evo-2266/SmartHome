@@ -25,6 +25,7 @@
 @import "./switch/switch.base.css";
 @import "./sidebar/sidebar.base.css";
 @import "./gallery/gallery.base.css";
+@import "./dialog/dialog.base.css";
 @import "./tableMqtt/tableMqtt.base.css";
 @import "./chart/chart.base.css";
 @import "./styleEdit/styleEdit.base.css";

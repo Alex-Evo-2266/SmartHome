@@ -1,9 +1,11 @@
 import React from 'react'
 import {BrowserRouter} from 'react-router-dom'
 import {Alert} from './components/alert/alert.js'
+import {DialogWindow} from './components/dialogWindow/dialogWindow.js'
 import {Menu} from './components/Menu/menu.js'
 import {Form} from './components/Form/form'
 import {AlertState} from './components/alert/alertState'
+import {DialogWindowState} from './components/dialogWindow/dialogWindowState'
 import {MenuState} from './components/Menu/menuState'
 import {FormState} from './components/Form/formState'
 import {TerminalState} from './components/terminal/terminalState'
@@ -36,6 +38,7 @@ function App() {
     }}>
     <SocketState>
     <AlertState>
+    <DialogWindowState>
     <CastomizeStyle token={token} ready={ready}>
     <MenuState>
     <FormState>
@@ -44,6 +47,7 @@ function App() {
 
     <BrowserRouter>
       <div className="App">
+        <DialogWindow/>
         <Alert/>
         <Form/>
         <TerminalCart/>
@@ -57,6 +61,7 @@ function App() {
     </FormState>
     </MenuState>
     </CastomizeStyle>
+    </DialogWindowState>
     </AlertState>
     </SocketState>
     </AuthContext.Provider>

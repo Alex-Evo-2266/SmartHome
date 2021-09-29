@@ -1,9 +1,33 @@
 zigbeeDevices = []
 permit_join = False
 from smartHomeApi.logic.config.configget import getConfig
+from smartHomeApi.logic.editDevice import giveidDeviceByAddres, editAdress
+import json
 
-# def zigbeeInfoSearch(topic, message):
-#
+def zigbeeInfoSearch(topic, message):
+    zigbee = getConfig("zigbee2mqtt")
+    last = topic.split('/')[-1]
+    first = topic.split('/')[0:-1]
+    first = "/".join(first)
+    if(topic == '/'.join([zigbee["topic"],"bridge","response","device","rename"])):
+        editAdressLincDevices(json.loads(message))
+    if ("/".join(topic.split('/')[0:2])=='/'.join([zigbee["topic"],"bridge"])):
+        if(last=="devices"):
+            decodeZigbeeDevices(json.loads(message))
+        if(last=="info"):
+            decodeZigbeeConfig(json.loads(message))
+
+def editAdressLincDevices(data):
+    zigbee = getConfig("zigbee2mqtt")
+    oldadress = data["data"]
+    oldadress = oldadress["from"]
+    newadress = data["data"]
+    newadress = newadress["to"]
+    adress = '/'.join([zigbee["topic"],oldadress])
+    devs = giveidDeviceByAddres(adress)
+    newadress = '/'.join([zigbee["topic"],newadress])
+    for id in devs:
+        editAdress(id,newadress)
 
 def addzigbeeDevices(id,data):
     global zigbeeDevices
