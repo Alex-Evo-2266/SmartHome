@@ -3,7 +3,7 @@ import {FormContext} from './formContext'
 import {EditDevicesForm} from './forms/editDevicesForm'
 import {LincDevicesForm} from './forms/lincDevicesForm'
 import {ChoiceType} from './forms/choiceType'
-import {BackForm} from '../moduls/backForm'
+import {BackForm} from '../backForm'
 import {EditUserLevel} from './forms/editUserLevel'
 import {CreateStyle} from './forms/CreateStyle'
 

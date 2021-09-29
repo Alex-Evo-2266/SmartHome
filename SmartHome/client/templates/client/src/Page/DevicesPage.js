@@ -1,7 +1,7 @@
 import React, {useContext,useEffect,useState,useRef} from 'react'
 import {Link, useHistory} from 'react-router-dom'
-import {Header} from '../components/moduls/header'
-import {NewDeviceElement} from '../components/moduls/newDeviceElement'
+import {Header} from '../components/header'
+import {NewDeviceElement} from '../components/newDeviceElement'
 import {DeviceStatusContext} from '../context/DeviceStatusContext'
 import {MenuContext} from '../components/Menu/menuContext'
 

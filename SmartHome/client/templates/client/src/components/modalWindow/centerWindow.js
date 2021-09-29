@@ -1,5 +1,5 @@
 import React from 'react'
-import {BackForm} from '../moduls/backForm'
+import {BackForm} from '../backForm'
 
 export const CenterWindow = ({
   children,

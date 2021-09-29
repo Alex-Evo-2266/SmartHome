@@ -1,5 +1,5 @@
 import React,{useEffect,useState,useContext} from 'react'
-import {BackForm} from '../moduls/backForm'
+import {BackForm} from '../backForm'
 import {AuthContext} from '../../context/AuthContext.js'
 import {StyleContext} from '../UserStyle/StyleContext'
 import {useHttp} from '../../hooks/http.hook'

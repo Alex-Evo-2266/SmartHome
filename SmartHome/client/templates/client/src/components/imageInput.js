@@ -1,7 +1,7 @@
 import React, {useEffect,useContext} from 'react'
-import {useHttp} from '../../hooks/http.hook'
-import {useMessage} from '../../hooks/message.hook'
-import {AuthContext} from '../../context/AuthContext.js'
+import {useHttp} from '../hooks/http.hook'
+import {useMessage} from '../hooks/message.hook'
+import {AuthContext} from '../context/AuthContext.js'
 
 export const ImageInput = ({title, src, name, onChange=null, id}) =>{
   const auth = useContext(AuthContext)

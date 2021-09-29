@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useContext,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import {DeviceStatusContext} from '../../context/DeviceStatusContext'
 
 export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>{
   const [device, setDevice]=useState({})

@@ -1,7 +1,7 @@
 import React,{useContext} from 'react'
-import {FormContext} from '../../Form/formContext'
-import {RunText} from '../../runText'
-import {Menu} from '../../dopmenu/menu'
+import {FormContext} from '../Form/formContext'
+import {RunText} from '../runText'
+import {Menu} from '../dopmenu/menu'
 // import {AuthContext} from '../../../context/AuthContext.js'
 // import {useHttp} from '../../../hooks/http.hook'
 

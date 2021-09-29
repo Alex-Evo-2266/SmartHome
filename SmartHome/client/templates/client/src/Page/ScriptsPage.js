@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useCallback,useContext} from 'react'
 import {Link, useHistory} from 'react-router-dom'
-import {Header} from '../components/moduls/header'
+import {Header} from '../components/header'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'

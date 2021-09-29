@@ -2,8 +2,8 @@ import React,{useContext,useState,useEffect} from 'react'
 import {ModalWindow} from '../../../modalWindow/modalWindow'
 import {CartEditContext} from '../CartEditContext'
 import {AddControlContext} from '../../AddControl/AddControlContext'
-import {InputNumber} from '../../../moduls/inputNumber'
-import {BackForm} from '../../../moduls/backForm'
+import {InputNumber} from '../../../inputNumber'
+import {BackForm} from '../../../backForm'
 
 export const BaseCartEdit = ({type="base"}) =>{
   const {cartEdit, hide} = useContext(CartEditContext)

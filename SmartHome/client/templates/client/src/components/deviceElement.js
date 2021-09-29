@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import {FormContext} from '../Form/formContext'
+import {FormContext} from './Form/formContext'
 
 
 export const DeviceElement = (props) =>{

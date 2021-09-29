@@ -1,7 +1,7 @@
 import React, {useState,useContext,useEffect} from 'react'
-import {useHttp} from '../../../hooks/http.hook'
-import {useMessage} from '../../../hooks/message.hook'
-import {AuthContext} from '../../../context/AuthContext.js'
+import {useHttp} from '../../hooks/http.hook'
+import {useMessage} from '../../hooks/message.hook'
+import {AuthContext} from '../../context/AuthContext.js'
 
 export const Mode = ({updata,title,type,conf,value,idDevice}) =>{
   const [newvalue, setValue]=useState(0)

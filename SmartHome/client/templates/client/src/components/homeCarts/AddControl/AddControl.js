@@ -1,6 +1,6 @@
 import React, {useContext,useState} from 'react'
 import {AddControlContext} from './AddControlContext'
-import {BackForm} from '../../moduls/backForm'
+import {BackForm} from '../../backForm'
 import {AddButton} from './Control/addButton'
 import {AddSlider} from './Control/addSlider'
 import {AddScript} from './Control/addScript'

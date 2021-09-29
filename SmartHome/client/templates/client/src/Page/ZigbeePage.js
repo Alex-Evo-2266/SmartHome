@@ -1,10 +1,10 @@
 import React,{useEffect,useState,useCallback,useContext} from 'react'
-import {Header} from '../components/moduls/header'
+import {Header} from '../components/header'
 import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
 import {MenuContext} from '../components/Menu/menuContext'
-import {ZigbeeElement} from '../components/moduls/zigbeeCard/Card'
+import {ZigbeeElement} from '../components/zigbeeCard/Card'
 
 export const ZigbeePage = ()=>{
   const auth = useContext(AuthContext)

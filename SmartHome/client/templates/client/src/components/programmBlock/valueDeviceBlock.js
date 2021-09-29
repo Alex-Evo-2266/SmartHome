@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useContext,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import {DeviceStatusContext} from '../../context/DeviceStatusContext'
 
 export const ValueDeviceBlock = ({data,updata,index,type,deleteEl,block})=>{
   const [device, setDevice]=useState({})

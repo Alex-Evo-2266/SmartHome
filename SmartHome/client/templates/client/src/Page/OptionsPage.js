@@ -1,6 +1,6 @@
 import React, {useContext,useEffect} from 'react'
 import {NavLink, useLocation, useHistory} from 'react-router-dom'
-import {Header} from '../components/moduls/header'
+import {Header} from '../components/header'
 import {UserOption} from '../components/pages/optionPages/userOption'
 import {ServerOption} from '../components/pages/optionPages/serverOption'
 import {ImgOption} from '../components/pages/optionPages/imgOption'

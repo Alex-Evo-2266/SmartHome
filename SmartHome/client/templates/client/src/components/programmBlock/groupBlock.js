@@ -1,6 +1,6 @@
 import React,{useState,useContext} from 'react'
 import {IfBlock} from './ifBlock'
-import {AddScriptContext} from '../../addScript/addScriptContext'
+import {AddScriptContext} from '../addScript/addScriptContext'
 // import {ifClass,groupIfClass} from '../../../myClass.js'
 
 export const GroupBlock = ({index,type,children,data,updata,deleteEl})=>{

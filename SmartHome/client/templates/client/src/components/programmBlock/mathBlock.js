@@ -1,5 +1,5 @@
 import React,{useState,useContext} from 'react'
-import {AddScriptContext} from '../../addScript/addScriptContext'
+import {AddScriptContext} from '../addScript/addScriptContext'
 import {ValueDeviceBlock} from './valueDeviceBlock'
 import {TextBlock} from './textBlock'
 import {NumberBlock} from './numberBlock'

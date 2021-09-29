@@ -1,16 +1,16 @@
 import React, {useContext,useState,useEffect} from 'react'
-import {FormContext} from '../Form/formContext'
-import {RunText} from '../runText'
-import {useHttp} from '../../hooks/http.hook'
-import {useMessage} from '../../hooks/message.hook'
+import {FormContext} from './Form/formContext'
+import {RunText} from './runText'
+import {useHttp} from '../hooks/http.hook'
+import {useMessage} from '../hooks/message.hook'
 import {Power} from './newDeviceControlElements/power'
 import {Dimmer} from './newDeviceControlElements/dimmer'
 import {Mode} from './newDeviceControlElements/mode'
 import {Enum} from './newDeviceControlElements/enum'
-import {Menu} from '../dopmenu/menu'
+import {Menu} from './dopmenu/menu'
 // import {Color} from './newDeviceControlElements/color'
-import {DeviceStatusContext} from '../../context/DeviceStatusContext'
-import {AuthContext} from '../../context/AuthContext.js'
+import {DeviceStatusContext} from '../context/DeviceStatusContext'
+import {AuthContext} from '../context/AuthContext.js'
 
 export const NewDeviceElement = ({id}) =>{
   const {devices, updateDevice} = useContext(DeviceStatusContext)

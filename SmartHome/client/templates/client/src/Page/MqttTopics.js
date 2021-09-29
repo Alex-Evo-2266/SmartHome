@@ -1,12 +1,12 @@
 import React,{useEffect,useState,useCallback,useContext} from 'react'
-import {Header} from '../components/moduls/header'
+import {Header} from '../components/header'
 import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
-import {MQTTElement} from '../components/moduls/mqttCards/mqttCard'
+import {MQTTElement} from '../components/mqttCards/mqttCard'
 import {MenuContext} from '../components/Menu/menuContext'
-import {BackForm} from '../components/moduls/backForm'
+import {BackForm} from '../components/backForm'
 
 export const MqttPage = ()=>{
   const auth = useContext(AuthContext)

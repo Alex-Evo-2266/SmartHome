@@ -1,6 +1,6 @@
 import React,{useContext} from 'react'
 import {EditModeContext} from '../../context/EditMode'
-import {Header} from '../moduls/header'
+import {Header} from '../header'
 
 export const EditToolbar = ({show=false,save=null}) => {
   const {setMode,add} = useContext(EditModeContext)
