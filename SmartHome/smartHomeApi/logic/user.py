@@ -180,6 +180,7 @@ def send_email(subject, to_email, message):
             "",
             message
         ))
+        print(from_email,password)
         server = smtplib.SMTP_SSL('smtp.mail.ru')
         server.login(from_email,password)
         server.sendmail(from_email,to_email,BODY)

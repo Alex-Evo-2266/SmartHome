@@ -21,7 +21,9 @@ function LightenDarkenColor(col, amt) {
 }
 
 const defbacground = ()=>{
-  document.body.style.background = `url(${defFon})`;
+  document.body.style = `background: url(${defFon});
+    background-size: cover;
+    background-attachment: fixed;`;
 }
 
 const defstyle = ()=>{

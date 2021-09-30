@@ -67,7 +67,6 @@ a.button.normalSelection{
   display: block;
   text-align: center;
   min-width: 64px;
-  top: 15px;
   border: 2px solid var(--color-active);
   color: var(--text-color-normal-fon);
   text-decoration: none;
@@ -88,6 +87,20 @@ button.button:hover{
 a.button.highSelection:hover,
 button.button.highSelection:hover{
   background: var(--btn-color-active);
+}
+.controlElement{
+  min-height: 48px;
+  display: flex;
+  margin: 10px;
+  position: relative;
+  justify-content: flex-end;
+}
+.controlElement > a.button,
+.controlElement > button.button{
+  margin: 0 8px 0 0;
+}
+.liteButton{
+  cursor: pointer;
 }
 @media (max-width: 400px){
   .pagecontent p{

@@ -3,11 +3,13 @@ import React, {useState, useEffect, useContext} from 'react'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
+import {DialogWindowContext} from '../components/dialogWindow/dialogWindowContext'
 import {AlertContext} from '../components/alert/alertContext'
 
 
 export const AuthPage = function (){
   const auth = useContext(AuthContext)
+  const dialog = useContext(DialogWindowContext)
   const {show} = useContext(AlertContext);
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
@@ -37,16 +39,14 @@ export const AuthPage = function (){
   }
 
 const newpass = ()=>{
-  show("введите имя пользователя для получения нового пароля","messageDialog",(data)=>{
-    console.log(data);
-    request('/api/user/newpass', 'POST', {name:data})
+  dialog.show("text",{
+    title:"Password recovery",
+    text:"input login",
+    placeholder:"login",
+    action:(data)=>{
+      request('/api/user/newpass', 'POST', {name:data})
+    }
   })
-  // try {
-  //   const data = await request('/api/auth/login', 'POST', {...form})
-  //   auth.login(data.token, data.userId, data.userLavel)
-  // } catch (e) {
-  //   console.error(e);
-  // }
 }
 
   return(
@@ -63,7 +63,7 @@ const newpass = ()=>{
             <p>Password</p>
             <input placeholder="•••••••" id="password" type="password" name="password" value={form.password} onChange={changeHandler} required/>
             <input type="submit" onClick={loginHandler} disabled={loading} value="Sign In"/>
-            <button onClick={newpass}>забыли пароль?</button>
+            <p onClick={newpass} style={{marginTop:"5px"}} className="liteButton">забыли пароль?</p>
           </div>
       </div>
     </div>

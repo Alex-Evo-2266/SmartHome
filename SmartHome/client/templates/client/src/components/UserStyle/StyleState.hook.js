@@ -52,6 +52,8 @@ export const CastomizeStyle = ({children, token, ready}) =>{
     if(!token)
     {
       console.error("no authtorization");
+      setBackground()
+      setStyle()
       return
     }
     const data = await getData()

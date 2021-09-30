@@ -25,8 +25,8 @@ export const TextDialog = ()=>{
         </div>
       </div>
       <div className="dialogFooter">
-      <button className="dialogButton" onClick={ok}>ok</button>
-      <button className="dialogButton" onClick={hide}>cancel</button>
+      <button className="dialogButton button normalSelection" onClick={ok}>ok</button>
+      <button className="dialogButton button normalSelection" onClick={hide}>cancel</button>
       </div>
     </div>
     </>

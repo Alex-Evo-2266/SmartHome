@@ -3,6 +3,10 @@ import React,{useState} from 'react'
 export const Menu = ({buttons=[]}) =>{
   const [visible, setVisible] = useState(false)
 
+  if(buttons?.length === 0){
+    return null
+  }
+
   return(
     <>
     {
