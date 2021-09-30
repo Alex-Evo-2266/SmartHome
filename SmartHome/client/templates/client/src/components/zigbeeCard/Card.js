@@ -31,7 +31,6 @@ export const ZigbeeElement = ({data}) =>{
       if(item.values){
         values = item.values.join(", ")
       }
-      console.log(item.value_off,item.value_on);
       let confel = {
         name:item.name,
         address:item.property,

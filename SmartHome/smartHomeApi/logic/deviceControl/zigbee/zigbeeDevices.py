@@ -26,15 +26,7 @@ def zigbeeInfoSearch(topic, message):
 
 def decodEvent(data):
     if(data["type"]=="device_leave"):
-        global zigbeeDevices
-        address = data["data"]
-        address = address["ieee_address"]
-        for item in zigbeeDevices:
-            if item["address"] == address:
-                devs = giveidDeviceByAddres(item["name"])
-                for id in devs:
-                    deleteDevice(id)
-                return
+        pass
 
 
 

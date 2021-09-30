@@ -3,11 +3,13 @@ import {Header} from '../components/header'
 import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
+import {SocketContext} from '../context/SocketContext'
 import {MenuContext} from '../components/Menu/menuContext'
 import {ZigbeeElement} from '../components/zigbeeCard/Card'
 
 export const ZigbeePage = ()=>{
   const auth = useContext(AuthContext)
+  const {message} = useContext(SocketContext)
   const [device,setDevice] = useState([])
   const [permitJoin,setPermitJoin] = useState(false)
   const {setData} = useContext(MenuContext)
@@ -38,6 +40,11 @@ export const ZigbeePage = ()=>{
   useEffect(()=>{
     zigbeeDevice()
   },[zigbeeDevice])
+
+  useEffect(()=>{
+    if(message.type==="zigbee")
+      setDevice(message.data)
+  },[message])
 
   useEffect(()=>{
     console.log(permitJoin);

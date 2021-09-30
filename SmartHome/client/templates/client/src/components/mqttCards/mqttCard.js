@@ -57,7 +57,6 @@ export const MQTTElement = ({data, onClickMessage}) =>{
 
   function dictToList(dict) {
     let arr = []
-    console.log(dict);
     for (var key in dict) {
       let val = dict[key]
       if(typeof(dict[key])==="object"||typeof(dict[key])==="binary"){

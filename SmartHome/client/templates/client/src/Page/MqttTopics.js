@@ -5,6 +5,7 @@ import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {MQTTElement} from '../components/mqttCards/mqttCard'
+import {SocketContext} from '../context/SocketContext'
 import {MenuContext} from '../components/Menu/menuContext'
 import {BackForm} from '../components/backForm'
 
@@ -16,6 +17,7 @@ export const MqttPage = ()=>{
   const [searchDevice, setSearchDevice] = useState("")
   const [ditail, setDitail] = useState(null)
   const {loading, request, error, clearError} = useHttp();
+  const socket = useContext(SocketContext)
   const {message} = useMessage();
   const {setData} = useContext(MenuContext)
 
@@ -23,7 +25,6 @@ export const MqttPage = ()=>{
     try {
       let data = await request('/api/mqtt', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       if(data){
-        console.log(data);
         setDeviceMqtt(data)
         setAllDeviceMqtt(data)
       }
@@ -74,6 +75,12 @@ export const MqttPage = ()=>{
   useEffect(()=>{
     getDev()
   },[getDev])
+
+  useEffect(()=>{
+    if(socket.message.type==="mqtt") {
+      setAllDeviceMqtt(socket.message.data)
+    }
+  },[socket.message])
 
   useEffect(()=>{
     setData("MQTT",{

@@ -1,6 +1,6 @@
 from smartHomeApi.models import Device,ValueDevice
 from smartHomeApi.logic.config.configget import getConfig
-# from ..zigbee.zigbeeDevices import decodeZigbeeDevices, decodeZigbeeConfig
+from smartHomeApi.logic.socketOut import sendData
 import ast
 import json
 mqttTopics = []
@@ -20,8 +20,10 @@ def addTopic(topic,message):
     id = getIdTopic(topic)
     if(id != None):
         mqttTopics[id] = t
+        sendData("mqtt",mqttTopics)
         return t
     mqttTopics.append(t)
+    sendData("mqtt",mqttTopics)
     return t
 
 def getTopicksAll():
