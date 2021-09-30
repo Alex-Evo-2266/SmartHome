@@ -17,6 +17,10 @@ export const ZigbeeElement = ({data}) =>{
     request('/api/zigbee2mqtt/rename', 'POST',{name:data.name,newName},{Authorization: `Bearer ${auth.token}`})
   }
 
+  const deleteDevice = () => {
+    request('/api/zigbee2mqtt/devices', 'DELETE',{name:data.address},{Authorization: `Bearer ${auth.token}`})
+  }
+
   const linc = ()=>{
     let conf = []
     for (var item of data.exposes) {
@@ -66,6 +70,22 @@ export const ZigbeeElement = ({data}) =>{
           text:"input new name",
           placeholder:"new name",
           action:rename
+        })
+      })
+      arr.push({
+        title:"delete",
+        active:()=>show("confirmation",{
+          title:"Delete",
+          text:"Delete device",
+          buttons:[
+            {
+              title:"cancel"
+            },
+            {
+              title:"ok",
+              action:deleteDevice
+            }
+          ]
         })
       })
     }

@@ -29,7 +29,8 @@ def sendDeviceData():
         {
         'type': 'chat_message',
         'message': {
-            'device':giveDevices()
+            'type':'devices',
+            'data':giveDevices()
             }
         }
     )

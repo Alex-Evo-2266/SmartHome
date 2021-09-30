@@ -1,5 +1,5 @@
 import React, {useContext,useState,useEffect,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../../context/DeviceStatusContext'
+import {SocketContext} from '../../../../context/SocketContext'
 
 function filtred(data) {
   let condidats = data.filter(item=>item.DeviceType!=="sensor")
@@ -26,7 +26,7 @@ function filtredField(data) {
 }
 
 export const AddButton = ({add})=>{
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const [allDevices] = useState(filtred(devices));
   const [device, setDevice] = useState({});
   const [deviceConfig, setDeviceConfig] = useState({})

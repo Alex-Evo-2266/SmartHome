@@ -2,7 +2,7 @@ import React,{useContext,useState,useEffect,useCallback} from 'react'
 import {ModalWindow} from '../modalWindow/modalWindow'
 import {BtnElement} from './CartLineElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
-import {DeviceStatusContext} from '../../context/DeviceStatusContext'
+import {SocketContext} from '../../context/SocketContext'
 import {CartEditContext} from './EditCarts/CartEditContext'
 import {SliderElement} from './CartLineElement/SliderElement'
 import {SensorElement} from './CartLineElement/SensorElement'
@@ -16,7 +16,7 @@ import {useMessage} from '../../hooks/message.hook'
 
 export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   const {message} = useMessage();
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const {request} = useHttp();
   const {mode} = useContext(EditModeContext)

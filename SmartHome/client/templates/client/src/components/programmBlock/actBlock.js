@@ -1,5 +1,5 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {DeviceStatusContext} from '../../context/DeviceStatusContext'
+import {SocketContext} from '../../context/SocketContext'
 import {AddScriptContext} from '../addScript/addScriptContext'
 import {ValueDeviceBlock} from './valueDeviceBlock'
 import {TextBlock} from './textBlock'
@@ -9,7 +9,7 @@ import {MathBlock} from './mathBlock'
 
 export const ActBlock = ({updata,index,data,deleteEl})=>{
   const [device, setDevice]=useState({})
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const {showData} = useContext(AddScriptContext)
   const [field,setField] = useState({})
 

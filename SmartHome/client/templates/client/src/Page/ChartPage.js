@@ -3,7 +3,7 @@ import {useHttp} from '../hooks/http.hook'
 import {Header} from '../components/header'
 import {AuthContext} from '../context/AuthContext.js'
 import {MenuContext} from '../components/Menu/menuContext'
-import {DeviceStatusContext} from '../context/DeviceStatusContext'
+import {SocketContext} from '../context/SocketContext'
 import {DeviceHistory} from  '../components/history/DeviceHistory'
 
 // const corectedData=(data)=>{
@@ -29,7 +29,7 @@ import {DeviceHistory} from  '../components/history/DeviceHistory'
 
 export const ChartsPage = () => {
   const {setData} = useContext(MenuContext)
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const {request} = useHttp();
   const [charts,setCharts] = useState()

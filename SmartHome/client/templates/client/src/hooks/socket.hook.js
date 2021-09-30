@@ -1,10 +1,11 @@
 import React,{useEffect,useState,useCallback,useContext,useRef} from 'react'
-import {DeviceStatusContext} from '../context/DeviceStatusContext'
+import {SocketContext} from '../context/SocketContext'
 import {AuthContext} from '../context/AuthContext.js'
 
 export const SocketState = ({children}) =>{
   const auth = useContext(AuthContext)
   const [devices, setDevices] = useState([]);
+  const [message, setMessage] = useState({});
   const socket = useRef(null);
   const timerId = useRef(null);
 
@@ -38,7 +39,10 @@ export const SocketState = ({children}) =>{
               const data = JSON.parse(e.data);
               console.log(data.message);
               if(data.message instanceof Object){
-                setDevices(data.message.device)
+                if(data.message.type==="devices"){
+                  setDevices(data.message.data)
+                }
+                setMessage(data.message)
               }
           };
 
@@ -64,10 +68,10 @@ useEffect(()=>{
 },[listenChanges])
 
   return(
-    <DeviceStatusContext.Provider value={{
-      devices:devices
+    <SocketContext.Provider value={{
+      devices, message
     }}>
       {children}
-    </DeviceStatusContext.Provider>
+    </SocketContext.Provider>
   )
 }

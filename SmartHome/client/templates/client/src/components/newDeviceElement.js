@@ -9,11 +9,11 @@ import {Mode} from './newDeviceControlElements/mode'
 import {Enum} from './newDeviceControlElements/enum'
 import {Menu} from './dopmenu/menu'
 // import {Color} from './newDeviceControlElements/color'
-import {DeviceStatusContext} from '../context/DeviceStatusContext'
+import {SocketContext} from '../context/SocketContext'
 import {AuthContext} from '../context/AuthContext.js'
 
 export const NewDeviceElement = ({id}) =>{
-  const {devices, updateDevice} = useContext(DeviceStatusContext)
+  const {devices, updateDevice} = useContext(SocketContext)
   const form = useContext(FormContext)
   const auth = useContext(AuthContext)
   const {message} = useMessage();

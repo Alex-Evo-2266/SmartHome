@@ -1,9 +1,9 @@
 import React,{useState,useEffect,useContext,useCallback} from 'react'
-import {DeviceStatusContext} from '../../context/DeviceStatusContext'
+import {SocketContext} from '../../context/SocketContext'
 
 export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>{
   const [device, setDevice]=useState({})
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const [type,setType] = useState(action??"all")
   const [allTypes,setAllTypes] = useState([])
 

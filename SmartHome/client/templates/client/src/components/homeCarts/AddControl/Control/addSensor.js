@@ -1,11 +1,11 @@
 import React, {useContext,useState,useEffect} from 'react'
-import {DeviceStatusContext} from '../../../../context/DeviceStatusContext'
+import {SocketContext} from '../../../../context/SocketContext'
 import {Loader} from '../../../Loader'
 
 // import {AuthContext} from '../../../../context/AuthContext.js'
 
 export const AddSensor = ({add})=>{
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const [allDevices] = useState(devices);
   const [device, setDevice] = useState({});
   // const [deviceConfig, setDeviceConfig] = useState({})

@@ -1,10 +1,10 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import {SocketContext} from '../../../context/SocketContext'
 import {RunText} from '../../runText'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 
 export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const {target} = useContext(CartEditContext)
   const [device, setDevice] = useState({})
 

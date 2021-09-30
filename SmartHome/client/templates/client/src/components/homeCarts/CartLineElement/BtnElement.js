@@ -1,5 +1,5 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import {SocketContext} from '../../../context/SocketContext'
 import {BaseElement} from './BaseElement'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -7,7 +7,7 @@ import {AuthContext} from '../../../context/AuthContext.js'
 
 
 export const BtnElement = ({baseswitchMode=false,data,icon,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const [value, setValue]=useState(firstValue)
   const [device, setDevice] = useState({})

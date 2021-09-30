@@ -1,5 +1,5 @@
 import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import {SocketContext} from '../../../context/SocketContext'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 import {AuthContext} from '../../../context/AuthContext.js'
 import {RunText} from '../../runText'
@@ -7,7 +7,7 @@ import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 
 export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValue=0,deleteBtn,editBtn,onClick}) =>{
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const [value , setValue] = useState(firstValue)
   const {message} = useMessage();

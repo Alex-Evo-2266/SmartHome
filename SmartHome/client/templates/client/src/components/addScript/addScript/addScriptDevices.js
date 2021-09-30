@@ -1,8 +1,8 @@
 import React, {useContext,useState,useEffect,useCallback} from 'react'
-import {DeviceStatusContext} from '../../../context/DeviceStatusContext'
+import {SocketContext} from '../../../context/SocketContext'
 
 export const AddScriptDevices = ({result,type,typeDev=null})=>{
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const [filteredDevices,setFilteredDevices] = useState([])
 
   const out=(item)=>{

@@ -1,9 +1,9 @@
 import React,{useState,useEffect,useContext,useCallback} from 'react'
-import {DeviceStatusContext} from '../../context/DeviceStatusContext'
+import {SocketContext} from '../../context/SocketContext'
 
 export const ValueDeviceBlock = ({data,updata,index,type,deleteEl,block})=>{
   const [device, setDevice]=useState({})
-  const {devices} = useContext(DeviceStatusContext)
+  const {devices} = useContext(SocketContext)
   const [field,setField] = useState({})
 
   const lookForDeviceById = useCallback((id)=>{

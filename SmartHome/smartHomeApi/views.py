@@ -17,7 +17,7 @@ from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,
 from .logic.deviceSetValue import setValue
 from .logic.weather import Weather
 from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopicks
-from .logic.deviceControl.zigbee.zigbee import reboot, permission_join, zigbeeDeviceRename
+from .logic.deviceControl.zigbee.zigbee import reboot, permission_join, zigbeeDeviceRename, zigbeeDeviceDelete
 from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices, getPermitJoin
 from .logic.charts import getCharts
 from .logic.style import addstyle, getStyles, getStyle,removeStyle
@@ -358,6 +358,21 @@ class Zigbee2mqttDevice(APIView):
             return Response(status=403)
         return Response(getzigbeeDevices())
 
+    def delete(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        try:
+            data = json.loads(request.body)
+            print(data)
+            config = readConfig()
+            zigbeeConf = config["zigbee2mqtt"]
+            zigbeeDeviceDelete(zigbeeConf["topic"],data["name"])
+            return Response("ok",status=200)
+        except Exception as e:
+            print("error device delete",e)
+            return Response("ok",status=400)
+
 class Zigbee2mqttRename(APIView):
     """docstring for Zigbee2mqttDevice."""
     def post(self,request):
@@ -374,7 +389,6 @@ class Zigbee2mqttRename(APIView):
         except Exception as e:
             print(e)
             return Response(status=400)
-
 
 # home page views
 class GetHomePageView(APIView):

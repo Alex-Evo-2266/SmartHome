@@ -1,7 +1,10 @@
 zigbeeDevices = []
 permit_join = False
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from smartHomeApi.logic.config.configget import getConfig
-from smartHomeApi.logic.editDevice import giveidDeviceByAddres, editAdress
+from smartHomeApi.logic.socketOut import sendData
+from smartHomeApi.logic.editDevice import giveidDeviceByAddres, deleteDevice, editAdress
 import json
 
 def zigbeeInfoSearch(topic, message):
@@ -11,11 +14,35 @@ def zigbeeInfoSearch(topic, message):
     first = "/".join(first)
     if(topic == '/'.join([zigbee["topic"],"bridge","response","device","rename"])):
         editAdressLincDevices(json.loads(message))
+    if(topic == '/'.join([zigbee["topic"],"bridge","response","device","remove"])):
+        decodRemove(json.loads(message))
+    if(topic == '/'.join([zigbee["topic"],"bridge","event"])):
+        decodEvent(json.loads(message))
     if ("/".join(topic.split('/')[0:2])=='/'.join([zigbee["topic"],"bridge"])):
         if(last=="devices"):
             decodeZigbeeDevices(json.loads(message))
         if(last=="info"):
             decodeZigbeeConfig(json.loads(message))
+
+def decodEvent(data):
+    if(data["type"]=="device_leave"):
+        global zigbeeDevices
+        address = data["data"]
+        address = address["ieee_address"]
+        for item in zigbeeDevices:
+            if item["address"] == address:
+                devs = giveidDeviceByAddres(item["name"])
+                for id in devs:
+                    deleteDevice(id)
+                return
+
+
+
+def decodRemove(data):
+    if(data["status"]=="ok"):
+        pass
+    elif(data["status"]=="error"):
+        print(data["error"])
 
 def editAdressLincDevices(data):
     zigbee = getConfig("zigbee2mqtt")
@@ -23,8 +50,8 @@ def editAdressLincDevices(data):
     oldadress = oldadress["from"]
     newadress = data["data"]
     newadress = newadress["to"]
-    adress = '/'.join([zigbee["topic"],oldadress])
-    devs = giveidDeviceByAddres(adress)
+    address = '/'.join([zigbee["topic"],oldadress])
+    devs = giveidDeviceByAddres(address)
     newadress = '/'.join([zigbee["topic"],newadress])
     for id in devs:
         editAdress(id,newadress)
@@ -54,9 +81,9 @@ def getPermitJoin():
 
 def decodeZigbeeDevices(data):
     config = getConfig("zigbee2mqtt")
-    # print(data)
+    global zigbeeDevices
+    zigbeeDevices = []
     for item in data:
-        # print("1",item,"\n")
         d = item["definition"]
         dev = dict()
         dev["name"] = item["friendly_name"]
@@ -70,12 +97,8 @@ def decodeZigbeeDevices(data):
             dev["vendor"] = d["vendor"]
             if("exposes" in d):
                 dev["exposes"] = d["exposes"]
-                # for item2 in d["exposes"]:
-                    # print(dev["name"],item2,"\n")
-        # print(dev,"\n")
         addzigbeeDevices(dev["address"],dev)
-        # print(item["friendly_name"])
-        # d = item["definition"]
+    sendData("zigbee",zigbeeDevices)
 
 def decodeZigbeeConfig(data):
     print(data["permit_join"])

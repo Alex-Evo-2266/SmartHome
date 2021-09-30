@@ -12,3 +12,8 @@ def zigbeeDeviceRename(zigbeetopik, name, newName):
     topic = zigbeetopik + "/bridge/request/device/rename"
     message = '{"from": "' + name + '", "to": "' + newName + '"}'
     publish(topic,message)
+
+def zigbeeDeviceDelete(zigbeetopik, name):
+    topic = zigbeetopik + "/bridge/request/device/remove"
+    message = '{"id": "' + name + '"}'
+    publish(topic,message)

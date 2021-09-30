@@ -2,12 +2,12 @@ import React, {useContext,useEffect,useState,useRef} from 'react'
 import {Link, useHistory} from 'react-router-dom'
 import {Header} from '../components/header'
 import {NewDeviceElement} from '../components/newDeviceElement'
-import {DeviceStatusContext} from '../context/DeviceStatusContext'
+import {SocketContext} from '../context/SocketContext'
 import {MenuContext} from '../components/Menu/menuContext'
 
 export const DevicesPage = () => {
   const history = useHistory()
-  const allDevices = useContext(DeviceStatusContext)
+  const allDevices = useContext(SocketContext)
   const {setData} = useContext(MenuContext)
 
   const [devices, setDevices] = useState([]);
