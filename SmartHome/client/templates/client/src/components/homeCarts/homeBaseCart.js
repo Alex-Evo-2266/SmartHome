@@ -8,6 +8,7 @@ import {SensorElement} from './CartElement/SensorElement'
 import {EnumElement} from './CartElement/EnumElement'
 import {ScriptElement} from './CartElement/ScriptElement'
 import {WeatherElement} from './CartElement/WeatherElement'
+import {TimeElement} from './CartElement/TimeElement'
 import {useMessage} from '../../hooks/message.hook'
 
 const COLUMNS = 4
@@ -192,6 +193,13 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               />:
               (item.type==="weather")?
               <WeatherElement
+              index={item.index}
+              data={item}
+              deleteBtn={(edit)?deleteElement:null}
+              editBtn={(edit)?editElement:null}
+              />:
+              (item.type==="time")?
+              <TimeElement
               index={item.index}
               data={item}
               deleteBtn={(edit)?deleteElement:null}

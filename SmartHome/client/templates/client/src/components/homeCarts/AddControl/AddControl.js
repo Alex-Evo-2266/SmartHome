@@ -20,6 +20,18 @@ const weather = {
   height:1
 }
 
+const time = {
+  id:null,
+  name:"time",
+  type:"time",
+  typeAction:"",
+  order:"0",
+  deviceId:null,
+  action:"",
+  width:2,
+  height:1
+}
+
 export const AddControl = ()=>{
   const {addControl, hide} = useContext(AddControlContext)
   const [typeChild, setTypeChild] = useState("");
@@ -58,7 +70,10 @@ export const AddControl = ()=>{
               <li onClick={()=>setTypeChild("enum")}><span>5</span>enum</li>
               {
                 (addControl.type === "AddButton")?
-                <li onClick={()=>addButton(weather)}><span>6</span>weather</li>:
+                <>
+                <li onClick={()=>addButton(weather)}><span>6</span>weather</li>
+                <li onClick={()=>addButton(time)}><span>7</span>time</li>
+                </>:
                 (addControl.type === "AddLineButton")?
                 <li onClick={()=>setTypeChild("text")}><span>6</span>text</li>:
                 null

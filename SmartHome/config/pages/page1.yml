@@ -20,6 +20,16 @@ carts:
     type: sensor-number
     typeAction: illuminance_lux
     width: 2
+  - action: ''
+    deviceId: null
+    height: 1
+    id: null
+    index: 2
+    name: time
+    order: 0
+    type: time
+    typeAction: ''
+    width: 2
   id: 1
   index: 0
   mainId: 1
@@ -105,6 +115,17 @@ carts:
     order: 0
     type: button
     typeAction: field1binary
+    width: 1
+  - action: ''
+    deviceId: 8
+    height: 1
+    id: null
+    index: 1
+    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    type: sensor-binary
+    typeAction: state
     width: 1
   id: 4
   index: 2

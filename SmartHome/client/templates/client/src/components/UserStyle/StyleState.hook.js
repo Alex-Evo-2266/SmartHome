@@ -1,12 +1,14 @@
-import React,{useEffect,useState,useCallback} from 'react'
+import React,{useEffect,useState,useCallback,useContext} from 'react'
 import {StyleContext} from './StyleContext'
 import {UserContext} from '../../context/UserContext'
 import {ServerConfigContext} from '../../context/ServerConfigContext'
+import {SocketContext} from '../../context/SocketContext'
 import {useHttp} from '../../hooks/http.hook'
 import {useCastomStyle} from '../../hooks/style.hook'
 
 export const CastomizeStyle = ({children, token, ready}) =>{
   const {request, error, clearError} = useHttp();
+  const {message} = useContext(SocketContext)
   const [config, setConfig] = useState({})
   const [serverConfig, setServerConfig] = useState({})
   const [styles, setStyles] = useState([])
@@ -38,15 +40,24 @@ export const CastomizeStyle = ({children, token, ready}) =>{
   const getData = useCallback(async()=>{
     const dataStyles = await request(`/api/user/styles`, 'GET', null,{Authorization: `Bearer ${token}`})
     const dataUserConf = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
-    const serverData = await request(`/api/server/data`, 'GET', null,{Authorization: `Bearer ${token}`})
     console.log(dataStyles);
-    console.log(serverData);
     console.log(dataUserConf);
     setStyles(dataStyles)
     setConfig(dataUserConf)
-    setServerConfig(serverData)
-    return {dataStyles, dataUserConf, serverData}
+    return {dataStyles, dataUserConf}
   },[request,token])
+
+  const applicationStyle = useCallback((data)=>{
+    const style = getColors(data?.dataStyles, data?.dataUserConf?.Style)
+    if(!data?.dataUserConf?.staticBackground)
+      adaptiveBackground(data?.dataUserConf?.images)
+    else
+      setBackground(getimage(data?.dataUserConf?.images, "base").image)
+    if(data?.dataUserConf?.autoStyle)
+      avtoNightStyle(style, getColors(data?.dataStyles, "night"))
+    else
+      setStyle(style)
+  },[])
 
   const updataStyle = useCallback(async() => {
     if(!token)
@@ -57,17 +68,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
       return
     }
     const data = await getData()
-    const style = getColors(data?.dataStyles, data?.dataUserConf?.Style)
-    if(!data?.dataUserConf?.staticBackground)
-      adaptiveBackground(data?.dataUserConf?.images)
-    else
-      setBackground(getimage(data?.dataUserConf?.images, "base").image)
-    if(data?.dataUserConf?.autoStyle)
-      avtoNightStyle(style, getColors(data?.dataStyles, "night"))
-    else
-      setStyle(style)
-
-
+    applicationStyle(data)
   },[token,getData,adaptiveBackground,avtoNightStyle,setStyle,setBackground])
 
   const update = ()=>{
@@ -90,6 +91,13 @@ export const CastomizeStyle = ({children, token, ready}) =>{
       clearError();
     }
   },[error, clearError])
+
+  useEffect(()=>{
+    if(message.type==="server"){
+      setServerConfig(message.data)
+      applicationStyle({dataStyles:styles, dataUserConf:config})
+    }
+  },[message,applicationStyle,styles,config])
 
   return(
     <UserContext.Provider value={{...config}}>

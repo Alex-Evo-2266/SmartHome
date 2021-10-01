@@ -15,7 +15,7 @@ from .logic.Cart import setPage,getPage
 from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
-from .logic.weather import Weather
+from .logic.serverData import getServerData
 from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopicks
 from .logic.deviceControl.zigbee.zigbee import reboot, permission_join, zigbeeDeviceRename, zigbeeDeviceDelete
 from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices, getPermitJoin
@@ -222,9 +222,7 @@ class ServerData(APIView):
         authData = auth(request)
         if not authData:
             return Response(status=403)
-        return Response({
-        "weather":Weather()
-        })
+        return Response(getServerData())
 
 # device views
 
