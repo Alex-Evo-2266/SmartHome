@@ -73,7 +73,7 @@ export const ZigbeeElement = ({data}) =>{
       })
       arr.push({
         title:"delete",
-        active:()=>show("confirmation",{
+        active:()=>show("alert",{
           title:"Delete",
           text:"Delete device",
           buttons:[

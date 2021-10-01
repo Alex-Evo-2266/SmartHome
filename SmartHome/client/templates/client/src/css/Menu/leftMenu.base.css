@@ -155,7 +155,7 @@
   position: relative;
   bottom: 0;
 }
-.searchConteainer{
+.toolbarConteainer{
   position: fixed;
   height: 56px;
   width: 100%;
@@ -166,14 +166,26 @@
   z-index: 100;
   display: none;
 }
-.searchConteainer.show{
+.toolbarConteainer.show{
   /* top: 56px; */
   display: block;
 }
-.searchConteainer .search{
+.toolbarConteainer .search{
   display: flex;
 }
-.searchConteainer .searchBtn{
+.toolbarButton{
+  height: 56px;
+  width: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background: #0000;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-color-base-fon);
+}
+.toolbarConteainer .backBtn{
   height: 56px;
   width: 56px;
   border: none;
@@ -182,7 +194,7 @@
   cursor: pointer;
   color: var(--text-color-base-fon);
 }
-.searchConteainer input{
+.toolbarConteainer input{
   height: 56px;
   width: calc(100% - 56px);
   border: none;
@@ -192,10 +204,18 @@
   color: var(--text-color-base-fon);
   outline: none;
 }
-.searchConteainer input::-ms-clear,
-.searchConteainer input::-webkit-search-cancel-button
+.toolbarConteainer input::-ms-clear,
+.toolbarConteainer input::-webkit-search-cancel-button
 {
   display: none;
+}
+.toolbar{
+  display: flex;
+}
+.toolbarButtons{
+  display: flex;
+  justify-content: flex-end;
+  width: calc(100% - 56px);
 }
 .controlConteiner{
   display: flex;

@@ -3,6 +3,7 @@ import {EditToolbar} from '../components/homeCarts/EditToolbar'
 import {HomebaseCart} from '../components/homeCarts/homeBaseCart'
 import {HomeLineCart} from '../components/homeCarts/homeLineCart'
 import {EditModeContext} from '../context/EditMode'
+import {DialogWindowContext} from '../components/dialogWindow/dialogWindowContext'
 import {CartEditState} from '../components/homeCarts/EditCarts/CartEditState'
 import {AddControlState} from '../components/homeCarts/AddControl/AddControlState'
 import {AddControl} from '../components/homeCarts/AddControl/AddControl'
@@ -13,6 +14,18 @@ import {AuthContext} from '../context/AuthContext.js'
 import {ScriptContext} from '../context/ScriptContext.js'
 import {Loader} from '../components/Loader'
 import {MenuContext} from '../components/Menu/menuContext'
+import {ToolBar} from '../components/toolBar'
+
+const cardsList = [
+  {
+    title:"base card",
+    data:"base"
+  },
+  {
+    title:"list card",
+    data:"line"
+  },
+]
 
 export const HomePage = () => {
 
@@ -21,6 +34,7 @@ const [carts, setCarts] = useState([])
 const [sortedCarts, setSortedCarts] = useState([])
 const auth = useContext(AuthContext)
 const {setData} = useContext(MenuContext)
+const {show} = useContext(DialogWindowContext)
 const {message} = useMessage();
 const {request, error, clearError} = useHttp();
 const conteiner = useRef(null)
@@ -42,6 +56,7 @@ function sort(array) {
 }
 
 const addCart = async(type="base")=>{
+  setEditMode(true)
   let newCart = {
     mainId:null,
     id:carts.length+1,
@@ -58,12 +73,9 @@ const addCart = async(type="base")=>{
   })
 }
 
-const removeCart = async(index)=>{
-  message("Удалить?", "dialog", async()=>{
-    await setCarts((prev)=>{
-      let mas = prev.slice();
-      return mas.filter((item, index2)=>index2!==index)
-    })
+const removeCart = (index)=>{
+  message("Удалить?", "dialog", ()=>{
+    setCarts(carts.filter((item, index2)=>index2!==index))
   },"no")
 }
 
@@ -77,6 +89,7 @@ const updataCart = async(index,cart)=>{
 
 const saveCarts = async()=>{
   try {
+    console.log(carts);
     await request('/api/homeCart/set', 'POST', {id:1,name:"page1",carts},{Authorization: `Bearer ${auth.token}`})
   } catch (e) {
     console.error(e);
@@ -109,24 +122,32 @@ useEffect(()=>{
 },[importCarts])
 
 useEffect(()=>{
-  if(!editMode){
-    setData("Home",{
-      specialAction: {
-        type: "config",
-        action:()=>setEditMode(true)
-      }
-    })
-  }else{
-    setData("Home",{
-      specialAction:{
-        type: "ok",
-        action:()=>{
-          saveCarts()
-          setEditMode(false)
+  console.log(carts);
+},[carts])
+
+useEffect(()=>{
+  setData("Home",{
+    dopmenu:[
+      {
+        title: (editMode)?"save":"config",
+        active:()=>{
+          if(editMode){
+            saveCarts()
+            setEditMode(false)
+          }else{
+            setEditMode(true)
+          }
         }
+      },{
+        title: "add card",
+        active: ()=>show("confirmation",{
+          title:"Add card",
+          items:cardsList,
+          active: addCart
+        })
       }
-    })
-  }
+    ]
+  })
 },[setData,editMode])
 
 const sortCard = useCallback((data,width)=>{
@@ -175,8 +196,6 @@ useEffect(()=>{
   }
 },[sortCard,carts])
 
-// <EditToolbar show={editMode} save={saveCarts}/>
-
 if(carts===[]){
   return(
     <Loader/>
@@ -190,7 +209,6 @@ if(carts===[]){
     <AddControlState>
       <CartEdit/>
       <AddControl/>
-
       <div className = {`conteiner top bottom home`}>
         <div ref={conteiner} className = "conteinerHome flexHome">
         {

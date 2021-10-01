@@ -42,33 +42,69 @@ export const BaseCartEdit = ({type="base"}) =>{
     hide()
   }
 
+  const addElement = ()=>show(
+  (type==="line")?
+  "AddLineButton":
+  "AddButton",
+  async(btn)=>{
+    let mas = cart.children.slice();
+    mas.push(btn)
+    cartEdit.OK(cartEdit.cart.index,{...cart,children:mas})
+    hide()
+  })
+
   return(
-    <BackForm onClick={hide}>
-    <ModalWindow hide={hide} title="Edit Cart" moving={false} backForm={true} style={{width:"400px",left:"50%",transform: "translateX(-50%)", top:"100px",maxHeight:"calc(100% - 200px)"}}>
-      <div className="editcart-conteiner">
-        <p>сontainer ID: {cartEdit.cart.id}</p>
-        <div className="editcart-element">
-          <p>сontainer name</p>
-          <input type="text" value={(cart)?cart.name:""} name="name" onChange={changeHandler}/>
+    <>
+      <div className="backGlass" onClick={hide}></div>
+      <div className="dialogCoteiner">
+        <div className="dialogHeader">Edit card</div>
+        <div className="dividers"></div>
+        <div className="dialogBody">
+          <div className="input-data">
+            <input name="name" onChange={changeHandler} required type="text" value={(cart)?cart.name:""}></input>
+            <label>name</label>
+          </div>
+          <div className="input-data" style={{marginTop:"15px",marginBottom:"10px"}}>
+            <input name="name" min={0} max={500} onChange={(v)=>setCart({...cart,order:v})} required type="text" value={cartEdit.cart.order||0}></input>
+            <label>order</label>
+          </div>
         </div>
-        <div className="editcart-element">
-          <p>button priority</p>
-          <InputNumber Xten={false} Value={cartEdit.cart.order||"0"} result={(v)=>setCart({...cart,order:v})} min={0} max={500}/>
+        <div className="dividers"></div>
+        <div className="dialogFooter">
+          <button className="dialogButton button normalSelection" onClick={addElement}>add Element</button>
+          <button className="dialogButton button highSelection" onClick={outHandler}>save</button>
         </div>
-        <button onClick = {()=>show(
-          (type==="line")?
-          "AddLineButton":
-          "AddButton",
-          async(btn)=>{
-                let mas = cart.children.slice();
-                mas.push(btn)
-                cartEdit.OK(cartEdit.cart.index,{...cart,children:mas})
-                hide()
-            })}>Add Control Element</button>
-        <button onClick = {outHandler}>Ок</button>
       </div>
-    </ModalWindow>
-    </BackForm>
+    </>
   )
+
+  // return(
+  //   <BackForm onClick={hide}>
+  //   <ModalWindow hide={hide} title="Edit Cart" moving={false} backForm={true} style={{width:"400px",left:"50%",transform: "translateX(-50%)", top:"100px",maxHeight:"calc(100% - 200px)"}}>
+  //     <div className="editcart-conteiner">
+  //       <p>сontainer ID: {cartEdit.cart.id}</p>
+  //       <div className="editcart-element">
+  //         <p>сontainer name</p>
+  //         <input type="text" value={(cart)?cart.name:""} name="name" onChange={changeHandler}/>
+  //       </div>
+  //       <div className="editcart-element">
+  //         <p>button priority</p>
+  //         <InputNumber Xten={false} Value={cartEdit.cart.order||"0"} result={(v)=>setCart({...cart,order:v})} min={0} max={500}/>
+  //       </div>
+  //       <button onClick = {()=>show(
+  //         (type==="line")?
+  //         "AddLineButton":
+  //         "AddButton",
+  //         async(btn)=>{
+  //               let mas = cart.children.slice();
+  //               mas.push(btn)
+  //               cartEdit.OK(cartEdit.cart.index,{...cart,children:mas})
+  //               hide()
+  //           })}>Add Control Element</button>
+  //       <button onClick = {outHandler}>Ок</button>
+  //     </div>
+  //   </ModalWindow>
+  //   </BackForm>
+  // )
 
 }

@@ -125,9 +125,9 @@ if(sizeWidth>700){
     </div>
     {
       (menu.menu.search)?
-      <div className={`searchConteainer ${(searchtVisible)?"show":"hide"}`}>
+      <div className={`toolbarConteainer ${(searchtVisible)?"show":"hide"}`}>
         <div className={`search`}>
-          <button onClick={()=>setSearchtVisible(false)} className="searchBtn">
+          <button onClick={()=>setSearchtVisible(false)} className="backBtn">
             <i className="fas fa-arrow-left"></i>
           </button>
           <input placeholder="search" type="search" name="search" onChange={searchHandler} onKeyDown={keyd} value={search}/>

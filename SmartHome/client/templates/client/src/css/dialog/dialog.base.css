@@ -3,13 +3,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 560px;
-  z-index: 51;
+  z-index: 99;
   background: var(--color-normal);
   position: fixed;
   box-shadow: 0 0 10px #000;
   border-radius: 4px;
   color: var(--text-color-normal-fon);
-  padding-left: 24px;
 }
 @media (max-width: 600px){
   .dialogCoteiner{
@@ -20,6 +19,7 @@
   height: 64px;
   font-size: 24px;
   line-height: 64px;
+  padding-left: 24px;
 }
 .dialogFooter{
   height: calc(52px - 16px);
@@ -27,15 +27,35 @@
   display: flex;
   justify-content: flex-end;
   margin-right: 8px;
+  padding-left: 24px;
 }
 .dialogFooter > button.button,
 .dialogFooter > a.button{
   margin-left: 8px;
   height: 100%;
 }
-.dialogBody{
-  padding-right: 24px;
+.dialogBody > *{
+  padding: 0 24px;
 }
 .dialogBody .input-data{
-  margin-top: 4px;
+  margin: 4px 24px 0 24px;
+  padding:0;
+  width: calc(100% - 48px);
+}
+.dialogBody.scroll{
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 200px;
+}
+.dialogItem{
+  display: flex;
+  width: calc(100% - 24px);
+  line-height: 48px;
+  align-items: center;
+  font-size: 24px;
+}
+.dialogItem input[type="radio"]{
+  margin-right: 32px;
+  width: 24px;
+  height: 24px;
 }

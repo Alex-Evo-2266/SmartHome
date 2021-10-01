@@ -41,9 +41,10 @@
 }
 button.button.highSelection,
 a.button.highSelection{
+  padding: 0;
   position: relative;
-  top: 15px;
-  border: none;
+  display: block;
+  text-align: center;
   min-width: 64px;
   background: var(--color-active);
   color: var(--text-color-active-fon);
