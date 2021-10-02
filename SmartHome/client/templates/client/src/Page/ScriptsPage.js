@@ -1,6 +1,5 @@
 import React,{useState,useEffect,useCallback,useContext} from 'react'
-import {Link, useHistory} from 'react-router-dom'
-import {Header} from '../components/header'
+import {useHistory} from 'react-router-dom'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
@@ -31,14 +30,14 @@ export const ScriptsPage = () => {
     setAllScripts(data)
   },[request,auth.token])
 
-  const searchout = (search)=>{
+  const searchout = useCallback((search)=>{
     if(search===""){
       setScripts(allScripts)
       return
     }
     let array = allScripts.filter(item => item.name.indexOf(search)!==-1)
     setScripts(array)
-  }
+  },[allScripts])
 
   useEffect(()=>{
     setData("Scripts All",{
@@ -48,7 +47,7 @@ export const ScriptsPage = () => {
       },
       search: searchout
     })
-  },[setData])
+  },[setData, searchout, history])
 
   useEffect(()=>{
     updataScripts()

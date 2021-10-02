@@ -59,7 +59,7 @@ export const MQTTElement = ({data, onClickMessage}) =>{
     let arr = []
     for (var key in dict) {
       let val = dict[key]
-      if(typeof(dict[key])==="object"||typeof(dict[key])==="binary"){
+      if(typeof(dict[key])==="object"||typeof(dict[key])==="boolean"){
         val = JSON.stringify(val)
       }
       if(val.length>100){
@@ -80,7 +80,7 @@ export const MQTTElement = ({data, onClickMessage}) =>{
   if(typeof(mes)==="object"){
     message = dictToList(mes)
   }else{
-    if(typeof(mes)==="binary"){
+    if(typeof(mes)==="boolean"){
       mes = JSON.stringify(mes)
     }
     let topicComponents = data.topic.split('/')

@@ -81,15 +81,22 @@
   background: #0000;
   outline: none;
 }
+.input-data select option{
+  background: var(--color-normal)
+}
 .input-data input:focus ~ label,
-.input-data input:valid ~ label{
+.input-data input:valid ~ label,
+.input-data select:focus ~ label,
+.input-data select:valid ~ label{
   transform: translateY(-20px);
   font-size: 15px;
 }
-.input-data input:focus ~ label{
+.input-data input:focus ~ label,
+.input-data select:focus ~ label{
   color: var(--color-active);
 }
-.input-data input:focus{
+.input-data input:focus,
+.input-data select:focus{
   border-bottom: 2px solid var(--color-active);
 }
 .input-data label{

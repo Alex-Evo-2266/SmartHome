@@ -1,5 +1,4 @@
 import React,{useEffect,useState,useCallback,useContext} from 'react'
-import {Header} from '../components/header'
 import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
@@ -15,14 +14,14 @@ export const ZigbeePage = ()=>{
   const {setData} = useContext(MenuContext)
   const {loading, request} = useHttp();
 
-  const rebootStik = () => {
+  const rebootStik = useCallback(() => {
     request('/api/zigbee2mqtt/reboot', 'GET',null,{Authorization: `Bearer ${auth.token}`})
-  }
+  },[request,auth.token])
 
-  const pairing = (state) => {
+  const pairing = useCallback((state) => {
     setPermitJoin(state)
     request('/api/zigbee2mqtt/permit_join', 'POST',{state},{Authorization: `Bearer ${auth.token}`})
-  }
+  },[request, auth.token])
 
   const zigbeeDevice = useCallback(async () => {
     try {
@@ -68,7 +67,7 @@ export const ZigbeePage = ()=>{
         },
       ]
     })
-  },[setData,zigbeeDevice,permitJoin])
+  },[setData,zigbeeDevice,permitJoin,rebootStik,pairing])
 
   return (
     <div className="conteiner bottom">

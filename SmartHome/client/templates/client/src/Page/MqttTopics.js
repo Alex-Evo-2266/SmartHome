@@ -1,5 +1,4 @@
 import React,{useEffect,useState,useCallback,useContext} from 'react'
-import {Header} from '../components/header'
 import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
@@ -82,6 +81,10 @@ export const MqttPage = ()=>{
     }
   },[socket.message])
 
+  const clearMqtt = useCallback(()=>{
+    request('/api/mqtt/clear', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+  },[request,auth.token])
+
   useEffect(()=>{
     setData("MQTT",{
       dopmenu: [
@@ -95,30 +98,26 @@ export const MqttPage = ()=>{
         }
       ]
     })
-  },[setData])
+  },[setData, getDev, clearMqtt])
 
-  function clearMqtt() {
-    request('/api/mqtt/clear', 'GET',null,{Authorization: `Bearer ${auth.token}`})
-  }
-
-  function syntaxHighlight(json) {
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-        var cls = 'number';
-        if (/^"/.test(match)) {
-            if (/:$/.test(match)) {
-                cls = 'key';
-            } else {
-                cls = 'string';
-            }
-        } else if (/true|false/.test(match)) {
-            cls = 'boolean';
-        } else if (/null/.test(match)) {
-            cls = 'null';
-        }
-        return '<span class="' + cls + '">' + match + '</span>';
-    });
-}
+//   function syntaxHighlight(json) {
+//     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+//     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+//         var cls = 'number';
+//         if (/^"/.test(match)) {
+//             if (/:$/.test(match)) {
+//                 cls = 'key';
+//             } else {
+//                 cls = 'string';
+//             }
+//         } else if (/true|false/.test(match)) {
+//             cls = 'boolean';
+//         } else if (/null/.test(match)) {
+//             cls = 'null';
+//         }
+//         return '<span class="' + cls + '">' + match + '</span>';
+//     });
+// }
 
   return (
     <div className="conteiner bottom">

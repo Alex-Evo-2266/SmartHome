@@ -4,11 +4,11 @@ export const FloatingButton = ({type, action, big, title}) =>{
   return(
     <div className={`specialActionButton ${(big)?"big":""}`} onClick={action}>
     {
-      (type=="config")?
+      (type==="config")?
       <i className="fas fa-cog"></i>:
-      (type=="ok")?
+      (type==="ok")?
       <i className="fas fa-check"></i>:
-      (type=="close")?
+      (type==="close")?
       <i className="fas fa-times"></i>:
       <i className="fas fa-plus"></i>
     }

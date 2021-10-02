@@ -1,5 +1,4 @@
 import React,{useState,useEffect,useContext,useCallback,useRef} from 'react'
-import {EditToolbar} from '../components/homeCarts/EditToolbar'
 import {HomebaseCart} from '../components/homeCarts/homeBaseCart'
 import {HomeLineCart} from '../components/homeCarts/homeLineCart'
 import {EditModeContext} from '../context/EditMode'
@@ -14,7 +13,6 @@ import {AuthContext} from '../context/AuthContext.js'
 import {ScriptContext} from '../context/ScriptContext.js'
 import {Loader} from '../components/Loader'
 import {MenuContext} from '../components/Menu/menuContext'
-import {ToolBar} from '../components/toolBar'
 
 const cardsList = [
   {
@@ -34,7 +32,7 @@ const [carts, setCarts] = useState([])
 const [sortedCarts, setSortedCarts] = useState([])
 const auth = useContext(AuthContext)
 const {setData} = useContext(MenuContext)
-const {show} = useContext(DialogWindowContext)
+const {show, hide} = useContext(DialogWindowContext)
 const {message} = useMessage();
 const {request, error, clearError} = useHttp();
 const conteiner = useRef(null)
@@ -55,7 +53,8 @@ function sort(array) {
   return arr
 }
 
-const addCart = async(type="base")=>{
+const addCart = useCallback((type="base")=>{
+  hide()
   setEditMode(true)
   let newCart = {
     mainId:null,
@@ -66,35 +65,35 @@ const addCart = async(type="base")=>{
     children:[],
     width:2
   }
-  await setCarts((prev)=>{
+  setCarts((prev)=>{
     let mas = prev.slice();
     mas.push(newCart)
     return mas;
   })
-}
+},[hide, carts.length])
 
-const removeCart = (index)=>{
+const removeCart = useCallback((index)=>{
   message("Удалить?", "dialog", ()=>{
-    setCarts(carts.filter((item, index2)=>index2!==index))
+    setCarts(prev=>prev.filter((item, index2)=>index2!==index))
   },"no")
-}
+},[message])
 
-const updataCart = async(index,cart)=>{
-  await setCarts((prev)=>{
-    let mas = prev.slice();
-    mas[index] = cart
-    return mas
-  })
-}
+const updataCart = useCallback((index,cart)=>{
+  setCarts(prev=>prev.map((item,index2)=>{
+    if(index2 === index)
+      return cart
+    return item
+  }))
+},[])
 
-const saveCarts = async()=>{
+const saveCarts = useCallback(()=>{
   try {
-    console.log(carts);
-    await request('/api/homeCart/set', 'POST', {id:1,name:"page1",carts},{Authorization: `Bearer ${auth.token}`})
+    console.log("save",carts);
+    request('/api/homeCart/set', 'POST', {id:1,name:"page1",carts},{Authorization: `Bearer ${auth.token}`})
   } catch (e) {
     console.error(e);
   }
-}
+},[carts, auth.token,request])
 
 const importCarts = useCallback(async()=>{
   try {
@@ -123,6 +122,7 @@ useEffect(()=>{
 
 useEffect(()=>{
   console.log(carts);
+  // request('/api/homeCart/set', 'POST', {id:1,name:"page1",carts},{Authorization: `Bearer ${auth.token}`})
 },[carts])
 
 useEffect(()=>{
@@ -148,7 +148,7 @@ useEffect(()=>{
       }
     ]
   })
-},[setData,editMode])
+},[setData,editMode, addCart, saveCarts,show])
 
 const sortCard = useCallback((data,width)=>{
   let column = 3

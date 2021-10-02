@@ -1,9 +1,6 @@
 import React,{useContext,useState,useEffect} from 'react'
-import {ModalWindow} from '../../../modalWindow/modalWindow'
 import {CartEditContext} from '../CartEditContext'
 import {AddControlContext} from '../../AddControl/AddControlContext'
-import {InputNumber} from '../../../inputNumber'
-import {BackForm} from '../../../backForm'
 
 export const BaseCartEdit = ({type="base"}) =>{
   const {cartEdit, hide} = useContext(CartEditContext)
@@ -13,7 +10,7 @@ export const BaseCartEdit = ({type="base"}) =>{
     id:null,
     name:"",
     type:"base",
-    order:"0",
+    order:0,
     children:[],
     width:1
   })
@@ -44,8 +41,8 @@ export const BaseCartEdit = ({type="base"}) =>{
 
   const addElement = ()=>show(
   (type==="line")?
-  "AddLineButton":
-  "AddButton",
+  "AddLineElement":
+  "AddElement",
   async(btn)=>{
     let mas = cart.children.slice();
     mas.push(btn)
@@ -65,7 +62,7 @@ export const BaseCartEdit = ({type="base"}) =>{
             <label>name</label>
           </div>
           <div className="input-data" style={{marginTop:"15px",marginBottom:"10px"}}>
-            <input name="name" min={0} max={500} onChange={(v)=>setCart({...cart,order:v})} required type="text" value={cartEdit.cart.order||0}></input>
+            <input name="name" min={0} max={500} onChange={(v)=>setCart({...cart,order:v.target.value})} required type="number" value={cart.order||0}></input>
             <label>order</label>
           </div>
         </div>

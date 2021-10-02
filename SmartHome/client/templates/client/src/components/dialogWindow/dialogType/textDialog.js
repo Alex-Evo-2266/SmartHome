@@ -1,14 +1,11 @@
-import React, {useContext,useState} from 'react'
-import {DialogWindowContext} from '../dialogWindowContext'
+import React, {useState} from 'react'
 
-export const TextDialog = ()=>{
-  const {dialog, hide} = useContext(DialogWindowContext)
+export const TextDialog = ({hide, title, text, active, placeholder})=>{
   const [data, setData] = useState("")
 
   const ok = ()=>{
-    console.log(typeof(dialog.action),data);
-    if(typeof(dialog.action)==="function")
-      dialog.action(data)
+    if(typeof(active)==="function")
+      active(data)
     hide()
   }
 
@@ -16,12 +13,12 @@ export const TextDialog = ()=>{
     <>
     <div className="backGlass" onClick={hide}></div>
     <div className="dialogCoteiner">
-      <div className="dialogHeader">{dialog.title}</div>
+      <div className="dialogHeader">{title}</div>
       <div className="dialogBody">
-        <p>{dialog.text}</p>
+        <p>{text}</p>
         <div className="input-data">
           <input required type = "text" name = "input" value={data} onChange={(e)=>{setData(e.target.value)}}/>
-          <label>{dialog.placeholder}</label>
+          <label>{placeholder}</label>
         </div>
       </div>
       <div className="dialogFooter">

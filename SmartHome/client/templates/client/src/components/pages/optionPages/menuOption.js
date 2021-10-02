@@ -12,7 +12,7 @@ import {menuField} from '../../Menu/data.menu.js'
 export const MenuOption = () =>{
   const auth = useContext(AuthContext)
   const config = useContext(UserContext)
-  const {styles, updateConfig} = useContext(StyleContext)
+  const {updateConfig} = useContext(StyleContext)
 
   const {message} = useMessage();
   const [visible,setVisible] = useState(false)

@@ -1,20 +1,18 @@
-import React, {useContext,useState} from 'react'
-import {DialogWindowContext} from '../dialogWindowContext'
+import React from 'react'
 
-export const AlertDialog = ()=>{
-  const {dialog, hide} = useContext(DialogWindowContext)
+export const AlertDialog = ({hide, text, title, buttons})=>{
 
   return(
     <>
     <div className="backGlass" onClick={hide}></div>
     <div className="dialogCoteiner">
-      <div className="dialogHeader">{dialog.title}</div>
+      <div className="dialogHeader">{title}</div>
       <div className="dialogBody">
-        <p>{dialog.text}</p>
+        <p>{text}</p>
       </div>
       <div className="dialogFooter" onClick={hide}>
       {
-        dialog?.buttons?.map((item, index)=>{
+        buttons?.map((item, index)=>{
           return(
             <button key={index} className="dialogButton button normalSelection" onClick={item.action}>{item.title}</button>
           )

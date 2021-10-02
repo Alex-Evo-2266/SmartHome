@@ -170,8 +170,8 @@ export const NewScriptsPage = ({edit}) => {
   },[id,edit,giveScript])
 
   useEffect(()=>{
-    setData("New Scrip")
-  },[script])
+    setData("New Script")
+  },[script, setData])
 
   if(loading){
     return(

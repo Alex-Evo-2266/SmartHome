@@ -49,10 +49,8 @@ const getimage = (images, name)=>{
 
 const textColor = (fon)=>{
   let color = "gray"
-  var usePound = false;
   if (fon[0] === "#") {
       fon = fon.slice(1);
-      usePound = true;
   }
   var num = parseInt(fon,16);
   var r = (num >> 16);

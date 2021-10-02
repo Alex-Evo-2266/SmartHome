@@ -4,13 +4,11 @@ import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
 import {DialogWindowContext} from '../components/dialogWindow/dialogWindowContext'
-import {AlertContext} from '../components/alert/alertContext'
 
 
 export const AuthPage = function (){
   const auth = useContext(AuthContext)
   const dialog = useContext(DialogWindowContext)
-  const {show} = useContext(AlertContext);
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
   const [form, setForm] = useState({

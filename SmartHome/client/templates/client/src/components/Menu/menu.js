@@ -1,23 +1,22 @@
-import React, {useContext,useState,useEffect,useCallback,useRef} from 'react'
-import {NavLink,Link,useHistory,useLocation} from 'react-router-dom'
+import React, {useContext,useState,useEffect,useCallback} from 'react'
+import {NavLink,useHistory} from 'react-router-dom'
 import {MenuContext} from './menuContext'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
 import {UserContext} from '../../context/UserContext'
 import {FloatingButton} from '../floatingButton'
-import {TerminalContext} from '../terminal/terminalContext.js'
+// import {TerminalContext} from '../terminal/terminalContext.js'
 import {menuField} from './data.menu.js'
 import {Menu as DopMenu} from '../dopmenu/menu'
 
 
 export const Menu = ()=>{
-  const location = useLocation();
   const history = useHistory()
   const menu = useContext(MenuContext)
-  const {request, error, clearError} = useHttp();
+  const {request} = useHttp();
   const config = useContext(UserContext)
   const auth = useContext(AuthContext)
-  const terminal = useContext(TerminalContext)
+  // const terminal = useContext(TerminalContext)
   const [user, setuser] = useState({
     UserName:"",
     UserSurname:"",
@@ -25,13 +24,21 @@ export const Menu = ()=>{
     Email:"",
     ImageId:""
   });
-  const bot_menu = useRef(null)
-  const [visiblesub, setVisiblesub] = useState(false)
   const [search, setSearch] = useState("")
   const [searchtVisible, setSearchtVisible] = useState(false)
   const [insluedField, setField] = useState([])
   const [otherField, setotherField] = useState([])
   const [sizeWidth, setSizeWidth] = useState(window.innerWidth)
+
+  useEffect(()=>{
+    window.addEventListener("resize",resizeThrottler)
+    function resizeThrottler(event) {
+      setSizeWidth(event.target.innerWidth)
+    }
+    return ()=>{
+      window.removeEventListener("resize", resizeThrottler);
+    }
+  },[])
 
   const giveField=useCallback((data)=>{
     let arr1 = []

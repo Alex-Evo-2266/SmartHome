@@ -1,6 +1,5 @@
-import React, {useContext,useEffect,useState,useRef} from 'react'
-import {Link, useHistory} from 'react-router-dom'
-import {Header} from '../components/header'
+import React, {useContext,useEffect,useState,useRef, useCallback} from 'react'
+import {useHistory} from 'react-router-dom'
 import {NewDeviceElement} from '../components/newDeviceElement'
 import {SocketContext} from '../context/SocketContext'
 import {MenuContext} from '../components/Menu/menuContext'
@@ -21,7 +20,7 @@ export const DevicesPage = () => {
 
   },[allDevices.devices])
 
-  const searchout = (data)=>{
+  const searchout = useCallback((data)=>{
     console.log(data);
     if(data===""){
       setDevices(allDevices.devices)
@@ -29,7 +28,7 @@ export const DevicesPage = () => {
     }
     let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(data)!==-1)
     setDevices(array)
-  }
+  },[allDevices.devices])
 
   useEffect(()=>{
     setData("Device All",{
@@ -39,7 +38,7 @@ export const DevicesPage = () => {
       },
       search: searchout
     })
-  },[setData])
+  },[setData, history, searchout])
 
   return(
       <div className = "conteiner top bottom">

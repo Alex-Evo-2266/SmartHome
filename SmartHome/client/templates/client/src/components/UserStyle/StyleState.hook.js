@@ -15,7 +15,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
   const [flag, setFlag] = useState(false)
   const {setStyle, avtoNightStyle, adaptiveBackground, setBackground} = useCastomStyle()
 
-  const getColors = (styles, name)=>{
+  const getColors = useCallback((styles, name)=>{
     try {
       for (var item of styles) {
         if(name === item.name)
@@ -24,7 +24,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
     } catch{
       return
     }
-  }
+  },[])
 
   const getimage = (images, name)=>{
     try {
@@ -57,7 +57,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
       avtoNightStyle(style, getColors(data?.dataStyles, "night"))
     else
       setStyle(style)
-  },[])
+  },[avtoNightStyle, setBackground, adaptiveBackground, getColors, setStyle])
 
   const updataStyle = useCallback(async() => {
     if(!token)
@@ -69,7 +69,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
     }
     const data = await getData()
     applicationStyle(data)
-  },[token,getData,adaptiveBackground,avtoNightStyle,setStyle,setBackground])
+  },[token,getData,applicationStyle,setStyle,setBackground])
 
   const update = ()=>{
     setFlag(true);

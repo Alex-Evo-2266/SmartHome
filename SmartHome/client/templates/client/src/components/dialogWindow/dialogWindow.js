@@ -1,4 +1,4 @@
-import React, {useContext,useState} from 'react'
+import React, {useContext} from 'react'
 import {DialogWindowContext} from './dialogWindowContext'
 import {TextDialog} from './dialogType/textDialog'
 import {ConfirmationDialog} from './dialogType/confirmationDialog'
@@ -12,13 +12,13 @@ export const DialogWindow = ()=>{
   }
 
   if(dialog.type === "alert")
-    return(<AlertDialog/>)
+    return(<AlertDialog hide={hide} text={dialog.text} title={dialog.title} buttons={dialog.buttons}/>)
 
   if(dialog.type === "text")
-    return(<TextDialog/>)
+    return(<TextDialog hide={hide} text={dialog.text} title={dialog.title} active={dialog.action} placeholder={dialog.placeholder}/>)
 
   if(dialog.type === "confirmation")
-    return(<ConfirmationDialog/>)
+    return(<ConfirmationDialog hide={hide} text={dialog.text} title={dialog.title} active={dialog.active} items={dialog.items}/>)
 
   return null
 

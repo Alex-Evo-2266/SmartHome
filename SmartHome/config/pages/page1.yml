@@ -175,11 +175,19 @@ carts:
     type: button
     typeAction: field1binary
     width: 1
+  - deviceId: 7
+    height: 1
+    index: 4
+    name: test1
+    order: 0
+    type: slider
+    typeAction: field0
+    width: 1
   id: 4
   index: 3
   mainId: 4
   name: ''
-  order: 0
+  order: '5'
   type: base
   width: 2
 - children:

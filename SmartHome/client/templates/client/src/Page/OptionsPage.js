@@ -1,6 +1,5 @@
 import React, {useContext,useEffect} from 'react'
-import {NavLink, useLocation, useHistory} from 'react-router-dom'
-import {Header} from '../components/header'
+import {useLocation, useHistory} from 'react-router-dom'
 import {UserOption} from '../components/pages/optionPages/userOption'
 import {ServerOption} from '../components/pages/optionPages/serverOption'
 import {ImgOption} from '../components/pages/optionPages/imgOption'
@@ -37,7 +36,7 @@ export const OptionsPage = () => {
         }
       ]
     })
-  },[setData,location.pathname])
+  },[setData,location.pathname, history])
 
   return(
     <div className = "fullScrinContainer">

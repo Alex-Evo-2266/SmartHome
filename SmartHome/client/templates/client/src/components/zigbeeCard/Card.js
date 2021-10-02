@@ -9,7 +9,7 @@ import {useHttp} from '../../hooks/http.hook'
 
 export const ZigbeeElement = ({data}) =>{
   const auth = useContext(AuthContext)
-  const {loading, request} = useHttp();
+  const {request} = useHttp();
   const form = useContext(FormContext)
   const {show} = useContext(DialogWindowContext)
 

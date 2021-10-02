@@ -10,7 +10,7 @@ export const ImageDitail = ({data,hide})=>{
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const auth = useContext(AuthContext)
-  const {styles, updateConfig} = useContext(StyleContext)
+  const {updateConfig} = useContext(StyleContext)
 
 
   const changeSelector = (event)=>{

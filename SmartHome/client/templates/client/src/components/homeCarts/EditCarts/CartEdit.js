@@ -1,7 +1,7 @@
 import React,{useContext} from 'react'
 import {CartEditContext} from './CartEditContext'
 import {BaseCartEdit} from './CartEditType/BaseCart'
-import {ButtonEdit} from './CartEditType/Button'
+import {ElementEdit} from './CartEditType/Element'
 
 export const CartEdit = () =>{
   const {cartEdit} = useContext(CartEditContext)
@@ -22,12 +22,12 @@ export const CartEdit = () =>{
   }
   if(cartEdit.type==="button"){
     return(
-      <ButtonEdit/>
+      <ElementEdit/>
     )
   }
   if(cartEdit.type==="button-line"){
     return(
-      <ButtonEdit type="button-line"/>
+      <ElementEdit type="button-line"/>
     )
   }
   return null;
