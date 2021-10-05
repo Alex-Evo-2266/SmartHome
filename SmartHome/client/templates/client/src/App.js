@@ -12,7 +12,7 @@ import {TerminalState} from './components/terminal/terminalState'
 import {AddScriptState} from './components/addScript/addScriptState'
 import {useRoutes} from './routes.js'
 import {useAuth} from './hooks/auth.hook.js'
-import {CastomizeStyle} from './components/UserStyle/StyleState.hook.js'
+import {CastomizeStyle} from './components/UserStyle/StyleState.js'
 import {AuthContext} from './context/AuthContext'
 import {TerminalCart} from './components/terminal/terminalCart'
 import {SocketState} from './hooks/socket.hook.js'
@@ -36,11 +36,11 @@ function App() {
     <AuthContext.Provider value={{
       token, login, logout, userId, userLevel, isAuthenticated
     }}>
+    <MenuState>
     <SocketState>
     <AlertState>
     <DialogWindowState>
     <CastomizeStyle token={token} ready={ready}>
-    <MenuState>
     <FormState>
     <TerminalState>
     <AddScriptState>
@@ -59,11 +59,11 @@ function App() {
     </AddScriptState>
     </TerminalState>
     </FormState>
-    </MenuState>
     </CastomizeStyle>
     </DialogWindowState>
     </AlertState>
     </SocketState>
+    </MenuState>
     </AuthContext.Provider>
   );
 }

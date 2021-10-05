@@ -65,6 +65,7 @@ def editDevice(data):
         for item in devices:
             if item.DeviceSystemName==data.get("DeviceSystemName") and item.id != data["DeviceId"]:
                 return False
+        print("f")
         dev = Device.objects.get(id=data["DeviceId"])
         dev.DeviceName = data["DeviceName"]
         dev.DeviceSystemName = data["DeviceSystemName"]
@@ -72,6 +73,7 @@ def editDevice(data):
         dev.DeviceType = data["DeviceType"]
         if(data["DeviceType"]!="variable"):
             dev.DeviceAddress = data["DeviceAddress"]
+        if("DeviceValueType" in data):
             dev.DeviceValueType = data["DeviceValueType"]
         if "DeviceToken" in data:
             dev.DeviceToken = data["DeviceToken"]

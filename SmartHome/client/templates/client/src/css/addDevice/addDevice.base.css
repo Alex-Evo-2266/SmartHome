@@ -2,6 +2,11 @@
 @import "./addDevice.night.css"; */
 @import "./addDevice.color.css";
 
+input[type="checkbox"]{
+  height: 24px;
+  width: 24px;
+}
+
 .conteiner-head{
   height: 50vh;
   display: flex;

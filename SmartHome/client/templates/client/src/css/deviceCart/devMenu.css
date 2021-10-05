@@ -18,6 +18,9 @@
   box-shadow: 0 0 5px #000;
   background: var(--color-normal);
 }
+.contextmenu.bottom{
+  transform: translateY(calc(-100% - 30px));
+}
 .contextmenu.show{
   display: block;
 }

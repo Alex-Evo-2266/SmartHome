@@ -100,7 +100,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
   },[message,applicationStyle,styles,config])
 
   return(
-    <UserContext.Provider value={{...config}}>
+    <UserContext.Provider value={{...config,getData}}>
       <ServerConfigContext.Provider value={{...serverConfig}}>
         <StyleContext.Provider value={{styles:styles,updateConfig:update}}>
           {children}

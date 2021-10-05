@@ -1,5 +1,6 @@
 from SmartHome.settings import SERVER_CONFIG
 import yaml
+from ..Cart import getPages
 
 def readConfig():
     templates = None
@@ -26,6 +27,7 @@ def GiveServerConfig():
         mqttBroker = templates["mqttBroker"]
         zigbeeBroker = templates["zigbee2mqtt"]
         mail = templates["mail"]
+        retPages = getPages()
         server={
             "mqttBroker":mqttBroker["host"],
             "mqttBrokerPort":mqttBroker["port"],
@@ -33,7 +35,8 @@ def GiveServerConfig():
             "passwordMqttBroker":mqttBroker["password"],
             "zigbee2mqttTopic":zigbeeBroker["topic"],
             "emailLogin":mail["login"],
-            "emailPass":mail["password"]
+            "emailPass":mail["password"],
+            "pages":retPages["data"]
         }
         return server
     except Exception as e:
@@ -44,5 +47,6 @@ def GiveServerConfig():
         "passwordMqttBroker":"admin",
         "zigbee2mqttTopic":"zigbee2mqtt",
         "emailLogin":'',
-        "emailPass":''
+        "emailPass":'',
+        "pages":[]
         }

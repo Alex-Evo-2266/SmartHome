@@ -1,0 +1,229 @@
+cards:
+- children:
+  - action: ''
+    deviceId: null
+    height: 1
+    id: 1
+    index: 0
+    name: weather
+    order: 0
+    type: weather
+    typeAction: ''
+    width: 1
+  - action: ''
+    deviceId: 9
+    height: 1
+    id: null
+    index: 1
+    name: "\u0434\u0430\u0442\u0447\u0438\u043A \u0441\u0432\u0435\u0442\u0430"
+    order: 0
+    type: sensor-number
+    typeAction: illuminance_lux
+    width: 2
+  - action: ''
+    deviceId: null
+    height: 1
+    id: null
+    index: 2
+    name: time
+    order: 0
+    type: time
+    typeAction: ''
+    width: 2
+  id: 1
+  index: 0
+  mainId: 1
+  name: "\u043F\u043E\u0433\u043E\u0434\u0430"
+  order: 0
+  type: base
+  width: 2
+- children:
+  - action: ''
+    deviceId: 2
+    height: 1
+    id: 2
+    index: 0
+    name: zigbee2mqtt
+    order: 0
+    type: sensor-binary
+    typeAction: state
+    width: 1
+  - action: '30'
+    deviceId: 7
+    height: 1
+    id: 3
+    index: 1
+    name: test1
+    order: 1
+    type: button
+    typeAction: field2
+    width: 2
+  - action: ''
+    deviceId: 1
+    height: 1
+    id: 4
+    index: 2
+    name: fgh
+    order: 0
+    type: sensor-boolean
+    typeAction: sn1
+    width: 1
+  - action: ''
+    deviceId: 6
+    height: 1
+    id: 5
+    index: 3
+    name: cube2
+    order: 0
+    type: sensor-enum
+    typeAction: action
+    width: 2
+  - action: ''
+    deviceId: null
+    height: 1
+    id: 6
+    index: 4
+    name: togle
+    order: 0
+    type: script
+    typeAction: ''
+    width: 1
+  - action: ''
+    deviceId: 4
+    height: 1
+    id: 8
+    index: 5
+    name: lamp4
+    order: 2
+    type: sensor-binary
+    typeAction: state
+    width: 1
+  id: 2
+  index: 1
+  mainId: 2
+  name: ''
+  order: 0
+  type: base
+  width: 2
+- children:
+  - action: ''
+    deviceId: 5
+    height: 1
+    id: 7
+    index: 0
+    name: testalfield
+    order: 0
+    type: button
+    typeAction: field1binary
+    width: 1
+  - action: ''
+    deviceId: 8
+    height: 1
+    id: null
+    index: 1
+    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    type: sensor-binary
+    typeAction: state
+    width: 1
+  id: 4
+  index: 2
+  mainId: 3
+  name: test
+  order: 0
+  type: base
+  width: 2
+- children:
+  - action: test
+    deviceId: 5
+    height: 1
+    id: 12
+    index: 0
+    name: testalfield
+    order: 0
+    type: button
+    typeAction: field0text
+    width: 1
+  - action: ''
+    deviceId: 5
+    height: 1
+    id: 17
+    index: 1
+    name: testalfield
+    order: 0
+    type: enum
+    typeAction: field3enum
+    width: 1
+  - action: ''
+    deviceId: 5
+    height: 1
+    id: 18
+    index: 2
+    name: testalfield
+    order: 0
+    type: slider
+    typeAction: field2number
+    width: 2
+  - action: ''
+    deviceId: 5
+    height: 1
+    id: 19
+    index: 3
+    name: testalfield
+    order: 0
+    type: button
+    typeAction: field1binary
+    width: 1
+  - deviceId: 7
+    height: 1
+    index: 4
+    name: test1
+    order: 0
+    type: slider
+    typeAction: field0
+    width: 1
+  - deviceId: 4
+    height: 1
+    index: 5
+    name: lamp4
+    order: 0
+    type: slider
+    typeAction: brightness
+    width: 1
+  id: 4
+  index: 3
+  mainId: 4
+  name: ''
+  order: '5'
+  type: base
+  width: 2
+- children:
+  - action: ''
+    deviceId: 5
+    height: 1
+    id: 9
+    index: 0
+    name: testalfield
+    order: 0
+    type: enum
+    typeAction: field3enum
+    width: 2
+  - action: ''
+    deviceId: 5
+    height: 1
+    id: 10
+    index: 1
+    name: testalfield
+    order: 0
+    type: text
+    typeAction: field0text
+    width: 2
+  id: 5
+  index: 4
+  mainId: 5
+  name: ''
+  order: 1
+  type: line
+  width: 2
+name: basePage

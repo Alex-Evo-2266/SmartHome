@@ -13,6 +13,20 @@
   align-items: center;
   justify-content: center;
 }
+.bottomMenu{
+  width: 100%;
+  height: 56px;
+  background: var(--color-base);
+  color: var(--text-color-base-fon);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 0 10px #000;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .topMenu > *{
   z-index: 99;
 }
@@ -75,20 +89,22 @@
   color: var(--color-active);
   border-bottom: 2px solid var(--color-active);
 }
-.specialActionButtonContainer{
-  margin-bottom: 8px;
-  padding: 7px;
-  position: sticky;
-}
+
 .specialActionButton{
   background: var(--color-active);
-  height: 40px;
-  width: 40px;
-  border-radius: 25px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 97;
+  height: 56px;
+  width: 56px;
+  border-radius: 50%;
   color: var(--text-color-active-fon);
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
   overflow: hidden;
+  font-weight: 300;
+  cursor: pointer;
   align-items: center;
   font-size: 24px;
   box-shadow: 0 0 10px -2px #000;
@@ -97,37 +113,42 @@
 .specialActionButton:hover{
   box-shadow: none
 }
-.specialActionButton.big{
+/* .specialActionButton.big{
   justify-content: flex-start;
   width: 90%;
-}
+} */
 .specialActionButton i{
   min-width: 40px;
   text-align: center;
   line-height: 40px;
 }
-.navigationRail ul li{
+.navigationRail ul li,
+.bottomMenuAll ul li{
   height: 56px;
   font-size: 24px;
   position: relative;
   width: 256px
 }
-.navigationRail ul li a{
+.navigationRail ul li a,
+.bottomMenuAll ul li a{
   height: 100%;
   width: 100%;
   align-items: center;
   text-decoration: none;
   color: var(--text-color-normal-fon);
 }
-.navigationRail ul li a.active{
+.navigationRail ul li a.active,
+.bottomMenuAll ul li a.active{
   color: var(--color-active);
 }
-.navigationRail ul li a i{
+.navigationRail ul li a i,
+.bottomMenuAll ul li a i{
   width: 56px;
   text-align: center;
   line-height: 56px;
 }
-.navigationRail ul li a span{
+.navigationRail ul li a span,
+.bottomMenuAll ul li a span{
   margin-left: 5px;
 }
 .dividers{
@@ -240,4 +261,65 @@
   top: 56px;
   font-size: 18px;
   line-height: 24px;
+}
+.controlConteiner.bottom .contextmenu{
+  bottom: 56px;
+  font-size: 18px;
+  line-height: 24px;
+}
+.bottomMenuAll::-webkit-scrollbar{
+  width: 0;
+}
+.bottomMenuAll{
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 100vh;
+  transform: translateY(100%);
+  transition: 0.5s
+}
+.bottomMenuAll.show{
+  overflow-y: scroll;
+  transform: none;
+}
+.bottomMenuAll ul{
+  background: var(--color-normal);
+}
+.bottomMenuAll ul li{
+  line-height: 48px;
+}
+.bottomMenu .controlConteiner .contextmenu{
+  top: 30px;
+}
+.bottomMenu .burger{
+  width: 56px;
+  line-height: 56px;
+  text-align: center;
+  font-size: 24px;
+}
+.bottomMenu .controlConteiner{
+  position: relative;
+}
+.bottomMenu .item{
+  width: 56px;
+  line-height: 56px;
+  text-align: center;
+  font-size: 24px;
+  color: var(--text-color-base-fon);
+}
+.bottomMenu .item *{
+  color: var(--text-color-base-fon);
+}
+
+@media (max-width: 700px), ((max-height: 700px) and (orientation: landscape)){
+  .specialActionButton{
+    bottom: 66px;
+  }
+}
+@media ((orientation: landscape)){
+  .specialActionButton{
+    bottom: 66px;
+  }
 }

@@ -112,6 +112,7 @@ class UserConfig(models.Model):
     staticBackground = models.BooleanField("static background", default=False)
     background = models.ManyToManyField(ImageBackground,verbose_name="фон", related_name="background")
     user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key = True)
+    page = models.CharField("activePage", max_length = 200, default="basePage")
 
     def __str__(self):
         return self.Style
@@ -120,6 +121,7 @@ class UserConfig(models.Model):
         return {
         "Style":self.Style,
         "autoStyle":self.auteStyle,
+        "page":self.page,
         "staticBackground":self.staticBackground,
         "images":set_to_list_dict(self.background.all())
         }
@@ -214,7 +216,7 @@ class ValueDevice(models.Model):
             "control":self.control,
             "value":self.value
         }
-        
+
     def toDict(self):
         return {
             "name":self.name,
@@ -252,71 +254,4 @@ class ValueListDevice(models.Model):
             "name":self.name,
             "value":self.value,
             "date":self.date
-        }
-class HomePage(models.Model):
-    id = models.IntegerField("id", primary_key=True)
-    name = models.CharField("page name", max_length = 50)
-    information = models.TextField("page info", default="")
-    def __str__(self):
-        return self.name
-
-    def receiveDict(self):
-        return {
-            "id":self.id,
-            "name":self.name,
-            "information":self.information
-        }
-
-class HomeCart(models.Model):
-    id = models.IntegerField("id", primary_key=True)
-    idInPage = models.IntegerField("id in page")
-    name = models.CharField("cart name", max_length = 50)
-    type = models.CharField("cart type", max_length = 20)
-    order = models.IntegerField("cart order", default=10)
-    homePage = models.ForeignKey(HomePage, on_delete = models.CASCADE)
-    width = models.IntegerField("width",default=2)
-
-
-    def __str__(self):
-        return self.name
-
-    def receiveDict(self):
-        return {
-            "mainId":self.id,
-            "id":self.idInPage,
-            "name":self.name,
-            "type":self.type,
-            "order":self.order,
-            "width":self.width
-        }
-
-class CartChildren(models.Model):
-    id = models.IntegerField("id", primary_key=True)
-    name = models.CharField("element name", max_length = 50)
-    type = models.CharField("element type", max_length = 20)
-    typeAction = models.CharField("element typeAction", max_length = 20)
-    order = models.IntegerField("element order", default=0)
-    device = models.ForeignKey(Device, on_delete = models.CASCADE, null=True)
-    action = models.CharField("element action", max_length = 20, default = "get")
-    homeCart = models.ForeignKey(HomeCart, on_delete = models.CASCADE)
-    width = models.IntegerField("width",default=1)
-    height = models.IntegerField("width",default=1)
-
-    def __str__(self):
-        return self.name+" "+self.type+" "+self.typeAction
-
-    def receiveDict(self):
-        device = self.device
-        if(device):
-            device = device.id
-        return {
-            "id":self.id,
-            "name":self.name,
-            "type":self.type,
-            "action":self.action,
-            "typeAction":self.typeAction,
-            "deviceId":device,
-            "order":self.order,
-            "width":self.width,
-            "height":self.height
         }

@@ -12,7 +12,6 @@ export const FloatingButton = ({type, action, big, title}) =>{
       <i className="fas fa-times"></i>:
       <i className="fas fa-plus"></i>
     }
-    <span>{title}</span>
     </div>
 )
 }

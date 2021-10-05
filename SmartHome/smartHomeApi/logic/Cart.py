@@ -2,21 +2,38 @@ from SmartHome.settings import PAGES_DIR
 import yaml
 import os, sys
 
-def addHomePage(name, information=""):
+def getPages():
+    fileList = os.listdir(PAGES_DIR)
+    arr = []
+    templates = None
+    for item in fileList:
+        with open(os.path.join(PAGES_DIR,item)) as f:
+            templates = yaml.safe_load(f)
+        arr.append(templates["name"])
+    return {"data":arr, "type":"ok"}
+
+def lookForPage(name):
+    fileList = os.listdir(PAGES_DIR)
+    print(name,fileList)
+    for item in fileList:
+        if(item==name):
+            return {"data":item, "type":"ok"}
+    return {"message":"no file", "type":"error"}
+
+def addHomePage(name):
     try:
-        print(data)
         fileList = os.listdir(PAGES_DIR)
         str = name + ".yml"
         for item in fileList:
             if(item==str):
-                return {"type":"error","message":"this name filled"}
+                return {"type":"error","message":"this name busy"}
         path = os.path.join(PAGES_DIR,str)
         with open(path, 'w') as f:
-            yaml.dump({"name":name,"info":information,"card":[]}, f, default_flow_style=False)
-        return True
+            yaml.dump({"name":name,"cards":[]}, f, default_flow_style=False)
+        return {"type":"ok","message":""}
     except Exception as e:
         print(e)
-        return False
+        return {"type":"error","message":e}
 
 
 def setPage(data):
@@ -31,10 +48,14 @@ def setPage(data):
 def getPage(name):
     templates = None
     name = name + ".yml"
-    with open(os.path.join(PAGES_DIR,name)) as f:
-        templates = yaml.safe_load(f)
-    return templates
-    
+    res = lookForPage(name)
+    if(res["type"]=="ok"):
+        with open(os.path.join(PAGES_DIR,name)) as f:
+            templates = yaml.safe_load(f)
+        return {"data":templates,"type":"ok"}
+    else:
+        return res
+
 # from ..models import Device,HomePage,HomeCart,CartChildren,genId,getEmptyId
 #
 # def addHomePage(name,information="",id=None)->HomePage:

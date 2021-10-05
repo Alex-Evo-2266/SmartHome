@@ -1,4 +1,4 @@
-import React, {useContext,useState,useEffect,useCallback} from 'react'
+import React, {useContext,useState,useEffect,useCallback, useRef} from 'react'
 import {NavLink,useHistory} from 'react-router-dom'
 import {MenuContext} from './menuContext'
 import {AuthContext} from '../../context/AuthContext.js'
@@ -16,6 +16,7 @@ export const Menu = ()=>{
   const {request} = useHttp();
   const config = useContext(UserContext)
   const auth = useContext(AuthContext)
+  const bottomMenuRef = useRef(null)
   // const terminal = useContext(TerminalContext)
   const [user, setuser] = useState({
     UserName:"",
@@ -72,6 +73,13 @@ export const Menu = ()=>{
     history.push("/profile")
   }
 
+  const closeMenu = ()=>{
+    if(bottomMenuRef.current){
+      bottomMenuRef.current.scrollTop = 0
+    }
+    menu.hide()
+  }
+
   const updataUser = useCallback(async()=>{
     const data = await request(`/api/user`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data) return;
@@ -101,6 +109,15 @@ export const Menu = ()=>{
 if(sizeWidth>700){
   return(
     <>
+    {
+      (menu.menu.specialAction?.type)?
+      <FloatingButton
+      title={menu.menu.specialAction?.title || menu.menu.specialAction?.type}
+      type = {menu.menu.specialAction?.type}
+      action = {menu.menu.specialAction?.action}
+      />:
+      null
+    }
     <div className="topMenu">
       <div className="burger" onClick={()=>menu.togle()}>
         <i className="fas fa-bars"></i>
@@ -142,18 +159,7 @@ if(sizeWidth>700){
       </div>:
       null
     }
-    <div className={`navigationRail ${(menu.menu.visible)?"active":""}`}>
-    {
-      (menu.menu.specialAction?.type)?
-      <div className="specialActionButtonContainer">
-        <FloatingButton
-        title={menu.menu.specialAction?.title || menu.menu.specialAction?.type}
-        big={menu.menu.visible} type = {menu.menu.specialAction?.type}
-        action = {menu.menu.specialAction?.action}
-        />
-      </div>:
-      null
-    }
+    <div onClick={menu.hide} className={`navigationRail ${(menu.menu.visible)?"active":""}`}>
     <ul className="baseMenu">
       <li>
         <NavLink to = "/home">
@@ -243,7 +249,102 @@ if(sizeWidth>700){
   )
 }
 else {
-  return null
+  return (
+    <>
+    {
+      (menu.menu.specialAction?.type)?
+      <FloatingButton
+      title={menu.menu.specialAction?.title || menu.menu.specialAction?.type}
+      big={menu.menu.visible} type = {menu.menu.specialAction?.type}
+      action = {menu.menu.specialAction?.action}
+      />:
+      null
+    }
+    <div onClick={closeMenu} ref={bottomMenuRef} className={`bottomMenuAll ${(menu.menu.visible)?"show":""}`}>
+    <div style={{height:"50vh", weight:"100%"}}></div>
+    <ul className="baseMenu">
+      <li>
+        <NavLink to = "/devices">
+          <i className="fas fa-plug"></i>
+          <span>Devices</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to = "/config">
+          <i className="fas fa-cogs"></i>
+          <span>Options</span>
+        </NavLink>
+      </li>
+      {
+        (insluedField)?
+        insluedField.map((item,index)=>{
+          let t = item.url.indexOf("/")
+          return(
+            <li key={index}>
+            {
+              (t!==0)?
+              <a href = {item.url}>
+                <i className={item.iconClass}></i>
+                <span>{item.title}</span>
+              </a>:
+              <NavLink to = {item.url}>
+                <i className={item.iconClass}></i>
+                <span>{item.title}</span>
+              </NavLink>
+            }
+            </li>
+          )
+        }):null
+      }
+      {
+        (otherField)?
+        otherField.map((item,index)=>{
+          let t = item.url.indexOf("/")
+          return(
+            <li key={index}>
+            {
+              (t!==0)?
+              <a href = {item.url}>
+                <i className={item.iconClass}></i>
+                <span>{item.title}</span>
+              </a>:
+              <NavLink to = {item.url}>
+                <i className={item.iconClass}></i>
+                <span>{item.title}</span>
+              </NavLink>
+            }
+            </li>
+          )
+        }):null
+      }
+    </ul>
+    </div>
+    <div className="bottomMenu">
+      <div className="burger" onClick={()=>menu.togle()}>
+        <i className="fas fa-bars"></i>
+      </div>
+      <div className="item">
+        <NavLink to = "/home">
+          <i className="fas fa-home"></i>
+        </NavLink>
+      </div>
+      <div className="controlConteiner">
+      {
+        (menu.menu.search)?
+        <div className="search" onClick={()=>setSearchtVisible(!searchtVisible)}>
+          <i className="fas fa-search"></i>
+        </div>:
+        null
+      }
+      {
+        (menu.menu.dopmenu)?
+          <DopMenu className="bottom" buttons={menu.menu.dopmenu}/>
+        :null
+      }
+      </div>
+    </div>
+    </>
+  )
 }
 
 

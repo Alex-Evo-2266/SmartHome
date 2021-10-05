@@ -1,0 +1,17 @@
+cards:
+- children:
+  - deviceId: 7
+    height: 1
+    index: 0
+    name: test1
+    order: 0
+    type: slider
+    typeAction: field0
+    width: 1
+  index: 0
+  mainId: null
+  name: ''
+  order: '0'
+  type: base
+  width: 2
+name: page2

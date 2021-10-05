@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 
-export const Menu = ({buttons=[]}) =>{
+export const Menu = ({buttons=[], className}) =>{
   const [visible, setVisible] = useState(false)
 
   if(buttons?.length === 0){
@@ -17,7 +17,7 @@ export const Menu = ({buttons=[]}) =>{
     <div className="menuTogleBtn" onClick={()=>setVisible(!visible)}>
       <i className="fas fa-ellipsis-v"></i>
     </div>
-    <div onClick={()=>setVisible(false)} className={`contextmenu ${(visible)?"show":"hide"}`}>
+    <div onClick={()=>setVisible(false)} className={`contextmenu ${className} ${(visible)?"show":"hide"}`}>
       {
         buttons.map((item, index)=>{
           return(

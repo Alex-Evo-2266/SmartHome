@@ -11,7 +11,7 @@ from .logic.getDevices import giveDevice
 from .logic.editDevice import addDevice, editDevice, deleteDevice
 from .logic.config.configget import GiveServerConfig,readConfig
 from .logic.config.configset import ServerConfigEdit
-from .logic.Cart import setPage,getPage
+from .logic.Cart import setPage,getPage,addHomePage
 from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
@@ -131,6 +131,19 @@ class UserNewPassword(APIView):
             return Response("ok",status=200)
 
 # user config views
+
+class UserSetPage(APIView):
+    """docstring for GetUsers."""
+    def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        data = json.loads(request.body)
+        if "userId" in authData:
+            user = User.objects.get(id=authData.get("userId"))
+            user.userconfig.page = data["name"]
+            user.userconfig.save()
+        return Response("ok",status=200)
 
 class UserConfigView(APIView):
     """docstring for ClientConfigView."""
@@ -262,6 +275,7 @@ class DevicePutPostView(APIView):
         data = json.loads(request.body)
         if editDevice(data):
             return Response("ok",status=201)
+        return Response(status=400)
 
 class SetValueDevice(APIView):
     """docstring for SetValueDevice."""
@@ -395,8 +409,10 @@ class GetHomePageView(APIView):
         authData = auth(request)
         if not authData:
             return Response(status=403)
-        page = getPage(name)
-        return Response(page)
+        data = getPage(name)
+        if(data["type"]=="ok"):
+            return Response(data["data"],status=200)
+        return Response(data,status=400)
 
 class SetHomePage(APIView):
     """docstring for SetHomePage."""
@@ -407,6 +423,22 @@ class SetHomePage(APIView):
         data = json.loads(request.body)
         if(setPage(data)):
             return Response("ok",status=201)
+
+class AddHomePage(APIView):
+    """docstring for SetHomePage."""
+    def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        data = json.loads(request.body)
+        res = addHomePage(data["name"])
+        if(res["type"]=="ok"):
+            if "userId" in authData:
+                user = User.objects.get(id=authData.get("userId"))
+                user.userconfig.page = data["name"]
+                user.userconfig.save()
+            return Response("ok",status=201)
+        return Response(res,status=400)
 
 # media views
 

@@ -16,7 +16,6 @@ export const GalleryPage = () => {
   const [visible,setVisible] = useState(false)
   const [end,setEnd] = useState(false)
   const [urls,setUrls] = useState([])
-  const [addVisible,setaddVisible] = useState(false)
   const [newUrl,setnewUrl] = useState(0)
   const [ditailElement,setDitailElement] = useState({})
 
@@ -69,23 +68,8 @@ export const GalleryPage = () => {
   },[error,message, clearError])
 
   useEffect(()=>{
-    if(addVisible){
-      setData("Gallery",{
-        specialAction:{
-          type: "close",
-          action:()=>setaddVisible(false)
-        }
-      })
-    }
-    else {
-      setData("Gallery",{
-        specialAction:{
-          type: "add",
-          action:()=>setaddVisible(true)
-        }
-      })
-    }
-  },[setData,addVisible])
+    setData("Gallery")
+  },[setData])
 
   return(
     <div className="conteiner">
@@ -95,11 +79,7 @@ export const GalleryPage = () => {
       null
     }
     <div className="">
-    {
-      (addVisible)?
       <ImagesInput update={getTenUrl}/>
-      :null
-    }
       <div className="galeryContent">
       {
         (urls&&urls[0])?

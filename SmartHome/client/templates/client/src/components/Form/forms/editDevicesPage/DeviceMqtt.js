@@ -183,39 +183,39 @@ const changeHandlerTest = event=>{
           <h5>{`Type connect - ${device.DeviceTypeConnect}`}</h5>
         </label>
       </li>
-      <li>
-        <label>
-          <h5>Name</h5>
-          <input className = "textInput" placeholder="name" id="DeviceName" type="text" name="DeviceName" value={device.DeviceName} onChange={changeHandler} required/>
-        </label>
-      </li>
-      <li>
-        <label>
-          <h5>System name</h5>
-          <input className = "textInput" placeholder="system name" id="DeviceSystemName" type="text" name="DeviceSystemName" value={device.DeviceSystemName} onChange={changeHandlerTest} required/>
-        </label>
-      </li>
-      <li>
-        <label>
-          <h5>Address</h5>
-          <input className = "textInput" placeholder="address" id="DeviceAddress" type="text" name="DeviceAddress" value={device.DeviceAddress} onChange={changeHandler} required/>
-        </label>
-      </li>
-      <li>
-        <label>
-          <h5>Type value</h5>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="DeviceName" type="text" value={device.DeviceName}></input>
+          <label>Name</label>
+        </div>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandlerTest} required name="DeviceSystemName" type="text" value={device.DeviceSystemName}></input>
+          <label>System name</label>
+        </div>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="DeviceAddress" type="text" value={device.DeviceAddress}></input>
+          <label>Address</label>
+        </div>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
           <select className = "textInput" name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
             <option value="json">json</option>
             <option value="value">value</option>
           </select>
-        </label>
-      </li>
-      <li>
-        <label>
-          <h5>information</h5>
-          <input className = "textInput" placeholder="information" id="DeviceInformation" type="text" name="DeviceInformation" value={device.DeviceInformation} onChange={changeHandler} required/>
-        </label>
-      </li>
+          <label>Type value</label>
+        </div>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="DeviceInformation" type="text" value={device.DeviceInformation}></input>
+          <label>Information</label>
+        </div>
+      </div>
       {
         field.map((item,index)=>{
           return(

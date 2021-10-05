@@ -59,7 +59,7 @@ if(getTypeField()==="number"||getTypeField()==="text"){
         <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
         <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
 
-        <p className= "sensor-value">{device.DeviceValue[data.typeAction]}</p>
+        <p className= "sensor-value">{(device.DeviceValue)?device.DeviceValue[data.typeAction]:""}</p>
         <p className= "sensor-unit">{getConfrg(data.typeAction)?.unit||""}</p>
       </div>
       {
@@ -89,7 +89,7 @@ if(getTypeField()==="binary"){
       <div className="icon-conteiner">
         <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
         <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
-        <div className={`valueIndicator ${(device.DeviceValue[data.typeAction]==="1")?"true":"false"}`}></div>
+        <div className={`valueIndicator ${(device?.DeviceValue&&device?.DeviceValue[data?.typeAction]==="1")?"true":"false"}`}></div>
       </div>
       {
         (deleteBtn || editBtn)?
@@ -117,7 +117,7 @@ return(
   <div className="SensorElement BtnElement">
     <div className="icon-conteiner">
       <p className= "sensor-value-name">{data.typeAction}</p>
-      <p className= "sensor-value">{`${device.DeviceValue[data.typeAction]} ${getConfrg(data.typeAction).unit||""}`}</p>
+      <p className= "sensor-value">{`${(device.DeviceValue)?device.DeviceValue[data.typeAction]:""} ${getConfrg(data.typeAction).unit||""}`}</p>
       <p className= "sensor-name">{device.DeviceName}</p>
     </div>
     {

@@ -21,11 +21,6 @@
 *.top{
   padding-top: 56px;
 }
-@media (max-width: 700px){
-  *.bottom{
-    padding-bottom: 90px;
-  }
-}
 
 /* .conteiner.home
 {

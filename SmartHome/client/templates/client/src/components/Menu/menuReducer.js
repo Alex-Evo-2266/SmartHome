@@ -3,7 +3,7 @@ import {SHOW_MENU, HIDE_MENU, EDIT_MENU} from '../types'
 const handlers={
   [SHOW_MENU]:(state,{payload}) => ({...state, visible:true}),
   [HIDE_MENU]:state => ({...state, visible:false}),
-  [EDIT_MENU]:(state,{payload}) => ({...payload}),
+  [EDIT_MENU]:(state,{payload}) => ({...payload, visible:state.visible}),
   DEFAULT: state => state
 }
 

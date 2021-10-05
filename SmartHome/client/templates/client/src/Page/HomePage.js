@@ -10,6 +10,7 @@ import {CartEdit} from '../components/homeCarts/EditCarts/CartEdit'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
+import {UserContext} from '../context/UserContext.js'
 import {ScriptContext} from '../context/ScriptContext.js'
 import {Loader} from '../components/Loader'
 import {MenuContext} from '../components/Menu/menuContext'
@@ -32,11 +33,13 @@ const [carts, setCarts] = useState([])
 const [sortedCarts, setSortedCarts] = useState([])
 const auth = useContext(AuthContext)
 const {setData} = useContext(MenuContext)
+const {page, getData} = useContext(UserContext)
 const {show, hide} = useContext(DialogWindowContext)
 const {message} = useMessage();
 const {request, error, clearError} = useHttp();
 const conteiner = useRef(null)
 const [scripts, setScripts] = useState({})
+const [pages, setPages] = useState([])
 
 function sort(array) {
   let arr = array.slice()
@@ -58,7 +61,6 @@ const addCart = useCallback((type="base")=>{
   setEditMode(true)
   let newCart = {
     mainId:null,
-    id:carts.length+1,
     name:"",
     order:"0",
     type:type,
@@ -70,13 +72,23 @@ const addCart = useCallback((type="base")=>{
     mas.push(newCart)
     return mas;
   })
-},[hide, carts.length])
+},[hide])
 
 const removeCart = useCallback((index)=>{
-  message("Удалить?", "dialog", ()=>{
-    setCarts(prev=>prev.filter((item, index2)=>index2!==index))
-  },"no")
-},[message])
+  show("alert",{
+    title: "delete card",
+    text: "delete card?",
+    buttons:[{
+      title:"yes",
+      action:()=>{
+        setCarts(prev=>prev.filter((item, index2)=>index2!==index))
+      }
+    },{
+      title:"no",
+      active:hide
+    }]
+  })
+},[show,hide])
 
 const updataCart = useCallback((index,cart)=>{
   setCarts(prev=>prev.map((item,index2)=>{
@@ -88,26 +100,50 @@ const updataCart = useCallback((index,cart)=>{
 
 const saveCarts = useCallback(()=>{
   try {
-    console.log("save",carts);
-    request('/api/homeCart/set', 'POST', {id:1,name:"page1",carts},{Authorization: `Bearer ${auth.token}`})
+    request('/api/homePage/set', 'POST', {name:page,cards:carts},{Authorization: `Bearer ${auth.token}`})
   } catch (e) {
     console.error(e);
   }
-},[carts, auth.token,request])
+},[carts, auth.token,request,page])
 
 const importCarts = useCallback(async()=>{
-  try {
-    const data = await request(`/api/homeCart/get/${"page1"}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    console.log(data);
-    setCarts(data.carts)
-    const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    setInterval(data2.updateFrequency)
-    const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    await setScripts(data3);
-  } catch (e) {
-    console.error(e);
+  if(page){
+    try {
+      const data = await request(`/api/homePage/get/${page}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      console.log(data);
+      setCarts(data.cards)
+      const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      console.log(data2);
+      setPages(data2.pages)
+      const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      await setScripts(data3);
+    } catch (e) {
+      console.error(e);
+    }
   }
-},[request,auth.token])
+},[request,auth.token,page])
+
+const addPage = useCallback(async(name)=>{
+  await request('/api/homePage/add', 'POST', {name},{Authorization: `Bearer ${auth.token}`})
+  setTimeout(()=>{
+    getData()
+  },0)
+},[request,auth.token,getData])
+
+const pagesArr = useCallback(()=>{
+  return pages.map((item)=>{
+    console.log(item);
+    return {title:item,data:item}
+  })
+},[pages])
+
+const changePage = useCallback(async(data)=>{
+  await request('/api/user/page', 'POST', {name:data},{Authorization: `Bearer ${auth.token}`})
+  hide()
+  setTimeout(()=>{
+    getData()
+  },0)
+},[request, getData, auth.token, hide])
 
 useEffect(()=>{
   message(error,"error")
@@ -121,15 +157,10 @@ useEffect(()=>{
 },[importCarts])
 
 useEffect(()=>{
-  console.log(carts);
-  // request('/api/homeCart/set', 'POST', {id:1,name:"page1",carts},{Authorization: `Bearer ${auth.token}`})
-},[carts])
-
-useEffect(()=>{
   setData("Home",{
     dopmenu:[
       {
-        title: (editMode)?"save":"config",
+        title: (editMode)?"save":"edit",
         active:()=>{
           if(editMode){
             saveCarts()
@@ -145,10 +176,25 @@ useEffect(()=>{
           items:cardsList,
           active: addCart
         })
+      },{
+        title: "new page",
+        active: ()=>show("text",{
+          title:"New page",
+          text:"input name newPage",
+          placeholder:"name",
+          action: addPage
+        })
+      },{
+        title: "change page",
+        active: ()=>show("confirmation",{
+          title:"change page",
+          items:pagesArr(),
+          active: changePage
+        })
       }
     ]
   })
-},[setData,editMode, addCart, saveCarts,show])
+},[setData,editMode, addCart, saveCarts,show,addPage,pagesArr, changePage])
 
 const sortCard = useCallback((data,width)=>{
   let column = 3
