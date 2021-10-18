@@ -184,13 +184,6 @@ useEffect(()=>{
           placeholder:"name",
           action: addPage
         })
-      },{
-        title: "change page",
-        active: ()=>show("confirmation",{
-          title:"change page",
-          items:pagesArr(),
-          active: changePage
-        })
       }
     ]
   })

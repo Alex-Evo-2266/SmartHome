@@ -1,7 +1,7 @@
 from smartHomeApi.models import Device,Room,genId,ValueDevice
-from ..BaseDeviceClass import BaseDevice
-from ..DeviceElement import DeviceElement
-from ..mqttDevice.connect import getMqttClient
+from smartHomeApi.logic.deviceControl.BaseDeviceClass import BaseDevice
+from smartHomeApi.logic.deviceControl.DeviceElement import DeviceElement
+from smartHomeApi.logic.deviceControl.mqttDevice.connect import getMqttClient
 import json
 
 def look_for_param(arr:list, val):

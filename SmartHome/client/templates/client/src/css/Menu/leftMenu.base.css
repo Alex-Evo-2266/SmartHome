@@ -1,3 +1,46 @@
+.submenu{
+  height: 0;
+  transition: 1s;
+  overflow: hidden;
+  color: var(--text-color-normal-fon);
+}
+.submenu.show{
+  height: auto;
+}
+.submenuElement{
+  background: var(--color-normal);
+  filter: brightness(120%);
+  width: calc(100% - 60px);
+  position: relative;
+}
+.submenuElement.active{
+  color: var(--color-active)
+}
+.submenuElement p{
+  padding-left: 60px;
+  z-index: 97;
+}
+.submenuElement span{
+  z-index: 98;
+  position: absolute;
+  width: 56px;
+  right: 0;
+  top: 0;
+  line-height: 56px;
+  text-align: center;
+}
+.subMenuArrow{
+  position: absolute;
+  top: 0;
+  color: var(--text-color-normal-fon);
+  right: 0;
+  height: 56px;
+  width: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
 
 .topMenu{
   width: 100%;
@@ -124,10 +167,11 @@
 }
 .navigationRail ul li,
 .bottomMenuAll ul li{
-  height: 56px;
+  line-height: 56px;
   font-size: 24px;
   position: relative;
-  width: 256px
+  cursor: pointer;
+  width: 255px;
 }
 .navigationRail ul li a,
 .bottomMenuAll ul li a{

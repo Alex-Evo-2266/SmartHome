@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'channels',
     'smartHomeApi',
     'client',
+    'corsheaders',
     # 'ckeditor',
     # 'ckeditor-uploader'
 ]
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -81,6 +83,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SmartHome.wsgi.application'
 
+CORS_ALLOWED_ORIGINS  = [
+     "http://localhost:3000" ,
+]
+CSRF_TRUSTED_ORIGINS = [
+     "localhost:3000" , 
+]
 
 # docker values
 # REDIS_HOST = os.environ.get("SMARTHOME_REDIS_HOST")
@@ -141,7 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 
 

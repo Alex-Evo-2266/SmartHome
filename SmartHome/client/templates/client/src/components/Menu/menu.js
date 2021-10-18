@@ -5,6 +5,10 @@ import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
 import {UserContext} from '../../context/UserContext'
 import {FloatingButton} from '../floatingButton'
+import {LeftMenu} from './menuComponents/leftMenu'
+import {TopMenu} from './menuComponents/topMenu'
+import {BottomMenu} from './menuComponents/bottomMenu'
+
 // import {TerminalContext} from '../terminal/terminalContext.js'
 import {menuField} from './data.menu.js'
 import {Menu as DopMenu} from '../dopmenu/menu'
@@ -16,7 +20,6 @@ export const Menu = ()=>{
   const {request} = useHttp();
   const config = useContext(UserContext)
   const auth = useContext(AuthContext)
-  const bottomMenuRef = useRef(null)
   // const terminal = useContext(TerminalContext)
   const [user, setuser] = useState({
     UserName:"",
@@ -69,17 +72,6 @@ export const Menu = ()=>{
     }
   },[config,giveField])
 
-  const toprofile = ()=>{
-    history.push("/profile")
-  }
-
-  const closeMenu = ()=>{
-    if(bottomMenuRef.current){
-      bottomMenuRef.current.scrollTop = 0
-    }
-    menu.hide()
-  }
-
   const updataUser = useCallback(async()=>{
     const data = await request(`/api/user`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data) return;
@@ -102,6 +94,8 @@ export const Menu = ()=>{
     }
   }
 
+  const searchtVisibleTogle = ()=>setSearchtVisible(!searchtVisible)
+
   useEffect(()=>{
     updataUser()
   },[updataUser])
@@ -118,35 +112,15 @@ if(sizeWidth>700){
       />:
       null
     }
-    <div className="topMenu">
-      <div className="burger" onClick={()=>menu.togle()}>
-        <i className="fas fa-bars"></i>
-      </div>
-      <h2>{menu.menu.title}</h2>
-      <div className="tabs">
-        {
-          menu.menu.buttons?.map((item, index)=>{
-            return(
-              <div key={index} className={`tabButton ${(item.active)?"active":""}`} onClick={item.action}>{item.title}</div>
-            )
-          })
-        }
-      </div>
-      <div className="controlConteiner">
-      {
-        (menu.menu.search)?
-        <div className="search" onClick={()=>setSearchtVisible(!searchtVisible)}>
-          <i className="fas fa-search"></i>
-        </div>:
-        null
-      }
-      {
-        (menu.menu.dopmenu)?
-          <DopMenu buttons={menu.menu.dopmenu}/>
-        :null
-      }
-      </div>
-    </div>
+    <TopMenu
+    title={menu.menu.title}
+    togle={menu.togle}
+    controlButtons={{
+      search:(menu.menu.search)?{togle:searchtVisibleTogle}:null,
+      dopmenu:menu.menu.dopmenu
+    }}
+    buttons={menu.menu.buttons}
+    />
     {
       (menu.menu.search)?
       <div className={`toolbarConteainer ${(searchtVisible)?"show":"hide"}`}>
@@ -159,92 +133,14 @@ if(sizeWidth>700){
       </div>:
       null
     }
-    <div onClick={menu.hide} className={`navigationRail ${(menu.menu.visible)?"active":""}`}>
-    <ul className="baseMenu">
-      <li>
-        <NavLink to = "/home">
-          <i className="fas fa-home"></i>
-          <span>Home</span>
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to = "/devices">
-          <i className="fas fa-plug"></i>
-          <span>Devices</span>
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to = "/config">
-          <i className="fas fa-cogs"></i>
-          <span>Options</span>
-        </NavLink>
-      </li>
-      {
-        (insluedField)?
-        insluedField.map((item,index)=>{
-          let t = item.url.indexOf("/")
-          return(
-            <li key={index}>
-            {
-              (t!==0)?
-              <a href = {item.url}>
-                <i className={item.iconClass}></i>
-                <span>{item.title}</span>
-              </a>:
-              <NavLink to = {item.url}>
-                <i className={item.iconClass}></i>
-                <span>{item.title}</span>
-              </NavLink>
-            }
-            </li>
-          )
-        }):null
-      }
-    </ul>
-    {
-      (menu.menu.visible)?
-      <>
-      <div className="dividers"></div>
-      <ul className="otherMenu">
-      {
-        (otherField)?
-        otherField.map((item,index)=>{
-          let t = item.url.indexOf("/")
-          return(
-            <li key={index}>
-            {
-              (t!==0)?
-              <a href = {item.url}>
-                <i className={item.iconClass}></i>
-                <span>{item.title}</span>
-              </a>:
-              <NavLink to = {item.url}>
-                <i className={item.iconClass}></i>
-                <span>{item.title}</span>
-              </NavLink>
-            }
-            </li>
-          )
-        }):null
-      }
-      </ul>
-
-      <div className="bottomField">
-        <div className="dividers"></div>
-        <div className="profifileConteiner">
-          <div className="out" onClick={auth.logout}>
-            <i className="fas fa-sign-out-alt" onClick={auth.logout}></i>
-          </div>
-          <div className="profile" onClick={toprofile}>
-            <div className="name">{user.UserName} {user.UserSurname}</div>
-            <div className="email">{user.Email}</div>
-          </div>
-        </div>
-      </div>
-      </>
-      :null
-    }
-    </div>
+    <LeftMenu
+    user={user}
+    hide={menu.hide}
+    show={menu.show}
+    visible={menu.menu.visible}
+    insluedField={insluedField}
+    otherField={otherField}
+    />
     </>
   )
 }
@@ -260,89 +156,24 @@ else {
       />:
       null
     }
-    <div onClick={closeMenu} ref={bottomMenuRef} className={`bottomMenuAll ${(menu.menu.visible)?"show":""}`}>
-    <div style={{height:"50vh", weight:"100%"}}></div>
-    <ul className="baseMenu">
-      <li>
-        <NavLink to = "/devices">
-          <i className="fas fa-plug"></i>
-          <span>Devices</span>
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to = "/config">
-          <i className="fas fa-cogs"></i>
-          <span>Options</span>
-        </NavLink>
-      </li>
-      {
-        (insluedField)?
-        insluedField.map((item,index)=>{
-          let t = item.url.indexOf("/")
-          return(
-            <li key={index}>
-            {
-              (t!==0)?
-              <a href = {item.url}>
-                <i className={item.iconClass}></i>
-                <span>{item.title}</span>
-              </a>:
-              <NavLink to = {item.url}>
-                <i className={item.iconClass}></i>
-                <span>{item.title}</span>
-              </NavLink>
-            }
-            </li>
-          )
-        }):null
-      }
-      {
-        (otherField)?
-        otherField.map((item,index)=>{
-          let t = item.url.indexOf("/")
-          return(
-            <li key={index}>
-            {
-              (t!==0)?
-              <a href = {item.url}>
-                <i className={item.iconClass}></i>
-                <span>{item.title}</span>
-              </a>:
-              <NavLink to = {item.url}>
-                <i className={item.iconClass}></i>
-                <span>{item.title}</span>
-              </NavLink>
-            }
-            </li>
-          )
-        }):null
-      }
-    </ul>
-    </div>
-    <div className="bottomMenu">
-      <div className="burger" onClick={()=>menu.togle()}>
-        <i className="fas fa-bars"></i>
-      </div>
-      <div className="item">
-        <NavLink to = "/home">
-          <i className="fas fa-home"></i>
-        </NavLink>
-      </div>
-      <div className="controlConteiner">
-      {
-        (menu.menu.search)?
-        <div className="search" onClick={()=>setSearchtVisible(!searchtVisible)}>
-          <i className="fas fa-search"></i>
-        </div>:
-        null
-      }
-      {
-        (menu.menu.dopmenu)?
-          <DopMenu className="bottom" buttons={menu.menu.dopmenu}/>
-        :null
-      }
-      </div>
-    </div>
+    {
+      (menu.menu.buttons)?
+      <TopMenu
+      buttons={menu.menu.buttons}
+      />
+      :null
+    }
+    <BottomMenu
+    hide={menu.hide}
+    togle={menu.togle}
+    visible={menu.menu.visible}
+    insluedField={insluedField}
+    otherField={otherField}
+    controlButtons={{
+      search:(menu.menu.search)?{togle:searchtVisibleTogle}:null,
+      dopmenu:menu.menu.dopmenu
+    }}
+    />
     </>
   )
 }

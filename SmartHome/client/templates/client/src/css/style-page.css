@@ -47,6 +47,14 @@
   width: 0;
 } */
 @media (max-width: 700px){
+  .fullScrinContainer{
+    padding: 0 0 56px 0;
+    height: calc(100vh - 56px);
+  }
+  .fullScrinContainer.top{
+    padding: 56px 0 56px 0;
+    height: calc(100vh - 56px - 56px);
+  }
   .conteiner{
     padding-left: 0;
     width: 100%;

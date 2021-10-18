@@ -39,7 +39,7 @@ export const OptionsPage = () => {
   },[setData,location.pathname, history])
 
   return(
-    <div className = "fullScrinContainer">
+    <div className = "fullScrinContainer top">
       <div className = "pages">
         <div className = {`page ${(location.pathname==="/config")?"active":""}`}>
           <UserOption/>

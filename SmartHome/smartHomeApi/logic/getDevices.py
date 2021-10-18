@@ -1,16 +1,16 @@
 from django.conf import settings
 from ..models import Device,ValueDevice,Room,genId
-from yeelight import BulbException
 
 from ..classes.devicesArrey import DevicesArrey
 
 
-from .deviceControl.DeviceClass.Yeelight import Yeelight
-from .deviceControl.DeviceClass.MQTTDevice import MQTTDevice
+from castom_moduls.Mqtt.MQTTDevice import MQTTDevice
+from castom_moduls.Yeelight.Yeelight import Yeelight
+# from .castom_moduls.getModuls import pr
 
 import json
 import ast
-
+# pr()
 
 devicesArrey = DevicesArrey()
 
