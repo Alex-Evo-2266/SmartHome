@@ -4,7 +4,7 @@ import {UserContext} from '../../../context/UserContext'
 import {Loader} from '../../Loader'
 import {StyleIcon} from './castomIcon/styleIcon'
 import {StyleContext} from '../../UserStyle/StyleContext'
-import {Menu} from '../../dopmenu/menu'
+import {Menu} from '../../Menu/dopmenu/menu'
 import {useHistory} from 'react-router-dom'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -92,11 +92,11 @@ export const UserOption = () =>{
         <Menu buttons={[
           {
             title:"create",
-            active:()=>history.push("/config/style")
+            onClick:()=>history.push("/config/style")
           },
           {
             title:"detete",
-            active:()=>setMode(!mode)
+            onClick:()=>setMode(!mode)
           }
         ]}/>
         <div className="StyleChoice">

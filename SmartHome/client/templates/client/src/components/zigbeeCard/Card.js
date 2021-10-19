@@ -1,7 +1,7 @@
 import React,{useContext} from 'react'
 import {FormContext} from '../Form/formContext'
 import {RunText} from '../runText'
-import {Menu} from '../dopmenu/menu'
+import {Menu} from '../Menu/dopmenu/menu'
 import {DialogWindowContext} from '../dialogWindow/dialogWindowContext'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
@@ -58,13 +58,13 @@ export const ZigbeeElement = ({data}) =>{
     if(data.exposes){
       arr.push({
         title:"linc",
-        active:linc
+        onClick:linc
       })
     }
     if(data.type!=="Coordinator"){
       arr.push({
         title:"rename",
-        active:()=>show("text",{
+        onClick:()=>show("text",{
           title:"Rename",
           text:"input new name",
           placeholder:"new name",
@@ -73,7 +73,7 @@ export const ZigbeeElement = ({data}) =>{
       })
       arr.push({
         title:"delete",
-        active:()=>show("alert",{
+        action:()=>show("alert",{
           title:"Delete",
           text:"Delete device",
           buttons:[
@@ -82,7 +82,7 @@ export const ZigbeeElement = ({data}) =>{
             },
             {
               title:"ok",
-              action:deleteDevice
+              onClick:deleteDevice
             }
           ]
         })

@@ -1,11 +1,11 @@
-import React, {useContext,useState,useEffect,useCallback, useRef} from 'react'
-import {AuthContext} from '../../../context/AuthContext.js'
-import {NavLink,useHistory} from 'react-router-dom'
-import {Menu as DopMenu} from '../../dopmenu/menu'
+import React from 'react'
+import {Menu as DopMenu} from '../dopmenu/menu'
 
 export const TopMenu = ({title, togle, buttons, controlButtons})=>{
-  const auth = useContext(AuthContext)
-  const history = useHistory()
+
+  const contextMenu = (e) =>{
+    e.preventDefault()
+  }
 
   return(
     <div className="topMenu">
@@ -21,7 +21,7 @@ export const TopMenu = ({title, togle, buttons, controlButtons})=>{
         {
           buttons?.map((item, index)=>{
             return(
-              <div key={index} className={`tabButton ${(item.active)?"active":""}`} onClick={item.action}>{item.title}</div>
+              <div onContextMenu={contextMenu} key={index} className={`tabButton ${(item.active)?"active":""}`} onClick={item.action}>{item.title}</div>
             )
           })
         }

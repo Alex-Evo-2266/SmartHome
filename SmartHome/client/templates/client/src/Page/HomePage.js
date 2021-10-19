@@ -112,12 +112,23 @@ const importCarts = useCallback(async()=>{
       const data = await request(`/api/homePage/get/${page}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       console.log(data);
       setCarts(data.cards)
+    }
+    catch (e) {
+      console.error(e);
+    }
+    try{
       const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       console.log(data2);
       setPages(data2.pages)
+    }
+    catch (e) {
+      console.error(e);
+    }
+    try{
       const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       await setScripts(data3);
-    } catch (e) {
+    }
+    catch (e) {
       console.error(e);
     }
   }
@@ -130,13 +141,6 @@ const addPage = useCallback(async(name)=>{
   },0)
 },[request,auth.token,getData])
 
-const pagesArr = useCallback(()=>{
-  return pages.map((item)=>{
-    console.log(item);
-    return {title:item,data:item}
-  })
-},[pages])
-
 const changePage = useCallback(async(data)=>{
   await request('/api/user/page', 'POST', {name:data},{Authorization: `Bearer ${auth.token}`})
   hide()
@@ -144,6 +148,70 @@ const changePage = useCallback(async(data)=>{
     getData()
   },0)
 },[request, getData, auth.token, hide])
+
+const deletePage = useCallback(async(name)=>{
+  console.log("del");
+  await request('/api/homePage/delete', 'POST', {name},{Authorization: `Bearer ${auth.token}`})
+  setTimeout(()=>{
+    getData()
+  },0)
+},[request,auth.token,getData])
+
+const getPages= useCallback(()=>{
+  let arr = pages.map((item)=>{
+    let b = {
+      title:item,
+    }
+    if(page === item)
+      b.active = true
+    else
+      b.action = ()=>changePage(item)
+    return b
+  })
+  return arr
+},[pages,changePage,page])
+
+const getdopMenu= useCallback(()=>{
+  let arr = [
+    {
+      title: (editMode)?"save":"edit",
+      onClick:()=>{
+        if(editMode){
+          saveCarts()
+          setEditMode(false)
+        }else{
+          setEditMode(true)
+        }
+      }
+    },{
+      title: "add card",
+      onClick: ()=>show("confirmation",{
+        title:"Add card",
+        items:cardsList,
+        active: addCart
+      })
+    },
+    {
+      type: "dividers"
+    },{
+      title: "create page",
+      onClick: ()=>show("text",{
+        title:"New page",
+        text:"input name newPage",
+        placeholder:"name",
+        action: addPage
+      })
+    }
+  ]
+  if(page !== 'basePage')
+  {
+    arr.push({
+      title: "delete page",
+      onClick: ()=>deletePage(page)
+    })
+  }
+  return arr
+},[page,deletePage,addPage,show,addCart,saveCarts,editMode])
 
 useEffect(()=>{
   message(error,"error")
@@ -158,36 +226,10 @@ useEffect(()=>{
 
 useEffect(()=>{
   setData("Home",{
-    dopmenu:[
-      {
-        title: (editMode)?"save":"edit",
-        active:()=>{
-          if(editMode){
-            saveCarts()
-            setEditMode(false)
-          }else{
-            setEditMode(true)
-          }
-        }
-      },{
-        title: "add card",
-        active: ()=>show("confirmation",{
-          title:"Add card",
-          items:cardsList,
-          active: addCart
-        })
-      },{
-        title: "new page",
-        active: ()=>show("text",{
-          title:"New page",
-          text:"input name newPage",
-          placeholder:"name",
-          action: addPage
-        })
-      }
-    ]
+    buttons:getPages(),
+    dopmenu:getdopMenu()
   })
-},[setData,editMode, addCart, saveCarts,show,addPage,pagesArr, changePage])
+},[setData,editMode, getdopMenu,addCart,getPages, saveCarts,show,addPage, changePage])
 
 const sortCard = useCallback((data,width)=>{
   let column = 3

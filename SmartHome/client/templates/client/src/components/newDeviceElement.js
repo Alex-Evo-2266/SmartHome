@@ -7,7 +7,7 @@ import {Power} from './newDeviceControlElements/power'
 import {Dimmer} from './newDeviceControlElements/dimmer'
 import {Mode} from './newDeviceControlElements/mode'
 import {Enum} from './newDeviceControlElements/enum'
-import {Menu} from './dopmenu/menu'
+import {Menu} from './Menu/dopmenu/menu'
 // import {Color} from './newDeviceControlElements/color'
 import {SocketContext} from '../context/SocketContext'
 import {AuthContext} from '../context/AuthContext.js'
@@ -56,11 +56,11 @@ export const NewDeviceElement = ({id}) =>{
         <Menu buttons={[
           {
             title:"edit",
-            active:()=>{form.show("EditDevices",updateDevice,device)}
+            onClick:()=>{form.show("EditDevices",updateDevice,device)}
           },
           {
             title:(device.DeviceStatus)?"unlinc":"linc",
-            active:linc
+            onClick:linc
           }
         ]}/>
       </div>

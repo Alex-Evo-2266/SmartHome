@@ -31,6 +31,7 @@ urlpatterns = [
     path('homePage/get/<str:name>',views.GetHomePageView.as_view()),
     path('homePage/set',views.SetHomePage.as_view()),
     path('homePage/add',views.AddHomePage.as_view()),
+    path('homePage/delete',views.DeleteHomePage.as_view()),
     path('script/all',views.GetScripts.as_view()),
     path('script/<str:name>',views.ScriptGetDeletePutView.as_view()),
     path('script',views.ScriptPostView.as_view()),

@@ -1,5 +1,4 @@
-import React, {useContext,useState,useEffect,useCallback, useRef} from 'react'
-import {NavLink,useHistory} from 'react-router-dom'
+import React, {useContext,useState,useEffect,useCallback} from 'react'
 import {MenuContext} from './menuContext'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
@@ -11,11 +10,9 @@ import {BottomMenu} from './menuComponents/bottomMenu'
 
 // import {TerminalContext} from '../terminal/terminalContext.js'
 import {menuField} from './data.menu.js'
-import {Menu as DopMenu} from '../dopmenu/menu'
 
 
 export const Menu = ()=>{
-  const history = useHistory()
   const menu = useContext(MenuContext)
   const {request} = useHttp();
   const config = useContext(UserContext)

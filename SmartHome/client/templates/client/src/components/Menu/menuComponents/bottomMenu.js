@@ -1,12 +1,9 @@
-import React, {useContext,useState,useEffect,useCallback, useRef} from 'react'
-import {AuthContext} from '../../../context/AuthContext.js'
-import {NavLink,useHistory} from 'react-router-dom'
-import {Menu as DopMenu} from '../../dopmenu/menu'
+import React, {useRef} from 'react'
+import {NavLink} from 'react-router-dom'
+import {Menu as DopMenu} from '../dopmenu/menu'
 
 export const BottomMenu = ({hide, togle, visible, insluedField, controlButtons, otherField})=>{
-  const auth = useContext(AuthContext)
   const bottomMenuRef = useRef(null)
-  const history = useHistory()
 
   const closeMenu = ()=>{
     if(bottomMenuRef.current){

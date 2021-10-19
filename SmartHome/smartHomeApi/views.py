@@ -11,7 +11,7 @@ from .logic.getDevices import giveDevice
 from .logic.editDevice import addDevice, editDevice, deleteDevice
 from .logic.config.configget import GiveServerConfig,readConfig
 from .logic.config.configset import ServerConfigEdit
-from .logic.Cart import setPage,getPage,addHomePage
+from .logic.Cart import setPage,getPage,addHomePage,deleteHomePage
 from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
@@ -439,6 +439,23 @@ class AddHomePage(APIView):
                 user.userconfig.save()
             return Response("ok",status=201)
         return Response(res,status=400)
+
+class DeleteHomePage(APIView):
+    """docstring for DeleteHomePage."""
+    def post(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        data = json.loads(request.body)
+        res = deleteHomePage(data["name"])
+        if(res["type"]=="ok"):
+            if "userId" in authData:
+                user = User.objects.get(id=authData.get("userId"))
+                user.userconfig.page = "basePage"
+                user.userconfig.save()
+            return Response("ok",status=201)
+        return Response(res,status=400)
+
 
 # media views
 

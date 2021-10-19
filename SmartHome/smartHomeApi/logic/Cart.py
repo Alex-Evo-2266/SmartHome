@@ -35,6 +35,14 @@ def addHomePage(name):
         print(e)
         return {"type":"error","message":e}
 
+def deleteHomePage(name):
+    try:
+        file_path = os.path.join(PAGES_DIR,name)
+        file_path = file_path + ".yml"
+        os.remove(file_path)
+        return {"type":"ok","message":""}
+    except Exception as e:
+        return {"type":"error","message":e}
 
 def setPage(data):
     print(data)

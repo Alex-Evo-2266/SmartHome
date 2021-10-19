@@ -1,2 +1,27 @@
-cards: []
+cards:
+- children:
+  - deviceId: 3
+    height: 1
+    index: 0
+    name: "xiaomi \u0442\u0435\u043C\u043F\u0435\u0440\u0430\u0442\u0443\u0440\u043D\
+      \u044B\u0439 \u0434\u0430\u0442\u0447\u0438\u043A"
+    order: 0
+    type: sensor
+    typeAction: temperature
+    width: 2
+  - deviceId: 3
+    height: 1
+    index: 1
+    name: "xiaomi \u0442\u0435\u043C\u043F\u0435\u0440\u0430\u0442\u0443\u0440\u043D\
+      \u044B\u0439 \u0434\u0430\u0442\u0447\u0438\u043A"
+    order: 0
+    type: sensor
+    typeAction: pressure
+    width: 2
+  index: 0
+  mainId: null
+  name: "\u043A\u043B\u0438\u043C\u0430\u0442"
+  order: '0'
+  type: base
+  width: 2
 name: testPage

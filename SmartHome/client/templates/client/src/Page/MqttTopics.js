@@ -90,11 +90,11 @@ export const MqttPage = ()=>{
       dopmenu: [
         {
           title:"clear",
-          active:clearMqtt
+          onClick:clearMqtt
         },
         {
           title:"update",
-          active:getDev
+          onClick:getDev
         }
       ]
     })

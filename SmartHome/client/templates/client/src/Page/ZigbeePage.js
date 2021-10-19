@@ -54,16 +54,16 @@ export const ZigbeePage = ()=>{
       dopmenu: [
         {
           title:"update",
-          active:zigbeeDevice
+          onClick:zigbeeDevice
         },
         {
           title:"reboot",
-          active:rebootStik
+          onClick:rebootStik
         },
         {
           title:"pairing mode",
-          check:permitJoin,
-          active:()=>pairing(!permitJoin)
+          active:permitJoin,
+          onClick:()=>pairing(!permitJoin)
         },
       ]
     })
