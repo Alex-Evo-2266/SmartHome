@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {ContextMenuElement} from './contextMenuElement'
 
 export const ContextMenu = ({buttons=[], className, style, hide}) =>{
 
@@ -9,7 +10,7 @@ export const ContextMenu = ({buttons=[], className, style, hide}) =>{
   return(
     <>
     <div className="backGlass" onClick={hide}></div>
-    <div onClick={hide} style={style} className={`contextmenu show ${className}`}>
+    <div style={style} className={`contextmenu show ${className}`}>
       {
         buttons.map((item, index)=>{
           if (item.type === "dividers")
@@ -17,10 +18,7 @@ export const ContextMenu = ({buttons=[], className, style, hide}) =>{
               <div key={index} className="dividers"></div>
             )
           return(
-            <div key={index} className="contextmenuElement" onClick={item.onClick}>
-              <span className="state">{(item.active)?<i className="fas fa-check"></i>:null}</span>
-              <span className="content">{item.title}</span>
-            </div>
+            <ContextMenuElement key={index} item={item} hide={hide}/>
           )
         })
       }

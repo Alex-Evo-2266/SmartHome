@@ -72,7 +72,7 @@ export const GalleryPage = () => {
   },[setData])
 
   return(
-    <div className="conteiner">
+    <div className="conteiner top bottom">
     {
       (visible)?
       <ImageDitail data={ditailElement} hide={()=>setVisible(false)}/>:

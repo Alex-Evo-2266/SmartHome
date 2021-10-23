@@ -25,6 +25,8 @@
   display: block;
 }
 .contextmenuElement{
+  display: flex;
+  justify-content: space-between;
   padding: 0 5px;
   min-width: 100px;
   line-height: 40px;

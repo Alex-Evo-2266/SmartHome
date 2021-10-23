@@ -35,7 +35,7 @@ export const LeftMenu = ({hide,show, visible, insluedField, otherField, user})=>
     }
     <div onClick={closeMenu} className={`navigationRail ${(visible)?"active":""}`}>
     <ul className="baseMenu">
-      <li data-el={(location.pathname==="/home")?"sub":""} onClick={()=>togleSubMenu("/home")}>
+      <li>
         <NavLink to = "/home">
           <i className="fas fa-home"></i>
           <span>Home</span>

@@ -11,6 +11,14 @@
   border-radius: 4px;
   box-shadow: 0 0 10px #000;
 }
+@media (max-width:700px) {
+  .CardConteiner{
+    padding: 0 0 60px 0;
+  }
+  .CardConteiner .NewCardElement{
+    margin: 20px 0 0 0;
+  }
+}
 .NewCardElement .NewCardHeader{
   min-height: 80px;
   position: relative;

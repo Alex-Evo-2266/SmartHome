@@ -1,11 +1,25 @@
-import React from 'react'
+import React, {useEffect,useState} from 'react'
 import {Menu as DopMenu} from '../dopmenu/menu'
+import {Tabs} from './tabs'
 
 export const TopMenu = ({title, togle, buttons, controlButtons})=>{
+  const [sizeWidth, setSizeWidth] = useState(window.innerWidth)
 
   const contextMenu = (e) =>{
     e.preventDefault()
   }
+
+  useEffect(()=>{
+    window.addEventListener("resize",resizeThrottler)
+    function resizeThrottler(event) {
+      setSizeWidth(event.target.innerWidth)
+    }
+    return ()=>{
+      window.removeEventListener("resize", resizeThrottler);
+    }
+  },[])
+
+
 
   return(
     <div className="topMenu">
@@ -17,15 +31,7 @@ export const TopMenu = ({title, togle, buttons, controlButtons})=>{
       :null
     }
       <h2>{title}</h2>
-      <div className="tabs">
-        {
-          buttons?.map((item, index)=>{
-            return(
-              <div onContextMenu={contextMenu} key={index} className={`tabButton ${(item.active)?"active":""}`} onClick={item.action}>{item.title}</div>
-            )
-          })
-        }
-      </div>
+      <Tabs buttons={buttons}/>
       <div className="controlConteiner">
       {
         (controlButtons?.search)?

@@ -165,7 +165,7 @@ const getPages= useCallback(()=>{
     if(page === item)
       b.active = true
     else
-      b.action = ()=>changePage(item)
+      b.onClick = ()=>changePage(item)
     return b
   })
   return arr
@@ -190,9 +190,11 @@ const getdopMenu= useCallback(()=>{
         items:cardsList,
         active: addCart
       })
-    },
-    {
+    },{
       type: "dividers"
+    },{
+      title: "pages",
+      sub:getPages()
     },{
       title: "create page",
       onClick: ()=>show("text",{
@@ -211,7 +213,7 @@ const getdopMenu= useCallback(()=>{
     })
   }
   return arr
-},[page,deletePage,addPage,show,addCart,saveCarts,editMode])
+},[page,deletePage,addPage,show,addCart,saveCarts,editMode,getPages])
 
 useEffect(()=>{
   message(error,"error")
@@ -226,7 +228,6 @@ useEffect(()=>{
 
 useEffect(()=>{
   setData("Home",{
-    buttons:getPages(),
     dopmenu:getdopMenu()
   })
 },[setData,editMode, getdopMenu,addCart,getPages, saveCarts,show,addPage, changePage])
@@ -290,7 +291,7 @@ if(carts===[]){
     <AddControlState>
       <CartEdit/>
       <AddControl/>
-      <div className = {`conteiner top bottom home`}>
+      <div className = {`conteiner top home`}>
         <div ref={conteiner} className = "conteinerHome flexHome">
         {
           sortedCarts.map((item,index)=>{

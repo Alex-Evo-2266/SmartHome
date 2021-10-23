@@ -3,7 +3,7 @@
 
 @import "./variable/base.css";
 
-@import "./Menu/leftMenu.base.css";
+@import "./Menu/Menu.base.css";
 /* @import "./header/header.base.css"; */
 @import "./deviceCart/deviceCart.base.css";
 @import "./infoCard/infoCard.css";

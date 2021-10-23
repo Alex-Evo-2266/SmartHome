@@ -21,6 +21,12 @@
 *.top{
   padding-top: 56px;
 }
+.conteiner.top{
+  padding-top: 56px;
+}
+.conteiner.tabs{
+  padding-top: 56px;
+}
 
 /* .conteiner.home
 {
@@ -58,6 +64,12 @@
   .conteiner{
     padding-left: 0;
     width: 100%;
+  }
+  .conteiner.top{
+    padding-top: 0;
+  }
+  .conteiner.bottom{
+    padding-bottom: 56px;
   }
   .conteiner.home{
     padding-top:0;
