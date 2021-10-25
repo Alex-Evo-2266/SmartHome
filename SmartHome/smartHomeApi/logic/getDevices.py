@@ -40,6 +40,8 @@ def device(item):
                 dev = Yeelight(id=id)
             if(typeConnect == "mqtt"):
                 dev = MQTTDevice(id=id)
+            if(typeConnect == "zigbee"):
+                dev = MQTTDevice(id=id)
             if(not dev.get_device()):
                 return {
                 **dev.get_Base_Info(),

@@ -28,7 +28,7 @@ li.hidingLi.show{
 
 }
 .LiContent{
-  margin-top: 40px;
+  margin-top: 50px;
 }
 li.hidingLi .LiTitle{
   position: absolute;
@@ -60,10 +60,10 @@ li.hidingLi .textInput{
   border-radius: 5px;
   border: none;
 }
-li.hidingLi label{
+/* li.hidingLi label{
   padding: 30px;
   display: block;
-}
+} */
 li.hidingLi label h5{
   position: relative;
   width: 100%;

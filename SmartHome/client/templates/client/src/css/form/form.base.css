@@ -184,10 +184,10 @@
   border-radius: 5px;
   border: none;
 }
-.editDevice li label{
+/* .editDevice li label{
   padding:15px;
   display: block;
-}
+} */
 .editDevice li label h5{
   position: relative;
   width: 100%;

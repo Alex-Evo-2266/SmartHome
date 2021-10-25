@@ -87,7 +87,7 @@ CORS_ALLOWED_ORIGINS  = [
      "http://localhost:3000" ,
 ]
 CSRF_TRUSTED_ORIGINS = [
-     "localhost:3000" , 
+     "localhost:3000" ,
 ]
 
 # docker values
@@ -178,6 +178,7 @@ STATICFILES_DIRS = [
 ]
 
 SERVER_CONFIG = os.path.join(BASE_DIR, "config","server-config.yml")
+DEVICETYPES = os.path.join(BASE_DIR, "config","devTypes.yml")
 SCRIPTS_DIR = os.path.join(BASE_DIR, "config","scripts")
 STYLES_DIR = os.path.join(BASE_DIR, "config","styles")
 PAGES_DIR =  os.path.join(BASE_DIR, "config","pages")

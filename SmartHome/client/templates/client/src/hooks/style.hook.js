@@ -56,7 +56,6 @@ const textColor = (fon)=>{
   var r = (num >> 16);
   var b = ((num >> 8) & 0x00FF);
   var g = (num & 0x0000FF);
-  console.log(r,g,b);
   if ((r < 200||g < 200||b < 200))
   {
     color="#fff";
@@ -134,7 +133,6 @@ export const useCastomStyle = () => {
   const adaptiveBackground = useCallback((images)=>{
     if(!images)
       return defbacground()
-    console.log(backgroundType());
     setBackground(getimage(images,backgroundType()).image)
   },[setBackground])
 

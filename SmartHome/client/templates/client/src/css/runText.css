@@ -14,6 +14,6 @@
   animation: runtext 8s linear infinite;
 }
 @keyframes runtext {
-  from { text-indent: 0 }
-    to { text-indent: -50%; }
+  from { text-indent: 25% }
+    to { text-indent: -25%; }
 }

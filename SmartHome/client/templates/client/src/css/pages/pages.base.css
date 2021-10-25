@@ -59,6 +59,12 @@
   margin: 10px 15px;
   position: relative;
 }
+.configTitle p{
+  padding: 0;
+  font-size: 16px;
+  text-align: left;
+  margin: 20px 10px;
+}
 .configElement .switchText,
 .configElement .text,
 .configElement p

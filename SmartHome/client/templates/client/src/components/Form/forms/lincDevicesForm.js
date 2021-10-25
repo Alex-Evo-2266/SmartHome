@@ -16,7 +16,7 @@ if(!device){
     <Loader/>
   )
 }
-if(device.DeviceTypeConnect==="mqtt"){
+if(device.DeviceTypeConnect==="mqtt" || device.DeviceTypeConnect==="zigbee"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">

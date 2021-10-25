@@ -61,7 +61,7 @@ export const ServerOption = () =>{
 
   return(
     <div className = "pagecontent">
-      <div className="configElement">
+      <div className="configTitle">
         <p className="text">Mqtt broker</p>
       </div>
       <div className="configElement">
@@ -89,7 +89,7 @@ export const ServerOption = () =>{
         </div>
       </div>
       <div className="dividers"></div>
-      <div className="configElement">
+      <div className="configTitle">
         <p className="text">Zigbee2mqtt</p>
       </div>
       <div className="configElement">
@@ -99,7 +99,7 @@ export const ServerOption = () =>{
         </div>
       </div>
       <div className="dividers"></div>
-      <div className="configElement">
+      <div className="configTitle">
         <p className="text">Server email</p>
       </div>
       <div className="configElement">

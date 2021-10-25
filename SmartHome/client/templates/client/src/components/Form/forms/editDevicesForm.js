@@ -16,6 +16,7 @@ export const EditDevicesForm = (props)=>{
 
   const usedevice = useCallback(async()=>{
     const data = await request(`/api/devices/${props.id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    console.log(data);
     setDevice(data);
   },[request,auth.token,props.id])
 
@@ -37,7 +38,7 @@ export const EditDevicesForm = (props)=>{
     )
   }
 
-if(device.DeviceTypeConnect==="mqtt"){
+if(device.DeviceTypeConnect==="mqtt" || device.DeviceTypeConnect==="zigbee"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">

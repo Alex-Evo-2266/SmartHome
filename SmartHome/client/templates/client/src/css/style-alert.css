@@ -1,20 +1,31 @@
 .alert p{
   margin: 0 30px 0 0;
   padding: 0;
+  font-size: 20px;
 }
 .alert{
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 56px;
+  left: 56px;
   position: fixed;
-  width: 70%;
+  width: calc(100% - 56px - 20px);
+  transform: translateY(calc(-100% - 56px));
   min-height: 50px;
-  z-index: 100;
+  z-index: 96;
   padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #000,
-              inset 0 0 10px #000;
-
+  background: var(--color-normal);
+  color: var(--text-color-normal-fon);
+  box-shadow:  0 10px 20px rgba(0, 0, 0, 0.5);
+  transition: 0.5s;
+}
+.alert.alert-general{
+  z-index: 101;
+  top: 0;
+  width: calc(100% - 20px);
+  transform: translateY(-100%);
+  left: 0;
+}
+.alert.show{
+  transform: none;
 }
 .alert.alert-info,
 .alert.alert-information{
@@ -28,12 +39,12 @@
   height: 100%;
   position: relative;
 }
-.alert-warning,
+/* .alert-warning,
 .alert-error{
   background: rgba(255,10,10,0.8);
   border: 2px solid #751212;
   color: #fff;
-}
+} */
 
 .alert-ok,
 .alert-success{
@@ -41,12 +52,12 @@
   border: 2px solid #127512;
   color: #000;
 }
-.alert-dialog,
+/* .alert-dialog,
 .alert-messageDialog{
   background: var(--content-color);
   border: 2px solid var(--head-color);
   color: var(--text-color);
-}
+} */
 
 .alert-messageDialog input{
   width: 50%;
@@ -93,8 +104,9 @@
   color: #fff;
 }
 .div-alert-btnConteiner{
+  margin-top: 12px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 .div-alert-btnConteiner button{

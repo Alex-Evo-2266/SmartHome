@@ -1,0 +1,21 @@
+- title: "light"
+  devices:
+  - "yeelight"
+  - "mqtt"
+  - "zigbee"
+- title: "switchs"
+  devices:
+  - "mqtt"
+  - "zigbee"
+- title: "wireless switchs"
+  devices:
+  - "mqtt"
+  - "zigbee"
+- title: "relay"
+  devices:
+  - "mqtt"
+  - "zigbee"
+- title: "socket"
+  devices:
+  - "mqtt"
+  - "zigbee"

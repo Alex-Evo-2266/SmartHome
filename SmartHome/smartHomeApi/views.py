@@ -15,6 +15,7 @@ from .logic.Cart import setPage,getPage,addHomePage,deleteHomePage
 from .logic.gallery import getFonUrl,deleteImage,linkbackground
 from .logic.script import addscript,scripts,scriptDelete,script,scriptsetstatus,runScript as runscript
 from .logic.deviceSetValue import setValue
+from .logic.deviceTypes import getDeviceTypes
 from .logic.serverData import getServerData
 from .logic.deviceControl.mqttDevice.mqttScan import getTopicksAndLinc,ClearTopicks
 from .logic.deviceControl.zigbee.zigbee import reboot, permission_join, zigbeeDeviceRename, zigbeeDeviceDelete
@@ -276,6 +277,18 @@ class DevicePutPostView(APIView):
         if editDevice(data):
             return Response("ok",status=201)
         return Response(status=400)
+
+class DeviceTypesView(APIView):
+    """docstring for SetValueDevice."""
+    def get(self,request):
+        authData = auth(request)
+        if not authData:
+            return Response(status=403)
+        ret = getDeviceTypes()
+        print(ret)
+        if(ret["status"] == "ok"):
+            return Response(ret["data"],status=201)
+        return Response(ret,status=400)
 
 class SetValueDevice(APIView):
     """docstring for SetValueDevice."""

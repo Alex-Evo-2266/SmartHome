@@ -19,7 +19,7 @@ def setValueAtToken(address,value):
     devices = devicesArrey.all()
     for item in devices:
         dev = item["device"]
-        if(dev.typeConnect != "mqtt"):
+        if(dev.typeConnect != "mqtt" and dev.typeConnect != "zigbee"):
             continue
         base_address = dev.coreAddress
         if(dev.valueType=="json"):
@@ -45,9 +45,10 @@ def deviceSetStatus(id, type,value,script=True):
         for item in values:
             if item.name==type:
                 if(item.type=="binary"):
-                    if(value==item.high):
+                    print(item.name,value,item.high,item.low,str(value)==str(item.high))
+                    if(str(value)==str(item.high)):
                         value = "1";
-                    elif(value==item.low):
+                    elif(str(value)==str(item.low)):
                         value = "0";
                     else:
                         return None

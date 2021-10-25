@@ -13,26 +13,27 @@ export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
   const [configForm, setConfigForm] = useState(getConf(deviceData.DeviceType||"other"));
   const {request, error, clearError} = useHttp();
 
-  const validCountField = (data)=>{
-    if(!deviceData.DeviceType||deviceData.DeviceType==="other"||deviceData.DeviceType==="sensor")return data
-    let data1 = getConf(deviceData.DeviceType||"other").config.slice()
-    let newdata = []
-    for (var item of data1) {
-      let validef = false
-      for (var item2 of data) {
-        if(item.name===item2.name){
-          validef = true
-          newdata.push(item2)
-        }
-      }
-      if(!validef){
-        let newField = item
-        newField.address = ""
-        newdata.push(newField)
-      }
-    }
-    return newdata
-  }
+  // const validCountField = (data)=>{
+  //   return data;
+  //   if(!deviceData.DeviceType||deviceData.DeviceType==="other"||deviceData.DeviceType==="sensor")return data
+  //   let data1 = getConf(deviceData.DeviceType||"other").config.slice()
+  //   let newdata = []
+  //   for (var item of data1) {
+  //     let validef = false
+  //     for (var item2 of data) {
+  //       if(item.name===item2.name){
+  //         validef = true
+  //         newdata.push(item2)
+  //       }
+  //     }
+  //     if(!validef){
+  //       let newField = item
+  //       newField.address = ""
+  //       newdata.push(newField)
+  //     }
+  //   }
+  //   return newdata
+  // }
 
   useEffect(()=>{
     message(error,"error")
@@ -56,7 +57,7 @@ export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
     DeviceTypeConnect:deviceData.DeviceTypeConnect||"mqtt",
     RoomId:deviceData.RoomId,
   })
-  const [field, setField] = useState(validCountField(deviceData.DeviceConfig||[]));
+  const [field, setField] = useState(deviceData.DeviceConfig||[]);
   const [count, setCount] = useState(deviceData.DeviceConfig.length);
 
   useEffect(()=>{
@@ -142,7 +143,7 @@ const changeHandlerTest = event=>{
   }
 
   const deleteHandler = async () =>{
-    message("All dependent scripts and controls will be removed along with the device. Delete?","dialog",async()=>{
+    message("All dependent scripts and controls will be removed along with the device. Delete?","general",async()=>{
       await request(`/api/devices/${device.DeviceId}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       hide();
     },"no")
@@ -203,7 +204,7 @@ const changeHandlerTest = event=>{
       </div>
       <div className="configElement">
         <div className="input-data">
-          <select className = "textInput" name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
+          <select name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
             <option value="json">json</option>
             <option value="value">value</option>
           </select>
@@ -222,60 +223,78 @@ const changeHandlerTest = event=>{
             <HidingLi key={index} title = {item.name}>
             {
               (configForm.editType)?
-              <label>
-                <h5>Enter the type</h5>
-                <input data-id={index} className = "textInput" placeholder="type" type="text" name="name" value={item.name} onChange={changeHandlerField} required/>
-              </label>:null
+              <div className="configElement">
+                <div className="input-data">
+                  <input data-id={index} type="text" name="name" value={item.name} onChange={changeHandlerField} required/>
+                  <label>name</label>
+                </div>
+              </div>:null
             }
-            <label>
-              <h5>Enter the address</h5>
-              <input data-id={index} className = "textInput" placeholder="address" type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
-            </label>
+            <div className="configElement">
+              <div className="input-data">
+                <input data-id={index} type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
+                <label>address</label>
+              </div>
+            </div>
             {
               (configForm.editTypeControl)?
-              <label>
-                <h5>Type</h5>
-                <select className = "textInput" data-id={index} name="type" value={item.type} onChange={changeHandlerField}>
-                  <option value="binary">binary</option>
-                  <option value="text">text</option>
-                  <option value="number">number</option>
-                  <option value="enum">enum</option>
-                </select>
-              </label>:null
+              <div className="configElement">
+                <div className="input-data">
+                  <select data-id={index} name="type" value={item.type} onChange={changeHandlerField}>
+                    <option value="binary">binary</option>
+                    <option value="text">text</option>
+                    <option value="number">number</option>
+                    <option value="enum">enum</option>
+                  </select>
+                <label>type</label>
+              </div>
+            </div>:null
             }
-            <label>
-              <h5>Enter the control</h5>
-              <input data-id={index} type="checkbox" className = "textInput" placeholder="unit" name="control" checked={Boolean(item.control)} onChange={changeHandlerFieldChek} required/>
-            </label>
+            <div className="configElement" style={{justifyContent:"center"}}>
+              <div className="checkbox-btn">
+                <input data-id={index} type="checkbox" name="control" checked={Boolean(item.control)} onChange={changeHandlerFieldChek} required/>
+                <div><span className="slide"></span></div>
+              </div>
+            </div>
             {
               (item.type==="number"||item.type==="binary")?
               <>
-              <label>
-                <h5>Enter the min</h5>
-                <input data-id={index} className = "textInput" placeholder="min" type={(item.type==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandlerField} required/>
-              </label>
-              <label>
-                <h5>Enter the max</h5>
-                <input data-id={index} className = "textInput" placeholder="max" type={(item.type==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
-              </label>
+              <div className="configElement">
+                <div className="input-data">
+                  <input data-id={index} type={(item.type==="range")?"number":"text"} name="low" value={item.low} onChange={changeHandlerField} required/>
+                  <label>min</label>
+                </div>
+              </div>
+              <div className="configElement">
+                <div className="input-data">
+                  <input data-id={index} type={(item.type==="range")?"number":"text"} name="high" value={item.high} onChange={changeHandlerField} required/>
+                  <label>max</label>
+                </div>
+              </div>
               </>:
               (item.type==="enum")?
-              <label>
-                <h5>Enter the enum</h5>
-                <input data-id={index} className = "textInput" placeholder="enum" type="text" name="values" value={item.values} onChange={changeHandlerField} required/>
-              </label>
+              <div className="configElement">
+                <div className="input-data">
+                  <input data-id={index} type="text" name="values" value={item.values} onChange={changeHandlerField} required/>
+                  <label>enum</label>
+                </div>
+              </div>
               :null
             }
-            <label>
-              <h5>Enter the icon</h5>
-              <input data-id={index} className = "textInput" placeholder="icon" name="icon" value={item.icon} onChange={changeHandlerField} required/>
-            </label>
+            <div className="configElement">
+              <div className="input-data">
+                <input data-id={index} name="icon" value={item.icon} onChange={changeHandlerField} required/>
+                <label>icon</label>
+              </div>
+            </div>
             {
               (item.type==="number")?
-              <label>
-                <h5>Enter the unit</h5>
-                <input data-id={index} className = "textInput" placeholder="unit" name="unit" value={item.unit} onChange={changeHandlerField} required/>
-              </label>:null
+              <div className="configElement">
+                <div className="input-data">
+                  <input data-id={index} name="unit" value={item.unit} onChange={changeHandlerField} required/>
+                  <label>unit</label>
+                </div>
+              </div>:null
             }
             {
               (configForm.editCountField)?

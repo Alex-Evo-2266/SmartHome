@@ -34,8 +34,8 @@ export const ZigbeeElement = ({data}) =>{
       let confel = {
         name:item.name,
         address:item.property,
-        low:item.value_min||item.value_off||0,
-        high:item.value_max||item.value_on||10000000,
+        low:item.value_min||item.value_off,
+        high:item.value_max||item.value_on,
         icon:"",
         type:type,
         unit:item.unit,
@@ -45,7 +45,7 @@ export const ZigbeeElement = ({data}) =>{
       conf.push(confel)
     }
     form.show("LinkDevices",null,{
-      DeviceTypeConnect: "mqtt",
+      DeviceTypeConnect: "zigbee",
       DeviceType: "other",
       DeviceAddress: data.allAddress,
       DeviceValueType: "json",

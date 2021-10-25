@@ -54,7 +54,6 @@ a.button.highSelection{
   padding-right: 16px;
   font-size: 15px;
   margin: 0;
-  margin-bottom: 20px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -76,7 +75,6 @@ a.button.normalSelection{
   padding-right: 16px;
   font-size: 15px;
   margin: 0;
-  margin-bottom: 20px;
   border-radius: 4px;
   cursor: pointer;
 }

@@ -18,6 +18,7 @@ urlpatterns = [
     path('user/styles',views.Style.as_view()),
     path('devices/<int:id>',views.DeviceGetDeleteView.as_view()),
     path('devices',views.DevicePutPostView.as_view()),
+    path('devices/types',views.DeviceTypesView.as_view()),
     path('devices/value/set',views.SetValueDevice.as_view()),
     path('devices/status/set',views.SetStatusDevice.as_view()),
     path('charts/get',views.GetCharts.as_view()),

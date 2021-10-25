@@ -19,11 +19,11 @@ def addTopic(topic,message):
     }
     id = getIdTopic(topic)
     print("send")
-    sendData("mqtt",mqttTopics)
     if(id != None):
         mqttTopics[id] = t
-        return t
-    mqttTopics.append(t)
+    else:
+        mqttTopics.append(t)
+    sendData("mqtt",mqttTopics)
     return t
 
 def getTopicksAll():

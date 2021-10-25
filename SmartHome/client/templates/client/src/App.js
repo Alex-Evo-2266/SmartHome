@@ -16,6 +16,7 @@ import {CastomizeStyle} from './components/UserStyle/StyleState.js'
 import {AuthContext} from './context/AuthContext'
 import {TerminalCart} from './components/terminal/terminalCart'
 import {SocketState} from './hooks/socket.hook.js'
+import {TypesDeviceState} from './components/typeDevices/typeDevicesState'
 import './css/style-auth.css'
 import './icon/css/all.min.css'
 import './css/style-alert.css'
@@ -41,6 +42,7 @@ function App() {
     <AlertState>
     <DialogWindowState>
     <CastomizeStyle token={token} ready={ready}>
+    <TypesDeviceState token={token} ready={ready}>
     <FormState>
     <TerminalState>
     <AddScriptState>
@@ -59,6 +61,7 @@ function App() {
     </AddScriptState>
     </TerminalState>
     </FormState>
+    </TypesDeviceState>
     </CastomizeStyle>
     </DialogWindowState>
     </AlertState>
