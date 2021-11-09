@@ -35,7 +35,7 @@ li.hidingLi .LiTitle{
   top: 0;
   left: 0;
 }
-li.hidingLi .fas{
+li.hidingLi .iconLI{
   position: absolute;
   top: 0;
   right: 0;
@@ -44,7 +44,7 @@ li.hidingLi .fas{
   transition: 0.5s;
 
 }
-li.hidingLi.show .fas{
+li.hidingLi.show .iconLI{
   transform: rotate(-180deg);
 }
 li.hidingLi .textInput{

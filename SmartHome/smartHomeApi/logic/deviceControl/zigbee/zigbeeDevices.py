@@ -25,8 +25,16 @@ def zigbeeInfoSearch(topic, message):
             decodeZigbeeConfig(json.loads(message))
 
 def decodEvent(data):
+    global zigbeeDevices
+    newdata = data["data"]
+    newdata["root_address"] = getConfig("zigbee2mqtt")
+    if(data["type"]=="device_interview"):
+        sendData("connect_device",newdata)
+    if(data["type"]=="device_joined"):
+        sendData("start_connect",newdata)
     if(data["type"]=="device_leave"):
-        pass
+        sendData("leave",newdata)
+
 
 
 

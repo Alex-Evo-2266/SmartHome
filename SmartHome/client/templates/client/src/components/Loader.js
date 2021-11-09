@@ -1,8 +1,8 @@
 import React from 'react'
 
-export const Loader = () =>{
+export const Loader = ({style}) =>{
   return(
-  <div className="loader">
+  <div className="loader" style={{...style}}>
     <div className="face face1">
       <div className="circle"></div>
     </div>

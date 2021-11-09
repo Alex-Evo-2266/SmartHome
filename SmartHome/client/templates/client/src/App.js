@@ -18,7 +18,7 @@ import {TerminalCart} from './components/terminal/terminalCart'
 import {SocketState} from './hooks/socket.hook.js'
 import {TypesDeviceState} from './components/typeDevices/typeDevicesState'
 import './css/style-auth.css'
-import './icon/css/all.min.css'
+import './icon/css/all.css'
 import './css/style-alert.css'
 import './css/style-components.css'
 

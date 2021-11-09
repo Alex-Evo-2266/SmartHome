@@ -1,12 +1,8 @@
-import React,{useContext,useState,useEffect,useCallback} from 'react'
-import {TypeDeviceContext} from '../../components/typeDevices/typeDevicesContext.js'
-import {useHttp} from '../../hooks/http.hook'
-import {useChecked} from '../../hooks/checked.hook'
+import React from 'react'
 import {useMessage} from '../../hooks/message.hook'
 
 export const AddDevicesPage2Yeelight = ({form, setForm, next, backPage}) => {
   const {message} = useMessage();
-  const {type} = useContext(TypeDeviceContext)
 
   const updata = (key, value)=>{
     setForm({...form, [key]:value})
@@ -22,6 +18,10 @@ export const AddDevicesPage2Yeelight = ({form, setForm, next, backPage}) => {
 
   return(
     <div className="allFon">
+    <div className="infoElement">
+      <p>1. Через оригинальное приложение необходимо включить у устройства управление по LAN.</p>
+      <p>2. Введите ip адресс устройства (его можно посмотреть в том же приложении).</p>
+    </div>
     <div className="configElement">
       <div className="input-data">
         <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="DeviceAddress" type="text" value={form.DeviceAddress}></input>

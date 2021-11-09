@@ -19,3 +19,7 @@
   devices:
   - "mqtt"
   - "zigbee"
+- title: "sensor"
+  devices:
+  - "mqtt"
+  - "zigbee"

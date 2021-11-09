@@ -1,9 +1,9 @@
-import React,{useEffect,useState,useCallback,useContext} from 'react'
+import React,{useEffect,useState,useCallback} from 'react'
 import {TypeDeviceContext} from './typeDevicesContext'
 import {useHttp} from '../../hooks/http.hook'
 
 export const TypesDeviceState = ({children, token, ready}) =>{
-  const {request, error, clearError} = useHttp();
+  const {request} = useHttp();
   const [types, setTypes] = useState([])
   const [flag, setFlag] = useState(true)
 

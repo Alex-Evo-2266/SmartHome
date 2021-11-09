@@ -15,7 +15,9 @@ export const ServerOption = () =>{
     passwordMqttBroker:'',
     zigbee2mqttTopic:'',
     emailLogin:'',
-    emailPass:''
+    emailPass:'',
+    city:'',
+    weatherKey:''
   });
 
   useEffect(()=>{
@@ -48,6 +50,8 @@ export const ServerOption = () =>{
       zigbee2mqttTopic:data.zigbee2mqttTopic||"",
       emailLogin:data.emailLogin||"",
       emailPass:data.emailPass||"",
+      city:data.city||"",
+      weatherKey:data.weatherKey||""
     })
   },[request,auth.token])
 
@@ -112,6 +116,22 @@ export const ServerOption = () =>{
         <div className="input-data">
           <input onChange={changeHandler} required name="emailPass" type="text" value={serverconf.emailPass}/>
           <label>password</label>
+        </div>
+      </div>
+      <div className="dividers"></div>
+      <div className="configTitle">
+        <p className="text">Weather</p>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="city" type="text" value={serverconf.city}/>
+          <label>city</label>
+        </div>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="weatherKey" type="text" value={serverconf.weatherKey}/>
+          <label>key</label>
         </div>
       </div>
       <div className="dividers"></div>

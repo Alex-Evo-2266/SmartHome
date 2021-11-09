@@ -3,6 +3,7 @@ import {HidingLi} from '../../../hidingLi.js'
 import {useHttp} from '../../../../hooks/http.hook'
 import {useMessage} from '../../../../hooks/message.hook'
 import {AuthContext} from '../../../../context/AuthContext.js'
+import {IconChoose} from '../../../iconChoose'
 import {getConf} from '../../../addDeviceComponent/config/defaultTypeDevConfig'
 import {useChecked} from '../../../../hooks/checked.hook'
 
@@ -71,6 +72,14 @@ export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
     let index = event.target.dataset.id
     let arr = field.slice()
     let newcom = { ...arr[index], [event.target.name]: event.target.value }
+    arr[index] = newcom
+    setField(arr)
+  }
+
+  const changeIcon = (val, id) => {
+    let index = id
+    let arr = field.slice()
+    let newcom = { ...arr[index], icon: val}
     arr[index] = newcom
     setField(arr)
   }
@@ -281,12 +290,7 @@ const changeHandlerTest = event=>{
               </div>
               :null
             }
-            <div className="configElement">
-              <div className="input-data">
-                <input data-id={index} name="icon" value={item.icon} onChange={changeHandlerField} required/>
-                <label>icon</label>
-              </div>
-            </div>
+            <IconChoose dataId={index} value={item.icon} onChange={changeIcon}/>
             {
               (item.type==="number")?
               <div className="configElement">

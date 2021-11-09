@@ -5,6 +5,7 @@
   padding: 0;
   width: 100%;
   overflow: scroll;
+  max-height: calc(100vh - 56px);
 }
 table.mqttTable{
   width: 100%;
@@ -39,4 +40,17 @@ table.mqttTable tbody tr{
 }
 table.mqttTable tbody tr:hover{
   background: var(--btn-color-normal);
+}
+.iconbutton{
+  padding: 2px 4px;
+  border: none;
+  font-size: 20px;
+  border-radius: 4px;
+  color: var(--text-color-normal-fon);
+  background: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.iconbutton:active{
+  box-shadow: none;
 }

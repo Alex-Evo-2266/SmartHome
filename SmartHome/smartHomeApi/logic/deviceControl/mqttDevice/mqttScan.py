@@ -18,7 +18,7 @@ def addTopic(topic,message):
         "message":message
     }
     id = getIdTopic(topic)
-    print("send")
+    print("send",topic)
     if(id != None):
         mqttTopics[id] = t
     else:

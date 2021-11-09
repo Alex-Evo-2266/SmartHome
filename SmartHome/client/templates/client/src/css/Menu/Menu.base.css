@@ -115,6 +115,16 @@
   width: 256px;
   overflow-y: scroll;
 }
+.navigationRail::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(1px);
+  z-index: -1;
+}
 .topMenu .tabsConteiner{
   height: 100%;
   margin-right: 56px;
@@ -327,6 +337,7 @@
   right: 0;
   top: 0;
   height: 56px;
+  min-width: 56px;
 }
 .controlConteiner .search,
 .controlConteiner .menuTogleBtn

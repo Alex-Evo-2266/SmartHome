@@ -12,7 +12,7 @@ export const TimeElement = ({deleteBtn,editBtn,index,data}) =>{
     index={index}
     data={data}
     >
-    {serverConfig.time || `${new Date().getHours()}:${new Date().getMinutes()}`}
+    <p className="sensor-value">{serverConfig.time || `${new Date().getHours()}:${new Date().getMinutes()}`}</p>
     </BaseElement>
   )
 }

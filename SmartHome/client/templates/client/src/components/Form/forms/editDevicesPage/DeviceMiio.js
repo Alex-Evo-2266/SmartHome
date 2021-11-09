@@ -1,6 +1,8 @@
 import React, {useState,useEffect,useContext} from 'react'
 import {useHttp} from '../../../../hooks/http.hook'
 import {useMessage} from '../../../../hooks/message.hook'
+import {HidingLi} from '../../../hidingLi.js'
+import {IconChoose} from '../../../iconChoose'
 import {AuthContext} from '../../../../context/AuthContext.js'
 import {useChecked} from '../../../../hooks/checked.hook'
 
@@ -27,7 +29,15 @@ export const DeviceMiioEdit = ({deviceData,hide,type="edit"})=>{
     DeviceTypeConnect:deviceData.DeviceTypeConnect,
     RoomId:deviceData.RoomId,
   })
+  const [field, setField] = useState(deviceData.DeviceConfig||[]);
 
+  const changeIcon = (val, id) => {
+    let index = id
+    let arr = field.slice()
+    let newcom = { ...arr[index], icon: val}
+    arr[index] = newcom
+    setField(arr)
+  }
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
   }
@@ -40,10 +50,9 @@ const changeHandlerTest = event=>{
 }
 
   const outHandler = async ()=>{
-    let conf = []
     let dataout = {
       ...device,
-      config:conf
+      config:field
     }
     if(type==="edit")
       await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
@@ -91,6 +100,15 @@ const changeHandlerTest = event=>{
           <input className = "textInput" placeholder="information" id="DeviceInformation" type="text" name="DeviceInformation" value={device.DeviceInformation} onChange={changeHandler} required/>
         </label>
       </li>
+      {
+        field.map((item, index)=>{
+          return(
+            <HidingLi key={index} title = {item.name}>
+              <IconChoose dataId={index} value={item.icon} onChange={changeIcon}/>
+            </HidingLi>
+          )
+        })
+      }
       <div className="controlForm" >
       {
         (type==="edit")?

@@ -39,6 +39,6 @@
   filter: brightness(80%);
 }
 .contextmenuElement .state{
-  width: 10px;
-  padding: 0 5px;
+  width: 40px;
+  text-align: center;
 }

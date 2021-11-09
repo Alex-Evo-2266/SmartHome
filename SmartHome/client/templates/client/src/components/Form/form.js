@@ -2,7 +2,6 @@ import React, {useContext} from 'react'
 import {FormContext} from './formContext'
 import {EditDevicesForm} from './forms/editDevicesForm'
 import {LincDevicesForm} from './forms/lincDevicesForm'
-import {ChoiceType} from './forms/choiceType'
 import {BackForm} from '../backForm'
 import {EditUserLevel} from './forms/editUserLevel'
 import {CreateStyle} from './forms/CreateStyle'
@@ -33,14 +32,6 @@ export const Form = ()=>{
     return (
       <BackForm onClick = {hide}>
         <LincDevicesForm hide = {hideAndApdata} data = {form.data}/>
-      </BackForm>
-    )
-  }
-
-  if(form.type === "ChoiceType"){
-    return (
-      <BackForm onClick = {hide}>
-        <ChoiceType hide = {hideAndApdata}/>
       </BackForm>
     )
   }

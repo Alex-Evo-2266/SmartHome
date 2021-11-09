@@ -1,9 +1,7 @@
-import React,{useContext,useState,useEffect,useCallback} from 'react'
+import React,{useContext} from 'react'
 import {TypeDeviceContext} from '../../components/typeDevices/typeDevicesContext.js'
-import {useHttp} from '../../hooks/http.hook'
-import {useChecked} from '../../hooks/checked.hook'
-import {useMessage} from '../../hooks/message.hook'
 import socketImg from '../../img/socket.png'
+import sensorImg from '../../img/sensor.png'
 import lampImg from '../../img/lamp.png'
 import switchImg from '../../img/switch.png'
 import relayImg from '../../img/relay.jpg'
@@ -13,7 +11,8 @@ const images = {
   light: lampImg,
   switch: switchImg,
   relay: relayImg,
-  socket: socketImg
+  socket: socketImg,
+  sensor: sensorImg
 }
 
 function getImage(name) {

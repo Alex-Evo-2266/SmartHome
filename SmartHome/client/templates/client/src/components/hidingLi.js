@@ -11,7 +11,7 @@ export const HidingLi = ({children, title, show=false})=>{
   return(
     <li name = "HidingLi" className={`hidingLi ${(visible)?"show":"hide"}`} onClick={togle}>
       <h3 value = "HidingLi" className="LiTitle">{title}</h3>
-      <i value = "HidingLi" className="fas fa-chevron-down"></i>
+      <i value = "HidingLi" className="iconLI fas fa-chevron-down"></i>
       <div className="LiContent">
         {children}
       </div>

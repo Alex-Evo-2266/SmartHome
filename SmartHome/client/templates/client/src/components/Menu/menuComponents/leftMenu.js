@@ -1,19 +1,10 @@
-import React, {useContext,useState} from 'react'
+import React, {useContext} from 'react'
 import {AuthContext} from '../../../context/AuthContext.js'
-import {NavLink,useHistory,useLocation} from 'react-router-dom'
+import {NavLink,useHistory} from 'react-router-dom'
 
 export const LeftMenu = ({hide,show, visible, insluedField, otherField, user})=>{
   const auth = useContext(AuthContext)
   const history = useHistory()
-  const location = useLocation();
-  const [visibleSubMenu, setVisibleSubMenu] = useState(false);
-
-  const togleSubMenu = (path)=>{
-    if(location.pathname===path){
-      setVisibleSubMenu(!visibleSubMenu);
-      show();
-    }
-  }
 
   const closeMenu=(e)=>{
     let el = e.target.closest("li[data-el=sub]")
@@ -23,7 +14,6 @@ export const LeftMenu = ({hide,show, visible, insluedField, otherField, user})=>
 
   const allclosev = ()=>{
     hide()
-    setVisibleSubMenu(false)
   }
 
   return(

@@ -11,13 +11,15 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
       return (<i className="fas fa-sun"></i>)
     else if (weather==="Облачно с прояснениями")
       return (<i className="fas fa-cloud-sun"></i>)
-    else if (weather==="Облачно"||weather==="Пасмурно")
+    else if (weather==="Облачно"||weather==="Пасмурно"||weather==="Clouds")
       return (<i className="fas fa-cloud"></i>)
-    else if (weather==="Дождь")
+    else if (weather==="Дождь"||weather==="Rain")
       return (<i className="fas fa-cloud-showers-heavy"></i>)
     else if (weather==="Небольшой дождь")
       return (<i className="fas fa-cloud-sun-rain"></i>)
   }
+
+  const convertTemp = k => Math.floor(k - 273.15)
 
   return(
     <BaseElement
@@ -33,22 +35,21 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
         <div className={`weather-body ${(data.width>3)?"veryWide":(data.width>1)?"wide":""} ${(data.height>2)?"veryTall":(data.height>1)?"tall":""}`}>
           <div className="day_anchor-div">
             <div className="icon_color_light">{
-              icon(serverConfig&&serverConfig.weather&&serverConfig.weather.now.weather)
+              icon(serverConfig?.weather?.now?.weather)
             }</div>
             {
               (data.width>1||data.height>1)?
-              <div className="day-anchor">{(serverConfig&&serverConfig.weather&&serverConfig.weather.now.weather)||""}</div>
+              <div className="day-anchor">{(serverConfig?.weather?.now?.weather)||""}</div>
               :null
             }
           </div>
-          <div className="temp">{(serverConfig&& serverConfig.weather&&serverConfig.weather.now.temp)||""} C*</div>
+          <div className="temp">{convertTemp(serverConfig?.weather?.now?.temp)} C*</div>
         </div>
         {
           (data.width>3&&data.height>1)?
           <div className="forecast">
             {
-              (serverConfig&&serverConfig.weather&&serverConfig.weather.tenDays)?
-              serverConfig.weather.tenDays.map((item,index)=>{
+              serverConfig?.weather?.tenDays?.map((item,index)=>{
                 return(
                   <div key={index} className={`forecast-weather-body`}>
                     <div className="day-name">{item.name||""}</div>
@@ -64,7 +65,6 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
                   </div>
                 )
               })
-              :null
             }
           </div>
           :null

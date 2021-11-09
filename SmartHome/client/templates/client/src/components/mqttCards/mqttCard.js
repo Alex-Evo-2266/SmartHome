@@ -1,5 +1,7 @@
 import React,{useContext} from 'react'
 import {FormContext} from '../Form/formContext'
+import {TypeDeviceContext} from '../typeDevices/typeDevicesContext.js'
+import {DialogWindowContext} from '../dialogWindow/dialogWindowContext'
 
 const baseAddressList = {
   state:"state",
@@ -53,7 +55,16 @@ const baseMinMax = {
 
 
 export const MQTTElement = ({data, onClickMessage}) =>{
+  const {show} = useContext(DialogWindowContext)
+  const types = useContext(TypeDeviceContext)
   const form = useContext(FormContext)
+
+  const typeList = ()=>types?.type?.map(item=>{
+    return {
+      title: item.title,
+      data: item.title,
+    }
+  })
 
   function dictToList(dict) {
     let arr = []
@@ -105,47 +116,51 @@ export const MQTTElement = ({data, onClickMessage}) =>{
   }
 
   function lincDecice() {
-    form.show("ChoiceType",(ret)=>{
-      let topicComponents = data.topic.split('/')
-      if(topicComponents[topicComponents.length-1]==="set")
-        topicComponents.pop()
-      if(typeMessage==="value"){
-        topicComponents.pop()
-      }
-      let address = topicComponents.join('/')
-      let conf = []
-      let typeControl = "text"
-      for (var item of message) {
-        let ctype = baseAddressList[item.name]
-        if(!ctype)
-          ctype = item.name
-        let cMinMax = baseMinMax[ctype]
-        if(!cMinMax){
-          cMinMax = baseMinMax["base"]
+    show("confirmation",{
+      title:"Types",
+      items:typeList(),
+      active:(ret)=>{
+        let topicComponents = data.topic.split('/')
+        if(topicComponents[topicComponents.length-1]==="set")
+          topicComponents.pop()
+        if(typeMessage==="value"){
+          topicComponents.pop()
         }
-        let caddress = item.name
-        let clow = cMinMax.min
-        let chigh = cMinMax.max
-        let cicon = cMinMax.icon
-        typeControl = cMinMax.type||typeControl
-        let confel = {
-          name:ctype,
-          address:caddress,
-          low:clow,
-          high:chigh,
-          icon:cicon||"",
-          type:typeControl,
-          control:(ret!=="sensor")
+        let address = topicComponents.join('/')
+        let conf = []
+        let typeControl = "text"
+        for (var item of message) {
+          let ctype = baseAddressList[item.name]
+          if(!ctype)
+            ctype = item.name
+          let cMinMax = baseMinMax[ctype]
+          if(!cMinMax){
+            cMinMax = baseMinMax["base"]
+          }
+          let caddress = item.name
+          let clow = cMinMax.min
+          let chigh = cMinMax.max
+          let cicon = cMinMax.icon
+          typeControl = cMinMax.type||typeControl
+          let confel = {
+            name:ctype,
+            address:caddress,
+            low:clow,
+            high:chigh,
+            icon:cicon||"",
+            type:typeControl,
+            control:(ret!=="sensor")
+          }
+          conf.push(confel)
         }
-        conf.push(confel)
+        form.show("LinkDevices",null,{
+          DeviceTypeConnect: "mqtt",
+          DeviceType: ret,
+          DeviceAddress: address,
+          DeviceValueType: typeMessage,
+          DeviceConfig: conf
+        })
       }
-      form.show("LinkDevices",null,{
-        DeviceTypeConnect: "mqtt",
-        DeviceType: ret,
-        DeviceAddress: address,
-        DeviceValueType: typeMessage,
-        DeviceConfig: conf
-      })
     })
   }
 
@@ -164,7 +179,7 @@ export const MQTTElement = ({data, onClickMessage}) =>{
           return <p className="mqttMessageStr" key={index}>{item}</p>
         })
       }</td>
-      <td><button onClick={lincDecice}>связать</button></td>
+      <td><button onClick={lincDecice} className="iconbutton" title="связать"><i className="fas fa-link"></i></button></td>
     </>
   )
 }

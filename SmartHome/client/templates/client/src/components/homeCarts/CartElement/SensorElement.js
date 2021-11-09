@@ -56,8 +56,8 @@ if(getTypeField()==="number"||getTypeField()==="text"){
   return(
     <div className="SensorElement">
       <div className="icon-conteiner">
-        <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
-        <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
+        <RunText className="sensor-name RunTextBaseColor" id={device.DeviceName} text={device.DeviceName}/>
+        <RunText className="sensor-value-name RunTextBaseColor" id={data.typeAction} text={data.typeAction}/>
 
         <p className= "sensor-value">{(device.DeviceValue)?device.DeviceValue[data.typeAction]:""}</p>
         <p className= "sensor-unit">{getConfrg(data.typeAction)?.unit||""}</p>
@@ -87,8 +87,8 @@ if(getTypeField()==="binary"){
   return(
     <div className="SensorElement">
       <div className="icon-conteiner">
-        <RunText className="sensor-name" id={device.DeviceName} text={device.DeviceName}/>
-        <RunText className="sensor-value-name" id={data.typeAction} text={data.typeAction}/>
+        <RunText className="sensor-name RunTextBaseColor" id={device.DeviceName} text={device.DeviceName}/>
+        <RunText className="sensor-value-name RunTextBaseColor" id={data.typeAction} text={data.typeAction}/>
         <div className={`valueIndicator ${(device?.DeviceValue&&device?.DeviceValue[data?.typeAction]==="1")?"true":"false"}`}></div>
       </div>
       {
@@ -116,9 +116,13 @@ if(getTypeField()==="binary"){
 return(
   <div className="SensorElement BtnElement">
     <div className="icon-conteiner">
-      <p className= "sensor-value-name">{data.typeAction}</p>
-      <p className= "sensor-value">{`${(device.DeviceValue)?device.DeviceValue[data.typeAction]:""} ${getConfrg(data.typeAction).unit||""}`}</p>
-      <p className= "sensor-name">{device.DeviceName}</p>
+      <RunText className="sensor-value-name RunTextBaseColor" id={data.typeAction} text={data.typeAction}/>
+      <RunText
+      className="sensor-value RunTextBaseColor"
+      id={`${(device.DeviceValue)?device.DeviceValue[data.typeAction]:""} ${getConfrg(data.typeAction).unit||""}`}
+      text={`${(device.DeviceValue)?device.DeviceValue[data.typeAction]:""} ${getConfrg(data.typeAction).unit||""}`}
+      />
+      <RunText className="sensor-name RunTextBaseColor" id={data.DeviceName} text={data.DeviceName}/>
     </div>
     {
       (deleteBtn || editBtn)?

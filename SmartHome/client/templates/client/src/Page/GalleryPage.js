@@ -40,7 +40,7 @@ export const GalleryPage = () => {
   },[auth.token,newUrl,urls,request])
 
   const deleteImg = (id)=>{
-    show("удалить изображение?","dialog",()=>{
+    show("удалить изображение?","general",()=>{
       request(`/api/image/fon/${id}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       let arr = urls.slice()
       arr = arr.filter(item=>item.id!==id)

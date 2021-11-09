@@ -6,6 +6,15 @@ import time
 from smartHomeApi.logic.socketOut import sendData
 from smartHomeApi.classes.devicesArrey import DevicesArrey
 from smartHomeApi.logic.serverData import getServerData
+from smartHomeApi.logic.weather import updateWeather
+
+from miio import Device, Yeelight
+
+# dev = Yeelight("192.168.0.2", "822dc07d3660422aef22c6cb11af3a25")
+# print(dev)
+# dev.set_developer_mode(True)
+# print(inf)
+
 
 devicesArrey = DevicesArrey()
 
@@ -22,6 +31,11 @@ def datasend():
     while True:
         time.sleep(6)
         sendData('devices',giveDevices())
+
+def weather():
+    while True:
+        updateWeather()
+        time.sleep(43200)
 
 def serverDataSend():
     while True:
@@ -42,3 +56,7 @@ def start():
     s3 = threading.Thread(target=serverDataSend)
     s3.daemon = True
     s3.start()
+
+    s4 = threading.Thread(target=weather)
+    s4.daemon = True
+    s4.start()

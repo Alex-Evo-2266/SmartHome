@@ -1,11 +1,8 @@
-import React,{useContext,useState,useEffect,useCallback} from 'react'
-import {TypeDeviceContext} from '../../components/typeDevices/typeDevicesContext.js'
-import {useHttp} from '../../hooks/http.hook'
+import React from 'react'
 import {useChecked} from '../../hooks/checked.hook'
 import {useMessage} from '../../hooks/message.hook'
 
 export const AddDevicesPage3 = ({form, setForm, next, backPage}) => {
-  const {type} = useContext(TypeDeviceContext)
   const {USText} = useChecked()
   const {message} = useMessage();
 

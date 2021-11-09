@@ -1,11 +1,7 @@
-import React,{useContext,useState,useEffect,useCallback} from 'react'
-import {TypeDeviceContext} from '../../components/typeDevices/typeDevicesContext.js'
-import {useHttp} from '../../hooks/http.hook'
-import {useChecked} from '../../hooks/checked.hook'
+import React,{useState} from 'react'
 import {useMessage} from '../../hooks/message.hook'
 
 export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []}) => {
-  const {type} = useContext(TypeDeviceContext)
   const {message} = useMessage();
   const [fields, setFields] = useState(begining)
 
@@ -30,7 +26,7 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
   }
 
   const removeField = (index)=>{
-    setFields(fields.filter((item, index2)=>index2 != index))
+    setFields(fields.filter((item, index2)=>index2 !== index))
   }
 
   const validFields = ()=>{
@@ -69,7 +65,7 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
       high:"100",
       values:"",
       control:true,
-      icon:"",
+      icon:"fas fa-circle-notch",
       unit:""
     })
     setFields(arr)

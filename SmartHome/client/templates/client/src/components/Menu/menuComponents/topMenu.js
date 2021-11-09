@@ -1,25 +1,8 @@
-import React, {useEffect,useState} from 'react'
+import React from 'react'
 import {Menu as DopMenu} from '../dopmenu/menu'
 import {Tabs} from './tabs'
 
 export const TopMenu = ({title, togle, buttons, controlButtons})=>{
-  const [sizeWidth, setSizeWidth] = useState(window.innerWidth)
-
-  const contextMenu = (e) =>{
-    e.preventDefault()
-  }
-
-  useEffect(()=>{
-    window.addEventListener("resize",resizeThrottler)
-    function resizeThrottler(event) {
-      setSizeWidth(event.target.innerWidth)
-    }
-    return ()=>{
-      window.removeEventListener("resize", resizeThrottler);
-    }
-  },[])
-
-
 
   return(
     <div className="topMenu">

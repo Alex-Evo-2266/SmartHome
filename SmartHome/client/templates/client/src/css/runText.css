@@ -3,11 +3,36 @@
   min-width: 100%;
   transition: 0.5s;
   display: flex;
+  position: relative;
   justify-content: center;
+}
+.RunText::before,
+.RunText::after{
+  position: absolute;
+  content: '';
+  height: 100%;
+  width: 10px;
+  filter: blur(4px);
+  opacity: 0.5;
+  background: var(--color-normal);
+}
+.RunText::before{
+  top: 0;
+  left: 0;
+}
+.RunText::after{
+  top: 0;
+  right: 0;
+}
+.RunText.RunTextBaseColor::before,
+.RunText.RunTextBaseColor::after
+{
+  background: var(--color-base);
 }
 .RunText p{
   white-space: nowrap;
   text-align: center;
+  /* text-shadow: 0 0 10px #000; */
 }
 .RunText p.scroll{
   text-align: left;

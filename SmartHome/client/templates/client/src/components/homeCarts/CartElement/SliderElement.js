@@ -115,7 +115,7 @@ if(!device){
 
 return(
   <div className="slider-box">
-    <RunText className="name" id={device.DeviceSystemName} text={`${device.DeviceName}.${data.typeAction}.`}/>
+    <RunText className="name RunTextBaseColor" id={device.DeviceSystemName} text={`${device.DeviceName}.${data.typeAction}.`}/>
     <div className="slider">
       <input
       type="range"

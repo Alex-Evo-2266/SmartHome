@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {ContextMenuElement} from './contextMenuElement'
 
 export const ContextMenu = ({buttons=[], className, style, hide}) =>{

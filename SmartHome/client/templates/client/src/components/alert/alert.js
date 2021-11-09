@@ -1,14 +1,8 @@
-import React, {useContext,useState} from 'react'
+import React, {useContext} from 'react'
 import {AlertContext} from './alertContext'
 
 export const Alert = ()=>{
   const {alert, hide} = useContext(AlertContext)
-
-  const [message,setMessage] = useState('')
-
-  const changeHandler=(event)=>{
-    setMessage(event.target.value)
-  }
 
     return(
       <div className={`alert ${(alert.visible)?"show":"hide"} alert-${alert.type}`}>

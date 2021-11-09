@@ -2,6 +2,7 @@ import React,{useContext} from 'react'
 import {FormContext} from '../Form/formContext'
 import {RunText} from '../runText'
 import {Menu} from '../Menu/dopmenu/menu'
+import {TypeDeviceContext} from '../typeDevices/typeDevicesContext.js'
 import {DialogWindowContext} from '../dialogWindow/dialogWindowContext'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHttp} from '../../hooks/http.hook'
@@ -11,7 +12,8 @@ export const ZigbeeElement = ({data}) =>{
   const auth = useContext(AuthContext)
   const {request} = useHttp();
   const form = useContext(FormContext)
-  const {show} = useContext(DialogWindowContext)
+  const types = useContext(TypeDeviceContext)
+  const {show, hide} = useContext(DialogWindowContext)
 
   const rename = (newName) => {
     request('/api/zigbee2mqtt/rename', 'POST',{name:data.name,newName},{Authorization: `Bearer ${auth.token}`})
@@ -20,6 +22,13 @@ export const ZigbeeElement = ({data}) =>{
   const deleteDevice = () => {
     request('/api/zigbee2mqtt/devices', 'DELETE',{name:data.address},{Authorization: `Bearer ${auth.token}`})
   }
+
+  const typeList = ()=>types?.type?.map(item=>{
+    return {
+      title: item.title,
+      data: item.title,
+    }
+  })
 
   const linc = ()=>{
     let conf = []
@@ -44,13 +53,22 @@ export const ZigbeeElement = ({data}) =>{
       }
       conf.push(confel)
     }
+    show("confirmation",{
+      title:"Types",
+      items:typeList(),
+      active:(d)=>addDev(d,conf)
+    })
+  }
+
+  function addDev(data1,conf) {
     form.show("LinkDevices",null,{
       DeviceTypeConnect: "zigbee",
-      DeviceType: "other",
+      DeviceType: data1,
       DeviceAddress: data.allAddress,
       DeviceValueType: "json",
       DeviceConfig: conf
     })
+    hide()
   }
 
   function buttons() {
@@ -73,7 +91,7 @@ export const ZigbeeElement = ({data}) =>{
       })
       arr.push({
         title:"delete",
-        action:()=>show("alert",{
+        onClick:()=>show("alert",{
           title:"Delete",
           text:"Delete device",
           buttons:[
@@ -82,7 +100,7 @@ export const ZigbeeElement = ({data}) =>{
             },
             {
               title:"ok",
-              onClick:deleteDevice
+              action:deleteDevice
             }
           ]
         })
