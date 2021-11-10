@@ -3,6 +3,8 @@ from ..models import Device
 from SmartHome.settings import SCRIPTS_DIR
 import os, sys
 import yaml
+import threading
+import time
 from ..classes.devicesArrey import DevicesArrey
 
 devicesArrey = DevicesArrey()
@@ -18,12 +20,18 @@ def runScripts(idDevice,type):
         runscript(templates)
 
 def runscript(data):
-    if(ifgroup(data["if"])):
-        print("ok")
-        actiondev(data["then"])
-    else:
-        print("none")
-        actiondev(data["else"])
+    print("p1")
+    def d():
+        print("p2")
+        if(ifgroup(data["if"])):
+            print("ok")
+            actiondev(data["then"])
+        else:
+            print("none")
+            actiondev(data["else"])
+    s = threading.Thread(target=d)
+    s.daemon = True
+    s.start()
 
 def ifgroup(data):
     retArrey = list()
@@ -159,6 +167,10 @@ def actiondev(data):
             with open(os.path.join(SCRIPTS_DIR,fullName)) as f:
                 templates = yaml.safe_load(f)
             runscript(templates)
+        elif(item["type"]=="delay"):
+            print("p3",item.get("value").get("value"))
+            time.sleep(int(item.get("value").get("value")))
+            print("p4")
         else:
             print("oh")
 

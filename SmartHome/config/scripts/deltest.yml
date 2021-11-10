@@ -1,0 +1,40 @@
+else: []
+if:
+  action: null
+  children: []
+  idDevice: null
+  oper: and
+  type: group
+  value: null
+name: deltest
+status: false
+then:
+- DeviceId: 8
+  action: state
+  type: device
+  value:
+    type: enum
+    value: low
+- action: delay
+  type: delay
+  value:
+    type: number
+    value: '10'
+- DeviceId: 8
+  action: state
+  type: device
+  value:
+    type: enum
+    value: high
+- action: delay
+  type: delay
+  value:
+    type: number
+    value: '2'
+- DeviceId: 8
+  action: brightness
+  type: device
+  value:
+    type: number
+    value: '10'
+trigger: []

@@ -17,6 +17,9 @@ export const TypeAct = ({result})=>{
           <li onClick={()=>out("script")}>
             <span>2</span>script
           </li>
+          <li onClick={()=>out("delay")}>
+            <span>3</span>delay
+          </li>
         </ul>
       </div>
   )

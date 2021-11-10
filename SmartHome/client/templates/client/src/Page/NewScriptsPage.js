@@ -11,6 +11,7 @@ import {TriggerBlock} from '../components/programmBlock/triggerBlock'
 import {Loader} from '../components/Loader'
 import {AddScriptContext} from '../components/addScript/addScriptContext'
 import {MenuContext} from '../components/Menu/menuContext'
+import {DelayBlock} from '../components/programmBlock/delayBlock'
 import {useHistory,useParams} from 'react-router-dom'
 
 export const NewScriptsPage = ({edit}) => {
@@ -72,6 +73,12 @@ export const NewScriptsPage = ({edit}) => {
             mas[type].push({type:"script",action:"run",DeviceId:datascr.name})
             setScript(mas)
           })
+        }
+        if(typeAct==="delay"){
+          let mas = script[type].slice();
+          mas.push({type:"delay",action:"delay",value:{type:"number", value:"0"}})
+          console.log(mas);
+          setScript({...script, [type]:mas})
         }
       }, 100);
     })
@@ -173,6 +180,11 @@ export const NewScriptsPage = ({edit}) => {
     setData("New Script")
   },[script, setData])
 
+  useEffect(()=>{
+    console.log(script);
+  },[script])
+
+
   if(loading){
     return(
       <Loader/>
@@ -235,6 +247,9 @@ export const NewScriptsPage = ({edit}) => {
                 if(item.type==="script"){
                   return <ActScript deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
                 }
+                if(item.type==="delay"){
+                  return <DelayBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
+                }
                 return null
               }):null
             }
@@ -256,6 +271,9 @@ export const NewScriptsPage = ({edit}) => {
                 }
                 if(item.type==="script"){
                   return <ActScript deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else"/>
+                }
+                if(item.type==="delay"){
+                  return <DelayBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
                 }
                 return null
               }):

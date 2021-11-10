@@ -2,6 +2,7 @@ import yaml
 from SmartHome.settings import SERVER_CONFIG
 from ..deviceControl.mqttDevice.connect import reconnect,publish
 from ..deviceControl.mqttDevice.mqttScan import ClearTopicks
+from ..weather import updateWeather
 
 def ServerConfigEdit(data):
     templates = None
@@ -36,4 +37,5 @@ def ServerConfigEdit(data):
     ClearTopicks()
     reconnect()
     publish(zigbee2mqttTopic + "/bridge/request/options",'{"options": {"mqtt": {"base_topic":"'+ data["zigbee2mqttTopic"] +'"}}}')
+    updateWeather()
     return True

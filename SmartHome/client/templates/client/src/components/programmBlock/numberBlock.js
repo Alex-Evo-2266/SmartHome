@@ -19,9 +19,13 @@ export const NumberBlock = ({data,updata,block,deleteEl})=>{
       <div className="programm-function-block-content-item">
         <input type="number" onChange={changeHandler} value={value}/>
       </div>
-      <div className="programm-function-block-content-item delete" onClick={()=>{deleteEl()}}>
-        <i className="fas fa-trash"></i>
-      </div>
+      {
+        (deleteEl)?
+        <div className="programm-function-block-content-item delete" onClick={()=>{deleteEl()}}>
+          <i className="fas fa-trash"></i>
+        </div>
+        :null
+      }
     </div>
   )
 }

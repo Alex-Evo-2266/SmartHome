@@ -18,7 +18,7 @@ export const ActBlock = ({updata,index,data,deleteEl})=>{
   },[devices])
 
   const lookForField = (device,name)=>{
-    return device.DeviceConfig.filter((item)=>item.name===name)[0]
+    return device?.DeviceConfig?.filter((item)=>item.name===name)[0]
   }
 
   const valuesDecod = (data)=> data.split(" ").join("").split(",")
@@ -77,7 +77,7 @@ const deleteValue = ()=>{
   updata({...element,index})
 }
 
-if(Object.keys(device).length === 0 || Object.keys(field).length === 0){
+if(Object?.keys(device||"")?.length === 0 || Object?.keys(field||"")?.length === 0){
   return null
 }
 

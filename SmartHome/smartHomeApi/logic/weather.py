@@ -6,6 +6,7 @@ dataWeather = dict()
 
 def current_weather(q: str, appid: str) -> dict:
     """https://openweathermap.org/api"""
+    print("p1",locals())
     return requests.get(URL_BASE + "forecast", params=locals()).json()
 
 def Weather():
@@ -45,7 +46,7 @@ def updateWeather():
         #     }
         #     daysWeather.append(data)
         # print("weatherConf",weatherNow)
-        print(weatherNow)
+        # print(weatherNow)
         dataWeather = {
             "city":weatherConf["city"],
             "now":{
@@ -54,7 +55,7 @@ def updateWeather():
             },
             "forecast":None
         }
-        print(dataWeather)
+        # print(dataWeather)
     except Exception as e:
         print("er Wether",e)
         return None

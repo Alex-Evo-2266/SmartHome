@@ -7,7 +7,7 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
 
   const icon = (weather)=>{
     if(!weather) return null
-    if (weather==="Ясно"||weather==="Малооблачно")
+    if (weather==="Ясно"||weather==="Малооблачно"||weather==="Clear")
       return (<i className="fas fa-sun"></i>)
     else if (weather==="Облачно с прояснениями")
       return (<i className="fas fa-cloud-sun"></i>)
