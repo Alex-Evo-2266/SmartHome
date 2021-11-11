@@ -13,6 +13,7 @@ export const ScriptElement = ({script,updata})=>{
 
   useEffect(()=>{
     setStatus(script.status)
+    console.log(auth.userLevel);
   },[script])
 
   useEffect(()=>{
@@ -46,11 +47,15 @@ export const ScriptElement = ({script,updata})=>{
       <p>{script.name}</p>
       <div className="scriptStatus">
         <button onClick={runScript} className="activateBtn">activate</button>
-        <button onClick={()=>history.push(`/scripts/edit/${script.name}`)} className="showBtn">edit</button>
+        {
+          (auth.userLevel >= 3)?
+          <button onClick={()=>history.push(`/scripts/edit/${script.name}`)} className="showBtn">edit</button>
+          :null
+        }
         <div className="switchConteiner">
         <p className="switchText">{status}</p>
         {
-          (script.trigger&&script.trigger[0])?
+          (script.trigger&&script.trigger[0]&&auth.userLevel >= 3)?
           <label className="switch">
             <input onChange={checkedHandler} name="auteStyle" type="checkbox" checked={(status)}></input>
             <span></span>
@@ -59,7 +64,11 @@ export const ScriptElement = ({script,updata})=>{
           :null
         }
         </div>
-        <button onClick={deleteScript} className="deleteBtn"><i className="fas fa-trash"></i></button>
+        {
+          (auth.userLevel >= 3)?
+          <button onClick={deleteScript} className="deleteBtn"><i className="fas fa-trash"></i></button>
+          :null
+        }
       </div>
     </div>
   )

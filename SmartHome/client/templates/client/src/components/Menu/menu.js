@@ -45,19 +45,11 @@ export const Menu = ()=>{
     let arr1 = []
     let arr2 = menuField
     for (var item of data) {
-      let a = false
-      for (var item2 of menuField) {
-        if(item.title===item2.title){
-          a = true
-          let element = item
-          arr2 = arr2.filter((item3)=>item3.title!==element.title)
-          break
-        }
-      }
-      if(a){
-        arr1.push(item)
-      }
+      arr2 = arr2.filter((item3)=>item3.title!==item.title)
+      arr1.push(item)
     }
+    if(auth.userLevel >= 3)
+      arr2.push({title:"Users",iconClass:"fas fa-users",url:"/users"})
     return {include:arr1, other:arr2}
   },[])
 

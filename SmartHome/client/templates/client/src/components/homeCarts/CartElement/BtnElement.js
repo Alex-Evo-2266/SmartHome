@@ -42,6 +42,10 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
     setDevice(lookForDeviceById(data.deviceId))
   },[devices,data,onClick,lookForDeviceById])
 
+  useEffect(()=>{
+    console.log(device);
+  },[device])
+
   const itemField = useCallback(()=>{
     if(!device||!device.DeviceConfig)return
     for (var item of device.DeviceConfig) {
@@ -80,13 +84,21 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
   },[device,data])
 
   useEffect(()=>{
+    console.log(value);
+  },[value])
+
+  useEffect(()=>{
     if(typeof(onClick)==="function"||disabled||device.status==="offline")return
-    const {low,high,typeControl} = deviceConfig
-    if(device&&typeControl==="boolean"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
+    const {low,high,type} = deviceConfig
+    console.log(deviceConfig);
+    if(device&&type==="binary"&&device?.DeviceValue&&device?.DeviceValue[deviceConfig.name]){
+      console.log("f4");
       if(device.DeviceValue[deviceConfig.name]===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="0"))
-        setValue(false)
+        {console.log("f2");
+          setValue(false)}
       if(device.DeviceValue[deviceConfig.name]===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="1"))
-        setValue(true)
+      {console.log("f3");
+        setValue(true)}
       if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
         let poz = Number(device.DeviceValue[deviceConfig.name])
         let min = Number(low)
@@ -97,7 +109,7 @@ export const BtnElement = ({data,className,index,children,name,onClick,disabled=
           setValue(false)
       }
     }
-    if(device&&typeControl==="number"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
+    if(device&&type==="number"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
       if(!data.action)data.action="0"
       if(data.action===device.DeviceValue[deviceConfig.name]){
         setValue(true)
@@ -149,6 +161,8 @@ const changeHandler = (event)=>{
       target("button",{...data,index},editBtn)
     }
   }
+
+
 
   return(
     <label className={`BtnElement ${className} ${(disabled2)?"disabled":""}`}>

@@ -26,15 +26,4 @@ then:
   value:
     type: enum
     value: high
-- action: delay
-  type: delay
-  value:
-    type: number
-    value: '2'
-- DeviceId: 8
-  action: brightness
-  type: device
-  value:
-    type: number
-    value: '10'
 trigger: []

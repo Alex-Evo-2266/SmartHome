@@ -2,14 +2,14 @@ cards:
 - children:
   - action: ''
     deviceId: null
-    height: 1
+    height: 2
     id: 1
     index: 0
     name: weather
     order: 0
     type: weather
     typeAction: ''
-    width: 1
+    width: 4
   - action: ''
     deviceId: 9
     height: 1
@@ -193,11 +193,65 @@ cards:
     type: text
     typeAction: field0text
     width: 2
+  - deviceId: 8
+    height: 1
+    index: 2
+    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    type: button
+    typeAction: state
+    width: 1
   id: 5
   index: 4
   mainId: 5
   name: ''
   order: 1
   type: line
+  width: 2
+- children:
+  - deviceId: 8
+    height: 1
+    index: 0
+    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    type: button
+    typeAction: state
+    width: 1
+  - action: '50'
+    deviceId: 8
+    height: 1
+    index: 1
+    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    type: button
+    typeAction: brightness
+    width: 1
+  - action: '3000'
+    deviceId: 8
+    height: 1
+    index: 2
+    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    type: button
+    typeAction: temp
+    width: 1
+  - deviceId: 8
+    height: 1
+    index: 3
+    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    type: button
+    typeAction: mode
+    width: 1
+  index: 5
+  mainId: null
+  name: ''
+  order: '0'
+  type: base
   width: 2
 name: basePage

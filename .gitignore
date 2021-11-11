@@ -16,4 +16,5 @@ whileCost
 zigbee2mqtt/database.db
 zigbee2mqtt/log
 zigbee2mqtt/state.json
+config/server-config.yml
 test

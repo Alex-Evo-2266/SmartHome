@@ -44,7 +44,7 @@ export default function AddUser(){
   return(
     <div className="conteiner top">
     <div className="title">
-      <h1>Register Form</h1>
+      <h1>Create user</h1>
     </div>
     <div className={`container-reg`}>
       <form>
@@ -68,7 +68,7 @@ export default function AddUser(){
         </div>
         <div className="footer-reg">
           <div className="formBox-reg">
-            <input type="submit" onClick={registerHandler} disabled={loading} value="Register"/>
+            <input type="submit" onClick={registerHandler} disabled={loading} value="Create"/>
           </div>
         </div>
       </form>

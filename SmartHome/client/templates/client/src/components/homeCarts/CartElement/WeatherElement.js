@@ -17,9 +17,11 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
       return (<i className="fas fa-cloud-showers-heavy"></i>)
     else if (weather==="Небольшой дождь")
       return (<i className="fas fa-cloud-sun-rain"></i>)
+    else if (weather==="Snow")
+      return (<i className="far fa-snowflake"></i>)
   }
 
-  const convertTemp = k => Math.floor(k - 273.15)
+  const convertTemp = k => (k)?`${String(Math.floor(k - 273.15))} C*`:null
 
   return(
     <BaseElement
@@ -43,25 +45,25 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
               :null
             }
           </div>
-          <div className="temp">{convertTemp(serverConfig?.weather?.now?.temp)} C*</div>
+          <div className="temp">{convertTemp(serverConfig?.weather?.now?.temp)}</div>
         </div>
         {
           (data.width>3&&data.height>1)?
           <div className="forecast">
             {
-              serverConfig?.weather?.tenDays?.map((item,index)=>{
+              serverConfig?.weather?.forecastDate?.map((item,index)=>{
                 return(
                   <div key={index} className={`forecast-weather-body`}>
                     <div className="day-name">{item.name||""}</div>
-                    <div className="day-date">{item.date||""}</div>
+                    <div className="day-date">{item.day.date||""}</div>
                     <div className="day_anchor-div">
                       <div className="icon_color_light">{
-                        icon(item&&item.weather)
+                        icon(item&&item.day.weather)
                       }</div>
-                      <div className="day-anchor">{item.weather||""}</div>
+                      <div className="day-anchor">{item.day.weather||""}</div>
                     </div>
-                    <div className="forecast-temp forecast-temp-day">{(item&&item.day)||""} C*</div>
-                    <div className="forecast-temp forecast-temp-night">{(item&&item.night)||""} C*</div>
+                    <div className="forecast-temp forecast-temp-day">{convertTemp(item?.day?.temp)||""}</div>
+                    <div className="forecast-temp forecast-temp-night">{convertTemp(item?.night?.temp)||""}</div>
                   </div>
                 )
               })

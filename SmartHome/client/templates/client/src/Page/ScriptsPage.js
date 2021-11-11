@@ -41,10 +41,10 @@ export const ScriptsPage = () => {
 
   useEffect(()=>{
     setData("Scripts All",{
-      specialAction:{
+      specialAction:(auth.userLevel >= 3)?{
         type: "add",
         action:()=>history.push("/scripts/add")
-      },
+      }:null,
       search: searchout
     })
   },[setData, searchout, history])

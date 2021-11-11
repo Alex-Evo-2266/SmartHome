@@ -1,6 +1,8 @@
 import React,{useState,useEffect,useCallback,useContext} from 'react'
 import {Header} from '../components/header'
 import {Link} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
+import {MenuContext} from '../components/Menu/menuContext'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
@@ -10,8 +12,10 @@ import {UserElement} from '../components/usersCart/userElement'
 export const UsersPage = () => {
   const [users, setUsers] = useState([])
   const [allUsers, setAllUsers] = useState([])
+  const {setData} = useContext(MenuContext)
   const auth = useContext(AuthContext)
   const {message} = useMessage();
+  const history = useHistory()
   const {loading,request, error, clearError} = useHttp();
 
   useEffect(()=>{
@@ -28,14 +32,24 @@ export const UsersPage = () => {
     setAllUsers(data)
   },[request,auth.token])
 
-  const searchout = (search)=>{
+  const searchout = useCallback((search)=>{
     if(search===""){
       setUsers(allUsers)
       return
     }
     let array = allUsers.filter(item => (item.UserName.toLowerCase().indexOf(search.toLowerCase())!==-1)||(item.UserSurname.toLowerCase().indexOf(search.toLowerCase())!==-1))
     setUsers(array)
-  }
+  },[allUsers])
+
+  useEffect(()=>{
+    setData("Users",{
+      specialAction:(auth.userLevel >= 3)?{
+        type: "add",
+        action:()=>history.push("/user/add")
+      }:null,
+      search: searchout
+    })
+  },[setData, history, searchout])
 
   useEffect(()=>{
     updataUsers()
@@ -50,13 +64,6 @@ export const UsersPage = () => {
   return(
     <>
       <div className = "conteiner top">
-      <Header search={searchout} name="All Users">
-      {
-        (auth.userLevel===3)?
-        <Link to={"/user/add"} className="btn"><i className="fas fa-plus"></i></Link>:
-        null
-      }
-      </Header>
         <div className = "Users">
           <div className="usersList">
             {

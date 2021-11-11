@@ -2,10 +2,12 @@ import React, {useContext,useEffect,useState,useRef, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 import {NewDeviceElement} from '../components/newDeviceElement'
 import {SocketContext} from '../context/SocketContext'
+import {AuthContext} from '../context/AuthContext.js'
 import {MenuContext} from '../components/Menu/menuContext'
 
 export const DevicesPage = () => {
   const history = useHistory()
+  const auth = useContext(AuthContext)
   const allDevices = useContext(SocketContext)
   const {setData} = useContext(MenuContext)
 
@@ -32,10 +34,10 @@ export const DevicesPage = () => {
 
   useEffect(()=>{
     setData("Device All",{
-      specialAction:{
+      specialAction:(auth.userLevel >= 3)?{
         type: "add",
         action:()=>history.push("/devices/add")
-      },
+      }:null,
       search: searchout
     })
   },[setData, history, searchout])

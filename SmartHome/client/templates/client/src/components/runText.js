@@ -1,6 +1,6 @@
 import React,{useEffect,useCallback} from 'react'
 
-export const RunText = ({id, text,className})=>{
+export const RunText = ({id, text,className, onClick})=>{
 
   const anim = useCallback(()=>{
     let el = document.getElementById(`p-${id}`)
@@ -19,7 +19,7 @@ export const RunText = ({id, text,className})=>{
   },[anim])
 
   return(
-    <div id={`div-${id}`} className={`RunText ${className}`}>
+    <div id={`div-${id}`} onClick={onClick} className={`RunText ${className}`}>
       <p id={`p-${id}`}>{text}</p>
     </div>
   )

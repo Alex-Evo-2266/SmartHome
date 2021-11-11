@@ -13,6 +13,8 @@
 }
 .fullScrinContainer{
   padding: 56px 0 0 56px;
+  min-height: calc(100vh - 56px);
+  position: relative;
 }
 .conteiner.fon{
   background: var(--body-v1-color);

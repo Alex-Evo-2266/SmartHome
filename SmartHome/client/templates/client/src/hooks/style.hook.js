@@ -133,7 +133,7 @@ export const useCastomStyle = () => {
   const adaptiveBackground = useCallback((images)=>{
     if(!images)
       return defbacground()
-    setBackground(getimage(images,backgroundType()).image)
+    setBackground(getimage(images,backgroundType())?.image)
   },[setBackground])
 
   const avtoNightStyle = useCallback((style,nightStyle)=>{

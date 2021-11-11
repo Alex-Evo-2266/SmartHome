@@ -60,6 +60,9 @@
 .DeviceLiControl{
   position: relative;
 }
+.DeviceName{
+  cursor: pointer;
+}
 .DeviceLiControl select{
   font-size: 18px;
   border: none;

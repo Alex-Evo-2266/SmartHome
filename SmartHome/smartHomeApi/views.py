@@ -36,9 +36,9 @@ class LoginView(APIView):
     def post(self,request):
         data = json.loads(request.body)
         res = Authorization(data)
-        if("token" in res):
-            return Response(res,status=200)
-        return Response(status=400)
+        if(res["status"] == "ok"):
+            return Response(res["data"],status=200)
+        return Response(res,status=400)
 
 # user views
 

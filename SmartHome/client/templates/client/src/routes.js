@@ -48,7 +48,14 @@ export const useRoutes = (isAuthenticated,level)=>{
         </Route>
         <Route path="/config/users" exact>
         {
-          (level===3)?
+          (level>=3)?
+          <OptionsPage/>:
+          <Redirect to="/config"/>
+        }
+        </Route>
+        <Route path="/config/server" exact>
+        {
+          (level>=3)?
           <OptionsPage/>:
           <Redirect to="/config"/>
         }

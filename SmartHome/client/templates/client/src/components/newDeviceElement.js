@@ -1,5 +1,6 @@
 import React, {useContext,useState,useEffect} from 'react'
 import {FormContext} from './Form/formContext'
+import {useHistory} from 'react-router-dom'
 import {RunText} from './runText'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
@@ -13,6 +14,7 @@ import {SocketContext} from '../context/SocketContext'
 import {AuthContext} from '../context/AuthContext.js'
 
 export const NewDeviceElement = ({id}) =>{
+  const history = useHistory()
   const {devices, updateDevice} = useContext(SocketContext)
   const form = useContext(FormContext)
   const auth = useContext(AuthContext)
@@ -52,17 +54,21 @@ export const NewDeviceElement = ({id}) =>{
         <div className = {`typeConnect ${device.DeviceTypeConnect||"other"}`}>
           <p>{device.DeviceTypeConnect||"other"}</p>
         </div>
-        <RunText className="DeviceName" id={device.DeviceSystemName} text={device.DeviceName||"NuN"}/>
-        <Menu buttons={[
-          {
-            title:"edit",
-            onClick:()=>{form.show("EditDevices",updateDevice,device)}
-          },
-          {
-            title:(device.DeviceStatus)?"unlinc":"linc",
-            onClick:linc
-          }
-        ]}/>
+        <RunText onClick={()=>history.push(`/devices/ditail/${device.DeviceId}`)} className="DeviceName" id={device.DeviceSystemName} text={device.DeviceName||"NuN"}/>
+        {
+          (auth.userLevel >= 3)?
+          <Menu buttons={[
+            {
+              title:"edit",
+              onClick:()=>{form.show("EditDevices",updateDevice,device)}
+            },
+            {
+              title:(device.DeviceStatus)?"unlinc":"linc",
+              onClick:linc
+            }
+          ]}/>
+          :null
+        }
       </div>
       <div className="dividers"></div>
       <div className = "NewCardBody">
