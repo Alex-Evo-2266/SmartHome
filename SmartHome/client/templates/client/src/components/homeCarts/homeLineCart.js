@@ -157,6 +157,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     <BtnElement
                     index={item.index}
                     disabled={edit}
+                    title={item.title}
                     data={item}
                     deleteBtn={
                       (edit)?deleteElement:null
@@ -170,6 +171,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                   <div className="line-el">
                   <EnumElement
                   index={item.index}
+                  title={item.title}
                   disabled={edit}
                   data={item}
                   deleteBtn={
@@ -185,6 +187,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                   <TextElement
                   index={item.index}
                   disabled={edit}
+                  title={item.title}
                   data={item}
                   deleteBtn={
                     (edit)?deleteElement:null
@@ -200,6 +203,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                   index={item.index}
                   data={item}
                   disabled={edit}
+                  title={item.title}
                   deleteBtn={
                     (edit)?deleteElement:null
                   }
@@ -212,6 +216,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                     <div className="line-el">
                     <ScriptElement
                     index={item.index}
+                    title={item.title}
                     data={item}
                     disabled={edit}
                     deleteBtn={
@@ -226,6 +231,7 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
                       <div className="line-el">
                       <SensorElement
                       index={item.index}
+                      title={item.title}
                       data={item}
                       disabled={edit}
                       deleteBtn={

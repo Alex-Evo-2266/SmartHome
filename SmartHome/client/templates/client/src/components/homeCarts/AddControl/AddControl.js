@@ -4,6 +4,7 @@ import {ScriptPage} from './Control/scriptPage'
 import {Page2} from './Control/page2'
 import {Page3} from './Control/page3'
 import {Page4} from './Control/page4'
+import {Page5} from './Control/page5'
 import {ConfirmationDialog} from '../../dialogWindow/dialogType/confirmationDialog'
 
 const cardBaseElement = [
@@ -84,6 +85,8 @@ export const AddControl = ()=>{
   const {addControl, hide} = useContext(AddControlContext)
   const [typeChild, setTypeChild] = useState("");
   const [device, setDevice] = useState(null);
+  const [title, setTitle] = useState(null);
+  const [action, setAction] = useState(null);
   const [field, setField] = useState(null);
   const [page, setPage] = useState(1);
 
@@ -122,7 +125,6 @@ export const AddControl = ()=>{
 
   const addDevFieldAction = (data)=>({...addDevField(field), action:data})
 
-
   if(!addControl.visible){
     return null;
   }
@@ -142,7 +144,7 @@ export const AddControl = ()=>{
         setPage(2)
       }}
       activeText="NEXT"
-      items={(addControl.type==="AddBaseElement")?cardBaseElement:cardLineElement}
+      items={(addControl.type==="AddElement")?cardBaseElement:cardLineElement}
       />
     )
   }
@@ -180,14 +182,21 @@ export const AddControl = ()=>{
       back={()=>setPage(2)}
       next={(data)=>{
         if(typeChild === "sensor")
-          addElement(addDevField(data))
+          {
+            setField(data)
+            // addDevField(data)
+            setPage(5)
+          }
         else if(typeChild === "button" && data.type !== "binary"){
           console.log("sd")
           setPage(4)
           setField(data)
         }
-        else
-          addElement(addDevField(data))
+        else{
+          setField(data)
+          // addDevField(data)
+          setPage(5)
+        }
       }}
       />
     )
@@ -197,7 +206,28 @@ export const AddControl = ()=>{
     return(
       <Page4
       next={(data)=>{
-        addElement(addDevFieldAction(data))
+        // addDevFieldAction(data)
+        setAction(data)
+        setPage(5)
+      }}
+      hide={close}
+      back={()=>setPage(3)}
+      field={field}
+      />
+    )
+  }
+
+  if(page === 5){
+    return(
+      <Page5
+      next={(data)=>{
+        let val
+        if(action)
+          val = addDevFieldAction(action)
+        else
+          val = addDevField(field)
+        val = {...val, title: data}
+        addElement(val)
       }}
       hide={close}
       back={()=>setPage(3)}

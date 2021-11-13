@@ -1,25 +1,31 @@
 - title: "light"
-  devices:
-  - "yeelight"
-  - "mqtt"
-  - "zigbee"
+  ditailType: "light"
+  interface:
+  - name: "yeelight"
+  - name: "mqtt"
+  - name: "zigbee"
 - title: "switchs"
-  devices:
-  - "mqtt"
-  - "zigbee"
+  ditailType: "switch"
+  interface:
+  - name: "mqtt"
+  - name: "zigbee"
 - title: "wireless switchs"
-  devices:
-  - "mqtt"
-  - "zigbee"
+  ditailType: "sensor"
+  interface:
+  - name: "mqtt"
+  - name: "zigbee"
 - title: "relay"
-  devices:
-  - "mqtt"
-  - "zigbee"
+  ditailType: "switch"
+  interface:
+  - name: "mqtt"
+  - name: "zigbee"
 - title: "socket"
-  devices:
-  - "mqtt"
-  - "zigbee"
+  ditailType: "switch"
+  interface:
+  - name: "mqtt"
+  - name: "zigbee"
 - title: "sensor"
-  devices:
-  - "mqtt"
-  - "zigbee"
+  ditailType: "sensor"
+  interface:
+  - name: "mqtt"
+  - name: "zigbee"

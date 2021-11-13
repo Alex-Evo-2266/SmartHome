@@ -18,7 +18,7 @@
 }
 .conteiner.fon{
   background: var(--body-v1-color);
-  min-height: 100vh;
+  min-height: calc(100vh - 56px);
 }
 *.top{
   padding-top: 56px;

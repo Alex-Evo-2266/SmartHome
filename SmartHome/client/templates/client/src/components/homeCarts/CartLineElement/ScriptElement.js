@@ -4,7 +4,7 @@ import {BaseElement} from './BaseElement'
 import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
-export const ScriptElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,switchMode=true,deleteBtn}) =>{
+export const ScriptElement = ({data,title,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,switchMode=true,deleteBtn}) =>{
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const auth = useContext(AuthContext)
@@ -27,7 +27,7 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
           <i className="far fa-file-alt"></i>
         </div>
       </div>
-      <p className="name">{data.name}</p>
+      <p className="name">{title}</p>
     </BaseElement>
   )
 }

@@ -6,7 +6,7 @@ import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
 
-export const BtnElement = ({baseswitchMode=false,data,icon,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
+export const BtnElement = ({title,baseswitchMode=false,data,icon,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
   const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const [value, setValue]=useState(firstValue)
@@ -151,7 +151,7 @@ const changeHandler = (event)=>{
           }
           </div>
         </div>
-        <p className="name">{(device&&device.DeviceName)?device.DeviceName:(name||"btn")}</p>
+        <p className="name">{title}</p>
         <p className="state">{data.action}</p>
       </BaseElement>
     )
@@ -168,7 +168,7 @@ const changeHandler = (event)=>{
       }
       </div>
     </div>
-      <p className="name">{(device&&device.DeviceName)?device.DeviceName:(name||"btn")}</p>
+      <p className="name">{title}</p>
       <div className="control">
         <div className="right-control">
           <div className="custom1-checkbox">

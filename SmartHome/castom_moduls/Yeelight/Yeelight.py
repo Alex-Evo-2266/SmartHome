@@ -28,7 +28,7 @@ class Yeelight(BaseDevice):
             if(not look_for_param(self.values, "brightness") and "current_brightness" in values):
                 self.values.append(DeviceElement(name="brightness", control=True, high=100, low=0, type="number", icon="far fa-sun", value=values["current_brightness"]))
             if(not look_for_param(self.values, "mode") and "active_mode" in values):
-                self.values.append(DeviceElement(name="mode", control=True, high=values["color_mode"], low=0, type="binary", icon="fab fa-medium-m", value=values["active_mode"]))
+                self.values.append(DeviceElement(name="mode", control=True, high=str(int(values["color_mode"]) - 1), low=0, type="number", icon="fab fa-medium-m", value=values["active_mode"]))
             if(not look_for_param(self.values, "temp") and "ct" in values):
                 self.values.append(DeviceElement(name="temp", control=True, high=minmaxValue["color_temp"]["max"], low=minmaxValue["color_temp"]["min"], type="number", icon="fas fa-adjust", value=values["ct"]))
         except Exception as e:

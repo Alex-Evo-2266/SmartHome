@@ -6,7 +6,7 @@ import {RunText} from '../../runText'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 
-export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValue=0,deleteBtn,editBtn,onClick}) =>{
+export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,firstValue=0,deleteBtn,editBtn,onClick}) =>{
   const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const [value , setValue] = useState(firstValue)
@@ -115,7 +115,7 @@ if(!device){
 
 return(
   <div className="slider-box">
-    <RunText className="name RunTextBaseColor" id={device.DeviceSystemName} text={`${device.DeviceName}.${data.typeAction}.`}/>
+    <RunText className="name RunTextBaseColor" id={title} text={title}/>
     <div className="slider">
       <input
       type="range"

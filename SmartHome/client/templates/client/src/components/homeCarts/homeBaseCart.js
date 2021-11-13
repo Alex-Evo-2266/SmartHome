@@ -135,6 +135,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               <BtnElement
               index={item.index}
               disabled={edit}
+              title={item.title}
               data={item}
               switchMode={item.typeAction==="power"}
               deleteBtn={
@@ -149,6 +150,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               index={item.index}
               data={item}
               disabled={edit}
+              title={item.title}
               deleteBtn={
                 (edit)?deleteElement:null
               }
@@ -160,6 +162,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               <SensorElement
               index={item.index}
               data={item}
+              title={item.title}
               deleteBtn={
                 (edit)?deleteElement:null
               }
@@ -171,6 +174,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               <ScriptElement
               index={item.index}
               data={item}
+              title={item.title}
               disabled={edit}
               deleteBtn={
                 (edit)?deleteElement:null
@@ -182,6 +186,7 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               (item.type==="enum")?
               <EnumElement
               index={item.index}
+              title={item.title}
               disabled={edit}
               data={item}
               deleteBtn={

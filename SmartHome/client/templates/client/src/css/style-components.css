@@ -28,6 +28,7 @@
 @import "./dialog/dialog.base.css";
 @import "./tableMqtt/tableMqtt.base.css";
 @import "./chart/chart.base.css";
+@import "./device.css";
 @import "./styleEdit/styleEdit.base.css";
 @import "./select/select.css";
 

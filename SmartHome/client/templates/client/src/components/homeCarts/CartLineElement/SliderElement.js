@@ -6,7 +6,7 @@ import {BaseElement} from './BaseElement'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 
-export const SliderElement = ({index,data,min=0,max=100,disabled=false,firstValue=0,deleteBtn,editBtn,onClick}) =>{
+export const SliderElement = ({title,index,data,min=0,max=100,disabled=false,firstValue=0,deleteBtn,editBtn,onClick}) =>{
   const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const [value , setValue] = useState(firstValue)
@@ -120,7 +120,7 @@ return(
       }
       </div>
     </div>
-      <p className="name">{data.name}</p>
+      <p className="name">{title}</p>
       <div className="flex">
         <input
         className="control-big"

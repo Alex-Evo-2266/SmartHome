@@ -6,7 +6,7 @@ import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
 
-export const EnumElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
+export const EnumElement = ({title,data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
   const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const [value, setValue]=useState(firstValue)
@@ -103,7 +103,7 @@ const changeHandler = (event)=>{
         }
         </div>
       </div>
-        <p className="name">{data.name}</p>
+        <p className="name">{title}</p>
 
         {
           (deviceConfig&&deviceConfig.values)?

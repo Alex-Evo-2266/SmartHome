@@ -1,0 +1,129 @@
+.ditailContainer{
+  display: flex;
+  color: var(--text-color-base-fon);
+}
+.blubContainer{
+  width: 130px;
+  height: 130px;
+  position: relative;
+  margin: 0 auto;
+}
+.dopBlubContainer{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.nameGeneralBlub{
+  padding: 40px 0 10px 0;
+  text-align: center;
+  bottom: 0;
+}
+.dopBlubContainer .dopBlubButton{
+  width: 50px;
+  height: 50px;
+  background: var(--color-normal);
+  color: var(--text-color-normal-fon);
+  position: relative;
+  cursor: pointer;
+}
+.dopBlubContainer .dopBlubButton.activ{
+  background: var(--btn-color-normal);
+}
+.dopBlubContainer .dopBlubButton i{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.lightName{
+  padding: 5px 0;
+  text-align: center;
+}
+.bulb{
+  position: absolute;
+  cursor: pointer;
+  top: 50px;
+  width: 80px;
+  height: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #444;
+  border-radius: 50%;
+}
+.bulb::before{
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: 22.5px;
+  width: 35px;
+  height: 80px;
+  background: #444;
+  border-top: 30px solid #000;
+  border-radius: 10px;
+}
+.bulb.on{
+  background: var(--blub-on);
+  box-shadow: 0 0 50px var(--blub-on),
+  0 0 100px var(--blub-on),
+  0 0 150px var(--blub-on),
+  0 0 200px var(--blub-on),
+  0 0 250px var(--blub-on),
+  0 0 300px var(--blub-on),
+  0 0 350px var(--blub-on);
+}
+.bulb.on::before{
+  background: var(--blub-on);
+}
+.bulb.on::after{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: var(--blub-on);
+  border-radius: 50%;
+  filter: blur(40px);
+}
+.bulb span:nth-child(1){
+  position: absolute;
+  top: -16px;
+  left: -4px;
+  display: block;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  transform: rotate(342deg);
+  border-bottom-right-radius: 40px;
+  box-shadow: 20px 20px 0 10px #444;
+}
+.bulb span:nth-child(2){
+  position: absolute;
+  top: -16px;
+  right: -4px;
+  display: block;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  transform: rotate(17deg);
+  border-bottom-left-radius: 40px;
+  box-shadow: -20px 20px 0 10px #444;
+}
+.bulb.on span:nth-child(1){
+  box-shadow: 20px 20px 0 10px var(--blub-on);
+}
+.bulb.on span:nth-child(2){
+  box-shadow: -20px 20px 0 10px var(--blub-on);
+}
+.centerControl{
+  flex: 320px;
+  width: 320px;
+  min-height: calc(100vh - 56px);
+  background: var(--color-base);
+
+}
+.leftControl,
+.rightControl{
+  width: calc(calc(100% - 320px) / 2);
+}

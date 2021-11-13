@@ -2,7 +2,7 @@ import React,{useState,useContext,useEffect,useCallback} from 'react'
 import {SocketContext} from '../../../context/SocketContext'
 import {BaseElement} from './BaseElement'
 
-export const SensorElement = ({index,data,deleteBtn,editBtn,onClick}) =>{
+export const SensorElement = ({index,title,data,deleteBtn,editBtn,onClick}) =>{
   const {devices} = useContext(SocketContext)
   const [device, setDevice] = useState({})
 
@@ -53,7 +53,7 @@ if(getTypeField()==="text"||getTypeField()==="number"){
       }
       </div>
     </div>
-        <p className= "sensor-name">{device.DeviceName}</p>
+        <p className= "sensor-name">{title}</p>
         <p className= "state">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
     </BaseElement>
   )

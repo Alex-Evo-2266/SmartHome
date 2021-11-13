@@ -1,6 +1,6 @@
 .ElementLine .control{
   width: 172px;
-  height: 22px;
+  /* height: 22px; */
 }
 .ElementLine .control input[type="text"]{
   font-size: 18px;

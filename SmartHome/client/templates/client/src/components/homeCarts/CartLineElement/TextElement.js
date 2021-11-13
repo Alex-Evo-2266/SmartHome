@@ -6,7 +6,7 @@ import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
 
-export const TextElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
+export const TextElement = ({title,data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
   const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const [value, setValue]=useState(firstValue)
@@ -104,7 +104,7 @@ const outHandler = (event)=>{
         }
         </div>
       </div>
-        <p className="name">{data.name}</p>
+        <p className="name">{title}</p>
         <div className="control">
           <input type="text" onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} value={value} onChange={changeHandler} disabled={disabled2}/>
           <input type="button" onClick={outHandler} disabled={disabled2} value="send"/>
