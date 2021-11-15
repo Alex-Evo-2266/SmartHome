@@ -8,27 +8,17 @@ if:
     type: device
     value:
       type: enum
-      value: rotate_left
+      value: flip90
   idDevice: null
   oper: and
   type: group
   value: null
-name: test2
+name: cubeSwitch
 status: true
 then:
-- DeviceId: 8
-  action: brightness
-  type: device
-  value:
-    action: '-'
-    type: math
-    value1:
-      action: brightness
-      idDevice: 8
-      type: device
-    value2:
-      type: number
-      value: '10'
+- DeviceId: lamp1Togle
+  action: run
+  type: script
 trigger:
 - DeviceId: 6
   action: action

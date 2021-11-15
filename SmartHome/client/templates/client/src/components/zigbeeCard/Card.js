@@ -30,6 +30,14 @@ export const ZigbeeElement = ({data}) =>{
     }
   })
 
+  const valmaxmin=(val, def)=>{
+    if(val === 0)
+      return 0
+    if(val === false)
+      return false
+    return val||def
+  }
+
   const linc = ()=>{
     let conf = []
     for (var item of data.exposes) {
@@ -43,8 +51,8 @@ export const ZigbeeElement = ({data}) =>{
       let confel = {
         name:item.name,
         address:item.property,
-        low:item.value_min||item.value_off,
-        high:item.value_max||item.value_on,
+        low:valmaxmin(item.value_min||item.value_off,0),
+        high:valmaxmin(item.value_max||item.value_on,1000000),
         icon:"",
         type:type,
         unit:item.unit,

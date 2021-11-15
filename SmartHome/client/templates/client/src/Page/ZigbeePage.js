@@ -74,7 +74,6 @@ export const ZigbeePage = ()=>{
       {
         (loading)?
         <Loader/>:
-        <div className="top">
         <div className = "Devices">
         <div className = "CardConteiner">
         {
@@ -84,7 +83,6 @@ export const ZigbeePage = ()=>{
             )
           })
         }
-        </div>
         </div>
         </div>
       }

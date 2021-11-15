@@ -8,8 +8,8 @@ mqttBroker:
   password: admin
   port: '1883'
   user: admin
-zigbee2mqtt:
-  topic: zigbee2mqtt
 weather:
   APPID: 7ef70d3274178d8de16b738339a2a943
   city: kazan
+zigbee2mqtt:
+  topic: zigbee2mqtt

@@ -1,28 +1,31 @@
-else: []
+else:
+- DeviceId: 8
+  action: state
+  type: device
+  value:
+    type: enum
+    value: low
 if:
   action: null
   children:
-  - action: action
-    idDevice: 6
+  - action: state
+    idDevice: 8
     oper: ==
     type: device
     value:
       type: enum
-      value: fall
+      value: low
   idDevice: null
   oper: and
   type: group
   value: null
-name: falltest
-status: true
+name: lamp1Togle
+status: false
 then:
 - DeviceId: 8
   action: state
   type: device
   value:
     type: enum
-    value: togle
-trigger:
-- DeviceId: 6
-  action: action
-  type: device
+    value: high
+trigger: []

@@ -54,50 +54,50 @@ services:
       - sh_db
       - mosquitto
       - redis
-  smart_home_worker:
-    build: ./SmartHome
-    command: celery -A SmartHome worker -l info
-    restart: always
-    volumes:
-      - ./SmartHome:/usr/src/smart_home
-    environment:
-      - SMARTHOME_BD_HOST=sh_db
-      - SMARTHOME_BD_PORT=3306
-      - SMARTHOME_BD_NAME=djangoSmartHome
-      - SMARTHOME_BD_USER=roothome
-      - SMARTHOME_BD_PASSWORD=root
-      - SMARTHOME_REDIS_HOST=redis
-      - SMARTHOME_REDIS_PORT=6379
-      - SMARTHOME_SOCKET_HOST=smart_home
-      - SMARTHOME_SOCKET_PORT=8000
-    links:
-      - redis
-    depends_on:
-      - smart_home
-      - sh_db
-      - redis
-  smart_home_beat:
-    build: ./SmartHome
-    command: celery -A SmartHome beat -l info
-    restart: always
-    volumes:
-      - ./SmartHome:/usr/src/smart_home
-    environment:
-      - SMARTHOME_BD_HOST=sh_db
-      - SMARTHOME_BD_PORT=3306
-      - SMARTHOME_BD_NAME=djangoSmartHome
-      - SMARTHOME_BD_USER=roothome
-      - SMARTHOME_BD_PASSWORD=root
-      - SMARTHOME_REDIS_HOST=redis
-      - SMARTHOME_REDIS_PORT=6379
-      - SMARTHOME_SOCKET_HOST=smart_home
-      - SMARTHOME_SOCKET_PORT=8000
-    links:
-      - redis
-    depends_on:
-      - smart_home_worker
-      - sh_db
-      - redis
+  # smart_home_worker:
+  #   build: ./SmartHome
+  #   command: celery -A SmartHome worker -l info
+  #   restart: always
+  #   volumes:
+  #     - ./SmartHome:/usr/src/smart_home
+  #   environment:
+  #     - SMARTHOME_BD_HOST=sh_db
+  #     - SMARTHOME_BD_PORT=3306
+  #     - SMARTHOME_BD_NAME=djangoSmartHome
+  #     - SMARTHOME_BD_USER=roothome
+  #     - SMARTHOME_BD_PASSWORD=root
+  #     - SMARTHOME_REDIS_HOST=redis
+  #     - SMARTHOME_REDIS_PORT=6379
+  #     - SMARTHOME_SOCKET_HOST=smart_home
+  #     - SMARTHOME_SOCKET_PORT=8000
+  #   links:
+  #     - redis
+  #   depends_on:
+  #     - smart_home
+  #     - sh_db
+  #     - redis
+  # smart_home_beat:
+  #   build: ./SmartHome
+  #   command: celery -A SmartHome beat -l info
+  #   restart: always
+  #   volumes:
+  #     - ./SmartHome:/usr/src/smart_home
+  #   environment:
+  #     - SMARTHOME_BD_HOST=sh_db
+  #     - SMARTHOME_BD_PORT=3306
+  #     - SMARTHOME_BD_NAME=djangoSmartHome
+  #     - SMARTHOME_BD_USER=roothome
+  #     - SMARTHOME_BD_PASSWORD=root
+  #     - SMARTHOME_REDIS_HOST=redis
+  #     - SMARTHOME_REDIS_PORT=6379
+  #     - SMARTHOME_SOCKET_HOST=smart_home
+  #     - SMARTHOME_SOCKET_PORT=8000
+  #   links:
+  #     - redis
+  #   depends_on:
+  #     - smart_home_worker
+  #     - sh_db
+  #     - redis
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt:latest

@@ -86,11 +86,11 @@ export const BtnElement = ({title,baseswitchMode=false,data,icon,className,index
 
   useEffect(()=>{
     if(typeof(onClick)==="function"||disabled||device.status==="offline")return
-    const {low,high,typeControl} = deviceConfig
-    if(device&&typeControl==="binary"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
-      if(device.DeviceValue[deviceConfig.name]===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="0"))
+    const {low,high,type} = deviceConfig
+    if(device&&type==="binary"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
+      if(device.DeviceValue[deviceConfig.name]==="0")
         setValue(false)
-      if(device.DeviceValue[deviceConfig.name]===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="1"))
+      if(device.DeviceValue[deviceConfig.name]==="1")
         setValue(true)
       if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
         let poz = Number(device.DeviceValue[deviceConfig.name])
@@ -102,7 +102,7 @@ export const BtnElement = ({title,baseswitchMode=false,data,icon,className,index
           setValue(false)
       }
     }
-    if(device&&typeControl==="number"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
+    if(device&&type==="number"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
       if(!data.action)data.action="0"
       if(data.action===device.DeviceValue[deviceConfig.name]){
         setValue(true)
@@ -145,7 +145,7 @@ const changeHandler = (event)=>{
           {
             (icon)?
             <i className={icon}></i>:
-            (itemField()&&itemField().icon)?
+            (itemField()?.icon)?
             <i className={itemField().icon}></i>:
             <i className="fas fa-circle-notch"></i>
           }

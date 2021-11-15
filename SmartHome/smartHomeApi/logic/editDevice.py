@@ -1,4 +1,5 @@
 from ..classes.devicesArrey import DevicesArrey
+from smartHomeApi.logic.Cart import deleteDeviceCart
 from ..models import Device,ValueDevice,Room,genId
 
 import json
@@ -130,6 +131,7 @@ def deleteDevice(id):
         devicesArrey.delete(id)
         print("delete in arr")
         dev.delete()
+        deleteDeviceCart(id)
         print("ok")
         return True
     except Exception as e:

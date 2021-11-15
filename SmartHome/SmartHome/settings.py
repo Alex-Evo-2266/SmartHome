@@ -29,7 +29,7 @@ SECRET_JWT_KEY = "dxkhbg5hth56"
 DEBUG = True
 
 ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ["localhost",'127.0.0.1']
+# ALLOWED_HOSTS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 
 # Application definition
 

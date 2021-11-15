@@ -20,6 +20,7 @@ def zigbeeInfoSearch(topic, message):
         decodEvent(json.loads(message))
     if ("/".join(topic.split('/')[0:2])=='/'.join([zigbee["topic"],"bridge"])):
         if(last=="devices"):
+            print("f")
             decodeZigbeeDevices(json.loads(message))
         if(last=="info"):
             decodeZigbeeConfig(json.loads(message))
@@ -27,6 +28,7 @@ def zigbeeInfoSearch(topic, message):
 def decodEvent(data):
     global zigbeeDevices
     newdata = data["data"]
+    print(data)
     newdata["root_address"] = getConfig("zigbee2mqtt")
     if(data["type"]=="device_interview"):
         sendData("connect_device",newdata)
@@ -34,6 +36,8 @@ def decodEvent(data):
         sendData("start_connect",newdata)
     if(data["type"]=="device_leave"):
         sendData("leave",newdata)
+    if(data["type"]=="device_announce"):
+        sendData("announced",newdata)
 
 
 
@@ -80,25 +84,43 @@ def getPermitJoin():
     return permit_join
 
 def decodeZigbeeDevices(data):
-    config = getConfig("zigbee2mqtt")
-    global zigbeeDevices
-    zigbeeDevices = []
-    for item in data:
-        d = item["definition"]
-        dev = dict()
-        dev["name"] = item["friendly_name"]
-        dev["address"] = item["ieee_address"]
-        dev["allAddress"] = config["topic"]+"/"+item["friendly_name"]
-        dev["type"] = item["type"]
-        if "power_source" in item:
-            dev["power_source"] = item["power_source"]
-        if(d and ("model" in d)):
-            dev["model"] = d["model"]
-            dev["vendor"] = d["vendor"]
-            if("exposes" in d):
-                dev["exposes"] = d["exposes"]
-        addzigbeeDevices(dev["address"],dev)
-    sendData("zigbee",zigbeeDevices)
+    # print(data)
+    try:
+        config = getConfig("zigbee2mqtt")
+        global zigbeeDevices
+        for item in data:
+            flag = True
+            for item2 in zigbeeDevices:
+                if(item["ieee_address"] == item2["id"]):
+                    if("exposes" in item2["data"]):
+                        if(len(item2["data"]["exposes"]) != 0):
+                            flag = False
+                            break
+                    else:
+                        flag = False
+                        break
+            if(flag):
+                sendData("newZigbeesDevice",item)
+        zigbeeDevices = []
+        for item in data:
+            d = item["definition"]
+            dev = dict()
+            dev["name"] = item["friendly_name"]
+            dev["address"] = item["ieee_address"]
+            dev["allAddress"] = config["topic"]+"/"+item["friendly_name"]
+            dev["type"] = item["type"]
+            if "power_source" in item:
+                dev["power_source"] = item["power_source"]
+            if(d and ("model" in d)):
+                dev["model"] = d["model"]
+                dev["vendor"] = d["vendor"]
+                if("exposes" in d):
+                    dev["exposes"] = d["exposes"]
+            addzigbeeDevices(dev["address"],dev)
+        sendData("zigbee",zigbeeDevices)
+    except Exception as e:
+        print("decoderror", e)
+
 
 def decodeZigbeeConfig(data):
     print(data["permit_join"])

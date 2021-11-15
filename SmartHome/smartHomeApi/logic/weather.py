@@ -8,7 +8,6 @@ dataWeather = dict()
 
 def current_weather(q: str, appid: str) -> dict:
     """https://openweathermap.org/api"""
-    print("p1",locals())
     return requests.get(URL_BASE + "forecast", params=locals()).json()
 
 def Weather():
@@ -24,9 +23,7 @@ def updateWeather():
         timeWeather = list()
         dateWeather = list()
         weatherNow = current_weather(weatherConf["city"],weatherConf["APPID"])
-        pprint(weatherNow)
         for item in weatherNow["list"]:
-            print(item)
             time = datetime.utcfromtimestamp(item["dt"])
             if(time.strftime('%H:%M:%S')=="12:00:00"):
                 dateWeather.append({
@@ -52,7 +49,6 @@ def updateWeather():
                     "wind": item.get("wind")
                 }
         for item in weatherNow["list"]:
-            print(item)
             time = datetime.utcfromtimestamp(item["dt"])
             timeWeather.append({
                 "date": time.strftime('%Y-%m-%d'),

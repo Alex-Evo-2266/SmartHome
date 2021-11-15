@@ -48,18 +48,19 @@ export const Menu = ()=>{
       arr2 = arr2.filter((item3)=>item3.title!==item.title)
       arr1.push(item)
     }
+    console.log(arr2,arr1,arr2.indexOf({title:"Users",iconClass:"fas fa-users",url:"/users"}));
     if(auth.userLevel >= 3)
       arr2.push({title:"Users",iconClass:"fas fa-users",url:"/users"})
     return {include:arr1, other:arr2}
   },[])
 
   useEffect(()=>{
-    if(config&&config.MenuElements){
+    if(config.MenuElements){
       let data = giveField(config.MenuElements)
       setField(data.include)
       setotherField(data.other)
     }
-  },[config,giveField])
+  },[config.MenuElements,giveField])
 
   const updataUser = useCallback(async()=>{
     const data = await request(`/api/user`, 'GET', null,{Authorization: `Bearer ${auth.token}`})

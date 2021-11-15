@@ -76,7 +76,7 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
   }
 
   useEffect(()=>{
-    if(socket.message.type==="connect_device")
+    if(socket.message.type==="newZigbeesDevice")
     {
       setDevices(prev=>{
         let flag = true;
