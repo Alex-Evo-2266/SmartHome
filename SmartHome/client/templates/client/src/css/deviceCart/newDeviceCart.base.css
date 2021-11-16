@@ -88,3 +88,39 @@ h4.offline{
   height: 50px;
   border: none;
 }
+.allColor{
+  position: relative;
+  z-index: 2
+}
+/* input[type="range"]{
+  z-index: 2;
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+input[type=range]::-moz-range-thumb{
+
+}
+input[type=range]::-ms-track {
+
+} */
+.allColor input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, red 5%, #ff0 20%, lime 34%, cyan 50%, blue 67%, #f0f 86%, red 95%);
+  border-radius: 10px;
+  border: 1px solid #aaa;
+}
+
+.allColor::before{
+  content: '';
+  z-index: 0;
+  display: none;
+  position: absolute;
+  width: calc(100% - 10px);
+  height: 100%;
+  top: 0;
+  left: 5px;
+  background: linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%);
+}

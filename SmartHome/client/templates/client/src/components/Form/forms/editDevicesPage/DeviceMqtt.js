@@ -4,37 +4,13 @@ import {useHttp} from '../../../../hooks/http.hook'
 import {useMessage} from '../../../../hooks/message.hook'
 import {AuthContext} from '../../../../context/AuthContext.js'
 import {IconChoose} from '../../../iconChoose'
-import {getConf} from '../../../addDeviceComponent/config/defaultTypeDevConfig'
 import {useChecked} from '../../../../hooks/checked.hook'
 
 export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {USText} = useChecked()
-  const [configForm, setConfigForm] = useState(getConf(deviceData.DeviceType||"other"));
   const {request, error, clearError} = useHttp();
-
-  // const validCountField = (data)=>{
-  //   return data;
-  //   if(!deviceData.DeviceType||deviceData.DeviceType==="other"||deviceData.DeviceType==="sensor")return data
-  //   let data1 = getConf(deviceData.DeviceType||"other").config.slice()
-  //   let newdata = []
-  //   for (var item of data1) {
-  //     let validef = false
-  //     for (var item2 of data) {
-  //       if(item.name===item2.name){
-  //         validef = true
-  //         newdata.push(item2)
-  //       }
-  //     }
-  //     if(!validef){
-  //       let newField = item
-  //       newField.address = ""
-  //       newdata.push(newField)
-  //     }
-  //   }
-  //   return newdata
-  // }
 
   useEffect(()=>{
     message(error,"error")
@@ -42,10 +18,6 @@ export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
       clearError();
     }
   },[error,message, clearError])
-
-  useEffect(()=>{
-    setConfigForm(getConf(deviceData.DeviceType))
-  },[deviceData.DeviceType])
 
   const [device, setDevice] = useState({
     DeviceId:deviceData.DeviceId||0,
@@ -111,9 +83,9 @@ const changeHandlerTest = event=>{
     ){return false}
     if(!field||!field[0]){return false}
     for (var item of field) {
-      if(item&&item.type&&item.address){return true}
+      if(!(item?.type&&item?.address)){return false}
     }
-    return false
+    return true
   }
   const validFields = ()=>{
     let arrType = []
@@ -230,23 +202,18 @@ const changeHandlerTest = event=>{
         field.map((item,index)=>{
           return(
             <HidingLi key={index} title = {item.name}>
-            {
-              (configForm.editType)?
               <div className="configElement">
                 <div className="input-data">
                   <input data-id={index} type="text" name="name" value={item.name} onChange={changeHandlerField} required/>
                   <label>name</label>
                 </div>
-              </div>:null
-            }
+              </div>
             <div className="configElement">
               <div className="input-data">
                 <input data-id={index} type="text" name="address" value={item.address} onChange={changeHandlerField} required/>
                 <label>address</label>
               </div>
             </div>
-            {
-              (configForm.editTypeControl)?
               <div className="configElement">
                 <div className="input-data">
                   <select data-id={index} name="type" value={item.type} onChange={changeHandlerField}>
@@ -257,8 +224,7 @@ const changeHandlerTest = event=>{
                   </select>
                 <label>type</label>
               </div>
-            </div>:null
-            }
+            </div>
             <div className="configElement" style={{justifyContent:"center"}}>
               <div className="checkbox-btn">
                 <input data-id={index} type="checkbox" name="control" checked={Boolean(item.control)} onChange={changeHandlerFieldChek} required/>
@@ -300,23 +266,16 @@ const changeHandlerTest = event=>{
                 </div>
               </div>:null
             }
-            {
-              (configForm.editCountField)?
               <label>
                 <button className="delField" onClick={()=>delcom(index)}>delete</button>
-              </label>:null
-            }
+              </label>
             </HidingLi>
           )
         })
       }
-      {
-        (configForm.editCountField)?
         <li>
           <button className="addField" onClick={addcom}>add</button>
         </li>
-        :null
-      }
       <div className="controlForm" >
       {
         (type==="edit")?

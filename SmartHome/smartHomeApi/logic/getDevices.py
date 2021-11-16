@@ -2,6 +2,7 @@ from django.conf import settings
 from ..models import Device,ValueDevice,Room,genId
 
 from ..classes.devicesArrey import DevicesArrey
+from .deviceControl.system.variable import Variable
 
 
 from castom_moduls.Mqtt.MQTTDevice import MQTTDevice
@@ -42,6 +43,8 @@ def device(item):
                 dev = MQTTDevice(id=id)
             if(typeConnect == "zigbee"):
                 dev = MQTTDevice(id=id)
+            if(typeConnect == "variable"):
+                dev = Variable(id=id)
             if(not dev.get_device()):
                 return {
                 **dev.get_Base_Info(),

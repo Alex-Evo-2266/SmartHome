@@ -15,6 +15,13 @@ makefile
 whileCost
 zigbee2mqtt/database.db
 zigbee2mqtt/log
+zigbee2mqtt/*_backup.json
 zigbee2mqtt/state.json
 config/server-config.yml
 test
+devfront.sh
+devserver.sh
+SmartHome/config/*/*.*
+!SmartHome/config/pages/basePage.yml
+!SmartHome/config/styles/light.yml
+!SmartHome/config/styles/night.yml

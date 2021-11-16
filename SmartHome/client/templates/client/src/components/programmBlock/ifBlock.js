@@ -132,7 +132,7 @@ if(Object.keys(device)?.length === 0 || Object.keys(field)?.length === 0){
         (data.value.type==="enum"&&field.type==="enum")?
         <EnumBlock data={data.value} values={valuesDecod(field.values)} updata={updataValue} deleteEl={deleteValue}/>:
         (data.value.type==="enum"&&field.type==="binary")?
-        <EnumBlock data={data.value} values={["high","low","togle"]} updata={updataValue} deleteEl={deleteValue}/>:
+        <EnumBlock data={data.value} values={["high","low"]} updata={updataValue} deleteEl={deleteValue}/>:
         null
       }
       </div>

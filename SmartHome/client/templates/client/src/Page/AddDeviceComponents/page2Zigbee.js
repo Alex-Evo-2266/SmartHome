@@ -45,7 +45,7 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
 
   const linc = async(dev)=>{
     let conf = []
-    for (let item of dev.definition.exposes) {
+    for (let item of dev.exposes) {
       let type = item.type
       if(item.type==="numeric")
         type="number"
@@ -57,7 +57,7 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
         name:item.name,
         address:item.property,
         low:(defVal[item.name]?.low)||val([item.value_min,item.value_off],0),
-        high:(defVal[item.name]?.high)||val([item.value_max,item.value_on],100),
+        high:(defVal[item.name]?.high)||val([item.value_max,item.value_on],100000),
         icon:"fas fa-circle-notch",
         type:type,
         unit:item.unit,
@@ -68,7 +68,7 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
     }
     await setForm({
       ...form,
-      DeviceAddress:dev.root_address.topic + "/" + dev.friendly_name,
+      DeviceAddress:dev.root_address.topic + "/" + dev.name,
       config: conf,
       DeviceValueType: "json",
     })
@@ -95,6 +95,10 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
   },[socket.message])
 
   useEffect(()=>{
+    console.log(devices);
+  },[devices])
+
+  useEffect(()=>{
     message(error,"error")
     return ()=>{
       clearError();
@@ -117,15 +121,15 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
     {
       devices.map((item, index)=>{
         return(
-          <div className="zigbeeDevice" key={index} onClick={(item.definition)?()=>linc(item):()=>{}}>
-            <div className="name">name: {item.friendly_name}</div>
+          <div className="zigbeeDevice" key={index} onClick={(item.exposes)?()=>linc(item):()=>{}}>
+            <div className="name">name: {item.name}</div>
             <div className="dividers"></div>
             {
-              (item.definition)?
+              (item.exposes)?
               <>
-                <div className="model">model: {item.definition?.model}</div>
+                <div className="model">model: {item.model}</div>
                 <div className="dividers"></div>
-                <div className="description">{item.definition?.description}</div>
+                <div className="description">{item.description}</div>
               </>
               :<div className="devLoader"><Loader style={{position:"absolute"}}/></div>
             }

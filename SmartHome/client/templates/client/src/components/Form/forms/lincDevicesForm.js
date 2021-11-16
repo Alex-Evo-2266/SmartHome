@@ -2,7 +2,7 @@ import React, {useEffect,useState} from 'react'
 import {Loader} from '../../Loader'
 import {DeviceMqttEdit} from './editDevicesPage/DeviceMqtt.js'
 import {DeviceMiioEdit} from './editDevicesPage/DeviceMiio.js'
-import {SistemVariableEdit} from './editDevicesPage/SistemVariable.js'
+import {DeviceVariableEdit} from './editDevicesPage/SistemVariable.js'
 
 export const LincDevicesForm = (props)=>{
   const [device, setDevice] = useState();
@@ -47,7 +47,7 @@ if(device.DeviceTypeConnect==="system"&&device.DeviceType==="variable"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
-        <SistemVariableEdit deviceData = {device} hide={props.hide} type="link"/>
+        <DeviceVariableEdit deviceData = {device} hide={props.hide} type="link"/>
       </div>
     </div>
   )

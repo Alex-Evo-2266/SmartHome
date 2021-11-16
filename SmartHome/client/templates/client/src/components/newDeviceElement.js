@@ -78,7 +78,7 @@ export const NewDeviceElement = ({id}) =>{
           <li className="DeviceControlLi"><h4 className="offline">{device.status}</h4></li>
           :device.DeviceConfig.map((item,index)=>{
             if(item.type==="binary" && item.control){
-              return <Power key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue&&(device.DeviceValue[item.name]==="1"))?1:0} type={item.name}/>
+              return <Power key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue&&(String(device.DeviceValue[item.name])==="1"))?true:false} type={item.name}/>
             }
             if(item.type==="number"&& item.control){
               return <Dimmer key={index} updata = {updateDevice} idDevice={device.DeviceId} value={(device.DeviceValue)?Number(device.DeviceValue[item.name]):0} type={item.name} title = {item.name} conf={{min:item.low,max:item.high}}/>

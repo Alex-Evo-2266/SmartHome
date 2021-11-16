@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import {useMessage} from '../../hooks/message.hook'
 import {IconChoose} from '../../components/iconChoose'
 
-export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []}) => {
+export const AddDevicesPage2Variable = ({form, setForm, next,backPage, begining = []}) => {
   const {message} = useMessage();
   const [fields, setFields] = useState(begining)
 
@@ -40,16 +40,12 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
 
   const validFields = ()=>{
     let arrType = []
-    if(!form.DeviceAddress){
-      message("нет адреса","error")
-      return false
-    }
     if(!fields[0]){
       message("нет полей","error")
       return false
     }
     for (var item of fields) {
-      if(!item.address || !item.name){
+      if(!item.name){
         message("некоректное поле","error")
         return false
       }
@@ -88,21 +84,6 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
 
   return(
     <div className="allFon">
-    <div className="configElement">
-      <div className="input-data">
-        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="DeviceAddress" type="text" value={form.DeviceAddress}></input>
-        <label>Address</label>
-      </div>
-    </div>
-    <div className="configElement">
-      <div className="input-data">
-        <select className = "textInput" name="DeviceValueType" value={form.DeviceValueType} onChange={(e)=>updata(e.target.name, e.target.value)}>
-          <option value="json">json</option>
-          <option value="value">value</option>
-        </select>
-        <label>Type value</label>
-      </div>
-    </div>
       <div className="fieldsConteiner">
       {
         fields?.map((item, index)=>{
@@ -116,12 +97,6 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
             </div>
             <div className="configElement">
               <div className="input-data">
-                <input data-id={index} onChange={changeHandlerField} required name="address" type="text" value={item.address}></input>
-                <label>address field</label>
-              </div>
-            </div>
-            <div className="configElement">
-              <div className="input-data">
                 <select className = "textInput" data-id={index} name="type" value={item.type} onChange={changeHandlerField}>
                   <option value="binary">binary</option>
                   <option value="text">text</option>
@@ -129,12 +104,6 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
                   <option value="enum">enum</option>
                 </select>
                 <label>type</label>
-              </div>
-            </div>
-            <div className="configElement" style={{justifyContent:"center"}}>
-              <div className="checkbox-btn">
-                <input data-id={index} type="checkbox" placeholder="unit" name="control" checked={Boolean(item.control)} onChange={changeHandlerFieldChek} required/>
-                <div><span className="slide"></span></div>
               </div>
             </div>
             {

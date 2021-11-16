@@ -6,6 +6,7 @@ import {AddDevicesPage1} from './AddDeviceComponents/page1'
 import {AddDevicesPage2MQTT} from './AddDeviceComponents/page2Mqtt'
 import {AddDevicesPage2Yeelight} from './AddDeviceComponents/page2Yeelight'
 import {AddDevicesPage2Zigbee} from './AddDeviceComponents/page2Zigbee'
+import {AddDevicesPage2Variable} from './AddDeviceComponents/page2Variable'
 import {AddDevicesPage3} from './AddDeviceComponents/page3'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
@@ -61,6 +62,8 @@ export const AddDevicesPage = () => {
       <AddDevicesPage2Yeelight form={form} setForm={setForm} backPage={backPage} next={next}/>:
       (page === 2 && (form.DeviceTypeConnect === "zigbee"))?
       <AddDevicesPage2Zigbee form={form} setForm={setForm} backPage={backPage} next={next}/>:
+      (page === 2 && (form.DeviceTypeConnect === "variable"))?
+      <AddDevicesPage2Variable form={form} setForm={setForm} backPage={backPage} next={next}/>:
       (page === 3)?
       <AddDevicesPage3 form={form} setForm={setForm} backPage={backPage} next={outHandler}/>:
       null

@@ -4,7 +4,7 @@ import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 import {DeviceMiioEdit} from './editDevicesPage/DeviceMiio.js'
-import {SistemVariableEdit} from './editDevicesPage/SistemVariable.js'
+import {DeviceVariableEdit} from './editDevicesPage/SistemVariable.js'
 import {DeviceMqttEdit} from './editDevicesPage/DeviceMqtt.js'
 
 
@@ -65,11 +65,11 @@ if(device.DeviceTypeConnect==="miio"){
     </div>
   )
 }
-if(device.DeviceTypeConnect==="system"&&device.DeviceType==="variable"){
+if(device.DeviceTypeConnect==="variable"&&device.DeviceType==="variable"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
-        <SistemVariableEdit deviceData = {device} hide={props.hide}/>
+        <DeviceVariableEdit deviceData = {device} hide={props.hide}/>
       </div>
     </div>
   )

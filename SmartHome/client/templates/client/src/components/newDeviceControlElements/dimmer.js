@@ -5,6 +5,7 @@ import {AuthContext} from '../../context/AuthContext.js'
 
 export const Dimmer = ({updata,title,type,conf,value,idDevice}) =>{
   const [newvalue, setValue]=useState(0)
+  // const [colo]=useState(false)
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
@@ -36,6 +37,10 @@ export const Dimmer = ({updata,title,type,conf,value,idDevice}) =>{
     }, 500);
   }
 
+  function isColor(text) {
+    return (text.indexOf("color") != -1)
+  }
+
   return(
     <li className="DeviceControlLi">
       <div className="DeviceControlLiName">
@@ -43,10 +48,10 @@ export const Dimmer = ({updata,title,type,conf,value,idDevice}) =>{
       </div>
       <div className="DeviceControlLiContent">
       <div className="DeviceControlLiValue">
-        <p>{newvalue||""}</p>
+        <p>{newvalue||"0"}</p>
       </div>
-      <div className="DeviceLiControl">
-      <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler}/>
+      <div className={`DeviceLiControl ${(isColor(type))?"allColor":""}`}>
+        <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler}/>
       </div>
       </div>
     </li>

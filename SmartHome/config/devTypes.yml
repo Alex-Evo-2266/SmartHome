@@ -29,3 +29,7 @@
   interface:
   - name: "mqtt"
   - name: "zigbee"
+- title: "variable"
+  ditailType: "variable"
+  interface:
+  - name: "variable"
