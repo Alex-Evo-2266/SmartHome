@@ -4,7 +4,7 @@
     "version": 1,
     "source": "zigbee-herdsman@0.13.164",
     "internal": {
-      "date": "2021-11-16T15:43:35.227Z",
+      "date": "2021-11-23T13:48:32.520Z",
       "znpVersion": 0
     }
   },
@@ -27,7 +27,7 @@
   },
   "devices": [
     {
-      "nwk_address": "c9e7",
+      "nwk_address": "e6fe",
       "ieee_address": "04cf8cdf3c7b5bf0",
       "is_child": true
     },
@@ -42,7 +42,7 @@
       "is_child": true
     },
     {
-      "nwk_address": "6c63",
+      "nwk_address": "4f5d",
       "ieee_address": "00158d0005884fb7",
       "is_child": true
     },

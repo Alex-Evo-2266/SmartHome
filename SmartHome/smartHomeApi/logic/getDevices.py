@@ -4,14 +4,10 @@ from ..models import Device,ValueDevice,Room,genId
 from ..classes.devicesArrey import DevicesArrey
 from .deviceControl.system.variable import Variable
 
-
-from castom_moduls.Mqtt.MQTTDevice import MQTTDevice
-from castom_moduls.Yeelight.Yeelight import Yeelight
-# from .castom_moduls.getModuls import pr
+from castom_moduls import getDevicesClass
 
 import json
 import ast
-# pr()
 
 devicesArrey = DevicesArrey()
 
@@ -37,14 +33,11 @@ def device(item):
             }
         element = devicesArrey.get(id)
         if(not element):
-            if(typeConnect == "yeelight"):
-                dev = Yeelight(id=id)
-            if(typeConnect == "mqtt"):
-                dev = MQTTDevice(id=id)
-            if(typeConnect == "zigbee"):
-                dev = MQTTDevice(id=id)
             if(typeConnect == "variable"):
                 dev = Variable(id=id)
+            else:
+                dev = getDevicesClass(typeConnect, id)
+            print(dev)
             if(not dev.get_device()):
                 return {
                 **dev.get_Base_Info(),

@@ -8,13 +8,22 @@ from smartHomeApi.classes.devicesArrey import DevicesArrey
 from smartHomeApi.logic.serverData import getServerData
 from smartHomeApi.logic.weather import updateWeather
 
-from miio import Device, Yeelight
+from miio import Device, Yeelight, Gateway
 
-# dev = Yeelight("192.168.0.2", "822dc07d3660422aef22c6cb11af3a25")
-# print(dev)
-# dev.set_developer_mode(True)
-# print(inf)
+# dev = Device("192.168.0.2", "822dc07d3660422aef22c6cb11af3a25")
 
+# def testConntec():
+#     try:
+#         dev = Gateway("192.168.0.6", "6f6e344a4d4f4e55787a68737537334e")
+#         print(dev)
+#         print(dev.info())
+#         z = dev.get_properties(["status"])
+#         print(z)
+#     except Exception as e:
+#         print("error",e)
+#         testConntec()
+#
+# testConntec()
 
 devicesArrey = DevicesArrey()
 

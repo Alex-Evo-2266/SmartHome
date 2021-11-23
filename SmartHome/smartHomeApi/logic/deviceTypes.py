@@ -1,12 +1,38 @@
 from SmartHome.settings import DEVICETYPES
+from castom_moduls import getDevices
 import yaml
 import os, sys
 
+def convertFormat():
+    baseTyps = ["light","switch","wireless switchs","relay","socket","sensor"]
+    devices = getDevices()
+    types = list()
+    for key in devices:
+        for item in devices[key]["typeDevices"]:
+            if(baseTyps.count(item) == 0 and item != "all"):
+                baseTyps.append(item)
+    for item in baseTyps:
+        types.append({
+        "title":item,
+        "interface":[]
+        })
+    for item in types:
+        for key in devices:
+            for item2 in devices[key]["typeDevices"]:
+                if(item["title"] == item2 or item2 == "all"):
+                    item["interface"].append(key)
+    types.append({
+        "title":"variable",
+        "interface":["variable"]
+    })
+    return types
+
 def getDeviceTypes():
     try:
-        templates = None
-        with open(DEVICETYPES) as f:
-            templates = yaml.safe_load(f)
+        templates = convertFormat()
+        # templates = None
+        # with open(DEVICETYPES) as f:
+        #     templates = yaml.safe_load(f)
         print(templates)
         return {
             "status": "ok",

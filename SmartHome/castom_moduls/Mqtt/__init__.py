@@ -1,1 +1,17 @@
-from .MQTTDevice import MQTTDevice
+from .MQTTDevice import MQTTDevice as Mqtt
+
+def getInfo():
+    return {
+        "type":"device",
+        "name":"mqtt",
+        "devices":[{
+            "class":Mqtt,
+            "name":"mqtt",
+            "typeDevices":["all"]
+        },
+        {
+            "class":Mqtt,
+            "name":"zigbee",
+            "typeDevices":["all"]
+        }]
+    }

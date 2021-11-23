@@ -45,11 +45,11 @@ export const AddDevicesPage1 = ({form, setForm, next}) => {
                 {
                   item.interface?.map((item2, index2)=>{
                     return(
-                      <div className="card" key={index2} onClick = {()=>choisetype(item.title, item2.name)}>
+                      <div className="card" key={index2} onClick = {()=>choisetype(item.title, item2)}>
                         <div className="imgConteiner">
                           <img src={item.img||getImage(item.title)} alt={item.title}/>
                         </div>
-                        <p>{`${item.title} (${item2.name})`}</p>
+                        <p>{`${item.title} (${item2})`}</p>
                       </div>
                     )
                   })
