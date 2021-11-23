@@ -8,6 +8,7 @@ import {GroupBlock} from '../components/programmBlock/groupBlock'
 import {ActBlock} from '../components/programmBlock/actBlock'
 import {ActScript} from '../components/programmBlock/actScript'
 import {TriggerBlock} from '../components/programmBlock/triggerBlock'
+import {TriggerDateTime} from '../components/programmBlock/triggerDateTime'
 import {Loader} from '../components/Loader'
 import {AddScriptContext} from '../components/addScript/addScriptContext'
 import {MenuContext} from '../components/Menu/menuContext'
@@ -20,7 +21,7 @@ export const NewScriptsPage = ({edit}) => {
   const history = useHistory()
   const {USText} = useChecked()
   const auth = useContext(AuthContext)
-  const {show} = useContext(AddScriptContext)
+  const {show,addTarget} = useContext(AddScriptContext)
   const {message} = useMessage();
   const {loading,request, error, clearError} = useHttp();
   const[cost, setCost]=useState(true)
@@ -33,7 +34,14 @@ export const NewScriptsPage = ({edit}) => {
   })
 
   const addTrigger = ()=>{
-    show("triggerBlock",(none,dataDev)=>{
+    addTarget((dataDev)=>{
+      if(dataDev.type === "datetime")
+      {
+        let mas = script;
+        mas.trigger.push({type:"datetime",action:{frequency:"everyday", time:"00:00:00"}})
+        setScript(mas)
+        return
+      }
       if(!dataDev||!dataDev.DeviceId)
         return
       let mas = script;
@@ -215,6 +223,8 @@ export const NewScriptsPage = ({edit}) => {
               {
                 (cost)?
                 script.trigger.map((item,index)=>{
+                  if(item?.type === "datetime")
+                    return <TriggerDateTime key={index} index={index} action={item.action} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.DeviceId}/>
                   return <TriggerBlock key={index} index={index} action={item.action} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.DeviceId}/>
                 }):null
               }

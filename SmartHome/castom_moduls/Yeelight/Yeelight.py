@@ -9,6 +9,12 @@ def look_for_param(arr:list, val):
             return(item)
     return None
 
+def saveNewDate(val, status):
+    # print(val.name, val.get(), status)
+    if(val.get() != status):
+        print("fdg",val.name, val.get(), status)
+        val.set(status)
+
 # def createValue()
 
 class Yeelight(BaseDevice):
@@ -24,17 +30,17 @@ class Yeelight(BaseDevice):
                 val = "0"
                 if(values["power"] == "on"):
                     val = "1"
-                self.values.append(DeviceElement(name="state", control=True, high=1, low=0, type="binary", icon="fas fa-power-off", value=val))
+                self.values.append(DeviceElement(name="state", idDevice=self.id, control=True, high=1, low=0, type="binary", icon="fas fa-power-off", value=val))
             if(not look_for_param(self.values, "brightness") and "current_brightness" in values):
-                self.values.append(DeviceElement(name="brightness", control=True, high=100, low=0, type="number", icon="far fa-sun", value=values["current_brightness"]))
+                self.values.append(DeviceElement(name="brightness", idDevice=self.id, control=True, high=100, low=0, type="number", icon="far fa-sun", value=values["current_brightness"]))
             if(not look_for_param(self.values, "night_light") and self.minmaxValue["night_light"] != False):
-                self.values.append(DeviceElement(name="night_light", control=True, high="1", low=0, type="binary", icon="fab fa-moon", value=values["active_mode"]))
+                self.values.append(DeviceElement(name="night_light", idDevice=self.id, control=True, high="1", low=0, type="binary", icon="fab fa-moon", value=values["active_mode"]))
             if(not look_for_param(self.values, "color") and values["hue"] != None):
-                self.values.append(DeviceElement(name="color", control=True, high=360, low=0, type="number", icon="fab fa-medium-m", value=values["hue"]))
+                self.values.append(DeviceElement(name="color", idDevice=self.id, control=True, high=360, low=0, type="number", icon="fab fa-medium-m", value=values["hue"]))
             if(not look_for_param(self.values, "saturation") and values["sat"] != None):
-                self.values.append(DeviceElement(name="saturation", control=True, high=100, low=0, type="number", icon="fab fa-medium-m", value=values["sat"]))
+                self.values.append(DeviceElement(name="saturation", idDevice=self.id, control=True, high=100, low=0, type="number", icon="fab fa-medium-m", value=values["sat"]))
             if(not look_for_param(self.values, "temp") and "ct" in values):
-                self.values.append(DeviceElement(name="temp", control=True, high=self.minmaxValue["color_temp"]["max"], low=self.minmaxValue["color_temp"]["min"], type="number", icon="fas fa-adjust", value=values["ct"]))
+                self.values.append(DeviceElement(name="temp", idDevice=self.id, control=True, high=self.minmaxValue["color_temp"]["max"], low=self.minmaxValue["color_temp"]["min"], type="number", icon="fas fa-adjust", value=values["ct"]))
             super().save()
         except Exception as e:
             print("yeelight initialize error",e)
@@ -47,22 +53,22 @@ class Yeelight(BaseDevice):
             val = "0"
             if(values["power"] == "on"):
                 val = "1"
-            state.value = val
+            saveNewDate(state,val)
         brightness = look_for_param(self.values, "brightness")
         if(brightness and "current_brightness" in values):
-            brightness.value = values["current_brightness"]
+            saveNewDate(brightness,values["current_brightness"])
         mode = look_for_param(self.values, "night_light")
         if(mode and "active_mode" in values):
-            mode.value = values["active_mode"]
+            saveNewDate(mode,values["active_mode"])
         temp = look_for_param(self.values, "temp")
         if(temp and "ct" in values):
-            temp.value = values["ct"]
+            saveNewDate(temp,values["ct"])
         color = look_for_param(self.values, "color")
         if(color and "hue" in values):
-            color.value = values["hue"]
+            saveNewDate(color,values["hue"])
         saturation = look_for_param(self.values, "saturation")
         if(saturation and "sat" in values):
-            saturation.value = values["sat"]
+            saveNewDate(saturation,values["sat"])
 
 
     def get_value(self, name):
@@ -94,11 +100,11 @@ class Yeelight(BaseDevice):
         if(name == "color"):
             self.device.set_power_mode(PowerMode.HSV)
             saturation = look_for_param(self.values, "saturation")
-            self.device.set_hsv(int(status), int(saturation.value))
+            self.device.set_hsv(int(status), int(saturation.get()))
         if(name == "saturation"):
             self.device.set_power_mode(PowerMode.HSV)
             color = look_for_param(self.values, "color")
-            self.device.set_hsv(int(color.value), int(status))
+            self.device.set_hsv(int(color.get()), int(status))
 
 
 

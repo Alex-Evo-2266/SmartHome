@@ -13,5 +13,5 @@ def setValue(id, type, value):
         e.set_value(type,value)
         return True
     except Exception as ex:
-        print("set value error",ex)
+        print("set value error",id,ex)
         return None

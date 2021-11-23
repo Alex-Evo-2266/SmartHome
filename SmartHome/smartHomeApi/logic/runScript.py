@@ -71,7 +71,7 @@ def ifblock(data):
                 if(item.name == data["action"]):
                     if(data["value"]):
                         val = getvalue(data["value"],{"type":item.type})
-                        rval = item.value
+                        rval = item.get()
                         if(rval=="on"):
                             rval="1"
                         elif(rval=="off"):
@@ -111,7 +111,7 @@ def getvalue(data,option):
         for item in option["device"].values:
             if(item.name==option["field"]):
                 type = item.type
-                oldValue = item.value
+                oldValue = item.get()
                 break
     if("type" in option):
         type = option["type"]
@@ -150,7 +150,7 @@ def getvalue(data,option):
         values = device.values
         for item in values:
             if(item.name == data["action"]):
-                val = item.value
+                val = item.get()
                 return val
 
 def actiondev(data):

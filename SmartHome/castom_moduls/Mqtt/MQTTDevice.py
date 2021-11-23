@@ -28,7 +28,7 @@ class MQTTDevice(BaseDevice):
         value = kwargs["value"]
 
         val = look_for_by_topic(self.values, topic)
-        val.value = value
+        val.set(value)
 
     def get_device(self):
         return True

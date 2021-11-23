@@ -1,0 +1,77 @@
+.calendar{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--color-active);
+}
+
+.calendar-grid{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  grid-gap: 0.3em;
+  padding: 10px 0;
+  background: var(--color-base);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: calc(100% - 50px - 20px);
+}
+.calendar-grid div{
+  font-size: 1em;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.calendar-grid div.naw{
+  background: var(--color-active);
+  color: var(--text-color-active-fon);
+}
+.calendar-grid div.prev,
+.calendar-grid div.next{
+  color: #999;
+}
+.NawMonth{
+  padding: 10px;
+  background: var(--color-active);
+  color: var(--text-color-active-fon);
+  font-size: 1.2em;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/*
+.weekdays{
+  width: 100%;
+  height: 2em;
+  padding: 0 0.4em;
+  display: flex;
+  align-items: center;
+}
+.weekdays div{
+  font-size: 1em;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  width: calc(44.2rem/7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0 0.3em 0.5em rgba(0, 0, 0, 0.5);
+}
+.days{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.2em;
+
+}
+.days div{
+  font-size: 1em;
+  margin: 0.3em 0;
+  width: calc(100% / 7)
+} */

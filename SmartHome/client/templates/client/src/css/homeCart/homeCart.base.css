@@ -6,6 +6,7 @@
 @import "./Text/text.base.css";
 @import "./Weather/Weather.css";
 @import "./homeCart.color.css";
+@import "./Calendar.css";
 
 ul.elementConteiner{
   position: relative;

@@ -47,11 +47,12 @@ export const AddScriptBase = ()=>{
   }
 
   if(addScript.type==="triggerBlock"){
-    return (
-      <BackForm onClick={close} className="addElementBody">
-        <AddScriptDevices result={shoseDevice} type={"if"}/>
-      </BackForm>
-    )
+    return null;
+    // return (
+    //   <BackForm onClick={close} className="addElementBody">
+    //     <AddScriptDevices result={shoseDevice} type={"if"}/>
+    //   </BackForm>
+    // )
   }
 
   if(addScript.type==="typeAct"){

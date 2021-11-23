@@ -36,6 +36,10 @@ const cardBaseElement = [
     title:"time",
     data:"time"
   },
+  {
+    title:"calendar",
+    data:"date"
+  }
 ]
 
 const cardLineElement = [
@@ -79,6 +83,14 @@ const time = {
   order:"0",
   width:2,
   height:1
+}
+
+const date = {
+  name:"date",
+  type:"date",
+  order:"0",
+  width:2,
+  height:2
 }
 
 export const AddControl = ()=>{
@@ -138,10 +150,14 @@ export const AddControl = ()=>{
       active={(data)=>{
         if(data==="weather")
           addElement(weather)
-        if(data==="time")
+        else if(data==="time")
           addElement(time)
-        setTypeChild(data)
-        setPage(2)
+        else if(data==="date")
+          addElement(date)
+        else{
+          setTypeChild(data)
+          setPage(2)
+        }
       }}
       activeText="NEXT"
       items={(addControl.type==="AddElement")?cardBaseElement:cardLineElement}

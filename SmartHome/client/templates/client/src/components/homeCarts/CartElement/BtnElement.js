@@ -43,7 +43,6 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
   },[devices,data,onClick,lookForDeviceById])
 
   useEffect(()=>{
-    console.log(device);
   },[device])
 
   const itemField = useCallback(()=>{
@@ -90,15 +89,11 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
   useEffect(()=>{
     if(typeof(onClick)==="function"||disabled||device.status==="offline")return
     const {low,high,type} = deviceConfig
-    console.log(deviceConfig);
     if(device&&type==="binary"&&device?.DeviceValue&&device?.DeviceValue[deviceConfig.name]){
-      console.log("f4");
       if(device.DeviceValue[deviceConfig.name]===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="0"))
-        {console.log("f2");
-          setValue(false)}
+          setValue(false)
       if(device.DeviceValue[deviceConfig.name]===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="1"))
-      {console.log("f3");
-        setValue(true)}
+        setValue(true)
       if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
         let poz = Number(device.DeviceValue[deviceConfig.name])
         let min = Number(low)

@@ -1,3 +1,4 @@
+from ..runScript import runScripts
 
 def getParams(d:dict, param:str, default=None):
     if(param in d):
@@ -10,6 +11,7 @@ class DeviceElement(object):
 
     def __init__(self, *args, **kwargs):
         self.name = getParams(kwargs, "name")
+        self.idDevice = getParams(kwargs, "idDevice")
         self.address = getParams(kwargs, "address")
         self.control = getParams(kwargs, "control")
         self.high = getParams(kwargs, "high")
@@ -18,10 +20,19 @@ class DeviceElement(object):
         self.type = getParams(kwargs, "type")
         self.unit = getParams(kwargs, "unit")
         self.values = getParams(kwargs, "values")
-        self.value = getParams(kwargs, "value")
+        self.__value = getParams(kwargs, "value")
+        print("init", self.idDevice)
 
     def __str__(self):
         return str(self.name)
+
+    def get(self):
+        return self.__value
+
+    def set(self, status, script=True):
+        self.__value = status
+        if(script):
+            runScripts(self.idDevice,self.name)
 
     def getDict(self):
         return {
@@ -34,5 +45,5 @@ class DeviceElement(object):
         "type": self.type,
         "unit": self.unit,
         "values": self.values,
-        "value": self.value,
+        "value": self.__value,
         }

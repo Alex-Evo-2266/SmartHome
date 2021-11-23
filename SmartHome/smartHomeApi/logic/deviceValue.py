@@ -1,5 +1,5 @@
 from ..models import Device,Room,genId,ValueDevice,ValueListDevice
-from .runScript import runScripts
+# from .runScript import runScripts
 from datetime import datetime
 import json
 import threading
@@ -52,19 +52,15 @@ def deviceSetStatus(id, type,value,script=True):
                         value = "0";
                     else:
                         return None
-                if(item.value != value):
-                    try:
-                        item.value = value
-                    except Exception as e:
-                        print('error write list',e)
-                if(script):
-                    runScripts(id,type)
+                item.set(value)
+                # if(script):
+                #     runScripts(id,type)
                 print("end",dev.name)
         return value
         print('not value error')
         return True
     except Exception as e:
-        print('set value error ',e)
+        print('set value error ',id,e)
         return None
 
 # def deviceSetStatusThread(id, type,value,script=True):

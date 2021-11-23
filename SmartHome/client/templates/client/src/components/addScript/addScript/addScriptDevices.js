@@ -1,8 +1,10 @@
 import React, {useContext,useState,useEffect,useCallback} from 'react'
+import {DialogWindowContext} from '../../dialogWindow/dialogWindowContext'
 import {SocketContext} from '../../../context/SocketContext'
 
 export const AddScriptDevices = ({result,type,typeDev=null})=>{
   const {devices} = useContext(SocketContext)
+  const {show, hide} = useContext(DialogWindowContext)
   const [filteredDevices,setFilteredDevices] = useState([])
 
   const out=(item)=>{
@@ -48,5 +50,4 @@ export const AddScriptDevices = ({result,type,typeDev=null})=>{
         </ul>
       </div>
   )
-
 }

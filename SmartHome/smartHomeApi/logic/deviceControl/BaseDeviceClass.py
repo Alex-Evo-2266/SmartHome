@@ -26,7 +26,7 @@ class BaseDevice(object):
         self.device = None
         values = deviceData.valuedevice_set.all()
         for item in values:
-            self.values.append(DeviceElement(**item.toDict()))
+            self.values.append(DeviceElement(**item.toDict(), idDevice=self.id))
 
     def get_value(self, name):
         value = look_for_param(self.values, name)
@@ -49,9 +49,11 @@ class BaseDevice(object):
                     status = value.high
                 if(int(status) < int(value.low)):
                     status = value.low
-            value.value = status
-
+            value.set(status, False)
         return status
+
+    # def update_value(self, *args, **kwargs):
+
 
     def save(self):
         dev = Device.objects.get(id=self.id)
@@ -59,8 +61,8 @@ class BaseDevice(object):
         for item in values:
             value = look_for_param(self.values, item.name)
             if(value):
-                ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=item.name,value=value.value,device=dev)
-                item.value = value.value
+                ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=item.name,value=value.get(),device=dev)
+                item.value = value.get()
                 item.save()
         print("save",self.name)
 
@@ -82,7 +84,7 @@ class BaseDevice(object):
         vals = dict()
         for item in self.values:
             values.append(item.getDict())
-            vals[item.name] = item.value
+            vals[item.name] = item.get()
         res["DeviceConfig"] = values
         res["DeviceValue"] = vals
         return res
