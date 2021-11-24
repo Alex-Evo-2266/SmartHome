@@ -37,7 +37,6 @@ def device(item):
                 dev = Variable(id=id)
             else:
                 dev = getDevicesClass(typeConnect, id)
-            print(dev)
             if(not dev.get_device()):
                 return {
                 **dev.get_Base_Info(),

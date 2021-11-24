@@ -5,10 +5,43 @@ import os, sys
 import yaml
 import threading
 import time
+from datetime import datetime
 from ..classes.devicesArrey import DevicesArrey
 
 devicesArrey = DevicesArrey()
+hour = 0;
+month = 13;
 
+def runTimeScript():
+    fileList = os.listdir(SCRIPTS_DIR)
+    listscripts = list()
+    now = datetime.now()
+    for item in fileList:
+        templates = None
+        with open(os.path.join(SCRIPTS_DIR,item)) as f:
+            templates = yaml.safe_load(f)
+        trig = templates["trigger"]
+        for item2 in trig:
+            if("action" in item2 and "frequency" in item2["action"]):
+                if(item2["action"]["frequency"] == "everyday" and "time" in item2["action"]):
+                    time = "{:%H:%M}".format(now)
+                    if(item2["action"]["time"] == time):
+                        runscript(templates)
+                elif(item2["action"]["frequency"] == "everyhour"):
+                    global hour
+                    if(now.hour != hour):
+                        hour = now.hour
+                        runscript(templates)
+                elif(item2["action"]["frequency"] == "everyweek" and "time" in item2["action"] and "date" in item2["action"]):
+                    time = "{:%H:%M}".format(now)
+                    if(str(now.weekday() + 1) == item2["action"]["date"] and item2["action"]["time"] == time):
+                        runscript(templates)
+                elif(item2["action"]["frequency"] == "everymonth" and "time" in item2["action"] and "date" in item2["action"]):
+                    global month
+                    time = "{:%H:%M}".format(now)
+                    if(month != str(now.month) and str(now.day) == item2["action"]["date"] and item2["action"]["time"] == time):
+                        month = now.month
+                        runscript(templates)
 
 def runScripts(idDevice,type):
     scripts = lockforScript(idDevice,type)
@@ -179,8 +212,8 @@ def lockforScript(idDevice,type):
     device = device["device"]
     fileList = os.listdir(SCRIPTS_DIR)
     listscripts = list()
-    if type=="variable":
-        type="value"
+    # if type=="variable":
+    #     type="value"
     for item in fileList:
         templates = None
         with open(os.path.join(SCRIPTS_DIR,item)) as f:

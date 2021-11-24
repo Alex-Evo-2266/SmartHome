@@ -7,8 +7,12 @@ from smartHomeApi.logic.socketOut import sendData
 from smartHomeApi.classes.devicesArrey import DevicesArrey
 from smartHomeApi.logic.serverData import getServerData
 from smartHomeApi.logic.weather import updateWeather
+from smartHomeApi.logic.runScript import runTimeScript
 
-from miio import Device, Yeelight, Gateway
+from miio import Device, Yeelight, Gateway, Discovery
+# from miio.discovery import DEVICE_MAP
+#
+# print(DEVICE_MAP)
 
 # dev = Device("192.168.0.2", "822dc07d3660422aef22c6cb11af3a25")
 
@@ -22,11 +26,23 @@ from miio import Device, Yeelight, Gateway
 #     except Exception as e:
 #         print("error",e)
 #         testConntec()
+# def testConntec():
+#     try:
+#         dev = Device("192.168.0.2", "822dc07d3660422aef22c6cb11af3a25")
+#         print(dev)
+#         k = dev.info().model
+#         print(k)
+#         c = None
+#         if(k in DEVICE_MAP):
+#             c = DEVICE_MAP[k]
+#         print(c)
+#     except Exception as e:
+#         print("error",e)
+#         testConntec()
 #
 # testConntec()
 
 devicesArrey = DevicesArrey()
-
 
 def datasave():
     while True:
@@ -51,6 +67,11 @@ def serverDataSend():
         sendData('server',getServerData())
         time.sleep(30)
 
+def TimeScriptActiv():
+    while True:
+        runTimeScript()
+        time.sleep(60)
+
 def start():
     connect()
 
@@ -69,3 +90,7 @@ def start():
     s4 = threading.Thread(target=weather)
     s4.daemon = True
     s4.start()
+
+    s5 = threading.Thread(target=TimeScriptActiv)
+    s5.daemon = True
+    s5.start()

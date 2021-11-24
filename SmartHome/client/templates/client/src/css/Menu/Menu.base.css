@@ -222,6 +222,10 @@
   cursor: pointer;
   width: 255px;
 }
+.navigationRail ul li:hover,
+.bottomMenuAll ul li:hover{
+  background: var(--btn-color-normal);
+}
 .navigationRail ul li a,
 .bottomMenuAll ul li a{
   height: 100%;
