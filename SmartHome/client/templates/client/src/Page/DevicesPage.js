@@ -28,7 +28,7 @@ export const DevicesPage = () => {
       setDevices(allDevices.devices)
       return
     }
-    let array = allDevices.devices.filter(item => item&&item.DeviceName.indexOf(data)!==-1)
+    let array = allDevices.devices.filter(item => item&&item.name.indexOf(data)!==-1)
     setDevices(array)
   },[allDevices.devices])
 
@@ -55,7 +55,7 @@ export const DevicesPage = () => {
 
                   if(item)
                     return(
-                      <NewDeviceElement key = {index} id={item.DeviceId}/>
+                      <NewDeviceElement key = {index} systemName={item.systemName}/>
                     )
                   return null
                 })

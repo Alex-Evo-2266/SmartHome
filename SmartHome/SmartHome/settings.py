@@ -182,6 +182,7 @@ DEVICETYPES = os.path.join(BASE_DIR, "config","devTypes.yml")
 SCRIPTS_DIR = os.path.join(BASE_DIR, "config","scripts")
 STYLES_DIR = os.path.join(BASE_DIR, "config","styles")
 PAGES_DIR =  os.path.join(BASE_DIR, "config","pages")
+DEVICES = os.path.join(BASE_DIR, "config","devices.yml")
 
 TIME_UPPDATA = 6
 

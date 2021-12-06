@@ -1,6 +1,8 @@
 from ..classes.devicesArrey import DevicesArrey
+from SmartHome.settings import DEVICES
 from smartHomeApi.logic.Cart import deleteDeviceCart
-from ..models import Device,ValueDevice,Room,genId
+from smartHomeApi.logic.utils.file import readYMLFile, writeYMLFile
+from .Device import Devices
 
 import json
 import ast
@@ -9,17 +11,19 @@ devicesArrey = DevicesArrey()
 
 def addDevice(data):
     try:
-        devices = Device.objects.all()
+        devices = readYMLFile(DEVICES)
+        if devices == None:
+            devices = list()
+        print(devices, data)
         for item in devices:
-            if item.DeviceSystemName==data.get("DeviceSystemName"):
+            if item["systemName"]==data.get("systemName"):
                 return False
-        newDevice = Device.objects.create(id=genId(Device.objects.all()),DeviceName=data.get("DeviceName"), DeviceSystemName=data.get("DeviceSystemName"), DeviceType=data.get("DeviceType"),DeviceTypeConnect=data.get("DeviceTypeConnect"),DeviceAddress=data.get("DeviceAddress"),DeviceValueType=data.get("DeviceValueType"))
+        newDevice = Devices.create(name=data.get("name"), systemName=data.get("systemName"), type=data.get("type"),typeConnect=data.get("typeConnect"),address=data.get("address"),valueType=data.get("valueType"))
         if "DeviceToken" in data:
-            newDevice.DeviceToken=data.get("DeviceToken")
-        newDevice.save()
+            newDevice.token=data.get("token")
         conf = data["config"]
         for item in conf:
-            val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=newDevice,name=item["name"])
+            val = newDevice.addField(name=item["name"])
             val.value="0"
             if "address" in item:
                 val.address=item["address"]
@@ -38,66 +42,58 @@ def addDevice(data):
                 val.unit=item["unit"]
             if "type" in item:
                 val.type=item["type"]
-            val.save()
+        newDevice.save()
         return True
     except Exception as e:
         print("error device add",e)
         return False
 
-def giveidDeviceByAddres(address):
-    devices = Device.objects.all()
+def giveSystemNameDeviceByAddres(address):
+    devices = Devices.all()
     arr = list()
     for item in devices:
-        if(item.DeviceAddress == address):
-            arr.append(item.id)
+        if(item.address == address):
+            arr.append(item.systemName)
     return arr
 
-def editAdress(id, newadress):
-    dev = Device.objects.get(id=id)
-    dev.DeviceAddress = newadress
+def editAdress(systemName, newadress):
+    dev = Devices.get(systemName=systemName)
+    dev.address = newadress
     dev.save()
-    devicesArrey.delete(id)
+    devicesArrey.delete(systemName)
 
 
 def editDevice(data):
     try:
-        print(data)
-        devices = Device.objects.all()
+        print("edit",data)
+        devices = Devices.all()
         for item in devices:
-            if item.DeviceSystemName==data.get("DeviceSystemName") and item.id != data["DeviceId"]:
+            if item.systemName==data.get("newSystemName") and data.get("systemName") != data.get("newSystemName"):
                 return False
-        print("f")
-        dev = Device.objects.get(id=data["DeviceId"])
-        dev.DeviceName = data["DeviceName"]
-        dev.DeviceSystemName = data["DeviceSystemName"]
-        dev.DeviceInformation = data["DeviceInformation"]
-        dev.DeviceType = data["DeviceType"]
-        if(data["DeviceType"]!="variable"):
-            dev.DeviceAddress = data["DeviceAddress"]
-        if("DeviceValueType" in data):
-            dev.DeviceValueType = data["DeviceValueType"]
-        if "DeviceToken" in data:
-            dev.DeviceToken = data["DeviceToken"]
-        dev.DeviceTypeConnect = data["DeviceTypeConnect"]
-        if(data["DeviceType"] != "miio" or data["DeviceType"] != "yeelight"):
-            dev.DeviceControl = ""
-        if("RoomId" in data and data["RoomId"]):
-            room = Room.objects.get(id=data["RoomId"])
-            dev.room = room
-        if("DeviceValue" in data):
-            deviceSetStatusThread(data["DeviceId"],"value",data["DeviceValue"])
+        dev = Devices.get(data.get("systemName"))
+        dev.name = data["name"]
+        dev.information = data["information"]
+        dev.type = data["type"]
+        if(data["type"]!="variable"):
+            dev.address = data["address"]
+        if("valueType" in data):
+            dev.valueType = data["valueType"]
+        if "token" in data:
+            dev.token = data["token"]
+        dev.typeConnect = data["typeConnect"]
+        dev.control = ""
         dev.save()
+        if("newSystemName" in data):
+            dev.editSysemName(data["newSystemName"])
 
         print(devicesArrey.all())
-        devicesArrey.delete(data["DeviceId"])
+        devicesArrey.delete(data["systemName"])
 
-        vals = ValueDevice.objects.filter(device__id=data["DeviceId"])
         if("config" in data):
-            for item in vals:
-                item.delete()
+            dev.values = []
             conf = data["config"]
             for item in conf:
-                val = ValueDevice.objects.create(id=genId(ValueDevice.objects.all()),device=dev,name=item["name"])
+                val = dev.addField(name=item["name"])
                 val.value="0"
                 if "address" in item:
                     val.address=item["address"]
@@ -116,22 +112,21 @@ def editDevice(data):
                     val.control=item["control"]
                 if "type" in item:
                     val.type=item["type"]
-                val.save()
+            dev.save()
             return True
         return True
     except Exception as e:
-        print(e)
+        print("edit dev error",e)
         return False
 
-def deleteDevice(id):
+def deleteDevice(systemName):
     try:
-        print("q",id)
-        dev = Device.objects.get(id=id)
+        dev = Devices.get(systemName=systemName)
         print("delete",dev)
-        devicesArrey.delete(id)
+        devicesArrey.delete(systemName)
         print("delete in arr")
         dev.delete()
-        deleteDeviceCart(id)
+        deleteDeviceCart(systemName)
         print("ok")
         return True
     except Exception as e:

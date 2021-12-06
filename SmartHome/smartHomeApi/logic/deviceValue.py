@@ -1,5 +1,7 @@
-from ..models import Device,Room,genId,ValueDevice,ValueListDevice
+# from ..models import Device,Room,genId,ValueDevice,ValueListDevice
 # from .runScript import runScripts
+from SmartHome.settings import DEVICES
+
 from datetime import datetime
 import json
 import threading
@@ -28,18 +30,18 @@ def setValueAtToken(address,value):
                 for key in data:
                     for item2 in dev.values:
                         if(item2.address==key):
-                            deviceSetStatus(dev.id,item2.name,data[key])
+                            deviceSetStatus(dev.systemName,item2.name,data[key])
 
         else:
             for item2 in dev.values:
                 if base_address + '/' + item2.address==address:
-                    return deviceSetStatus(dev.id,item2.name,value)
+                    return deviceSetStatus(dev.systemName,item2.name,value)
 
-def deviceSetStatus(id, type,value,script=True):
+def deviceSetStatus(systemName, type,value,script=True):
     try:
         if(value==None or type=="background"):
             return None
-        dev = devicesArrey.get(id)
+        dev = devicesArrey.get(systemName)
         dev = dev["device"]
         values = dev.values
         for item in values:
@@ -53,14 +55,12 @@ def deviceSetStatus(id, type,value,script=True):
                     else:
                         return None
                 item.set(value)
-                # if(script):
-                #     runScripts(id,type)
                 print("end",dev.name)
         return value
         print('not value error')
         return True
     except Exception as e:
-        print('set value error ',id,e)
+        print('set value error ',systemName,e)
         return None
 
 # def deviceSetStatusThread(id, type,value,script=True):

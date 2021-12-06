@@ -70,11 +70,11 @@ export const ZigbeeElement = ({data}) =>{
 
   function addDev(data1,conf) {
     form.show("LinkDevices",null,{
-      DeviceTypeConnect: "zigbee",
-      DeviceType: data1,
-      DeviceAddress: data.allAddress,
-      DeviceValueType: "json",
-      DeviceConfig: conf
+      typeConnect: "zigbee",
+      type: data1,
+      address: data.allAddress,
+      valueType: "json",
+      config: conf
     })
     hide()
   }

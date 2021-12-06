@@ -1,4 +1,3 @@
-from smartHomeApi.models import Device,ValueDevice
 from smartHomeApi.logic.config.configget import getConfig
 from smartHomeApi.logic.socketOut import sendData
 import ast

@@ -41,46 +41,34 @@ cards:
   type: base
   width: 2
 - children:
-  - deviceId: 8
+  - deviceName: lamp1
     height: 1
     index: 0
-    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+    name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
       \u0435"
     order: 0
     title: "\u0441\u0432\u0435\u0442"
     type: button
     typeAction: state
     width: 1
-  - deviceId: 8
+  - deviceName: lamp1
     height: 1
     index: 1
-    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+    name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
       \u0435"
     order: 0
-    title: "\u042F\u0440\u043A\u043E\u0441\u0442\u044C"
+    title: "\u044F\u0440\u043A\u043E\u0441\u0442\u044C"
     type: slider
     typeAction: brightness
     width: 1
-  - deviceId: 8
+  - deviceName: magicCub
     height: 1
     index: 2
-    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
-      \u0435"
+    name: "\u043A\u0443\u0431"
     order: 0
-    title: "\u0422\u0435\u043C\u043F\u0435\u0440\u0430\u0442\u0443\u0440\u0430 \u0441\
-      \u0432\u0435\u0447\u0435\u043D\u0438\u044F"
-    type: slider
-    typeAction: temp
-    width: 1
-  - deviceId: 8
-    height: 1
-    index: 3
-    name: "\u041B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
-      \u0435"
-    order: 0
-    title: "\u043D\u043E\u0447\u043D\u0438\u043A"
-    type: button
-    typeAction: night_light
+    title: cub
+    type: sensor
+    typeAction: action_angle
     width: 1
   index: 2
   mainId: null

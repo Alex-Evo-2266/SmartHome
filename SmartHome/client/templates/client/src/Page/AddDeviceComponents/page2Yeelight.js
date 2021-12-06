@@ -9,7 +9,7 @@ export const AddDevicesPage2Yeelight = ({form, setForm, next, backPage}) => {
   }
 
   const nextPage = ()=>{
-    if(!form.DeviceAddress){
+    if(!form.address){
       message("нет адреса","error")
       return false
     }
@@ -24,7 +24,7 @@ export const AddDevicesPage2Yeelight = ({form, setForm, next, backPage}) => {
     </div>
     <div className="configElement">
       <div className="input-data">
-        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="DeviceAddress" type="text" value={form.DeviceAddress}></input>
+        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="address" type="text" value={form.address}></input>
         <label>Address</label>
       </div>
     </div>

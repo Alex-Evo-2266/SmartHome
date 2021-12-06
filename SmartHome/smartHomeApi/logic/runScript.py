@@ -1,5 +1,4 @@
 from .deviceSetValue import setValue
-from ..models import Device
 from SmartHome.settings import SCRIPTS_DIR
 import os, sys
 import yaml
@@ -43,14 +42,18 @@ def runTimeScript():
                         month = now.month
                         runscript(templates)
 
-def runScripts(idDevice,type):
-    scripts = lockforScript(idDevice,type)
-    for item in scripts:
-        templates = None
-        fullName = item + ".yml"
-        with open(os.path.join(SCRIPTS_DIR,fullName)) as f:
-            templates = yaml.safe_load(f)
-        runscript(templates)
+def runScripts(systemName,type):
+    try:
+        scripts = lockforScript(systemName,type)
+        for item in scripts:
+            templates = None
+            fullName = item + ".yml"
+            with open(os.path.join(SCRIPTS_DIR,fullName)) as f:
+                templates = yaml.safe_load(f)
+            runscript(templates)
+    except Exception as e:
+        print("run script error", e) 
+
 
 def runscript(data):
     print("p1")
@@ -96,8 +99,8 @@ def ifgroup(data):
 def ifblock(data):
     try:
         if(data["type"]=="device"):
-            idDev = data["idDevice"]
-            device = devicesArrey.get(idDev)
+            systemName = data["systemName"]
+            device = devicesArrey.get(systemName)
             device = device["device"]
             values = device.values
             for item in values:
@@ -177,8 +180,8 @@ def getvalue(data,option):
         if(data["action"]=="/"):
             return v1//v2
     if(data["type"]== "device"):
-        IDdevice = data["idDevice"]
-        device = devicesArrey.get(IDdevice)
+        systemName = data["systemName"]
+        device = devicesArrey.get(systemName)
         device = device["device"]
         values = device.values
         for item in values:
@@ -189,14 +192,14 @@ def getvalue(data,option):
 def actiondev(data):
     for item in data:
         if(item["type"]=="device"):
-            IDdevice = item["DeviceId"]
-            device = devicesArrey.get(IDdevice)
+            systemName = item["systemName"]
+            device = devicesArrey.get(systemName)
             device = device["device"]
             val = getvalue(item["value"],{"device":device,"field":item["action"]})
-            setValue(device.id,item["action"],val)
+            setValue(device.systemName,item["action"],val)
         elif(item["type"]=="script"):
             templates = None
-            fullName = item["DeviceId"] + ".yml"
+            fullName = item["systemName"] + ".yml"
             with open(os.path.join(SCRIPTS_DIR,fullName)) as f:
                 templates = yaml.safe_load(f)
             runscript(templates)
@@ -207,8 +210,8 @@ def actiondev(data):
         else:
             print("oh")
 
-def lockforScript(idDevice,type):
-    device = devicesArrey.get(idDevice)
+def lockforScript(systemName,type):
+    device = devicesArrey.get(systemName)
     device = device["device"]
     fileList = os.listdir(SCRIPTS_DIR)
     listscripts = list()
@@ -220,6 +223,6 @@ def lockforScript(idDevice,type):
             templates = yaml.safe_load(f)
         trig = templates["trigger"]
         for item2 in trig:
-            if(templates["status"] and item2["type"]=="device" and item2["DeviceId"]==idDevice and (item2["action"]=="all" or item2["action"]==type)):
+            if(templates["status"] and item2["type"]=="device" and item2["systemName"]==systemName and (item2["action"]=="all" or item2["action"]==type)):
                 listscripts.append(templates["name"])
     return listscripts

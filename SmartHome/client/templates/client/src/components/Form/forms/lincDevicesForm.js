@@ -16,7 +16,7 @@ if(!device){
     <Loader/>
   )
 }
-if(device.DeviceTypeConnect==="mqtt" || device.DeviceTypeConnect==="zigbee"){
+if(device.typeConnect==="mqtt" || device.typeConnect==="zigbee"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
@@ -25,7 +25,7 @@ if(device.DeviceTypeConnect==="mqtt" || device.DeviceTypeConnect==="zigbee"){
     </div>
   )
 }
-if(device.DeviceTypeConnect==="yeelight"){
+if(device.typeConnect==="yeelight"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
@@ -34,7 +34,7 @@ if(device.DeviceTypeConnect==="yeelight"){
     </div>
   )
 }
-if(device.DeviceTypeConnect==="miio"){
+if(device.typeConnect==="miio"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
@@ -43,7 +43,7 @@ if(device.DeviceTypeConnect==="miio"){
     </div>
   )
 }
-if(device.DeviceTypeConnect==="system"&&device.DeviceType==="variable"){
+if(device.typeConnect==="system"&&device.type==="variable"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">

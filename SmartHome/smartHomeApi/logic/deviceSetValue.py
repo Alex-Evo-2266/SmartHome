@@ -1,6 +1,4 @@
-from ..models import Device,Room,genId
 from ..classes.devicesArrey import DevicesArrey
-import threading
 
 devicesArrey = DevicesArrey()
 

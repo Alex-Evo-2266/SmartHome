@@ -127,8 +127,8 @@ export const AddControl = ()=>{
 
   const addDevField = (data)=>({
     height: 1,
-    name: device.DeviceName,
-    deviceId:device.DeviceId,
+    name: device.name,
+    deviceName:device.systemName,
     order: 0,
     type: typeChild,
     width: 1,

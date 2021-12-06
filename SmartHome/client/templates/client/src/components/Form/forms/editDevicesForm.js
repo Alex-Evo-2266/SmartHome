@@ -15,10 +15,10 @@ export const EditDevicesForm = (props)=>{
   const [device, setDevice] = useState();
 
   const usedevice = useCallback(async()=>{
-    const data = await request(`/api/devices/${props.id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/devices/get/${props.systemName}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     console.log(data);
     setDevice(data);
-  },[request,auth.token,props.id])
+  },[request,auth.token,props.systemName])
 
   useEffect(()=>{
     usedevice()
@@ -38,7 +38,7 @@ export const EditDevicesForm = (props)=>{
     )
   }
 
-if(device.DeviceTypeConnect==="mqtt" || device.DeviceTypeConnect==="zigbee"){
+if(device.typeConnect==="mqtt" || device.typeConnect==="zigbee"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
@@ -47,7 +47,7 @@ if(device.DeviceTypeConnect==="mqtt" || device.DeviceTypeConnect==="zigbee"){
     </div>
   )
 }
-if(device.DeviceTypeConnect==="yeelight"){
+if(device.typeConnect==="yeelight"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
@@ -56,7 +56,7 @@ if(device.DeviceTypeConnect==="yeelight"){
     </div>
   )
 }
-if(device.DeviceTypeConnect==="miio"){
+if(device.typeConnect==="miio"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
@@ -65,7 +65,7 @@ if(device.DeviceTypeConnect==="miio"){
     </div>
   )
 }
-if(device.DeviceTypeConnect==="variable"&&device.DeviceType==="variable"){
+if(device.typeConnect==="variable"&&device.type==="variable"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">

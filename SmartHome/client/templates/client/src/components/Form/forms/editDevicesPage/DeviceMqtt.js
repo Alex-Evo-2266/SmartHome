@@ -20,18 +20,18 @@ export const DeviceMqttEdit = ({deviceData,hide,type="edit"})=>{
   },[error,message, clearError])
 
   const [device, setDevice] = useState({
-    DeviceId:deviceData.DeviceId||0,
-    DeviceInformation:deviceData.DeviceInformation||"",
-    DeviceName:deviceData.DeviceName||"",
-    DeviceSystemName:deviceData.DeviceSystemName||"",
-    DeviceType:deviceData.DeviceType||"other",
-    DeviceValueType:deviceData.DeviceValueType||"json",
-    DeviceAddress:deviceData.DeviceAddress||"",
-    DeviceTypeConnect:deviceData.DeviceTypeConnect||"mqtt",
+    information:deviceData.information||"",
+    name:deviceData.name||"",
+    systemName:deviceData.systemName||"",
+    newSystemName:deviceData.systemName||"",
+    type:deviceData.type||"other",
+    valueType:deviceData.valueType||"json",
+    address:deviceData.address||"",
+    typeConnect:deviceData.typeConnect||"mqtt",
     RoomId:deviceData.RoomId,
   })
-  const [field, setField] = useState(deviceData.DeviceConfig||[]);
-  const [count, setCount] = useState(deviceData.DeviceConfig.length);
+  const [field, setField] = useState(deviceData.config||[]);
+  const [count, setCount] = useState(deviceData.config.length);
 
   useEffect(()=>{
     console.log(field);
@@ -74,12 +74,13 @@ const changeHandlerTest = event=>{
 
   function valid() {
     if(
-      !device.DeviceSystemName||
-      !device.DeviceValueType||
-      !device.DeviceAddress||
-      !device.DeviceName||
-      !device.DeviceType||
-      !device.DeviceTypeConnect
+      (!device.systemName && type != "link")||
+      !device.newSystemName||
+      !device.valueType||
+      !device.address||
+      !device.name||
+      !device.type||
+      !device.typeConnect
     ){return false}
     if(!field||!field[0]){return false}
     for (var item of field) {
@@ -118,14 +119,16 @@ const changeHandlerTest = event=>{
     }
     if(type==="edit")
       await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
-    else if(type==="link")
+    else if(type==="link"){
+      dataout.systemName = dataout.newSystemName
       await request('/api/devices', 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
+    }
     hide();
   }
 
   const deleteHandler = async () =>{
     message("All dependent scripts and controls will be removed along with the device. Delete?","general",async()=>{
-      await request(`/api/devices/${device.DeviceId}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
+      await request(`/api/devices/${device.systemName}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       hide();
     },"no")
   }
@@ -161,31 +164,31 @@ const changeHandlerTest = event=>{
     <ul className="editDevice">
       <li>
         <label>
-          <h5>{`Type - ${device.DeviceType}`}</h5>
-          <h5>{`Type connect - ${device.DeviceTypeConnect}`}</h5>
+          <h5>{`Type - ${device.type}`}</h5>
+          <h5>{`Type connect - ${device.typeConnect}`}</h5>
         </label>
       </li>
       <div className="configElement">
         <div className="input-data">
-          <input onChange={changeHandler} required name="DeviceName" type="text" value={device.DeviceName}></input>
+          <input onChange={changeHandler} required name="name" type="text" value={device.name}></input>
           <label>Name</label>
         </div>
       </div>
       <div className="configElement">
         <div className="input-data">
-          <input onChange={changeHandlerTest} required name="DeviceSystemName" type="text" value={device.DeviceSystemName}></input>
+          <input onChange={changeHandlerTest} required name="newSystemName" type="text" value={device.newSystemName}></input>
           <label>System name</label>
         </div>
       </div>
       <div className="configElement">
         <div className="input-data">
-          <input onChange={changeHandler} required name="DeviceAddress" type="text" value={device.DeviceAddress}></input>
+          <input onChange={changeHandler} required name="address" type="text" value={device.address}></input>
           <label>Address</label>
         </div>
       </div>
       <div className="configElement">
         <div className="input-data">
-          <select name="DeviceValueType" value={device.DeviceValueType} onChange={changeHandler}>
+          <select name="valueType" value={device.valueType} onChange={changeHandler}>
             <option value="json">json</option>
             <option value="value">value</option>
           </select>
@@ -194,7 +197,7 @@ const changeHandlerTest = event=>{
       </div>
       <div className="configElement">
         <div className="input-data">
-          <input onChange={changeHandler} required name="DeviceInformation" type="text" value={device.DeviceInformation}></input>
+          <input onChange={changeHandler} required name="information" type="text" value={device.information}></input>
           <label>Information</label>
         </div>
       </div>

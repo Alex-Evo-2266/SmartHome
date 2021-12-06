@@ -21,10 +21,10 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0]||!data)
       return false
-    let condidat = devices.filter((item)=>item&&item.DeviceId===id)
+    let condidat = devices.filter((item)=>item&&item.systemName===id)
     if(!condidat[0]) return null
     let conf
-    for (var item of condidat[0].DeviceConfig) {
+    for (var item of condidat[0].config) {
       if(item.name===data.typeAction){
         conf = item
       }
@@ -35,7 +35,7 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
   },[devices,data])
 
   const outValue = async(v)=>{
-    await request('/api/devices/value/set', 'POST', {id: data.deviceId,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/devices/value/set', 'POST', {systemName: data.deviceName,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   useEffect(()=>{
@@ -46,12 +46,12 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
   },[error,message, clearError])
 
   useEffect(()=>{
-    if(!data||!data.deviceId||typeof(onClick)==="function"){
+    if(!data||!data.systemName||typeof(onClick)==="function"){
       setMin(min)
       setMax(max)
       return
     }
-    setDevice(lookForDeviceById(data.deviceId))
+    setDevice(lookForDeviceById(data.systemName))
   },[devices,data,onClick,lookForDeviceById,min,max])
 
   useEffect(()=>{
@@ -72,8 +72,8 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
 
   useEffect(()=>{
     if(typeof(onClick)==="function")return
-    if(!device||!device.DeviceValue)return
-    setValue(Number(device.DeviceValue[data.typeAction]))
+    if(!device||!device.value)return
+    setValue(Number(device.value[data.typeAction]))
   },[device,onClick,data])
 
   const changeHandler = (event)=>{

@@ -26,7 +26,7 @@ export const AddDevicesPage1 = ({form, setForm, next}) => {
   const {type} = useContext(TypeDeviceContext)
 
   const choisetype = (typedev, typeconnect)=>{
-    setForm({...form, DeviceType:typedev, DeviceTypeConnect:typeconnect})
+    setForm({...form, type:typedev, typeConnect:typeconnect})
     next()
   }
 

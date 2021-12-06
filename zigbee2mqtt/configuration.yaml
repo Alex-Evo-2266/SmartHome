@@ -1,7 +1,7 @@
 homeassistant: false
 mqtt:
   base_topic: zigbee2mqtt
-  server: 'mqtt://mosquitto:1883'
+  server: mqtt://mosquitto:1883
   user: admin
   password: admin
 serial:
@@ -17,3 +17,5 @@ devices:
     friendly_name: luxMetor
   '0x00158d000548e74b':
     friendly_name: openDoorSensor
+  '0x00158d00075db2f6':
+    friendly_name: '0x00158d00075db2f6'

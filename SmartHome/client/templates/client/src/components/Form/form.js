@@ -23,7 +23,7 @@ export const Form = ()=>{
   if(form.type === "EditDevices"){
     return (
       <BackForm onClick = {hide}>
-        <EditDevicesForm hide = {hideAndApdata} id = {form.data.DeviceId}/>
+        <EditDevicesForm hide = {hideAndApdata} systemName = {form.data.systemName}/>
       </BackForm>
     )
   }

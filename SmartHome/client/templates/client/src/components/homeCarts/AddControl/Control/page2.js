@@ -13,10 +13,10 @@ const types = {
 function filtred(data, typeField) {
   if(typeField === "sensor")
     return data
-  let condidats = data.filter(item=>item.DeviceType!=="sensor")
+  let condidats = data.filter(item=>item.type!=="sensor")
   let filtredData = []
   for (var item of condidats) {
-    for (var item2 of item.DeviceConfig) {
+    for (var item2 of item.config) {
       if(item2.control && typeField in types && types[typeField].indexOf(item2.type) !== -1){
         filtredData.push(item)
         break
@@ -30,7 +30,7 @@ export const Page2 = ({type ,next, back, hide})=>{
   const {devices} = useContext(SocketContext)
   const [allDevices] = useState(filtred(devices, type));
 
-  const transformation = (data)=>data.map(item=>({title:item.DeviceName, data:item}))
+  const transformation = (data)=>data.map(item=>({title:item.name, data:item}))
 
   return(
     <ConfirmationDialog

@@ -1,14 +1,13 @@
-from ..models import ValueListDevice,Device
 from datetime import datetime,timedelta
 
 def blankSheet(values):
     newVal = dict()
-    for item in values:
-        if(not(item.device.DeviceSystemName in newVal)):
-            newVal[item.device.DeviceSystemName] = dict()
-        if(not(item.name in newVal[item.device.DeviceSystemName])):
-            dev = newVal[item.device.DeviceSystemName]
-            dev[item.name] = list()
+    # for item in values:
+    #     if(not(item.device.DeviceSystemName in newVal)):
+    #         newVal[item.device.DeviceSystemName] = dict()
+    #     if(not(item.name in newVal[item.device.DeviceSystemName])):
+    #         dev = newVal[item.device.DeviceSystemName]
+    #         dev[item.name] = list()
     return newVal
 #
 # def editMicrosec(date, newMicros):
@@ -75,24 +74,25 @@ def blankSheet(values):
 
 def formatChart(values):
     blank = blankSheet(values)
-    for item in values:
-        for key in blank:
-            for key2 in blank[key]:
-                if(key2==item.name and key==item.device.DeviceSystemName):
-                    blank[key][key2].append({
-                        "date":item.date.timestamp() * 1000,
-                        "value":item.value
-                    })
-    for key in blank:
-        for key2 in blank[key]:
-            print(blank[key][key2][-1])
-            blank[key][key2].append({
-                "date":datetime.now().timestamp() * 1000,
-                "value":blank[key][key2][-1]["value"]
-            })
+    # for item in values:
+    #     for key in blank:
+    #         for key2 in blank[key]:
+    #             if(key2==item.name and key==item.device.DeviceSystemName):
+    #                 blank[key][key2].append({
+    #                     "date":item.date.timestamp() * 1000,
+    #                     "value":item.value
+    #                 })
+    # for key in blank:
+    #     for key2 in blank[key]:
+    #         print(blank[key][key2][-1])
+    #         blank[key][key2].append({
+    #             "date":datetime.now().timestamp() * 1000,
+    #             "value":blank[key][key2][-1]["value"]
+    #         })
 
     return blank
 
 def getCharts():
-    values = ValueListDevice.objects.all()
-    return {"charts":formatChart(values)}
+    # values = ValueListDevice.objects.all()
+    # return {"charts":formatChart(values)}
+    return {"charts":None}

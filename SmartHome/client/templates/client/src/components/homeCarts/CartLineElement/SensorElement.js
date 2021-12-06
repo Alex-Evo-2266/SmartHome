@@ -9,19 +9,19 @@ export const SensorElement = ({index,title,data,deleteBtn,editBtn,onClick}) =>{
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0])
       return false
-    let condidat = devices.filter((item)=>item.DeviceId===id)
+    let condidat = devices.filter((item)=>item.systemName===id)
     return condidat[0]
   },[devices])
 
   useEffect(()=>{
-    if(!data||!data.deviceId)
+    if(!data||!data.deviceName)
       return
-    setDevice(lookForDeviceById(data.deviceId))
+    setDevice(lookForDeviceById(data.deviceName))
   },[devices,data,onClick,lookForDeviceById])
 
   const itemField = ()=>{
-    if(!device||!device.DeviceConfig||!data.typeAction)return
-    for (var item of device.DeviceConfig) {
+    if(!device||!device.config||!data.typeAction)return
+    for (var item of device.config) {
       if(item.name===data.typeAction){
         return item
       }
@@ -30,7 +30,7 @@ export const SensorElement = ({index,title,data,deleteBtn,editBtn,onClick}) =>{
 
   const getTypeField = ()=>{
     if(!device)return "text"
-    for (var item of device.DeviceConfig) {
+    for (var item of device.config) {
       if(data.typeAction === item.name){
         return item.type
       }
@@ -38,7 +38,7 @@ export const SensorElement = ({index,title,data,deleteBtn,editBtn,onClick}) =>{
     return "text"
   }
 
-if(!device||!device.DeviceId){
+if(!device||!device.systemName){
   return null;
 }
 if(getTypeField()==="text"||getTypeField()==="number"){
@@ -54,7 +54,7 @@ if(getTypeField()==="text"||getTypeField()==="number"){
       </div>
     </div>
         <p className= "sensor-name">{title}</p>
-        <p className= "state">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
+        <p className= "state">{`${device.value[data.typeAction]} ${itemField().unit||""}`}</p>
     </BaseElement>
   )
 }
@@ -70,9 +70,9 @@ if(getTypeField()==="binary"){
       }
       </div>
     </div>
-        <p className= "sensor-name">{device.DeviceName}</p>
+        <p className= "sensor-name">{device.name}</p>
         <div className="control">
-          <p className= "state">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
+          <p className= "state">{`${device.value[data.typeAction]} ${itemField().unit||""}`}</p>
         </div>
     </BaseElement>
   )
@@ -88,8 +88,8 @@ return (
       }
       </div>
     </div>
-    <p className= "sensor-name">{device.DeviceName}</p>
-    <p className= "state">{`${device.DeviceValue[data.typeAction]} ${itemField().unit||""}`}</p>
+    <p className= "sensor-name">{device.name}</p>
+    <p className= "state">{`${device.value[data.typeAction]} ${itemField().unit||""}`}</p>
   </BaseElement>
 )
 }

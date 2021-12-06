@@ -25,25 +25,25 @@ export const EnumElement = ({data,title,className,index,children,name,onClick,di
   },[error,message, clearError])
 
   const outValue = async(id,v)=>{
-    await request('/api/devices/value/set', 'POST', {id: data.deviceId,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/devices/value/set', 'POST', {systemName: data.deviceName,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0])
       return false
-    let condidat = devices.filter((item)=>(item&&item.DeviceId===id))
+    let condidat = devices.filter((item)=>(item&&item.systemName===id))
     return condidat[0]
   },[devices])
 
   useEffect(()=>{
-    if(!data||!data.deviceId||typeof(onClick)==="function")
+    if(!data||!data.deviceName||typeof(onClick)==="function")
       return
-    setDevice(lookForDeviceById(data.deviceId))
+    setDevice(lookForDeviceById(data.deviceName))
   },[devices,data,onClick,lookForDeviceById])
 
   const itemField = useCallback(()=>{
-    if(!device||!device.DeviceConfig)return
-    for (var item of device.DeviceConfig) {
+    if(!device||!device.config)return
+    for (var item of device.config) {
       if(item.name===data.typeAction){
         return item
       }
@@ -67,16 +67,16 @@ export const EnumElement = ({data,title,className,index,children,name,onClick,di
   },[device,disabled,devices])
 
   useEffect(()=>{
-    if(!device||!device.DeviceConfig||!data)return
+    if(!device||!device.config||!data)return
     const {typeAction} = data
-    let conf = device.DeviceConfig.filter((item)=>item.name===typeAction)
+    let conf = device.config.filter((item)=>item.name===typeAction)
     if(conf.length)
       setDeviceConfig(conf[0])
   },[device,data])
 
   useEffect(()=>{
-    if(typeof(onClick)==="function"||!deviceConfig||!deviceConfig.name||!device||!device.DeviceValue||disabled||device.status==="offline")return;
-    setValue(device.DeviceValue[deviceConfig.name])
+    if(typeof(onClick)==="function"||!deviceConfig||!deviceConfig.name||!device||!device.value||disabled||device.status==="offline")return;
+    setValue(device.value[deviceConfig.name])
   },[device,onClick,data,deviceConfig,disabled])
 
 const changeHandler = (event)=>{
@@ -84,7 +84,7 @@ const changeHandler = (event)=>{
 
   if(!data||!device)
     return
-  return outValue(device.DeviceId,event.target.value)
+  return outValue(device.systemName,event.target.value)
 }
 
   const deletebtn = ()=>{

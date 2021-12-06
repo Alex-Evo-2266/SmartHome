@@ -19,14 +19,14 @@ export const AddDevicesPage = () => {
   const {request} = useHttp();
   const [page, setPage] = useState(1)
   const [form, setForm] = useState({
-    DeviceTypeConnect: '',
-    DeviceType: '',
-    DeviceValueType: 'json',
-    DeviceName: '',
-    DeviceAddress:'',
-    DeviceSystemName:'',
+    typeConnect: '',
+    type: '',
+    valueType: 'json',
+    name: '',
+    address:'',
+    systemName:'',
     config:[],
-    DeviceToken:''
+    token:''
   });
 
   useEffect(()=>{
@@ -56,13 +56,13 @@ export const AddDevicesPage = () => {
     {
       (page === 1)?
       <AddDevicesPage1 form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && form.DeviceTypeConnect === "mqtt")?
+      (page === 2 && form.typeConnect === "mqtt")?
       <AddDevicesPage2MQTT form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && (form.DeviceTypeConnect === "yeelight"))?
+      (page === 2 && (form.typeConnect === "yeelight"))?
       <AddDevicesPage2Yeelight form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && (form.DeviceTypeConnect === "zigbee"))?
+      (page === 2 && (form.typeConnect === "zigbee"))?
       <AddDevicesPage2Zigbee form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && (form.DeviceTypeConnect === "variable"))?
+      (page === 2 && (form.typeConnect === "variable"))?
       <AddDevicesPage2Variable form={form} setForm={setForm} backPage={backPage} next={next}/>:
       (page === 3)?
       <AddDevicesPage3 form={form} setForm={setForm} backPage={backPage} next={outHandler}/>:

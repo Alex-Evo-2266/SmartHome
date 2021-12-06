@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 
 from .logic.user import addUser,newGenPass,editPass,send_email,deleteUser,setLevel, login as Authorization, userConfEdit,menuConfEdit,user,editUser
 from .logic.auth import auth
+from .logic.Device import Devices
 from .logic.getDevices import giveDevice
 from .logic.editDevice import addDevice, editDevice, deleteDevice
 from .logic.config.configget import GiveServerConfig,readConfig
@@ -23,7 +24,7 @@ from .logic.deviceControl.zigbee.zigbeeDevices import getzigbeeDevices, getPermi
 from .logic.charts import getCharts
 from .logic.style import addstyle, getStyles, getStyle,removeStyle
 
-from .models import User, UserConfig,ImageBackground,genId,LocalImage,Device
+from .models import User, UserConfig,ImageBackground,genId,LocalImage
 
 from .forms import ImageForm
 
@@ -297,7 +298,7 @@ class SetValueDevice(APIView):
         if not authData:
             return Response(status=403)
         data = json.loads(request.body)
-        if setValue(data["id"],data["type"],data["status"]):
+        if setValue(data["systemName"],data["type"],data["status"]):
             return Response("ok",status=201)
         return Response("err",status=400)
 
@@ -309,8 +310,8 @@ class SetStatusDevice(APIView):
             return Response(status=403)
         data = json.loads(request.body)
         print(data)
-        dev = Device.objects.get(id=data["id"])
-        dev.DeviceStatus = data["status"]
+        dev = Devices.get(systemName=data["systemName"])
+        dev.status = data["status"]
         dev.save()
         return Response("ok",status=201)
 

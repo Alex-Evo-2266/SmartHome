@@ -11,7 +11,7 @@ class DeviceElement(object):
 
     def __init__(self, *args, **kwargs):
         self.name = getParams(kwargs, "name")
-        self.idDevice = getParams(kwargs, "idDevice")
+        self.deviceName = getParams(kwargs, "deviceName")
         self.address = getParams(kwargs, "address")
         self.control = getParams(kwargs, "control")
         self.high = getParams(kwargs, "high")
@@ -21,7 +21,6 @@ class DeviceElement(object):
         self.unit = getParams(kwargs, "unit")
         self.values = getParams(kwargs, "values")
         self.__value = getParams(kwargs, "value")
-        print("init", self.idDevice)
 
     def __str__(self):
         return str(self.name)
@@ -32,7 +31,8 @@ class DeviceElement(object):
     def set(self, status, script=True):
         self.__value = status
         if(script):
-            runScripts(self.idDevice,self.name)
+            runScripts(self.deviceName,self.name)
+
 
     def getDict(self):
         return {

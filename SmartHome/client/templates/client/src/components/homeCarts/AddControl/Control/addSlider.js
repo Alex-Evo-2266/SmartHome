@@ -6,7 +6,7 @@ import {Loader} from '../../../Loader'
 function sortDevice(data) {
   let arr = []
   for (var item of data) {
-    for (var item2 of item.DeviceConfig) {
+    for (var item2 of item.config) {
       if(item2.type==="number"&&item2.control){
         arr.push(item)
         break
@@ -28,7 +28,7 @@ export const AddSlider = ({add})=>{
     type:"slider",
     typeAction:"",
     order:"0",
-    deviceId:null,
+    deviceName:null,
     action:"",
     width:2,
     height:1
@@ -37,11 +37,11 @@ export const AddSlider = ({add})=>{
   useEffect(()=>{
     if(device){
       setButtonForm({id:null,
-        name:device.DeviceName,
+        name:device.name,
         type:"slider",
         typeAction:"",
         order:0,
-        deviceId:device.DeviceId,
+        deviceName:device.systemName,
         action:"",
         width:2,
         height:1
@@ -65,14 +65,14 @@ export const AddSlider = ({add})=>{
   return (
     <ul>
     {
-      (!device||!device.DeviceId)?
+      (!device||!device.systemName)?
         allDevices.map((item,index)=>{
           return(
             <li key={index} onClick={()=>setDevice(item)}><span>{index+1}</span>{item.DeviceName}</li>
           )
         }):
-        (!buttonForm.typeAction&&device.DeviceConfig)?
-          sortField(device.DeviceConfig).map((item,index)=>{
+        (!buttonForm.typeAction&&device.config)?
+          sortField(device.config).map((item,index)=>{
             return <li key={index} onClick={()=>out(item.name)}>{item.name}</li>
           })
           :null

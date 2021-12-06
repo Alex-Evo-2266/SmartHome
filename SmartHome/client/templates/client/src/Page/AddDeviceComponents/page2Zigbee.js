@@ -68,9 +68,9 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
     }
     await setForm({
       ...form,
-      DeviceAddress:dev.root_address.topic + "/" + dev.name,
+      address:dev.root_address.topic + "/" + dev.name,
       config: conf,
-      DeviceValueType: "json",
+      valueType: "json",
     })
     nextPage()
   }

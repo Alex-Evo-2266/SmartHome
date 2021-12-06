@@ -40,7 +40,7 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
 
   const validFields = ()=>{
     let arrType = []
-    if(!form.DeviceAddress){
+    if(!form.address){
       message("нет адреса","error")
       return false
     }
@@ -90,13 +90,13 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
     <div className="allFon">
     <div className="configElement">
       <div className="input-data">
-        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="DeviceAddress" type="text" value={form.DeviceAddress}></input>
+        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="address" type="text" value={form.address}></input>
         <label>Address</label>
       </div>
     </div>
     <div className="configElement">
       <div className="input-data">
-        <select className = "textInput" name="DeviceValueType" value={form.DeviceValueType} onChange={(e)=>updata(e.target.name, e.target.value)}>
+        <select className = "textInput" name="valueType" value={form.valueType} onChange={(e)=>updata(e.target.name, e.target.value)}>
           <option value="json">json</option>
           <option value="value">value</option>
         </select>

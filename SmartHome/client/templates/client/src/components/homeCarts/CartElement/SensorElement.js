@@ -12,16 +12,16 @@ export const SensorElement = ({title,index,data,deleteBtn,editBtn,onClick}) =>{
     if(!devices||!devices[0])
       return false
 
-    let condidat = devices.filter((item)=>item.DeviceId===id)
+    let condidat = devices.filter((item)=>item.systemName===id)
     return condidat[0]
   },[devices])
 
   useEffect(()=>{
-    setDevice(lookForDeviceById(data.deviceId))
+    setDevice(lookForDeviceById(data.deviceName))
   },[devices,data,onClick,lookForDeviceById])
 
   function getConfrg(key) {
-    for (var item of device.DeviceConfig) {
+    for (var item of device.config) {
       if(item.name === key)
         return item
     }
@@ -29,7 +29,7 @@ export const SensorElement = ({title,index,data,deleteBtn,editBtn,onClick}) =>{
 
   const getTypeField = ()=>{
     if(!device)return "text"
-    for (var item of device.DeviceConfig) {
+    for (var item of device.config) {
       if(data.typeAction === item.name){
         return item.type
       }
@@ -49,7 +49,7 @@ export const SensorElement = ({title,index,data,deleteBtn,editBtn,onClick}) =>{
     }
   }
 
-if(!device||!device.DeviceId){
+if(!device||!device.systemName){
   return null;
 }
 if(getTypeField()==="number"||getTypeField()==="text"){
@@ -57,7 +57,7 @@ if(getTypeField()==="number"||getTypeField()==="text"){
     <div className="SensorElement">
       <div className="icon-conteiner">
         <RunText className="sensor-name RunTextBaseColor" id={title} text={title}/>
-        <p className= "sensor-value">{(device.DeviceValue)?device.DeviceValue[data.typeAction]:""}</p>
+        <p className= "sensor-value">{(device.value)?device.value[data.typeAction]:""}</p>
         <p className= "sensor-unit">{getConfrg(data.typeAction)?.unit||""}</p>
       </div>
       {
@@ -86,7 +86,7 @@ if(getTypeField()==="binary"){
     <div className="SensorElement">
       <div className="icon-conteiner">
         <RunText className="sensor-name RunTextBaseColor" id={title} text={title}/>
-        <div className={`valueIndicator ${(device?.DeviceValue&&device?.DeviceValue[data?.typeAction]==="1")?"true":"false"}`}></div>
+        <div className={`valueIndicator ${(device?.value&&device?.value[data?.typeAction]==="1")?"true":"false"}`}></div>
       </div>
       {
         (deleteBtn || editBtn)?

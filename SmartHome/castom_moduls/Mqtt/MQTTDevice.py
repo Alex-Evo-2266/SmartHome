@@ -1,4 +1,3 @@
-from smartHomeApi.models import Device,Room,genId,ValueDevice
 from smartHomeApi.logic.deviceControl.BaseDeviceClass import BaseDevice
 from smartHomeApi.logic.deviceControl.DeviceElement import DeviceElement
 from smartHomeApi.logic.deviceControl.mqttDevice.connect import getMqttClient

@@ -26,28 +26,28 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
   },[error,message, clearError])
 
   const outValue = async(id,v)=>{
-    await request('/api/devices/value/set', 'POST', {id: data.deviceId,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/devices/value/set', 'POST', {systemName: id,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0])
       return false
-    let condidat = devices.filter((item)=>(item&&item.DeviceId===id))
+    let condidat = devices.filter((item)=>(item&&item.systemName===id))
     return condidat[0]
   },[devices])
 
   useEffect(()=>{
-    if(!data||!data.deviceId||typeof(onClick)==="function")
+    if(!data||!data.deviceName||typeof(onClick)==="function")
       return
-    setDevice(lookForDeviceById(data.deviceId))
+    setDevice(lookForDeviceById(data.deviceName))
   },[devices,data,onClick,lookForDeviceById])
 
   useEffect(()=>{
   },[device])
 
   const itemField = useCallback(()=>{
-    if(!device||!device.DeviceConfig)return
-    for (var item of device.DeviceConfig) {
+    if(!device||!device.config)return
+    for (var item of device.config) {
       if(item.name===data.typeAction){
         return item
       }
@@ -75,9 +75,9 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
   },[device,disabled,devices,itemField])
 
   useEffect(()=>{
-    if(!device||!device.DeviceConfig||!data)return
+    if(!device||!device.config||!data)return
     const {typeAction} = data
-    let conf = device.DeviceConfig.filter((item)=>item.name===typeAction)
+    let conf = device.config.filter((item)=>item.name===typeAction)
     if(conf.length)
       setDeviceConfig(conf[0])
   },[device,data])
@@ -87,15 +87,15 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
   },[value])
 
   useEffect(()=>{
-    if(typeof(onClick)==="function"||disabled||device.status==="offline")return
+    if(typeof(onClick)==="function"||disabled||device?.status==="offline")return
     const {low,high,type} = deviceConfig
-    if(device&&type==="binary"&&device?.DeviceValue&&device?.DeviceValue[deviceConfig.name]){
-      if(device.DeviceValue[deviceConfig.name]===low||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="0"))
+    if(device&&type==="binary"&&device?.value&&device?.value[deviceConfig.name]){
+      if(device.value[deviceConfig.name]===low||(device.typeConnect!=="mqtt"&&device.value[deviceConfig.name]==="0"))
           setValue(false)
-      if(device.DeviceValue[deviceConfig.name]===high||(device.DeviceTypeConnect!=="mqtt"&&device.DeviceValue[deviceConfig.name]==="1"))
+      if(device.value[deviceConfig.name]===high||(device.typeConnect!=="mqtt"&&device.value[deviceConfig.name]==="1"))
         setValue(true)
-      if(device.DeviceTypeConnect==="mqtt"&&(!/\D/.test(device.DeviceValue[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
-        let poz = Number(device.DeviceValue[deviceConfig.name])
+      if(device.typeConnect==="mqtt"&&(!/\D/.test(device.value[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
+        let poz = Number(device.value[deviceConfig.name])
         let min = Number(low)
         let max = Number(high)
         if(poz>min&&poz<=max)
@@ -104,9 +104,9 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
           setValue(false)
       }
     }
-    if(device&&type==="number"&&device.DeviceValue&&device.DeviceValue[deviceConfig.name]){
+    if(device&&type==="number"&&device.value&&device.value[deviceConfig.name]){
       if(!data.action)data.action="0"
-      if(data.action===device.DeviceValue[deviceConfig.name]){
+      if(data.action===device.value[deviceConfig.name]){
         setValue(true)
       }
       else {
@@ -130,14 +130,14 @@ const changeHandler = (event)=>{
   // if(data.typeAction==="variable")
   //     return outValue(device.DeviceId,data.action)
   if(data.typeAction==="modeTarget")
-      return outValue(device.DeviceId,"target")
+      return outValue(device.systemName,"target")
   if(deviceConfig.type==="binary")
-      return outValue(device.DeviceId,(oldvel)?0:1)
+      return outValue(device.systemName,(oldvel)?0:1)
   if(deviceConfig.type==="number")
-      return outValue(device.DeviceId,data.action)
+      return outValue(device.systemName,data.action)
   if(deviceConfig.type==="text")
-      return outValue(device.DeviceId,data.action)
-  return outValue(device.DeviceId,data.action)
+      return outValue(device.systemName,data.action)
+  return outValue(device.systemName,data.action)
   // if(data.type==="ir")
   //     socket.terminalMessage(`device ${device.DeviceSystemName} send ${data.value}`)
   // // socket.terminalMessage()

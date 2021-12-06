@@ -30,11 +30,11 @@ def __load_all__(dir="castom_moduls"):
 
 __load_all__()
 
-def getDevicesClass(type, id):
+def getDevicesClass(type, systemName):
     if(type in devices):
         p = devices[type]
         deviceClass = p["class"]
-        return deviceClass(id=id)
+        return deviceClass(systemName=systemName)
     return None
 
 def getDevices():

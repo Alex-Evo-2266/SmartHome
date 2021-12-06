@@ -16,7 +16,7 @@ export const AddSensor = ({add})=>{
     type:"sensor",
     typeAction:"",
     order:"0",
-    deviceId:null,
+    deviceName:null,
     action:"",
     width:1,
     height:1
@@ -25,11 +25,11 @@ export const AddSensor = ({add})=>{
   useEffect(()=>{
     if(device){
       setButtonForm({id:null,
-        name:device.DeviceName,
+        name:device.name,
         type:"sensor",
         typeAction:"",
         order:0,
-        deviceId:device.DeviceId,
+        deviceName:device.systemName,
         action:"",
         width:1,
         height:1
@@ -49,14 +49,14 @@ export const AddSensor = ({add})=>{
   return (
     <ul>
     {
-      (!device||!device.DeviceId)?
+      (!device||!device.systemName)?
         allDevices.map((item,index)=>{
           return(
             <li key={index} onClick={()=>setDevice(item)}><span>{index+1}</span>{item.DeviceName}</li>
           )
         }):
-        (!buttonForm.typeAction&&device.DeviceConfig)?
-          device.DeviceConfig.map((item,index)=>{
+        (!buttonForm.typeAction&&device.config)?
+          device.config.map((item,index)=>{
             return <li key={index} onClick={()=>out(item)}>{item.name}</li>
           })
           :null

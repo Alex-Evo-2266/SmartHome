@@ -1,4 +1,4 @@
-from smartHomeApi.models import Device,Room,genId,ValueDevice,ValueListDevice
+from ..Device import Devices
 from .DeviceElement import DeviceElement
 
 def look_for_param(arr:list, val):
@@ -11,22 +11,20 @@ class BaseDevice(object):
     """docstring for BaseDevice."""
 
     def __init__(self, *args, **kwargs):
-        self.id = kwargs["id"]
-        deviceData = Device.objects.get(id=self.id)
-        self.status = deviceData.DeviceStatus
-        self.name = deviceData.DeviceName
-        self.systemName = deviceData.DeviceSystemName
-        self.coreAddress = deviceData.DeviceAddress
-        self.token = deviceData.DeviceToken
-        self.info = deviceData.DeviceInformation
-        self.type = deviceData.DeviceType
-        self.typeConnect = deviceData.DeviceTypeConnect
-        self.valueType = deviceData.DeviceValueType
+        self.systemName = kwargs["systemName"]
+        deviceData = Devices.get(systemName=self.systemName)
+        self.status = deviceData.status
+        self.name = deviceData.name
+        self.coreAddress = deviceData.address
+        self.token = deviceData.token
+        self.info = deviceData.information
+        self.type = deviceData.type
+        self.typeConnect = deviceData.typeConnect
+        self.valueType = deviceData.valueType
         self.values = []
         self.device = None
-        values = deviceData.valuedevice_set.all()
-        for item in values:
-            self.values.append(DeviceElement(**item.toDict(), idDevice=self.id))
+        for item in deviceData.values:
+            self.values.append(DeviceElement(**item.get(), deviceName=self.systemName))
 
     def get_value(self, name):
         value = look_for_param(self.values, name)
@@ -56,37 +54,37 @@ class BaseDevice(object):
 
 
     def save(self):
-        dev = Device.objects.get(id=self.id)
-        values = dev.valuedevice_set.all()
-        for item in values:
+        dev = Devices.get(systemName=self.systemName)
+        for item in self.values:
+            print("save list")
+            # ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=item.name,value=value.get(),device=dev)
+        for item in dev.values:
             value = look_for_param(self.values, item.name)
             if(value):
-                ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=item.name,value=value.get(),device=dev)
                 item.value = value.get()
-                item.save()
+        dev.save()
         print("save",self.name)
 
     def get_Base_Info(self):
         res = {
-        "DeviceAddress": self.coreAddress,
-        "DeviceId": self.id,
-        "DeviceInformation": self.info,
-        "DeviceName": self.name,
-        "DeviceStatus": self.status,
-        "DeviceSystemName":self.systemName,
-        "DeviceToken":self.token,
-        "DeviceType":self.type,
-        "DeviceTypeConnect": self.typeConnect,
+        "address": self.coreAddress,
+        "information": self.info,
+        "name": self.name,
+        "status": self.status,
+        "systemName":self.systemName,
+        "token":self.token,
+        "type":self.type,
+        "typeConnect": self.typeConnect,
         "RoomId": None,
-        "DeviceValueType":self.valueType,
+        "valueType":self.valueType,
         }
         values = []
         vals = dict()
         for item in self.values:
             values.append(item.getDict())
             vals[item.name] = item.get()
-        res["DeviceConfig"] = values
-        res["DeviceValue"] = vals
+        res["config"] = values
+        res["value"] = vals
         return res
 
     def get_All_Info(self):

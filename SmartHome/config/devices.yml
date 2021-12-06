@@ -1,0 +1,194 @@
+- address: test
+  name: testdev
+  systemName: testdev
+  token: null
+  type: light
+  typeConnect: mqtt
+  valueType: json
+  values:
+  - address: field0
+    control: true
+    high: '100'
+    icon: fas fa-cog
+    low: '0'
+    name: field0
+    type: binary
+    unit: ''
+    value: 1
+    values: ''
+- address: 192.168.0.7
+  name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+    \u0435"
+  systemName: lamp1
+  token: null
+  type: light
+  typeConnect: yeelight
+  valueType: json
+  values: []
+- address: zigbee2mqtt/coub
+  name: "\u043A\u0443\u0431"
+  systemName: magicCub
+  token: null
+  type: sensor
+  typeConnect: zigbee
+  valueType: json
+  values:
+  - address: battery
+    control: false
+    high: 100
+    icon: ''
+    low: 0
+    name: battery
+    type: number
+    unit: '%'
+    value: 0
+    values: ''
+  - address: voltage
+    control: false
+    high: 1000000
+    icon: ''
+    low: 0
+    name: voltage
+    type: number
+    unit: mV
+    value: 0
+    values: ''
+  - address: action_angle
+    control: false
+    high: 360
+    icon: ''
+    low: -360
+    name: action_angle
+    type: number
+    unit: ''
+    value: -360
+    values: ''
+  - address: action_from_side
+    control: false
+    high: 6
+    icon: ''
+    low: 0
+    name: action_from_side
+    type: number
+    unit: ''
+    value: 0
+    values: ''
+  - address: action_side
+    control: false
+    high: 6
+    icon: ''
+    low: 0
+    name: action_side
+    type: number
+    unit: ''
+    value: 0
+    values: ''
+  - address: action_to_side
+    control: false
+    high: 6
+    icon: ''
+    low: 0
+    name: action_to_side
+    type: number
+    unit: ''
+    value: 0
+    values: ''
+  - address: action
+    control: false
+    high: 1000000
+    icon: ''
+    low: 0
+    name: action
+    type: enum
+    unit: ''
+    value: 0
+    values: shake, wakeup, fall, tap, slide, flip180, flip90, rotate_left, rotate_right
+  - address: linkquality
+    control: false
+    high: 255
+    icon: ''
+    low: 0
+    name: linkquality
+    type: number
+    unit: lqi
+    value: 0
+    values: ''
+- address: zigbee2mqtt/0x00158d00075db2f6
+  name: switch1
+  systemName: switch1
+  token: null
+  type: switch
+  typeConnect: zigbee
+  valueType: json
+  values:
+  - address: t
+    control: false
+    high: 1000000
+    icon: ''
+    low: 0
+    name: left
+    type: switch
+    unit: ''
+    value: 0
+    values: ''
+  - address: t
+    control: false
+    high: 1000000
+    icon: ''
+    low: 0
+    name: right
+    type: switch
+    unit: ''
+    value: 0
+    values: ''
+  - address: power
+    control: false
+    high: 1000000
+    icon: ''
+    low: 0
+    name: power
+    type: number
+    unit: W
+    value: 0
+    values: ''
+  - address: action
+    control: false
+    high: 1000000
+    icon: ''
+    low: 0
+    name: action
+    type: enum
+    unit: ''
+    value: single_right
+    values: hold_left, single_left, double_left, release_left, hold_right, single_right,
+      double_right, release_right, hold_both, single_both, double_both, release_both
+  - address: operation_mode_left
+    control: false
+    high: 1000000
+    icon: ''
+    low: 0
+    name: operation_mode_l
+    type: enum
+    unit: ''
+    value: 0
+    values: control_left_relay, decoupled
+  - address: operation_mode_right
+    control: false
+    high: 1000000
+    icon: ''
+    low: 0
+    name: operation_mode_r
+    type: enum
+    unit: ''
+    value: 0
+    values: control_right_relay, decoupled
+  - address: linkquality
+    control: false
+    high: 255
+    icon: ''
+    low: 0
+    name: linkquality
+    type: number
+    unit: lqi
+    value: 115
+    values: ''

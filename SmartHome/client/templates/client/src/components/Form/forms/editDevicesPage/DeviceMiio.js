@@ -20,16 +20,16 @@ export const DeviceMiioEdit = ({deviceData,hide,type="edit"})=>{
   },[error,message, clearError])
 
   const [device, setDevice] = useState({
-    DeviceId:deviceData.DeviceId,
-    DeviceInformation:deviceData.DeviceInformation,
-    DeviceName:deviceData.DeviceName,
-    DeviceSystemName:deviceData.DeviceSystemName,
-    DeviceType:deviceData.DeviceType,
-    DeviceAddress:deviceData.DeviceAddress,
-    DeviceTypeConnect:deviceData.DeviceTypeConnect,
+    information:deviceData.information,
+    name:deviceData.name,
+    systemName:deviceData.systemName,
+    newSystemName:deviceData.systemName,
+    type:deviceData.type,
+    address:deviceData.address,
+    typeConnect:deviceData.typeConnect,
     RoomId:deviceData.RoomId,
   })
-  const [field, setField] = useState(deviceData.DeviceConfig||[]);
+  const [field, setField] = useState(deviceData.config||[]);
 
   const changeIcon = (val, id) => {
     let index = id
@@ -63,7 +63,7 @@ const changeHandlerTest = event=>{
 
   const deleteHandler = async () =>{
     message("All dependent scripts and controls will be removed along with the device. Delete?","general",async()=>{
-      await request(`/api/devices/${device.DeviceId}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
+      await request(`/api/devices/${device.systemName}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       hide();
     },"no")
   }
@@ -72,32 +72,32 @@ const changeHandlerTest = event=>{
     <ul className="editDevice">
       <li>
         <label>
-          <h5>{`Type - ${device.DeviceType}`}</h5>
-          <h5>{`Type connect - ${device.DeviceTypeConnect}`}</h5>
+          <h5>{`Type - ${device.type}`}</h5>
+          <h5>{`Type connect - ${device.typeConnect}`}</h5>
         </label>
       </li>
       <li>
         <label>
           <h5>Name</h5>
-          <input className = "textInput" placeholder="name" id="DeviceName" type="text" name="DeviceName" value={device.DeviceName} onChange={changeHandler} required/>
+          <input className = "textInput" placeholder="name" id="name" type="text" name="name" value={device.name} onChange={changeHandler} required/>
         </label>
       </li>
       <li>
         <label>
           <h5>System name</h5>
-          <input className = "textInput" placeholder="system name" id="DeviceSystemName" type="text" name="DeviceSystemName" value={device.DeviceSystemName} onChange={changeHandlerTest} required/>
+          <input className = "textInput" placeholder="system name" id="newSystemName" type="text" name="newSystemName" value={device.newSystemName} onChange={changeHandlerTest} required/>
         </label>
       </li>
       <li>
         <label>
           <h5>Address</h5>
-          <input className = "textInput" placeholder="address" id="DeviceAddress" type="text" name="DeviceAddress" value={device.DeviceAddress} onChange={changeHandler} required/>
+          <input className = "textInput" placeholder="address" id="address" type="text" name="address" value={device.address} onChange={changeHandler} required/>
         </label>
       </li>
       <li>
         <label>
           <h5>information</h5>
-          <input className = "textInput" placeholder="information" id="DeviceInformation" type="text" name="DeviceInformation" value={device.DeviceInformation} onChange={changeHandler} required/>
+          <input className = "textInput" placeholder="information" id="information" type="text" name="information" value={device.information} onChange={changeHandler} required/>
         </label>
       </li>
       {

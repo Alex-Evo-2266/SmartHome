@@ -148,110 +148,110 @@ class Room(models.Model):
     def __str__(self):
         return self.RoomName
 
-class Device(models.Model):
-    id = models.IntegerField("id", primary_key=True)
-    DeviceStatus = models.BooleanField("статус",default=True)
-    DeviceName = models.CharField("device name", max_length = 200)
-    DeviceSystemName = models.SlugField("device system name", max_length = 200)
-    DeviceAddress = models.SlugField("device address", max_length = 200, default="")
-    DeviceToken = models.SlugField("device token", max_length = 200, default="")
-    DeviceInformation = models.TextField("device info", default="")
-    DeviceType = models.SlugField("device type", max_length = 200, default="")
-    DeviceTypeConnect = models.SlugField("device connect type", max_length = 200, default="")
-    DeviceValueType = models.SlugField("device value type", max_length = 200, default="json")
-    DeviceControl= models.TextField("device control", max_length = 200, default="")
-    room = models.ForeignKey(Room, on_delete = models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.DeviceName + ", " + self.DeviceControl
-
-    def receiveDict(self):
-        return {
-            "DeviceId":self.id,
-            "DeviceStatus":self.DeviceStatus,
-            "DeviceName":self.DeviceName,
-            "DeviceSystemName":self.DeviceSystemName,
-            "DeviceInformation":self.DeviceInformation,
-            "DeviceType":self.DeviceType,
-            "DeviceTypeConnect":self.DeviceTypeConnect,
-            "DeviceValueType":self.DeviceValueType,
-            "DeviceAddress":self.DeviceAddress,
-            "DeviceToken":self.DeviceToken,
-            "RoomId":self.room_id
-        }
-    def get_value(self):
-        values = self.valuedevice_set.all()
-        valuesDict = dict()
-        for item in values:
-            valuesDict[item.name]=item.value
-        return valuesDict
-
-class ValueDevice(models.Model):
-    id = models.IntegerField("id", primary_key=True)
-    address = models.SlugField("device config address", max_length = 200,default="")
-    name = models.SlugField("device value name", max_length = 200,default="null")
-    low = models.SlugField("device config low", max_length = 200, default="")
-    high = models.SlugField("device config high", max_length = 200, default="")
-    values = models.CharField("values", max_length = 200, default="")
-    icon = models.SlugField("device icon", max_length = 200, default="")
-    value = models.SlugField("device value value", max_length = 200)
-    unit = models.CharField("unit", max_length = 10,default="")
-    control = models.BooleanField("управление",default=True)
-    type = models.SlugField("device value value", max_length = 200,default="binary")
-    device = models.ForeignKey(Device, on_delete = models.CASCADE)
-
-    def __str__(self):
-        return self.name +" "+ self.value
-
-    def receiveDictConf(self):
-        return {
-            "name":self.name,
-            "address":self.address,
-            "low":self.low,
-            "high":self.high,
-            "values":self.values,
-            "icon":self.icon,
-            "unit":self.unit,
-            "type":self.type,
-            "control":self.control,
-            "value":self.value
-        }
-
-    def toDict(self):
-        return {
-            "name":self.name,
-            "address":self.address,
-            "low":self.low,
-            "high":self.high,
-            "values":self.values,
-            "icon":self.icon,
-            "unit":self.unit,
-            "type":self.type,
-            "control":self.control,
-            "value":self.value
-        }
-
-    def receiveDict(self):
-        return {
-            "id":self.id,
-            "name":self.name,
-            "value":self.value,
-        }
-
-class ValueListDevice(models.Model):
-    id = models.IntegerField("id", primary_key=True)
-    name = models.SlugField("device name field", max_length = 200)
-    value = models.SlugField("device value list value", max_length = 200,default="")
-    date = models.DateTimeField("device value element date", auto_now=True)
-    device = models.ForeignKey(Device, on_delete = models.CASCADE)
-
-    def __str__(self):
-        return self.type +" "+ self.value
-
-    def receiveDict(self):
-        return {
-            "device":self.device.DeviceSystemName,
-            "name":self.name,
-            "value":self.value,
-            "date":self.date
-        }
+# class Device(models.Model):
+#     id = models.IntegerField("id", primary_key=True)
+#     DeviceStatus = models.BooleanField("статус",default=True)
+#     DeviceName = models.CharField("device name", max_length = 200)
+#     DeviceSystemName = models.SlugField("device system name", max_length = 200)
+#     DeviceAddress = models.SlugField("device address", max_length = 200, default="")
+#     DeviceToken = models.SlugField("device token", max_length = 200, default="")
+#     DeviceInformation = models.TextField("device info", default="")
+#     DeviceType = models.SlugField("device type", max_length = 200, default="")
+#     DeviceTypeConnect = models.SlugField("device connect type", max_length = 200, default="")
+#     DeviceValueType = models.SlugField("device value type", max_length = 200, default="json")
+#     DeviceControl= models.TextField("device control", max_length = 200, default="")
+#     room = models.ForeignKey(Room, on_delete = models.SET_NULL, null=True)
+#
+#     def __str__(self):
+#         return self.DeviceName + ", " + self.DeviceControl
+#
+#     def receiveDict(self):
+        # return {
+        #     "DeviceId":self.id,
+        #     "DeviceStatus":self.DeviceStatus,
+        #     "DeviceName":self.DeviceName,
+        #     "DeviceSystemName":self.DeviceSystemName,
+        #     "DeviceInformation":self.DeviceInformation,
+        #     "DeviceType":self.DeviceType,
+        #     "DeviceTypeConnect":self.DeviceTypeConnect,
+        #     "DeviceValueType":self.DeviceValueType,
+        #     "DeviceAddress":self.DeviceAddress,
+        #     "DeviceToken":self.DeviceToken,
+        #     "RoomId":self.room_id
+        # }
+    # def get_value(self):
+    #     values = self.valuedevice_set.all()
+    #     valuesDict = dict()
+    #     for item in values:
+    #         valuesDict[item.name]=item.value
+    #     return valuesDict
+#
+# class ValueDevice(models.Model):
+#     id = models.IntegerField("id", primary_key=True)
+#     address = models.SlugField("device config address", max_length = 200,default="")
+#     name = models.SlugField("device value name", max_length = 200,default="null")
+#     low = models.SlugField("device config low", max_length = 200, default="")
+#     high = models.SlugField("device config high", max_length = 200, default="")
+#     values = models.CharField("values", max_length = 200, default="")
+#     icon = models.SlugField("device icon", max_length = 200, default="")
+#     value = models.SlugField("device value value", max_length = 200)
+#     unit = models.CharField("unit", max_length = 10,default="")
+#     control = models.BooleanField("управление",default=True)
+#     type = models.SlugField("device value value", max_length = 200,default="binary")
+#     device = models.ForeignKey(Device, on_delete = models.CASCADE)
+#
+#     def __str__(self):
+#         return self.name +" "+ self.value
+#
+#     def receiveDictConf(self):
+#         return {
+#             "name":self.name,
+#             "address":self.address,
+#             "low":self.low,
+#             "high":self.high,
+#             "values":self.values,
+#             "icon":self.icon,
+#             "unit":self.unit,
+#             "type":self.type,
+#             "control":self.control,
+#             "value":self.value
+#         }
+#
+#     def toDict(self):
+#         return {
+#             "name":self.name,
+#             "address":self.address,
+#             "low":self.low,
+#             "high":self.high,
+#             "values":self.values,
+#             "icon":self.icon,
+#             "unit":self.unit,
+#             "type":self.type,
+#             "control":self.control,
+#             "value":self.value
+#         }
+#
+#     def receiveDict(self):
+#         return {
+#             "id":self.id,
+#             "name":self.name,
+#             "value":self.value,
+#         }
+#
+# class ValueListDevice(models.Model):
+#     id = models.IntegerField("id", primary_key=True)
+#     name = models.SlugField("device name field", max_length = 200)
+#     value = models.SlugField("device value list value", max_length = 200,default="")
+#     date = models.DateTimeField("device value element date", auto_now=True)
+#     device = models.ForeignKey(Device, on_delete = models.CASCADE)
+#
+#     def __str__(self):
+#         return self.type +" "+ self.value
+#
+#     def receiveDict(self):
+#         return {
+#             "device":self.device.DeviceSystemName,
+#             "name":self.name,
+#             "value":self.value,
+#             "date":self.date
+#         }

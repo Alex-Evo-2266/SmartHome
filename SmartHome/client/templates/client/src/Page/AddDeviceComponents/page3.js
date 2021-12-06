@@ -11,7 +11,7 @@ export const AddDevicesPage3 = ({form, setForm, next, backPage}) => {
   }
 
   const nextPage = ()=>{
-    if(!form.DeviceName || !USText(form.DeviceSystemName)){
+    if(!form.name || !USText(form.systemName)){
       message("некоректные данные","error")
       return
     }
@@ -22,13 +22,13 @@ export const AddDevicesPage3 = ({form, setForm, next, backPage}) => {
     <div className="allFon">
     <div className="configElement">
       <div className="input-data">
-        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="DeviceName" type="text" value={form.DeviceName}></input>
+        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="name" type="text" value={form.name}></input>
         <label>Name</label>
       </div>
     </div>
     <div className="configElement">
       <div className="input-data">
-        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="DeviceSystemName" type="text" value={form.DeviceSystemName}></input>
+        <input onChange={(e)=>updata(e.target.name, e.target.value)} required name="systemName" type="text" value={form.systemName}></input>
         <label>System name</label>
       </div>
     </div>

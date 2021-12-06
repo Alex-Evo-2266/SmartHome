@@ -4,7 +4,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from smartHomeApi.logic.config.configget import getConfig
 from smartHomeApi.logic.socketOut import sendData
-from smartHomeApi.logic.editDevice import giveidDeviceByAddres, deleteDevice, editAdress
+from smartHomeApi.logic.editDevice import giveSystemNameDeviceByAddres, deleteDevice, editAdress
 import json
 
 def zigbeeInfoSearch(topic, message):
@@ -59,10 +59,10 @@ def editAdressLincDevices(data):
     newadress = data["data"]
     newadress = newadress["to"]
     address = '/'.join([zigbee["topic"],oldadress])
-    devs = giveidDeviceByAddres(address)
+    devs = giveSystemNameDeviceByAddres(address)
     newadress = '/'.join([zigbee["topic"],newadress])
-    for id in devs:
-        editAdress(id,newadress)
+    for name in devs:
+        editAdress(name,newadress)
 
 def addzigbeeDevices(id,data):
     global zigbeeDevices
