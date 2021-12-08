@@ -18,4 +18,4 @@ devices:
   '0x00158d000548e74b':
     friendly_name: openDoorSensor
   '0x00158d00075db2f6':
-    friendly_name: '0x00158d00075db2f6'
+    friendly_name: switch

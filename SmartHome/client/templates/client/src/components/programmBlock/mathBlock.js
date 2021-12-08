@@ -20,7 +20,7 @@ export const MathBlock = ({data,updata,block,deleteEl})=>{
     showData("addValue",{type:"number"},(typeValue,deviceData)=>{
       let element = data
       if(typeValue==="deviceBlock")
-        element = {...element, [v]:{type:"device",idDevice:deviceData.DeviceId,action:deviceData.DeviceConfig[0].name}}
+        element = {...element, [v]:{type:"device",systemName:deviceData.systemName,action:deviceData.config[0].name}}
       if(typeValue==="Text")
         element = {...element, [v]:{type:"text",value:""}}
       if(typeValue==="Number")

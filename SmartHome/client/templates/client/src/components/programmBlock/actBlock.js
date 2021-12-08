@@ -14,24 +14,24 @@ export const ActBlock = ({updata,index,data,deleteEl})=>{
   const [field,setField] = useState({})
 
   const lookForDeviceById = useCallback((id)=>{
-    return devices.filter((item)=>item.DeviceId===id)[0]
+    return devices.filter((item)=>item.systemName===id)[0]
   },[devices])
 
   const lookForField = (device,name)=>{
-    return device?.DeviceConfig?.filter((item)=>item.name===name)[0]
+    return device?.config?.filter((item)=>item.name===name)[0]
   }
 
   const valuesDecod = (data)=> data.split(" ").join("").split(",")
 
   useEffect(()=>{
-    setDevice(lookForDeviceById(data.DeviceId))
-    setField(lookForField(lookForDeviceById(data.DeviceId),data.action))
+    setDevice(lookForDeviceById(data.systemName))
+    setField(lookForField(lookForDeviceById(data.systemName),data.action))
   },[lookForDeviceById,data])
 
   const changeSelector = (event)=>{
     let element = {...data, [event.target.name]:event.target.value}
     if(event.target.name==="action")
-      setField(lookForField(lookForDeviceById(data.DeviceId),element.action))
+      setField(lookForField(lookForDeviceById(data.systemName),element.action))
     updata({...element,index})
   }
 
@@ -57,7 +57,7 @@ const addvalue = ()=>{
   showData("addValue",{type:field.type},(typeValue,deviceData)=>{
     let element = data
     if(typeValue==="deviceBlock")
-      element = {...element, value:{type:"device",idDevice:deviceData.DeviceId,action:deviceData.DeviceConfig[0].name}}
+      element = {...element, value:{type:"device",systemName:deviceData.systemName,action:deviceData.config[0].name}}
     if(typeValue==="Text")
       element = {...element, value:{type:"text",value:""}}
     if(typeValue==="Number")
@@ -84,12 +84,12 @@ if(Object?.keys(device||"")?.length === 0 || Object?.keys(field||"")?.length ===
   return(
     <div className="programm-function-block-root">
       <div className="programm-function-block-content-item programm-function-block-name">
-        {(device)?device.DeviceName:"Name"}
+        {(device)?device.name:"Name"}
       </div>
       <div className="programm-function-block-content-item">
         <select value={field.name} onChange={changeSelector} name="action">
           {
-            device.DeviceConfig.map((item,index)=>{
+            device.config.map((item,index)=>{
               return(
                 <option key={index} value={item.name}>{item.name}</option>
               )

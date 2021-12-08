@@ -21,6 +21,7 @@ urlpatterns = [
     path('devices/value/set',views.SetValueDevice.as_view()),
     path('devices/status/set',views.SetStatusDevice.as_view()),
     path('devices/get/<str:id>',views.DeviceGetDeleteView.as_view()),
+    path('devices/del/<str:id>',views.DeviceGetDeleteView.as_view()),
     path('charts/get',views.GetCharts.as_view()),
     path('mqtt',views.MqttDevice.as_view()),
     path('mqtt/clear',views.MqttClear.as_view()),

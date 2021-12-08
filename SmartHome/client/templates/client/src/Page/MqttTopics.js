@@ -38,10 +38,10 @@ export const MqttPage = ()=>{
       for (var item of data.lincs) {
         let dev = item.device
         let field
-        if(dev.DeviceValueType!=="json" && item.field){
+        if(dev.valueType!=="json" && item.field){
           field = item.field.name
         }
-        devices.push(`${dev.DeviceSystemName}${(field)?`.${field}`:''}`)
+        devices.push(`${dev.systemName}${(field)?`.${field}`:''}`)
       }
       return devices
     }

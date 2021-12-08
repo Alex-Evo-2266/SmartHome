@@ -16,6 +16,16 @@
     unit: ''
     value: 1
     values: ''
+  - address: field1
+    control: true
+    high: '100'
+    icon: fas fa-bolt
+    low: '0'
+    name: field1
+    type: text
+    unit: ''
+    value: erty
+    values: ''
 - address: 192.168.0.7
   name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
     \u0435"
@@ -41,7 +51,7 @@
     name: battery
     type: number
     unit: '%'
-    value: 0
+    value: 86
     values: ''
   - address: voltage
     control: false
@@ -51,7 +61,7 @@
     name: voltage
     type: number
     unit: mV
-    value: 0
+    value: 2975
     values: ''
   - address: action_angle
     control: false
@@ -71,7 +81,7 @@
     name: action_from_side
     type: number
     unit: ''
-    value: 0
+    value: 5
     values: ''
   - address: action_side
     control: false
@@ -81,7 +91,7 @@
     name: action_side
     type: number
     unit: ''
-    value: 0
+    value: 4
     values: ''
   - address: action_to_side
     control: false
@@ -91,7 +101,7 @@
     name: action_to_side
     type: number
     unit: ''
-    value: 0
+    value: 4
     values: ''
   - address: action
     control: false
@@ -101,7 +111,7 @@
     name: action
     type: enum
     unit: ''
-    value: 0
+    value: wakeup
     values: shake, wakeup, fall, tap, slide, flip180, flip90, rotate_left, rotate_right
   - address: linkquality
     control: false
@@ -111,9 +121,9 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 0
+    value: 123
     values: ''
-- address: zigbee2mqtt/0x00158d00075db2f6
+- address: zigbee2mqtt/switch
   name: switch1
   systemName: switch1
   token: null
@@ -121,25 +131,25 @@
   typeConnect: zigbee
   valueType: json
   values:
-  - address: t
-    control: false
-    high: 1000000
-    icon: ''
-    low: 0
+  - address: state_left
+    control: left
+    high: 'ON'
+    icon: fas fa-power-off
+    low: 'OFF'
     name: left
-    type: switch
+    type: binary
     unit: ''
-    value: 0
+    value: '1'
     values: ''
-  - address: t
-    control: false
-    high: 1000000
-    icon: ''
-    low: 0
+  - address: state_right
+    control: right
+    high: 'ON'
+    icon: fas fa-power-off
+    low: 'OFF'
     name: right
-    type: switch
+    type: binary
     unit: ''
-    value: 0
+    value: '0'
     values: ''
   - address: power
     control: false
@@ -163,24 +173,24 @@
     values: hold_left, single_left, double_left, release_left, hold_right, single_right,
       double_right, release_right, hold_both, single_both, double_both, release_both
   - address: operation_mode_left
-    control: false
+    control: left
     high: 1000000
     icon: ''
     low: 0
-    name: operation_mode_l
+    name: operation_mode_left
     type: enum
     unit: ''
-    value: 0
+    value: decoupled
     values: control_left_relay, decoupled
   - address: operation_mode_right
-    control: false
+    control: right
     high: 1000000
     icon: ''
     low: 0
-    name: operation_mode_r
+    name: operation_mode_right
     type: enum
     unit: ''
-    value: 0
+    value: control_right_relay
     values: control_right_relay, decoupled
   - address: linkquality
     control: false
@@ -190,5 +200,5 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 115
+    value: 131
     values: ''

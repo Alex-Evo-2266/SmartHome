@@ -46,6 +46,7 @@ class Device(object):
         self.values = []
         self.token = None
         self.status = True
+        self.RoomId = None
         self.information = ""
         if("status" in kwargs):
             self.status = kwargs["status"]

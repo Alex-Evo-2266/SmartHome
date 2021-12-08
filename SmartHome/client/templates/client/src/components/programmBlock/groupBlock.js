@@ -13,18 +13,18 @@ const addEl = ()=>{
   show("typeBlock",(typeblock,dataDev)=>{
     if(typeblock==="groupBlockAnd"){
       let element = blockData
-      element.children.push({type:"group" ,oper:"and",children:[],idDevice:null,action:null,value:null})
+      element.children.push({type:"group" ,oper:"and",children:[],systemName:null,action:null,value:null})
       updata(element,index)
     }
     else if(typeblock==="groupBlockOr"){
       let element = blockData
-      element.children.push({type:"group" ,oper:"or",children:[],idDevice:null,action:null,value:null})
+      element.children.push({type:"group" ,oper:"or",children:[],systemName:null,action:null,value:null})
       updata(element,index)
     }
     else if(typeblock==="deviceBlock"){
       let element = blockData
-      let act = dataDev.DeviceConfig[0].name
-      element.children.push({type:"device" ,oper:"==",idDevice:dataDev.DeviceId,action:act,value:""})
+      let act = dataDev.config[0].name
+      element.children.push({type:"device" ,oper:"==",systemName:dataDev.systemName,action:act,value:""})
       updata(element,index)
     }
   })
@@ -64,7 +64,7 @@ const reqUpdata = (elementData,indexel)=>{
             if(item.type==="group"){
               return <GroupBlock index={index1} deleteEl={devEl} updata={reqUpdata} key={index1} type={item.oper} data={item}/>
             }
-            return <IfBlock key={index1} data={item} deleteEl={devEl} index={index1} updata={reqUpdata} idDevice={item.idDevice}/>
+            return <IfBlock key={index1} data={item} deleteEl={devEl} index={index1} updata={reqUpdata} idDevice={item.systemName}/>
           })
         :null
       }

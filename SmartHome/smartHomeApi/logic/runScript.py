@@ -52,7 +52,7 @@ def runScripts(systemName,type):
                 templates = yaml.safe_load(f)
             runscript(templates)
     except Exception as e:
-        print("run script error", e) 
+        print("run script error", e)
 
 
 def runscript(data):

@@ -15,7 +15,7 @@ export const AddScriptDevices = ({result,type,typeDev=null})=>{
   const filtered = useCallback(()=>{
       setFilteredDevices(devices.filter((item)=>{
         let flag = false
-        for (var item2 of item.DeviceConfig) {
+        for (var item2 of item.config) {
           if(
             (typeDev==="number"&&(item2.type==="number"||item2.type==="binary"))||
             (typeDev==="binary"&&item2.type==="binary")||
@@ -42,7 +42,7 @@ export const AddScriptDevices = ({result,type,typeDev=null})=>{
           filteredDevices.map((item,index)=>{
             return(
               <li key={index} onClick={()=>out(item)}>
-                <span>{index+1}</span>{item.DeviceName}
+                <span>{index+1}</span>{item.name}
               </li>
             )
           })

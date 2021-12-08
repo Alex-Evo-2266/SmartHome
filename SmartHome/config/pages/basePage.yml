@@ -70,10 +70,35 @@ cards:
     type: sensor
     typeAction: action_angle
     width: 1
+  - deviceName: switch1
+    height: 1
+    index: 3
+    name: switch1
+    order: 0
+    title: btn1
+    type: button
+    typeAction: left
+    width: 1
   index: 2
   mainId: null
   name: ''
   order: '0'
   type: base
+  width: 2
+- children:
+  - deviceName: testdev
+    height: 1
+    index: 0
+    name: testdev
+    order: 0
+    title: test test
+    type: text
+    typeAction: field1
+    width: 1
+  index: 3
+  mainId: null
+  name: ''
+  order: '0'
+  type: line
   width: 2
 name: basePage

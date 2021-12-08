@@ -11,7 +11,7 @@ export const AddScriptState = ({children}) =>{
   const [state, dispatch] = useReducer(addScriptReducer,{visible:false})
 
   const addTarget = (result=null)=>{
-    let targets = devices.map((item)=>({title:item.DeviceName, data:item}))
+    let targets = devices.map((item)=>({title:item.name, data:item}))
     targets.unshift({title:"datetime", data:{type:"datetime"}})
     dialog.show("confirmation",{
       title:"Devices",

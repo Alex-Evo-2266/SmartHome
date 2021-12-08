@@ -21,13 +21,15 @@ class MQTTDevice(BaseDevice):
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
+        self.update_value()
 
     def update_value(self, *args, **kwargs):
-        topic = kwargs["topic"]
-        value = kwargs["value"]
-
-        val = look_for_by_topic(self.values, topic)
-        val.set(value)
+        if(self.valueType=="json"):
+            client = getMqttClient()
+            data = dict()
+            data[self.values[0].address] = ""
+            data = json.dumps(data)
+            client.publish(self.coreAddress+"/get", data)
 
     def get_device(self):
         return True

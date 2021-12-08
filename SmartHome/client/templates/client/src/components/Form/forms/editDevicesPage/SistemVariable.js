@@ -124,7 +124,7 @@ const changeHandlerTest = event=>{
 
   const deleteHandler = async () =>{
     message("All dependent scripts and controls will be removed along with the device. Delete?","general",async()=>{
-      await request(`/api/devices/${device.systemName}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
+      await request(`/api/devices/del/${device.systemName}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
       hide();
     },"no")
   }

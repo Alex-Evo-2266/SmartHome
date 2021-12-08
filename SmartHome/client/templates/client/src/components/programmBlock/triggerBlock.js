@@ -8,11 +8,11 @@ export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>
   const [allTypes,setAllTypes] = useState([])
 
   const lookForDeviceById = useCallback((id)=>{
-    let condidat = devices.filter((item)=>item.DeviceId===id)
+    let condidat = devices.filter((item)=>item.systemName===id)
     condidat = condidat[0]
     let array = []
     if(condidat){
-      for (var item of condidat.DeviceConfig) {
+      for (var item of condidat.config) {
         if(item.name){
           array.push(item.name)
         }
@@ -35,7 +35,7 @@ export const TriggerBlock = ({deviceId,action,updata,index,el,block,deleteEl})=>
   return(
     <div className="programm-function-block-root">
       <div className="programm-function-block-content-item programm-function-block-name">
-        {(device)?device.DeviceName:"Name"}
+        {(device)?device.name:"Name"}
       </div>
       <div className="programm-function-block-content-item">
         <select value={type} onChange={changeSelector} name="property">

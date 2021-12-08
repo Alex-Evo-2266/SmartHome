@@ -34,10 +34,10 @@ export const ShowScript = ({data})=>{
   const trigger = (content)=>{
     return content.map((item)=>{
       if(item.type==="device"){
-        let condidat = devices.filter((item2)=>item2.DeviceId===item.DeviseId)
+        let condidat = devices.filter((item2)=>item2.systemName===item.systemName)
         if(!condidat||!condidat[0])
           return"error"
-        return `${condidat[0].DeviceSystemName}`
+        return `${condidat[0].systemName}`
       }
       return "error"
     })
@@ -45,10 +45,10 @@ export const ShowScript = ({data})=>{
 
   const element = (content)=>{
     if(content.type!=="device") return
-    let condidat = devices.filter((item)=>item.DeviceId===content.DeviseId)
+    let condidat = devices.filter((item)=>item.systemName===content.systemName)
     if(!condidat||!condidat[0])
       return"error"
-    return `${condidat[0].DeviceSystemName} ${content.property} ${content.oper} ${content.value}`
+    return `${condidat[0].systemName} ${content.property} ${content.oper} ${content.value}`
   }
 
   const group = (content)=>{
@@ -64,10 +64,10 @@ export const ShowScript = ({data})=>{
   const then = (content)=>{
     return content.map((item)=>{
       if(item.type==="device"){
-        let condidat = devices.filter((item2)=>item2.DeviceId===item.DeviseId)
+        let condidat = devices.filter((item2)=>item2.systemName===item.systemName)
         if(!condidat||!condidat[0])
           return "error"
-        return `${condidat[0].DeviceSystemName} ${item.property} = ${value(item.value)}`
+        return `${condidat[0].systemName} ${item.property} = ${value(item.value)}`
       }
       return "error"
     })
@@ -78,10 +78,10 @@ export const ShowScript = ({data})=>{
       return content.value
     }
     else if(content.type==="DeviseValue"){
-      let condidat = devices.filter((item2)=>item2.DeviceId===content.value.DeviceId)
+      let condidat = devices.filter((item2)=>item2.systemName===content.value.systemName)
       if(!condidat||!condidat[0])
         return "error"
-      return `${condidat[0].DeviceSystemName}>${content.value.property}`
+      return `${condidat[0].systemName}>${content.value.property}`
     }
   }
 

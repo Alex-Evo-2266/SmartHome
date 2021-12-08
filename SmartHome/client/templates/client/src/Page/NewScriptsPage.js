@@ -28,7 +28,7 @@ export const NewScriptsPage = ({edit}) => {
   const[script, setScript]=useState({
     name:"",
     trigger:[],
-    if:{type:"group" ,oper:"and",children:[],idDevice:null,action:null,value:null},
+    if:{type:"group" ,oper:"and",children:[],systemName:null,action:null,value:null},
     then:[],
     else:[]
   })
@@ -42,10 +42,10 @@ export const NewScriptsPage = ({edit}) => {
         setScript(mas)
         return
       }
-      if(!dataDev||!dataDev.DeviceId)
+      if(!dataDev||!dataDev.systemName)
         return
       let mas = script;
-      mas.trigger.push({type:"device",action:"all",DeviceId:dataDev.DeviceId})
+      mas.trigger.push({type:"device",action:"all",systemName:dataDev.systemName})
       setScript(mas)
     })
   }
@@ -64,11 +64,11 @@ export const NewScriptsPage = ({edit}) => {
       setTimeout(function () {
         if(typeAct==="device"){
           show("deviceBlock",(_,dataDev)=>{
-            if(!dataDev||!dataDev.DeviceId)
+            if(!dataDev||!dataDev.systemName)
               return
             let mas = script;
-            let act = dataDev.DeviceConfig[0].name
-            mas[type].push({type:"device",action:act,DeviceId:dataDev.DeviceId})
+            let act = dataDev.config[0].name
+            mas[type].push({type:"device",action:act,systemName:dataDev.systemName})
             setScript(mas)
           })
         }
@@ -78,7 +78,7 @@ export const NewScriptsPage = ({edit}) => {
             if(!datascr||!datascr.name)
               return
             let mas = script;
-            mas[type].push({type:"script",action:"run",DeviceId:datascr.name})
+            mas[type].push({type:"script",action:"run",systemName:datascr.name})
             setScript(mas)
           })
         }
@@ -224,8 +224,8 @@ export const NewScriptsPage = ({edit}) => {
                 (cost)?
                 script.trigger.map((item,index)=>{
                   if(item?.type === "datetime")
-                    return <TriggerDateTime key={index} index={index} action={item.action} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.DeviceId}/>
-                  return <TriggerBlock key={index} index={index} action={item.action} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.DeviceId}/>
+                    return <TriggerDateTime key={index} index={index} action={item.action} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.systemName}/>
+                  return <TriggerBlock key={index} index={index} action={item.action} updata={(data1)=>updatascript("trigger",data1)} deleteEl={()=>deleteTrigger(index)} block="trigger" deviceId={item.systemName}/>
                 }):null
               }
             </div>

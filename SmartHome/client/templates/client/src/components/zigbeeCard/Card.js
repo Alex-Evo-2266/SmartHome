@@ -23,6 +23,45 @@ export const ZigbeeElement = ({data}) =>{
     request('/api/zigbee2mqtt/devices', 'DELETE',{name:data.address},{Authorization: `Bearer ${auth.token}`})
   }
 
+  const convertForm = (exposes)=>{
+    let newArr = []
+    for (var item of exposes) {
+      if(item.features)
+      {
+        for (var item2 of item.features) {
+          item2.name = item2.endpoint
+          item2.control = true
+          newArr.push(item2)
+        }
+      }
+      else {
+        newArr.push(item)
+      }
+    }
+    return newArr;
+  }
+
+  const dupCorrekt = (arr)=>{
+    let arr2 = []
+    let flag = true
+    for (var item of arr) {
+      flag = true
+      if(item.endpoint && item.endpoint != item.name)
+        item.name = item.name + "_" + item.endpoint
+      for (var item2 of arr2) {
+        if(item.name === item2)
+          flag = false
+      }
+      if(flag)
+        arr2.push(item.name)
+      else {
+        item.name = item.name + "_" + arr2.indexOf(item.name)
+        arr2.push(item.name)
+      }
+    }
+    return arr
+  }
+
   const typeList = ()=>types?.type?.map(item=>{
     return {
       title: item.title,
@@ -40,7 +79,7 @@ export const ZigbeeElement = ({data}) =>{
 
   const linc = ()=>{
     let conf = []
-    for (var item of data.exposes) {
+    for (var item of dupCorrekt(convertForm(data.exposes))) {
       let type = item.type
       if(item.type==="numeric")
         type="number"
@@ -57,7 +96,7 @@ export const ZigbeeElement = ({data}) =>{
         type:type,
         unit:item.unit,
         values:values,
-        control:false
+        control:item.endpoint||false
       }
       conf.push(confel)
     }
@@ -137,7 +176,7 @@ export const ZigbeeElement = ({data}) =>{
       <div className = "NewCardBody">
         <ul>
         {(data.exposes)?
-          data.exposes.map((item,index)=>{
+          convertForm(data.exposes).map((item,index)=>{
             return(
               <li className="DeviceControlLi" key={index}>
                 <div className="DeviceControlLiName">

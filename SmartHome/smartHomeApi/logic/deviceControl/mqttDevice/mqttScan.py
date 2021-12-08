@@ -1,5 +1,6 @@
 from smartHomeApi.logic.config.configget import getConfig
 from smartHomeApi.logic.socketOut import sendData
+from smartHomeApi.logic.Device import Devices
 import ast
 import json
 mqttTopics = []
@@ -44,18 +45,18 @@ def getTopicksAndLinc():
         #     if(last=="info"):
         #         decodeZigbeeConfig(json.loads(item["message"]))
         lincs = list()
-        for device in Device.objects.all():
-            if device.DeviceValueType=="json":
-                if(device.DeviceAddress==topic or (device.DeviceAddress==first and last == "set")):
+        for device in Devices.all():
+            if device.valueType=="json":
+                if(device.address==topic or (device.address==first and last == "set")):
                     lincs.append({
-                    "device": device.receiveDict()
+                    "device": device.getDict()
                     })
             else:
-                for devValue in device.valuedevice_set.all():
-                    if ((device.DeviceAddress + "/" + devValue.address ==topic) and last != "set"):
+                for devValue in device.values:
+                    if ((device.address + "/" + devValue.address ==topic) and last != "set"):
                         lincs.append({
-                        "device": device.receiveDict(),
-                        "field": devValue.receiveDictConf()
+                        "device": device.getDict(),
+                        "field": devValue.get()
                         })
         item["lincs"] = lincs
         if(last == "set"):
