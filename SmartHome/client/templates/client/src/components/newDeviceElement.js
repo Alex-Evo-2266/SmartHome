@@ -8,6 +8,7 @@ import {Power} from './newDeviceControlElements/power'
 import {Dimmer} from './newDeviceControlElements/dimmer'
 import {Mode} from './newDeviceControlElements/mode'
 import {Enum} from './newDeviceControlElements/enum'
+import {Text} from './newDeviceControlElements/text'
 import {Menu} from './Menu/dopmenu/menu'
 // import {Color} from './newDeviceControlElements/color'
 import {SocketContext} from '../context/SocketContext'
@@ -90,18 +91,7 @@ export const NewDeviceElement = ({systemName}) =>{
               return <Enum key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values}/>
             }
             if(item.type==="text"&& item.control){
-              return(
-                <li className="DeviceControlLi" key={index}>
-                  <div className="DeviceControlLiName">
-                    <p>{item.name}</p>
-                  </div>
-                  <div className="DeviceControlLiContent">
-                    <div className="DeviceControlLiValue">
-                      <p>{device.value[item.name]}</p>
-                    </div>
-                  </div>
-                </li>
-              )
+              return <Text key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values}/>
             }
             if(!item.control){
               return(

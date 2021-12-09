@@ -70,7 +70,7 @@ if(getTypeField()==="binary"){
       }
       </div>
     </div>
-        <p className= "sensor-name">{device.name}</p>
+        <p className= "sensor-name">{title}</p>
         <div className="control">
           <p className= "state">{`${device.value[data.typeAction]} ${itemField().unit||""}`}</p>
         </div>
@@ -88,7 +88,7 @@ return (
       }
       </div>
     </div>
-    <p className= "sensor-name">{device.name}</p>
+    <p className= "sensor-name">{title}</p>
     <p className= "state">{`${device.value[data.typeAction]} ${itemField().unit||""}`}</p>
   </BaseElement>
 )

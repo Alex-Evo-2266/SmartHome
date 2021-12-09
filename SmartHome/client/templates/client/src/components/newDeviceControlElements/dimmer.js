@@ -1,4 +1,4 @@
-import React, {useState,useEffect,useContext} from 'react'
+import React, {useState,useEffect,useContext, useRef} from 'react'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {AuthContext} from '../../context/AuthContext.js'
@@ -8,6 +8,7 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
   // const [colo]=useState(false)
   const auth = useContext(AuthContext)
   const {message} = useMessage();
+  const delay = useRef(null)
   const {request, error, clearError} = useHttp();
 
   useEffect(()=>{
@@ -26,7 +27,7 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
   }
 
   const mouseUp = (event)=>{
-      outValue(event.target.value)
+      // outValue(event.target.value)
     }
 
   const changeHandler = event =>{
@@ -35,6 +36,12 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
       if(typeof(updata)==='function')
         updata()
     }, 500);
+    if(delay.current){
+      clearTimeout(delay.current)
+    }
+    delay.current = setTimeout(function () {
+      outValue(event.target.value)
+    }, 200);
   }
 
   function isColor(text) {
@@ -51,7 +58,7 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
         <p>{newvalue||"0"}</p>
       </div>
       <div className={`DeviceLiControl ${(isColor(type))?"allColor":""}`}>
-        <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler}/>
+        <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler} oninput={changeHandler}/>
       </div>
       </div>
     </li>

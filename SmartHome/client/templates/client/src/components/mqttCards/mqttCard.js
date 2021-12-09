@@ -105,10 +105,10 @@ export const MQTTElement = ({data, onClickMessage}) =>{
       for (var item of data.lincs) {
         let dev = item.device
         let field
-        if(dev.DeviceValueType!=="json" && item.field){
+        if(dev.valueType!=="json" && item.field){
           field = item.field.name
         }
-        devices.push(`${dev.DeviceSystemName}${(field)?`.${field}`:''}`)
+        devices.push(`${dev.systemName}${(field)?`.${field}`:''}`)
       }
       return devices
     }
@@ -154,11 +154,11 @@ export const MQTTElement = ({data, onClickMessage}) =>{
           conf.push(confel)
         }
         form.show("LinkDevices",null,{
-          DeviceTypeConnect: "mqtt",
-          DeviceType: ret,
-          DeviceAddress: address,
-          DeviceValueType: typeMessage,
-          DeviceConfig: conf
+          typeConnect: "mqtt",
+          type: ret,
+          address: address,
+          valueType: typeMessage,
+          config: conf
         })
       }
     })

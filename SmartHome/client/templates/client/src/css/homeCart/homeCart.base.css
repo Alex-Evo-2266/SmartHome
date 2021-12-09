@@ -50,6 +50,7 @@ ul.elementConteiner.line{
 }
 @media (max-width: 440px){
   ul.elementConteiner{
-    grid-template-columns: repeat(4,auto);
+    grid-template-columns: repeat(4,minmax(78px,1fr));
+    grid-auto-rows: 82px;
   }
 }

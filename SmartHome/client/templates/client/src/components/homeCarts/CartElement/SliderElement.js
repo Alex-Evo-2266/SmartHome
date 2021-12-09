@@ -1,4 +1,4 @@
-import React,{useState,useContext,useEffect,useCallback} from 'react'
+import React,{useState,useContext,useRef,useEffect,useCallback} from 'react'
 import {SocketContext} from '../../../context/SocketContext'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 import {AuthContext} from '../../../context/AuthContext.js'
@@ -12,6 +12,7 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
   const [value , setValue] = useState(firstValue)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
+  const delay = useRef(null)
   const [disabled2, setDisabled] = useState(disabled)
   const [device, setDevice] = useState({})
   const [minstate, setMin] = useState(0)
@@ -80,7 +81,13 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
   },[device,onClick,data])
 
   const changeHandler = (event)=>{
-    setValue(event.target.value);
+    setValue(event.target.value)
+    if(delay.current){
+      clearTimeout(delay.current)
+    }
+    delay.current = setTimeout(function () {
+      outValue(event.target.value)
+    }, 200);
   }
 
   const mouseUp = (event)=>{

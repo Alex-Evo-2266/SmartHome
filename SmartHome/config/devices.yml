@@ -24,7 +24,7 @@
     name: field1
     type: text
     unit: ''
-    value: cvb
+    value: cvbd
     values: ''
 - address: 192.168.0.7
   name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
@@ -161,7 +161,7 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 181
+    value: 168
     values: ''
 - address: zigbee2mqtt/switch
   name: switch1
@@ -240,5 +240,23 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 86
+    value: 123
+    values: ''
+- address: zigbee2mqtt/bridge
+  name: zigbee2mqtt
+  systemName: zigbee2mqtt
+  token: null
+  type: sensor
+  typeConnect: mqtt
+  valueType: value
+  values:
+  - address: state
+    control: false
+    high: online
+    icon: fas fa-broadcast-tower
+    low: offline
+    name: state
+    type: binary
+    unit: ''
+    value: '1'
     values: ''

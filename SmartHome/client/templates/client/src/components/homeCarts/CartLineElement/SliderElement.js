@@ -1,4 +1,4 @@
-import React,{useState,useContext,useEffect,useCallback} from 'react'
+import React,{useState,useContext,useEffect,useRef,useCallback} from 'react'
 import {SocketContext} from '../../../context/SocketContext'
 import {AuthContext} from '../../../context/AuthContext.js'
 // import {RunText} from '../../runText'
@@ -10,6 +10,7 @@ export const SliderElement = ({title,index,data,min=0,max=100,disabled=false,fir
   const {devices} = useContext(SocketContext)
   const auth = useContext(AuthContext)
   const [value , setValue] = useState(firstValue)
+  const delay = useRef(null)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const [disabled2, setDisabled] = useState(disabled)
@@ -20,7 +21,7 @@ export const SliderElement = ({title,index,data,min=0,max=100,disabled=false,fir
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0]||!data)
       return false
-    let condidat = devices.filter((item)=>item&&item.DeviceId===id)
+    let condidat = devices.filter((item)=>item&&item.systemName===id)
     if(!condidat[0]) return null
     let conf
     for (var item of condidat[0].config) {
@@ -85,24 +86,13 @@ export const SliderElement = ({title,index,data,min=0,max=100,disabled=false,fir
   },[device,onClick,data])
 
   const changeHandler = (event)=>{
-    setValue(event.target.value);
-  }
-
-  const mouseUp = (event)=>{
-    if(typeof(onClick)==="function"){
-      onClick(event, value,setValue)
+    setValue(event.target.value)
+    if(delay.current){
+      clearTimeout(delay.current)
     }
-    outValue(value)
-
-    // if(!data||!device)
-    //   return
-    // // if(data.type==="dimmer")
-    // //     socket.terminalMessage(`device ${device.DeviceSystemName} dimmer ${value}`)
-    // // if(data.type==="color")
-    // //     socket.terminalMessage(`device ${device.DeviceSystemName} color ${value}`)
-    // // // socket.terminalMessage()
-    // return
-    // // setTimeout(()=>updateDevice(),500)
+    delay.current = setTimeout(function () {
+      outValue(event.target.value)
+    }, 200);
   }
 
 if(!device){
@@ -129,7 +119,7 @@ return(
         max={maxstate}
         value={value}
         onChange={changeHandler}
-        onMouseUp={mouseUp}
+        oninput={changeHandler}
         disabled={disabled2}
         />
         <div className="state">{value}</div>

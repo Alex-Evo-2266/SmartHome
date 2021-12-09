@@ -98,7 +98,7 @@ ul.elementConteiner li label .icon-box i{
 }
 .ElementLine .control{
   position: relative;
-  height: 42px;
+  line-height: 42px;
 }
 .ElementLine .control .right-control{
   position: absolute;

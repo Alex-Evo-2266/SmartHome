@@ -60,6 +60,21 @@
 .DeviceLiControl{
   position: relative;
 }
+.DeviceLiControl input[type="text"] {
+    font-size: 18px;
+    width: 50%;
+    border: none;
+    border-radius: 2px;
+    outline: none;
+    margin-right: 6%;
+}
+.DeviceLiControl input[type="button"] {
+    font-size: 18px;
+    width: 24%;
+    border: none;
+    border-radius: 2px;
+    outline: none;
+}
 .DeviceName{
   cursor: pointer;
 }

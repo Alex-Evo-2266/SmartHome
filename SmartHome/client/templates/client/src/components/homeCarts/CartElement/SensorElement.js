@@ -57,8 +57,7 @@ if(getTypeField()==="number"||getTypeField()==="text"){
     <div className="SensorElement">
       <div className="icon-conteiner">
         <RunText className="sensor-name RunTextBaseColor" id={title} text={title}/>
-        <p className= "sensor-value">{(device.value)?device.value[data.typeAction]:""}</p>
-        <p className= "sensor-unit">{getConfrg(data.typeAction)?.unit||""}</p>
+        <RunText className="sensor-value RunTextBaseColor" id={`${title}-val`} text={`${(device.value)?device.value[data.typeAction]:""} ${getConfrg(data.typeAction)?.unit||""}`}/>
       </div>
       {
         (deleteBtn || editBtn)?

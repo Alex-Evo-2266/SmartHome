@@ -133,7 +133,7 @@ export const ZigbeeElement = ({data}) =>{
           title:"Rename",
           text:"input new name",
           placeholder:"new name",
-          action:rename
+          active:rename
         })
       })
       arr.push({

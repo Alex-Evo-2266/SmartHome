@@ -45,33 +45,12 @@
   justify-content: center;
   align-items: center;
 }
-/*
-.weekdays{
-  width: 100%;
-  height: 2em;
-  padding: 0 0.4em;
-  display: flex;
-  align-items: center;
+@media (max-width: 440px){
+  .calendar-grid{
+    height: auto;
+    padding: 0;
+  }
+  .NawMonth{
+    padding: 2px;
+  }
 }
-.weekdays div{
-  font-size: 1em;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  width: calc(44.2rem/7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-shadow: 0 0.3em 0.5em rgba(0, 0, 0, 0.5);
-}
-.days{
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0.2em;
-
-}
-.days div{
-  font-size: 1em;
-  margin: 0.3em 0;
-  width: calc(100% / 7)
-} */

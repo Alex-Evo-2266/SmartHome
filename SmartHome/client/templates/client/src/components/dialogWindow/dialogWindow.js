@@ -15,7 +15,7 @@ export const DialogWindow = ()=>{
     return(<AlertDialog hide={hide} text={dialog.text} title={dialog.title} buttons={dialog.buttons}/>)
 
   if(dialog.type === "text")
-    return(<TextDialog hide={hide} text={dialog.text} title={dialog.title} active={dialog.action} placeholder={dialog.placeholder}/>)
+    return(<TextDialog hide={hide} text={dialog.text} title={dialog.title} active={dialog.active} placeholder={dialog.placeholder}/>)
 
   if(dialog.type === "confirmation")
     return(<ConfirmationDialog hide={hide} text={dialog.text} title={dialog.title} active={dialog.active} items={dialog.items}/>)

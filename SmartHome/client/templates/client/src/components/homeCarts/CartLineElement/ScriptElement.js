@@ -27,7 +27,7 @@ export const ScriptElement = ({data,title,className,index,children,name,onClick,
           <i className="far fa-file-alt"></i>
         </div>
       </div>
-      <p className="name">{title}</p>
+      <p className="name">{data.name}</p>
     </BaseElement>
   )
 }

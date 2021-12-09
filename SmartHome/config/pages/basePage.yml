@@ -89,6 +89,15 @@ cards:
     type: button
     typeAction: night_light
     width: 1
+  - deviceName: switch1
+    height: 1
+    index: 5
+    name: switch1
+    order: 0
+    title: btn
+    type: enum
+    typeAction: operation_mode_right
+    width: 1
   index: 2
   mainId: null
   name: ''
@@ -104,6 +113,51 @@ cards:
     title: test test
     type: text
     typeAction: field1
+    width: 1
+  - deviceName: switch1
+    height: 1
+    index: 1
+    name: switch1
+    order: 0
+    title: btn control
+    type: enum
+    typeAction: operation_mode_left
+    width: 1
+  - deviceName: lamp1
+    height: 1
+    index: 2
+    name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    title: f
+    type: sensor
+    typeAction: state
+    width: 1
+  - deviceName: lamp1
+    height: 1
+    index: 3
+    name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    title: gh
+    type: sensor
+    typeAction: brightness
+    width: 1
+  - height: 1
+    index: 4
+    name: togle
+    order: 0
+    type: script
+    width: 1
+  - deviceName: lamp1
+    height: 1
+    index: 5
+    name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
+      \u0435"
+    order: 0
+    title: z
+    type: slider
+    typeAction: brightness
     width: 1
   index: 3
   mainId: null

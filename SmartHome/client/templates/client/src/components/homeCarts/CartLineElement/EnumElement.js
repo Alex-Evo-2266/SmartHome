@@ -30,7 +30,7 @@ export const EnumElement = ({title,data,className,index,children,name,onClick,di
   const lookForDeviceById = useCallback((id)=>{
     if(!devices||!devices[0])
       return false
-    let condidat = devices.filter((item)=>(item&&item.DeviceId===id))
+    let condidat = devices.filter((item)=>(item&&item.systemName===id))
     return condidat[0]
   },[devices])
 
