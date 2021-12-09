@@ -1,4 +1,4 @@
-import React,{useEffect,useState,useCallback,useContext} from 'react'
+import React,{useEffect,useState,useCallback,useContext, useRef} from 'react'
 import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
@@ -10,7 +10,9 @@ export const ZigbeePage = ()=>{
   const auth = useContext(AuthContext)
   const {message} = useContext(SocketContext)
   const [device,setDevice] = useState([])
+  const [allDevice,setAllDevice] = useState([])
   const [permitJoin,setPermitJoin] = useState(false)
+  const read = useRef(0)
   const {setData} = useContext(MenuContext)
   const {loading, request} = useHttp();
 
@@ -28,7 +30,7 @@ export const ZigbeePage = ()=>{
       let data = await request('/api/zigbee2mqtt/devices', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       if(data){
         console.log(data);
-        setDevice(data)
+        setAllDevice(data)
       }
       let data2 = await request('/api/zigbee2mqtt/permit_join', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       console.log(data2);
@@ -42,7 +44,7 @@ export const ZigbeePage = ()=>{
 
   useEffect(()=>{
     if(message.type==="zigbee")
-      setDevice(message.data)
+      setAllDevice(message.data)
   },[message])
 
   useEffect(()=>{
@@ -50,7 +52,24 @@ export const ZigbeePage = ()=>{
   },[permitJoin])
 
   useEffect(()=>{
+    if(read.current<3){
+      setDevice(allDevice)
+      read.current++
+    }
+  },[allDevice])
+
+  const searchout = useCallback((data)=>{
+    if(data===""){
+      setDevice(allDevice)
+      return
+    }
+    let array = allDevice.filter(item => item&&item.data.name.toLowerCase().indexOf(data.toLowerCase())!==-1)
+    setDevice(array)
+  },[allDevice])
+
+  useEffect(()=>{
     setData("Zigbee",{
+      search: searchout,
       dopmenu: [
         {
           title:"update",
@@ -67,7 +86,7 @@ export const ZigbeePage = ()=>{
         },
       ]
     })
-  },[setData,zigbeeDevice,permitJoin,rebootStik,pairing])
+  },[setData,zigbeeDevice,permitJoin,rebootStik,pairing,searchout])
 
   return (
     <div className="conteiner bottom">

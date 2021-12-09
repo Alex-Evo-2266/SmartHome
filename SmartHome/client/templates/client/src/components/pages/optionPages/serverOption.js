@@ -17,7 +17,8 @@ export const ServerOption = () =>{
     emailLogin:'',
     emailPass:'',
     city:'',
-    weatherKey:''
+    weatherKey:'',
+    frequency:''
   });
 
   useEffect(()=>{
@@ -51,7 +52,8 @@ export const ServerOption = () =>{
       emailLogin:data.emailLogin||"",
       emailPass:data.emailPass||"",
       city:data.city||"",
-      weatherKey:data.weatherKey||""
+      weatherKey:data.weatherKey||"",
+      frequency:data.frequency||"",
     })
   },[request,auth.token])
 
@@ -132,6 +134,16 @@ export const ServerOption = () =>{
         <div className="input-data">
           <input onChange={changeHandler} required name="weatherKey" type="text" value={serverconf.weatherKey}/>
           <label>key</label>
+        </div>
+      </div>
+      <div className="dividers"></div>
+      <div className="configTitle">
+        <p className="text">Polling frequency</p>
+      </div>
+      <div className="configElement">
+        <div className="input-data">
+          <input onChange={changeHandler} required name="frequency" type="text" value={serverconf.frequency}/>
+          <label>Polling frequency</label>
         </div>
       </div>
       <div className="dividers"></div>

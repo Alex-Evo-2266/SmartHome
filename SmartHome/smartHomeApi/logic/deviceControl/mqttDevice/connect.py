@@ -1,4 +1,4 @@
-from smartHomeApi.logic.config.configget import GiveServerConfig
+from smartHomeApi.logic.config.configget import getConfig
 from smartHomeApi.logic.deviceValue import setValueAtToken,GetTopicks
 from .mqttScan import addTopic,getTopicksAll,ClearTopicks
 from ..zigbee.zigbeeDevices import zigbeeInfoSearch
@@ -17,10 +17,10 @@ def connect():
             print("errorMqtt",e)
 
     try:
-        conf = GiveServerConfig()
+        conf = getConfig("mqttBroker")
         client = mqtt.Client()
-        client.username_pw_set(conf["loginMqttBroker"], conf["passwordMqttBroker"])
-        client.connect(conf["mqttBroker"], int(conf["mqttBrokerPort"]))
+        client.username_pw_set(conf["user"], conf["password"])
+        client.connect(conf["host"], int(conf["port"]))
         client.loop_start()
         mqttClient[0] = client
         client.on_message = on_message

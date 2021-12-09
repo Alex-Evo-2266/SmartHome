@@ -33,6 +33,10 @@ export const AddDevicesPage = () => {
     setData("Add device")
   },[setData])
 
+  useEffect(()=>{
+    console.log(form);
+  },[form])
+
   const next = ()=>setPage(prev=>prev + 1)
 
   const outHandler = async () => {

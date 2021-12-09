@@ -31,6 +31,45 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
     next()
   }
 
+  const convertForm = (exposes)=>{
+    let newArr = []
+    for (var item of exposes) {
+      if(item.features)
+      {
+        for (var item2 of item.features) {
+          item2.name = item2.endpoint
+          item2.control = true
+          newArr.push(item2)
+        }
+      }
+      else {
+        newArr.push(item)
+      }
+    }
+    return newArr;
+  }
+
+  const dupCorrekt = (arr)=>{
+    let arr2 = []
+    let flag = true
+    for (var item of arr) {
+      flag = true
+      if(item.endpoint && item.endpoint != item.name)
+        item.name = item.name + "_" + item.endpoint
+      for (var item2 of arr2) {
+        if(item.name === item2)
+          flag = false
+      }
+      if(flag)
+        arr2.push(item.name)
+      else {
+        item.name = item.name + "_" + arr2.indexOf(item.name)
+        arr2.push(item.name)
+      }
+    }
+    return arr
+  }
+
   const val = (values=[], def)=>{
     for (var item of values) {
       if(item)
@@ -45,7 +84,7 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
 
   const linc = async(dev)=>{
     let conf = []
-    for (let item of dev.exposes) {
+    for (let item of dupCorrekt(convertForm(dev.exposes))) {
       let type = item.type
       if(item.type==="numeric")
         type="number"
@@ -62,7 +101,7 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
         type:type,
         unit:item.unit,
         values:values,
-        control:false
+        control:item.endpoint||false
       }
       conf.push(confel)
     }

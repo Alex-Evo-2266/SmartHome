@@ -12,11 +12,11 @@ export const DitailDevicePage = ()=>{
   const [value,setValue] = useState(false)
   const {setData} = useContext(MenuContext)
   const {devices, updateDevice} = useContext(SocketContext)
-  let {id} = useParams()
+  let {systemName} = useParams()
 
   const getConfig = useCallback((key)=>{
     if(!device) return null;
-    for (var item of device.DeviceConfig) {
+    for (var item of device.config) {
       if(item.name == key){
         return item
       }
@@ -26,7 +26,7 @@ export const DitailDevicePage = ()=>{
   const getValue = useCallback((key)=>{
     if(!device) return null;
     let config = getConfig(key)
-    let val = device?.DeviceValue[key]
+    let val = device?.value[key]
     if(config.type === "binary"){
       if(val === config.high)
         return true
@@ -39,10 +39,10 @@ export const DitailDevicePage = ()=>{
 
   useEffect(()=>{
     if(devices){
-      let newdev = devices.filter(item => (item&&item.DeviceId===Number(id)))[0]
+      let newdev = devices.filter(item => (item&&item.systemName===systemName))[0]
       setDevice(newdev)
     }
-  },[devices,id])
+  },[devices,systemName])
 
   useEffect(()=>{
     let d = getValue("state")
@@ -50,13 +50,13 @@ export const DitailDevicePage = ()=>{
   },[device, getValue])
 
   useEffect(()=>{
-    setData(device?.DeviceName)
+    setData(device?.name)
   },[setData, device])
 
   return(
     <div className="conteiner fon">
     {
-      (device?.DeviceType === "light")?
+      (device?.type === "light")?
       <LightPage device={device}/>
       :null
     }

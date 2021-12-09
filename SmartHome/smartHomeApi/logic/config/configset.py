@@ -9,6 +9,9 @@ def ServerConfigEdit(data):
     with open(SERVER_CONFIG) as f:
         templates = yaml.safe_load(f)
 
+    base = {
+        "frequency":data["frequency"]
+    }
     mqtt = {
         "host":data["mqttBroker"],
         "port":data["mqttBrokerPort"],
@@ -32,6 +35,7 @@ def ServerConfigEdit(data):
     templates["zigbee2mqtt"] = zigbee
     templates["mail"] = email
     templates["weather"] = weather
+    templates["base"] = base
     with open(SERVER_CONFIG, 'w') as f:
         yaml.dump(templates, f, default_flow_style=False)
     ClearTopicks()

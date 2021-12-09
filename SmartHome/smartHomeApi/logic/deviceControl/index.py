@@ -1,6 +1,7 @@
 from .mqttDevice.connect import connect
 import asyncio
 from smartHomeApi.logic.getDevices import giveDevices
+from smartHomeApi.logic.config.configget import getConfig
 import threading
 import time
 from smartHomeApi.logic.socketOut import sendData
@@ -54,7 +55,8 @@ def datasave():
 
 def datasend():
     while True:
-        time.sleep(6)
+        base = getConfig("base")
+        time.sleep(int(base["frequency"]))
         sendData('devices',giveDevices())
 
 def weather():

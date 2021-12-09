@@ -24,7 +24,7 @@
     name: field1
     type: text
     unit: ''
-    value: erty
+    value: cvb
     values: ''
 - address: 192.168.0.7
   name: "\u043B\u0430\u043C\u043F\u0430 \u0432 \u0441\u043F\u0430\u043B\u044C\u043D\
@@ -34,7 +34,47 @@
   type: light
   typeConnect: yeelight
   valueType: json
-  values: []
+  values:
+  - address: null
+    control: true
+    high: 1
+    icon: fas fa-power-off
+    low: 0
+    name: state
+    type: binary
+    unit: null
+    value: '1'
+    values: null
+  - address: null
+    control: true
+    high: 100
+    icon: far fa-sun
+    low: 0
+    name: brightness
+    type: number
+    unit: null
+    value: '100'
+    values: null
+  - address: null
+    control: true
+    high: '1'
+    icon: fas fa-moon
+    low: 0
+    name: night_light
+    type: binary
+    unit: null
+    value: '0'
+    values: null
+  - address: null
+    control: true
+    high: 6500
+    icon: fas fa-adjust
+    low: 2700
+    name: temp
+    type: number
+    unit: null
+    value: '2700'
+    values: null
 - address: zigbee2mqtt/coub
   name: "\u043A\u0443\u0431"
   systemName: magicCub
@@ -51,7 +91,7 @@
     name: battery
     type: number
     unit: '%'
-    value: 86
+    value: 91
     values: ''
   - address: voltage
     control: false
@@ -61,7 +101,7 @@
     name: voltage
     type: number
     unit: mV
-    value: 2975
+    value: 2985
     values: ''
   - address: action_angle
     control: false
@@ -71,7 +111,7 @@
     name: action_angle
     type: number
     unit: ''
-    value: -360
+    value: -492.7
     values: ''
   - address: action_from_side
     control: false
@@ -81,7 +121,7 @@
     name: action_from_side
     type: number
     unit: ''
-    value: 5
+    value: 3
     values: ''
   - address: action_side
     control: false
@@ -91,7 +131,7 @@
     name: action_side
     type: number
     unit: ''
-    value: 4
+    value: 1
     values: ''
   - address: action_to_side
     control: false
@@ -101,7 +141,7 @@
     name: action_to_side
     type: number
     unit: ''
-    value: 4
+    value: 1
     values: ''
   - address: action
     control: false
@@ -121,7 +161,7 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 123
+    value: 176
     values: ''
 - address: zigbee2mqtt/switch
   name: switch1
@@ -139,7 +179,7 @@
     name: left
     type: binary
     unit: ''
-    value: '1'
+    value: '0'
     values: ''
   - address: state_right
     control: right
@@ -200,5 +240,5 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 131
+    value: 92
     values: ''

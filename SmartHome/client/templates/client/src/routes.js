@@ -98,7 +98,7 @@ export const useRoutes = (isAuthenticated,level)=>{
         </Route>
 
 
-        <Route path="/devices/ditail/:id">
+        <Route path="/devices/ditail/:systemName">
           <DitailDevicePage/>
         </Route>
         <Route path="/mqtt" exact>

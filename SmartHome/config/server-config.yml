@@ -1,5 +1,5 @@
 base:
-  timeSend: 6
+  frequency: '3'
 mail:
   login: smarthome2244@mail.ru
   password: 66dfghty

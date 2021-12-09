@@ -12,7 +12,7 @@ export const SensorElement = ({title,index,data,deleteBtn,editBtn,onClick}) =>{
     if(!devices||!devices[0])
       return false
 
-    let condidat = devices.filter((item)=>item.systemName===id)
+    let condidat = devices.filter((item)=>item?.systemName===id)
     return condidat[0]
   },[devices])
 

@@ -27,6 +27,7 @@ def GiveServerConfig():
         mqttBroker = templates["mqttBroker"]
         zigbeeBroker = templates["zigbee2mqtt"]
         mail = templates["mail"]
+        base = templates["base"]
         weather = templates["weather"]
         retPages = getPages()
         server={
@@ -39,7 +40,8 @@ def GiveServerConfig():
             "emailPass":mail["password"],
             "pages":retPages["data"],
             "city":weather["city"],
-            "weatherKey":weather["APPID"]
+            "weatherKey":weather["APPID"],
+            "frequency":base["frequency"]
         }
         return server
     except Exception as e:

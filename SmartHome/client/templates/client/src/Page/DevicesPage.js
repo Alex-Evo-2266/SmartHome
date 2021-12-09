@@ -19,7 +19,6 @@ export const DevicesPage = () => {
       setDevices(allDevices.devices)
       read.current++
     }
-
   },[allDevices.devices])
 
   const searchout = useCallback((data)=>{
@@ -28,7 +27,7 @@ export const DevicesPage = () => {
       setDevices(allDevices.devices)
       return
     }
-    let array = allDevices.devices.filter(item => item&&item.name.indexOf(data)!==-1)
+    let array = allDevices.devices.filter(item => item&&item.name.toLowerCase().indexOf(data.toLowerCase())!==-1)
     setDevices(array)
   },[allDevices.devices])
 

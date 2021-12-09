@@ -13,11 +13,11 @@ export const LightPage = ({device})=>{
   const blub = useRef(null)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
-  let {id} = useParams()
+  let {systemName} = useParams()
 
   const getConfig = useCallback((key)=>{
     if(!device) return null;
-    for (var item of device.DeviceConfig) {
+    for (var item of device.config) {
       if(item.name == key){
         return item
       }
@@ -27,7 +27,7 @@ export const LightPage = ({device})=>{
   const getValue = useCallback((key)=>{
     if(!device) return null;
     let config = getConfig(key)
-    let val = device?.DeviceValue[key]
+    let val = device?.value[key]
     if(config.type === "binary"){
       if(val === "1")
         return true
@@ -56,13 +56,13 @@ export const LightPage = ({device})=>{
     return blubs.filter((item)=>item.name != blub.name)
   }
 
-  const outValue = async(id,name,v)=>{
-    await request('/api/devices/value/set', 'POST', {id: id,type:name,status:v},{Authorization: `Bearer ${auth.token}`})
+  const outValue = async(systemName,name,v)=>{
+    await request('/api/devices/value/set', 'POST', {systemName: systemName,type:name,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   const togleField = (name)=>{
-    let val = device.DeviceValue[name]
-    outValue(device.DeviceId, name, (val==="1")?0:1)
+    let val = device.value[name]
+    outValue(device.systemName, name, (val==="1")?0:1)
   }
 
   // const getValue = (name)=>device.DeviceValue[name]
@@ -91,9 +91,9 @@ export const LightPage = ({device})=>{
     <div className="ditailContainer">
       <div className="leftControl"></div>
       <div className="centerControl">
-        <p className="lightName">{device?.DeviceName}</p>
+        <p className="lightName">{device?.name}</p>
       {
-        [generalBlub(device.DeviceConfig)]?.map((item,index)=>{
+        [generalBlub(device.config)]?.map((item,index)=>{
           return(
           <div key={index}>
             <div className="blubContainer">
@@ -110,7 +110,7 @@ export const LightPage = ({device})=>{
         <div className="dopBlubContainer">
         <div className="dividers"></div>
         {
-          dopBlub(device.DeviceConfig).map((item, index)=>{
+          dopBlub(device.config).map((item, index)=>{
             return (
               <div onClick={()=>togleField(item.name)} key={index} className={`dopBlubButton ${(getValue(item.name))?"activ":""}`}>
                 <i className={item.icon}></i>
