@@ -74,7 +74,7 @@ const changeHandlerTest = event=>{
 
   function valid() {
     if(
-      (!device.systemName && type != "link")||
+      (!device.systemName && type !== "link")||
       !device.newSystemName||
       !device.valueType||
       !device.address||

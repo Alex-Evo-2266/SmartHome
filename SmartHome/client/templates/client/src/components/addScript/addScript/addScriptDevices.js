@@ -1,19 +1,13 @@
-import React, {useContext,useState,useEffect,useCallback} from 'react'
+import {useContext,useCallback} from 'react'
 import {DialogWindowContext} from '../../dialogWindow/dialogWindowContext'
 import {SocketContext} from '../../../context/SocketContext'
 
-export const AddScriptDevices = ({result,type,typeDev=null})=>{
+export const useScriptDevices = ()=>{
   const {devices} = useContext(SocketContext)
-  const {show, hide} = useContext(DialogWindowContext)
-  const [filteredDevices,setFilteredDevices] = useState([])
+  const dialog = useContext(DialogWindowContext)
 
-  const out=(item)=>{
-    if(typeof(result)==="function")
-      result(item)
-  }
-
-  const filtered = useCallback(()=>{
-      setFilteredDevices(devices.filter((item)=>{
+  const filtered = useCallback((type, typeDev)=>{
+      let filteredDevs = devices.filter((item)=>{
         let flag = false
         for (var item2 of item.config) {
           if(
@@ -27,27 +21,24 @@ export const AddScriptDevices = ({result,type,typeDev=null})=>{
             return true
         }
         return false
-      }))
-  },[devices,type,typeDev])
+      })
+      return filteredDevs
+  },[devices])
 
-  useEffect(()=>{
-    filtered()
-  },[filtered])
+  const deviceBlock = useCallback((result, type="act", typeDev = null)=>{
+    console.log("f", type, typeDev);
+    let items = filtered(type, typeDev).map((item)=>({title:item.name, data:item}))
+    console.log(items);
+    dialog.show("confirmation",{
+      title:"typeAct",
+      items:items,
+      active:(d)=>{
+        if(typeof(result)==="function")
+          result(d)
+        dialog.hide()
+      }
+    })
+  },[filtered, dialog])
 
-  return(
-    <div className="box">
-      <h2>type control element</h2>
-        <ul>
-        {
-          filteredDevices.map((item,index)=>{
-            return(
-              <li key={index} onClick={()=>out(item)}>
-                <span>{index+1}</span>{item.name}
-              </li>
-            )
-          })
-        }
-        </ul>
-      </div>
-  )
+  return {deviceBlock}
 }

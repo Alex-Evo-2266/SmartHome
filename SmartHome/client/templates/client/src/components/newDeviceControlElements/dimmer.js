@@ -38,7 +38,7 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
   }
 
   function isColor(text) {
-    return (text.indexOf("color") != -1)
+    return (text.indexOf("color") !== -1)
   }
 
   return(

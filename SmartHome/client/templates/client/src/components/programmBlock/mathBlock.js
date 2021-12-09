@@ -6,7 +6,7 @@ import {NumberBlock} from './numberBlock'
 
 export const MathBlock = ({data,updata,block,deleteEl})=>{
   const [type,setType] = useState(data.action??"+")
-  const {showData} = useContext(AddScriptContext)
+  const {deviceBlock,typeValue} = useContext(AddScriptContext)
 
 
   const changeSelector = event=>{
@@ -17,10 +17,15 @@ export const MathBlock = ({data,updata,block,deleteEl})=>{
   }
 
   const addvalue = (v)=>{
-    showData("addValue",{type:"number"},(typeValue,deviceData)=>{
+    typeValue("addValue",{type:"number"},(typeValue,deviceData)=>{
       let element = data
-      if(typeValue==="deviceBlock")
-        element = {...element, [v]:{type:"device",systemName:deviceData.systemName,action:deviceData.config[0].name}}
+      if(typeValue==="DeviceValue"){
+        deviceBlock((deviceData)=>{
+          element = {...element, [v]:{type:"device",systemName:deviceData.systemName,action:deviceData.config[0].name}}
+          updata(element)
+          return
+        }, "if", "number")
+      }
       if(typeValue==="Text")
         element = {...element, [v]:{type:"text",value:""}}
       if(typeValue==="Number")

@@ -56,14 +56,6 @@ export const DeviceVariableEdit = ({deviceData,hide,type="edit"})=>{
     setField(arr)
   }
 
-  const changeHandlerFieldChek = event => {
-    let index = event.target.dataset.id
-    let arr = field.slice()
-    let newcom = { ...arr[index], [event.target.name]: event.target.checked }
-    arr[index] = newcom
-    setField(arr)
-  }
-
 const changeHandlerTest = event=>{
   if(USText(event.target.value)){
     changeHandler(event)

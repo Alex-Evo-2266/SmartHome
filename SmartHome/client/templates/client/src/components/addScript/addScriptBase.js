@@ -1,6 +1,5 @@
 import React, {useContext,useState} from 'react'
 import {AddScriptContext} from './addScriptContext'
-import {AddScriptDevices} from './addScript/addScriptDevices'
 import {CenterWindow} from '../modalWindow/centerWindow'
 import {BackForm} from '../backForm'
 import {ShowScript} from './addScript/showScript'
@@ -46,30 +45,16 @@ export const AddScriptBase = ()=>{
     )
   }
 
-  if(addScript.type==="triggerBlock"){
-    return null;
-    // return (
-    //   <BackForm onClick={close} className="addElementBody">
-    //     <AddScriptDevices result={shoseDevice} type={"if"}/>
-    //   </BackForm>
-    // )
-  }
+  // if(addScript.type==="deviceBlock"){
+  //   return (
+  //     <BackForm onClick={close} className="addElementBody">
+  //       <AddScriptDevices result={shoseDevice} type={"act"}/>
+  //     </BackForm>
 
-  if(addScript.type==="typeAct"){
-    return (
-      <BackForm onClick={close} className="addElementBody">
-        <TypeAct result={shoseDevice}/>
-      </BackForm>
-    )
-  }
+  // <AddScriptDevices result={shoseDevice} type={"if"} typeDev={addScript.data.type}/>
 
-  if(addScript.type==="deviceBlock"){
-    return (
-      <BackForm onClick={close} className="addElementBody">
-        <AddScriptDevices result={shoseDevice} type={"act"}/>
-      </BackForm>
-    )
-  }
+  //   )
+  // }
 
   if(addScript.type==="scriptBlock"){
     return (
@@ -114,28 +99,7 @@ export const AddScriptBase = ()=>{
             :null
           }
           </ul>
-        </div>:
-        <AddScriptDevices result={shoseDevice} type={"if"} typeDev={addScript.data.type}/>
-      }
-      </BackForm>
-    )
-  }
-
-  if(addScript.type==="typeBlock"){
-    return (
-      <BackForm onClick={close} className="addElementBody">
-      {
-        (!deviceBlock)?
-        <div className="box">
-          <h2>type control element</h2>
-            <ul>
-              <li onClick={()=>shoseBlock("groupBlockAnd")}><span>1</span>group Block And</li>
-              <li onClick={()=>shoseBlock("groupBlockOr")}><span>2</span>group Block Or</li>
-              <li onClick={()=>shoseBlock("deviceBlock")}><span>3</span>device</li>
-            </ul>
-          </div>
-        :
-        <AddScriptDevices result={shoseDevice} type={"if"}/>
+        </div>:null
       }
       </BackForm>
     )

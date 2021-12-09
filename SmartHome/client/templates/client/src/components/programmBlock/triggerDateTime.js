@@ -1,5 +1,4 @@
-import React,{useState,useEffect,useContext,useCallback} from 'react'
-import {SocketContext} from '../../context/SocketContext'
+import React,{useState} from 'react'
 
 export const TriggerDateTime = ({deviceId,action,updata,index,el,block,deleteEl})=>{
   const [frequency, setFrequency] = useState(action?.frequency||"everyday")
@@ -66,7 +65,7 @@ export const TriggerDateTime = ({deviceId,action,updata,index,el,block,deleteEl}
         (frequency==="everyweek")?
         <>
         <div className="programm-function-block-content-item">
-          <select value={date} name="date" onChange={change} name="date">
+          <select value={date} onChange={change} name="date">
             <option value={1}>Monday</option>
             <option value={2}>Tuesday</option>
             <option value={3}>Wednesday</option>

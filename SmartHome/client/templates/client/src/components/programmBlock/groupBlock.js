@@ -4,13 +4,13 @@ import {AddScriptContext} from '../addScript/addScriptContext'
 // import {ifClass,groupIfClass} from '../../../myClass.js'
 
 export const GroupBlock = ({index,type,children,data,updata,deleteEl})=>{
-const {show} = useContext(AddScriptContext)
+const {deviceBlock,typeIf} = useContext(AddScriptContext)
 const [blockData/*, setData*/] = useState(data)
 
 // {type:"group" ,oper:"and",children:[],idDevice:null,action:null,value:null}
 
 const addEl = ()=>{
-  show("typeBlock",(typeblock,dataDev)=>{
+  typeIf((typeblock)=>{
     if(typeblock==="groupBlockAnd"){
       let element = blockData
       element.children.push({type:"group" ,oper:"and",children:[],systemName:null,action:null,value:null})
@@ -22,10 +22,12 @@ const addEl = ()=>{
       updata(element,index)
     }
     else if(typeblock==="deviceBlock"){
-      let element = blockData
-      let act = dataDev.config[0].name
-      element.children.push({type:"device" ,oper:"==",systemName:dataDev.systemName,action:act,value:""})
-      updata(element,index)
+      deviceBlock((dataDev)=>{
+        let element = blockData
+        let act = dataDev.config[0].name
+        element.children.push({type:"device" ,oper:"==",systemName:dataDev.systemName,action:act,value:""})
+        updata(element,index)
+      },"if")
     }
   })
 }

@@ -11,7 +11,7 @@ import {MathBlock} from './mathBlock'
 export const IfBlock = ({idDevice,updata,index,data,deleteEl})=>{
   const [device, setDevice]=useState({})
   const {devices} = useContext(SocketContext)
-  const {showData} = useContext(AddScriptContext)
+  const {deviceBlock,typeValue} = useContext(AddScriptContext)
   const [action,setAction] = useState(data.oper??"==")
   const [field,setField] = useState({})
 
@@ -41,10 +41,15 @@ export const IfBlock = ({idDevice,updata,index,data,deleteEl})=>{
   }
 
   const addvalue = ()=>{
-    showData("addValue",{type:field.type},(typeValue,deviceData)=>{
+    typeValue("addValue",{type:field.type},(typeValue)=>{
       let element = data
-      if(typeValue==="deviceBlock")
-        element = {...element, value:{type:"device",systemName:deviceData.systemName,action:deviceData.config[0].name}}
+      if(typeValue==="DeviceValue"){
+        deviceBlock((deviceData)=>{
+          element = {...element, value:{type:"device",systemName:deviceData.systemName,action:deviceData.config[0].name}}
+          updata(element,index)
+          return
+        }, "if", field.type)
+      }
       if(typeValue==="Text")
         element = {...element, value:{type:"text",value:""}}
       if(typeValue==="Number")

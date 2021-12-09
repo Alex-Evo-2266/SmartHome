@@ -97,7 +97,6 @@ export const AddControl = ()=>{
   const {addControl, hide} = useContext(AddControlContext)
   const [typeChild, setTypeChild] = useState("");
   const [device, setDevice] = useState(null);
-  const [title, setTitle] = useState(null);
   const [action, setAction] = useState(null);
   const [field, setField] = useState(null);
   const [page, setPage] = useState(1);

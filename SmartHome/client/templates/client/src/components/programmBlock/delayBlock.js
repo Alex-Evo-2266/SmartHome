@@ -1,11 +1,4 @@
-import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {SocketContext} from '../../context/SocketContext'
-import {AddScriptContext} from '../addScript/addScriptContext'
-import {ValueDeviceBlock} from './valueDeviceBlock'
-import {TextBlock} from './textBlock'
-import {EnumBlock} from './enumBlock'
-import {NumberBlock} from './numberBlock'
-import {MathBlock} from './mathBlock'
+import React from 'react'
 
 export const DelayBlock = ({updata,index,data,deleteEl})=>{
 

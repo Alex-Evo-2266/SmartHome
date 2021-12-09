@@ -1,6 +1,4 @@
 import React,{useState,useEffect,useCallback,useContext} from 'react'
-import {Header} from '../components/header'
-import {Link} from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
 import {MenuContext} from '../components/Menu/menuContext'
 import {useHttp} from '../hooks/http.hook'
@@ -49,7 +47,7 @@ export const UsersPage = () => {
       }:null,
       search: searchout
     })
-  },[setData, history, searchout])
+  },[setData, history, searchout, auth.userLevel])
 
   useEffect(()=>{
     updataUsers()

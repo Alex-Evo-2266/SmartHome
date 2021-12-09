@@ -46,7 +46,7 @@ export const ZigbeeElement = ({data}) =>{
     let flag = true
     for (var item of arr) {
       flag = true
-      if(item.endpoint && item.endpoint != item.name)
+      if(item.endpoint && item.endpoint !== item.name)
         item.name = item.name + "_" + item.endpoint
       for (var item2 of arr2) {
         if(item.name === item2)

@@ -39,7 +39,7 @@ export const DevicesPage = () => {
       }:null,
       search: searchout
     })
-  },[setData, history, searchout])
+  },[setData, history, searchout, auth.userLevel])
 
   return(
       <div className = "conteiner top bottom">

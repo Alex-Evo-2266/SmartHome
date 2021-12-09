@@ -91,7 +91,7 @@
     name: battery
     type: number
     unit: '%'
-    value: 91
+    value: 100
     values: ''
   - address: voltage
     control: false
@@ -101,7 +101,7 @@
     name: voltage
     type: number
     unit: mV
-    value: 2985
+    value: 3005
     values: ''
   - address: action_angle
     control: false
@@ -161,7 +161,7 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 176
+    value: 181
     values: ''
 - address: zigbee2mqtt/switch
   name: switch1
@@ -240,5 +240,5 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 92
+    value: 86
     values: ''

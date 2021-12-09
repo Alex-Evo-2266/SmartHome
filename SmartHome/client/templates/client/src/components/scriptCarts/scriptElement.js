@@ -14,7 +14,7 @@ export const ScriptElement = ({script,updata})=>{
   useEffect(()=>{
     setStatus(script.status)
     console.log(auth.userLevel);
-  },[script])
+  },[script, auth.userLevel])
 
   useEffect(()=>{
     message(error,"error")

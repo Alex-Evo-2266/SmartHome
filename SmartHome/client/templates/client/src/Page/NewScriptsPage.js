@@ -21,7 +21,7 @@ export const NewScriptsPage = ({edit}) => {
   const history = useHistory()
   const {USText} = useChecked()
   const auth = useContext(AuthContext)
-  const {show,addTarget} = useContext(AddScriptContext)
+  const {show,addTarget,typeAct,deviceBlock,addScriptBlock} = useContext(AddScriptContext)
   const {message} = useMessage();
   const {loading,request, error, clearError} = useHttp();
   const[cost, setCost]=useState(true)
@@ -60,10 +60,10 @@ export const NewScriptsPage = ({edit}) => {
   }
 
   const addActBlock = (type)=>{
-    show("typeAct",(_,typeAct)=>{
+    typeAct((typeAct)=>{
       setTimeout(function () {
         if(typeAct==="device"){
-          show("deviceBlock",(_,dataDev)=>{
+          deviceBlock((dataDev)=>{
             if(!dataDev||!dataDev.systemName)
               return
             let mas = script;
@@ -73,7 +73,7 @@ export const NewScriptsPage = ({edit}) => {
           })
         }
         if(typeAct==="script"){
-          show("scriptBlock",(_,datascr)=>{
+          addScriptBlock((datascr)=>{
             console.log(datascr);
             if(!datascr||!datascr.name)
               return
@@ -108,7 +108,7 @@ export const NewScriptsPage = ({edit}) => {
   const outHandler = async()=>{
     console.log(script);
     try {
-      if(!USText(script.name)){
+      if(!script.name || !USText(script.name)){
         console.error("allowed characters: 1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM");
         let el = document.getElementById("scriptName")
         el.style="background:red;"

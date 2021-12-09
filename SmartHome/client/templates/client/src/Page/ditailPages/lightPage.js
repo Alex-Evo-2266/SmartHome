@@ -1,8 +1,4 @@
 import React,{useContext, useState, useEffect, useCallback, useRef} from 'react'
-import lightDevices from '../../img/lamp.jpg'
-import {SocketContext} from '../../context/SocketContext'
-import {MenuContext} from '../../components/Menu/menuContext'
-import {useParams} from "react-router-dom"
 import {useHttp} from '../../hooks/http.hook'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useMessage} from '../../hooks/message.hook'
@@ -13,12 +9,11 @@ export const LightPage = ({device})=>{
   const blub = useRef(null)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
-  let {systemName} = useParams()
 
   const getConfig = useCallback((key)=>{
     if(!device) return null;
     for (var item of device.config) {
-      if(item.name == key){
+      if(item.name === key){
         return item
       }
     }
@@ -38,11 +33,11 @@ export const LightPage = ({device})=>{
       return val
   },[device, getConfig])
 
-  const getBlub = (fields)=>fields?.filter((item)=>(item?.type === "binary" && (item?.name?.toLowerCase()?.indexOf("state") != -1 || item?.name?.toLowerCase()?.indexOf("power") != -1)))
+  const getBlub = (fields)=>fields?.filter((item)=>(item?.type === "binary" && (item?.name?.toLowerCase()?.indexOf("state") !== -1 || item?.name?.toLowerCase()?.indexOf("power") !== -1)))
 
   const generalBlub = (fields)=>{
     let blubs = getBlub(fields)||[]
-    let blubs2 = blubs.filter((item)=>(item?.name?.toLowerCase()?.indexOf("state") == 0 || item?.name?.toLowerCase()?.indexOf("power") == 0))
+    let blubs2 = blubs.filter((item)=>(item?.name?.toLowerCase()?.indexOf("state") === 0 || item?.name?.toLowerCase()?.indexOf("power") === 0))
     if(blubs2.length > 0)
       return blubs2[0]
     if(blubs.length > 0)
@@ -53,7 +48,7 @@ export const LightPage = ({device})=>{
   const dopBlub = (fields)=>{
     let blubs = getBlub(fields)
     let blub = generalBlub(fields)
-    return blubs.filter((item)=>item.name != blub.name)
+    return blubs.filter((item)=>item.name !== blub.name)
   }
 
   const outValue = async(systemName,name,v)=>{

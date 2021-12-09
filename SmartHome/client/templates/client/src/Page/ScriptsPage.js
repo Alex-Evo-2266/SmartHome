@@ -47,7 +47,7 @@ export const ScriptsPage = () => {
       }:null,
       search: searchout
     })
-  },[setData, searchout, history])
+  },[setData, searchout, history, auth.userLevel])
 
   useEffect(()=>{
     updataScripts()

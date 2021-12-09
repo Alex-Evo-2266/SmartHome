@@ -26,14 +26,6 @@ export const AddDevicesPage2Variable = ({form, setForm, next,backPage, begining 
     setFields(arr)
   }
 
-  const changeHandlerFieldChek = event => {
-    let index = event.target.dataset.id
-    let arr = fields.slice()
-    let newcom = { ...arr[index], [event.target.name]: event.target.checked }
-    arr[index] = newcom
-    setFields(arr)
-  }
-
   const removeField = (index)=>{
     setFields(fields.filter((item, index2)=>index2 !== index))
   }

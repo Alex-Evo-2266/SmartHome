@@ -40,7 +40,7 @@ export const OptionsPage = () => {
     setData("Setings",{
       buttons:buttons
     })
-  },[setData,location.pathname, history])
+  },[setData,location.pathname, history, auth.userLevel])
 
   return(
     <div className = "fullScrinContainer color-normal page-whith-tabs">

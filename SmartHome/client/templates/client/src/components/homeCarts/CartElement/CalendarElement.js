@@ -35,7 +35,7 @@ export const CalendarElement = ({deleteBtn,editBtn,index,data}) =>{
       days.push({type:"next", day:new Date(day)})
     }
     setDays(days)
-  },[serverConfig.date])
+  },[serverConfig.date, convertDateFormat])
 
   if(data.height >= 2 && data.width >= 3)
   {
