@@ -240,7 +240,7 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 123
+    value: 134
     values: ''
 - address: zigbee2mqtt/bridge
   name: zigbee2mqtt

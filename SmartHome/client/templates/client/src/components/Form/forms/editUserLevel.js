@@ -39,7 +39,10 @@ export const EditUserLevel = ({hide,data})=>{
           <li>
             <label>
               <h5>level</h5>
-              <input className = "textInput" placeholder="level" id="level" max="3" min="1" type="number" name="level" value={level} onChange={changeHandler} required/>
+              <select className = "textInput" name="level" value={level} onChange={changeHandler}>
+                <option value={1}>Usual</option>
+                <option value={3}>Admin</option>
+              </select>
             </label>
           </li>
           <div className="controlForm" >
