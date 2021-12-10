@@ -41,7 +41,6 @@ export const ServerOption = () =>{
 
   const updataConf = useCallback(async()=>{
     const data = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    console.log(data);
     if(!data)return;
     setServerconf({
       mqttBroker:data.mqttBroker||"",

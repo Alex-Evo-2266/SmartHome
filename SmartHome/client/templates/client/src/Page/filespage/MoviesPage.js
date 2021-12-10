@@ -21,7 +21,6 @@ export const MoviesPage = () => {
       setMovies(allmovies)
       read.current++
     }
-    console.log(allmovies);
   },[allmovies])
 
   const searchout = ()=>{
@@ -46,7 +45,6 @@ export const MoviesPage = () => {
   const getMovies = useCallback(async()=>{
     try {
       const data = await request(`/api/files/movies/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      console.log(data);
       if(data&&data.movies){
         setAllMovies(data.movies)
       }

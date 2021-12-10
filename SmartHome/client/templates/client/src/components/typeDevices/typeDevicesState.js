@@ -10,7 +10,6 @@ export const TypesDeviceState = ({children, token, ready}) =>{
   const gettypes = useCallback(async()=>{
     try {
       const data = await request(`/api/devices/types`, 'GET', null,{Authorization: `Bearer ${token}`})
-      console.log(data)
       setTypes(data)
       setFlag(false)
     } catch (e) {

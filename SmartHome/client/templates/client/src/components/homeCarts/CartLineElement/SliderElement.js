@@ -119,7 +119,7 @@ return(
         max={maxstate}
         value={value}
         onChange={changeHandler}
-        oninput={changeHandler}
+        onInput={changeHandler}
         disabled={disabled2}
         />
         <div className="state">{value}</div>

@@ -1,20 +1,19 @@
-import React, {useReducer,useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import {AddScriptContext} from './addScriptContext'
-import {addScriptReducer} from './addScriptReducer'
 import {DialogWindowContext} from '../dialogWindow/dialogWindowContext'
 import {SocketContext} from '../../context/SocketContext'
 import {useScriptDevices} from './addScript/addScriptDevices'
+import {useMessage} from '../../hooks/message.hook'
 import {useHttp} from '../../hooks/http.hook'
 import {AuthContext} from '../../context/AuthContext.js'
-import {SHOW_ADDSCRIPT, HIDE_ADDSCRIPT} from '../types'
 
 export const AddScriptState = ({children}) =>{
   const dialog = useContext(DialogWindowContext)
   const {devices} = useContext(SocketContext)
+  const {message} = useMessage();
   const auth = useContext(AuthContext)
   const {request, error, clearError} = useHttp();
   const {deviceBlock} = useScriptDevices()
-  const [state, dispatch] = useReducer(addScriptReducer,{visible:false})
 
   const addTarget = (result=null)=>{
     let targets = devices.map((item)=>({title:item.name, data:item}))
@@ -101,29 +100,16 @@ export const AddScriptState = ({children}) =>{
     })
   }
 
-  const show = (type = "Devices", OK = null) =>{
-    dispatch({
-      type:SHOW_ADDSCRIPT,
-      payload: {type,OK,data:null}
-    })
-  }
-
-  const showData = (type = "Devices",data={}, OK = null) =>{
-    dispatch({
-      type:SHOW_ADDSCRIPT,
-      payload: {type,OK,data}
-    })
-  }
-
-  const hide = () =>{
-    dispatch({
-      type:HIDE_ADDSCRIPT,
-    })
-  }
+  useEffect(()=>{
+    message(error,"error")
+    return ()=>{
+      clearError();
+    }
+  },[error,message, clearError])
 
   return(
     <AddScriptContext.Provider
-    value={{show, hide,showData,typeValue,addTarget,typeAct,deviceBlock,typeIf,addScriptBlock, addScript: state}}>
+    value={{typeValue,addTarget,typeAct,deviceBlock,typeIf,addScriptBlock}}>
       {children}
     </AddScriptContext.Provider>
   )

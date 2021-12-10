@@ -78,7 +78,6 @@ export const AddMoviePage = ({type="movie",edit=false}) => {
     if(allcategorys){
       setCategorys(allcategorys.category)
     }
-    console.log(allactors,allganres,allcategorys);
   },[auth.token,request])
 
   function handleFiles(event) {
@@ -130,7 +129,6 @@ const getMovieData = useCallback(async()=>{
   const data = await request(`/api/files/movie/${id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   if(data&&data[type]){
     let item = data[type]
-    console.log(item);
     setForm((prev)=>{return{
       ...prev,
       title:item.title,

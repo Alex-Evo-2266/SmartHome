@@ -52,7 +52,6 @@ export const DeviceMqtt = ({onChange,back,type})=>{
 
   const changeHandler = event => {
     let index = event.target.dataset.id
-    console.log(index);
     let arr = form.slice()
     let newData = { ...arr[index], [event.target.name]: event.target.value }
     arr[index] = newData

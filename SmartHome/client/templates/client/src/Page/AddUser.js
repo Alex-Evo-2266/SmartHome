@@ -20,7 +20,6 @@ export default function AddUser(){
   },[setData])
 
   useEffect(()=>{
-    console.log("use");
     message(error, 'error');
     clearError();
   },[error, message, clearError])

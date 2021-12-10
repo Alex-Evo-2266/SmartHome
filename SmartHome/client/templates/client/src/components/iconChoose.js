@@ -26,7 +26,6 @@ export const IconChoose = ({value, onChange, dataId}) =>{
   const [visible, setVisible] = useState(false)
 
   const changeHandler = (event)=>{
-    console.log(event.target);
     onChange(event.target.dataset.val, dataId)
   }
 

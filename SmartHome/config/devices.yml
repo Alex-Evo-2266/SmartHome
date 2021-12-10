@@ -43,7 +43,7 @@
     name: state
     type: binary
     unit: null
-    value: '1'
+    value: '0'
     values: null
   - address: null
     control: true
@@ -161,7 +161,7 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 168
+    value: 173
     values: ''
 - address: zigbee2mqtt/switch
   name: switch1
@@ -258,5 +258,5 @@
     name: state
     type: binary
     unit: ''
-    value: '1'
+    value: '0'
     values: ''

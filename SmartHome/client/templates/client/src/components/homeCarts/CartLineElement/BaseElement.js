@@ -11,7 +11,6 @@ export const BaseElement = ({children,deleteBtn,editBtn,index,data,onClick}) =>{
   }
 
   const editbtn = ()=>{
-    console.log("d");
     if(typeof(editBtn)==="function"){
       target("button-line",{...data,index},editBtn)
     }

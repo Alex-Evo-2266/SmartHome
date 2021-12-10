@@ -11,7 +11,6 @@ export const BaseElement = ({children,deleteBtn,editBtn,index,data}) =>{
   }
 
   const editbtn = ()=>{
-    console.log("d");
     if(typeof(editBtn)==="function"){
       target("button",{...data,index},editBtn)
     }

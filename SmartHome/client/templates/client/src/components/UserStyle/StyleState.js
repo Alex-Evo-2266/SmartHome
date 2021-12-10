@@ -40,8 +40,6 @@ export const CastomizeStyle = ({children, token, ready}) =>{
   const getData = useCallback(async()=>{
     const dataStyles = await request(`/api/user/styles`, 'GET', null,{Authorization: `Bearer ${token}`})
     const dataUserConf = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
-    console.log(dataStyles);
-    console.log(dataUserConf);
     setStyles(dataStyles)
     setConfig(dataUserConf)
     return {dataStyles, dataUserConf}

@@ -98,7 +98,6 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   }
 
   const editElement = (index1,data1)=>{
-    console.log(data1);
     if(!data1||!data1.order||!data1.width||!data1.height)
       return
     let mas = data.children.slice();

@@ -121,20 +121,24 @@
   display: inline-block;
 }
 .StyleChoice{
-  display: grid;
+  display: flex;
   border: none;
+  justify-content: center;
   box-shadow: none;
-  grid-template-columns: repeat(4,1fr);
-  grid-gap: 2px;
-  grid-auto-rows: 1fr
+  flex-wrap: wrap;
 }
 .choiceElement{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 5px 10px;
   transition: .5s;
   position: relative;
+}
+.choiceElement.styleName{
+  padding: 0;
+  margin: 0;
 }
 .choiceElement::after{
   content: '';

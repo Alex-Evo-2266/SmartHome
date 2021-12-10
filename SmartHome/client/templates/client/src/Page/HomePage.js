@@ -110,7 +110,6 @@ const importCarts = useCallback(async()=>{
   if(page){
     try {
       const data = await request(`/api/homePage/get/${page}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      console.log(data);
       setCarts(data.cards)
     }
     catch (e) {
@@ -118,7 +117,6 @@ const importCarts = useCallback(async()=>{
     }
     try{
       const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      console.log(data2);
       setPages(data2.pages)
     }
     catch (e) {
@@ -150,7 +148,6 @@ const changePage = useCallback(async(data)=>{
 },[request, getData, auth.token, hide])
 
 const deletePage = useCallback(async(name)=>{
-  console.log("del");
   await request('/api/homePage/delete', 'POST', {name},{Authorization: `Bearer ${auth.token}`})
   setTimeout(()=>{
     getData()

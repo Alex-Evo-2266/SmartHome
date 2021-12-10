@@ -26,7 +26,6 @@ export const IfBlock = ({idDevice,updata,index,data,deleteEl})=>{
   const valuesDecod = (data)=> data.split(" ").join("").split(",")
 
   useEffect(()=>{
-    console.log("effect",data);
     setDevice(lookForDeviceById(data.systemName))
     setField(lookForField(lookForDeviceById(data.systemName),data.action))
   },[lookForDeviceById,data])

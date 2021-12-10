@@ -23,7 +23,6 @@ export default function RegisterPage(){
   const registerHandler = async () => {
     try {
       const data = await request('/api/auth/register', 'POST', {...form})
-      console.log(data);
       if(data){
         history.push('/')
         message("user registered","ok")

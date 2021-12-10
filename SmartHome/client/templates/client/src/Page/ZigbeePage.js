@@ -29,11 +29,9 @@ export const ZigbeePage = ()=>{
     try {
       let data = await request('/api/zigbee2mqtt/devices', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       if(data){
-        console.log(data);
         setAllDevice(data)
       }
       let data2 = await request('/api/zigbee2mqtt/permit_join', 'GET',null,{Authorization: `Bearer ${auth.token}`})
-      console.log(data2);
       setPermitJoin(data2)
     } catch (e) {}
   },[request,auth.token])
@@ -46,10 +44,6 @@ export const ZigbeePage = ()=>{
     if(message.type==="zigbee")
       setAllDevice(message.data)
   },[message])
-
-  useEffect(()=>{
-    console.log(permitJoin);
-  },[permitJoin])
 
   useEffect(()=>{
     if(read.current<3){

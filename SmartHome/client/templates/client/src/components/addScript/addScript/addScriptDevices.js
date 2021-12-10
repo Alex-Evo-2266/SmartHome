@@ -26,9 +26,7 @@ export const useScriptDevices = ()=>{
   },[devices])
 
   const deviceBlock = useCallback((result, type="act", typeDev = null)=>{
-    console.log("f", type, typeDev);
     let items = filtered(type, typeDev).map((item)=>({title:item.name, data:item}))
-    console.log(items);
     dialog.show("confirmation",{
       title:"typeAct",
       items:items,

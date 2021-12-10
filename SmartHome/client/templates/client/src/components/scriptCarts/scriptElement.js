@@ -13,7 +13,6 @@ export const ScriptElement = ({script,updata})=>{
 
   useEffect(()=>{
     setStatus(script.status)
-    console.log(auth.userLevel);
   },[script, auth.userLevel])
 
   useEffect(()=>{
@@ -33,7 +32,6 @@ export const ScriptElement = ({script,updata})=>{
   }
 
   const checkedHandler = async event => {
-    console.log(event.target.checked);
     setStatus((prev)=>!prev)
     await request('/api/script/set/status', 'POST', {name:script.name,status:!status},{Authorization: `Bearer ${auth.token}`})
     if(typeof(updata)==="function")
@@ -53,7 +51,7 @@ export const ScriptElement = ({script,updata})=>{
           :null
         }
         <div className="switchConteiner">
-        <p className="switchText">{status}</p>
+        <p className="switchText">{(status)?"auto":"manual"}</p>
         {
           (script.trigger&&script.trigger[0]&&auth.userLevel >= 3)?
           <label className="switch">

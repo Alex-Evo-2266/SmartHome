@@ -68,10 +68,6 @@ export const LightPage = ({device})=>{
   },[device, getValue])
 
   useEffect(()=>{
-   console.log(value);
-  },[value])
-
-  useEffect(()=>{
     blub.current?.style.setProperty('--blub-on',"#fff")
   },[])
 

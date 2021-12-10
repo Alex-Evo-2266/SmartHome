@@ -2,7 +2,6 @@ import React from 'react'
 import {toDate} from '../utils'
 
 export const HistoryList = ({data,device})=>{
-  console.log(data);
   return (
     <div className="historyList">
       <div className="title">{`${data.deviceName}-${data.name}`}</div>

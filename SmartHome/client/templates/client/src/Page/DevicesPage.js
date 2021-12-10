@@ -22,7 +22,6 @@ export const DevicesPage = () => {
   },[allDevices.devices])
 
   const searchout = useCallback((data)=>{
-    console.log(data);
     if(data===""){
       setDevices(allDevices.devices)
       return

@@ -51,10 +51,6 @@ export const ChartsPage = () => {
     importCharts()
   },[importCharts])
 
-  useEffect(()=>{
-    console.log(charts);
-  },[charts])
-
   const searchout = (data)=>{
 
   }

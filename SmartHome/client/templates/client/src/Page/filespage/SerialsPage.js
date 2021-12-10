@@ -19,7 +19,6 @@ export const SerialsPage = () => {
       setMovies(allmovies)
       read.current++
     }
-    console.log(allmovies);
   },[allmovies])
 
   const searchout = ()=>{
@@ -44,7 +43,6 @@ export const SerialsPage = () => {
   const getMovies = useCallback(async()=>{
     try {
       const data = await request(`/api/files/serials/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      console.log(data);
       if(data&&data.serials){
         setAllMovies(data.serials)
       }

@@ -134,10 +134,6 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
   },[socket.message])
 
   useEffect(()=>{
-    console.log(devices);
-  },[devices])
-
-  useEffect(()=>{
     message(error,"error")
     return ()=>{
       clearError();

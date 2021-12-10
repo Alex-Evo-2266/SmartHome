@@ -30,10 +30,6 @@ const changeHeandler = (event)=>{
 }
 
 useEffect(()=>{
-  console.log(form);
-},[form])
-
-useEffect(()=>{
   message(error, 'error');
   clearError();
 },[error, message, clearError])

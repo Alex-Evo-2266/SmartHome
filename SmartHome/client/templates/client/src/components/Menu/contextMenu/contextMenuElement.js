@@ -4,7 +4,6 @@ export const ContextMenuElement = ({item, hide}) =>{
   const [visible, setVisible] = useState(false)
 
   const buttonClick = (e)=>{
-    console.log(item.sub);
     if(item.sub)
       setVisible(!visible)
     else

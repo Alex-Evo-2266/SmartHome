@@ -13,7 +13,6 @@ export const MovieDitail = ({type="movie"})=>{
 
   const getData = useCallback(async()=>{
     const data = await request(`/api/files/movie/${id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    console.log(data);
     if(data){
       setMovie(data.movie)
     }

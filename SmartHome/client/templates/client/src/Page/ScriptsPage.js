@@ -6,7 +6,6 @@ import {AuthContext} from '../context/AuthContext.js'
 import {Loader} from '../components/Loader'
 import {ScriptElement} from '../components/scriptCarts/scriptElement'
 import {MenuContext} from '../components/Menu/menuContext'
-import {AddScriptBase} from '../components/addScript/addScriptBase'
 
 export const ScriptsPage = () => {
   const [scripts, setScripts] = useState([])
@@ -41,7 +40,7 @@ export const ScriptsPage = () => {
 
   useEffect(()=>{
     setData("Scripts All",{
-      specialAction:(auth.userLevel >= 3)?{
+      specialAction:(auth.userLevel >= 3 && window.screen.width > 700)?{
         type: "add",
         action:()=>history.push("/scripts/add")
       }:null,
@@ -55,7 +54,6 @@ export const ScriptsPage = () => {
 
   return(
     <>
-      <AddScriptBase/>
       <div className = "conteiner top bottom">
         <div className = "Scripts">
           <div className="scriptsList">

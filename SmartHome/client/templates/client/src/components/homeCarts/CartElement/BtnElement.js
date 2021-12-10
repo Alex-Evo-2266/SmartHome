@@ -83,10 +83,6 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
   },[device,data])
 
   useEffect(()=>{
-    console.log(value);
-  },[value])
-
-  useEffect(()=>{
     if(typeof(onClick)==="function"||disabled||device?.status==="offline")return
     const {low,high,type} = deviceConfig
     if(device&&type==="binary"&&device?.value&&device?.value[deviceConfig.name]){

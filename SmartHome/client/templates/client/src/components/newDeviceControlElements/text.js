@@ -21,7 +21,7 @@ export const Text = ({updata,title,type,conf,value,systemName}) =>{
     if(focus)
       return ;
     setValue(value)
-  },[value])
+  },[value, focus])
 
   const outValue = ()=>{
     request('/api/devices/value/set', 'POST', {systemName: systemName,type:type,status:newvalue},{Authorization: `Bearer ${auth.token}`})

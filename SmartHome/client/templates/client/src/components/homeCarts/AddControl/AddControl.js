@@ -203,7 +203,6 @@ export const AddControl = ()=>{
             setPage(5)
           }
         else if(typeChild === "button" && data.type !== "binary"){
-          console.log("sd")
           setPage(4)
           setField(data)
         }
@@ -252,45 +251,4 @@ export const AddControl = ()=>{
   }
 
   return(null)
-
-    // return (
-    //   <BackForm onClick = {close} className="addElementBody">
-    //     <div className="box">
-    //       <h2>type control element</h2>
-          // {
-          //   (!typeChild)?
-          //   <ul>
-          //     <li onClick={()=>setTypeChild("button")}><span>1</span>button activate</li>
-          //     <li onClick={()=>setTypeChild("script")}><span>2</span>scripts</li>
-          //     <li onClick={()=>setTypeChild("slider")}><span>3</span>slider</li>
-          //     <li onClick={()=>setTypeChild("sensor")}><span>4</span>sensor monitor</li>
-          //     <li onClick={()=>setTypeChild("enum")}><span>5</span>enum</li>
-          //     {
-          //       (addControl.type === "AddButton")?
-          //       <>
-          //       <li onClick={()=>addButton(weather)}><span>6</span>weather</li>
-          //       <li onClick={()=>addButton(time)}><span>7</span>time</li>
-          //       </>:
-          //       (addControl.type === "AddLineButton")?
-          //       <li onClick={()=>setTypeChild("text")}><span>6</span>text</li>:
-          //       null
-          //     }
-          //   </ul>:
-            // (typeChild==="button")?
-            // <AddButton add={addButton}/>:
-            // (typeChild==="slider")?
-            // <AddSlider add={addButton}/>:
-            // (typeChild==="script")?
-            // <AddScript add={addButton}/>:
-            // (typeChild==="sensor")?
-            // <AddSensor add={addButton}/>:
-            // (typeChild==="enum")?
-            // <AddEnum add={addButton}/>:
-            // (typeChild==="text")?
-            // <AddText add={addButton}/>
-            // :null
-          // }
-    //     </div>
-    //   </BackForm>
-    // )
 }

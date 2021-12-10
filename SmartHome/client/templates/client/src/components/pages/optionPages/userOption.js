@@ -19,9 +19,9 @@ export const UserOption = () =>{
   const {loading, request, error, clearError} = useHttp();
   const [mode , setMode] = useState(false)
   const [userconf , setUserconf] = useState({
-    auteStyle:false,
-    staticBackground:false,
-    style:"light"
+    auteStyle:config.autoStyle||false,
+    staticBackground:config.staticBackground||false,
+    style:config.Style||"light"
   });
 
   const updataConf = useCallback(async()=>{
@@ -33,21 +33,24 @@ export const UserOption = () =>{
     })
   },[config])
 
-  useEffect(()=>{
-    updataConf()
-  },[updataConf])
+  // useEffect(()=>{
+  //   updataConf()
+  // },[updataConf])
 
   const userConfigHandler = async()=>{
     await request(`/api/user/config`, 'PUT', userconf,{Authorization: `Bearer ${auth.token}`})
     updateConfig()
-    // setTimeout(function () {
-    //
-    // }, 200);
+    setTimeout(()=>{
+      updataConf()
+    },500)
   }
 
   const deleteStyle = async (event)=>{
     await request(`/api/user/style/remove`, 'DELETE', {name:event.target.dataset.name}, {Authorization: `Bearer ${auth.token}`})
     updateConfig();
+    setTimeout(()=>{
+      updataConf()
+    },500)
   }
 
   const styleHandler = async(event)=>{
@@ -109,6 +112,7 @@ export const UserOption = () =>{
                 className={`choiceElement ${(mode && (item.name !== "light" && item.name !== "night"))?"deleted":""} ${(userconf.style===item.name)?"active":null}`}
                 data-name={item.name}>
                   <StyleIcon colors={item}/>
+                  <p className="styleName">{item.name}</p>
                 </div>
               )
             })

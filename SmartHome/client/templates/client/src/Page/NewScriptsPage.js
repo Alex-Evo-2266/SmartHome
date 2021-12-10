@@ -3,7 +3,6 @@ import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {useChecked} from '../hooks/checked.hook'
 import {AuthContext} from '../context/AuthContext.js'
-import {AddScriptBase} from '../components/addScript/addScriptBase'
 import {GroupBlock} from '../components/programmBlock/groupBlock'
 import {ActBlock} from '../components/programmBlock/actBlock'
 import {ActScript} from '../components/programmBlock/actScript'
@@ -21,7 +20,7 @@ export const NewScriptsPage = ({edit}) => {
   const history = useHistory()
   const {USText} = useChecked()
   const auth = useContext(AuthContext)
-  const {show,addTarget,typeAct,deviceBlock,addScriptBlock} = useContext(AddScriptContext)
+  const {addTarget,typeAct,deviceBlock,addScriptBlock} = useContext(AddScriptContext)
   const {message} = useMessage();
   const {loading,request, error, clearError} = useHttp();
   const[cost, setCost]=useState(true)
@@ -74,7 +73,6 @@ export const NewScriptsPage = ({edit}) => {
         }
         if(typeAct==="script"){
           addScriptBlock((datascr)=>{
-            console.log(datascr);
             if(!datascr||!datascr.name)
               return
             let mas = script;
@@ -85,7 +83,6 @@ export const NewScriptsPage = ({edit}) => {
         if(typeAct==="delay"){
           let mas = script[type].slice();
           mas.push({type:"delay",action:"delay",value:{type:"number", value:"0"}})
-          console.log(mas);
           setScript({...script, [type]:mas})
         }
       }, 100);
@@ -106,7 +103,6 @@ export const NewScriptsPage = ({edit}) => {
   }
 
   const outHandler = async()=>{
-    console.log(script);
     try {
       if(!script.name || !USText(script.name)){
         console.error("allowed characters: 1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM");
@@ -165,14 +161,12 @@ export const NewScriptsPage = ({edit}) => {
   const giveScript = useCallback(async(idscript)=>{
     const data = await request(`/api/script/${idscript}`, 'Get', null,{Authorization: `Bearer ${auth.token}`})
     if(data){
-      console.log(data);
       let s = {}
       s.name = data.name
       s.if = data.if
       s.trigger = data.trigger
       s.then = data.then
       s.else = data.else
-      console.log(s);
       setScript(s)
       setCost(prev=>!prev)
     }
@@ -188,11 +182,6 @@ export const NewScriptsPage = ({edit}) => {
     setData("New Script")
   },[script, setData])
 
-  useEffect(()=>{
-    console.log(script);
-  },[script])
-
-
   if(loading){
     return(
       <Loader/>
@@ -201,14 +190,13 @@ export const NewScriptsPage = ({edit}) => {
 
   return(
     <>
-      <AddScriptBase/>
       <div className = "NewScripConteiner">
       <h2>Create new script</h2>
         <div className="NewScripPage">
           <div className="scriptOut">
             <p>Script name</p>
             <input type="text" id="scriptName" name="name" value={script.name} onChange={changeHandler}/>
-            <button onClick={outHandler}>Send</button>
+            <button onClick={outHandler}>Save</button>
           </div>
           <div className="progammzon">
             <div className="triggerBlock">

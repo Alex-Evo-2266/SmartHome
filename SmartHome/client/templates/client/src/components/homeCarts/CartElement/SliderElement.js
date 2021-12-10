@@ -72,11 +72,8 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
   },[device,disabled,devices])
 
   useEffect(()=>{
-    console.log(data.typeAction);
-    console.log(onClick,device);
     if(typeof(onClick)==="function")return
     if(!device||!device.value)return
-    console.log(data.typeAction);
     setValue(Number(device.value[data.typeAction]))
   },[device,onClick,data])
 
@@ -88,23 +85,6 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
     delay.current = setTimeout(function () {
       outValue(event.target.value)
     }, 200);
-  }
-
-  const mouseUp = (event)=>{
-    if(typeof(onClick)==="function"){
-      onClick(event, value,setValue)
-    }
-    outValue(value)
-
-    // if(!data||!device)
-    //   return
-    // // if(data.type==="dimmer")
-    // //     socket.terminalMessage(`device ${device.DeviceSystemName} dimmer ${value}`)
-    // // if(data.type==="color")
-    // //     socket.terminalMessage(`device ${device.DeviceSystemName} color ${value}`)
-    // // // socket.terminalMessage()
-    // return
-    // // setTimeout(()=>updateDevice(),500)
   }
 
   const deletebtn = ()=>{
@@ -133,7 +113,7 @@ return(
       max={maxstate}
       value={value}
       onChange={changeHandler}
-      onMouseUp={mouseUp}
+      onInput={changeHandler}
       disabled={disabled2}
       />
     </div>

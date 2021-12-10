@@ -63,7 +63,8 @@
     height: calc(100vh - 56px);
   }
   .page-whith-tabs{
-    padding: 56px 0 56px 0;
+    padding: 56px 0 0 0;
+    margin-bottom: 56px;
     height: calc(100vh - 56px - 56px);
   }
   .conteiner{
