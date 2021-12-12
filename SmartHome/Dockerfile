@@ -24,7 +24,7 @@ RUN apt-get update \
 COPY ./req.txt /usr/src/req.txt
 RUN pip3 install --upgrade pip
 RUN pip3 install -r /usr/src/req.txt
-RUN pip3 install gunicorn
+RUN python3 -m pip install daphne
 
 COPY . $APP_HOME
 
