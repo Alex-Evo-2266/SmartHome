@@ -11,13 +11,9 @@ export const SocketState = ({children}) =>{
 
   const connect = useCallback(()=>{
     try {
-      socket.current = new WebSocket(
-            'ws://'
-            + process.env.REACT_APP_WS_HOST
-            + '/ws/smartHome/'
-            + 'devices'
-            + '/'
-        )
+      let path = `ws://${window.location.host}/ws/smartHome/devices/`
+
+      socket.current = new WebSocket(path)
     } catch (e) {
       setTimeout(function () {
         connect()
@@ -29,7 +25,8 @@ export const SocketState = ({children}) =>{
     if(!auth.isAuthenticated) return
 
     connect()
-
+    console.log(socket);
+    if(!socket.current) return ;
     socket.current.onopen = () => {
       console.log("connect");
         clearInterval(timerId.current);

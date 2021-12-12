@@ -26,13 +26,16 @@ services:
       - ./mosquitto/log:/mosquitto/log
     ports:
       - 1883:1883
-    # user: '1000:1000'
     environment:
       - MQTT_BROKER_URL=mqtt://mosquitto
+  client:
+    build: ./client
+    restart: always
+    volumes:
+      - client_voluem6:/client/build
   smart_home:
     build: ./SmartHome
     restart: always
-    # command: gunicorn SmartHome.wsgi:application --bind 0.0.0.0:8000
     command: bash -c "python3 /home/smart_home/web/manage.py migrate &&
               python3 /home/smart_home/web/manage.py makemigrations &&
               python3 /home/smart_home/web/manage.py collectstatic --no-input --clear &&
@@ -64,9 +67,11 @@ services:
       - 1337:80
     depends_on:
       - smart_home
+      - client
     volumes:
       - static_voluem:/home/smart_home/web/staticfile
       - media_voluem:/home/smart_home/web/media
+      - client_voluem6:/client/build
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt:latest
@@ -82,3 +87,4 @@ volumes:
   bd_data2:
   media_voluem:
   static_voluem:
+  client_voluem6:

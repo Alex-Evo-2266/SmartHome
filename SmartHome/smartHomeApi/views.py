@@ -282,9 +282,6 @@ class DevicePutPostView(APIView):
 class DeviceTypesView(APIView):
     """docstring for SetValueDevice."""
     def get(self,request):
-        authData = auth(request)
-        if not authData:
-            return Response(status=403)
         ret = getDeviceTypes()
         print(ret)
         if(ret["status"] == "ok"):
