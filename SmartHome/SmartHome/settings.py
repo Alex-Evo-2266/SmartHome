@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os, sys
+# from SmartHome.local_settings.py import *
+
+try:
+    from SmartHome.local_settings import *
+except ImportError:
+    from SmartHome.prod_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,15 +27,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'wse5dr6ft7yg8plivkuytrrestrytfygui'
-
-SECRET_JWT_KEY = "dxkhbg5hth56"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 
 # Application definition
 
@@ -46,10 +43,7 @@ INSTALLED_APPS = [
     'files',
     'channels',
     'smartHomeApi',
-    'client',
     'corsheaders',
-    # 'ckeditor',
-    # 'ckeditor-uploader'
 ]
 
 MIDDLEWARE = [
@@ -82,39 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'SmartHome.wsgi.application'
-
-CORS_ALLOWED_ORIGINS  = [
-     "http://localhost:3000" ,
-]
-CSRF_TRUSTED_ORIGINS = [
-     "localhost:3000" ,
-]
-
-# docker values
-# REDIS_HOST = os.environ.get("SMARTHOME_REDIS_HOST")
-# REDIS_PORT = os.environ.get("SMARTHOME_REDIS_PORT")
-#
-# BD_HOST = os.environ.get("SMARTHOME_BD_HOST")
-# BD_PORT = os.environ.get("SMARTHOME_BD_PORT")
-# BD_NAME = os.environ.get("SMARTHOME_BD_NAME")
-# BD_USER = os.environ.get("SMARTHOME_BD_USER")
-# BD_PASSWORD = os.environ.get("SMARTHOME_BD_PASSWORD")
-#
-# SMART_HOME_HOST = os.environ.get("SMARTHOME_SOCKET_HOST")
-# SMART_HOME_PORT = os.environ.get("SMARTHOME_SOCKET_PORT")
-
-#dev no docker
-REDIS_HOST = '0.0.0.0'
-REDIS_PORT = 6379
-
-BD_HOST = 'localhost'
-BD_PORT = '3306'
-BD_NAME = 'djangoSmartHome'
-BD_USER = 'roothome'
-BD_PASSWORD = 'root'
-
-SMART_HOME_HOST = 'localhost'
-SMART_HOME_PORT = '5000'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -171,18 +132,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfile/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfile")
+# STATIC_DIR = os.path.join(BASE_DIR, "static")
+#
+# STATICFILES_DIRS = [
+#     STATIC_DIR,
+# ]
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "client","templates","client","build","static"),
-]
-
-SERVER_CONFIG = os.path.join(BASE_DIR, "config","server-config.yml")
-DEVICETYPES = os.path.join(BASE_DIR, "config","devTypes.yml")
-SCRIPTS_DIR = os.path.join(BASE_DIR, "config","scripts")
-STYLES_DIR = os.path.join(BASE_DIR, "config","styles")
-PAGES_DIR =  os.path.join(BASE_DIR, "config","pages")
-DEVICES = os.path.join(BASE_DIR, "config","devices.yml")
+SERVER_CONFIG = os.path.join(BASE_DIR, "files","server-config.yml")
+DEVICETYPES = os.path.join(BASE_DIR, "files","devTypes.yml")
+SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
+STYLES_DIR = os.path.join(BASE_DIR, "files","styles")
+PAGES_DIR =  os.path.join(BASE_DIR, "files","pages")
+DEVICES = os.path.join(BASE_DIR, "files","devices.yml")
 
 TIME_UPPDATA = 6
 
@@ -200,28 +163,3 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             "hosts": [('redis', REDIS_PORT)],
-#         },
-#     },
-# }
-
-# CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + str(REDIS_PORT)
-# CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
-# CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + str(REDIS_PORT)
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-
-# CELERY_BROKER_URL = 'redis://redis:6379'
-# CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
-# CELERY_RESULT_BACKEND = 'redis://redis:6379'
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')

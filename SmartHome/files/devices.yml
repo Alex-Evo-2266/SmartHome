@@ -43,7 +43,7 @@
     name: state
     type: binary
     unit: null
-    value: '0'
+    value: '1'
     values: null
   - address: null
     control: true
@@ -101,7 +101,7 @@
     name: voltage
     type: number
     unit: mV
-    value: 3005
+    value: 3015
     values: ''
   - address: action_angle
     control: false
@@ -161,7 +161,7 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 173
+    value: 176
     values: ''
 - address: zigbee2mqtt/switch
   name: switch1
@@ -209,7 +209,7 @@
     name: action
     type: enum
     unit: ''
-    value: single_right
+    value: single_left
     values: hold_left, single_left, double_left, release_left, hold_right, single_right,
       double_right, release_right, hold_both, single_both, double_both, release_both
   - address: operation_mode_left
@@ -240,7 +240,7 @@
     name: linkquality
     type: number
     unit: lqi
-    value: 134
+    value: 118
     values: ''
 - address: zigbee2mqtt/bridge
   name: zigbee2mqtt

@@ -13,9 +13,7 @@ export const SocketState = ({children}) =>{
     try {
       socket.current = new WebSocket(
             'ws://'
-            // + window.location.host
-            + '127.0.0.1:5000'
-            // + '192.168.0.11:5000'
+            + process.env.REACT_APP_WS_HOST
             + '/ws/smartHome/'
             + 'devices'
             + '/'

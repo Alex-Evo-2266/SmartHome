@@ -21,7 +21,8 @@ config/server-config.yml
 test
 devfront.sh
 devserver.sh
-SmartHome/config/*/*.*
-!SmartHome/config/pages/basePage.yml
-!SmartHome/config/styles/light.yml
-!SmartHome/config/styles/night.yml
+SmartHome/files/*/*.*
+!SmartHome/files/pages/basePage.yml
+!SmartHome/files/styles/light.yml
+!SmartHome/files/styles/night.yml
+SmartHome/staticfile/

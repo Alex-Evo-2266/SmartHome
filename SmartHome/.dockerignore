@@ -1,1 +1,5 @@
 ./config/
+./media/
+./SmartHome/local_settings.py
+./staticfile
+./files/devices.yml
