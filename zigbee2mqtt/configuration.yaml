@@ -6,4 +6,3 @@ mqtt:
   password: admin
 serial:
   port: /dev/ttyACM0
-devices:
