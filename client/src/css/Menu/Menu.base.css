@@ -218,6 +218,7 @@
 .bottomMenuAll ul li{
   line-height: 56px;
   font-size: 24px;
+  height: 56px;
   position: relative;
   cursor: pointer;
   width: 255px;
@@ -227,9 +228,12 @@
   background: var(--btn-color-normal);
 }
 .navigationRail ul li a,
-.bottomMenuAll ul li a{
+.bottomMenuAll ul li a,
+.bottomMenuAll ul li .menu-btn,
+.navigationRail ul li .menu-btn{
   height: 100%;
   width: 100%;
+  position: absolute;
   align-items: center;
   text-decoration: none;
   color: var(--text-color-normal-fon);
@@ -239,13 +243,32 @@
   color: var(--color-active);
 }
 .navigationRail ul li a i,
-.bottomMenuAll ul li a i{
+.bottomMenuAll ul li a i,
+.navigationRail ul li .menu-btn i,
+.bottomMenuAll ul li .menu-btn i{
   width: 56px;
   text-align: center;
   line-height: 56px;
 }
+.menu-btn{
+  border: none;
+  outline: none;
+  display: block;
+  font-size: 24px;
+  cursor: pointer;
+}
+.menu-btn:hover{
+  background: var(--btn-color-normal);
+}
+.menu-btn i{
+  position: absolute;
+  left: 0;
+  top: 0;
+}
 .navigationRail ul li a span,
-.bottomMenuAll ul li a span{
+.bottomMenuAll ul li a span,
+.navigationRail ul li .menu-btn span,
+.bottomMenuAll ul li .menu-btn span{
   margin-left: 5px;
 }
 .dividers{
@@ -390,6 +413,8 @@
 }
 .bottomMenuAll ul li{
   line-height: 48px;
+  height: 48px;
+  width: 100%;
 }
 .bottomMenu .controlConteiner .contextmenu{
   top: 30px;

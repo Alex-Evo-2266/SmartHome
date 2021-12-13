@@ -60,6 +60,20 @@ a.button.highSelection{
 a.button.normalSelection{
   line-height: 36px;
 }
+.logout-btn{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 56px;
+  line-height: 56px;
+  font-size: 24px;
+  text-align: center;
+  z-index: 30;
+  transition: .3s;
+}
+.logout-btn:hover{
+  background: var(--btn-color-normal);
+}
 button.button.normalSelection,
 a.button.normalSelection{
   padding: 0;
@@ -93,10 +107,11 @@ button.button.highSelection:hover{
   margin: 10px;
   position: relative;
   justify-content: flex-end;
+  flex-wrap: wrap;
 }
 .controlElement > a.button,
 .controlElement > button.button{
-  margin: 0 8px 0 0;
+  margin: 4px 8px 4px 0;
 }
 .liteButton{
   cursor: pointer;
@@ -108,6 +123,9 @@ button.button.highSelection:hover{
     padding: 10px;
     margin: 10px;
     border-radius: 4px;
+  }
+  .controlElement{
+    flex-direction: column;
   }
   .pagecontent a,
   .pagecontent button{

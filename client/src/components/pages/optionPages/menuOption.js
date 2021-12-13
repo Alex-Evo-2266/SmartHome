@@ -129,9 +129,6 @@ export const MenuOption = () =>{
         <MenuComponent name="Devices" icon="fas fa-plug" def={true}/>
       </div>
       <div className="configElement">
-        <MenuComponent name="Profile" icon="fas fa-user-circle" def={true}/>
-      </div>
-      <div className="configElement">
         <MenuComponent name="Setings" icon="fas fa-cogs" def={true}/>
       </div>
         {

@@ -3,10 +3,12 @@ import {useHistory} from 'react-router-dom'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AlertContext} from '../components/alert/alertContext'
+import {AuthContext} from '../context/AuthContext.js'
 import {MenuContext} from '../components/Menu/menuContext'
 
 export default function AddUser(){
   const {setData} = useContext(MenuContext)
+  const auth = useContext(AuthContext)
   const history = useHistory()
   const {loading, request, error, clearError} = useHttp();
   const {message} = useMessage();
@@ -30,7 +32,7 @@ export default function AddUser(){
 
   const registerHandler = async () => {
     try {
-      const data = await request('/api/user', 'POST', {...form})
+      const data = await request('/api/user', 'POST', {...form}, {Authorization: `Bearer ${auth.token}`})
       if(data){
         history.push('/')
         show("user registered","ok")

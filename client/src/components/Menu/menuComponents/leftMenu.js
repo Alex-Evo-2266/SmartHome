@@ -1,10 +1,9 @@
 import React, {useContext} from 'react'
 import {AuthContext} from '../../../context/AuthContext.js'
-import {NavLink,useHistory} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 
 export const LeftMenu = ({hide,show, visible, insluedField, otherField, user})=>{
   const auth = useContext(AuthContext)
-  const history = useHistory()
 
   const closeMenu=(e)=>{
     let el = e.target.closest("li[data-el=sub]")
@@ -92,19 +91,15 @@ export const LeftMenu = ({hide,show, visible, insluedField, otherField, user})=>
         }):null
       }
       </ul>
-
-      <div className="bottomField">
-        <div className="dividers"></div>
-        <div className="profifileConteiner">
-          <div className="out" onClick={auth.logout}>
-            <i className="fas fa-sign-out-alt" onClick={auth.logout}></i>
-          </div>
-          <div className="profile" onClick={()=>history.push("/profile")}>
-            <div className="name">{user.UserName} {user.UserSurname}</div>
-            <div className="email">{user.Email}</div>
-          </div>
-        </div>
-      </div>
+      <div className="dividers"></div>
+      <ul className="otherMenu">
+        <li>
+          <button className="menu-btn" onClick={auth.logout}>
+            <i className="fas fa-sign-out-alt"></i>
+            <span>logout</span>
+          </button>
+        </li>
+      </ul>
       </>
       :null
     }

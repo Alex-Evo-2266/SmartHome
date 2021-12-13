@@ -78,13 +78,14 @@ export const ProfilePage = () => {
   },[setData])
 
   return(
-    <div className = "conteiner top bottom">
+    <div className = "fullScrinContainer color-normal">
         <div className = "pages">
         {
           (loading)?
           <Loader/>:
           <>
           <div className = {`page ${(location.pathname==="/profile")?"active":""}`}>
+            <i className="fas fa-sign-out-alt logout-btn" onClick={auth.logout}></i>
             <div className = "pagecontent">
               <h2>Profile</h2>
               <p>User Name: {user.UserName}</p>

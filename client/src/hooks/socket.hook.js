@@ -25,7 +25,6 @@ export const SocketState = ({children}) =>{
     if(!auth.isAuthenticated) return
 
     connect()
-    console.log(socket);
     if(!socket.current) return ;
     socket.current.onopen = () => {
       console.log("connect");
