@@ -29,3 +29,4 @@ SmartHome/files/*.yml
 !SmartHome/files/styles/light.yml
 !SmartHome/files/styles/night.yml
 SmartHome/staticfile/
+SmartHome/logs

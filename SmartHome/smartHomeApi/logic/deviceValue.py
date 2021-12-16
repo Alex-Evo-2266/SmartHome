@@ -6,6 +6,9 @@ from datetime import datetime
 import json
 import threading
 from ..classes.devicesArrey import DevicesArrey
+import logging
+
+logger = logging.getLogger(__name__)
 
 devicesArrey = DevicesArrey()
 
@@ -47,7 +50,6 @@ def deviceSetStatus(systemName, type,value,script=True):
         for item in values:
             if item.name==type:
                 if(item.type=="binary"):
-                    print(item.name,value,item.high,item.low,str(value)==str(item.high))
                     if(str(value)==str(item.high)):
                         value = "1";
                     elif(str(value)==str(item.low)):
@@ -55,12 +57,9 @@ def deviceSetStatus(systemName, type,value,script=True):
                     else:
                         return None
                 item.set(value)
-                print("end",dev.name)
         return value
-        print('not value error')
-        return True
     except Exception as e:
-        print('set value error ',systemName,e)
+        logger.error(f'set value error. systemName:{systemName}, detail:{e}')
         return None
 
 # def deviceSetStatusThread(id, type,value,script=True):

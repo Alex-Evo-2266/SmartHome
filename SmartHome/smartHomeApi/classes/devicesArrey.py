@@ -1,4 +1,6 @@
+import logging
 
+logger = logging.getLogger(__name__)
 
 class DevicesArrey():
     devices = []
@@ -25,7 +27,7 @@ class DevicesArrey():
                     return ret
             return None
         except Exception as e:
-            print("error",e)
+            logger.error(f"delete device from device list. {e}")
             return None
 
     def get(self,id):

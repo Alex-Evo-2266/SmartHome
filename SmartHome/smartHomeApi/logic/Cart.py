@@ -1,6 +1,9 @@
 from SmartHome.settings import PAGES_DIR
 import yaml
 import os, sys
+import logging
+
+logger = logging.getLogger(__name__)
 
 def getPages():
     fileList = os.listdir(PAGES_DIR)
@@ -14,38 +17,42 @@ def getPages():
 
 def lookForPage(name):
     fileList = os.listdir(PAGES_DIR)
-    print(name,fileList)
+    logger.debug(f'lookForPage -> input data:{name}')
     for item in fileList:
         if(item==name):
             return {"data":item, "type":"ok"}
-    return {"message":"no file", "type":"error"}
+    return {"detail":"no file", "type":"error"}
 
 def addHomePage(name):
     try:
+        logger.debug(f"addHomePage -> input name:{name}")
         fileList = os.listdir(PAGES_DIR)
         str = name + ".yml"
         for item in fileList:
             if(item==str):
-                return {"type":"error","message":"this name busy"}
+                return {"type":"error","detail":"this name busy"}
         path = os.path.join(PAGES_DIR,str)
         with open(path, 'w') as f:
             yaml.dump({"name":name,"cards":[]}, f, default_flow_style=False)
-        return {"type":"ok","message":""}
-    except Exception as e:
-        print(e)
-        return {"type":"error","message":e}
+        logger.info(f"add new page name:{name}")
+        return {"type":"ok","detail":""}
+    except FileNotFoundError as e:
+        logger.error(f"file not found file:{str}, detail:{e}")
+        return {"status":"error", "detail":e}
 
 def deleteHomePage(name):
     try:
         file_path = os.path.join(PAGES_DIR,name)
         file_path = file_path + ".yml"
         os.remove(file_path)
-        return {"type":"ok","message":""}
+        logger.info(f"delete page name:{name}")
+        return {"type":"ok","detail":""}
     except Exception as e:
-        return {"type":"error","message":e}
+        logger.error(f"error delete page name:{name}, detail:{e}")
+        return {"type":"error","detail":e}
 
 def setPage(data):
-    print(data)
+    logger.debug(f"setPage -> input data:{data}")
     str = data["name"] + ".yml"
     path = os.path.join(PAGES_DIR,str)
     with open(path, 'w') as f:
@@ -54,15 +61,20 @@ def setPage(data):
 
 
 def getPage(name):
-    templates = None
-    name = name + ".yml"
-    res = lookForPage(name)
-    if(res["type"]=="ok"):
-        with open(os.path.join(PAGES_DIR,name)) as f:
-            templates = yaml.safe_load(f)
-        return {"data":templates,"type":"ok"}
-    else:
-        return res
+    try:
+        templates = None
+        name = name + ".yml"
+        res = lookForPage(name)
+        if(res["type"]=="ok"):
+            with open(os.path.join(PAGES_DIR,name)) as f:
+                templates = yaml.safe_load(f)
+            return {"data":templates,"type":"ok"}
+        else:
+            return res
+    except FileNotFoundError as e:
+        logger.error(f"file not found file:{name}, detail:{e}")
+        return {"status":"error", "detail":e}
+
 
 def deleteDeviceCart(id):
     pages = getPages().get("data")

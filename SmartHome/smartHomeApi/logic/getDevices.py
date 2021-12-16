@@ -53,7 +53,7 @@ def device(item):
         }
 
     except Exception as e:
-        print("error device",e)
+        logger.info(f'device not found. {e}')
         el = devicesArrey.get(item.systemName)
         if(el):
             dev = el['device']

@@ -5,7 +5,9 @@ from channels.layers import get_channel_layer
 from smartHomeApi.logic.config.configget import getConfig
 from smartHomeApi.logic.socketOut import sendData
 from smartHomeApi.logic.editDevice import giveSystemNameDeviceByAddres, deleteDevice, editAdress
-import json
+import json, logging
+
+logger = logging.getLogger(__name__)
 
 def zigbeeInfoSearch(topic, message):
     zigbee = getConfig("zigbee2mqtt")
@@ -20,7 +22,6 @@ def zigbeeInfoSearch(topic, message):
         decodEvent(json.loads(message))
     if ("/".join(topic.split('/')[0:2])=='/'.join([zigbee["topic"],"bridge"])):
         if(last=="devices"):
-            print("f")
             decodeZigbeeDevices(json.loads(message))
         if(last=="info"):
             decodeZigbeeConfig(json.loads(message))
@@ -28,7 +29,6 @@ def zigbeeInfoSearch(topic, message):
 def decodEvent(data):
     global zigbeeDevices
     newdata = data["data"]
-    print(data)
     newdata = formatDev(newdata)
     if(data["type"]=="device_interview"):
         sendData("connect_device",newdata)
@@ -50,7 +50,7 @@ def decodRemove(data):
     if(data["status"]=="ok"):
         pass
     elif(data["status"]=="error"):
-        print(data["error"])
+        logger.error(data["error"])
 
 def editAdressLincDevices(data):
     zigbee = getConfig("zigbee2mqtt")
@@ -88,30 +88,16 @@ def getPermitJoin():
     return permit_join
 
 def decodeZigbeeDevices(data):
-    # print(data)
     try:
         config = getConfig("zigbee2mqtt")
         global zigbeeDevices
-        # for item in data:
-        #     flag = True
-        #     for item2 in zigbeeDevices:
-        #         if(item["ieee_address"] == item2["id"]):
-        #             if("exposes" in item2["data"]):
-        #                 if(len(item2["data"]["exposes"]) != 0):
-        #                     flag = False
-        #                     break
-        #             else:
-        #                 flag = False
-        #                 break
-        #     if(flag):
-        #         sendData("newZigbeesDevice",item)
         zigbeeDevices = []
         for item in data:
             dev = formatDev(item)
             addzigbeeDevices(dev["address"],dev)
         sendData("zigbee",zigbeeDevices)
     except Exception as e:
-        print("decoderror", e)
+        logger.error(f'zigbee devices decod {e}')
 
 def formatDev(item):
     config = getConfig("zigbee2mqtt")
@@ -136,6 +122,5 @@ def formatDev(item):
     return dev
 
 def decodeZigbeeConfig(data):
-    print(data["permit_join"])
     global permit_join
     permit_join = data["permit_join"]

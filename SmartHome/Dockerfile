@@ -35,4 +35,5 @@ USER smart_home
 RUN mkdir media
 RUN mkdir files/scripts
 RUN mkdir staticfile
+RUN mkdir logs
 RUN touch files/devices.yml

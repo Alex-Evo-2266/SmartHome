@@ -256,6 +256,7 @@
   display: block;
   font-size: 24px;
   cursor: pointer;
+  background: var(--color-normal);
 }
 .menu-btn:hover{
   background: var(--btn-color-normal);

@@ -1,6 +1,10 @@
 from ..models import LocalImage,genId,set_to_list_dict,ImageBackground,UserConfig,User
+import logging
+
+logger = logging.getLogger(__name__)
 
 def getFonUrl(oldindex):
+    logger.debug(f'get image urls. input oldindex:{oldindex}')
     images = LocalImage.objects.all()
     images2 = images[oldindex:oldindex+30]
     end=True
@@ -8,25 +12,25 @@ def getFonUrl(oldindex):
         end=False
     for item in images2:
         users = item.imagebackground_set.all()
-        print(users)
     dictImeges = set_to_list_dict(images2)
-    print(dictImeges)
     ret = {"images":dictImeges,"end":end}
     return ret
 
 def deleteImage(id):
     try:
+        logger.debug(f'delete image. input id:{id}')
         image = LocalImage.objects.get(id=id)
         back = image.imagebackground_set.all()
         for item in back:
             item.delete()
         image.delete()
-        return True
+        return {'status':'ok'}
     except Exception as e:
-        return False
+        logger.error(f'error delete image. id:{id}, detail:{e}')
+        return {'status':'error', 'detail':e}
 
 def linkbackground(data,id):
-    print(data,id)
+    logger.debug(f'link background. input id:{id}, data:{data}')
     try:
         user = User.objects.get(id=id)
         backgrounds = user.userconfig.background.all()
@@ -37,6 +41,7 @@ def linkbackground(data,id):
                 break
         background = ImageBackground.objects.create(id=genId(ImageBackground.objects.all()),type=data["type"],image=image)
         user.userconfig.background.add(background)
-        return True
+        return {'status':'ok'}
     except Exception as e:
-        return False
+        logger.error(f'error link image. id:{id}, data:{data}, detail:{e}')
+        return {'status':'error', 'detail':e}

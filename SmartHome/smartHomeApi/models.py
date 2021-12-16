@@ -8,7 +8,6 @@ def set_to_list_dict(items):
     return item_list
 
 def set_dict_ro_null(item):
-    print(item)
     if(item):
         return item.model_to_dict()
     return None

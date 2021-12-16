@@ -1,5 +1,8 @@
 from ..Device import Devices
 from .DeviceElement import DeviceElement
+import logging
+
+logger = logging.getLogger(__name__)
 
 def look_for_param(arr:list, val):
     for item in arr:
@@ -56,14 +59,14 @@ class BaseDevice(object):
     def save(self):
         dev = Devices.get(systemName=self.systemName)
         for item in self.values:
-            print("save list")
+            pass
             # ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=item.name,value=value.get(),device=dev)
         for item in dev.values:
             value = look_for_param(self.values, item.name)
             if(value):
                 item.value = value.get()
         dev.save()
-        print("save",self.name)
+        logger.info(f'save {self.name}')
 
     def get_Base_Info(self):
         res = {

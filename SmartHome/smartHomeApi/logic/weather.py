@@ -1,6 +1,9 @@
 from smartHomeApi.logic.config.configget import getConfig
 import requests,bs4,json
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 URL_BASE = "http://api.openweathermap.org/data/2.5/"
 
@@ -15,7 +18,6 @@ def Weather():
     return dataWeather
 
 def updateWeather():
-    from pprint import pprint
 
     try:
         weatherConf = getConfig("weather")
@@ -68,7 +70,6 @@ def updateWeather():
             "forecastTime":timeWeather,
             "forecastDate":dateWeather
         }
-        # print(dataWeather)
     except Exception as e:
-        print("er Wether",e)
+        logger.warning(f'get weather forecast')
         return None

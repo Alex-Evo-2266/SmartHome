@@ -77,6 +77,36 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SmartHome.wsgi.application'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters':{
+        'base':{
+            'format':'%(levelname)s %(asctime)s %(module)s "%(message)s"'
+        }
+    },
+    'handlers':{
+        'file':{
+            'level':'INFO',
+            'class':'logging.FileHandler',
+            'filename':os.path.join(BASE_DIR, "logs", "log.log"),
+            'formatter': 'base',
+        },
+        'write':{
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'formatter': 'base',
+        }
+    },
+    'loggers':{
+        'smartHomeApi':{
+            'handlers':['file','write'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    }
+}
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -152,6 +182,8 @@ TIME_UPPDATA = 6
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+ALGORITHM = 'HS256'
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 ASGI_APPLICATION = 'SmartHome.asgi.application'
 

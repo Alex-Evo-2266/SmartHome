@@ -1,12 +1,18 @@
 from SmartHome.settings import SERVER_CONFIG
-import yaml
+import yaml, logging
 from ..Cart import getPages
 
+logger = logging.getLogger(__name__)
+
 def readConfig():
-    templates = None
-    with open(SERVER_CONFIG) as f:
-        templates = yaml.safe_load(f)
-    return templates
+    try:
+        templates = None
+        with open(SERVER_CONFIG) as f:
+            templates = yaml.safe_load(f)
+        return templates
+    except FileNotFoundError as e:
+        logger.error(f"file not found. file:{SERVER_CONFIG}")
+        raise
 
 def getConfig(key):
     try:
@@ -14,9 +20,12 @@ def getConfig(key):
         with open(SERVER_CONFIG) as f:
             templates = yaml.safe_load(f)
         return templates[key]
-    except Exception as e:
-        print(e)
-
+    except FileNotFoundError as e:
+        logger.error(f"file not found. file:{SERVER_CONFIG}")
+        raise
+    except KeyError as e:
+        logger.error(f"invalud key. key:{key}")
+        raise
 
 
 def GiveServerConfig():
@@ -45,6 +54,7 @@ def GiveServerConfig():
         }
         return server
     except Exception as e:
+        logger.error(f"error get config. detail:{e}")
         return {
         "mqttBroker":"0.0.0.0",
         "mqttBrokerPort":"1883",

@@ -2,6 +2,9 @@ from SmartHome.settings import DEVICETYPES
 from castom_moduls import getDevices
 import yaml
 import os, sys
+import logging
+
+logger = logging.getLogger(__name__)
 
 def convertFormat():
     baseTyps = ["light","switch","wireless switchs","relay","socket","sensor"]
@@ -33,14 +36,14 @@ def getDeviceTypes():
         # templates = None
         # with open(DEVICETYPES) as f:
         #     templates = yaml.safe_load(f)
-        print(templates)
+        logger.debug(f'typs devices: {templates}')
         return {
             "status": "ok",
             "data": templates
         }
     except Exception as e:
-        print(e)
+        logger.error(f'error get type. detail:{e}')
         return {
             "status": "error",
-            "message": e
+            "detail": e
         }

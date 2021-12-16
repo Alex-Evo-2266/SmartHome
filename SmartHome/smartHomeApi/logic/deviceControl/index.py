@@ -4,6 +4,7 @@ from smartHomeApi.logic.getDevices import giveDevices
 from smartHomeApi.logic.config.configget import getConfig
 import threading
 import time
+import logging
 from smartHomeApi.logic.socketOut import sendData
 from smartHomeApi.classes.devicesArrey import DevicesArrey
 from smartHomeApi.logic.serverData import getServerData
@@ -11,39 +12,11 @@ from smartHomeApi.logic.weather import updateWeather
 from smartHomeApi.logic.runScript import runTimeScript
 
 from miio import Device, Yeelight, Gateway, Discovery
-# from miio.discovery import DEVICE_MAP
-#
-# print(DEVICE_MAP)
-
-# dev = Device("192.168.0.2", "822dc07d3660422aef22c6cb11af3a25")
-
-# def testConntec():
-#     try:
-#         dev = Gateway("192.168.0.6", "6f6e344a4d4f4e55787a68737537334e")
-#         print(dev)
-#         print(dev.info())
-#         z = dev.get_properties(["status"])
-#         print(z)
-#     except Exception as e:
-#         print("error",e)
-#         testConntec()
-# def testConntec():
-#     try:
-#         dev = Device("192.168.0.2", "822dc07d3660422aef22c6cb11af3a25")
-#         print(dev)
-#         k = dev.info().model
-#         print(k)
-#         c = None
-#         if(k in DEVICE_MAP):
-#             c = DEVICE_MAP[k]
-#         print(c)
-#     except Exception as e:
-#         print("error",e)
-#         testConntec()
-#
-# testConntec()
 
 devicesArrey = DevicesArrey()
+
+logger = logging.getLogger(__name__)
+logger.info("starting")
 
 def datasave():
     while True:

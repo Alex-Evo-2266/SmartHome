@@ -11,7 +11,8 @@ export const SocketState = ({children}) =>{
 
   const connect = useCallback(()=>{
     try {
-      let path = `ws://${window.location.host}/ws/smartHome/devices/`
+      // let path = `ws://${window.location.host}/ws/smartHome/devices/`
+      let path = `ws://localhost:5000/ws/smartHome/devices/`
 
       socket.current = new WebSocket(path)
     } catch (e) {
