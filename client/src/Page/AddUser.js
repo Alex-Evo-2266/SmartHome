@@ -14,7 +14,7 @@ export default function AddUser(){
   const {message} = useMessage();
   const {show} = useContext(AlertContext);
   const [form, setForm] = useState({
-    name: '', password: '', email: '', mobile: '', key: ''
+    name: '', password: '', email: '', mobile: ''
   });
 
   useEffect(()=>{

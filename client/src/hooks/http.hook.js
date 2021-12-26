@@ -18,6 +18,11 @@ export const useHttp = () => {
     try {
       // if(headers['X-CSRFToken']===""||!headers['X-CSRFToken'])
       //   headers['X-CSRFToken'] = csrf
+      if(headers['Authorization'])
+      {
+        headers['Authorization-Token'] = headers['Authorization']
+        headers['Authorization'] = undefined
+      }
       if(body&&!file){
         headers['Content-Type'] = 'application/json'
         body = JSON.stringify(body);

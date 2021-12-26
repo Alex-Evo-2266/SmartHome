@@ -1,5 +1,6 @@
 *.pot
 *.pyc
+SmartHomeold
 env
 celerybeat-schedule
 __pycache__/
@@ -8,6 +9,7 @@ db.sqlite3
 media
 черновик
 MediaList
+myvenv_baz
 TRASH
 mosquitto/data/*
 mosquitto/log/*
