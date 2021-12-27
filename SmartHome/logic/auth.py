@@ -12,6 +12,9 @@ async def login(data: Login):
     try:
         logger.debug(f"login input data: {data.dict()}")
         u = await User.objects.get_or_none(UserName=data.name)
+        if not u:
+            logger.error(f"user not found")
+            return {"status":"error", "detail":"user not found"}
         if bcrypt.checkpw(data.password.encode('utf-8'),u.UserPassword.encode('utf-8')):
             encoded_jwt = await create_token(u.id)
             result = {"token":encoded_jwt, "userId":u.id,"userLavel":u.UserLevel}
@@ -40,7 +43,7 @@ async def auth(Authorization):
     try:
         head = Authorization
         jwtdata = head
-        # jwtdata = head.split(" ")[1]
+        jwtdata = head.split(" ")[1]
         data = jwt.decode(jwtdata,settings.SECRET_JWT_KEY,algorithms=[settings.ALGORITHM])
         if not('exp' in data and 'user_id' in data):
             logger.worning(f"no data in jwt")

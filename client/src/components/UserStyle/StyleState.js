@@ -38,8 +38,8 @@ export const CastomizeStyle = ({children, token, ready}) =>{
   }
 
   const getData = useCallback(async()=>{
-    const dataStyles = await request(`/api/user/styles`, 'GET', null,{Authorization: `Bearer ${token}`})
-    const dataUserConf = await request(`/api/user/config`, 'GET', null,{Authorization: `Bearer ${token}`})
+    const dataStyles = await request(`/api/style/all`, 'GET', null,{Authorization: `Bearer ${token}`})
+    const dataUserConf = await request(`/api/user/config/get`, 'GET', null,{Authorization: `Bearer ${token}`})
     setStyles(dataStyles)
     setConfig(dataUserConf)
     return {dataStyles, dataUserConf}
@@ -50,7 +50,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
     if(!data?.dataUserConf?.staticBackground)
       adaptiveBackground(data?.dataUserConf?.images)
     else
-      setBackground(getimage(data?.dataUserConf?.images, "base").image)
+      setBackground(getimage(data?.dataUserConf?.images, "base")?.image)
     if(data?.dataUserConf?.autoStyle)
       avtoNightStyle(style, getColors(data?.dataStyles, "night"))
     else

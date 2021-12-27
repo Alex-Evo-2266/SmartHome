@@ -4,9 +4,14 @@ from dbtest import metadata, database, engine
 from models import User
 from api.auth import router as router_auth
 from api.user import router as router_user
+from api.style import router as router_style
+from api.device import router as router_device
+from api.server import router as router_server
+
+from logic.weather import updateWeather
 
 app = FastAPI();
-
+updateWeather()
 # metadata.create_all(engine)
 app.state.database = database
 
@@ -25,4 +30,7 @@ async def shutdown() -> None:
         await database_.disconnect()
 
 app.include_router(router_auth)
+app.include_router(router_server)
+app.include_router(router_device)
+app.include_router(router_style)
 app.include_router(router_user)

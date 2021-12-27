@@ -1,0 +1,8 @@
+c1: '#303030'
+c2: '#505050'
+error: '#f00000'
+active: '#1E90FF'
+error: '#ff0000'
+ok: '#00d22d'
+icon: ''
+name: night

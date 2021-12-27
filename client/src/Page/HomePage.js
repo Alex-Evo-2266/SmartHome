@@ -116,7 +116,7 @@ const importCarts = useCallback(async()=>{
       console.error(e);
     }
     try{
-      const data2 = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      const data2 = await request(`/api/server/config/get`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       setPages(data2.pages)
     }
     catch (e) {

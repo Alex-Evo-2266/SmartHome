@@ -4,12 +4,12 @@ from fastapi.responses import JSONResponse
 from schemas.auth import Login
 
 router = APIRouter(
-    prefix="/auth",
+    prefix="/api/auth",
     tags=["auth"],
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/login/")
+@router.post("/login")
 async def login(data: Login):
     res = await Authorization(data)
     if(res["status"] == "ok"):

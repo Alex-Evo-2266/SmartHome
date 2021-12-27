@@ -57,7 +57,7 @@ export const ProfilePage = () => {
   }
 
   const outForm = async () =>{
-      const data = await request(`/api/user`, 'PUT', {newuser},{Authorization: `Bearer ${auth.token}`})
+      const data = await request(`/api/user`, 'PUT', newuser,{Authorization: `Bearer ${auth.token}`})
       if(!data)return;
       setUser(data);
       setNewuser({

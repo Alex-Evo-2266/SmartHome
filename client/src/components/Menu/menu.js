@@ -63,7 +63,7 @@ export const Menu = ()=>{
   },[config.MenuElements,giveField])
 
   const updataUser = useCallback(async()=>{
-    const data = await request(`/api/user`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/user/get`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data) return;
     setuser({
       UserName:data.UserName,

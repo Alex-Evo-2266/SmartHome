@@ -36,11 +36,11 @@ export const ServerOption = () =>{
   }
 
   const serverConfigHandler = async(event)=>{
-    request(`/api/server/config`, 'PUT', serverconf,{Authorization: `Bearer ${auth.token}`})
+    request(`/api/server/config/edit`, 'POST', serverconf,{Authorization: `Bearer ${auth.token}`})
   }
 
   const updataConf = useCallback(async()=>{
-    const data = await request(`/api/server/config`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/server/config/get`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data)return;
     setServerconf({
       mqttBroker:data.mqttBroker||"",
