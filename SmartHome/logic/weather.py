@@ -26,7 +26,7 @@ def Weather():
     global dataWeather
     return dataWeather
 
-def updateWeather():
+async def updateWeather():
 
     try:
         weatherConf = getConfig("weather")

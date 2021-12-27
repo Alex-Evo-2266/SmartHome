@@ -15,7 +15,7 @@ export const EditDevicesForm = (props)=>{
   const [device, setDevice] = useState();
 
   const usedevice = useCallback(async()=>{
-    const data = await request(`/api/devices/get/${props.systemName}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/device/get/${props.systemName}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     console.log(data);
     setDevice(data);
   },[request,auth.token,props.systemName])

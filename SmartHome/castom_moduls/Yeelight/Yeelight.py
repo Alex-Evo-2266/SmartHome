@@ -1,6 +1,6 @@
 from yeelight import Bulb,PowerMode
-from smartHomeApi.logic.deviceControl.BaseDeviceClass import BaseDevice
-from smartHomeApi.logic.deviceControl.DeviceElement import DeviceElement
+from logic.device.BaseDeviceClass import BaseDevice
+from logic.device.DeviceElement import DeviceElement
 import logging
 
 logger = logging.getLogger(__name__)
@@ -43,7 +43,7 @@ class Yeelight(BaseDevice):
                 self.values.append(DeviceElement(name="temp", systemName=self.systemName, control=True, high=self.minmaxValue["color_temp"]["max"], low=self.minmaxValue["color_temp"]["min"], type="number", icon="fas fa-adjust", value=values["ct"]))
             super().save()
         except Exception as e:
-            logger.info(f"yeelight initialize error. {e}")
+            logger.warning(f"yeelight initialize error. {e}")
             self.device = None
 
     def update_value(self, *args, **kwargs):

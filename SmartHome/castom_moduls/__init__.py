@@ -25,16 +25,17 @@ def __load_all__(dir="castom_moduls"):
         if(list_modules_2.count("__init__.py") == 1):
             foo = imp.load_source('module', dir+os.sep+module_name+os.sep+"__init__.py")
             info = foo.getInfo()
-            if(info["type"] == "device"):
+            if(info and "type" in info and info["type"] == "device"):
                 deviceType(foo)
 
-# __load_all__()
+__load_all__()
 
-def getDevicesClass(type, systemName):
+async def getDevicesClass(type, systemName):
     if(type in devices):
         p = devices[type]
         deviceClass = p["class"]
-        return deviceClass(systemName=systemName)
+        res = deviceClass(systemName=systemName)
+        return res
     return None
 
 def getDevices():

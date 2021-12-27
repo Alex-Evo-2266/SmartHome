@@ -108,15 +108,15 @@ const changeHandlerTest = event=>{
       config:conf
     }
     if(type==="edit")
-      await request(`/api/devices`, 'PUT', {...dataout},{Authorization: `Bearer ${auth.token}`})
+      await request(`/api/device/edit`, 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
     else if(type==="link")
-      await request('/api/devices', 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
+      await request('/api/device/add', 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})
     hide();
   }
 
   const deleteHandler = async () =>{
     message("All dependent scripts and controls will be removed along with the device. Delete?","general",async()=>{
-      await request(`/api/devices/del/${device.systemName}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
+      await request(`/api/device/delete/${device.systemName}`, 'POST', null,{Authorization: `Bearer ${auth.token}`})
       hide();
     },"no")
   }
