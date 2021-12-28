@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Header
-from logic.auth import auth
 from fastapi.responses import JSONResponse
 from typing import Optional, List
-from schemas.device import TypesDeviceSchema, DeviceValueSchema, DeviceSchema, DeviceStatusSchema, DeviceEditSchema
-from logic.device.types import getDeviceTypes
-from logic.device.getdevice import giveDevice
-from logic.device.addDevice import addDevice
-from logic.device.deviceSetValue import setValue
-from logic.device.editDevice import editDevice, deleteDevice, editStatusDevice
+
+from SmartHome.logic.auth import auth
+from SmartHome.schemas.device import TypesDeviceSchema, DeviceValueSchema, DeviceSchema, DeviceStatusSchema, DeviceEditSchema
+from SmartHome.logic.device.types import getDeviceTypes
+from SmartHome.logic.device.getdevice import giveDevice
+from SmartHome.logic.device.addDevice import addDevice
+from SmartHome.logic.device.deviceSetValue import setValue
+from SmartHome.logic.device.editDevice import editDevice, deleteDevice, editStatusDevice
 
 router = APIRouter(
     prefix="/api/device",

@@ -1,5 +1,5 @@
-from settings import DEVICES
-from logic.utils.file import readYMLFile, writeYMLFile
+from SmartHome.settings import DEVICES
+from SmartHome.logic.utils.file import readYMLFile, writeYMLFile
 
 import json
 import ast

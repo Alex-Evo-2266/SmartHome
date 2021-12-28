@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Header
-from logic.auth import auth
-from logic.user import addUser, getUser, menuConfEdit, userConfEdit, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass, getConfig
-from fastapi.responses import JSONResponse
-from schemas.user import UserForm, UserSchema, EditUserConfigSchema, UserEditSchema, UserDeleteSchema, UserEditLevelSchema, UserEditPasswordSchema, UserNameSchema, MenuElementsSchema, UserConfigSchema
-from typing import Optional, List
 import json
+
+from fastapi import APIRouter, Header
+from fastapi.responses import JSONResponse
+from typing import Optional, List
+
+from SmartHome.logic.auth import auth
+from SmartHome.logic.user import addUser, getUser, menuConfEdit, userConfEdit, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass, getConfig
+from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, UserEditSchema, UserDeleteSchema, UserEditLevelSchema, UserEditPasswordSchema, UserNameSchema, MenuElementsSchema, UserConfigSchema
 
 router = APIRouter(
     prefix="/api/user",

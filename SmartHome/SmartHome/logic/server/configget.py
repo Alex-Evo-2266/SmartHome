@@ -1,6 +1,7 @@
-from settings import SERVER_CONFIG
 import yaml, logging
-from schemas.server import ServerConfigSchema
+
+from SmartHome.settings import SERVER_CONFIG
+from SmartHome.schemas.server import ServerConfigSchema
 # from ..Cart import getPages
 
 logger = logging.getLogger(__name__)

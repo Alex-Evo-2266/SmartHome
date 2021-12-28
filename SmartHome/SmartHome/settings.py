@@ -1,10 +1,11 @@
 from pathlib import Path
 import os, sys
+
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 SECRET_JWT_KEY = "dxkhbg5hth56"
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SERVER_CONFIG = os.path.join(BASE_DIR, "files","server-config.yml")
 DEVICETYPES = os.path.join(BASE_DIR, "files","devTypes.yml")

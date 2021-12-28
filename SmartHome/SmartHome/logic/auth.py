@@ -1,10 +1,12 @@
-from models import User,genId,MenuElement
-from schemas.auth import Login
 import logging
 import bcrypt
-from datetime import datetime, timedelta
 import jwt
-import settings
+
+from datetime import datetime, timedelta
+
+from SmartHome.models import User,MenuElement
+from SmartHome.schemas.auth import Login
+from SmartHome import settings
 
 logger = logging.getLogger(__name__)
 

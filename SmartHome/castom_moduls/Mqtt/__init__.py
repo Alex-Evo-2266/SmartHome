@@ -1,7 +1,11 @@
 # from .MQTTDevice import MQTTDevice as Mqtt
+from castom_moduls import ModelData
 
 def getInfo():
-    pass
+    return ModelData(
+        name="mqtt",
+        dependencies=[]
+    )
     # return {
     #     "type":"device",
     #     "name":"mqtt",
@@ -16,3 +20,6 @@ def getInfo():
     #         "typeDevices":["all"]
     #     }]
     # }
+
+def init():
+    return getInfo()

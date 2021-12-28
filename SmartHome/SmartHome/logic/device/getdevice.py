@@ -1,7 +1,7 @@
 from .devicesArrey import devicesArrey
 from .DeviceFile import Devices
-from schemas.device import DeviceSchema, DeviceFieldConfigSchema
 
+from SmartHome.schemas.device import DeviceSchema, DeviceFieldConfigSchema
 from castom_moduls import getDevicesClass
 
 import json

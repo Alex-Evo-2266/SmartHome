@@ -1,8 +1,10 @@
-from logic.server.configget import getConfig
 import requests,json
-from datetime import datetime
 import logging
-from schemas.weather import WeatherSchema, NowWeatherSchema, WeatherTimeSchema, WeatherDateSchema
+
+from datetime import datetime
+
+from SmartHome.schemas.weather import WeatherSchema, NowWeatherSchema, WeatherTimeSchema, WeatherDateSchema
+from SmartHome.logic.server.configget import getConfig
 
 logger = logging.getLogger(__name__)
 

@@ -1,12 +1,16 @@
 from .Yeelight import Yeelight
+from castom_moduls import ModelData, DeviceData, TypeDevice
 
 def getInfo():
-    return {
-        "type":"device",
-        "name":"yeelight",
-        "devices":[{
-            "class":Yeelight,
-            "name":"yeelight",
-            "typeDevices":["light"]
-        }]
-    }
+    return ModelData(
+        name="yeelight",
+        dependencies=[],
+        deviceType=[DeviceData(
+            name="yeelight",
+            deviceClass=Yeelight,
+            typeDevices=["light"]
+        )]
+    )
+
+def init():
+    return getInfo()

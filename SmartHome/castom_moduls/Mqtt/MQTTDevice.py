@@ -1,6 +1,6 @@
-from smartHomeApi.logic.deviceControl.BaseDeviceClass import BaseDevice
-from smartHomeApi.logic.deviceControl.DeviceElement import DeviceElement
-from smartHomeApi.logic.deviceControl.mqttDevice.connect import getMqttClient
+from SmartHome.logic.deviceControl.BaseDeviceClass import BaseDevice
+from SmartHome.logic.deviceControl.DeviceElement import DeviceElement
+from SmartHome.logic.deviceControl.mqttDevice.connect import getMqttClient
 import json
 
 def look_for_param(arr:list, val):

@@ -1,13 +1,14 @@
+import logging
+
 from .devicesArrey import devicesArrey
-from settings import DEVICES
 # from smartHomeApi.logic.Cart import deleteDeviceCart
-from schemas.device import DeviceSchema, DeviceFieldConfigSchema, DeviceEditSchema
 from ..utils.file import readYMLFile, writeYMLFile
 from .DeviceFile import Devices
 
-import json
-import ast
-import logging
+from SmartHome.settings import DEVICES
+from SmartHome.schemas.device import DeviceSchema, DeviceFieldConfigSchema, DeviceEditSchema
+
+
 
 logger = logging.getLogger(__name__)
 

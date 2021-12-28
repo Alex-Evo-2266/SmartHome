@@ -1,6 +1,6 @@
 from yeelight import Bulb,PowerMode
-from logic.device.BaseDeviceClass import BaseDevice
-from logic.device.DeviceElement import DeviceElement
+from SmartHome.logic.device.BaseDeviceClass import BaseDevice
+from SmartHome.logic.device.DeviceElement import DeviceElement
 import logging
 
 logger = logging.getLogger(__name__)

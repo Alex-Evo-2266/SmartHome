@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
-from logic.auth import login as Authorization
 from fastapi.responses import JSONResponse
-from schemas.auth import Login
+
+from SmartHome.logic.auth import login as Authorization
+from SmartHome.schemas.auth import Login
 
 router = APIRouter(
     prefix="/api/auth",

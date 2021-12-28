@@ -1,6 +1,7 @@
 from ..weather import Weather
 from datetime import datetime
-from schemas.server import ServerDataSchema
+
+from SmartHome.schemas.server import ServerDataSchema
 
 async def getServerData():
     now = datetime.now()

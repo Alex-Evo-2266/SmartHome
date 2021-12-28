@@ -1,8 +1,10 @@
-from castom_moduls import getDevices
 import yaml
-import os, sys
-from schemas.device import TypesDeviceSchema
 import logging
+import os, sys
+
+from castom_moduls import getDevices
+
+from SmartHome.schemas.device import TypesDeviceSchema
 
 logger = logging.getLogger(__name__)
 

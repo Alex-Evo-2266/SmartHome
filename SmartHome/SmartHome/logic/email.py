@@ -1,6 +1,7 @@
 import yaml, smtplib
-import settings
 import logging
+
+from SmartHome import settings
 
 logger = logging.getLogger(__name__)
 

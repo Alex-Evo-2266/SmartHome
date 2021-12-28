@@ -1,14 +1,16 @@
-from models import User,MenuElement
-from schemas.user import UserForm, UserSchema, EditUserConfigSchema, MenuElementsSchema, UserEditSchema, UserConfigSchema
 import logging
-from typing import Optional, List
 import bcrypt
-from datetime import datetime, timedelta
 import jwt
-import settings
 import random
-from logic.email import send_email
+
+from typing import Optional, List
+from datetime import datetime, timedelta
 from .images.fon import getBackgroundUser
+
+from SmartHome import settings
+from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, MenuElementsSchema, UserEditSchema, UserConfigSchema
+from SmartHome.models import User,MenuElement
+from SmartHome.logic.email import send_email
 
 logger = logging.getLogger(__name__)
 

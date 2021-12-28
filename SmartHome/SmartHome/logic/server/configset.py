@@ -1,6 +1,7 @@
 import yaml, logging
-from schemas.server import ServerConfigSchema
-from settings import SERVER_CONFIG
+
+from SmartHome.schemas.server import ServerConfigSchema
+from SmartHome.settings import SERVER_CONFIG
 # from ..deviceControl.mqttDevice.connect import reconnect,publish
 # from ..deviceControl.mqttDevice.mqttScan import ClearTopicks
 # from ..weather import updateWeather

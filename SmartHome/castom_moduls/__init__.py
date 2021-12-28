@@ -1,14 +1,15 @@
 import imp,os
+from .models_schema import TypeDevice, DeviceData, ModelAPIData, ModelData
 
 devices = dict()
 
 def deviceType(module):
     info = module.getInfo()
-    moduldevices = info["devices"]
+    moduldevices = info.deviceType
     for item in moduldevices:
-        devices[item["name"]] = {
-            "class":item["class"],
-            "typeDevices":item["typeDevices"]
+        devices[item.name] = {
+            "class":item.deviceClass,
+            "typeDevices":item.typeDevices
         }
 
 def __load_all__(dir="castom_moduls"):
@@ -20,15 +21,17 @@ def __load_all__(dir="castom_moduls"):
             flag = True
     if flag:
         list_modules.remove('__pycache__')
+        list_modules.remove('models_schema.py')
     for module_name in list_modules:
         list_modules_2=os.listdir(dir+os.sep+module_name)
         if(list_modules_2.count("__init__.py") == 1):
             foo = imp.load_source('module', dir+os.sep+module_name+os.sep+"__init__.py")
-            info = foo.getInfo()
-            if(info and "type" in info and info["type"] == "device"):
+            info = foo.init()
+            if(info.deviceType != None):
                 deviceType(foo)
 
-__load_all__()
+def init_moduls():
+    __load_all__()
 
 async def getDevicesClass(type, systemName):
     if(type in devices):

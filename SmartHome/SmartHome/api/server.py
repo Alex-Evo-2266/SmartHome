@@ -1,45 +1,45 @@
 from fastapi import APIRouter, Header
-from logic.auth import auth
 from fastapi.responses import JSONResponse
 from typing import Optional, List
-from schemas.style import StyleSchemas, StyleDeleteSchemas
-from logic.style import addstyle, getStyles, removeStyle
+
+from SmartHome.logic.auth import auth
+from SmartHome.schemas.server import ServerConfigSchema, ServerDataSchema
+from SmartHome.logic.server.configset import ServerConfigEdit
+from SmartHome.logic.server.configget import GiveServerConfig,readConfig
+from SmartHome.logic.server.serverData import getServerData
 
 router = APIRouter(
-    prefix="/api/style",
-    tags=["style"],
+    prefix="/api/server",
+    tags=["server"],
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/add")
-async def add(data: StyleSchemas, authorization_token: Optional[str] = Header(None)):
+@router.get("/config/get", response_model=ServerConfigSchema)
+async def getconfig(authorization_token: Optional[str] = Header(None)):
     if not authorization_token:
         return JSONResponse(status_code=403, content={"message": "token not found"})
     auth_data = await auth(authorization_token)
     if auth_data['type'] != 'ok':
         return JSONResponse(status_code=403, content={"message": "invalid jwt"})
-    res = await addstyle(data)
-    if res['status'] == 'error':
-        return JSONResponse(status_code=400, content={"message": "error add style"})
-    return "ok"
+    return await GiveServerConfig()
 
-@router.get("/all", response_model=List[StyleSchemas])
-async def add(authorization_token: Optional[str] = Header(None)):
+@router.post("/config/edit")
+async def getconfig(data:ServerConfigSchema, authorization_token: Optional[str] = Header(None)):
     if not authorization_token:
         return JSONResponse(status_code=403, content={"message": "token not found"})
     auth_data = await auth(authorization_token)
     if auth_data['type'] != 'ok':
         return JSONResponse(status_code=403, content={"message": "invalid jwt"})
-    return await getStyles()
+    res = await ServerConfigEdit(data)
+    if res["status"] == "ok":
+        return "ok"
+    return JSONResponse(status_code=400, content={"message": "error write file"})
 
-@router.post("/delete")
-async def delete(data:StyleDeleteSchemas, authorization_token: Optional[str] = Header(None)):
+@router.get("/data/get", response_model=ServerDataSchema)
+async def getdata(authorization_token: Optional[str] = Header(None)):
     if not authorization_token:
         return JSONResponse(status_code=403, content={"message": "token not found"})
     auth_data = await auth(authorization_token)
     if auth_data['type'] != 'ok':
         return JSONResponse(status_code=403, content={"message": "invalid jwt"})
-    res = await removeStyle(data.name)
-    if res['status'] == 'error':
-        return JSONResponse(status_code=400, content={"message": res['detail']})
-    return "ok"
+    return await getServerData()
