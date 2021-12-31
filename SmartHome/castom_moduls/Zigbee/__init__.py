@@ -1,26 +1,30 @@
 import os
 
-from .MQTTDevice import MQTTDevice as Mqtt
-from .mqttConnect import mqttManager
+from .ZigbeeDevice import ZigbeeDevice
 from castom_moduls import ModelData
 
 from castom_moduls import ModelData, DeviceData, TypeDevice
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
 from SmartHome.logic.server.modulesconfig import configManager
+from castom_moduls.Mqtt.deviceValue import mqttvalue
 
-from .router import router
+# try:
+#     from castom_moduls.Mqtt.deviceValue import mqttvalue
+# except Exception as e:
+#     raise
+
 
 def installdepModule():
-    os.system("poetry add paho-mqtt")
+    pass
 
 def getInfo():
     return ModelData(
-        name="mqtt",
-        dependencies=[],
-        router=router,
+        name="zigbee",
+        dependencies=["mqtt"],
+        router=None,
         deviceType=[DeviceData(
-            name="mqtt",
-            deviceClass=Mqtt,
+            name="zigbee",
+            deviceClass=ZigbeeDevice,
             typeDevices=["all"]
         )]
     )
@@ -40,30 +44,16 @@ def getInfo():
     # }
 
 def init():
-    print("mqtt init")
     configManager.addConfig(
         ServerModuleConfigSchema(
-            name="mqttBroker",
+            name="zigbee",
             fields=[
                 ServerModuleConfigFieldSchema(
-                    name="host",
-                    value='localhost'
+                    name="topic",
+                    value='zigbee2mqtt'
                 ),
-                ServerModuleConfigFieldSchema(
-                    name="port",
-                    value='1883'
-                ),
-                ServerModuleConfigFieldSchema(
-                    name="user",
-                    value='admin'
-                ),
-                ServerModuleConfigFieldSchema(
-                    name="password",
-                    value='admin'
-                )
             ]
-        ),
-        mqttManager.reconnect
+        )
     )
-    mqttManager.connect()
+    mqttvalue.addConnect("zigbee")
     return getInfo()

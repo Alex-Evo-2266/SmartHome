@@ -300,6 +300,17 @@ crypto = ["cryptography (>=35,<37)"]
 orjson = ["orjson (>=3.6.4,<4.0.0)"]
 
 [[package]]
+name = "paho-mqtt"
+version = "1.6.1"
+description = "MQTT version 5.0/3.1.1 client class"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+proxy = ["pysocks"]
+
+[[package]]
 name = "pathlib"
 version = "1.0.1"
 description = "Object-oriented filesystem paths"
@@ -574,7 +585,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8"
-content-hash = "069cf5a8bca81efb2f2f448d0e8c8cd5f86848c0f70d210e429d66549540487a"
+content-hash = "cba15ea855ec637a2180e9b447b5f2e9c5b7f61857464aec81141744cf2fe44e"
 
 [metadata.files]
 aiomysql = [
@@ -866,6 +877,9 @@ markupsafe = [
 ormar = [
     {file = "ormar-0.10.23-py3-none-any.whl", hash = "sha256:168541fd1e59e5a2f193ec97a97b6af3125eb2a1468e9ecb93c3e1e1c1bb0f43"},
     {file = "ormar-0.10.23.tar.gz", hash = "sha256:bd8f86389db87f3844b25d7e1e47e18fa52b113877dcbad180f67d5a9597c9d3"},
+]
+paho-mqtt = [
+    {file = "paho-mqtt-1.6.1.tar.gz", hash = "sha256:2a8291c81623aec00372b5a85558a372c747cbca8e9934dfe218638b8eefc26f"},
 ]
 pathlib = [
     {file = "pathlib-1.0.1.tar.gz", hash = "sha256:6940718dfc3eff4258203ad5021090933e5c04707d5ca8cc9e73c94a7894ea9f"},

@@ -24,7 +24,7 @@ export const Text = ({updata,title,type,conf,value,systemName}) =>{
   },[value, focus])
 
   const outValue = ()=>{
-    request('/api/devices/value/set', 'POST', {systemName: systemName,type:type,status:newvalue},{Authorization: `Bearer ${auth.token}`})
+    request('/api/device/value/set', 'POST', {systemName: systemName,type:type,status:newvalue},{Authorization: `Bearer ${auth.token}`})
   }
 
   const changeHandler = event =>{

@@ -22,7 +22,7 @@ export const MqttPage = ()=>{
 
   const getDev = useCallback(async () => {
     try {
-      let data = await request('/api/mqtt', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+      let data = await request('/api/module/mqtt/get', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       if(data){
         setDeviceMqtt(data)
         setAllDeviceMqtt(data)
@@ -82,8 +82,9 @@ export const MqttPage = ()=>{
   },[socket.message])
 
   const clearMqtt = useCallback(()=>{
-    request('/api/mqtt/clear', 'GET',null,{Authorization: `Bearer ${auth.token}`})
-  },[request,auth.token])
+    request('/api/module/mqtt/clear', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+    getDev()
+  },[request,auth.token, getDev])
 
   useEffect(()=>{
     setData("MQTT",{

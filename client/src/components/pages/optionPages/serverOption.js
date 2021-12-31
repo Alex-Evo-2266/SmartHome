@@ -8,18 +8,7 @@ export const ServerOption = () =>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
-  const [serverconf , setServerconf] = useState({
-    mqttBroker:'none',
-    mqttBrokerPort:"",
-    loginMqttBroker:'',
-    passwordMqttBroker:'',
-    zigbee2mqttTopic:'',
-    emailLogin:'',
-    emailPass:'',
-    city:'',
-    weatherKey:'',
-    frequency:''
-  });
+  const [serverconf , setServerconf] = useState([]);
 
   useEffect(()=>{
     message(error,"error")
@@ -31,29 +20,36 @@ export const ServerOption = () =>{
   // const checkedHandler = event => {
   //   setServerconf({ ...serverconf, [event.target.name]: event.target.checked })
   // }
-  const changeHandler = event => {
-    setServerconf({ ...serverconf, [event.target.name]: event.target.value })
+  const changeHandler = (event, module, field) => {
+    let arr = serverconf.slice()
+    for (var item of arr) {
+      if(item.name === module)
+      {
+        for (var item2 of item.fields) {
+          if(item2.name === field)
+          {
+            item2.value = event.target.value
+            setServerconf(arr)
+            return
+          }
+        }
+        return
+      }
+    }
   }
 
   const serverConfigHandler = async(event)=>{
-    request(`/api/server/config/edit`, 'POST', serverconf,{Authorization: `Bearer ${auth.token}`})
+    request(`/api/server/config/edit`, 'POST', {moduleConfig:serverconf},{Authorization: `Bearer ${auth.token}`})
   }
 
   const updataConf = useCallback(async()=>{
     const data = await request(`/api/server/config/get`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data)return;
-    setServerconf({
-      mqttBroker:data.mqttBroker||"",
-      mqttBrokerPort:data.mqttBrokerPort||"",
-      loginMqttBroker:data.loginMqttBroker||"",
-      passwordMqttBroker:data.passwordMqttBroker||"",
-      zigbee2mqttTopic:data.zigbee2mqttTopic||"",
-      emailLogin:data.emailLogin||"",
-      emailPass:data.emailPass||"",
-      city:data.city||"",
-      weatherKey:data.weatherKey||"",
-      frequency:data.frequency||"",
-    })
+    let arr = []
+    for (var item of data.moduleConfig) {
+      arr.push(item)
+    }
+    setServerconf(arr)
   },[request,auth.token])
 
   useEffect(()=>{
@@ -66,86 +62,30 @@ export const ServerOption = () =>{
 
   return(
     <div className = "pagecontent">
-      <div className="configTitle">
-        <p className="text">Mqtt broker</p>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="mqttBroker" type="text" value={serverconf.mqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
-          <label>ip</label>
-        </div>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="mqttBrokerPort" type="number" value={serverconf.mqttBrokerPort} disabled = {(serverconf.mqttBroker==="none")}></input>
-          <label>port</label>
-        </div>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="loginMqttBroker" type="text" value={serverconf.loginMqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
-          <label>login</label>
-        </div>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="passwordMqttBroker" type="text" value={serverconf.passwordMqttBroker} disabled = {(serverconf.mqttBroker==="none")}></input>
-          <label>password</label>
-        </div>
-      </div>
-      <div className="dividers"></div>
-      <div className="configTitle">
-        <p className="text">Zigbee2mqtt</p>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="zigbee2mqttTopic" type="text" value={serverconf.zigbee2mqttTopic} disabled = {(serverconf.mqttBroker==="none")}></input>
-          <label>topic</label>
-        </div>
-      </div>
-      <div className="dividers"></div>
-      <div className="configTitle">
-        <p className="text">Server email</p>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="emailLogin" type="email" value={serverconf.emailLogin}/>
-          <label>login</label>
-        </div>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="emailPass" type="text" value={serverconf.emailPass}/>
-          <label>password</label>
-        </div>
-      </div>
-      <div className="dividers"></div>
-      <div className="configTitle">
-        <p className="text">Weather</p>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="city" type="text" value={serverconf.city}/>
-          <label>city</label>
-        </div>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="weatherKey" type="text" value={serverconf.weatherKey}/>
-          <label>key</label>
-        </div>
-      </div>
-      <div className="dividers"></div>
-      <div className="configTitle">
-        <p className="text">Polling frequency</p>
-      </div>
-      <div className="configElement">
-        <div className="input-data">
-          <input onChange={changeHandler} required name="frequency" type="text" value={serverconf.frequency}/>
-          <label>Polling frequency</label>
-        </div>
-      </div>
-      <div className="dividers"></div>
+    {
+      serverconf.map((item, index)=>{
+        return(
+          <div key={index}>
+          <div className="configTitle">
+            <p className="text">{item.name}</p>
+          </div>
+          {
+            item?.fields?.map((item2, index2)=>{
+              return(
+                <div key={index2} className="configElement">
+                  <div className="input-data">
+                    <input onChange={(e)=>changeHandler(e, item.name, item2.name)} required name={item2.name} type="text" value={item2.value} disabled = {(!item2)}></input>
+                    <label>{item2.name}</label>
+                  </div>
+                </div>
+              )
+            })
+          }
+          <div className="dividers"></div>
+          </div>
+        )
+      })
+    }
       <div className="configElement block">
         <button style={{width: "100%"}} className="normalSelection button" onClick={serverConfigHandler}>Save</button>
       </div>

@@ -1,5 +1,8 @@
 from datetime import datetime, timedelta
 import asyncio
+import logging
+
+logger = logging.getLogger(__name__)
 
 class RunFunctions():
     def __init__(self):
@@ -33,9 +36,13 @@ class RunFunctions():
         while True:
             for item in self.functions:
                 if(item['interval'] > 0 and datetime.now() > (timedelta(seconds=item['interval']) + item['time_run'])):
-                    item['time_run'] = datetime.now()
-                    f = item['function']
-                    await f()
+                    try:
+                        item['time_run'] = datetime.now()
+                        f = item['function']
+                        await f()
+                    except Exception as e:
+                        logger.error(f"error call function {item['name']}. detail:{e}")
+
             await asyncio.sleep(1)
 
 

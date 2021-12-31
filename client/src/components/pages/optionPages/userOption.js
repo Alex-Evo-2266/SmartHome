@@ -38,7 +38,7 @@ export const UserOption = () =>{
   // },[updataConf])
 
   const userConfigHandler = async()=>{
-    await request(`/api/user/config`, 'PUT', userconf,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/user/config/edit`, 'POST', userconf,{Authorization: `Bearer ${auth.token}`})
     updateConfig()
     setTimeout(()=>{
       updataConf()
@@ -46,7 +46,7 @@ export const UserOption = () =>{
   }
 
   const deleteStyle = async (event)=>{
-    await request(`/api/user/style/remove`, 'DELETE', {name:event.target.dataset.name}, {Authorization: `Bearer ${auth.token}`})
+    await request(`/api/style/remove`, 'POST', {name:event.target.dataset.name}, {Authorization: `Bearer ${auth.token}`})
     updateConfig();
     setTimeout(()=>{
       updataConf()

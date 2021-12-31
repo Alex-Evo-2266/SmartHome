@@ -79,6 +79,7 @@ class Device(object):
                 item["address"] = self.address
                 item["valueType"] = self.valueType
                 item["token"] = self.token
+                item["status"] = self.status
                 item["values"] = values
                 flag = True
                 break

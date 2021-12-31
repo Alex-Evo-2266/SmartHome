@@ -36,7 +36,7 @@ async def device(item):
     status = "offline"
     try:
         if(not item.status):
-            control = item.control
+            # control = item.control
             data = item.getDict()
             data.pop('config', None)
             data.pop('status', None)

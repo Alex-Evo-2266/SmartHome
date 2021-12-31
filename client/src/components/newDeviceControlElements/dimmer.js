@@ -23,7 +23,7 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
   },[error,message, clearError])
 
   const outValue = async(v)=>{
-    await request('/api/devices/value/set', 'POST', {systemName: systemName,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/device/value/set', 'POST', {systemName: systemName,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   const mouseUp = (event)=>{

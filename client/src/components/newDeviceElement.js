@@ -46,7 +46,7 @@ export const NewDeviceElement = ({systemName}) =>{
 
   const linc = ()=>{
     setStatus((prev)=>!prev)
-    request('/api/devices/status/set', 'POST', {systemName: device.systemName,status:!status},{Authorization: `Bearer ${auth.token}`})
+    request('/api/device/status/set', 'POST', {systemName: device.systemName,status:!status},{Authorization: `Bearer ${auth.token}`})
   }
 
   return(

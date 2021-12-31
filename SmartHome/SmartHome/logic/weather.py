@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 
 from SmartHome.schemas.weather import WeatherSchema, NowWeatherSchema, WeatherTimeSchema, WeatherDateSchema
-from SmartHome.logic.server.configget import getConfig
+from SmartHome.logic.server.modulesconfig import configManager
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ def Weather():
 async def updateWeather():
 
     try:
-        weatherConf = getConfig("weather")
+        weatherConf = configManager.getConfig("weather")
         global dataWeather
         timeWeather = list()
         dateWeather = list()
@@ -83,5 +83,5 @@ async def updateWeather():
             forecastDate=dateWeather
         )
     except Exception as e:
-        logger.warning(f'get weather forecast detail {e}')
+        logger.warning(f'error get weather forecast. detail {e}')
         return None

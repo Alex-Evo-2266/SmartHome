@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from enum import Enum
-from typing import Type, List, Optional
+from typing import Type, TypeVar, List, Optional, Any
 from fastapi import APIRouter
 
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
@@ -13,6 +13,7 @@ class TypeDevice(str, Enum):
     SOCKET = "socket"
     SENSOR = "sensor"
     VARIABLE = "variable"
+    ALL = "all"
 
 
 class DeviceData(BaseModel):
@@ -27,6 +28,7 @@ class ModelAPIData(BaseModel):
 class ModelData(BaseModel):
     name: str
     dependencies: List[str]
+    router: Any = None
     deviceType: Optional[List[DeviceData]] = None
     # api: Optional[APIRouter] = None
     # api: Optional[APIRouter] = None

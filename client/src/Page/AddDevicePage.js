@@ -33,12 +33,16 @@ export const AddDevicesPage = () => {
     setData("Add device")
   },[setData])
 
+  useEffect(()=>{
+    console.log(form);
+  },[form])
+
   const next = ()=>setPage(prev=>prev + 1)
 
   const outHandler = async () => {
     try {
       clearMessage();
-      const data = await request('/api/devices', 'POST', {...form},{Authorization: `Bearer ${auth.token}`})
+      const data = await request('/api/device/add', 'POST', {...form},{Authorization: `Bearer ${auth.token}`})
       if(data){
         history.push('/devices')
       }

@@ -82,7 +82,7 @@ class Yeelight(BaseDevice):
     def set_value(self, name, status):
         status = super().set_value(name, status)
         if(name == "state"):
-            if(status==1):
+            if(int(status)==1):
                 self.device.turn_on()
             else:
                 self.device.turn_off()
@@ -104,8 +104,6 @@ class Yeelight(BaseDevice):
             self.device.set_power_mode(PowerMode.HSV)
             color = look_for_param(self.values, "color")
             self.device.set_hsv(int(color.get()), int(status))
-
-
 
     def get_All_Info(self):
         self.update_value()

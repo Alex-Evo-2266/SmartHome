@@ -28,7 +28,7 @@ export const MenuOption = () =>{
   },[error,message, clearError])
 
   const configHandler = async(event)=>{
-    await request(`/api/user/menu`, 'PUT', useBlock,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/user/menu/edit`, 'POST', useBlock,{Authorization: `Bearer ${auth.token}`})
     setTimeout(function () {
       updateConfig()
     }, 200);

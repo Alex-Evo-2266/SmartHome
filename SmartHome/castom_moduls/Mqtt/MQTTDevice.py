@@ -1,6 +1,6 @@
-from SmartHome.logic.deviceControl.BaseDeviceClass import BaseDevice
-from SmartHome.logic.deviceControl.DeviceElement import DeviceElement
-from SmartHome.logic.deviceControl.mqttDevice.connect import getMqttClient
+from SmartHome.logic.device.BaseDeviceClass import BaseDevice
+from SmartHome.logic.device.DeviceElement import DeviceElement
+from .mqttConnect import mqttManager
 import json
 
 def look_for_param(arr:list, val):
@@ -25,18 +25,16 @@ class MQTTDevice(BaseDevice):
 
     def update_value(self, *args, **kwargs):
         if(self.valueType=="json"):
-            client = getMqttClient()
             data = dict()
             data[self.values[0].address] = ""
             data = json.dumps(data)
-            client.publish(self.coreAddress+"/get", data)
+            mqttManager.publish(self.coreAddress+"/get", data)
 
     def get_device(self):
         return True
 
     def set_value(self, name, status):
         super().set_value(name, status)
-        client = getMqttClient()
         message = ""
         val = look_for_param(self.values, name)
         if(val.type=="binary"):
@@ -50,14 +48,14 @@ class MQTTDevice(BaseDevice):
             elif(int(status)<int(val.low)):
                 message = int(val.low)
             else:
-                message = status
+                message = int(status)
         else:
             message = status
         if(self.valueType=="json"):
             data = dict()
             data[val.address] = message
             data = json.dumps(data)
-            client.publish(self.coreAddress+"/set", data)
+            mqttManager.publish(self.coreAddress+"/set", data)
         else:
             alltopic = self.coreAddress + "/" + val.address
-            client.publish(alltopic, message)
+            mqttManager.publish(alltopic, message)

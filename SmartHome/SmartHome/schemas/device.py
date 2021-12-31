@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 class TypesDeviceSchema(BaseModel):
     title: str
@@ -29,7 +29,7 @@ class DeviceSchema(BaseModel):
     config: List[DeviceFieldConfigSchema]
     token: Optional[str]
     RoomId: Optional[int] = None
-    values: Optional[List]
+    value: Optional[Dict[str,str]]
 
 class DeviceEditSchema(DeviceSchema):
     newSystemName: str
