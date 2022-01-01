@@ -1,6 +1,6 @@
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from SmartHome.logic.device.DeviceElement import DeviceElement
-from .mqttConnect import mqttManager
+from castom_moduls.Mqtt.mqttConnect import getManager
 import json
 
 def look_for_param(arr:list, val):
@@ -28,7 +28,7 @@ class MQTTDevice(BaseDevice):
             data = dict()
             data[self.values[0].address] = ""
             data = json.dumps(data)
-            mqttManager.publish(self.coreAddress+"/get", data)
+            getManager().publish(self.coreAddress+"/get", data)
 
     def get_device(self):
         return True
@@ -55,7 +55,7 @@ class MQTTDevice(BaseDevice):
             data = dict()
             data[val.address] = message
             data = json.dumps(data)
-            mqttManager.publish(self.coreAddress+"/set", data)
+            getManager().publish(self.coreAddress+"/set", data)
         else:
             alltopic = self.coreAddress + "/" + val.address
-            mqttManager.publish(alltopic, message)
+            getManager().publish(alltopic, message)

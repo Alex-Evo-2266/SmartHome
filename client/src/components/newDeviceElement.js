@@ -22,14 +22,19 @@ export const NewDeviceElement = ({systemName}) =>{
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const [device,setDevice] = useState({})
-  const [status,setStatus] = useState(false)
+  const [status,setStatus] = useState(true)
 
   useEffect(()=>{
     if(devices){
       let newdev = devices.filter(item => (item&&item.systemName===systemName))[0]
       setDevice(newdev)
       if(newdev)
-        setStatus(newdev.status)
+      {
+        if (newdev.status === "unlink")
+          setStatus(false)
+        else
+          setStatus(true)
+      }
     }
   },[devices,systemName])
 
@@ -64,7 +69,7 @@ export const NewDeviceElement = ({systemName}) =>{
               onClick:()=>{form.show("EditDevices",updateDevice,device)}
             },
             {
-              title:(device.status)?"unlinc":"linc",
+              title:(device.status === "unlink")?"linc":"unlink",
               onClick:linc
             }
           ]}/>

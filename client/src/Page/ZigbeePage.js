@@ -17,21 +17,22 @@ export const ZigbeePage = ()=>{
   const {loading, request} = useHttp();
 
   const rebootStik = useCallback(() => {
-    request('/api/zigbee2mqtt/reboot', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+    request('/api/module/zigbee2mqtt/reboot', 'GET',null,{Authorization: `Bearer ${auth.token}`})
   },[request,auth.token])
 
   const pairing = useCallback((state) => {
     setPermitJoin(state)
-    request('/api/zigbee2mqtt/permit_join', 'POST',{state},{Authorization: `Bearer ${auth.token}`})
+    request('/api/module/zigbee2mqtt/permit_join/set', 'POST',{state},{Authorization: `Bearer ${auth.token}`})
   },[request, auth.token])
 
   const zigbeeDevice = useCallback(async () => {
     try {
-      let data = await request('/api/zigbee2mqtt/devices', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+      let data = await request('/api/module/zigbee2mqtt/device/get', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+      console.log(data);
       if(data){
         setAllDevice(data)
       }
-      let data2 = await request('/api/zigbee2mqtt/permit_join', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+      let data2 = await request('/api/module/zigbee2mqtt/permit_join/get', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       setPermitJoin(data2)
     } catch (e) {}
   },[request,auth.token])
@@ -42,7 +43,10 @@ export const ZigbeePage = ()=>{
 
   useEffect(()=>{
     if(message.type==="zigbee")
+    {
+      console.log(message);
       setAllDevice(message.data)
+    }
   },[message])
 
   useEffect(()=>{
@@ -57,7 +61,7 @@ export const ZigbeePage = ()=>{
       setDevice(allDevice)
       return
     }
-    let array = allDevice.filter(item => item&&item.data.name.toLowerCase().indexOf(data.toLowerCase())!==-1)
+    let array = allDevice.filter(item => item&&item.name.toLowerCase().indexOf(data.toLowerCase())!==-1)
     setDevice(array)
   },[allDevice])
 
@@ -92,7 +96,7 @@ export const ZigbeePage = ()=>{
         {
           device.map((item,index)=>{
             return(
-              <ZigbeeElement key={index} data={item.data}/>
+              <ZigbeeElement key={index} data={item}/>
             )
           })
         }

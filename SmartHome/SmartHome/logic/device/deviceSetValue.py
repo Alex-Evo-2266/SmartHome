@@ -12,5 +12,5 @@ async def setValue(id, type, value):
         e.set_value(type,value)
         return True
     except Exception as ex:
-        logger.erroe(f'error set value. id:{id}, detail:{ex}')
+        logger.error(f'error set value. id:{id}, detail:{ex}')
         return None

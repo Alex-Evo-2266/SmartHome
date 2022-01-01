@@ -28,7 +28,6 @@ class ModelAPIData(BaseModel):
 class ModelData(BaseModel):
     name: str
     dependencies: List[str]
-    router: Any = None
-    deviceType: Optional[List[DeviceData]] = None
+    status: bool = True
     # api: Optional[APIRouter] = None
     # api: Optional[APIRouter] = None

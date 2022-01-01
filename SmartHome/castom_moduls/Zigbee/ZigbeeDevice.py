@@ -1,6 +1,7 @@
-from castom_moduls.Mqtt.MQTTDevice import MQTTDevice
+from castom_moduls.Mqtt import Mqtt
 
+# mqtt = modules["Mqtt"]
 # def createValue()
 
-class ZigbeeDevice(MQTTDevice):
+class ZigbeeDevice(Mqtt):
     pass

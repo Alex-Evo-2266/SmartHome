@@ -2,6 +2,7 @@ from .devicesArrey import devicesArrey
 from .DeviceFile import Devices
 
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldConfigSchema
+from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from castom_moduls import getDevicesClass
 
 import json
@@ -49,6 +50,17 @@ async def device(item):
         element = devicesArrey.get(systemName)
         if(not element):
             dev = await getDevicesClass(typeConnect, systemName)
+            if(not dev):
+                dev = BaseDevice(systemName=systemName)
+                data = dev.get_Base_Info()
+                config = data['config']
+                data.pop('config', None)
+                data.pop('status', None)
+                return DeviceSchema(
+                    **data,
+                    config=confdecod2(config),
+                    status="not supported"
+                )
             if(not dev.get_device()):
                 data = dev.get_Base_Info()
                 config = data['config']

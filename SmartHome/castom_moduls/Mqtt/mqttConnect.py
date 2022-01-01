@@ -1,7 +1,7 @@
 from SmartHome.logic.server.modulesconfig import configManager
 
 from typing import Callable, Any
-from .deviceValue import mqttvalue
+from .deviceValue import getManager as getValue
 from .mqttScan import TopicHistory
 # from ..zigbee.zigbeeDevices import zigbeeInfoSearch
 
@@ -19,24 +19,21 @@ class MqttManagerClass():
     def addcallback(self, name: str, callback: Callable[[str, str],Any]):
         self.callbacks[name] = callback
 
-    def removecallbacks(self, name: str):
-        self.callbacks[name] = callback
+    def on_message(self, client, userdata, msg):
+        try:
+            logger.debug(f"mqtt message. topic:{msg.topic}, message:{str(msg.payload.decode('utf-8'))}")
+            for item in self.callbacks:
+                f = self.callbacks[item]
+                asyncio.run(f(msg.topic,str(msg.payload.decode('utf-8'))))
+            getValue().setValueAtToken(msg.topic,str(msg.payload.decode('utf-8')))
+            asyncio.run(self.history.add(msg.topic,str(msg.payload.decode('utf-8'))))
+
+            # zigbeeInfoSearch(msg.topic,str(msg.payload.decode('utf-8')))
+        except Exception as e:
+            logger.error(f'error reception mqtt message {e}')
 
     def connect(self):
-        mqttvalue.addConnect("mqtt")
-        def on_message(client, userdata, msg):
-            try:
-                logger.debug(f"mqtt message. topic:{msg.topic}, message:{str(msg.payload.decode('utf-8'))}")
-                for item in self.callbacks:
-                    f = self.callbacks[item]
-                    f(msg.topic,str(msg.payload.decode('utf-8')))
-                mqttvalue.setValueAtToken(msg.topic,str(msg.payload.decode('utf-8')))
-                asyncio.run(self.history.add(msg.topic,str(msg.payload.decode('utf-8'))))
-
-                # zigbeeInfoSearch(msg.topic,str(msg.payload.decode('utf-8')))
-            except Exception as e:
-                logger.error(f'error reception mqtt message {e}')
-
+        getValue().addConnect("mqtt")
         try:
             logger.debug("mqtt conecting...")
             conf = configManager.getConfig("mqttBroker")
@@ -44,7 +41,7 @@ class MqttManagerClass():
             self.mqttClient.username_pw_set(conf["user"], conf["password"])
             self.mqttClient.connect(conf["host"], int(conf["port"]))
             self.mqttClient.loop_start()
-            self.mqttClient.on_message = on_message
+            self.mqttClient.on_message = self.on_message
             self.mqttClient.subscribe("#")
             logger.debug("mqtt conect")
             return self.mqttClient
@@ -79,4 +76,11 @@ class MqttManagerClass():
         return self.history
 
 
-mqttManager = MqttManagerClass()
+from moduls_src.managers import add, get
+
+def initManager():
+    add("mqtt", MqttManagerClass())
+    return get("mqtt")
+
+def getManager():
+    return get("mqtt")

@@ -79,7 +79,15 @@ class MqttValue():
             logger.error(f'set value error. systemName:{systemName}, detail:{e}')
             return None
 
-mqttvalue = MqttValue()
+from moduls_src.managers import add, get
+
+def initManager():
+    add("MqttValue", MqttValue())
+    return get("MqttValue")
+
+def getManager():
+    return get("MqttValue")
+
 
 # def GetTopicks():
 #     arr = []

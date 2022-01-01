@@ -33,7 +33,4 @@ class ConnectionManager:
                 })
             )
 
-
-
-
 manager = ConnectionManager()

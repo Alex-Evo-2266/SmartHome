@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from SmartHome.depends.auth import token_dep
 
-from .mqttConnect import mqttManager
+from .mqttConnect import getManager
 
 router = APIRouter(
     prefix="/mqtt",
@@ -11,14 +11,20 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+from moduls_src.managers import add
+
+def routerInit():
+    add("mqttrouter",router)
+    return "mqttrouter"
+
 @router.get("/get")
 async def get(auth_data: dict = Depends(token_dep)):
-    res = mqttManager.getHistory().getTopicksAndLinc()
+    res = getManager().getHistory().getTopicksAndLinc()
     if(res == None):
         return JSONResponse(status_code=400, content={"message": "unknown error"})
     return res
 
 @router.get("/clear")
 async def get(auth_data: dict = Depends(token_dep)):
-    mqttManager.getHistory().clear()
+    getManager().getHistory().clear()
     return "ok"
