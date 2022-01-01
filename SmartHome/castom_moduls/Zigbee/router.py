@@ -5,7 +5,7 @@ from SmartHome.depends.auth import token_dep
 
 from .zigbeeCoordinatorManager import initManager, getManager as getControlManager
 from .zigbeeInputMessage import getManager as getMessageManager
-from .schemas import PermitJoin, ZigbeeDeviceSchema
+from .schemas import PermitJoin, ZigbeeDeviceSchema, RenameForm
 from typing import Optional, List
 from moduls_src.managers import add
 
@@ -26,9 +26,25 @@ async def get(auth_data: dict = Depends(token_dep)):
     return "ok"
 
 @router.get("/permit_join/get", response_model=PermitJoin)
-async def get(auth_data: dict = Depends(token_dep)):
+async def pjoin(auth_data: dict = Depends(token_dep)):
+    print(getMessageManager().permit_join)
     return PermitJoin(state=getMessageManager().permit_join)
 
+@router.post("/permit_join/set")
+async def pjoin(data: PermitJoin, auth_data: dict = Depends(token_dep)):
+    getControlManager().permission_join(data.state)
+    return "ok"
+
 @router.get("/device/get", response_model=List[ZigbeeDeviceSchema])
-async def get(auth_data: dict = Depends(token_dep)):
+async def device(auth_data: dict = Depends(token_dep)):
     return getMessageManager().getDevices()
+
+@router.get("/device/delete/{address}")
+async def device(address: str, auth_data: dict = Depends(token_dep)):
+    getControlManager().zigbeeDeviceDelete(address)
+    return "ok"
+
+@router.post("/device/rename")
+async def rename(data:RenameForm, auth_data: dict = Depends(token_dep)):
+    getControlManager().zigbeeDeviceRename(data.name, data.newName)
+    return "ok"

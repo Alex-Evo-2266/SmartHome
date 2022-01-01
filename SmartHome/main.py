@@ -30,12 +30,12 @@ app.state.database = database
 @app.on_event("startup")
 async def startup() -> None:
     call_functions.subscribe("weather", updateWeather, 43200)
+    confinit()
     base = configManager.getConfig("base")
     if isinstance(base['frequency'], int):
         call_functions.subscribe("devices", sendDevice, int(base['frequency']))
     else:
         call_functions.subscribe("devices", sendDevice, 6)
-    confinit()
     init_moduls()
     database_ = app.state.database
     if not database_.is_connected:

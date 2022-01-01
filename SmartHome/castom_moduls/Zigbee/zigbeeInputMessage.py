@@ -44,14 +44,13 @@ class ZigbeeInMessage:
             )
         self.addcallback(
             '/'.join([self.topic,"bridge","info"]),
-            self.decodeZigbeeDevices
+            self.decodeZigbeeConfig
             )
 
     def addcallback(self, topic, callback):
         self.callbacks[topic] = callback
 
     async def decodTopic(self, topic, message):
-        print(topic, self.callbacks)
         if topic in self.callbacks:
             f = self.callbacks[topic]
             await f(topic, message)
@@ -76,6 +75,7 @@ class ZigbeeInMessage:
 
     async def decodeZigbeeDevices(self, topic, message):
         try:
+            print("device")
             data = json.loads(message)
             config = configManager.getConfig('zigbee')
             self.devices = []
@@ -88,7 +88,6 @@ class ZigbeeInMessage:
 
     async def decodeZigbeeConfig(self, topic, message):
         data = json.loads(message)
-        print(data["permit_join"])
         self.permit_join = data["permit_join"]
 
     async def decodEvent(self, topic, message):

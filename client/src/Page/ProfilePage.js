@@ -33,7 +33,7 @@ export const ProfilePage = () => {
   },[error,message, clearError])
 
   const updataUser = useCallback(async()=>{
-    const data = await request(`/api/user`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/user/get`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     if(!data) return;
     setUser(data);
     setNewuser({
@@ -57,20 +57,14 @@ export const ProfilePage = () => {
   }
 
   const outForm = async () =>{
-      const data = await request(`/api/user`, 'PUT', newuser,{Authorization: `Bearer ${auth.token}`})
-      if(!data)return;
-      setUser(data);
-      setNewuser({
-        UserName:data.UserName,
-        UserSurname:data.UserSurname,
-        Mobile:data.Mobile,
-        Email:data.Email,
-        ImageId:data.ImageId
-      });
+      const data = await request(`/api/user/edit`, 'POST', newuser,{Authorization: `Bearer ${auth.token}`})
+      if(data === "ok"){
+        updataUser()
+      }
   }
 
   const outPassForm = async () =>{
-    await request(`/api/user/edit/password`, 'POST', {password},{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/user/password/edit`, 'POST', {...password},{Authorization: `Bearer ${auth.token}`})
   }
 
   useEffect(()=>{

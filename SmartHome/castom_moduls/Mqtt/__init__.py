@@ -41,7 +41,7 @@ class ModuleControll(BaseControllModule):
                     )
                 ]
             ),
-            self.manager.reconnect
+            self.manager.reconnect_async
         )
         self.manager.connect()
         return self.getInfo()

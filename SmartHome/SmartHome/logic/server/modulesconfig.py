@@ -62,7 +62,6 @@ class ModuleConfig(object):
         return None
 
     async def set(self, data: ServerModuleConfigSchema):
-        print("f")
         templates = self.readConfig()
         templates[data.name] = convert(data.fields)
         self.writeConfig(templates)

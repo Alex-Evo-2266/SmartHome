@@ -4,6 +4,10 @@ from typing import Optional, List, Any, Dict
 class PermitJoin(BaseModel):
     state: bool
 
+class RenameForm(BaseModel):
+    name: str
+    newName: str
+
 class ZigbeeDeviceSchema(BaseModel):
     name: str
     root_address: str

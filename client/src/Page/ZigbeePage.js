@@ -1,4 +1,4 @@
-import React,{useEffect,useState,useCallback,useContext, useRef} from 'react'
+import React,{useEffect,useState,useCallback,useContext} from 'react'
 import {Loader} from '../components/Loader'
 import {AuthContext} from '../context/AuthContext.js'
 import {useHttp} from '../hooks/http.hook'
@@ -11,8 +11,8 @@ export const ZigbeePage = ()=>{
   const {message} = useContext(SocketContext)
   const [device,setDevice] = useState([])
   const [allDevice,setAllDevice] = useState([])
+  const [searchtest,setSearchtest] = useState("")
   const [permitJoin,setPermitJoin] = useState(false)
-  const read = useRef(0)
   const {setData} = useContext(MenuContext)
   const {loading, request} = useHttp();
 
@@ -33,7 +33,7 @@ export const ZigbeePage = ()=>{
         setAllDevice(data)
       }
       let data2 = await request('/api/module/zigbee2mqtt/permit_join/get', 'GET',null,{Authorization: `Bearer ${auth.token}`})
-      setPermitJoin(data2)
+      setPermitJoin(data2.state)
     } catch (e) {}
   },[request,auth.token])
 
@@ -50,20 +50,17 @@ export const ZigbeePage = ()=>{
   },[message])
 
   useEffect(()=>{
-    if(read.current<3){
-      setDevice(allDevice)
-      read.current++
-    }
-  },[allDevice])
-
-  const searchout = useCallback((data)=>{
-    if(data===""){
+    if(searchtest===""){
       setDevice(allDevice)
       return
     }
-    let array = allDevice.filter(item => item&&item.name.toLowerCase().indexOf(data.toLowerCase())!==-1)
+    let array = allDevice.filter(item => item&&item.name.toLowerCase().indexOf(searchtest.toLowerCase())!==-1)
     setDevice(array)
-  },[allDevice])
+  },[allDevice,searchtest])
+
+  const searchout = useCallback((data)=>{
+    setSearchtest(data)
+  },[])
 
   useEffect(()=>{
     setData("Zigbee",{

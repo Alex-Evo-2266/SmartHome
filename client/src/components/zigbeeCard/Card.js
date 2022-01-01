@@ -16,11 +16,11 @@ export const ZigbeeElement = ({data}) =>{
   const {show, hide} = useContext(DialogWindowContext)
 
   const rename = (newName) => {
-    request('/api/zigbee2mqtt/rename', 'POST',{name:data.name,newName},{Authorization: `Bearer ${auth.token}`})
+    request('/api/module/zigbee2mqtt/device/rename', 'POST',{name:data.name,newName},{Authorization: `Bearer ${auth.token}`})
   }
 
   const deleteDevice = () => {
-    request('/api/zigbee2mqtt/devices', 'DELETE',{name:data.address},{Authorization: `Bearer ${auth.token}`})
+    request(`/api/module/zigbee2mqtt/device/delete/${data.address}`, 'GET', null, {Authorization: `Bearer ${auth.token}`})
   }
 
   const convertForm = (exposes)=>{

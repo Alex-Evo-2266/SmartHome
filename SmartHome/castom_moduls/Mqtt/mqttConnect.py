@@ -61,6 +61,9 @@ class MqttManagerClass():
         self.desconnect()
         self.connect()
 
+    async def reconnect_async(self):
+        self.desconnect()
+        self.connect()
 
     def getMqttClient(self):
         return self.mqttClient
