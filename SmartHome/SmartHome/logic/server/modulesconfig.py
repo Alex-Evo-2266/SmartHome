@@ -39,6 +39,8 @@ class ModuleConfig(object):
 
     def addConfig(self, data: ServerModuleConfigSchema, callback: Callable = None):
         templates = self.readConfig()
+        if(not templates):
+            return
         if data.name in templates:
             conf = templates[data.name]
             for item in data.fields:

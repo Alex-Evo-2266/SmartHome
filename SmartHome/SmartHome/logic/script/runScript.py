@@ -59,15 +59,23 @@ def runScripts(systemName,type):
 
 def runscript(data):
     def d():
-        if(ifgroup(data["condition"])):
-            print("ok")
-            asyncio.run(actiondev(data["then"]))
-        else:
-            print("none")
-            asyncio.run(actiondev(data["otherwise"]))
-    s = threading.Thread(target=d)
-    s.daemon = True
-    s.start()
+        try:
+            if(ifgroup(data["condition"])):
+                print("ok")
+                asyncio.run(actiondev(data["then"]))
+            else:
+                print("none")
+                asyncio.run(actiondev(data["otherwise"]))
+        except Exception as e:
+            print("1",e)
+
+    try:
+        s = threading.Thread(target=d)
+        s.daemon = True
+        s.start()
+    except Exception as e:
+        print("2",e)
+
 
 def ifgroup(data):
     retArrey = list()
@@ -209,6 +217,8 @@ async def actiondev(data):
             print("oh")
 
 def lockforScript(systemName,type):
+    if not systemName:
+        return []
     device = devicesArrey.get(systemName)
     device = device["device"]
     fileList = os.listdir(SCRIPTS_DIR)

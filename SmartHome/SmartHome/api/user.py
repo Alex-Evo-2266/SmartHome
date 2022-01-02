@@ -55,7 +55,7 @@ async def all(auth_data: dict = Depends(token_dep)):
         return JSONResponse(status_code=400, content={"message": 'user not found'})
     return res['data']
 
-@router.post("/editLevel")
+@router.post("/level/edit")
 async def level(data: UserEditLevelSchema, auth_data: dict = Depends(token_dep)):
     if auth_data['user_level'] != 3:
         return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
