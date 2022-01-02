@@ -7,7 +7,6 @@ from .schemas import ZigbeeDeviceSchema
 import json
 
 async def editAdressLincDevices(topic, message):
-    print("rename",message)
     data = json.loads(message)
     zigbee = configManager.getConfig("zigbee2mqtt")
     oldadress = data["data"]

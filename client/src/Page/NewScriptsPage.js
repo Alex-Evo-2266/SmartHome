@@ -27,9 +27,9 @@ export const NewScriptsPage = ({edit}) => {
   const[script, setScript]=useState({
     name:"",
     trigger:[],
-    if:{type:"group" ,oper:"and",children:[],systemName:null,action:null,value:null},
+    condition:{type:"group" ,oper:"and",children:[],systemName:null,action:null,value:null},
     then:[],
-    else:[]
+    otherwise:[]
   })
 
   const addTrigger = ()=>{
@@ -113,9 +113,9 @@ export const NewScriptsPage = ({edit}) => {
       }
       let data
       if(edit)
-        data = await request(`/api/script/${id}`, 'PUT', {...script},{Authorization: `Bearer ${auth.token}`})
+        data = await request(`/api/script/edit/${id}`, 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
       else
-        data = await request('/api/script', 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
+        data = await request('/api/script/add', 'POST', {...script},{Authorization: `Bearer ${auth.token}`})
       if(data){
         history.push('/scripts')
       }
@@ -141,7 +141,7 @@ export const NewScriptsPage = ({edit}) => {
 
   const updataIfBlock=(data)=>{
     let mas = script;
-    mas.if = data
+    mas.condition = data
     setScript(mas)
     setCost((prev)=>!prev)
   }
@@ -159,14 +159,14 @@ export const NewScriptsPage = ({edit}) => {
   },[cost])
 
   const giveScript = useCallback(async(idscript)=>{
-    const data = await request(`/api/script/${idscript}`, 'Get', null,{Authorization: `Bearer ${auth.token}`})
+    const data = await request(`/api/script/get/${idscript}`, 'Get', null,{Authorization: `Bearer ${auth.token}`})
     if(data){
       let s = {}
       s.name = data.name
-      s.if = data.if
+      s.condition = data.condition
       s.trigger = data.trigger
       s.then = data.then
-      s.else = data.else
+      s.otherwise = data.otherwise
       setScript(s)
       setCost(prev=>!prev)
     }
@@ -181,6 +181,10 @@ export const NewScriptsPage = ({edit}) => {
   useEffect(()=>{
     setData("New Script")
   },[script, setData])
+
+  useEffect(()=>{
+    console.log(script);
+  },[script])
 
   if(loading){
     return(
@@ -223,8 +227,8 @@ export const NewScriptsPage = ({edit}) => {
               </div>
             </div>
             {
-              (script.if.children&&cost)?
-                <GroupBlock index = {"1"} type={script.if.oper} data={script.if} updata={updataIfBlock}/>
+              (script.condition.children&&cost)?
+                <GroupBlock index = {"1"} type={script.condition.oper} data={script.condition} updata={updataIfBlock}/>
               :null
             }
             <div className="baseBlock">
@@ -256,22 +260,22 @@ export const NewScriptsPage = ({edit}) => {
               <div className="textBlock">
                 <p>else</p>
               </div>
-              <div className="addBlock" onClick={()=>addActBlock("else")}>
+              <div className="addBlock" onClick={()=>addActBlock("otherwise")}>
                 <i className="fas fa-plus"></i>
               </div>
             </div>
             <div className="groupBlockConteiner">
             {
               (cost)?
-              script.else.map((item,index)=>{
+              script.otherwise.map((item,index)=>{
                 if(item.type==="device"){
-                  return <ActBlock deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else"/>
+                  return <ActBlock deleteEl={()=>deleteActBlock("otherwise",index)} updata={(data1)=>updatascript("otherwise",data1)} key={index} data={item} index={index} block="otherwise"/>
                 }
                 if(item.type==="script"){
-                  return <ActScript deleteEl={()=>deleteActBlock("else",index)} updata={(data1)=>updatascript("else",data1)} key={index} data={item} index={index} block="else"/>
+                  return <ActScript deleteEl={()=>deleteActBlock("otherwise",index)} updata={(data1)=>updatascript("otherwise",data1)} key={index} data={item} index={index} block="otherwise"/>
                 }
                 if(item.type==="delay"){
-                  return <DelayBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
+                  return <DelayBlock deleteEl={()=>deleteActBlock("otherwise",index)} updata={(data1)=>updatascript("otherwise",data1)} key={index} data={item} index={index} block="otherwise"/>
                 }
                 return null
               }):

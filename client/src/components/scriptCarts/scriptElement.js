@@ -1,6 +1,7 @@
 import React,{useState,useContext,useEffect} from 'react'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
+import {DialogWindowContext} from '../dialogWindow/dialogWindowContext'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useHistory} from 'react-router-dom'
 
@@ -8,6 +9,7 @@ export const ScriptElement = ({script,updata})=>{
   const history = useHistory()
   const [status, setStatus] = useState(script.status)
   const {message} = useMessage();
+  const {show, hide} = useContext(DialogWindowContext)
   const {request, error, clearError} = useHttp();
   const auth = useContext(AuthContext)
 
@@ -23,17 +25,33 @@ export const ScriptElement = ({script,updata})=>{
   },[error,message, clearError])
 
   const deleteScript = async()=>{
-    await request(`/api/script/${script.name}`, 'DELETE',null ,{Authorization: `Bearer ${auth.token}`})
-    updata()
+    show("alert",{
+      title:"Delete script",
+      text:`delete ${script.name}?`,
+      buttons:[
+        {
+          title:"ok",
+          action:async()=>{
+            await request(`/api/script/delete?name=${script.name}`, 'GET',null ,{Authorization: `Bearer ${auth.token}`})
+            updata()
+            hide()
+          }
+        },
+        {
+          title:"cancel",
+          action:hide
+        },
+      ]
+    })
   }
 
   const runScript = async()=>{
-    await request(`/api/script/run/${script.name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/run?name=${script.name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   }
 
   const checkedHandler = async event => {
     setStatus((prev)=>!prev)
-    await request('/api/script/set/status', 'POST', {name:script.name,status:!status},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/script/status/set', 'POST', {name:script.name,status:!status},{Authorization: `Bearer ${auth.token}`})
     if(typeof(updata)==="function")
     setTimeout(function () {
       updata()

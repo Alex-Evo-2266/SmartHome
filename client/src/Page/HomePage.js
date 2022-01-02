@@ -214,8 +214,8 @@ const getdopMenu= useCallback(()=>{
     arr.push({
       title: "delete page",
       onClick: ()=>show("alert",{
-        title:"Devete page",
-        text:"devete page?",
+        title:"Delete page",
+        text:"delete page?",
         buttons:[
           {
             title:"ok",

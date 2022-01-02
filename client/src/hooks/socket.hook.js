@@ -33,6 +33,7 @@ export const SocketState = ({children}) =>{
 
         socket.current.onmessage = function(e) {
               const data = JSON.parse(e.data);
+              console.log(data.message);
               if(data.message instanceof Object){
                 if(data.message.type==="devices"){
                   setDevices(data.message.data)

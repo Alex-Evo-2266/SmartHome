@@ -30,7 +30,7 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
   }
 
   const clickHandler = async()=>{
-    await request(`/api/script/run/${data.name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/run?name=${data.name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   }
 
   return(

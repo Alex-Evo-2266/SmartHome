@@ -75,7 +75,6 @@ class ZigbeeInMessage:
 
     async def decodeZigbeeDevices(self, topic, message):
         try:
-            print("device")
             data = json.loads(message)
             config = configManager.getConfig('zigbee')
             self.devices = []

@@ -1,4 +1,4 @@
-# from ..runScript import runScripts
+from SmartHome.logic.script.runScript import runScripts
 
 def getParams(d:dict, param:str, default=None):
     if(param in d):
@@ -30,8 +30,8 @@ class DeviceElement(object):
 
     def set(self, status, script=True):
         self.__value = status
-        # if(script):
-        #     runScripts(self.deviceName,self.name)
+        if(script):
+            runScripts(self.deviceName,self.name)
 
 
     def getDict(self):
