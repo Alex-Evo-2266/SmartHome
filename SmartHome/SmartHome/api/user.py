@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List
 
-from SmartHome.logic.user import addUser, getUser, menuConfEdit, userConfEdit, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass, getConfig
+from SmartHome.logic.user import addUser, setActivePage, getUser, menuConfEdit, userConfEdit, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass, getConfig
 from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, UserEditSchema, UserDeleteSchema, UserEditLevelSchema, UserEditPasswordSchema, UserNameSchema, MenuElementsSchema, UserConfigSchema
 from SmartHome.depends.auth import token_dep
 
@@ -97,4 +97,11 @@ async def editconfig(data: List[MenuElementsSchema], auth_data: dict = Depends(t
     res = await menuConfEdit(auth_data['user_id'], data)
     if res['status'] == 'error':
         return JSONResponse(status_code=400, content={"message": 'user not found'})
+    return "ok"
+
+@router.get("/page/set")
+async def editconfig(page: str, auth_data: dict = Depends(token_dep)):
+    res = await setActivePage(page, auth_data['user_id'])
+    if res['status'] == 'error':
+        return JSONResponse(status_code=400, content={"message": res['detail']})
     return "ok"

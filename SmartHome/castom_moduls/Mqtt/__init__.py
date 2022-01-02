@@ -8,7 +8,8 @@ from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigField
 from SmartHome.logic.server.modulesconfig import configManager
 from .mqttConnect import initManager as initManagerCon
 from .deviceValue import initManager as initManagerVal
-from castom_moduls.Mqtt.router import routerInit
+# from .router import routerInit
+from .router import router
 
 def installdepModule():
     os.system("poetry add paho-mqtt")
@@ -73,4 +74,7 @@ class ModuleControll(BaseControllModule):
         )]}
 
     def getRouter(self):
-        return routerInit()
+        from moduls_src.managers import add
+        add("mqttrouter",router)
+        return "mqttrouter"
+        # return routerInit()

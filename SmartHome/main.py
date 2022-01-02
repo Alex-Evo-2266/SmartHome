@@ -19,6 +19,7 @@ from SmartHome.api.auth import router as router_auth
 from SmartHome.api.user import router as router_user
 from SmartHome.api.style import router as router_style
 from SmartHome.api.device import router as router_device
+from SmartHome.api.homePage import router as router_homePage
 from SmartHome.api.server import router as router_server
 from SmartHome.api.moduls import router_moduls
 
@@ -63,5 +64,6 @@ app.include_router(router_auth)
 app.include_router(router_server)
 app.include_router(router_device)
 app.include_router(router_style)
+app.include_router(router_homePage)
 app.include_router(router_user)
 app.include_router(router_moduls)

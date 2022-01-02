@@ -36,7 +36,7 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
   },[devices,data])
 
   const outValue = async(v)=>{
-    await request('/api/devices/value/set', 'POST', {systemName: data.deviceName,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/device/value/set', 'POST', {systemName: data.deviceName,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   useEffect(()=>{

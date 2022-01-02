@@ -60,7 +60,7 @@ const addCart = useCallback((type="base")=>{
   hide()
   setEditMode(true)
   let newCart = {
-    mainId:null,
+    // mainId:null,
     name:"",
     order:"0",
     type:type,
@@ -106,6 +106,16 @@ const saveCarts = useCallback(()=>{
   }
 },[carts, auth.token,request,page])
 
+const getAllPages = useCallback(async()=>{
+  try{
+    const data2 = await request(`/api/server/config/get`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    setPages(data2.pages)
+  }
+  catch (e) {
+    console.error(e);
+  }
+},[request,auth.token])
+
 const importCarts = useCallback(async()=>{
   if(page){
     try {
@@ -115,13 +125,7 @@ const importCarts = useCallback(async()=>{
     catch (e) {
       console.error(e);
     }
-    try{
-      const data2 = await request(`/api/server/config/get`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      setPages(data2.pages)
-    }
-    catch (e) {
-      console.error(e);
-    }
+    getAllPages()
     try{
       const data3 = await request(`/api/script/all`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       await setScripts(data3);
@@ -130,17 +134,18 @@ const importCarts = useCallback(async()=>{
       console.error(e);
     }
   }
-},[request,auth.token,page])
+},[request,auth.token,page,getAllPages])
 
 const addPage = useCallback(async(name)=>{
-  await request('/api/homePage/add', 'POST', {name},{Authorization: `Bearer ${auth.token}`})
+  await request(`/api/homePage/add?name=${name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   setTimeout(()=>{
+    // getAllPages()
     getData()
   },0)
 },[request,auth.token,getData])
 
 const changePage = useCallback(async(data)=>{
-  await request('/api/user/page', 'POST', {name:data},{Authorization: `Bearer ${auth.token}`})
+  await request(`/api/user/page/set?page=${data}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   hide()
   setTimeout(()=>{
     getData()
@@ -148,7 +153,7 @@ const changePage = useCallback(async(data)=>{
 },[request, getData, auth.token, hide])
 
 const deletePage = useCallback(async(name)=>{
-  await request('/api/homePage/delete', 'POST', {name},{Authorization: `Bearer ${auth.token}`})
+  await request(`/api/homePage/delete?name=${name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   setTimeout(()=>{
     getData()
   },0)
@@ -198,7 +203,9 @@ const getdopMenu= useCallback(()=>{
         title:"New page",
         text:"input name newPage",
         placeholder:"name",
-        action: addPage
+        active: (d)=>{
+          addPage(d)
+        }
       })
     }
   ]
@@ -206,11 +213,27 @@ const getdopMenu= useCallback(()=>{
   {
     arr.push({
       title: "delete page",
-      onClick: ()=>deletePage(page)
+      onClick: ()=>show("alert",{
+        title:"Devete page",
+        text:"devete page?",
+        buttons:[
+          {
+            title:"ok",
+            action:()=>{
+              deletePage(page)
+              hide()
+            }
+          },
+          {
+            title:"cancel",
+            action:hide
+          },
+        ]
+      })
     })
   }
   return arr
-},[page,deletePage,addPage,show,addCart,saveCarts,editMode,getPages])
+},[page,deletePage,addPage,show,hide,addCart,saveCarts,editMode,getPages])
 
 useEffect(()=>{
   message(error,"error")

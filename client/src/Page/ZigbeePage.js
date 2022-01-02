@@ -27,7 +27,7 @@ export const ZigbeePage = ()=>{
 
   const zigbeeDevice = useCallback(async () => {
     try {
-      let data = await request('/api/module/zigbee2mqtt/device/get', 'GET',null,{Authorization: `Bearer ${auth.token}`})
+      let data = await request('/api/module/zigbee2mqtt/device/all', 'GET',null,{Authorization: `Bearer ${auth.token}`})
       console.log(data);
       if(data){
         setAllDevice(data)

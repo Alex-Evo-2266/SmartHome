@@ -26,7 +26,7 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
   },[error,message, clearError])
 
   const outValue = async(id,v)=>{
-    await request('/api/devices/value/set', 'POST', {systemName: id,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
+    await request('/api/device/value/set', 'POST', {systemName: id,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
   const lookForDeviceById = useCallback((id)=>{

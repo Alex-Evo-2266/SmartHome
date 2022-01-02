@@ -13,9 +13,9 @@ router = APIRouter(
 
 from moduls_src.managers import add
 
-def routerInit():
-    add("mqttrouter",router)
-    return "mqttrouter"
+# def routerInit():
+#     add("mqttrouter",router)
+#     return "mqttrouter"
 
 @router.get("/get")
 async def get(auth_data: dict = Depends(token_dep)):

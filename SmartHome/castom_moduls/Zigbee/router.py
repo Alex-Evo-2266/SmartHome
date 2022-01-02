@@ -15,10 +15,10 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-def routerInit():
-    add("zigbeerouter",router)
-    initManager()
-    return "zigbeerouter"
+# def routerInit():
+#     add("zigbeerouter",router)
+#     initManager()
+#     return "zigbeerouter"
 
 @router.get("/reboot")
 async def get(auth_data: dict = Depends(token_dep)):
@@ -27,7 +27,6 @@ async def get(auth_data: dict = Depends(token_dep)):
 
 @router.get("/permit_join/get", response_model=PermitJoin)
 async def pjoin(auth_data: dict = Depends(token_dep)):
-    print(getMessageManager().permit_join)
     return PermitJoin(state=getMessageManager().permit_join)
 
 @router.post("/permit_join/set")
@@ -35,7 +34,7 @@ async def pjoin(data: PermitJoin, auth_data: dict = Depends(token_dep)):
     getControlManager().permission_join(data.state)
     return "ok"
 
-@router.get("/device/get", response_model=List[ZigbeeDeviceSchema])
+@router.get("/device/all", response_model=List[ZigbeeDeviceSchema])
 async def device(auth_data: dict = Depends(token_dep)):
     return getMessageManager().getDevices()
 

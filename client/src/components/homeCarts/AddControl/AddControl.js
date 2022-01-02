@@ -121,6 +121,7 @@ export const AddControl = ()=>{
     name: data.name,
     order: 0,
     type: "script",
+    title:'',
     width: 1
   })
 
@@ -131,6 +132,7 @@ export const AddControl = ()=>{
     order: 0,
     type: typeChild,
     width: 1,
+    title:'',
     typeAction:data.name
   })
 

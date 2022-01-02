@@ -10,6 +10,7 @@ from .images.fon import getBackgroundUser
 from SmartHome import settings
 from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, MenuElementsSchema, UserEditSchema, UserConfigSchema
 from SmartHome.models import User,MenuElement
+from SmartHome.logic.homePage import lookForPage
 from SmartHome.logic.email import send_email
 
 logger = logging.getLogger(__name__)
@@ -157,6 +158,19 @@ async def getConfig(id: int):
         MenuElements= await getMenuUser(id)
     )
     return {"status":"ok", "data":res}
+
+async def setActivePage(name:str, id: int):
+    user = await User.objects.get_or_none(id=id)
+    if not user:
+        logger.error(f"none user")
+        return {"status":"error", "detail": f"none user"}
+    res = lookForPage(name + ".yml")
+    if res.status != "ok":
+        logger.error(f"none page")
+        return {"status":"error", "detail": f"none page"}
+    user.page = name
+    await user.update(_columns=["page"])
+    return {"status":"ok"}
 
 async def userConfEdit(id: int, data: EditUserConfigSchema):
     logger.debug(f"userConfEdit input. id:{id}, data:{data.dict()}")

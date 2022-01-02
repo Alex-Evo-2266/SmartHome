@@ -4,8 +4,10 @@ from moduls_src.models_schema import ModelData, DeviceData, TypeDevice
 from moduls_src.baseClassControll import BaseControllModule
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
 from SmartHome.logic.server.modulesconfig import configManager
-from .zigbeeInputMessage import initManager, getManager as zigbeeInputMessage
-from castom_moduls.Zigbee.router import routerInit
+from .zigbeeInputMessage import initManager as initMessageManager, getManager as zigbeeInputMessage
+from moduls_src.managers import add
+from castom_moduls.Zigbee.router import router
+from .zigbeeCoordinatorManager import initManager as initControlManager
 
 def installdepModule():
     pass
@@ -24,7 +26,7 @@ class ModuleControll(BaseControllModule):
                 dependencies=["mqtt"],
                 status=False
             )
-        initManager()
+        initMessageManager()
         configManager.addConfig(
             ServerModuleConfigSchema(
                 name="zigbee",
@@ -64,4 +66,7 @@ class ModuleControll(BaseControllModule):
         )
 
     def getRouter(self):
-        return routerInit()
+        from moduls_src.managers import add
+        add("zigbeerouter",router)
+        initControlManager()
+        return "zigbeerouter"
