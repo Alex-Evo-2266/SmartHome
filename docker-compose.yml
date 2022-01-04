@@ -11,11 +11,11 @@ services:
       - MYSQL_DATABASE=djangoSmartHome
       - MYSQL_USER=roothome
       - MYSQL_PASSWORD=root
-  redis:
-    restart: always
-    image: redis:5
-    ports:
-      - 6379:6379
+  # redis:
+  #   restart: always
+  #   image: redis:5
+  #   ports:
+  #     - 6379:6379
   mosquitto:
     container_name: mosquitto
     build: ./mosquitto
@@ -32,14 +32,12 @@ services:
     build: ./client
     restart: always
     volumes:
-      - client_voluem7:/client/build
+      - client_voluem8:/client/build
   smart_home:
     build: ./SmartHome
     restart: always
-    command: bash -c "python3 /home/smart_home/web/manage.py migrate &&
-              python3 /home/smart_home/web/manage.py makemigrations &&
-              python3 /home/smart_home/web/manage.py collectstatic --no-input --clear &&
-              daphne -b 0.0.0.0 -p 8000 SmartHome.asgi:application"
+    command: bash -c "alembic upgrade head &&
+              uvicorn main:app --reload --port=8000"
     environment:
       - SMARTHOME_BD_HOST=sh_db
       - SMARTHOME_BD_PORT=3306
@@ -57,12 +55,9 @@ services:
       - static_voluem:/home/smart_home/web/staticfile
       - media_voluem:/home/smart_home/web/media
       - ./SmartHome/castom_moduls:/home/smart_home/web/castom_moduls
-    links:
-      - redis
     depends_on:
       - sh_db
       - mosquitto
-      - redis
   nginx:
     build: ./nginx
     ports:
@@ -73,7 +68,7 @@ services:
     volumes:
       - static_voluem:/home/smart_home/web/staticfile
       - media_voluem:/home/smart_home/web/media
-      - client_voluem7:/client/build
+      - client_voluem8:/client/build
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt:latest
@@ -89,4 +84,4 @@ volumes:
   bd_data2:
   media_voluem:
   static_voluem:
-  client_voluem7:
+  client_voluem8:

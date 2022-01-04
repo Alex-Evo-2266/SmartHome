@@ -3,6 +3,12 @@ import os, sys
 
 DB_URL = "mysql+pymysql://roothome:root@localhost:3306/djangoSmartHome"
 
+DEBUG = True
+
+ORIGINS = [
+    "http://localhost",
+]
+
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 SECRET_JWT_KEY = "dxkhbg5hth56"

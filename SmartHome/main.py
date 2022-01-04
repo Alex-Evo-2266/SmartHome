@@ -3,6 +3,7 @@ import asyncio, logging
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine
+from fastapi.middleware.cors import CORSMiddleware
 
 from castom_moduls import init_moduls
 
@@ -28,13 +29,22 @@ from SmartHome.api.server import router as router_server
 from SmartHome.api.script import router as router_script
 from SmartHome.api.moduls import router_moduls
 from SmartHome.api.file import router as router_file
-from SmartHome.settings import MEDIA_ROOT, MEDIA_URL
+from SmartHome.settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS
 
 logger = logging.getLogger(__name__)
 
 app = FastAPI();
 
-app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
+if DEBUG:
+    app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 logger.info("starting")
 # metadata.create_all(engine)
