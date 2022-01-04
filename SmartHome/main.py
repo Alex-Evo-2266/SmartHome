@@ -48,7 +48,7 @@ async def startup() -> None:
     call_functions.subscribe("saveDevice", saveDevice, 120)
     confinit()
     base = configManager.getConfig("base")
-    if base['frequency']:
+    if "frequency" in base:
         call_functions.subscribe("devices", sendDevice, int(base['frequency']))
     else:
         call_functions.subscribe("devices", sendDevice, 6)

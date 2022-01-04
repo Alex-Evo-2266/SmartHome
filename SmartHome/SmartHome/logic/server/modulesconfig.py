@@ -39,7 +39,7 @@ class ModuleConfig(object):
 
     def addConfig(self, data: ServerModuleConfigSchema, callback: Callable = None):
         templates = self.readConfig()
-        if(not templates):
+        if(templates == None):
             return
         if data.name in templates:
             conf = templates[data.name]
