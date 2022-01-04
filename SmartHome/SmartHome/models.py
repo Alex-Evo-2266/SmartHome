@@ -2,25 +2,6 @@ import ormar
 from SmartHome.dbtest import BaseMeta
 from typing import Optional, List
 
-class LocalImage(ormar.Model):
-    class Meta(BaseMeta):
-        pass
-
-    id: int = ormar.Integer(primary_key=True)
-    title: str = ormar.String(max_length=200, nullable=False)
-    image: str = ormar.String(max_length=200, nullable=False)
-
-    def __str__(self):
-        return self.title
-
-class ImageBackground(ormar.Model):
-    class Meta(BaseMeta):
-        pass
-
-    id: int = ormar.Integer(primary_key=True)
-    type: str = ormar.String(max_length=200, default="base")
-    image: Optional[LocalImage] = ormar.ForeignKey(LocalImage, nullable=True)
-
 # Create your models here.
 class User(ormar.Model):
     class Meta(BaseMeta):
@@ -36,7 +17,6 @@ class User(ormar.Model):
     Style: str = ormar.String(max_length=200, default="light")
     auteStyle: bool = ormar.Boolean(default=True)
     staticBackground: bool = ormar.Boolean(default=False)
-    background: Optional[List[ImageBackground]] = ormar.ManyToMany(ImageBackground)
     page: str = ormar.String(max_length=200, default="basePage")
 
     def __str__(self):
@@ -58,3 +38,13 @@ class MenuElement(ormar.Model):
         "iconClass":self.iconClass,
         "url":self.url
         }
+
+class ImageBackground(ormar.Model):
+    class Meta(BaseMeta):
+        pass
+
+    id: int = ormar.Integer(primary_key=True)
+    type: str = ormar.String(max_length=200, default="base")
+    title: str = ormar.String(max_length=200)
+    image: str = ormar.String(max_length=1000)
+    user: Optional[User] = ormar.ForeignKey(User, related_name="background")

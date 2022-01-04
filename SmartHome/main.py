@@ -1,6 +1,7 @@
 import asyncio, logging
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine
 
 from castom_moduls import init_moduls
@@ -26,13 +27,17 @@ from SmartHome.api.homePage import router as router_homePage
 from SmartHome.api.server import router as router_server
 from SmartHome.api.script import router as router_script
 from SmartHome.api.moduls import router_moduls
+from SmartHome.api.file import router as router_file
+from SmartHome.settings import MEDIA_ROOT, MEDIA_URL
 
 logger = logging.getLogger(__name__)
 
 app = FastAPI();
 
+app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
+
 logger.info("starting")
-# metadata.create_all(engine)
+metadata.create_all(engine)
 app.state.database = database
 
 @app.on_event("startup")
@@ -75,6 +80,7 @@ app.include_router(router_server)
 app.include_router(router_device)
 app.include_router(router_script)
 app.include_router(router_style)
+app.include_router(router_file)
 app.include_router(router_homePage)
 app.include_router(router_user)
 app.include_router(router_moduls)

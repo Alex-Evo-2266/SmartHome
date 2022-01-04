@@ -21,15 +21,16 @@ export const GalleryPage = () => {
 
   const getTenUrl = useCallback(async(oldUrl = 0)=>{
     try {
-      const data = await request(`/api/image/fon/el/${oldUrl}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-      if(data&&data.images){
-        setEnd(data.end)
+      const data = await request(`/api/file/background/get?index=${oldUrl}&count=10`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+      if(data){
+        if(data.length !== 10)
+          setEnd(true)
         setnewUrl(oldUrl+30)
         let arr = urls.slice()
         if(newUrl>oldUrl){
           arr = []
         }
-        for (let item of data.images) {
+        for (let item of data) {
           arr.push(item)
         }
         setUrls(arr)
@@ -41,9 +42,9 @@ export const GalleryPage = () => {
 
   const deleteImg = (id)=>{
     show("удалить изображение?","general",()=>{
-      request(`/api/image/fon/${id}`, 'DELETE', null,{Authorization: `Bearer ${auth.token}`})
+      request(`/api/file/background/delete/${id}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
       let arr = urls.slice()
-      arr = arr.filter(item=>item.id!==id)
+      arr = arr.filter(item=>item.title!==id)
       setUrls(arr)
     },hide)
   }
@@ -87,7 +88,7 @@ export const GalleryPage = () => {
           return(
             <div key={index} className="imageBx" onClick={(event)=>ditail(event,item)}>
               <img src={item.image} alt={item.title} data-type="rootimg"/>
-              <div className="preview-remove" onClick={()=>deleteImg(item.id)}>
+              <div className="preview-remove" onClick={()=>deleteImg(item.title)}>
               <i className="fas fa-times"></i>
               </div>
               <div className="preview-info"><span>{item.title}</span></div>

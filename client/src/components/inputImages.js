@@ -62,9 +62,9 @@ export const ImagesInput = ({update}) =>{
   const sendFile = async()=>{
     for (const file of filesArr) {
       var data = new FormData();
-      data.append("image",file)
+      data.append("file",file)
       data.append('name',file.name)
-      const ret = await request(`/api/media/set/image/${file.name}`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
+      const ret = await request(`/api/file/background/load`, 'POST',data,{Authorization: `Bearer ${auth.token}`},true)
       if(ret==="ok"){
         const block = imgConteiner.current.querySelector(`[data-name="${file.name}"]`).closest(".image-preview")
         block.classList.add("removeing")

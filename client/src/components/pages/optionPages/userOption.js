@@ -19,7 +19,7 @@ export const UserOption = () =>{
   const {loading, request, error, clearError} = useHttp();
   const [mode , setMode] = useState(false)
   const [userconf , setUserconf] = useState({
-    auteStyle:config.autoStyle||false,
+    auteStyle:config.auteStyle||false,
     staticBackground:config.staticBackground||false,
     style:config.Style||"light"
   });
@@ -27,15 +27,11 @@ export const UserOption = () =>{
   const updataConf = useCallback(async()=>{
     if(!config)return;
     setUserconf({
-      auteStyle:config.autoStyle||false,
+      auteStyle:config.auteStyle||false,
       staticBackground:config.staticBackground||false,
       style:config.Style||"light",
     })
   },[config])
-
-  // useEffect(()=>{
-  //   updataConf()
-  // },[updataConf])
 
   const userConfigHandler = async()=>{
     await request(`/api/user/config/edit`, 'POST', userconf,{Authorization: `Bearer ${auth.token}`})
@@ -46,12 +42,16 @@ export const UserOption = () =>{
   }
 
   const deleteStyle = async (event)=>{
-    await request(`/api/style/remove`, 'POST', {name:event.target.dataset.name}, {Authorization: `Bearer ${auth.token}`})
+    await request(`/api/style/delete`, 'POST', {name:event.target.dataset.name}, {Authorization: `Bearer ${auth.token}`})
     updateConfig();
     setTimeout(()=>{
       updataConf()
     },500)
   }
+  
+  useEffect(()=>{
+    updataConf();
+  },[updataConf])
 
   const styleHandler = async(event)=>{
     setUserconf({ ...userconf, style:event.target.dataset.name })

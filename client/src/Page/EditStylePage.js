@@ -53,7 +53,7 @@ export const EditStylePage = () => {
   const createStyle = async() =>{
     if(!style.name)
       return message("name empty", "error");
-    await request(`/api/user/style/add`, 'POST', style,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/style/add`, 'POST', style,{Authorization: `Bearer ${auth.token}`})
     updateConfig()
     out()
   }

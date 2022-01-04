@@ -24,14 +24,16 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
       return false
     let condidat = devices.filter((item)=>item&&item.systemName===id)
     if(!condidat[0]) return null
-    let conf
+    let conf = null
     for (var item of condidat[0].config) {
       if(item.name===data.typeAction){
         conf = item
       }
     }
-    setMin(conf.low)
-    setMax(conf.high)
+    if(!conf)
+      setDisabled(true)
+    setMin(conf?.low)
+    setMax(conf?.high)
     return condidat[0]
   },[devices,data])
 
@@ -99,9 +101,9 @@ export const SliderElement = ({index,title,data,min=0,max=100,disabled=false,fir
     }
   }
 
-if(!device){
-  return null
-}
+// if(!device){
+//   return null
+// }
 
 return(
   <div className="slider-box">
@@ -109,15 +111,15 @@ return(
     <div className="slider">
       <input
       type="range"
-      min={minstate}
-      max={maxstate}
-      value={value}
+      min={minstate||0}
+      max={maxstate||100}
+      value={value||0}
       onChange={changeHandler}
       onInput={changeHandler}
       disabled={disabled2}
       />
     </div>
-    <div className="value">{value}</div>
+    <div className="value">{value||0}</div>
     {
       (deleteBtn || editBtn)?
       <div className="delete-box">

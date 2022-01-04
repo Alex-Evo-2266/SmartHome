@@ -60,7 +60,7 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
       if(item&&item.type==="binary"){
         setSwitchMode(true)
       }
-      if(device.status==="online"){
+      if(device.status==="online" && item){
         setDisabled(false)
       }else{
         setDisabled(true)

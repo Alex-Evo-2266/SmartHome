@@ -18,7 +18,7 @@ export const ImageDitail = ({data,hide})=>{
   }
 
   const out = async()=>{
-    await request(`/api/background/set`, 'POST', {id:data.id,type:fon},{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/file/background/linc?name=${data.title}&type=${fon}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     updateConfig()
     hide()
   }

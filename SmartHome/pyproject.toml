@@ -17,6 +17,7 @@ pathlib = "^1.0.1"
 requests = "^2.26.0"
 yeelight = "^0.7.8"
 paho-mqtt = "^1.6.1"
+python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
 

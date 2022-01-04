@@ -59,12 +59,12 @@ class BaseDevice(object):
     def save(self):
         dev = Devices.get(systemName=self.systemName)
         for item in self.values:
-            pass
+            value = look_for_param(dev.values, item.name)
+            if value:
+                value.value = item.get()
+                    # item.value = value.get()
             # ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=item.name,value=value.get(),device=dev)
-        for item in dev.values:
-            value = look_for_param(self.values, item.name)
-            if(value):
-                item.value = value.get()
+
         dev.save()
         logger.info(f'save {self.name}')
 
