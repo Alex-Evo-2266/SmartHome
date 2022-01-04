@@ -1,6 +1,5 @@
 *.pot
 *.pyc
-SmartHomeold
 env
 celerybeat-schedule
 __pycache__/
@@ -26,7 +25,6 @@ devserver.sh
 SmartHome/files/*/*.*
 SmartHome/files/*.yml
 !SmartHome/files/server-config.yml
-!SmartHome/files/devTypes.yml
 !SmartHome/files/pages/basePage.yml
 !SmartHome/files/styles/light.yml
 !SmartHome/files/styles/night.yml

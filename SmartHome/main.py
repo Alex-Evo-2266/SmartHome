@@ -6,8 +6,7 @@ from sqlalchemy import create_engine
 
 from castom_moduls import init_moduls
 
-from SmartHome.dbtest import metadata, database, engine
-from SmartHome.models import User
+from SmartHome.dbormar import metadata, database, engine
 from SmartHome.logic.call_functions import call_functions
 from SmartHome.logic.weather import updateWeather
 from SmartHome.logic.device.sendDevice import sendDevice
@@ -18,6 +17,7 @@ from SmartHome.logic.script.runScript import runTimeScript
 from SmartHome.logic.device.deviceSave import saveDevice
 
 from SmartHome.logic.server.configInit import confinit
+from initadmin import initApp
 
 from SmartHome.api.auth import router as router_auth
 from SmartHome.api.user import router as router_user
@@ -37,7 +37,7 @@ app = FastAPI();
 app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
 
 logger.info("starting")
-metadata.create_all(engine)
+# metadata.create_all(engine)
 app.state.database = database
 
 @app.on_event("startup")
@@ -58,6 +58,7 @@ async def startup() -> None:
         await database_.connect()
     loop = asyncio.get_running_loop()
     loop.create_task(call_functions.run())
+    await initApp()
 
 
 @app.on_event("shutdown")

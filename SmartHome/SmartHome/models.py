@@ -1,5 +1,5 @@
 import ormar
-from SmartHome.dbtest import BaseMeta
+from SmartHome.dbormar import BaseMeta
 from typing import Optional, List
 
 # Create your models here.

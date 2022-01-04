@@ -2,10 +2,11 @@ import databases
 import sqlalchemy
 from sqlalchemy import create_engine
 import ormar
+from SmartHome.settings import DB_URL
 
 metadata = sqlalchemy.MetaData()
-database = databases.Database("mysql+pymysql://roothome:root@localhost:3306/djangoSmartHome")
-engine = create_engine("mysql+pymysql://roothome:root@localhost:3306/djangoSmartHome")
+database = databases.Database(DB_URL)
+engine = create_engine(DB_URL)
 
 class BaseMeta(ormar.ModelMeta):
     metadata = metadata
