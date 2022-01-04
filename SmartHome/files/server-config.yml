@@ -1,15 +1,1 @@
-base:
-  frequency: '3'
-email:
-  login: smarthome2244@mail.ru
-  password: 66dfghty
-mqttBroker:
-  host: localhost
-  password: admin
-  port: '1883'
-  user: admin
-weather:
-  APPID: 7ef70d3274178d8de16b738339a2a943
-  city: kazan
-zigbee:
-  topic: zigbee2mqtt
+
