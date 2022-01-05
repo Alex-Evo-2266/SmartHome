@@ -9,12 +9,12 @@ export const useAuth = () => {
   const [ready, setReady] = useState(false)
 
 
-  const login = useCallback((jwtToken, id,level)=>{
+  const login = useCallback(async(jwtToken, id,level)=>{
     setToken(jwtToken);
     setUserId(id);
     setUserLevel(level);
 
-    localStorage.setItem(storegeName, JSON.stringify({
+    await localStorage.setItem(storegeName, JSON.stringify({
       userId: id, userLevel:level, token:jwtToken
     }))
   },[])
