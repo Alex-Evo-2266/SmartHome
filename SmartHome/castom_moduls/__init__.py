@@ -90,11 +90,14 @@ def __load_all__(dir="castom_moduls"):
         q = q + 1
         moduls = moduls2
 
-            # info = module.start()
-            # if not info.status:
-            #     continue
-            # if(info.deviceType != None):
-            #     deviceType(module)
+def getPages():
+    arr = list()
+    for key in modules:
+        m = modules[key]
+        data = m.getPages()
+        if data:
+            arr.append(data)
+    return arr
 
 def init_moduls():
     __load_all__()

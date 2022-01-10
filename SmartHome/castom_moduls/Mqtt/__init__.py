@@ -9,6 +9,7 @@ from SmartHome.logic.server.modulesconfig import configManager
 from .mqttConnect import initManager as initManagerCon
 from .deviceValue import initManager as initManagerVal
 # from .router import routerInit
+from .pages.page import page
 from .router import router
 
 def installdepModule():
@@ -64,6 +65,9 @@ class ModuleControll(BaseControllModule):
             name="mqtt",
             dependencies=[],
         )
+
+    def getPages(self):
+        return page()
 
     def getItems(self):
         return {

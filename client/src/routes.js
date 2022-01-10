@@ -18,6 +18,7 @@ import {ChartsPage} from './Page/ChartPage'
 import {MovieDitail} from './Page/filespage/movieDitail'
 import {MqttPage} from './Page/MqttTopics'
 import {ZigbeePage} from './Page/ZigbeePage'
+import {ModulsPage} from './Page/ModulsPage'
 import {EditStylePage} from './Page/EditStylePage'
 import AddUser from './Page/AddUser'
 
@@ -79,7 +80,9 @@ export const useRoutes = (isAuthenticated,level)=>{
           <ChartsPage/>
         </Route>
 
-
+        <Route path="/moduls/:name">
+          <ModulsPage/>
+        </Route>
 
         <Route path="/movie/add" exact>
           <AddMoviePage/>

@@ -49,6 +49,32 @@ class ModuleControll(BaseControllModule):
         self.end()
         self.start()
 
+    def getPages(self):
+        return None
+        return{
+        "name":"zigbee",
+        "pages":[
+            {
+            "name": "zigbee",
+            "src":"",
+            "typeContent": "cards",
+            "rootField": ".",
+            "fields":[
+                {
+                    "name":{
+                        "type":"text",
+                        "value":"address"
+                    },
+                    "value":{
+                        "type":"path",
+                        "value":"."
+                    }
+                }
+            ]
+            }
+        ]
+        }
+
     def getItems(self):
         from .ZigbeeDevice import ZigbeeDevice
         return {

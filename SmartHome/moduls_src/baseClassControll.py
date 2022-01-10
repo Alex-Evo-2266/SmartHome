@@ -10,6 +10,9 @@ class BaseControllModule(object):
     def restart(self):
         pass
 
+    def getPages(self):
+        pass
+
     def getInfo(self):
         pass
 
