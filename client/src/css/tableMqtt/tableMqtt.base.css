@@ -5,7 +5,7 @@
   padding: 0;
   width: 100%;
   overflow: scroll;
-  max-height: calc(100vh - 56px);
+  height: calc(100vh - 56px);
 }
 table.mqttTable{
   width: 100%;
@@ -26,8 +26,14 @@ table.mqttTable tr th label{
 table.mqttTable tr td,
 table.mqttTable tr th{
   padding: 5px;
+  position: relative;
+  min-height: 40px;
   text-align: center;
   font-weight: 600;
+}
+table.mqttTable tr td.menu,
+table.mqttTable tr th.menu{
+  width: 20px;
 }
 .mqttMessageStr{
   padding: 5px 0;

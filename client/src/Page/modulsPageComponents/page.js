@@ -4,6 +4,7 @@ import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {SocketContext} from '../../context/SocketContext'
 import {useDecodePath} from './pathDecodhook'
+import {useMenuModuls} from './menuModuls'
 import {Card} from './Card'
 import {Table} from './table'
 
@@ -11,37 +12,24 @@ export const Page = ({data={}, updateMenu}) => {
   const auth = useContext(AuthContext)
   const socket = useContext(SocketContext)
   const {getfields, gettext} = useDecodePath()
+  const {getmenu} = useMenuModuls()
   const [dataPage, setDataPage] = useState([])
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
 
   const getData = useCallback(async()=>{
-    console.log(data);
-    if(!(data?.content?.src)) return ;
-    const data1 = await request(data?.content?.src, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    console.log(data1);
+    if(!(data?.src)) return ;
+    const data1 = await request(data?.src, 'GET', null,{Authorization: `Bearer ${auth.token}`})
     setDataPage(data1)
     return data1
   },[request,auth.token,data])
 
-  const action = useCallback(async(dataf)=>{
-    console.log("test", dataf);
-    for (var item of dataf) {
-      if(item.type === "update")
-        getData()
-      else {
-        console.log(item);
-        await request(item.address, item.method, item.body,{Authorization: `Bearer ${auth.token}`})
-      }
-    }
-  },[getData,request,auth.token])
-
   useEffect(()=>{
-    if(!(data?.content?.ws_src)) return ;
-    if(socket.message.type===data?.content?.ws_src) {
+    if(!(data?.ws_src)) return ;
+    if(socket.message.type===data?.ws_src) {
       setDataPage(socket.message.data)
     }
-  },[socket.message,data?.content?.ws_src])
+  },[socket.message,data?.ws_src])
 
   useEffect(()=>{
     message(error, 'error');
@@ -53,20 +41,12 @@ export const Page = ({data={}, updateMenu}) => {
   },[getData])
 
   useEffect(()=>{
-    console.log(data);
     if (!(data?.menu)) return ;
-    let arr = []
-    for (let item of data?.menu) {
-      arr.push({
-        title:getfields(item.title,dataPage),
-        onClick:()=>action(item.action)
-      })
-    }
-    updateMenu(arr)
-  },[dataPage,data,action,getfields,updateMenu])
+    updateMenu(getmenu(data, dataPage, getData))
+  },[dataPage,data,getfields,updateMenu])
 
   return (
-    <div className={`conteiner`}>
+    <div className={`conteiner ${(data?.content?.typeContent === "table")?"color-normal":""}`}>
       {
         (data?.content?.typeContent === "cards")?
         <div className="Devices">

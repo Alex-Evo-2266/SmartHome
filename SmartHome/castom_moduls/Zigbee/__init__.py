@@ -18,8 +18,6 @@ class ModuleControll(BaseControllModule):
         try:
             from castom_moduls.Mqtt.deviceValue import getManager as getValue
             from castom_moduls.Mqtt.mqttConnect import getManager as getManagerConnect
-            # from castom_moduls import modules
-            # mqtt = modules["mqtt"]
         except Exception as e:
             return ModelData(
                 name="zigbee",

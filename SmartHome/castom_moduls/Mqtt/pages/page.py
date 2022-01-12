@@ -1,15 +1,17 @@
-from moduls_src.pages import TableFields, TibleCol, ActionSchema, MenuFieldSchema, Pages, Page, TableContent, Cards, CardFields, fieldSRC
+from moduls_src.pages import *
+from .linc import lincDecice
 
 def page():
     return Pages(
         name="mqtt",
+        linc=lincDecice,
         pages=[Page(
             name="mqtt",
             menu=[
                 MenuFieldSchema(
                     title=fieldSRC(
                         type="text",
-                        path="update"
+                        value="update"
                     ),
                     action=[
                         ActionSchema(type="update"),
@@ -18,7 +20,7 @@ def page():
                 MenuFieldSchema(
                     title=fieldSRC(
                         type="text",
-                        path="clear"
+                        value="clear"
                     ),
                     action=[
                         ActionSchema(
@@ -28,13 +30,13 @@ def page():
                     ]
                 )
             ],
+            src="/api/module/mqtt/get",
+            ws_src="mqtt",
             content=TableContent(
-                src="/api/module/mqtt/get",
-                ws_src="mqtt",
-                items=TibleCol(
+                items=Table(
                     title=fieldSRC(
-                        type="path",
-                        path=".topic"
+                        type="text",
+                        value="test"
                     ),
                     fields=[
                     TableFields(
@@ -46,49 +48,22 @@ def page():
                     ),
                     TableFields(
                         title="message",
+                        type=TypeField.JSON,
                         value=fieldSRC(
                             type="path",
                             path=".message"
                         )
+                    )],
+                    menu=[MenuFieldSchema(
+                        title=fieldSRC(
+                            type="text",
+                            value="linc"
+                        ),
+                        action=[
+                            ActionSchema(type=TypeAction.LINC),
+                        ]
                     )]
                 )
             )
         )]
     )
-
-    # {
-    # "name":"mqtt",
-    # "pages":[
-    #     {
-    #     "name": "mqtt",
-    #     "src":"/api/module/mqtt/get",
-    #     "typeContent": "cards",
-    #     "rootField": ".",
-    #     "cards":{
-    #         "fields":[
-    #             {
-    #                 "name":{
-    #                     "type":"text",
-    #                     "value":"address"
-    #                 },
-    #                 "value":{
-    #                     "type":"path",
-    #                     "value":".topic"
-    #                 }
-    #             },
-    #             {
-    #                 "name":{
-    #                     "type":"text",
-    #                     "value":"message"
-    #                 },
-    #                 "value":{
-    #                     "type":"path",
-    #                     "value":".message"
-    #                 }
-    #             }
-    #         ]
-    #         },
-    #     "title":
-    #     }
-    # ]
-    # }

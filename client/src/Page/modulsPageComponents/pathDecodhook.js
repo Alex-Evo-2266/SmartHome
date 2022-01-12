@@ -18,7 +18,7 @@ export const useDecodePath = () => {
 
   const getfields = useCallback((field, root)=>{
     if(field.type==="text")
-      return field.path
+      return field.value
     else if(field.type==="path")
       return gettext(root, field.path)
     else

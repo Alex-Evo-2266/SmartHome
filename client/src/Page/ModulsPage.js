@@ -17,16 +17,16 @@ export const ModulsPage = () => {
 
   const getData = useCallback(async()=>{
     const data = await request(`/api/page/get/${name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
-    console.log(data);
+    console.log(data,data?.pages[0]);
     setDataPage(data)
     setDataActivePage(data?.pages[0])
   },[request,name,auth.token])
 
   const updateMenu = useCallback(async(menu)=>{
-    setData(dataPage.name,{
+    setData(dataPage?.name,{
       dopmenu: menu
     })
-  },[setData, dataPage.name])
+  },[setData, dataPage?.name])
 
   useEffect(()=>{
     message(error, 'error');
@@ -38,7 +38,7 @@ export const ModulsPage = () => {
   },[getData])
 
   useEffect(()=>{
-    setData(dataPage.name)
+    setData(dataPage?.name)
   },[setData,dataPage])
 
   return (

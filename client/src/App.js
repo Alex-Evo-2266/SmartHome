@@ -17,6 +17,8 @@ import {AuthContext} from './context/AuthContext'
 import {TerminalCart} from './components/terminal/terminalCart'
 import {SocketState} from './hooks/socket.hook.js'
 import {TypesDeviceState} from './components/typeDevices/typeDevicesState'
+import {PageState} from './components/Menu/pageState'
+
 import './css/style-auth.css'
 import './icon/css/all.css'
 import './css/style-alert.css'
@@ -37,6 +39,7 @@ function App() {
     <AuthContext.Provider value={{
       token, login, logout, userId, userLevel, isAuthenticated
     }}>
+    <PageState token={token}>
     <MenuState>
     <SocketState>
     <AlertState>
@@ -67,6 +70,7 @@ function App() {
     </AlertState>
     </SocketState>
     </MenuState>
+    </PageState>
     </AuthContext.Provider>
   );
 }
