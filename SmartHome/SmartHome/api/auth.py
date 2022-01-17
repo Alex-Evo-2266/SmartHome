@@ -13,13 +13,16 @@ router = APIRouter(
 
 @router.post("/login")
 async def login(data: Login):
-    res = await Authorization(data)
-    if(res["status"] == "ok"):
-        p = res["data"]["response"]
-        response = JSONResponse(status_code=200, content=p)
-        response.set_cookie(key="refresh_toket", value=res["data"]["refresh"], httponly=True)
-        return response
-    return JSONResponse(status_code=403, content={"message": res['detail']})
+    try:
+        res = await Authorization(data)
+        if(res["status"] == "ok"):
+            p = res["data"]["response"]
+            response = JSONResponse(status_code=200, content=p)
+            response.set_cookie(key="refresh_toket", value=res["data"]["refresh"], httponly=True)
+            return response
+        return JSONResponse(status_code=403, content={"message": res['detail']})
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"message": str(e)})
 
 @router.get("/refresh", response_model=Token)
 async def ref(refresh_toket: Optional[str] = Cookie(None)):

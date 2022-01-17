@@ -30,3 +30,4 @@ SmartHome/files/*.yml
 !SmartHome/files/styles/night.yml
 SmartHome/staticfile/
 SmartHome/logs
+settings_local.py

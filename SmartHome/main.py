@@ -28,7 +28,7 @@ from SmartHome.api.homePage import router as router_homePage
 from SmartHome.api.server import router as router_server
 from SmartHome.api.script import router as router_script
 from SmartHome.api.moduls import router_moduls
-from SmartHome.api.pages import router_pages 
+from SmartHome.api.pages import router_pages
 from SmartHome.api.file import router as router_file
 from SmartHome.settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS
 
@@ -47,7 +47,6 @@ else:
         allow_headers=["*"],
     )
 
-logger.info("starting")
 # metadata.create_all(engine)
 app.state.database = database
 
@@ -70,6 +69,8 @@ async def startup() -> None:
     loop = asyncio.get_running_loop()
     loop.create_task(call_functions.run())
     await initApp()
+    logger.info("starting")
+
 
 
 @app.on_event("shutdown")

@@ -1,13 +1,18 @@
 from pathlib import Path
 import os, sys
 
-DB_URL = "mysql+pymysql://roothome:root@localhost:3306/djangoSmartHome"
+from .settings_prod import *
 
-DEBUG = True
+DB_URL = "".join(["mysql+pymysql://",
+    MYSQL_USER,":",
+    MYSQL_PASSWORD,"@",
+    MYSQL_HOST,":",MYSQL_PORT,"/",
+    MYSQL_DATABASE])
+print("bd: ",DB_URL)
 
-ORIGINS = [
-    "http://localhost",
-]
+DEBUG = False
+
+ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
