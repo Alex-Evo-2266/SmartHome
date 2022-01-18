@@ -42,8 +42,6 @@ COPY pyproject.toml $APP_HOME/
 RUN poetry config virtualenvs.create false \
   && poetry install $(test "$YOUR_ENV" == production && echo "--no-dev") --no-interaction --no-ansi
 
-RUN python3 -m pip install daphne
-
 COPY . $APP_HOME
 
 RUN chown -R smart_home:smart_home $APP_HOME
