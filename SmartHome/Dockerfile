@@ -25,7 +25,16 @@ RUN apt-get update \
 
 RUN pip3 install --upgrade pip
 
-RUN pip install "poetry==$POETRY_VERSION"
+RUN set -x && apt-get -qq update \
+    && apt-get install -y --no-install-recommends \
+    libpq-dev python3-dev git \
+    && apt-get purge -y --auto-remove\
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
+    cd /usr/local/bin && \
+    ln -s /opt/poetry/bin/poetry && \
+    poetry config virtualenvs.create false
 
 COPY poetry.lock $APP_HOME/
 COPY pyproject.toml $APP_HOME/

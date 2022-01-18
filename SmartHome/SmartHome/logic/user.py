@@ -116,9 +116,8 @@ async def newGenPass(name: str):
         logger.error(f"user does not exist. id:{id}")
         return {"status":"error"}
     chars = '+-/*!&$#?=@<>abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-    length = 8
     password =''
-    for i in range(length):
+    for i in range(settings.LENGTHPASS):
         password += random.choice(chars)
     message = "new Password for " + name + " = " + password
     await send_email("Account smart home",user.UserEmail,message)

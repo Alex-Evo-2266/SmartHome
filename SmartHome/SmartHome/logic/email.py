@@ -13,7 +13,7 @@ async def send_email(subject, to_email, message):
         templates = None
         with open(settings.SERVER_CONFIG) as f:
             templates = yaml.safe_load(f)
-        acaunt = templates["mail"]
+        acaunt = templates["email"]
         from_email = acaunt["login"]
         password = acaunt["password"]
         if(from_email == '' or password == ''):

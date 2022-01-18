@@ -41,8 +41,8 @@ const newpass = ()=>{
     title:"Password recovery",
     text:"input login",
     placeholder:"login",
-    action:(data)=>{
-      request('/api/user/newpass', 'POST', {name:data})
+    active:(data)=>{
+      request('/api/user/password/new', 'POST', {name:data})
     }
   })
 }

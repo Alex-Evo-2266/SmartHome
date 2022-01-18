@@ -1,7 +1,11 @@
 from pathlib import Path
 import os, sys
 
-from .settings_prod import *
+try:
+    from .settings_local import *
+except Exception as e:
+    from .settings_prod import *
+
 
 DB_URL = "".join(["mysql+pymysql://",
     MYSQL_USER,":",
@@ -30,6 +34,7 @@ PAGES_DIR =  os.path.join(BASE_DIR, "files","pages")
 DEVICES = os.path.join(BASE_DIR, "files","devices.yml")
 
 TIME_UPPDATA = 6
+LENGTHPASS = 10
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
