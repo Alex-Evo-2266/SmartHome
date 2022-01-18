@@ -3,6 +3,7 @@ version: "3.3"
 services:
   sh_db:
     image: mariadb
+    # image: 459below/mariadb-armv7:latest
     restart: always
     ports:
       - 3307:3306
