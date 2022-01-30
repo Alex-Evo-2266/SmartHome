@@ -15,7 +15,6 @@ month = 13;
 
 async def runTimeScript():
     fileList = os.listdir(SCRIPTS_DIR)
-    fileList.remove('.gitkeep')
     listscripts = list()
     now = datetime.now()
     for item in fileList:

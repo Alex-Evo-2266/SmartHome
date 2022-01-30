@@ -25,9 +25,7 @@ devserver.sh
 SmartHome/files/*/*.*
 SmartHome/files/*.yml
 !SmartHome/files/server-config.yml
-!SmartHome/files/devices.yml
 !SmartHome/files/pages/basePage.yml
-!SmartHome/files/*/.gitkeep
 !SmartHome/files/styles/light.yml
 !SmartHome/files/styles/night.yml
 SmartHome/staticfile/

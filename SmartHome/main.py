@@ -18,7 +18,7 @@ from SmartHome.logic.script.runScript import runTimeScript
 from SmartHome.logic.device.deviceSave import saveDevice
 
 from SmartHome.logic.server.configInit import confinit
-from initadmin import initApp
+from initapp import initAdmin, initdir
 
 from SmartHome.api.auth import router as router_auth
 from SmartHome.api.user import router as router_user
@@ -52,6 +52,7 @@ app.state.database = database
 
 @app.on_event("startup")
 async def startup() -> None:
+    await initdir()
     call_functions.subscribe("weather", updateWeather, 43200)
     call_functions.subscribe("script", runTimeScript, 60)
     call_functions.subscribe("serverData", sendServerData, 30)
@@ -68,7 +69,7 @@ async def startup() -> None:
         await database_.connect()
     loop = asyncio.get_running_loop()
     loop.create_task(call_functions.run())
-    await initApp()
+    await initAdmin()
     logger.info("starting")
 
 

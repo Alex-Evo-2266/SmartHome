@@ -1,10 +1,18 @@
 import logging
 import bcrypt
+import os
 from SmartHome.models import User
+from SmartHome.settings import SCRIPTS_DIR, DEVICES
 
 logger = logging.getLogger(__name__)
 
-async def initApp():
+async def initdir():
+    file = open(DEVICES, "w+")
+    file.close()
+    if not os.path.exists(SCRIPTS_DIR):
+        os.mkdir(SCRIPTS_DIR)
+
+async def initAdmin():
     users = await User.objects.all()
     if len(users) == 0:
         await addAdmin()
