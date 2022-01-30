@@ -49,6 +49,3 @@ RUN chown -R smart_home:smart_home $APP_HOME
 USER smart_home
 
 RUN mkdir media
-RUN mkdir files/scripts
-RUN mkdir staticfile
-RUN touch files/devices.yml
