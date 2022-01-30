@@ -3,6 +3,3 @@ base:
 email:
   login: ''
   password: ''
-weather:
-  APPID: ''
-  city: ''

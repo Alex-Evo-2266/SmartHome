@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 def scripts()->FunctionRespons:
     fileList = os.listdir(SCRIPTS_DIR)
+    fileList.remove('.gitkeep')
     listscripts = list()
     for item in fileList:
         res = script(item)
