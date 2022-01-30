@@ -14,13 +14,6 @@ services:
       - MYSQL_DATABASE=SmartHome
       - MYSQL_USER=roothome
       - MYSQL_PASSWORD=root
-  phpmyadmin:
-    image: phpmyadmin
-    restart: always
-    ports:
-      - 1338:80
-    environment:
-      - PMA_ARBITRARY=1
   mosquitto:
     container_name: mosquitto
     build: ./mosquitto
@@ -37,7 +30,7 @@ services:
     build: ./client
     restart: always
     volumes:
-      - client_voluem8:/client/build
+      - client_voluem:/client/build
   smart_home:
     build: ./SmartHome
     restart: always
@@ -54,6 +47,7 @@ services:
     volumes:
       - media_voluem:/home/smart_home/web/media
       - ./SmartHome/castom_moduls:/home/smart_home/web/castom_moduls
+      - ./SmartHome/files:/home/smart_home/web/files
     depends_on:
       - sh_db
       - mosquitto
@@ -66,7 +60,7 @@ services:
       - client
     volumes:
       - media_voluem:/home/smart_home/web/media
-      - client_voluem8:/client/build
+      - client_voluem:/client/build
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt:latest
@@ -81,4 +75,4 @@ services:
 volumes:
   bd_data:
   media_voluem:
-  client_voluem8:
+  client_voluem:
