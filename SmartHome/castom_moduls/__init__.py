@@ -78,7 +78,7 @@ def __load_all__(dir="castom_moduls"):
             list_model_control.append(module)
     moduls = module_sequence(list_model_control)
     moduls = dict_to_list(moduls)
-    moduls2 = moduls
+    moduls2 = moduls.copy()
     q = 1
     while len(moduls2) > 0:
         for item in moduls:
@@ -88,7 +88,7 @@ def __load_all__(dir="castom_moduls"):
                 modules[item["name"]] = m
                 moduls2.remove(item)
         q = q + 1
-        moduls = moduls2
+        moduls = moduls2.copy()
 
 def getPages():
     arr = list()
