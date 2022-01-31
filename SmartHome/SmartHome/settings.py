@@ -14,7 +14,6 @@ DB_URL = "".join(["mysql+pymysql://",
     MYSQL_DATABASE])
 print("bd: ",DB_URL)
 
-DEBUG = False
 
 ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 

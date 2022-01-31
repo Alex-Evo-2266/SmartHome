@@ -11,8 +11,8 @@ export const SocketState = ({children}) =>{
 
   const connect = useCallback(()=>{
     try {
-      let path = `ws://${window.location.host}/ws/base`
-      // let path = `ws://localhost:5000/ws/base`
+      // let path = `ws://${window.location.host}/ws/base`
+      let path = `ws://localhost:5000/ws/base`
 
       socket.current = new WebSocket(path)
     } catch (e) {

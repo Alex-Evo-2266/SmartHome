@@ -9,6 +9,8 @@ async def send_email(subject, to_email, message):
     """
     Send an email
     """
+    logger.debug(f"send email input param. subject: {subject}, to_email: {to_email}, message: {message}")
+
     try:
         templates = None
         with open(settings.SERVER_CONFIG) as f:

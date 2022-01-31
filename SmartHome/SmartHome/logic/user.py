@@ -25,7 +25,7 @@ async def addUser(data: UserForm):
         newUser = await User.objects.create(UserName=data.name, UserEmail=data.email, UserMobile=data.mobile,UserPassword=hashedPass)
         message = "login = " + data.name + "\npassword = " + data.password
         logger.info(f"login input data: {data.dict()}")
-        send_email("Account smart home",data.email,message)
+        await send_email("Account smart home",data.email,message)
         return {'status':'ok'}
     except Exception as e:
         logger.error(f"error add user: {e}")
