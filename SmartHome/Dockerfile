@@ -44,8 +44,4 @@ RUN poetry config virtualenvs.create false \
 
 COPY . $APP_HOME
 
-RUN chown -R smart_home:smart_home $APP_HOME
-
-USER smart_home
-
 RUN mkdir media
