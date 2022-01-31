@@ -7,8 +7,9 @@ from SmartHome.settings import SCRIPTS_DIR, DEVICES
 logger = logging.getLogger(__name__)
 
 async def initdir():
-    file = open(DEVICES, "w+")
-    file.close()
+    if not os.path.exists(DEVICES):
+        file = open(DEVICES, "w+")
+        file.close()
     if not os.path.exists(SCRIPTS_DIR):
         os.mkdir(SCRIPTS_DIR)
 
