@@ -28,7 +28,6 @@ services:
       - MQTT_BROKER_URL=mqtt://mosquitto
   client:
     build: ./client
-    restart: always
     volumes:
       - client_voluem:/client/build
   smart_home:
