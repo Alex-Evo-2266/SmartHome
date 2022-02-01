@@ -37,3 +37,4 @@ LENGTHPASS = 10
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
