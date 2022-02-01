@@ -67,9 +67,10 @@ class MqttValue():
             for item in values:
                 if item.name==type:
                     if(item.type=="binary"):
-                        if(str(value)==str(item.high)):
+                        print(value, item.high, item.low)
+                        if(str(value).lower()==str(item.high).lower()):
                             value = "1";
-                        elif(str(value)==str(item.low)):
+                        elif(str(value).lower()==str(item.low).lower()):
                             value = "0";
                         else:
                             return None
