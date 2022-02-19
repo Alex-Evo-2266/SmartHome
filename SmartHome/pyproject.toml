@@ -5,7 +5,7 @@ description = ""
 authors = ["Avex-Evo-2244 <ghbdtn2266@mail.ru>"]
 
 [tool.poetry.dependencies]
-python = "3.8"
+python = "^3.8"
 fastapi = "^0.70.1"
 alembic = "^1.7.5"
 ormar = {extras = ["mysql"], version = "^0.10.23"}

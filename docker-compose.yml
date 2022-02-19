@@ -49,7 +49,6 @@ services:
       - ./SmartHome/files:/home/smart_home/web/files
     depends_on:
       - sh_db
-      - mosquitto
   nginx:
     build: ./nginx
     ports:

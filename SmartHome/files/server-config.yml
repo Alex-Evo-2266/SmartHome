@@ -4,7 +4,7 @@ email:
   login: ''
   password: ''
 mqttBroker:
-  host: localhost
+  host: mosquitto
   password: admin
   port: '1883'
   user: admin
