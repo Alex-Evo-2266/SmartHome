@@ -1,6 +1,13 @@
+.topContainer{
+  background: var(--color-base);
+  color: var(--text-color-base-fon);
+  height: 230px;
+}
 .ditailContainer{
   display: flex;
   color: var(--text-color-base-fon);
+  min-height: calc(100vh - 56px - 230px);
+  background: var(--color-base);
 }
 .blubContainer{
   width: 130px;
@@ -119,8 +126,6 @@
 .centerControl{
   flex: 320px;
   width: 320px;
-  min-height: calc(100vh - 56px);
-  background: var(--color-base);
 
 }
 .leftControl,

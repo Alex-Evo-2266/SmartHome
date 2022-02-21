@@ -51,7 +51,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
       adaptiveBackground(data?.dataUserConf?.images)
     else
       setBackground(getimage(data?.dataUserConf?.images, "base")?.image)
-    if(data?.dataUserConf?.autoStyle)
+    if(data?.dataUserConf?.auteStyle)
       avtoNightStyle(style, getColors(data?.dataStyles, "night"))
     else
       setStyle(style)
