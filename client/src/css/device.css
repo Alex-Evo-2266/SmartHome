@@ -20,12 +20,17 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+.containerBlock{
+  flex: 1 1 33.3%;
+  height: 200px;
+  overflow-y: scroll;
+}
 .nameGeneralBlub{
   padding: 40px 0 10px 0;
   text-align: center;
   bottom: 0;
 }
-.dopBlubContainer .dopBlubButton{
+.containerBlock .dopBlubButton{
   width: 50px;
   height: 50px;
   background: var(--color-normal);
@@ -33,10 +38,11 @@
   position: relative;
   cursor: pointer;
 }
-.dopBlubContainer .dopBlubButton.activ{
-  background: var(--btn-color-normal);
+.containerBlock .dopBlubButton.activ{
+  background: var(--btn-color-active);
+  color: var(--text-color-active-fon);
 }
-.dopBlubContainer .dopBlubButton i{
+.containerBlock .dopBlubButton i{
   position: absolute;
   top: 50%;
   left: 50%;

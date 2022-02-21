@@ -14,6 +14,8 @@ export const LightPage = ({device})=>{
 
   const getBlub = (fields)=>fields?.filter((item)=>(item?.type === "binary" && (item?.name?.toLowerCase()?.indexOf("state") !== -1 || item?.name?.toLowerCase()?.indexOf("power") !== -1)))
 
+  const otherBinary = (fields)=>fields?.filter((item)=>(item?.type === "binary" && item?.name?.toLowerCase()?.indexOf("state") === -1 && item?.name?.toLowerCase()?.indexOf("power") === -1))
+
   const generalBlub = (fields)=>{
     let blubs = getBlub(fields)||[]
     let blubs2 = blubs.filter((item)=>(item?.name?.toLowerCase()?.indexOf("state") === 0 || item?.name?.toLowerCase()?.indexOf("power") === 0))
@@ -30,9 +32,7 @@ export const LightPage = ({device})=>{
     return blubs.filter((item)=>item.name !== blub.name)
   }
 
-  const ranges = (fields)=>{
-    return fields.filter((item)=>item.type === "number")
-  }
+  const ranges = (fields)=>fields.filter((item)=>item.type === "number")
 
   const outValue = async(systemName,name,v)=>{
     await request('/api/device/value/set', 'POST', {systemName: systemName,type:name,status:v},{Authorization: `Bearer ${auth.token}`})
@@ -78,36 +78,41 @@ export const LightPage = ({device})=>{
             )
           })
         }
-        <div className="dividers"></div>
       </div>
       <div className="ditailContainer">
-        <div className="leftControl">
-          <div className="">
-            {
-              ranges(device.config).map((item, index)=>{
-                return (
-                  <Slider device={device} key={index} item={item}/>
-                )
-              })
-            }
-            <div className="dividers"></div>
-          </div>
+        <div className="containerBlock">
+          {
+            ranges(device.config).map((item, index)=>{
+              return (
+                <div key={index} className="slider-container">
+                  <Slider device={device} item={item}/>
+                </div>
+              )
+            })
+          }
         </div>
-        <div className="centerControl">
-          <div className="">
-            {
-              dopBlub(device.config).map((item, index)=>{
-                return (
-                  <div onClick={()=>togleField(item.name)} key={index} className={`dopBlubButton ${(getValue(device,item.name))?"activ":""}`}>
-                    <i className={item.icon}></i>
-                  </div>
-                )
-              })
-            }
-            <div className="dividers"></div>
-          </div>
+        <div className="containerBlock dopBlubContainer">
+          {
+            dopBlub(device.config).map((item, index)=>{
+              return (
+                <div onClick={()=>togleField(item.name)} key={index} className={`dopBlubButton ${(getValue(device,item.name))?"activ":""}`}>
+                  <i className={item.icon||"far fa-lightbulb"}></i>
+                </div>
+              )
+            })
+          }
         </div>
-        <div className="rightControl"></div>
+        <div className="containerBlock dopBlubContainer">
+          {
+            otherBinary(device.config).map((item, index)=>{
+              return (
+                <div onClick={()=>togleField(item.name)} key={index} className={`dopBlubButton ${(getValue(device,item.name))?"activ":""}`}>
+                  <i className={item.icon||"fas fa-power-off"}></i>
+                </div>
+              )
+            })
+          }
+        </div>
       </div>
     </div>
   )
