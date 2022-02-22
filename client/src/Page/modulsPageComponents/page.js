@@ -43,7 +43,7 @@ export const Page = ({data={}, updateMenu}) => {
   useEffect(()=>{
     if (!(data?.menu)) return ;
     updateMenu(getmenu(data, dataPage, getData))
-  },[dataPage,data,getfields,updateMenu])
+  },[dataPage,data,getfields,updateMenu,getData,getmenu])
 
   return (
     <div className={`conteiner ${(data?.content?.typeContent === "table")?"color-normal":""}`}>

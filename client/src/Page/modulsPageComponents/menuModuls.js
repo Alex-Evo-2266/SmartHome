@@ -9,7 +9,7 @@ import {TypeDeviceContext} from '../../components/typeDevices/typeDevicesContext
 import {DialogWindowContext} from '../../components/dialogWindow/dialogWindowContext'
 
 export const useMenuModuls = () => {
-  const {getfields, gettext} = useDecodePath()
+  const {getfields} = useDecodePath()
   const {show} = useContext(DialogWindowContext)
   const types = useContext(TypeDeviceContext)
   const form = useContext(FormContext)
@@ -50,7 +50,7 @@ export const useMenuModuls = () => {
       }
       else{}
     }
-  },[auth.token,request,name,typeList])
+  },[auth.token,request,name,typeList,show,form])
 
   const getmenu = useCallback((config, root, update)=>{
     if(!(config?.menu)) return ;

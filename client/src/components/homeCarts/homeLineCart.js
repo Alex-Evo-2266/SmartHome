@@ -80,8 +80,11 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   function allPower(array,value) {
     setAct(value)
     for (var item of array)
-      if(item.typeAction==="power")
-        request('/api/devices/value/set', 'POST', {id: item.deviceId,type:item.typeAction,status:value},{Authorization: `Bearer ${auth.token}`})
+    {
+      console.log(item);
+      if(item.typeAction==="power"||item.typeAction==="state")
+        request('/api/device/value/set', 'POST', {systemName: item.deviceName,type:item.typeAction,status:(value)?1:0},{Authorization: `Bearer ${auth.token}`})
+    }
     return false
   }
 

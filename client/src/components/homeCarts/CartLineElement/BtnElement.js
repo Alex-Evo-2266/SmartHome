@@ -130,7 +130,7 @@ const changeHandler = (event)=>{
   if(data.typeAction==="modeTarget")
       return outValue(device.systemName,"target")
   if(deviceConfig.type==="binary")
-      return outValue(device.systemName,!oldvel)
+      return outValue(device.systemName,(oldvel)?0:1)
   if(deviceConfig.type==="number")
       return outValue(device.systemName,data.action)
   if(deviceConfig.type==="text")

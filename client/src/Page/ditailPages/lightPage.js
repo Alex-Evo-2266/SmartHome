@@ -1,9 +1,11 @@
-import React,{useContext, useState, useEffect, useCallback, useRef} from 'react'
+import React,{useContext, useState, useEffect, useRef} from 'react'
 import {useHttp} from '../../hooks/http.hook'
 import {AuthContext} from '../../context/AuthContext.js'
 import {useMessage} from '../../hooks/message.hook'
 import {getValue} from './components/utils'
 import {Slider} from './components/slider'
+import {Text} from './components/text'
+import {Enum} from './components/enum'
 
 export const LightPage = ({device})=>{
   const auth = useContext(AuthContext)
@@ -12,9 +14,15 @@ export const LightPage = ({device})=>{
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
 
-  const getBlub = (fields)=>fields?.filter((item)=>(item?.type === "binary" && (item?.name?.toLowerCase()?.indexOf("state") !== -1 || item?.name?.toLowerCase()?.indexOf("power") !== -1)))
+  const getBlub = (fields)=>fields?.filter((item)=>(item?.type === "binary" && item?.control === true && (item?.name?.toLowerCase()?.indexOf("state") !== -1 || item?.name?.toLowerCase()?.indexOf("power") !== -1)))
 
-  const otherBinary = (fields)=>fields?.filter((item)=>(item?.type === "binary" && item?.name?.toLowerCase()?.indexOf("state") === -1 && item?.name?.toLowerCase()?.indexOf("power") === -1))
+  const otherBinary = (fields)=>fields?.filter((item)=>(item?.type === "binary" && item?.control === true && item?.name?.toLowerCase()?.indexOf("state") === -1 && item?.name?.toLowerCase()?.indexOf("power") === -1))
+
+  const textcontrol = (fields)=>fields?.filter((item)=>(item?.type === "text" && item?.control === true))
+
+  const enumcontrol = (fields)=>fields?.filter((item)=>(item?.type === "enum" && item?.control === true))
+
+  const sensors = (fields)=>fields?.filter((item)=>(item?.control === false))
 
   const generalBlub = (fields)=>{
     let blubs = getBlub(fields)||[]
@@ -46,7 +54,7 @@ export const LightPage = ({device})=>{
   useEffect(()=>{
     let d = getValue(device, "state")
     setValue(d)
-  },[device, getValue])
+  },[device])
 
   useEffect(()=>{
     blub.current?.style.setProperty('--blub-on',"#fff")
@@ -61,8 +69,9 @@ export const LightPage = ({device})=>{
 
   return(
     <div className="deviceContainer">
-      <div className="topContainer">
-      <p className="lightName">{device?.name}</p>
+      <div className="top-left"></div>
+      <div className="topContainer top-center">
+        <p className="lightName">{device?.name}</p>
         {
           [generalBlub(device.config)]?.map((item,index)=>{
             return(
@@ -79,7 +88,9 @@ export const LightPage = ({device})=>{
           })
         }
       </div>
-      <div className="ditailContainer">
+      <div className="top-right"></div>
+      {
+        (ranges(device.config).length !== 0)?
         <div className="containerBlock">
           {
             ranges(device.config).map((item, index)=>{
@@ -90,7 +101,11 @@ export const LightPage = ({device})=>{
               )
             })
           }
-        </div>
+        </div>:
+        null
+      }
+      {
+        (dopBlub(device.config).length !== 0)?
         <div className="containerBlock dopBlubContainer">
           {
             dopBlub(device.config).map((item, index)=>{
@@ -101,7 +116,11 @@ export const LightPage = ({device})=>{
               )
             })
           }
-        </div>
+        </div>:
+        null
+      }
+      {
+        (otherBinary(device.config).length !== 0)?
         <div className="containerBlock dopBlubContainer">
           {
             otherBinary(device.config).map((item, index)=>{
@@ -112,8 +131,57 @@ export const LightPage = ({device})=>{
               )
             })
           }
-        </div>
-      </div>
+        </div>:
+        null
+      }
+      {
+        (textcontrol(device.config).length !== 0)?
+        <div className="containerBlock">
+          {
+            textcontrol(device.config).map((item, index)=>{
+              return (
+                <div key={index} className="text-container">
+                  <Text device={device} item={item}/>
+                </div>
+              )
+            })
+          }
+        </div>:
+        null
+      }
+      {
+        (textcontrol(device.config).length !== 0)?
+        <div className="containerBlock">
+          {
+            enumcontrol(device.config).map((item, index)=>{
+              return (
+                <div key={index} className="text-container">
+                  <Enum device={device} item={item}/>
+                </div>
+              )
+            })
+          }
+        </div>:
+        null
+      }
+      {
+        (sensors(device.config).length !== 0)?
+        <div className="containerBlock">
+          {
+            sensors(device.config).map((item, index)=>{
+              return (
+                <div key={index} className="text-container">
+                  <div className="sensor-container">
+                    <p className="name">{item.name}</p>
+                    <p className="value">{String(getValue(device,item.name))}</p>
+                  </div>
+                </div>
+              )
+            })
+          }
+        </div>:
+        null
+      }
     </div>
   )
 }

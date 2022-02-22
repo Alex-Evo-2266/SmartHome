@@ -1,33 +1,27 @@
-import React,{useState, useEffect, useCallback, useContext} from 'react'
-import {AuthContext} from '../../context/AuthContext.js'
-import {useHttp} from '../../hooks/http.hook'
-import {useMessage} from '../../hooks/message.hook'
+import React from 'react'
 import {Menu} from '../../components/Menu/dopmenu/menu'
 import {useDecodePath} from './pathDecodhook'
 import {useMenuModuls} from './menuModuls'
 
 export const Table = ({data=[], conf}) => {
-  const auth = useContext(AuthContext)
   const {getmenu} = useMenuModuls()
   const {getfields} = useDecodePath()
-  const {message} = useMessage();
-  const {request, error, clearError} = useHttp();
 
-  const clickmenu = (item, datael)=>{
-    console.log(item,datael);
+  // const clickmenu = (item, datael)=>{
+  //   console.log(item,datael);
+  //
+  // }
 
-  }
-
-  const getMenubtns = (menu,datael)=>{
-    let arr = []
-    for (let item of menu) {
-      arr.push({
-        title:getfields(item.title,datael),
-        onClick:()=>clickmenu(item,datael)
-      })
-      return arr
-    }
-  }
+  // const getMenubtns = (menu,datael)=>{
+  //   let arr = []
+  //   for (let item of menu) {
+  //     arr.push({
+  //       title:getfields(item.title,datael),
+  //       onClick:()=>clickmenu(item,datael)
+  //     })
+  //     return arr
+  //   }
+  // }
 
   return (
     <div className="mqttTableDiv">
