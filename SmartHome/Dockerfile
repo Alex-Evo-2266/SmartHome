@@ -45,3 +45,4 @@ RUN poetry config virtualenvs.create false \
 COPY . $APP_HOME
 
 RUN mkdir media
+RUN chmod 777 media/

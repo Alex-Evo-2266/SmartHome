@@ -85,14 +85,14 @@ export const BtnElement = ({title,baseswitchMode=false,data,icon,className,index
   },[device,data])
 
   useEffect(()=>{
-    if(typeof(onClick)==="function"||disabled||device.status==="offline")return
+    if(typeof(onClick)==="function"||disabled||!device||device?.status==="offline")return
     const {low,high,type} = deviceConfig
-    if(device&&type==="binary"&&device.value&&device.value[deviceConfig.name]){
-      if(device.value[deviceConfig.name]==="0")
+    if(device&&type==="binary"&&device?.value&&device?.value[deviceConfig.name]){
+      if(device?.value[deviceConfig.name]==="0")
         setValue(false)
-      if(device.value[deviceConfig.name]==="1")
+      if(device?.value[deviceConfig.name]==="1")
         setValue(true)
-      if(device.typeConnect==="mqtt"&&(!/\D/.test(device.value[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
+      if(device?.typeConnect==="mqtt"&&(!/\D/.test(device.value[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
         let poz = Number(device.value[deviceConfig.name])
         let min = Number(low)
         let max = Number(high)
