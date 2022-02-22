@@ -96,3 +96,21 @@ def deleteHomePage(name: str)->FunctionRespons:
     except Exception as e:
         logger.error(f"error delete page name:{name}, detail:{e}")
         return FunctionRespons(status="error", detail=str(e))
+
+def deleteDevice(name: str)->FunctionRespons:
+    try:
+        pages = getPagesName()
+        if pages.status != "ok":
+            return FunctionRespons(status="error", detail=f"error delete device name:{name}")
+        for page in pages.data:
+            datapage = getPage(page)
+            if datapage.status == "ok":
+                data = datapage.data
+                for card in data.cards:
+                    filt = [x for x in card.children if x.deviceName != name]
+                    card.children = filt
+            setPage(data)
+            return FunctionRespons(status="ok", data="ok")
+    except Exception as e:
+        logger.error(f"error delete device name:{name}, detail:{e}")
+        return FunctionRespons(status="error", detail=str(e))

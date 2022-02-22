@@ -8,6 +8,7 @@ from .DeviceFile import Devices
 from SmartHome.settings import DEVICES
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldConfigSchema, DeviceEditSchema
 
+from SmartHome.logic.homePage import deleteDevice as deleteDeviceinpage
 
 
 logger = logging.getLogger(__name__)
@@ -70,7 +71,7 @@ async def deleteDevice(systemName: str):
         dev = Devices.get(systemName=systemName)
         devicesArrey.delete(systemName)
         dev.delete()
-        # deleteDeviceCart(systemName)
+        deleteDeviceinpage(systemName)
         logger.info(f'delete device, systemName:{systemName}')
         return {"status":'ok'}
     except Exception as e:
