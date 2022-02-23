@@ -3,6 +3,7 @@ import {SocketContext} from '../context/SocketContext'
 import {MenuContext} from '../components/Menu/menuContext'
 import {useParams} from "react-router-dom"
 import {LightPage} from './ditailPages/lightPage'
+import {OtherDevicePage} from './ditailPages/otherdevice'
 
 export const DitailDevicePage = ()=>{
   const [device,setDevice] = useState(null)
@@ -29,7 +30,7 @@ export const DitailDevicePage = ()=>{
     {
       (device?.type === "light")?
       <LightPage device={device}/>
-      :null
+      :<OtherDevicePage device={device}/>
     }
     </div>
   )

@@ -58,3 +58,5 @@ class DeviceHistory(ormar.Model):
     field: str = ormar.String(max_length=200)
     type: str = ormar.String(max_length=100)
     value: str = ormar.String(max_length=500)
+    unit: str = ormar.String(max_length=10)
+    datatime: str = ormar.String(max_length=20)

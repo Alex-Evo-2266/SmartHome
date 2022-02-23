@@ -6,6 +6,7 @@ import {getValue} from './components/utils'
 import {Slider} from './components/slider'
 import {Text} from './components/text'
 import {Enum} from './components/enum'
+import {History} from './components/history'
 
 export const LightPage = ({device})=>{
   const auth = useContext(AuthContext)
@@ -69,6 +70,7 @@ export const LightPage = ({device})=>{
 
   return(
     <div className="deviceContainer">
+      <div className="gridDeviceContainer">
       <div className="top-left"></div>
       <div className="topContainer top-center">
         <p className="lightName">{device?.name}</p>
@@ -182,6 +184,10 @@ export const LightPage = ({device})=>{
         </div>:
         null
       }
+      </div>
+    <div className="HistoryBlock">
+      <History device={device}/>
+    </div>
     </div>
   )
 }

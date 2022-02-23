@@ -1,10 +1,16 @@
 .deviceContainer{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
   min-height: calc(100vh - 56px);
   background: var(--color-base);
   color: var(--text-color-base-fon);
+}
+.gridDeviceContainer{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+.HistoryBlock{
+  grid-column-start: 1;
+  grid-column-end: 4;
 }
 .text-container{
   padding: 5px;

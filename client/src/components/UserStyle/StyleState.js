@@ -12,6 +12,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
   const [config, setConfig] = useState({})
   const [serverConfig, setServerConfig] = useState({})
   const [styles, setStyles] = useState([])
+  const [nawstyles, setNawStyles] = useState(null)
   const [flag, setFlag] = useState(false)
   const {setStyle, avtoNightStyle, adaptiveBackground, setBackground} = useCastomStyle()
 
@@ -47,6 +48,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
 
   const applicationStyle = useCallback((data)=>{
     const style = getColors(data?.dataStyles, data?.dataUserConf?.Style)
+    setNawStyles(style)
     if(!data?.dataUserConf?.staticBackground)
       adaptiveBackground(data?.dataUserConf?.images)
     else
@@ -100,7 +102,7 @@ export const CastomizeStyle = ({children, token, ready}) =>{
   return(
     <UserContext.Provider value={{...config,getData}}>
       <ServerConfigContext.Provider value={{...serverConfig}}>
-        <StyleContext.Provider value={{styles:styles,updateConfig:update}}>
+        <StyleContext.Provider value={{styles:styles,updateConfig:update, nawstyle:nawstyles}}>
           {children}
         </StyleContext.Provider>
       </ServerConfigContext.Provider>

@@ -4,6 +4,7 @@ from SmartHome.models import DeviceHistory
 import logging
 import asyncio
 import threading
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +75,7 @@ class BaseDevice(object):
             value = look_for_param(dev.values, item.name)
             if value:
                 value.value = item.get()
-            await DeviceHistory.objects.create(deviceName=self.systemName, field=item.name, type=item.type, value=value.value)
+            await DeviceHistory.objects.create(deviceName=self.systemName, field=item.name, type=item.type, value=value.value, unit=value.unit, datatime=datetime.now().timestamp())
         dev.save()
         logger.info(f'save {self.name}')
 

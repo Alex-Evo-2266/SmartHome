@@ -1,101 +1,59 @@
-
-.device-chart-card{
-  margin: 5px;
-  background: #fff;
-  overflow: hidden;
-}
-.device-chart-card h2{
-  text-align: center;
-}
-.device-chart-card .content{
-  display: flex;
-  min-height: 400px;
-}
-.canvasConteiner{
-  width: 70%
-}
-.controlCanvasConteiner{
-  width: 30%;
-  background: var(--content-color);
-  box-shadow: 0 0 10px #000;
-  padding: 5px;
-  border-left: 2px solid #555;
-  z-index: 2;
-}
-.controlCanvasConteiner button{
- outline: none;
- border: none;
- border-radius: 5px;
- padding: 10px;
- background: #999;
- width: 80%;
- margin: 5px 0;
- margin-left: 50%;
- transform: translate(calc(-50% - 2px),-2px);
- box-shadow: 2px 2px 10px #000;
- transition: .2s;
-
-}
-.controlCanvasConteiner button:hover
+.historyContainer
 {
-  transform: translate(-50%,0);
-  box-shadow: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
-.controlCanvasConteiner button.active,
-.controlCanvasConteiner button:active{
-  box-shadow: inset 0 0 10px #000;
-  transform: translate(-50%,0);
+.canvasContainer{
+  grid-column-start: 1;
+  grid-column-end: 3;
 }
-.controlCanvasConteiner .ChartZoom{
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  box-shadow: 0 0 5px #000;
-  border-radius: 20px;
-  margin: 10px 0;
+.menuContainer{
+  margin-left: 2px;
 }
-.controlCanvasConteiner .ChartZoom li{
-  background: #777;
-  width: 100%;
-  padding: 10px;
-  border-top: 2px solid #555;
-  border-bottom: 2px solid #555;
+.historySetingsContainer{
+  height: 100px;
+  background: var(--color-normal);
+  margin-bottom: 2px;
+}
+.fieldsList{
+  background: var(--color-normal);
+  height: calc(100% - 100px - 1px);
+}
+.fieldsList ul li{
+  padding: 10px 5px;
   text-align: center;
+  background: var(--btn-color-normal);
+  color: var(--text-color-normal-fon);
+  margin: 1px 0;
 }
-.controlCanvasConteiner .ChartZoom li:last-child{
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  border-right: 2px solid #555;
-}
-.controlCanvasConteiner .ChartZoom li:first-child{
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  border-left: 2px solid #555;
-}
-.controlCanvasConteiner .ChartZoom li:hover,
-.controlCanvasConteiner .ChartZoom li.active{
+.fieldsList ul li:hover,
+.fieldsList ul li.active{
+  background: var(--btn-color-normal);
+  color: var(--text-color-normal-fon);
   box-shadow: inset 0 0 5px #000;
 }
-.NoContent{
-  display: flex;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-}
 .historyList{
-  height: 100%;
-  width: 100%;
+  background: var(--color-normal);
+  height: 400px;
 }
-.historyList .title{
-  font-size: 2.5em;
-  font-weight: 800;
-  padding: 0;
+.historyList h3{
+  text-align: center;
+  line-height: 40px;
+  position: relative;
+  border-bottom: 2px solid var(--color-base);
+  font-size: 34px;
 }
-.historyList .historyItem{
+.historyList ul li{
   display: flex;
   justify-content: space-between;
-  padding: 2px 5px;
-  font-size: 1.3em;
+  padding: 5px 20px
+}
+.historyList ul{
+  position: relative;
+  box-sizing:border-box;
+  overflow-y: scroll;
+  height: 358px;
+}
+.historyList ul li:hover{
+  background: var(--btn-color-normal);
 }
