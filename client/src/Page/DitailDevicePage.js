@@ -26,7 +26,7 @@ export const DitailDevicePage = ()=>{
     return(null)
 
   return(
-    <div className="conteiner fon">
+    <div className="conteiner fon bottom">
     {
       (device?.type === "light")?
       <LightPage device={device}/>

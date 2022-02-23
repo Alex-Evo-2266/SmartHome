@@ -37,11 +37,7 @@ export const History = ({device}) => {
   useEffect(()=>{
     setField(converHistorys(history, fieldname))
   },[fieldname, history])
-
-  useEffect(()=>{
-    console.log(field);
-  },[field])
-
+  
   return(
     <div className="historyContainer">
       <div className="canvasContainer">

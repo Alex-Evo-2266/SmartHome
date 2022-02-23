@@ -7,6 +7,7 @@ import {Slider} from './components/slider'
 import {Text} from './components/text'
 import {Enum} from './components/enum'
 import {History} from './components/history'
+import {Btn} from './components/btn'
 
 export const LightPage = ({device})=>{
   const auth = useContext(AuthContext)
@@ -73,7 +74,6 @@ export const LightPage = ({device})=>{
       <div className="gridDeviceContainer">
       <div className="top-left"></div>
       <div className="topContainer top-center">
-        <p className="lightName">{device?.name}</p>
         {
           [generalBlub(device.config)]?.map((item,index)=>{
             return(
@@ -94,51 +94,58 @@ export const LightPage = ({device})=>{
       {
         (ranges(device.config).length !== 0)?
         <div className="containerBlock">
-          {
-            ranges(device.config).map((item, index)=>{
-              return (
-                <div key={index} className="slider-container">
-                  <Slider device={device} item={item}/>
-                </div>
-              )
-            })
-          }
+          <div className="titleBlock">ranges field</div>
+          <div className="containerBlockcontent">
+            {
+              ranges(device.config).map((item, index)=>{
+                return (
+                  <div key={index} className="slider-container">
+                    <Slider device={device} item={item}/>
+                  </div>
+                )
+              })
+            }
+          </div>
         </div>:
         null
       }
       {
         (dopBlub(device.config).length !== 0)?
-        <div className="containerBlock dopBlubContainer">
+        <div className="containerBlock">
+          <div className="titleBlock">blubs</div>
+          <div className="containerBlockcontent dopBlubContainer">
           {
             dopBlub(device.config).map((item, index)=>{
               return (
-                <div onClick={()=>togleField(item.name)} key={index} className={`dopBlubButton ${(getValue(device,item.name))?"activ":""}`}>
-                  <i className={item.icon||"far fa-lightbulb"}></i>
-                </div>
+                <Btn device={device} item={item}/>
               )
             })
           }
+          </div>
         </div>:
         null
       }
       {
         (otherBinary(device.config).length !== 0)?
-        <div className="containerBlock dopBlubContainer">
+        <div className="containerBlock">
+          <div className="titleBlock">switchs</div>
+          <div className="containerBlockcontent dopBlubContainer">
           {
             otherBinary(device.config).map((item, index)=>{
               return (
-                <div onClick={()=>togleField(item.name)} key={index} className={`dopBlubButton ${(getValue(device,item.name))?"activ":""}`}>
-                  <i className={item.icon||"fas fa-power-off"}></i>
-                </div>
+                <Btn device={device} item={item}/>
               )
             })
           }
+          </div>
         </div>:
         null
       }
       {
         (textcontrol(device.config).length !== 0)?
         <div className="containerBlock">
+          <div className="titleBlock">text field</div>
+          <div className="containerBlockcontent">
           {
             textcontrol(device.config).map((item, index)=>{
               return (
@@ -148,39 +155,46 @@ export const LightPage = ({device})=>{
               )
             })
           }
+          </div>
         </div>:
         null
       }
       {
-        (textcontrol(device.config).length !== 0)?
+        (enumcontrol(device.config).length !== 0)?
         <div className="containerBlock">
-          {
-            enumcontrol(device.config).map((item, index)=>{
-              return (
-                <div key={index} className="text-container">
-                  <Enum device={device} item={item}/>
-                </div>
-              )
-            })
-          }
+          <div className="titleBlock">enum field</div>
+          <div className="containerBlockcontent">
+            {
+              enumcontrol(device.config).map((item, index)=>{
+                return (
+                  <div key={index} className="text-container">
+                    <Enum device={device} item={item}/>
+                  </div>
+                )
+              })
+            }
+          </div>
         </div>:
         null
       }
       {
         (sensors(device.config).length !== 0)?
         <div className="containerBlock">
-          {
-            sensors(device.config).map((item, index)=>{
-              return (
-                <div key={index} className="text-container">
-                  <div className="sensor-container">
-                    <p className="name">{item.name}</p>
-                    <p className="value">{String(getValue(device,item.name))}</p>
+          <div className="titleBlock">sensors field</div>
+          <div className="containerBlockcontent">
+            {
+              sensors(device.config).map((item, index)=>{
+                return (
+                  <div key={index} className="text-container">
+                    <div className="sensor-container">
+                      <p className="name">{item.name}</p>
+                      <p className="value">{String(getValue(device,item.name))}</p>
+                    </div>
                   </div>
-                </div>
-              )
-            })
-          }
+                )
+              })
+            }
+          </div>
         </div>:
         null
       }

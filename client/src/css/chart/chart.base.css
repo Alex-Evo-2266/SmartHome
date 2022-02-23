@@ -57,3 +57,16 @@
 .historyList ul li:hover{
   background: var(--btn-color-normal);
 }
+@media (max-width: 900px){
+  .historyContainer{
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .canvasContainer{
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
+  .menuContainer{
+    grid-row-start: 1;
+    grid-row-end: 2;
+  }
+}
