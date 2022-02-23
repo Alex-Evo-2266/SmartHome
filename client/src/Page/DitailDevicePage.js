@@ -21,6 +21,9 @@ export const DitailDevicePage = ()=>{
     setData(device?.name)
   },[setData, device])
 
+  if(!device || device.status !== "online" || !device?.value)
+    return(null)
+
   return(
     <div className="conteiner fon">
     {

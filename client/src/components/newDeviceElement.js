@@ -54,13 +54,18 @@ export const NewDeviceElement = ({systemName}) =>{
     request('/api/device/status/set', 'POST', {systemName: device.systemName,status:!status},{Authorization: `Bearer ${auth.token}`})
   }
 
+  const detailDevice = ()=>{
+    if(device?.status === "online" && device?.value)
+      history.push(`/devices/ditail/${device.systemName}`)
+  }
+
   return(
     <div className = "NewCardElement">
       <div className = "NewCardHeader">
         <div className = {`typeConnect ${device.typeConnect||"other"}`}>
           <p>{device.typeConnect||"other"}</p>
         </div>
-        <RunText onClick={()=>history.push(`/devices/ditail/${device.systemName}`)} className="DeviceName" id={device.systemName} text={device.name||"NuN"}/>
+        <RunText onClick={detailDevice} className="DeviceName" id={device.systemName} text={device.name||"NuN"}/>
         {
           (auth.userLevel >= 3)?
           <Menu buttons={[

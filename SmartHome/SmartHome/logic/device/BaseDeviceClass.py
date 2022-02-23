@@ -1,6 +1,9 @@
 from .DeviceFile import Devices
 from .DeviceElement import DeviceElement
+from SmartHome.models import DeviceHistory
 import logging
+import asyncio
+import threading
 
 logger = logging.getLogger(__name__)
 
@@ -62,9 +65,16 @@ class BaseDevice(object):
             value = look_for_param(dev.values, item.name)
             if value:
                 value.value = item.get()
-                    # item.value = value.get()
-            # ValueListDevice.objects.create(id=genId(ValueListDevice.objects.all()),name=item.name,value=value.get(),device=dev)
+        dev.save()
+        logger.info(f'save {self.name}')
 
+    async def save_and_addrecord(self):
+        dev = Devices.get(systemName=self.systemName)
+        for item in self.values:
+            value = look_for_param(dev.values, item.name)
+            if value:
+                value.value = item.get()
+            await DeviceHistory.objects.create(deviceName=self.systemName, field=item.name, type=item.type, value=value.value)
         dev.save()
         logger.info(f'save {self.name}')
 

@@ -10,6 +10,9 @@ from SmartHome.logic.device.addDevice import addDevice
 from SmartHome.depends.auth import token_dep
 from SmartHome.logic.device.deviceSetValue import setValue
 from SmartHome.logic.device.editDevice import editDevice, deleteDevice, editStatusDevice
+from SmartHome.logic.device.deviceHistory import getHistory
+
+from SmartHome.models import DeviceHistory
 
 router = APIRouter(
     prefix="/api/device",
@@ -65,3 +68,10 @@ async def add_device(data:DeviceValueSchema, auth_data: dict = Depends(token_dep
     if not res:
         return JSONResponse(status_code=400, content={"message": "error set value"})
     return "ok"
+
+@router.get("/history/get/{systemName}", response_model=List[DeviceHistory])
+async def getHistoryapi(systemName:str, auth_data: dict = Depends(token_dep)):
+    res = await getHistory(systemName)
+    if res.status != "ok":
+        return JSONResponse(status_code=400, content={"message": res.detail})
+    return res.data

@@ -48,3 +48,13 @@ class ImageBackground(ormar.Model):
     title: str = ormar.String(max_length=200)
     image: str = ormar.String(max_length=1000)
     user: Optional[User] = ormar.ForeignKey(User, related_name="background")
+
+class DeviceHistory(ormar.Model):
+    class Meta(BaseMeta):
+        pass
+
+    id: int = ormar.Integer(primary_key=True)
+    deviceName: str = ormar.String(max_length=200)
+    field: str = ormar.String(max_length=200)
+    type: str = ormar.String(max_length=100)
+    value: str = ormar.String(max_length=500)

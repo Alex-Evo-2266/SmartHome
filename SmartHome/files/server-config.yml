@@ -1,0 +1,15 @@
+base:
+  frequency: '3'
+email:
+  login: ''
+  password: ''
+mqttBroker:
+  host: localhost
+  password: admin
+  port: '1883'
+  user: admin
+weather:
+  APPID: ''
+  city: ''
+zigbee:
+  topic: zigbee2mqtt
