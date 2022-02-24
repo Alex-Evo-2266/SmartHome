@@ -2,6 +2,8 @@
 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  border-radius: 4px;
+  overflow: hidden;
 }
 .canvasContainer{
   grid-column-start: 1;
@@ -14,17 +16,51 @@
   height: 100px;
   background: var(--color-normal);
   margin-bottom: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .fieldsList{
   background: var(--color-normal);
   height: calc(100% - 100px - 1px);
+}
+.fieldsList ul{
+  box-sizing: border-box;
+  position: relative;
+  padding: 1px;
+}
+.SetingsBtn{
+  display: flex;
+  margin: 0 10px;
+  border-radius: 15px;
+  width: calc(100% - 10px);
+}
+.SetingsBtn > div:first-child{
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+.SetingsBtn > div:last-child{
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+.SetingsBtn > div{
+  padding: 10px;
+  background: var(--color-base);
+  width: 50%;
+  text-align: center;
+}
+.SetingsBtn > div:hover,
+.SetingsBtn > div.active
+{
+  box-shadow: inset 0 0 5px #000;
 }
 .fieldsList ul li{
   padding: 10px 5px;
   text-align: center;
   background: var(--btn-color-normal);
   color: var(--text-color-normal-fon);
-  margin: 1px 0;
+  margin: 4px 4px;
+  border-radius: 4px;
 }
 .fieldsList ul li:hover,
 .fieldsList ul li.active{

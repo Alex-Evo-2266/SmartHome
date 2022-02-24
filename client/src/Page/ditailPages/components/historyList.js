@@ -1,4 +1,4 @@
-import React, {useContext,useEffect,useState,useCallback} from 'react'
+import React from 'react'
 import {dateFormat} from './utils'
 
 export const HistoryList = ({records, title}) => {

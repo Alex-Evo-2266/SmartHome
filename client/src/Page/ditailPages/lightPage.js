@@ -117,7 +117,7 @@ export const LightPage = ({device})=>{
           {
             dopBlub(device.config).map((item, index)=>{
               return (
-                <Btn device={device} item={item}/>
+                <Btn device={device} key={index} item={item}/>
               )
             })
           }
@@ -133,7 +133,7 @@ export const LightPage = ({device})=>{
           {
             otherBinary(device.config).map((item, index)=>{
               return (
-                <Btn device={device} item={item}/>
+                <Btn device={device} key={index} item={item}/>
               )
             })
           }

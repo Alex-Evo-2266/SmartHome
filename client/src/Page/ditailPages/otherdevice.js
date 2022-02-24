@@ -1,4 +1,4 @@
-import React,{useContext, useState, useEffect, useRef} from 'react'
+import React from 'react'
 import {getValue} from './components/utils'
 import {Slider} from './components/slider'
 import {Text} from './components/text'

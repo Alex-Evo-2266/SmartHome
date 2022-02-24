@@ -26,7 +26,7 @@ export const Text = ({device, item}) =>{
   }
 
   return(
-    <div>
+    <div className="text-field">
       <div className="textfield-name">
         <p>{item.name||"text"}</p>
       </div>

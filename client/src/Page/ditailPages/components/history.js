@@ -13,6 +13,7 @@ export const History = ({device}) => {
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
   const [history, setHistory] = useState([])
+  const [range, setrange] = useState("all")
   const [fieldname, setFieldname] = useState(device.config[0].name)
   const [field, setField] = useState(null)
 
@@ -30,6 +31,18 @@ export const History = ({device}) => {
       setHistory(data)
   },[auth.token, request, device.systemName])
 
+  const filterTime = (data, time)=>{
+    let naw = new Date()
+    let newdata = {...data}
+    if(time==="year")
+      newdata.data = data.data.filter((item)=>item.x.getFullYear() === naw.getFullYear())
+    else if(time==="month")
+      newdata.data = data.data.filter((item)=>(item.x.getMonth() === naw.getMonth() && item.x.getFullYear() === naw.getFullYear()))
+    else if(time==="day")
+      newdata.data = data.data.filter((item)=>(item.x.getDate() === naw.getDate() && item.x.getMonth() === naw.getMonth() && item.x.getFullYear() === naw.getFullYear()))
+    return newdata
+  }
+
   useEffect(()=>{
     getHistory()
   },[getHistory])
@@ -37,18 +50,25 @@ export const History = ({device}) => {
   useEffect(()=>{
     setField(converHistorys(history, fieldname))
   },[fieldname, history])
-  
+
   return(
     <div className="historyContainer">
       <div className="canvasContainer">
       {
         (field?.type === "binary" || field?.type === "number")?
-        <CanvasJSChart options={getOption(field, nawstyle)}/>
-        :<HistoryList records={field} title={field?.deviceName}/>
+        <CanvasJSChart options={getOption(filterTime(field, range), nawstyle)}/>
+        :<HistoryList records={filterTime(field, range)} title={field?.deviceName}/>
       }
       </div>
       <div className="menuContainer">
-        <div className="historySetingsContainer"></div>
+        <div className="historySetingsContainer">
+          <div className="SetingsBtn">
+            <div className={(range==="all")?"active":""} onClick={()=>setrange("all")}>all</div>
+            <div className={(range==="year")?"active":""} onClick={()=>setrange("year")}>year</div>
+            <div className={(range==="month")?"active":""} onClick={()=>setrange("month")}>month</div>
+            <div className={(range==="day")?"active":""} onClick={()=>setrange("day")}>day</div>
+          </div>
+        </div>
         <div className="fieldsList">
           <ul>
             {
