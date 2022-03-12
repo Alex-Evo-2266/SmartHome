@@ -51,7 +51,7 @@ export const GroupCard = ({group, updata}) =>{
 
   const controlfield = fields => fields?.filter(item => item.control === true)
 
-  const addfield  = (fieldsList, fields) => {
+  const addfield  = (fieldsList, fields, values) => {
     let flag = true
     let arr = fieldsList.slice()
     for (var item of fields) {
@@ -61,7 +61,9 @@ export const GroupCard = ({group, updata}) =>{
           flag = false
       }
       if (flag)
-        arr.push(item)
+      {
+        arr.push({...item, value:values[item.name]})
+      }
     }
     return arr
   }
@@ -74,7 +76,7 @@ export const GroupCard = ({group, updata}) =>{
     }
     let groupdevices = getdevice(devName)
     for (var item of groupdevices) {
-      arr = addfield(arr, controlfield(item.config))
+      arr = addfield(arr, controlfield(item.config), item.value)
     }
     return arr
   }
@@ -120,19 +122,19 @@ export const GroupCard = ({group, updata}) =>{
         {
           getFields().map((item,index)=>{
             if(item.type==="binary" && item.control){
-              return <Power outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={(String(getValue(item.name))==="1")?true:false} type={item.name}/>
+              return <Power outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={(String(item.value)==="1")?true:false} type={item.name}/>
             }
             if(item.type==="number"&& item.control){
-              return <Dimmer outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={Number(getValue(item.name))} type={item.name} title = {item.name} conf={{min:item.low,max:item.high}}/>
+              return <Dimmer outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={Number(item.value)} type={item.name} title = {item.name} conf={{min:item.low,max:item.high}}/>
             }
             if(item.type==="number"&& item.control){
-              return <Mode outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={Number(getValue(item.name))} type={item.name} conf={Number(item.high)}/>
+              return <Mode outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={Number(item.value)} type={item.name} conf={Number(item.high)}/>
             }
             if(item.type==="enum"&& item.control){
-              return <Enum outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={getValue(item.name)} type={item.name} conf={item.values}/>
+              return <Enum outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={item.value} type={item.name} conf={item.values}/>
             }
             if(item.type==="text"&& item.control){
-              return <Text outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={getValue(item.name)} type={item.name} conf={item.values}/>
+              return <Text outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={item.value} type={item.name} conf={item.values}/>
             }
             if(!item.control){
               return(
