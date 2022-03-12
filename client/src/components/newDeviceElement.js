@@ -4,11 +4,11 @@ import {useHistory} from 'react-router-dom'
 import {RunText} from './runText'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
-import {Power} from './newDeviceControlElements/power'
-import {Dimmer} from './newDeviceControlElements/dimmer'
-import {Mode} from './newDeviceControlElements/mode'
-import {Enum} from './newDeviceControlElements/enum'
-import {Text} from './newDeviceControlElements/text'
+import {Power} from './controlComponents/power'
+import {Dimmer} from './controlComponents/dimmer'
+import {Mode} from './controlComponents/mode'
+import {Enum} from './controlComponents/enum'
+import {Text} from './controlComponents/text'
 import {Menu} from './Menu/dopmenu/menu'
 // import {Color} from './newDeviceControlElements/color'
 import {SocketContext} from '../context/SocketContext'
@@ -59,6 +59,11 @@ export const NewDeviceElement = ({systemName}) =>{
       history.push(`/devices/ditail/${device.systemName}`)
   }
 
+  const outValue = async(systemName, type, v)=>{
+    console.log(v);
+    await request('/api/device/value/set', 'POST', {systemName: systemName,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
+  }
+
   return(
     <div className = "NewCardElement">
       <div className = "NewCardHeader">
@@ -89,19 +94,19 @@ export const NewDeviceElement = ({systemName}) =>{
           <li className="DeviceControlLi"><h4 className="offline">{device.status}</h4></li>
           :device.config.map((item,index)=>{
             if(item.type==="binary" && item.control){
-              return <Power key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value&&(String(device.value[item.name])==="1"))?true:false} type={item.name}/>
+              return <Power outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value&&(String(device.value[item.name])==="1"))?true:false} type={item.name}/>
             }
             if(item.type==="number"&& item.control){
-              return <Dimmer key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?Number(device.value[item.name]):0} type={item.name} title = {item.name} conf={{min:item.low,max:item.high}}/>
+              return <Dimmer outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?Number(device.value[item.name]):0} type={item.name} title = {item.name} conf={{min:item.low,max:item.high}}/>
             }
             if(item.type==="number"&& item.control){
-              return <Mode key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?Number(device.value[item.name]):0} type={item.name} conf={Number(item.high)}/>
+              return <Mode outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?Number(device.value[item.name]):0} type={item.name} conf={Number(item.high)}/>
             }
             if(item.type==="enum"&& item.control){
-              return <Enum key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values}/>
+              return <Enum outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values}/>
             }
             if(item.type==="text"&& item.control){
-              return <Text key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values}/>
+              return <Text outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values}/>
             }
             if(!item.control){
               return(

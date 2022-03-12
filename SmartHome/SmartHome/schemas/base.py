@@ -9,5 +9,5 @@ class TypeRespons(str, Enum):
 
 class FunctionRespons(BaseModel):
     status: TypeRespons
-    data: Optional[Any]
-    detail: Optional[str]
+    data: Any = ""
+    detail: str = ""

@@ -1,5 +1,3 @@
-/* @import "./hidingLi.light.css";
-@import "./hidingLi.night.css"; */
 @import "./hidingLi.color.css";
 li.hidingLi{
   width: calc(100% - 20px);

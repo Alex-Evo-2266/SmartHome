@@ -9,8 +9,8 @@ export const useHttp = () => {
   const refresh = useCallback(async ()=>{
     const response = await fetch("/api/auth/refresh", {method:"GET", body:null, headers:{}});
     const data = await response.json()
-    console.log(data);
     if (!response.ok) {
+      auth.logout()
       throw new Error(data.message||'что-то пошло не так')
     }
     await auth.login(data.token, data.userId, data.userLavel)

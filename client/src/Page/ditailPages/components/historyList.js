@@ -3,7 +3,6 @@ import {dateFormat} from './utils'
 
 export const HistoryList = ({records, title}) => {
 
-console.log(records);
   return(
     <div className="historyList">
       <h3>{title||""}</h3>

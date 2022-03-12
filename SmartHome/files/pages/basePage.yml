@@ -1,2 +1,17 @@
-cards: []
+cards:
+- children:
+  - deviceName: lamp1
+    height: 1
+    index: 0
+    name: lamp1
+    order: 0
+    title: admin
+    type: button
+    typeAction: state
+    width: 1
+  index: 0
+  name: ''
+  order: 0
+  type: line
+  width: 2
 name: basePage

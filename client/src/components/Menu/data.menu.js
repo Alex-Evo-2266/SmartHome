@@ -8,6 +8,7 @@ export const menuField = [
   // {title:"Files",iconClass:"fas fa-file",url:"/files/gallery"},
   {title:"Gallery",iconClass:"fas fa-images",url:"/gallery"},
   {title:"Terminal",iconClass:"fas fa-terminal",url:"/terminal"},
-  {title:"Сhart",iconClass:"fas fa-chart-area",url:"/chart"},
+  {title:"Groups",iconClass:"fas fa-object-group",url:"/groups"},
   {title:"Rooms",iconClass:"fab fa-buromobelexperte",url:"/rooms"},
+  {title:"Users",iconClass:"fas fa-users",url:"/users"}
 ]

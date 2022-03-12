@@ -19,6 +19,8 @@ import {MovieDitail} from './Page/filespage/movieDitail'
 import {MqttPage} from './Page/MqttTopics'
 import {ZigbeePage} from './Page/ZigbeePage'
 import {ModulsPage} from './Page/ModulsPage'
+import {GroupsPage} from './Page/GroupsPage'
+import {GroupsAddPage} from './Page/addGroupPage'
 import {EditStylePage} from './Page/EditStylePage'
 import AddUser from './Page/AddUser'
 
@@ -43,6 +45,12 @@ export const useRoutes = (isAuthenticated,level)=>{
         </Route>
         <Route path="/profile">
           <ProfilePage/>
+        </Route>
+        <Route path="/groups" exact>
+          <GroupsPage/>
+        </Route>
+        <Route path="/groups/add" exact>
+          <GroupsAddPage/>
         </Route>
         <Route path="/config/style" exact>
           <EditStylePage/>

@@ -15,6 +15,7 @@
 .historySetingsContainer{
   height: 100px;
   background: var(--color-normal);
+  color: var(--text-color-normal-fon);
   margin-bottom: 2px;
   display: flex;
   justify-content: center;
@@ -22,6 +23,7 @@
 }
 .fieldsList{
   background: var(--color-normal);
+  color: var(--text-color-normal-fon);
   height: calc(100% - 100px - 1px);
 }
 .fieldsList ul{
@@ -46,6 +48,7 @@
 .SetingsBtn > div{
   padding: 10px;
   background: var(--color-base);
+  color: var(--text-color-base-fon);
   width: 50%;
   text-align: center;
 }
@@ -70,6 +73,7 @@
 }
 .historyList{
   background: var(--color-normal);
+  color: var(--text-color-normal-fon);
   height: 400px;
 }
 .historyList h3{
@@ -77,6 +81,7 @@
   line-height: 40px;
   position: relative;
   border-bottom: 2px solid var(--color-base);
+  color: var(--text-color-normal-fon);
   font-size: 34px;
 }
 .historyList ul li{

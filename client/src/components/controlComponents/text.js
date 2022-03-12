@@ -3,7 +3,9 @@ import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {AuthContext} from '../../context/AuthContext.js'
 
-export const Text = ({updata,title,type,conf,value,systemName}) =>{
+const foo = (systemName, type, v)=>{}
+
+export const Text = ({updata,title,type,conf,value,systemName,outValue=foo}) =>{
   const [newvalue, setValue]=useState("")
   const [focus, setFocus] = useState(false)
   const auth = useContext(AuthContext)
@@ -23,12 +25,13 @@ export const Text = ({updata,title,type,conf,value,systemName}) =>{
     setValue(value)
   },[value, focus])
 
-  const outValue = ()=>{
-    request('/api/device/value/set', 'POST', {systemName: systemName,type:type,status:newvalue},{Authorization: `Bearer ${auth.token}`})
-  }
-
   const changeHandler = event =>{
     setValue(event.target.value)
+  }
+
+  const out = ()=>{
+    outValue(systemName, type, newvalue)
+    setFocus(false)
   }
 
   return(
@@ -38,8 +41,8 @@ export const Text = ({updata,title,type,conf,value,systemName}) =>{
       </div>
       <div className="DeviceControlLiContent">
         <div className="DeviceLiControl" style={{display: "flex",justifyContent: "flex-end"}}>
-          <input type="text" onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} value={newvalue} onChange={changeHandler}/>
-          <input type="button" onClick={outValue} value="send"/>
+          <input type="text" onFocus={()=>setFocus(true)} value={newvalue} onChange={changeHandler}/>
+          <input type="button" onClick={out} value="send"/>
         </div>
       </div>
     </li>

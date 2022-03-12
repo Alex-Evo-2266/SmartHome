@@ -3,7 +3,9 @@ import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {AuthContext} from '../../context/AuthContext.js'
 
-export const Enum = ({updata,title,type,conf,value,systemName}) =>{
+const foo = (systemName, type, v)=>{}
+
+export const Enum = ({updata,title,type,conf,value,systemName, outValue=foo}) =>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
@@ -20,13 +22,9 @@ export const Enum = ({updata,title,type,conf,value,systemName}) =>{
     }
   },[error,message, clearError])
 
-  const outValue = async(v)=>{
-    await request('/api/device/value/set', 'POST', {systemName: systemName,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
-  }
-
   const changeHandler = event =>{
     setValue(event.target.value)
-    outValue(event.target.value)
+    outValue(systemName, type, event.target.value)
   }
 
   const valuesDecod = (data)=>{

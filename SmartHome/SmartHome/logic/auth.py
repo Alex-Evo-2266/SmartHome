@@ -88,6 +88,6 @@ async def refresh_token(token: str):
         encoded_jwt = await create_tokens(u.id)
         result = {"token":encoded_jwt.access, "userId":u.id,"userLavel":u.UserLevel}
         logger.info(f"login user: {u.UserName}, id: {u.id}")
-        return {"status":"ok","data":{"refresh":encoded_jwt.refresh, "response": result}}
+        return {"type":"ok","data":{"refresh":encoded_jwt.refresh, "response": result}}
     except Exception as e:
         return {'type':'error', 'detail':e}

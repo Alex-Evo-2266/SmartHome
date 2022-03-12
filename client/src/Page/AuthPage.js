@@ -57,7 +57,7 @@ const newpass = ()=>{
       <div className="right-auth">
           <div className={`formBox-auth`}>
             <p>Name</p>
-            <input placeholder="Online" id="name" type="text" name="name" value={form.name} onChange={changeHandler} required/>
+            <input placeholder="Login" id="name" type="text" name="name" value={form.name} onChange={changeHandler} required/>
             <p>Password</p>
             <input placeholder="•••••••" id="password" type="password" name="password" value={form.password} onChange={changeHandler} required/>
             <input type="submit" onClick={loginHandler} disabled={loading} value="Sign In"/>

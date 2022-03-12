@@ -26,7 +26,11 @@
 }
 .slider-container .slider-box{
   background: var(--color-normal);
+  color: var(--text-color-normal-fon);
   border-radius: 4px;
+}
+.slider-container .slider-box .name{
+  color: var(--text-color-normal-fon);
 }
 .text-field{
   background: var(--color-normal);
@@ -42,6 +46,7 @@
 }
 .titleBlock{
   background: var(--color-normal);
+  color: var(--text-color-normal-fon);
   text-align: center;
   line-height: 40px;
 }
@@ -98,6 +103,7 @@
   border-left: 2px solid var(--color-normal);
   border-right: 2px solid var(--color-normal);
   background: var(--color-base);
+  color: var(--text-color-normal-fon);
   box-shadow: 0 0 10px #000;
   border-radius: 4px;
 }

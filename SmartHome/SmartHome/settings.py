@@ -31,6 +31,8 @@ SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
 STYLES_DIR = os.path.join(BASE_DIR, "files","styles")
 PAGES_DIR =  os.path.join(BASE_DIR, "files","pages")
 DEVICES = os.path.join(BASE_DIR, "files","devices.yml")
+GROUPS = os.path.join(BASE_DIR, "files","groups.yml")
+ROOMS = os.path.join(BASE_DIR, "files","rooms.yml")
 
 TIME_UPPDATA = 6
 LENGTHPASS = 10

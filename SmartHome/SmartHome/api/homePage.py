@@ -10,7 +10,7 @@ from SmartHome.depends.auth import token_dep
 
 router = APIRouter(
     prefix="/api/homePage",
-    tags=["homPage"],
+    tags=["homePage"],
     responses={404: {"description": "Not found"}},
 )
 

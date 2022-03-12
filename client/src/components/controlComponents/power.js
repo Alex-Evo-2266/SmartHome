@@ -3,7 +3,9 @@ import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {AuthContext} from '../../context/AuthContext.js'
 
-export const Power = ({updata,title,type,conf,value,systemName}) =>{
+const foo = (systemName, type, v)=>{}
+
+export const Power = ({updata,title,type,conf,value,systemName,outValue=foo}) =>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
@@ -20,16 +22,12 @@ export const Power = ({updata,title,type,conf,value,systemName}) =>{
     }
   },[error,message, clearError])
 
-  const outValue = async(v)=>{
-    await request('/api/device/value/set', 'POST', {systemName: systemName,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
-  }
-
   const clickHandler = event =>{
     setValue(event.target.checked)
     if(event.target.checked)
-      outValue(1)
+      outValue(systemName, type, 1)
     else
-      outValue(0)
+      outValue(systemName, type, 0)
     setTimeout(function () {
       if(typeof(updata)==='function')
         updata()

@@ -3,9 +3,10 @@ import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import {AuthContext} from '../../context/AuthContext.js'
 
-export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
+const foo = (systemName, type, v)=>{}
+
+export const Dimmer = ({updata,title,type,conf,value,systemName,outValue=foo}) =>{
   const [newvalue, setValue]=useState(0)
-  // const [colo]=useState(false)
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const delay = useRef(null)
@@ -22,14 +23,6 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
     }
   },[error,message, clearError])
 
-  const outValue = async(v)=>{
-    await request('/api/device/value/set', 'POST', {systemName: systemName,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
-  }
-
-  const mouseUp = (event)=>{
-      // outValue(event.target.value)
-    }
-
   const changeHandler = event =>{
     setValue(event.target.value)
     setTimeout(function () {
@@ -40,7 +33,7 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
       clearTimeout(delay.current)
     }
     delay.current = setTimeout(function () {
-      outValue(event.target.value)
+      outValue(systemName, type, event.target.value)
     }, 200);
   }
 
@@ -58,7 +51,7 @@ export const Dimmer = ({updata,title,type,conf,value,systemName}) =>{
         <p>{newvalue||"0"}</p>
       </div>
       <div className={`DeviceLiControl ${(isColor(type))?"allColor":""}`}>
-        <input type="range" value={newvalue||0} onMouseUp={mouseUp} min={conf.min} max={conf.max} onChange={changeHandler} onInput={changeHandler}/>
+        <input type="range" value={newvalue||0} min={conf.min} max={conf.max} onChange={changeHandler} onInput={changeHandler}/>
       </div>
       </div>
     </li>

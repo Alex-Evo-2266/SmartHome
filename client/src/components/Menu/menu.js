@@ -44,15 +44,13 @@ export const Menu = ()=>{
 
   const giveField=useCallback((data)=>{
     let arr1 = []
-    let arr2 = menuField
+    let arr2 = menuField.slice()
     for (let item of data) {
       arr2 = arr2.filter((item3)=>item3.title!==item.title)
       arr1.push(item)
     }
-    if(auth.userLevel >= 3)
-      arr2.push({title:"Users",iconClass:"fas fa-users",url:"/users"})
     return {include:arr1, other:arr2}
-  },[auth.userLevel])
+  },[])
 
   useEffect(()=>{
     if(config.MenuElements){

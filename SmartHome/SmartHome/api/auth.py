@@ -27,9 +27,10 @@ async def login(data: Login):
 @router.get("/refresh", response_model=Token)
 async def ref(refresh_toket: Optional[str] = Cookie(None)):
     res = await rtoken(refresh_toket)
-    if(res["status"] == "ok"):
+    print(res)
+    if(res["type"] == "ok"):
         p = res["data"]["response"]
         response = JSONResponse(status_code=200, content=p)
         response.set_cookie(key="refresh_toket", value=res["data"]["refresh"], httponly=True)
         return response
-    return JSONResponse(status_code=403, content={"message": res['detail']})
+    return JSONResponse(status_code=403, content={"message": str(res['detail'])})

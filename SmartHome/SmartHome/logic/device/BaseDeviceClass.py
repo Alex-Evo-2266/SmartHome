@@ -35,7 +35,12 @@ class BaseDevice(object):
 
     def get_value(self, name):
         value = look_for_param(self.values, name)
+        if not value:
+            return None
         return value.getDict()
+
+    def get_field(self, name:str):
+        return look_for_param(self.values, name)
 
     def get_values(self):
         res = []

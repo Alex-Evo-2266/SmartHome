@@ -1,0 +1,43 @@
+.group-device{
+  background: var(--color-base);
+  color: var(--text-color-base-fon);
+  line-height: 40px;
+  min-height: 40px;
+}
+.group-device > p{
+  text-align: center;
+}
+.addgroup-deviceEl{
+  line-height: 40px;
+  background: var(--color-base);
+  display: flex;
+  justify-content: space-around;
+}
+.iconAdded, .iconOpenField{
+  position: absolute;
+  right: 5px;
+  font-size: 20px;
+  top: 5px;
+  padding: 5px;
+  border-radius: 50%;
+}
+.iconAdded:hover, .iconOpenField:hover{
+  background: var(--btn-color-base);
+}
+.iconAdded.added{
+  transform: rotate(-45deg);
+}
+.iconOpenField{
+  right: 40px;
+  transition: .5s;
+}
+.hidingLi.hide > .iconOpenField{
+  transform: rotate(-180deg);
+}
+.LiContent .devEl{
+  line-height: 40px;
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: var(--color-normal);
+}

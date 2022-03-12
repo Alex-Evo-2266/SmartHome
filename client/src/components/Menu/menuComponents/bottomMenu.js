@@ -1,9 +1,11 @@
-import React, {useRef} from 'react'
+import React, {useRef, useContext} from 'react'
 import {NavLink} from 'react-router-dom'
+import {AuthContext} from '../../../context/AuthContext.js'
 import {Menu as DopMenu} from '../dopmenu/menu'
 
 export const BottomMenu = ({hide, togle, visible, insluedField, controlButtons, otherField})=>{
   const bottomMenuRef = useRef(null)
+  const auth = useContext(AuthContext)
 
   const closeMenu = ()=>{
     if(bottomMenuRef.current){
@@ -71,6 +73,12 @@ export const BottomMenu = ({hide, togle, visible, insluedField, controlButtons, 
           )
         }):null
       }
+      <li>
+        <button className="menu-btn" onClick={auth.logout}>
+          <i className="fas fa-sign-out-alt"></i>
+          <span>logout</span>
+        </button>
+      </li>
     </ul>
     </div>
     <div className="bottomMenu">
