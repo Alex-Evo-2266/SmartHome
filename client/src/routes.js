@@ -52,6 +52,9 @@ export const useRoutes = (isAuthenticated,level)=>{
         <Route path="/groups/add" exact>
           <GroupsAddPage/>
         </Route>
+        <Route path="/groups/edit/:id" exact>
+          <GroupsAddPage/>
+        </Route>
         <Route path="/config/style" exact>
           <EditStylePage/>
         </Route>

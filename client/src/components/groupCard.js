@@ -87,7 +87,7 @@ export const GroupCard = ({group, updata}) =>{
 
   const editDevices = ()=>{
     form.show("deviceInGroup", group, async(_, group)=>{
-      await request(`/api/group/edit/${group.systemName}`, 'POST', group,{Authorization: `Bearer ${auth.token}`})
+      await request(`/api/group/device/edit/${group.systemName}`, 'POST', group,{Authorization: `Bearer ${auth.token}`})
       if(typeof(updata) === "function")
         updata()
     })
@@ -106,7 +106,7 @@ export const GroupCard = ({group, updata}) =>{
           <Menu buttons={[
             {
               title:"edit",
-              onClick:()=>{}
+              onClick:()=>history.push(`/groups/edit/${group.systemName}`)
             },
             {
               title:"device",
