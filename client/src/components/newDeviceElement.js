@@ -60,7 +60,6 @@ export const NewDeviceElement = ({systemName}) =>{
   }
 
   const outValue = async(systemName, type, v)=>{
-    console.log(v);
     await request('/api/device/value/set', 'POST', {systemName: systemName,type:type,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
@@ -106,7 +105,7 @@ export const NewDeviceElement = ({systemName}) =>{
               return <Enum outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values}/>
             }
             if(item.type==="text"&& item.control){
-              return <Text outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values}/>
+              return <Text outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value)?device.value[item.name]:0} type={item.name} conf={item.values} title={item.name}/>
             }
             if(!item.control){
               return(

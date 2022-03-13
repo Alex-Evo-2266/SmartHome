@@ -4,6 +4,7 @@ import {GroupCard} from '../components/groupCard'
 import {SocketContext} from '../context/SocketContext'
 import {AuthContext} from '../context/AuthContext.js'
 import {MenuContext} from '../components/Menu/menuContext'
+import {GroupsContext} from '../components/Groups/groupsContext'
 import {GroupFormState} from '../components/groupForm/groupFormState'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
@@ -11,6 +12,7 @@ import {useMessage} from '../hooks/message.hook'
 export const GroupsPage = () => {
   const history = useHistory()
   const auth = useContext(AuthContext)
+  const groupsData = useContext(GroupsContext)
   const [allGroups, setAllGroups] = useState([]);
   const {setData} = useContext(MenuContext)
   const {message} = useMessage();
@@ -19,16 +21,14 @@ export const GroupsPage = () => {
   const [groups, setGroups] = useState([]);
   const read = useRef(0)
 
-  const getGroups = useCallback(async ()=>{
-    let data = await request(`/api/group/all`, 'get', null,{Authorization: `Bearer ${auth.token}`})
-    if(data)
-      setAllGroups(data)
-      setGroups(data)
-  },[auth.token])
+  useEffect(()=>{
+    setAllGroups(groupsData.groups)
+    setGroups(groupsData.groups)
+  },[groupsData.groups])
 
   useEffect(()=>{
-    getGroups()
-  },[getGroups])
+    groupsData.updata()
+  },[groupsData.updata])
 
   useEffect(()=>{
     message(error,"error")
@@ -66,7 +66,7 @@ export const GroupsPage = () => {
             <div className = "CardConteiner">
               {
                 groups.map((item,index)=>{
-                  return <GroupCard group={item} updata={getGroups} key={index}/>
+                  return <GroupCard group={item} updata={groupsData.updata} key={index}/>
                 })
               }
             </div>

@@ -11,10 +11,12 @@ import {WeatherElement} from './CartElement/WeatherElement'
 import {TimeElement} from './CartElement/TimeElement'
 import {CalendarElement} from './CartElement/CalendarElement'
 import {useMessage} from '../../hooks/message.hook'
+import {useControlData} from '../../hooks/controlData.hook'
 
 const COLUMNS = 4
 export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   const {message} = useMessage();
+  const {convert} = useControlData();
   const {mode} = useContext(EditModeContext)
   const {target} = useContext(CartEditContext)
   let column = 1
@@ -132,91 +134,21 @@ export const HomebaseCart = ({hide,index,name,updata,data,edit=false,add}) =>{
             }}>
             {
               (item.type==="button")?
-              <BtnElement
-              index={item.index}
-              disabled={edit}
-              title={item.title}
-              data={item}
-              switchMode={item.typeAction==="power"}
-              deleteBtn={
-                (edit)?deleteElement:null
-              }
-              editBtn={
-                (edit)?editElement:null
-              }
-              />:
+              <BtnElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>:
               (item.type==="slider")?
-              <SliderElement
-              index={item.index}
-              data={item}
-              disabled={edit}
-              title={item.title}
-              deleteBtn={
-                (edit)?deleteElement:null
-              }
-              editBtn={
-                (edit)?editElement:null
-              }
-              />:
+              <SliderElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>:
               (splitType(item.type)[0]==="sensor")?
-              <SensorElement
-              index={item.index}
-              data={item}
-              title={item.title}
-              deleteBtn={
-                (edit)?deleteElement:null
-              }
-              editBtn={
-                (edit)?editElement:null
-              }
-              />:
+              <SensorElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>:
               (item.type==="script")?
-              <ScriptElement
-              index={item.index}
-              data={item}
-              title={item.title}
-              disabled={edit}
-              deleteBtn={
-                (edit)?deleteElement:null
-              }
-              editBtn={
-                (edit)?editElement:null
-              }
-              />:
+              <ScriptElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>:
               (item.type==="enum")?
-              <EnumElement
-              index={item.index}
-              title={item.title}
-              disabled={edit}
-              data={item}
-              deleteBtn={
-                (edit)?deleteElement:null
-              }
-              editBtn={
-                (edit)?editElement:null
-              }
-              />:
+              <EnumElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>:
               (item.type==="weather")?
-              <WeatherElement
-              index={item.index}
-              data={item}
-              deleteBtn={(edit)?deleteElement:null}
-              editBtn={(edit)?editElement:null}
-              />:
+              <WeatherElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>:
               (item.type==="time")?
-              <TimeElement
-              index={item.index}
-              data={item}
-              deleteBtn={(edit)?deleteElement:null}
-              editBtn={(edit)?editElement:null}
-              />:
+              <TimeElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>:
               (item.type==="date")?
-              <CalendarElement
-              index={item.index}
-              data={item}
-              deleteBtn={(edit)?deleteElement:null}
-              editBtn={(edit)?editElement:null}
-              />:
+              <CalendarElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>:
               null
             }
             </li>

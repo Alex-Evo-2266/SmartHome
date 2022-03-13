@@ -6,13 +6,9 @@ import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
 
-export const BtnElement = ({data,title,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
-  const {devices} = useContext(SocketContext)
+export const BtnElement = ({children, data, onClick, index, deleteBtn, editBtn, className, name}) =>{
   const auth = useContext(AuthContext)
-  const [value, setValue]=useState(firstValue)
-  const [device, setDevice] = useState({})
-  const [deviceConfig, setDeviceConfig] = useState({})
-  const [disabled2, setDisabled] = useState(disabled)
+  const [value, setValue]=useState(false)
   const [switchMode, setSwitchMode] = useState(false)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
@@ -26,90 +22,40 @@ export const BtnElement = ({data,title,className,index,children,name,onClick,dis
   },[error,message, clearError])
 
   const outValue = async(id,v)=>{
-    await request('/api/device/value/set', 'POST', {systemName: id,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/${data.data.typeItem}/value/set`, 'POST', {systemName: id,type:data.data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
-  const lookForDeviceById = useCallback((id)=>{
-    if(!devices||!devices[0])
-      return false
-    let condidat = devices.filter((item)=>(item&&item.systemName===id))
-    return condidat[0]
-  },[devices])
+  useEffect(()=>{
+    if(data.field?.type==="binary")
+      setSwitchMode(true)
+  },[])
 
   useEffect(()=>{
-    if(!data||!data.deviceName||typeof(onClick)==="function")
-      return
-    setDevice(lookForDeviceById(data.deviceName))
-  },[devices,data,onClick,lookForDeviceById])
-
-  useEffect(()=>{
-  },[device])
-
-  const itemField = useCallback(()=>{
-    if(!device||!device.config)return
-    for (var item of device.config) {
-      if(item.name===data.typeAction){
-        return item
-      }
-    }
-  },[data.typeAction,device])
-
-  useEffect(()=>{
-    if(!disabled&&device&&device.status){
-      let item = itemField()
-      if(item&&item.type==="binary"){
-        setSwitchMode(true)
-      }
-      if(device.status==="online" && item){
-        setDisabled(false)
-      }else{
-        setDisabled(true)
-      }
-      return
-    }
-    if(!disabled&&!devices.length) {
-      setDisabled(true)
-    }else if(!disabled&&devices.length) {
-      setDisabled(false)
-    }
-  },[device,disabled,devices,itemField])
-
-  useEffect(()=>{
-    if(!device||!device.config||!data)return
-    const {typeAction} = data
-    let conf = device.config.filter((item)=>item.name===typeAction)
-    if(conf.length)
-      setDeviceConfig(conf[0])
-  },[device,data])
-
-  useEffect(()=>{
-    if(typeof(onClick)==="function"||disabled||device?.status==="offline")return
-    const {low,high,type} = deviceConfig
-    if(device&&type==="binary"&&device?.value&&device?.value[deviceConfig.name]){
-      if(device.value[deviceConfig.name]===low||(device.typeConnect!=="mqtt"&&device.value[deviceConfig.name]==="0"))
+    if(typeof(onClick)==="function"||data.disabled||data.entity?.status==="offline")return
+    const {low, high, type, name} = data.field
+    if(data.entity && data.field.type==="binary" && data.fieldvalue){
+      if(data.fieldvalue===data.field.low)
           setValue(false)
-      if(device.value[deviceConfig.name]===high||(device.typeConnect!=="mqtt"&&device.value[deviceConfig.name]==="1"))
+      if(data.fieldvalue===data.field.high)
         setValue(true)
-      if(device.typeConnect==="mqtt"&&(!/\D/.test(device.value[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
-        let poz = Number(device.value[deviceConfig.name])
-        let min = Number(low)
-        let max = Number(high)
+      if(data.entity.typeConnect==="mqtt"&&(!/\D/.test(data.fieldvalue)&&!/\D/.test(data.field.low)&&!/\D/.test(data.field.high))){
+        let poz = Number(data.fieldvalue)
+        let min = Number(data.field.low)
+        let max = Number(data.field.high)
         if(poz>min&&poz<=max)
           setValue(true)
         else
           setValue(false)
       }
     }
-    if(device&&type==="number"&&device.value&&device.value[deviceConfig.name]){
-      if(!data.action)data.action="0"
-      if(data.action===device.value[deviceConfig.name]){
+    if(data.entity && data.field.type==="number" && data.fieldvalue){
+      if(!data.data.action)data.data.action="0"
+      if(data.data.action===data.fieldvalue)
         setValue(true)
-      }
-      else {
+      else
         setValue(false)
-      }
     }
-  },[device,onClick,data,deviceConfig,disabled])
+  },[onClick,data])
 
 const changeHandler = (event)=>{
   let oldvel = value
@@ -121,24 +67,19 @@ const changeHandler = (event)=>{
     onClick(event, value,setValue)
   }
 
-  if(!data||!device)
+  if(!data.data || !data.entity)
     return
   // if(data.typeAction==="variable")
   //     return outValue(device.DeviceId,data.action)
   if(data.typeAction==="modeTarget")
-      return outValue(device.systemName,"target")
-  if(deviceConfig.type==="binary")
-      return outValue(device.systemName,(oldvel)?0:1)
-  if(deviceConfig.type==="number")
-      return outValue(device.systemName,data.action)
-  if(deviceConfig.type==="text")
-      return outValue(device.systemName,data.action)
-  return outValue(device.systemName,data.action)
-  // if(data.type==="ir")
-  //     socket.terminalMessage(`device ${device.DeviceSystemName} send ${data.value}`)
-  // // socket.terminalMessage()
-  // return
-  // setTimeout(()=>updateDevice(),500)
+      return outValue(data.entity.systemName,"target")
+  if(data.field.type==="binary")
+      return outValue(data.entity.systemName,(oldvel)?0:1)
+  if(data.field.type==="number")
+      return outValue(data.entity.systemName,data.data.action)
+  if(data.field.type==="text")
+      return outValue(data.entity.systemName,data.data.action)
+  return outValue(data.entity.systemName,data.data.action)
 }
 
   const deletebtn = ()=>{
@@ -149,18 +90,18 @@ const changeHandler = (event)=>{
 
   const editbtn = ()=>{
     if(typeof(editBtn)==="function"){
-      target("button",{...data,index},editBtn)
+      target("button",{...data.data,index},editBtn)
     }
   }
 
 
 
   return(
-    <label className={`BtnElement ${className} ${(disabled2)?"disabled":""}`}>
-      <input type="checkbox" checked={value} name={name} onChange={changeHandler} disabled={disabled2}/>
+    <label className={`BtnElement ${className} ${(data.disabled)?"disabled":""}`}>
+      <input type="checkbox" checked={value} name={name} onChange={changeHandler} disabled={data.disabled}/>
       <div className="icon-conteiner">
       {
-        (deleteBtn || editBtn)?
+        (data.editmode)?
         <div className="delete-box">
         {
           (deleteBtn)?
@@ -183,16 +124,12 @@ const changeHandler = (event)=>{
           children:
           <div className="icon">
             <div className="circle">
-            {
-              (itemField()&&itemField().icon)?
-              <i className={itemField().icon}></i>:
-              <i className="fas fa-circle-notch"></i>
-            }
+              <i className={data?.field?.icon||"fas fa-circle-notch"}></i>
             </div>
           </div>
         }
         </div>
-        <p>{title}</p>
+        <p>{data.title}</p>
       </div>
 
     </label>

@@ -6,7 +6,7 @@ import {AuthContext} from '../../context/AuthContext.js'
 const foo = (systemName, type, v)=>{}
 
 export const Text = ({updata,title,type,conf,value,systemName,outValue=foo}) =>{
-  const [newvalue, setValue]=useState("")
+  const [newvalue, setValue]=useState(value)
   const [focus, setFocus] = useState(false)
   const auth = useContext(AuthContext)
   const {message} = useMessage();
@@ -19,11 +19,11 @@ export const Text = ({updata,title,type,conf,value,systemName,outValue=foo}) =>{
     }
   },[error,message, clearError])
 
-  useEffect(()=>{
-    if(focus)
-      return ;
-    setValue(value)
-  },[value, focus])
+  // useEffect(()=>{
+  //   if(focus)
+  //     return ;
+  //   setValue(value)
+  // },[value, focus])
 
   const changeHandler = event =>{
     setValue(event.target.value)

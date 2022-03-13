@@ -11,6 +11,7 @@ export const AddDevice = ()=>{
   const auth = useContext(AuthContext)
   const {devices} = useContext(SocketContext)
   const [groupDevice, setGroupDevice] = useState([])
+  const [fields, setFields] = useState([])
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
 
@@ -33,11 +34,44 @@ export const AddDevice = ()=>{
 
   useEffect(()=>{
     setGroupDevice(form.group.devices)
-  },[form.group.devices])
+    setFields(form.group.fields)
+  },[form.group])
 
   const outHandler = async()=>{
-    form.OK(groupDevice, {...form.group, devices:groupDevice})
+    form.OK(groupDevice, {...form.group, devices:groupDevice, fields})
     hide()
+  }
+
+  const getGroupDevice = (groupdevices) => devices.filter((item)=>groupdevices.includes(item.systemName))
+
+  const getfields  = (fieldsList, fields) => {
+    let arr = fieldsList.slice()
+    for (var item of fields) {
+      if (arr.filter((item2)=>item.name === item2.name).length === 0)
+        arr.push(item)
+    }
+    return arr
+  }
+
+  const updataField = (groupdevices)=>{
+    let groupdev = getGroupDevice(groupdevices.map(item => item.name))
+    // let arr = fields.slice()
+    let arr = []
+    for (var item of groupdev) {
+      arr = getfields(arr, item.config)
+    }
+    arr = arr.map(item => ({
+      name: item.name,
+      type: item.type,
+      low: item.low,
+      high: item.high,
+      values: item.values,
+      control: item.control,
+      icon: item.icon,
+      unit: item.unit,
+    }))
+    console.log(arr);
+    setFields(arr)
   }
 
   const add = (item)=>{
@@ -49,10 +83,13 @@ export const AddDevice = ()=>{
       )
     })
     setGroupDevice(arr)
+    updataField(arr)
   }
 
   const del = (item)=>{
-    setGroupDevice(groupDevice.filter((item2)=>item2.name !==item.name))
+    let groupdevices = groupDevice.filter((item2)=>item2.name !==item.name)
+    setGroupDevice(groupdevices)
+    updataField(groupdevices)
   }
 
   const setDevice = (data)=>{

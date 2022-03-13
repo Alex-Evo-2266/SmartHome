@@ -10,13 +10,13 @@ const types = {
 }
 
 function filtredField(data, typeField) {
-  let condidats = data.config
+  let condidats = data.fields
   if(typeField === "sensor")
     return condidats
   return condidats.filter(item=>(item.control && typeField in types && types[typeField].indexOf(item.type) !== -1))
 }
 
-export const Page3 = ({type ,next, device, back, hide})=>{
+export const Page4Group = ({type ,next, device, back, hide})=>{
   const [allField] = useState(filtredField(device, type));
 
   const transformation = (data)=>data.map(item=>({title:item.name, data:item}))
@@ -24,7 +24,7 @@ export const Page3 = ({type ,next, device, back, hide})=>{
   return(
     <ConfirmationDialog
     hide={hide}
-    text="choose a device."
+    text="choose a groups."
     title="adds element"
     active={next}
     activeText="NEXT"

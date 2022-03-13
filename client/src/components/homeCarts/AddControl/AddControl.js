@@ -2,9 +2,13 @@ import React, {useContext,useState} from 'react'
 import {AddControlContext} from './AddControlContext'
 import {ScriptPage} from './Control/scriptPage'
 import {Page2} from './Control/page2'
-import {Page3} from './Control/page3'
-import {Page4} from './Control/page4'
-import {Page5} from './Control/page5'
+import {Page3Device} from './Control/page3device'
+import {Page4Device} from './Control/page4device'
+import {Page5Device} from './Control/page5device'
+import {Page3Group} from './Control/page3group'
+import {Page4Group} from './Control/page4group'
+import {Page5Group} from './Control/page5group'
+import {Page6} from './Control/page6'
 import {ConfirmationDialog} from '../../dialogWindow/dialogType/confirmationDialog'
 
 const cardBaseElement = [
@@ -72,7 +76,8 @@ const cardLineElement = [
 const weather = {
   name:"weather",
   type:"weather",
-  order:"0",
+  order:0,
+  typeItem:"system",
   width:1,
   height:1
 }
@@ -80,7 +85,8 @@ const weather = {
 const time = {
   name:"time",
   type:"time",
-  order:"0",
+  order:0,
+  typeItem:"system",
   width:2,
   height:1
 }
@@ -88,7 +94,8 @@ const time = {
 const date = {
   name:"date",
   type:"date",
-  order:"0",
+  order:0,
+  typeItem:"system",
   width:2,
   height:2
 }
@@ -99,6 +106,7 @@ export const AddControl = ()=>{
   const [device, setDevice] = useState(null);
   const [action, setAction] = useState(null);
   const [field, setField] = useState(null);
+  const [item, setItem] = useState("device");
   const [page, setPage] = useState(1);
 
   const close = ()=>{
@@ -121,6 +129,7 @@ export const AddControl = ()=>{
     name: data.name,
     order: 0,
     type: "script",
+    typeItem: "script",
     title:'',
     width: 1
   })
@@ -131,6 +140,7 @@ export const AddControl = ()=>{
     deviceName:device.systemName,
     order: 0,
     type: typeChild,
+    typeItem: item,
     width: 1,
     title:'',
     typeAction:data.name
@@ -183,59 +193,131 @@ export const AddControl = ()=>{
       type={typeChild}
       back={()=>setPage(1)}
       next={(data)=>{
-        setDevice(data)
+        setItem(data)
         setPage(3)
       }}
       />
     )
   }
+  if(item === "device"){
+    if(page === 3){
+      return(
+        <Page3Device
+        hide={close}
+        type={typeChild}
+        back={()=>setPage(2)}
+        next={(data)=>{
+          setDevice(data)
+          setPage(4)
+        }}
+        />
+      )
+    }
 
-  if(page === 3){
-    return(
-      <Page3
-      hide={close}
-      type={typeChild}
-      device={device}
-      back={()=>setPage(2)}
-      next={(data)=>{
-        if(typeChild === "sensor")
-          {
+    if(page === 4){
+      return(
+        <Page4Device
+        hide={close}
+        type={typeChild}
+        device={device}
+        back={()=>setPage(3)}
+        next={(data)=>{
+          if(typeChild === "sensor")
+            {
+              setField(data)
+              // addDevField(data)
+              setPage(6)
+            }
+          else if(typeChild === "button" && data.type !== "binary"){
+            setPage(5)
+            setField(data)
+          }
+          else{
             setField(data)
             // addDevField(data)
-            setPage(5)
+            setPage(6)
           }
-        else if(typeChild === "button" && data.type !== "binary"){
+        }}
+        />
+      )
+    }
+
+    if(page === 5){
+      return(
+        <Page5Device
+        next={(data)=>{
+          // addDevFieldAction(data)
+          setAction(data)
+          setPage(6)
+        }}
+        hide={close}
+        back={()=>setPage(4)}
+        field={field}
+        />
+      )
+    }
+  }
+  else{
+    if(page === 3){
+      return(
+        <Page3Group
+        hide={close}
+        type={typeChild}
+        back={()=>setPage(2)}
+        next={(data)=>{
+          setDevice(data)
           setPage(4)
-          setField(data)
-        }
-        else{
-          setField(data)
-          // addDevField(data)
-          setPage(5)
-        }
-      }}
-      />
-    )
-  }
+        }}
+        />
+      )
+    }
 
-  if(page === 4){
-    return(
-      <Page4
-      next={(data)=>{
-        // addDevFieldAction(data)
-        setAction(data)
-        setPage(5)
-      }}
-      hide={close}
-      back={()=>setPage(3)}
-      field={field}
-      />
-    )
-  }
+    if(page === 4){
+      return(
+        <Page4Group
+        hide={close}
+        type={typeChild}
+        device={device}
+        back={()=>setPage(3)}
+        next={(data)=>{
+          if(typeChild === "sensor")
+            {
+              setField(data)
+              // addDevField(data)
+              setPage(6)
+            }
+          else if(typeChild === "button" && data.type !== "binary"){
+            setPage(5)
+            setField(data)
+          }
+          else{
+            setField(data)
+            // addDevField(data)
+            setPage(6)
+          }
+        }}
+        />
+      )
+    }
 
-  if(page === 5){
+    if(page === 5){
+      return(
+        <Page5Group
+        next={(data)=>{
+          // addDevFieldAction(data)
+          setAction(data)
+          setPage(6)
+        }}
+        hide={close}
+        back={()=>setPage(4)}
+        field={field}
+        />
+      )
+    }
+  }
+  if(page === 6){
     return(
-      <Page5
+      <Page6
       next={(data)=>{
         let val
         if(action)
@@ -246,11 +328,12 @@ export const AddControl = ()=>{
         addElement(val)
       }}
       hide={close}
-      back={()=>setPage(3)}
+      back={()=>setPage(4)}
       field={field}
       />
     )
   }
+
 
   return(null)
 }

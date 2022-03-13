@@ -22,6 +22,7 @@ async def setValueGroup(data:DeviceValueSchema):
         return FunctionRespons(status=TypeRespons.INVALID, detail=f"group {data.systemName} not found")
     for item in group.devices:
         device = devicesArrey.get(item.name)
+        print(device)
         if not device:
             logger.info(f'device {item.name} not found')
             continue
@@ -32,5 +33,6 @@ async def setValueGroup(data:DeviceValueSchema):
             continue
         if field.type == "binary" and not is_digit(data.status):
             continue
+        print(item.name, data.type, data.status)
         await setValue(item.name, data.type, data.status)
     return FunctionRespons(status=TypeRespons.OK, data="ok")

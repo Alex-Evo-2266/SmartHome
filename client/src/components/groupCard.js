@@ -51,34 +51,13 @@ export const GroupCard = ({group, updata}) =>{
 
   const controlfield = fields => fields?.filter(item => item.control === true)
 
-  const addfield  = (fieldsList, fields, values) => {
-    let flag = true
-    let arr = fieldsList.slice()
-    for (var item of fields) {
-      flag = true
-      for (var item2 of arr) {
-        if (item.name === item2.name)
-          flag = false
-      }
-      if (flag)
-      {
-        arr.push({...item, value:values[item.name]})
-      }
-    }
-    return arr
+  const getValueField = (field)=>{
+    let groupdevices = getdevice(group?.devices?.map(item=>item.name))
+    return groupdevices?.filter(item=>!!item?.value[field])[0]?.value[field]
   }
 
   const getFields = ()=>{
-    let arr = []
-    let devName = []
-    for (var item of group.devices) {
-      devName.push(item.name)
-    }
-    let groupdevices = getdevice(devName)
-    for (var item of groupdevices) {
-      arr = addfield(arr, controlfield(item.config), item.value)
-    }
-    return arr
+    return group?.fields?.map(item=>({...item, value:getValueField(item.name)}))
   }
 
   const outValue = async(systemName, type, v)=>{
@@ -134,7 +113,7 @@ export const GroupCard = ({group, updata}) =>{
               return <Enum outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={item.value} type={item.name} conf={item.values}/>
             }
             if(item.type==="text"&& item.control){
-              return <Text outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={item.value} type={item.name} conf={item.values}/>
+              return <Text outValue={outValue} key={index} updata = {updateDevice} systemName={group.systemName} value={item.value} type={item.name} conf={item.values} title={item.name}/>
             }
             if(!item.control){
               return(

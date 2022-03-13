@@ -37,14 +37,14 @@ export const CalendarElement = ({deleteBtn,editBtn,index,data}) =>{
     setDays(days)
   },[serverConfig.date, convertDateFormat])
 
-  if(data.height >= 2 && data.width >= 3)
+  if(data.data.height >= 2 && data.data.width >= 3)
   {
     return(
       <BaseElement
-      deleteBtn = {deleteBtn}
-      editBtn={editBtn}
+      deleteBtn = {(data.editmode)?deleteBtn:null}
+      editBtn={(data.editmode)?editBtn:null}
       index={index}
-      data={data}
+      data={data.data}
       >
         <div className="calendar">
           <div className="NawMonth">
@@ -73,14 +73,14 @@ export const CalendarElement = ({deleteBtn,editBtn,index,data}) =>{
 
   return(
     <BaseElement
-    deleteBtn = {deleteBtn}
-    editBtn={editBtn}
+    deleteBtn = {(data.editmode)?deleteBtn:null}
+    editBtn={(data.editmode)?editBtn:null}
     index={index}
-    data={data}
+    data={data.data}
     >
       <div className="calendar">
         <div className="NawMonth" style={{height: "calc(100% - 20px)", fontSize:"25px"}}>
-          <p>{new Date().getDate()} {getMonthStr(new Date().getMonth(), data.width === 1)} {new Date().getFullYear()}</p>
+          <p>{new Date().getDate()} {getMonthStr(new Date().getMonth(), data.data.width === 1)} {new Date().getFullYear()}</p>
         </div>
       </div>
     </BaseElement>

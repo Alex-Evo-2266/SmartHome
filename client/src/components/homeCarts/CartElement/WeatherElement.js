@@ -25,22 +25,22 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
 
   return(
     <BaseElement
-    deleteBtn = {deleteBtn}
-    editBtn={editBtn}
+    deleteBtn = {(data.editmode)?deleteBtn:null}
+    editBtn={(data.editmode)?editBtn:null}
     index={index}
-    data={data}
+    data={data.data}
     >
     {
       (serverConfig&&serverConfig.weather)?
       <div className="weather-box">
         <div className="city">{(serverConfig&&serverConfig.weather&&serverConfig.weather.city)||""}</div>
-        <div className={`weather-body ${(data.width>3)?"veryWide":(data.width>1)?"wide":""} ${(data.height>2)?"veryTall":(data.height>1)?"tall":""}`}>
+        <div className={`weather-body ${(data.data.width>3)?"veryWide":(data.data.width>1)?"wide":""} ${(data.height>2)?"veryTall":(data.height>1)?"tall":""}`}>
           <div className="day_anchor-div">
             <div className="icon_color_light">{
               icon(serverConfig?.weather?.now?.weather)
             }</div>
             {
-              (data.width>1||data.height>1)?
+              (data.data.width>1||data.data.height>1)?
               <div className="day-anchor">{(serverConfig?.weather?.now?.weather)||""}</div>
               :null
             }
@@ -48,7 +48,7 @@ export const WeatherElement = ({deleteBtn,editBtn,index,data}) =>{
           <div className="temp">{convertTemp(serverConfig?.weather?.now?.temp)}</div>
         </div>
         {
-          (data.width>3&&data.height>1)?
+          (data.data.width>3&&data.data.height>1)?
           <div className="forecast">
             {
               serverConfig?.weather?.forecastDate?.map((item,index)=>{

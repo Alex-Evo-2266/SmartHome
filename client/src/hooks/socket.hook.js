@@ -55,6 +55,12 @@ export const SocketState = ({children}) =>{
     };
 },[auth.isAuthenticated,connect])
 
+const getDevice = useCallback((systemName)=>{
+  if(!devices||!devices[0])
+    return null
+  return devices.filter((item)=>(item?.systemName===systemName))[0]
+},[devices])
+
 useEffect(()=>{
   listenChanges()
   return () => {
@@ -65,7 +71,7 @@ useEffect(()=>{
 
   return(
     <SocketContext.Provider value={{
-      devices, message
+      devices, message, getDevice
     }}>
       {children}
     </SocketContext.Provider>

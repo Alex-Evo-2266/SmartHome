@@ -9,6 +9,7 @@ class CardChildren(BaseModel):
     order: int
     width: int
     height: int
+    typeItem: str
     deviceName: Optional[str]
     typeAction: Optional[str]
 

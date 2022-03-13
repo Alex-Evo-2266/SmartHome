@@ -1,14 +1,19 @@
 import React from 'react'
 import {BaseElement} from './BaseElement'
 
-export const InfoElement = ({name, value, unit,children,deleteBtn,editBtn,index,data}) =>{
+export const InfoElement = ({data,className,index,children,name,onClick,editBtn,deleteBtn}) =>{
   return(
-    <BaseElement deleteBtn={deleteBtn} editBtn={editBtn} index={index} data={data}>
+    <BaseElement
+    deleteBtn = {(data.editmode)?deleteBtn:null}
+    editBtn={(data.editmode)?editBtn:null}
+    index={index}
+    data={data.data}
+    >
       <div className="info-box">
-        <p className="name">{name}</p>
+        <p className="name">{data.field.name}</p>
         {children}
-        <p className="value">{value}</p>
-        <p className="unit">{unit}</p>
+        <p className="value">{data.fieldvalue}</p>
+        <p className="unit">{data.field.unit}</p>
       </div>
     </BaseElement>
   )

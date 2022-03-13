@@ -48,6 +48,16 @@ async def get_group(name: str, data:GroupSchema, auth_data: dict = Depends(token
     if not group:
         return JSONResponse(status_code=404, content={"message": "not found"})
     group.devices = data.devices
+    group.fields = data.fields
+    group.save()
+    return "ok"
+
+@router_groups.post("/field/edit/{name}")
+async def get_group(name: str, data:GroupSchema, auth_data: dict = Depends(token_dep)):
+    group = Groups.get(name)
+    if not group:
+        return JSONResponse(status_code=404, content={"message": "not found"})
+    group.fields = data.fields
     group.save()
     return "ok"
 

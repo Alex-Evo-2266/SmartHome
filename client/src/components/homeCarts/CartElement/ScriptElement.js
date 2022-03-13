@@ -4,7 +4,7 @@ import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
-export const ScriptElement = ({data,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,switchMode=true,deleteBtn}) =>{
+export const ScriptElement = ({data,className,index,children,name,onClick,editBtn,deleteBtn}) =>{
   const {target} = useContext(CartEditContext)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
@@ -25,20 +25,20 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
 
   const editbtn = ()=>{
     if(typeof(editBtn)==="function"){
-      target("button",{...data,index},editBtn)
+      target("button",{...data.data,index},editBtn)
     }
   }
 
   const clickHandler = async()=>{
-    await request(`/api/script/run?name=${data.name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    await request(`/api/script/run?name=${data.data.name}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
   }
 
   return(
     <label className={`ScriptElement ${className}`}>
-      <input type="button" onClick={clickHandler} disabled={disabled}/>
+      <input type="button" onClick={clickHandler} disabled={data.disabled}/>
       <div className="icon-conteiner">
       {
-        (deleteBtn || editBtn)?
+        (data.editmode && (deleteBtn || editBtn))?
         <div className="delete-box">
         {
           (deleteBtn)?
@@ -58,7 +58,7 @@ export const ScriptElement = ({data,className,index,children,name,onClick,disabl
         <div className="icon-box">
           <i className="fas fa-file-alt"></i>
         </div>
-        <p>{data.name}</p>
+        <p>{data.data.name}</p>
       </div>
 
     </label>

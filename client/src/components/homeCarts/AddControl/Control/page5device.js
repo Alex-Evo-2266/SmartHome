@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-export const Page4 = ({field ,next, back, hide})=>{
+export const Page5Device = ({field ,next, back, hide})=>{
   const [number, setNumber] = useState(0)
   const [text, setText] = useState('')
 
