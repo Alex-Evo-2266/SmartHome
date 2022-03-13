@@ -1,5 +1,4 @@
-import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {SocketContext} from '../../../context/SocketContext'
+import React,{useState,useContext,useEffect} from 'react'
 import {CartEditContext} from '../EditCarts/CartEditContext'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
@@ -28,11 +27,10 @@ export const BtnElement = ({children, data, onClick, index, deleteBtn, editBtn, 
   useEffect(()=>{
     if(data.field?.type==="binary")
       setSwitchMode(true)
-  },[])
+  },[data.field?.type])
 
   useEffect(()=>{
     if(typeof(onClick)==="function"||data.disabled||data.entity?.status==="offline")return
-    const {low, high, type, name} = data.field
     if(data.entity && data.field.type==="binary" && data.fieldvalue){
       if(data.fieldvalue===data.field.low)
           setValue(false)

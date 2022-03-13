@@ -1,41 +1,28 @@
-import React, {useContext,useEffect,useState,useRef, useCallback} from 'react'
+import React, {useContext,useEffect,useState, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 import {GroupCard} from '../components/groupCard'
-import {SocketContext} from '../context/SocketContext'
 import {AuthContext} from '../context/AuthContext.js'
 import {MenuContext} from '../components/Menu/menuContext'
 import {GroupsContext} from '../components/Groups/groupsContext'
 import {GroupFormState} from '../components/groupForm/groupFormState'
-import {useHttp} from '../hooks/http.hook'
-import {useMessage} from '../hooks/message.hook'
 
 export const GroupsPage = () => {
   const history = useHistory()
   const auth = useContext(AuthContext)
-  const groupsData = useContext(GroupsContext)
+  const {updata, groups} = useContext(GroupsContext)
   const [allGroups, setAllGroups] = useState([]);
   const {setData} = useContext(MenuContext)
-  const {message} = useMessage();
-  const {request, error, clearError} = useHttp();
 
-  const [groups, setGroups] = useState([]);
-  const read = useRef(0)
+  const [groupsc, setGroups] = useState([]);
 
   useEffect(()=>{
-    setAllGroups(groupsData.groups)
-    setGroups(groupsData.groups)
-  },[groupsData.groups])
+    setAllGroups(groups)
+    setGroups(groups)
+  },[groups])
 
   useEffect(()=>{
-    groupsData.updata()
-  },[groupsData.updata])
-
-  useEffect(()=>{
-    message(error,"error")
-    return ()=>{
-      clearError();
-    }
-  },[error,message, clearError])
+    updata()
+  },[updata])
 
   const searchout = useCallback((data)=>{
     if(data===""){
@@ -61,12 +48,12 @@ export const GroupsPage = () => {
       <div className = "conteiner top bottom">
         <div className = "Devices">
           {
-            (!groups||groups.length === 0)?
+            (!groupsc||groupsc.length === 0)?
             <h2 className="empty">Not elements</h2>:
             <div className = "CardConteiner">
               {
-                groups.map((item,index)=>{
-                  return <GroupCard group={item} updata={groupsData.updata} key={index}/>
+                groupsc.map((item,index)=>{
+                  return <GroupCard group={item} updata={updata} key={index}/>
                 })
               }
             </div>

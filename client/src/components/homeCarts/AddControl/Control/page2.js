@@ -1,5 +1,4 @@
-import React, {useContext,useState} from 'react'
-import {SocketContext} from '../../../../context/SocketContext'
+import React from 'react'
 import {ConfirmationDialog} from '../../../dialogWindow/dialogType/confirmationDialog'
 
 const types = [

@@ -1,9 +1,8 @@
-import React, {useContext, useState} from 'react'
+import React, {useState} from 'react'
 import {Switch} from '../../switch'
 
 export const Device = ({device, onClick, setGroupDevice, groupDevice, added=false, field=false})=>{
   const [visible, setVisible] = useState(false)
-  const [newvalue] = useState(false)
 
   const togle = (event)=>{
     if(event.target.className.split(" ")[0]!=="hidingLi"&&event.target.parentNode.className.split(" ")[0]!=="hidingLi") return;

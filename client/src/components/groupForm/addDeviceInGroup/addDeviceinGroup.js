@@ -1,33 +1,21 @@
-import React, {useContext, useState, useEffect, useCallback} from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import {GroupFormContext} from '../groupFormContext'
 import {Device} from './deviceEl'
 import {SocketContext} from '../../../context/SocketContext'
-import {useHttp} from '../../../hooks/http.hook'
-import {AuthContext} from '../../../context/AuthContext.js'
-import {useMessage} from '../../../hooks/message.hook'
 
 export const AddDevice = ()=>{
   const {form, hide} = useContext(GroupFormContext)
-  const auth = useContext(AuthContext)
   const {devices} = useContext(SocketContext)
   const [groupDevice, setGroupDevice] = useState([])
   const [fields, setFields] = useState([])
-  const {message} = useMessage();
-  const {request, error, clearError} = useHttp();
 
   const dev = (systemName)=>devices.filter((item2)=>item2.systemName === systemName)[0]
-
-  useEffect(()=>{
-    message(error,"error")
-    return ()=>{
-      clearError();
-    }
-  },[error,message, clearError])
 
   const otherdev = ()=>{
     let arr = devices
     for (var item of groupDevice) {
-      arr = arr.filter((item2)=>item2.systemName !== item.name)
+      let dev = item
+      arr = arr.filter((item2)=>item2.systemName !== dev.name)
     }
     return arr
   }
@@ -47,7 +35,8 @@ export const AddDevice = ()=>{
   const getfields  = (fieldsList, fields) => {
     let arr = fieldsList.slice()
     for (var item of fields) {
-      if (arr.filter((item2)=>item.name === item2.name).length === 0)
+      let field = item
+      if (arr.filter((item2)=>field.name === item2.name).length === 0)
         arr.push(item)
     }
     return arr

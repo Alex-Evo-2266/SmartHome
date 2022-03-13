@@ -1,4 +1,4 @@
-import React, {useContext,useState,useEffect, useCallback} from 'react'
+import React, {useContext,useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
 import {RunText} from './runText'
 import {useHttp} from '../hooks/http.hook'
@@ -20,7 +20,6 @@ export const GroupCard = ({group, updata}) =>{
   const auth = useContext(AuthContext)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
-  const [status,setStatus] = useState(true)
 
   useEffect(()=>{
     message(error,"error")
@@ -48,8 +47,6 @@ export const GroupCard = ({group, updata}) =>{
   }
 
   const getdevice = (names) => devices.filter((item)=>names.includes(item.systemName))
-
-  const controlfield = fields => fields?.filter(item => item.control === true)
 
   const getValueField = (field)=>{
     let groupdevices = getdevice(group?.devices?.map(item=>item.name))

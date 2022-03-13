@@ -1,8 +1,6 @@
-import {useState, useCallback, useContext} from 'react'
+import {useCallback, useContext} from 'react'
 import {SocketContext} from '../context/SocketContext'
 import {GroupsContext} from '../components/Groups/groupsContext'
-
-const foo = ()=>{}
 
 export const useControlData = ()=>{
   const {getDevice} = useContext(SocketContext)
@@ -45,7 +43,7 @@ export const useControlData = ()=>{
     }
     if(!res.entity || !res.fieldsEntity || !res.field)
       res.disabled = true
-    if(res.entity?.status && res.entity?.status!="online")
+    if(res.entity?.status && res.entity?.status!=="online")
       res.disabled = true
     return res
   },[getDevice, getGroupValue, itemField, getGroup])

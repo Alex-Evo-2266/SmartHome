@@ -1,7 +1,5 @@
-import React, {useContext,useEffect,useState,useRef, useCallback} from 'react'
+import React, {useContext,useEffect,useState, useCallback} from 'react'
 import {useHistory,useParams} from 'react-router-dom'
-import {NewDeviceElement} from '../components/newDeviceElement'
-import {SocketContext} from '../context/SocketContext'
 import {AuthContext} from '../context/AuthContext.js'
 import {MenuContext} from '../components/Menu/menuContext'
 import {useHttp} from '../hooks/http.hook'
@@ -19,7 +17,6 @@ export const GroupsAddPage = () => {
     systemName:"",
     devices:[]
   })
-  const allDevices = useContext(SocketContext)
 
   const updata = (event)=>{
     setGroup({...group, [event.target.name]: event.target.value})
@@ -44,7 +41,7 @@ export const GroupsAddPage = () => {
         systemName:data.systemName,
         devices:[]
       })
-  },[auth.token])
+  },[auth.token, request])
 
   useEffect(()=>{
     if(id)
@@ -52,26 +49,6 @@ export const GroupsAddPage = () => {
       getGroups(id)
     }
   },[id, getGroups])
-
-  const isInclude = (dev)=>{
-    for (let item of group.devices) {
-      if(item === dev.systemName)
-        return true
-    }
-    return false
-  }
-
-  const addDevice = (dev)=>{
-    let arr = group.devices.slice()
-    arr.push(dev.systemName)
-    setGroup({...group, devices: arr})
-  }
-
-  const deleteDevice = (dev)=>{
-    let arr = group.devices.slice()
-    arr = arr.filter((item)=>item !== dev.systemName)
-    setGroup({...group, devices: arr})
-  }
 
   const create = async ()=>{
     if(!group.name || !group.systemName) return ;

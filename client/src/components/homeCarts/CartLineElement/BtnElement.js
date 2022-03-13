@@ -1,27 +1,16 @@
-import React,{useState,useContext,useEffect,useCallback} from 'react'
-import {SocketContext} from '../../../context/SocketContext'
+import React,{useState,useContext,useEffect} from 'react'
 import {BaseElement} from './BaseElement'
 import {useHttp} from '../../../hooks/http.hook'
 import {useMessage} from '../../../hooks/message.hook'
 import {AuthContext} from '../../../context/AuthContext.js'
 
 
-export const BtnElement = ({title,baseswitchMode=false,data,icon,className,index,children,name,onClick,disabled=false,editBtn,firstValue=false,deleteBtn}) =>{
-  const {devices} = useContext(SocketContext)
+export const BtnElement = ({children, data, onClick, index, deleteBtn, editBtn, className}) =>{
   const auth = useContext(AuthContext)
-  const [value, setValue]=useState(firstValue)
-  const [device, setDevice] = useState({})
-  const [deviceConfig, setDeviceConfig] = useState({})
-  const [disabled2, setDisabled] = useState(disabled)
-  const [switchMode, setSwitchMode] = useState(baseswitchMode)
+  const [value, setValue]=useState(false)
+  const [switchMode, setSwitchMode] = useState(false)
   const {message} = useMessage();
   const {request, error, clearError} = useHttp();
-
-  useEffect(()=>{
-    if(typeof(onClick)==="function"){
-      setValue(firstValue)
-    }
-  },[firstValue,onClick])
 
   useEffect(()=>{
     message(error,"error")
@@ -30,88 +19,41 @@ export const BtnElement = ({title,baseswitchMode=false,data,icon,className,index
     }
   },[error,message, clearError])
 
-  const outValue = async(id,v)=>{
-    await request('/api/device/value/set', 'POST', {systemName: data.deviceName,type:data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
+  const outValue = async(v)=>{
+    await request(`/api/${data.data.typeItem}/value/set`, 'POST', {systemName: data.data.deviceName,type:data.data.typeAction,status:v},{Authorization: `Bearer ${auth.token}`})
   }
 
-  const lookForDeviceById = useCallback((id)=>{
-    if(!devices||!devices[0])
-      return false
-    let condidat = devices.filter((item)=>(item&&item.systemName===id))
-    return condidat[0]
-  },[devices])
-
   useEffect(()=>{
-    if(!data||!data.deviceName||typeof(onClick)==="function")
-      return
-    setDevice(lookForDeviceById(data.deviceName))
-  },[devices,data,onClick,lookForDeviceById])
-
-  const itemField = useCallback(()=>{
-    if(!device||!device.config||!data)return
-    for (var item of device.config) {
-      if(item.name===data.typeAction){
-        return item
-      }
+    if(data?.field?.type==="binary"){
+      setSwitchMode(true)
     }
-  },[data,device])
+  },[data.field])
 
   useEffect(()=>{
-    if(!disabled&&device&&device.status){
-      let item = itemField()
-      if(item&&item.type==="binary"){
-        setSwitchMode(true)
-      }
-      if(device.status==="online"){
-        setDisabled(false)
-      }else{
-        setDisabled(true)
-      }
-      return
-    }
-    if(!disabled&&!devices.length) {
-      setDisabled(true)
-    }else if(!disabled&&devices.length) {
-      setDisabled(false)
-    }
-  },[device,disabled,devices,itemField,baseswitchMode,onClick])
-
-  useEffect(()=>{
-    if(!device||!device.config||!data)return
-    const {typeAction} = data
-    let conf = device.config.filter((item)=>item.name===typeAction)
-    if(conf.length)
-      setDeviceConfig(conf[0])
-  },[device,data])
-
-  useEffect(()=>{
-    if(typeof(onClick)==="function"||disabled||!device||device?.status==="offline")return
-    const {low,high,type} = deviceConfig
-    if(device&&type==="binary"&&device?.value&&device?.value[deviceConfig.name]){
-      if(device?.value[deviceConfig.name]==="0")
+    if(typeof(onClick)==="function"||data.disabled||!data.entity||data.entity.status==="offline")return
+    if(data.field.type==="binary"&&data?.fieldvalue){
+      if(data.fieldvalue==="0")
         setValue(false)
-      if(device?.value[deviceConfig.name]==="1")
+      if(data.fieldvalue==="1")
         setValue(true)
-      if(device?.typeConnect==="mqtt"&&(!/\D/.test(device.value[deviceConfig.name])&&!/\D/.test(low)&&!/\D/.test(high))){
-        let poz = Number(device.value[deviceConfig.name])
-        let min = Number(low)
-        let max = Number(high)
+      if(data.entity?.typeConnect==="mqtt"&&(!/\D/.test(data.fieldvalue)&&!/\D/.test(data.field.low)&&!/\D/.test(data.field.high))){
+        let poz = Number(data.fieldvalue)
+        let min = Number(data.field.low)
+        let max = Number(data.field.high)
         if(poz>min&&poz<=max)
           setValue(true)
         else
           setValue(false)
       }
     }
-    if(device&&type==="number"&&device.value&&device.value[deviceConfig.name]){
-      if(!data.action)data.action="0"
-      if(data.action===device.value[deviceConfig.name]){
+    if(data.field.type==="number"&&data?.fieldvalue){
+      if(!data.data.action)data.data.action="0"
+      if(data.data.action===data.fieldvalue)
         setValue(true)
-      }
-      else {
+      else
         setValue(false)
-      }
     }
-  },[device,onClick,data,deviceConfig,disabled])
+  },[onClick,data])
 
 const changeHandler = (event)=>{
   let oldvel = value
@@ -123,56 +65,46 @@ const changeHandler = (event)=>{
     onClick(event, !oldvel,setValue)
   }
 
-  if(!data||!device)
+  if(!data?.entity)
     return
   // if(data.typeAction==="variable")
   //     return outValue(device.DeviceId,data.action)
-  if(data.typeAction==="modeTarget")
-      return outValue(device.systemName,"target")
-  if(deviceConfig.type==="binary")
-      return outValue(device.systemName,(oldvel)?0:1)
-  if(deviceConfig.type==="number")
-      return outValue(device.systemName,data.action)
-  if(deviceConfig.type==="text")
-      return outValue(device.systemName,data.action)
-  return outValue(device.systemName,data.action)
+  if(data.data.typeAction==="modeTarget")
+      return outValue("target")
+  if(data.field.type==="binary")
+      return outValue((oldvel)?0:1)
+  if(data.field.type==="number")
+      return outValue(data.data.action)
+  if(data.field.type==="text")
+      return outValue(data.data.action)
+  return outValue(data.data.action)
 }
   if(!switchMode){
     return(
-      <BaseElement onClick={changeHandler} editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
+      <BaseElement onClick={changeHandler} deleteBtn = {(data.editmode)?deleteBtn:null} editBtn={(data.editmode)?editBtn:null} data={data.data} index={index}>
         <div className="icon icon-btn">
           <div className="circle">
-          {
-            (icon)?
-            <i className={icon}></i>:
-            (itemField()?.icon)?
-            <i className={itemField().icon}></i>:
-            <i className="fas fa-circle-notch"></i>
-          }
+            <i className={data.field?.icon||"fas fa-circle-notch"}></i>
           </div>
         </div>
-        <p className="name">{title}</p>
-        <p className="state">{data.action}</p>
+        <p className="name">{data.title}</p>
+        <p className="state">{data.data.action}</p>
       </BaseElement>
     )
   }
 
   return(
-    <BaseElement editBtn={editBtn} deleteBtn={deleteBtn} data={data} index={index}>
+    <BaseElement deleteBtn = {(data.editmode)?deleteBtn:null} editBtn={(data.editmode)?editBtn:null} data={data.data} index={index}>
     <div className="icon">
       <div className="circle">
-      {
-        (itemField()&&itemField().icon)?
-        <i className={itemField().icon}></i>:
-        <i className="fas fa-circle-notch"></i>
-      }
+        <i className={data.field?.icon||"fas fa-circle-notch"}></i>
       </div>
     </div>
-      <p className="name">{title}</p>
+      <p className="name">{data.title}</p>
       <div className="control">
         <div className="right-control">
           <div className="custom1-checkbox">
-            <div className={`custom1-inner ${(value)?"active":""}`} name={name} onClick={(disabled2)?()=>{}:changeHandler} disabled={disabled2} >
+            <div className={`custom1-inner ${(value)?"active":""}`} onClick={(data.disabled)?()=>{}:changeHandler} disabled={data.disabled} >
               <div className="custom1-toggle"></div>
             </div>
           </div>

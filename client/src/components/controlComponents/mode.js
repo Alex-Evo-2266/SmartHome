@@ -1,26 +1,13 @@
-import React, {useState,useContext,useEffect} from 'react'
-import {useHttp} from '../../hooks/http.hook'
-import {useMessage} from '../../hooks/message.hook'
-import {AuthContext} from '../../context/AuthContext.js'
+import React, {useState,useEffect} from 'react'
 
 const foo = (systemName, type, v)=>{}
 
 export const Mode = ({updata,title,type,conf,value,systemName,outValue=foo}) =>{
   const [newvalue, setValue]=useState(0)
-  const auth = useContext(AuthContext)
-  const {message} = useMessage();
-  const {request, error, clearError} = useHttp();
 
   useEffect(()=>{
     setValue(value)
   },[value])
-
-  useEffect(()=>{
-    message(error,"error")
-    return ()=>{
-      clearError();
-    }
-  },[error,message, clearError])
 
   const clickHandler = event =>{
     if(newvalue>=conf-1){

@@ -1,8 +1,7 @@
-import React,{useContext,useState,useEffect,useCallback} from 'react'
+import React,{useContext} from 'react'
 import {ModalWindow} from '../modalWindow/modalWindow'
 import {BtnElement} from './CartLineElement/BtnElement'
 import {EditModeContext} from '../../context/EditMode'
-import {SocketContext} from '../../context/SocketContext'
 import {CartEditContext} from './EditCarts/CartEditContext'
 import {SliderElement} from './CartLineElement/SliderElement'
 import {SensorElement} from './CartLineElement/SensorElement'
@@ -10,47 +9,14 @@ import {ScriptElement} from './CartLineElement/ScriptElement'
 import {EnumElement} from './CartLineElement/EnumElement'
 import {TextElement} from './CartLineElement/TextElement'
 // import {WeatherElement} from './CartElement/WeatherElement'
-import {AuthContext} from '../../context/AuthContext.js'
-import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
+import {useControlData} from '../../hooks/controlData.hook'
 
 export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
   const {message} = useMessage();
-  const {devices} = useContext(SocketContext)
-  const auth = useContext(AuthContext)
-  const {request} = useHttp();
+  const {convert} = useControlData();
   const {mode} = useContext(EditModeContext)
   const {target} = useContext(CartEditContext)
-  const [act, setAct] = useState(isPowerActiv(data.children))
-
-  const isPowerActivcallback = useCallback(isPowerActiv,[devices])
-
-  function isPowerActiv(array){
-    for (var item of array)
-      if(item.typeAction==="power"){
-        let id = item.deviceId
-        let condidat = devices.filter((item2)=>(item2&&(item2.DeviceId===id)))
-        if(condidat[0]){
-          let congDev = condidat[0].DeviceConfig.filter((item2)=>item2&&item2.type==="power")
-          congDev = congDev[0]||{}
-          if(condidat[0]&&condidat[0].DeviceValue&&(condidat[0].DeviceValue.power===congDev.high||(condidat[0].DeviceTypeConnect!=="mqtt"&&condidat[0].DeviceValue.power==="1"))){
-            return true
-          }
-          if(condidat[0]&&condidat[0].DeviceTypeConnect==="mqtt"&&(!/\D/.test(condidat[0].DeviceValue.power)&&!/\D/.test(congDev.low)&&!/\D/.test(congDev.high))){
-            let poz = Number(condidat[0].DeviceValue.power)
-            let min = Number(congDev.low)
-            let max = Number(congDev.high)
-            if(poz>min&&poz<=max)
-              return true
-          }
-        }
-      }
-    return false
-  }
-
-  useEffect(()=>{
-    setAct(isPowerActivcallback(data.children))
-  },[isPowerActivcallback,data.children])
 
   function sort(array) {
     let arr = array.slice()
@@ -65,27 +31,6 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
       }
     }
     return arr
-  }
-
-  function isPowerAct(array) {
-    let countpower = 0
-    for (var item of array)
-      if(item.typeAction==="power"||item.typeAction==="state")
-        countpower++
-      if(countpower>=2)
-        return true
-    return false
-  }
-
-  function allPower(array,value) {
-    setAct(value)
-    for (var item of array)
-    {
-      console.log(item);
-      if(item.typeAction==="power"||item.typeAction==="state")
-        request('/api/device/value/set', 'POST', {systemName: item.deviceName,type:item.typeAction,status:(value)?1:0},{Authorization: `Bearer ${auth.token}`})
-    }
-    return false
   }
 
   const deleteElement=(index1)=>{
@@ -131,24 +76,6 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
      heightToolbar={30}>
       <ul className="elementConteiner line">
       {
-        (data&&data.children&&isPowerAct(data.children))?
-        <li>
-          <div className="line-el">
-            <BtnElement
-            disabled={edit}
-            name="all"
-            baseswitchMode={true}
-            firstValue={act}
-            icon="fas fa-power-off"
-            onClick={(event,value)=>{
-              allPower(data.children,value)
-            }}
-            />
-          </div>
-        </li>
-        :null
-      }
-      {
         (data&&data.children)?
         sort(data.children).map((item,index)=>{
           return(
@@ -156,95 +83,29 @@ export const HomeLineCart = ({hide,index,name,updata,data,edit=false,add}) =>{
               {
                 (item.type==="button")?
                   <div className="line-el">
-                    <BtnElement
-                    index={item.index}
-                    disabled={edit}
-                    title={item.title}
-                    data={item}
-                    deleteBtn={
-                      (edit)?deleteElement:null
-                    }
-                    editBtn={
-                      (edit)?editElement:null
-                    }
-                    />
+                    <BtnElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>
                   </div>:
                   (item.type==="enum")?
                   <div className="line-el">
-                  <EnumElement
-                  index={item.index}
-                  title={item.title}
-                  disabled={edit}
-                  data={item}
-                  deleteBtn={
-                    (edit)?deleteElement:null
-                  }
-                  editBtn={
-                    (edit)?editElement:null
-                  }
-                  />
+                    <EnumElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>
                   </div>:
                   (item.type==="text")?
                   <div className="line-el">
-                  <TextElement
-                  index={item.index}
-                  disabled={edit}
-                  title={item.title}
-                  data={item}
-                  deleteBtn={
-                    (edit)?deleteElement:null
-                  }
-                  editBtn={
-                    (edit)?editElement:null
-                  }
-                  />
+                    <TextElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>
                   </div>:
                   (item.type==="slider")?
                   <div className="line-el">
-                  <SliderElement
-                  index={item.index}
-                  data={item}
-                  disabled={edit}
-                  title={item.title}
-                  deleteBtn={
-                    (edit)?deleteElement:null
-                  }
-                  editBtn={
-                    (edit)?editElement:null
-                  }
-                  />
+                    <SliderElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>
                   </div>
                   :(item.type==="script")?
-                    <div className="line-el">
-                    <ScriptElement
-                    index={item.index}
-                    title={item.title}
-                    data={item}
-                    disabled={edit}
-                    deleteBtn={
-                      (edit)?deleteElement:null
-                    }
-                    editBtn={
-                      (edit)?editElement:null
-                    }
-                    />
-                    </div>
-                    :(splitType(item.type)[0]==="sensor")?
-                      <div className="line-el">
-                      <SensorElement
-                      index={item.index}
-                      title={item.title}
-                      data={item}
-                      disabled={edit}
-                      deleteBtn={
-                        (edit)?deleteElement:null
-                      }
-                      editBtn={
-                        (edit)?editElement:null
-                      }
-                      />
-                      </div>
-                :null
+                  <div className="line-el">
+                    <ScriptElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>
+                  </div>
+                  :(splitType(item.type)[0]==="sensor")?
+                  <div className="line-el">
+                    <SensorElement data={convert(item, edit)} index={item.index} deleteBtn={deleteElement} editBtn={editElement}/>
+                  </div>
+                  :null
               }
             </li>
           )
