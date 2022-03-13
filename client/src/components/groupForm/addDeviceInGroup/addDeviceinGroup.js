@@ -88,7 +88,7 @@ export const AddDevice = ()=>{
   return (
     <div className="form">
       <div className="editDevicesForm">
-        <h4>added device</h4>
+        <h4 className="form-headline">added device</h4>
             {
               (groupDevice.length === 0)?
                 <p>not element</p>
@@ -99,7 +99,7 @@ export const AddDevice = ()=>{
                 )
               })
             }
-        <h4>other device</h4>
+        <h4 className="form-headline">other device</h4>
             {
               otherdev().map((item,index)=>{
                 return(

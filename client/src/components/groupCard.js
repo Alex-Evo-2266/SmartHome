@@ -33,28 +33,22 @@ export const GroupCard = ({group, updata}) =>{
       history.push(`/group/ditail/${group.systemName}`)
   }
 
+  const getdevice = (names) => devices.filter((item)=>names.includes(item.systemName))
+
   const getValue = (name, type=null)=>{
     let val = 0
-    let arr = []
-    for (let item of group.devices) {
-      arr.push(devices.filter(item2 => (item2&&item2.systemName===item))[0])
-    }
+    let arr = getdevice(group?.devices?.map(item=>item.name))
     for (var item of arr) {
-      if (!item || !item.value) continue
-      val = item?.value[name]
+      for (var item2 of item.config) {
+        if(item2.name === name && item2.type === type)
+          return item?.value[name]
+      }
     }
     return val
   }
 
-  const getdevice = (names) => devices.filter((item)=>names.includes(item.systemName))
-
-  const getValueField = (field)=>{
-    let groupdevices = getdevice(group?.devices?.map(item=>item.name))
-    return groupdevices?.filter(item=>!!item?.value[field])[0]?.value[field]
-  }
-
   const getFields = ()=>{
-    return group?.fields?.map(item=>({...item, value:getValueField(item.name)}))
+    return group?.fields?.map(item=>({...item, value:getValue(item.name, item.type)}))
   }
 
   const outValue = async(systemName, type, v)=>{
@@ -64,6 +58,14 @@ export const GroupCard = ({group, updata}) =>{
   const editDevices = ()=>{
     form.show("deviceInGroup", group, async(_, group)=>{
       await request(`/api/group/device/edit/${group.systemName}`, 'POST', group,{Authorization: `Bearer ${auth.token}`})
+      if(typeof(updata) === "function")
+        updata()
+    })
+  }
+
+  const editFields = ()=>{
+    form.show("fieldInGroup", group, async(_, group)=>{
+      await request(`/api/group/field/edit/${group.systemName}`, 'POST', group,{Authorization: `Bearer ${auth.token}`})
       if(typeof(updata) === "function")
         updata()
     })
@@ -87,6 +89,10 @@ export const GroupCard = ({group, updata}) =>{
             {
               title:"device",
               onClick:editDevices
+            },
+            {
+              title:"edit fields",
+              onClick:editFields
             }
           ]}/>
           :null
@@ -120,7 +126,7 @@ export const GroupCard = ({group, updata}) =>{
                   </div>
                   <div className="DeviceControlLiContent">
                     <div className="DeviceControlLiValue">
-                      <p>{getValue(item.name)}</p>
+                      <p>{getValue(item.name, item.type)}</p>
                     </div>
                   </div>
                 </li>

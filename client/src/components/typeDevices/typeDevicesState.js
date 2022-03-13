@@ -8,9 +8,7 @@ export const TypesDeviceState = ({children, token, ready}) =>{
 
   const gettypes = useCallback(async()=>{
     try {
-      console.log("type");
       const data = await request(`/api/device/types/get`, 'GET', null,{Authorization: `Bearer ${token}`})
-      console.log("t",data);
       setTypes(data)
     } catch (e) {
       console.error(e)
@@ -18,7 +16,6 @@ export const TypesDeviceState = ({children, token, ready}) =>{
   },[request,token])
 
   useEffect(()=>{
-    console.log(ready);
     if(ready){
       gettypes()
     }
