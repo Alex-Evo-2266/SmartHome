@@ -5,6 +5,7 @@ import {useChecked} from '../hooks/checked.hook'
 import {AuthContext} from '../context/AuthContext.js'
 import {GroupBlock} from '../components/programmBlock/groupBlock'
 import {ActBlock} from '../components/programmBlock/actBlock'
+import {ActGroup} from '../components/programmBlock/actGroup'
 import {ActScript} from '../components/programmBlock/actScript'
 import {TriggerBlock} from '../components/programmBlock/triggerBlock'
 import {TriggerDateTime} from '../components/programmBlock/triggerDateTime'
@@ -77,7 +78,7 @@ export const NewScriptsPage = ({edit}) => {
               return
             let mas = script;
             let act = dataDev.fields[0].name
-            mas[type].push({type:"device",action:act,systemName:dataDev.systemName})
+            mas[type].push({type:"group",action:act,systemName:dataDev.systemName})
             setScript(mas)
           })
         }
@@ -257,7 +258,7 @@ export const NewScriptsPage = ({edit}) => {
                   return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
                 }
                 if(item.type==="group"){
-                  return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
+                  return <ActGroup deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
                 }
                 if(item.type==="script"){
                   return <ActScript deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
@@ -283,6 +284,9 @@ export const NewScriptsPage = ({edit}) => {
               script.otherwise.map((item,index)=>{
                 if(item.type==="device"){
                   return <ActBlock deleteEl={()=>deleteActBlock("otherwise",index)} updata={(data1)=>updatascript("otherwise",data1)} key={index} data={item} index={index} block="otherwise"/>
+                }
+                if(item.type==="group"){
+                  return <ActGroup deleteEl={()=>deleteActBlock("otherwise",index)} updata={(data1)=>updatascript("otherwise",data1)} key={index} data={item} index={index} block="otherwise"/>
                 }
                 if(item.type==="script"){
                   return <ActScript deleteEl={()=>deleteActBlock("otherwise",index)} updata={(data1)=>updatascript("otherwise",data1)} key={index} data={item} index={index} block="otherwise"/>

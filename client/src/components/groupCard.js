@@ -71,6 +71,12 @@ export const GroupCard = ({group, updata}) =>{
     })
   }
 
+  const deleteGroup = async()=>{
+    await request(`/api/group/delete/${group.systemName}`, 'GET', null,{Authorization: `Bearer ${auth.token}`})
+    if(typeof(updata) === "function")
+      updata()
+  }
+
   if(!group){
     return null
   }
@@ -93,6 +99,10 @@ export const GroupCard = ({group, updata}) =>{
             {
               title:"edit fields",
               onClick:editFields
+            },
+            {
+              title:"delete",
+              onClick:deleteGroup
             }
           ]}/>
           :null

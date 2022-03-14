@@ -1,4 +1,7 @@
 from SmartHome.logic.device.deviceSetValue import setValue
+from SmartHome.logic.groups.setValueGroup import setValueGroup
+from SmartHome.logic.groups.GroupFile import Groups
+from SmartHome.schemas.device import DeviceValueSchema
 from SmartHome.settings import SCRIPTS_DIR
 import os, sys
 import yaml, asyncio
@@ -157,6 +160,12 @@ def getvalue(data,option):
                 type = item.type
                 oldValue = item.get()
                 break
+    if(("group" in option) and ("field" in option)):
+        field = None
+        for item in option["group"].fields:
+            if(item.name==option["field"]):
+                type = item.type
+                break
     if("type" in option):
         type = option["type"]
     if(type == "binary" and data["type"]== "enum"):
@@ -205,6 +214,11 @@ async def actiondev(data):
             device = device["device"]
             val = getvalue(item["value"],{"device":device,"field":item["action"]})
             await setValue(device.systemName,item["action"],val)
+        elif(item["type"]=="group"):
+            systemName = item["systemName"]
+            group = Groups.get(systemName)
+            val = getvalue(item["value"],{"group":group,"field":item["action"]})
+            await setValueGroup(DeviceValueSchema(systemName=group.systemName,type=item["action"],status=val))
         elif(item["type"]=="script"):
             templates = None
             fullName = item["systemName"] + ".yml"

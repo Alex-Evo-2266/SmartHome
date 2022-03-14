@@ -5,7 +5,7 @@ import {GroupsContext} from '../../Groups/groupsContext'
 
 export const useScriptDevices = ()=>{
   const {devices} = useContext(SocketContext)
-  const {updata, groups} = useContext(GroupsContext)
+  const {groups} = useContext(GroupsContext)
   const dialog = useContext(DialogWindowContext)
 
   const filteredDevice = useCallback((type, typeDev)=>{
@@ -44,7 +44,7 @@ export const useScriptDevices = ()=>{
         return false
       })
       return filteredDevs
-  },[devices])
+  },[groups])
 
   const deviceBlock = useCallback((result, type="act", typeDev = null)=>{
     let items = filteredDevice(type, typeDev).map((item)=>({title:item.name, data:item}))
