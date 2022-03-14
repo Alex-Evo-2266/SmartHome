@@ -158,7 +158,7 @@ export const MQTTElement = ({data, onClickMessage}) =>{
           type: ret,
           address: address,
           valueType: typeMessage,
-          config: conf
+          fields: conf
         })
       }
     })

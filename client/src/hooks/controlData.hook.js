@@ -30,7 +30,7 @@ export const useControlData = ()=>{
     else if(data.typeItem === "device")
     {
       res.entity = getDevice(data.deviceName)
-      res.fieldsEntity = res.entity?.config
+      res.fieldsEntity = res.entity?.fields
       res.field = itemField(res.fieldsEntity, data.typeAction)
       res.fieldvalue = res.entity?.value[res.field?.name]
     }

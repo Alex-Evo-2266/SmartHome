@@ -47,7 +47,7 @@ export const AddDevice = ()=>{
     // let arr = fields.slice()
     let arr = []
     for (var item of groupdev) {
-      arr = getfields(arr, item.config)
+      arr = getfields(arr, item.fields)
     }
     arr = arr.map(item => ({
       name: item.name,
@@ -67,7 +67,7 @@ export const AddDevice = ()=>{
     let arr = groupDevice.slice()
     arr.push({
       name:item.systemName,
-      fields:item.config.map(
+      fields:item.fields.map(
         (item)=>({name:item.name, type:item.type})
       )
     })

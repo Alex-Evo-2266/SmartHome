@@ -14,7 +14,7 @@ export const History = ({device}) => {
   const {request, error, clearError} = useHttp();
   const [history, setHistory] = useState([])
   const [range, setrange] = useState("all")
-  const [fieldname, setFieldname] = useState(device.config[0].name)
+  const [fieldname, setFieldname] = useState(device.fields[0].name)
   const [field, setField] = useState(null)
 
   useEffect(()=>{
@@ -72,7 +72,7 @@ export const History = ({device}) => {
         <div className="fieldsList">
           <ul>
             {
-              device?.config?.map((item, index)=>{
+              device?.fields?.map((item, index)=>{
                 return(
                   <li key={index} className={(fieldname === item.name)?"active":""} onClick={()=>setFieldname(item.name)}>
                     {item.name}

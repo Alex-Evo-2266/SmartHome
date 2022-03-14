@@ -1,4 +1,5 @@
 from SmartHome.logic.script.runScript import runScripts
+from SmartHome.schemas.device import DeviceFieldSchema
 
 def getParams(d:dict, param:str, default=None):
     if(param in d):
@@ -34,16 +35,16 @@ class DeviceElement(object):
             runScripts(self.deviceName,self.name)
 
 
-    def getDict(self):
-        return {
-        "name": self.name,
-        "address": self.address,
-        "control": self.control,
-        "high": self.high,
-        "low": self.low,
-        "icon": self.icon,
-        "type": self.type,
-        "unit": self.unit,
-        "values": self.values,
-        "value": self.__value,
-        }
+    def getData(self)->DeviceFieldSchema:
+        return DeviceFieldSchema(
+            name=self.name,
+            address=self.address,
+            control=self.control,
+            high=self.high,
+            low=self.low,
+            icon=self.icon,
+            type=self.type,
+            unit=self.unit,
+            values=self.values,
+            value=self.__value,
+        )

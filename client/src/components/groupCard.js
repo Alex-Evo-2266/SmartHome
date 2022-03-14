@@ -39,7 +39,7 @@ export const GroupCard = ({group, updata}) =>{
     let val = 0
     let arr = getdevice(group?.devices?.map(item=>item.name))
     for (var item of arr) {
-      for (var item2 of item.config) {
+      for (var item2 of item.fields) {
         if(item2.name === name && item2.type === type)
           return item?.value[name]
       }

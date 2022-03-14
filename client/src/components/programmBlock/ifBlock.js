@@ -20,7 +20,7 @@ export const IfBlock = ({idDevice,updata,index,data,deleteEl})=>{
   },[devices])
 
   const lookForField = (device,name)=>{
-    return device.config.filter((item)=>item.name===name)[0]
+    return device.fields.filter((item)=>item.name===name)[0]
   }
 
   const valuesDecod = (data)=> data.split(" ").join("").split(",")
@@ -44,7 +44,7 @@ export const IfBlock = ({idDevice,updata,index,data,deleteEl})=>{
       let element = data
       if(typeValue==="DeviceValue"){
         deviceBlock((deviceData)=>{
-          element = {...element, value:{type:"device",systemName:deviceData.systemName,action:deviceData.config[0].name}}
+          element = {...element, value:{type:"device",systemName:deviceData.systemName,action:deviceData.fields[0].name}}
           updata(element,index)
           return
         }, "if", field.type)
@@ -96,7 +96,7 @@ if(Object.keys(device)?.length === 0 || Object.keys(field)?.length === 0){
       <div className="programm-function-block-content-item">
         <select value={field.name} onChange={changeSelector} name="action">
           {
-            device.config.map((item,index)=>{
+            device.fields.map((item,index)=>{
               return(
                 <option key={index} value={item.name}>{item.name}</option>
               )

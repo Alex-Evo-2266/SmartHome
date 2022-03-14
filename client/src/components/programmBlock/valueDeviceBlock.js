@@ -11,7 +11,7 @@ export const ValueDeviceBlock = ({data,updata,index,type,deleteEl,block})=>{
   },[devices])
 
   const lookForField = (device,name)=>{
-    return device.config.filter((item)=>item.name===name)[0]
+    return device.fields.filter((item)=>item.name===name)[0]
   }
 
   useEffect(()=>{
@@ -44,7 +44,7 @@ export const ValueDeviceBlock = ({data,updata,index,type,deleteEl,block})=>{
       <div className="programm-function-block-content-item">
         <select value={field.name} onChange={changeSelector} name="property">
           {
-            filtredOption(device.config).map((item,index)=>{
+            filtredOption(device.fields).map((item,index)=>{
               return(
                 <option key={index} value={item.name}>{item.name}</option>
               )

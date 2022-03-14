@@ -20,7 +20,7 @@ export const NewScriptsPage = ({edit}) => {
   const history = useHistory()
   const {USText} = useChecked()
   const auth = useContext(AuthContext)
-  const {addTarget,typeAct,deviceBlock,addScriptBlock} = useContext(AddScriptContext)
+  const {addTarget,typeAct,deviceBlock,groupBlock,addScriptBlock} = useContext(AddScriptContext)
   const {message} = useMessage();
   const {loading,request, error, clearError} = useHttp();
   const[cost, setCost]=useState(true)
@@ -66,7 +66,17 @@ export const NewScriptsPage = ({edit}) => {
             if(!dataDev||!dataDev.systemName)
               return
             let mas = script;
-            let act = dataDev.config[0].name
+            let act = dataDev.fields[0].name
+            mas[type].push({type:"device",action:act,systemName:dataDev.systemName})
+            setScript(mas)
+          })
+        }
+        if(typeAct==="group"){
+          groupBlock((dataDev)=>{
+            if(!dataDev||!dataDev.systemName)
+              return
+            let mas = script;
+            let act = dataDev.fields[0].name
             mas[type].push({type:"device",action:act,systemName:dataDev.systemName})
             setScript(mas)
           })
@@ -244,6 +254,9 @@ export const NewScriptsPage = ({edit}) => {
               (cost)?
               script.then.map((item,index)=>{
                 if(item.type==="device"){
+                  return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
+                }
+                if(item.type==="group"){
                   return <ActBlock deleteEl={()=>deleteActBlock("then",index)} updata={(data1)=>updatascript("then",data1)} key={index} data={item} index={index} block="then"/>
                 }
                 if(item.type==="script"){

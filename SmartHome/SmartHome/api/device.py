@@ -10,8 +10,8 @@ from SmartHome.logic.device.addDevice import addDevice
 from SmartHome.depends.auth import token_dep
 from SmartHome.logic.device.deviceSetValue import setValue
 from SmartHome.logic.device.editDevice import editDevice, deleteDevice, editStatusDevice
+from SmartHome.schemas.base import FunctionRespons, TypeRespons
 from SmartHome.logic.device.deviceHistory import getHistory
-
 from SmartHome.models import DeviceHistory
 
 router = APIRouter(
@@ -37,29 +37,38 @@ async def get_device(systemName:str, auth_data: dict = Depends(token_dep)):
 @router.post("/add")
 async def add_device(data:DeviceSchema, auth_data: dict = Depends(token_dep)):
     res = await addDevice(data)
-    if res['status'] == 'error':
-        return JSONResponse(status_code=400, content={"message": f"error add device. {res['detail']}"})
+    if res.status == TypeRespons.INVALID:
+        return JSONResponse(status_code=400, content={"message": f"error add device. {res.detail}"})
+    if res.status == TypeRespons.ERROR:
+        return JSONResponse(status_code=500, content={"message": f"error add device. {res.detail}"})
     return "ok"
 
 @router.post("/edit")
 async def add_device(data:DeviceEditSchema, auth_data: dict = Depends(token_dep)):
     res = await editDevice(data)
-    if res['status'] == 'error':
-        return JSONResponse(status_code=400, content={"message": f"error add device. {res['detail']}"})
+    if res.status == TypeRespons.INVALID:
+        return JSONResponse(status_code=400, content={"message": f"error edit device. {res.detail}"})
+    if res.status == TypeRespons.ERROR:
+        return JSONResponse(status_code=500, content={"message": f"error edit device. {res.detail}"})
     return "ok"
 
 @router.post("/delete/{systemName}")
 async def add_device(systemName:str, auth_data: dict = Depends(token_dep)):
     res = await deleteDevice(systemName)
-    if res['status'] == 'error':
-        return JSONResponse(status_code=400, content={"message": f"error add device. {res['detail']}"})
+    if res.status == TypeRespons.INVALID:
+        return JSONResponse(status_code=400, content={"message": f"error delete device. {res.detail}"})
+    if res.status == TypeRespons.ERROR:
+        return JSONResponse(status_code=500, content={"message": f"error delete device. {res.detail}"})
     return "ok"
 
 @router.post("/status/set")
 async def editstatusdevice(data:DeviceStatusSchema, auth_data: dict = Depends(token_dep)):
+    print(data)
     res = await editStatusDevice(data.systemName, data.status)
-    if res['status'] == 'error':
-        return JSONResponse(status_code=400, content={"message": f"error add device. {res['detail']}"})
+    if res.status == TypeRespons.INVALID:
+        return JSONResponse(status_code=400, content={"message": f"error edit status device. {res.detail}"})
+    if res.status == TypeRespons.ERROR:
+        return JSONResponse(status_code=500, content={"message": f"error edit status device. {res.detail}"})
     return "ok"
 
 @router.post("/value/set")
@@ -72,6 +81,8 @@ async def add_device(data:DeviceValueSchema, auth_data: dict = Depends(token_dep
 @router.get("/history/get/{systemName}", response_model=List[DeviceHistory])
 async def getHistoryapi(systemName:str, auth_data: dict = Depends(token_dep)):
     res = await getHistory(systemName)
-    if res.status != "ok":
+    if res.status == TypeRespons.INVALID:
         return JSONResponse(status_code=400, content={"message": res.detail})
+    if res.status == TypeRespons.ERROR:
+        return JSONResponse(status_code=500, content={"message": res.detail})
     return res.data

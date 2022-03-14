@@ -37,6 +37,8 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI();
 
+logging.basicConfig(encoding='utf-8', level=logging.INFO)
+
 if DEBUG:
     app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
 else:

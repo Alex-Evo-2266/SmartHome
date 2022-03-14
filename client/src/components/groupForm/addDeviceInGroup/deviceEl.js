@@ -33,7 +33,7 @@ export const Device = ({device, onClick, setGroupDevice, groupDevice, added=fals
         (field)?
         <div className="LiContent">
           {
-            device?.config?.map((item, index)=>{
+            device?.fields?.map((item, index)=>{
               return(
                 <div className="devEl" key={index}>
                 <p>{item.name}</p>

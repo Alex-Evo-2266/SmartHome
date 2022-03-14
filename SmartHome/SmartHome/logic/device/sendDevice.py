@@ -5,5 +5,8 @@ async def sendDevice():
     devices = await giveDevices()
     devicesdict = list()
     for item in devices:
-        devicesdict.append(item.dict())
+        if item:
+            devicesdict.append(item.dict())
+        else:
+            devicesdict.append(None)
     await manager.send_information("devices", devicesdict)

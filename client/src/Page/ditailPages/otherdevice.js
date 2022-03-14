@@ -22,12 +22,12 @@ export const OtherDevicePage = ({device})=>{
     <div className="deviceContainer">
       <div className="gridDeviceContainer">
       {
-        (ranges(device.config).length !== 0)?
+        (ranges(device.fields).length !== 0)?
         <div className="containerBlock">
           <div className="titleBlock">ranges field</div>
           <div className="containerBlockcontent">
             {
-              ranges(device.config).map((item, index)=>{
+              ranges(device.fields).map((item, index)=>{
                 return (
                   <div key={index} className="slider-container">
                     <Slider device={device} item={item}/>
@@ -40,12 +40,12 @@ export const OtherDevicePage = ({device})=>{
         null
       }
       {
-        (binaryControl(device.config).length !== 0)?
+        (binaryControl(device.fields).length !== 0)?
         <div className="containerBlock">
           <div className="titleBlock">switchs</div>
           <div className="containerBlockcontent dopBlubContainer">
           {
-            binaryControl(device.config).map((item, index)=>{
+            binaryControl(device.fields).map((item, index)=>{
               return (
                 <Btn device={device} item={item}/>
               )
@@ -56,12 +56,12 @@ export const OtherDevicePage = ({device})=>{
         null
       }
       {
-        (textcontrol(device.config).length !== 0)?
+        (textcontrol(device.fields).length !== 0)?
         <div className="containerBlock">
           <div className="titleBlock">text field</div>
           <div className="containerBlockcontent">
           {
-            textcontrol(device.config).map((item, index)=>{
+            textcontrol(device.fields).map((item, index)=>{
               return (
                 <div key={index} className="text-container">
                   <Text device={device} item={item}/>
@@ -74,12 +74,12 @@ export const OtherDevicePage = ({device})=>{
         null
       }
       {
-        (enumcontrol(device.config).length !== 0)?
+        (enumcontrol(device.fields).length !== 0)?
         <div className="containerBlock">
           <div className="titleBlock">enum field</div>
           <div className="containerBlockcontent">
             {
-              enumcontrol(device.config).map((item, index)=>{
+              enumcontrol(device.fields).map((item, index)=>{
                 return (
                   <div key={index} className="text-container">
                     <Enum device={device} item={item}/>
@@ -92,12 +92,12 @@ export const OtherDevicePage = ({device})=>{
         null
       }
       {
-        (sensors(device.config).length !== 0)?
+        (sensors(device.fields).length !== 0)?
         <div className="containerBlock">
           <div className="titleBlock">sensors field</div>
           <div className="containerBlockcontent">
             {
-              sensors(device.config).map((item, index)=>{
+              sensors(device.fields).map((item, index)=>{
                 return (
                   <div key={index} className="text-container">
                     <div className="sensor-container">

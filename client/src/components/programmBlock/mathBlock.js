@@ -21,7 +21,7 @@ export const MathBlock = ({data,updata,block,deleteEl})=>{
       let element = data
       if(typeValue==="DeviceValue"){
         deviceBlock((deviceData)=>{
-          element = {...element, [v]:{type:"device",systemName:deviceData.systemName,action:deviceData.config[0].name}}
+          element = {...element, [v]:{type:"device",systemName:deviceData.systemName,action:deviceData.fields[0].name}}
           updata(element)
           return
         }, "if", "number")

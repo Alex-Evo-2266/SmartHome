@@ -91,7 +91,7 @@ export const NewDeviceElement = ({systemName}) =>{
         {
           (device.status!=="online")?
           <li className="DeviceControlLi"><h4 className="offline">{device.status}</h4></li>
-          :device.config.map((item,index)=>{
+          :device.fields.map((item,index)=>{
             if(item.type==="binary" && item.control){
               return <Power outValue={outValue} key={index} updata = {updateDevice} systemName={device.systemName} value={(device.value&&(String(device.value[item.name])==="1"))?true:false} type={item.name}/>
             }

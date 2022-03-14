@@ -24,7 +24,7 @@ const addEl = ()=>{
     else if(typeblock==="deviceBlock"){
       deviceBlock((dataDev)=>{
         let element = blockData
-        let act = dataDev.config[0].name
+        let act = dataDev.fields[0].name
         element.children.push({type:"device" ,oper:"==",systemName:dataDev.systemName,action:act,value:""})
         updata(element,index)
       },"if")

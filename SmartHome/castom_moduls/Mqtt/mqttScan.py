@@ -47,13 +47,13 @@ class TopicHistory():
                     if device.valueType=="json":
                         if(device.address==topic or (device.address==first and last == "set")):
                             lincs.append({
-                            "device": device.getDict()
+                            "device": device.dict()
                             })
                     else:
                         for devValue in device.values:
                             if ((device.address + "/" + devValue.address ==topic) and last != "set"):
                                 lincs.append({
-                                "device": device.getDict(),
+                                "device": device.dict(),
                                 "field": devValue.get()
                                 })
                 item["lincs"] = lincs

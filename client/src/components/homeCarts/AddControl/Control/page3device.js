@@ -16,7 +16,7 @@ function filtred(data, typeField) {
   let condidats = data.filter(item=>item.type!=="sensor")
   let filtredData = []
   for (var item of condidats) {
-    for (var item2 of item.config) {
+    for (var item2 of item.fields) {
       if(item2.control && typeField in types && types[typeField].indexOf(item2.type) !== -1){
         filtredData.push(item)
         break

@@ -5,7 +5,7 @@ class TypesDeviceSchema(BaseModel):
     title: str
     interface: List[str]
 
-class DeviceFieldConfigSchema(BaseModel):
+class DeviceFieldSchema(BaseModel):
     address: Optional[str]
     name: str
     value: Optional[str]
@@ -26,9 +26,8 @@ class DeviceSchema(BaseModel):
     information: Optional[str] = ''
     address: str
     systemName: str
-    config: List[DeviceFieldConfigSchema]
+    fields: List[DeviceFieldSchema]
     token: Optional[str]
-    RoomId: Optional[int] = None
     value: Optional[Dict[str,str]]
 
 class DeviceEditSchema(DeviceSchema):

@@ -17,7 +17,7 @@ export const EditField = ()=>{
     let arr = []
     for (var item of form.group.devices) {
       let dev = getDevice(item.name)
-      for (var item2 of dev.config) {
+      for (var item2 of dev.fields) {
         if(item2.name === name && !arr.includes(item2.type))
           arr.push(item2.type)
       }
@@ -28,7 +28,7 @@ export const EditField = ()=>{
   const getcontrols = (name)=>{
     for (var item of form.group.devices) {
       let dev = getDevice(item.name)
-      for (var item2 of dev.config) {
+      for (var item2 of dev.fields) {
         if(item2.name === name && item2.control)
           return [true, false]
       }

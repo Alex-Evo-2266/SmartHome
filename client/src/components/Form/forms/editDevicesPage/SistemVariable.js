@@ -30,8 +30,8 @@ export const DeviceVariableEdit = ({deviceData,hide,type="edit"})=>{
     typeConnect:deviceData.typeConnect||"mqtt",
     RoomId:deviceData.RoomId,
   })
-  const [field, setField] = useState(deviceData.config||[]);
-  const [count, setCount] = useState(deviceData.config.length);
+  const [field, setField] = useState(deviceData.fields||[]);
+  const [count, setCount] = useState(deviceData.fields.length);
 
   useEffect(()=>{
     console.log(field);
@@ -105,7 +105,7 @@ const changeHandlerTest = event=>{
     }
     let dataout = {
       ...device,
-      config:conf
+      fields:conf
     }
     if(type==="edit")
       await request(`/api/device/edit`, 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})

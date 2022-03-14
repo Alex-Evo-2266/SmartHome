@@ -29,7 +29,7 @@ export const DeviceMiioEdit = ({deviceData,hide,type="edit"})=>{
     typeConnect:deviceData.typeConnect,
     RoomId:deviceData.RoomId,
   })
-  const [field, setField] = useState(deviceData.config||[]);
+  const [field, setField] = useState(deviceData.fields||[]);
 
   const changeIcon = (val, id) => {
     let index = id
@@ -52,7 +52,7 @@ const changeHandlerTest = event=>{
   const outHandler = async ()=>{
     let dataout = {
       ...device,
-      config:field
+      fields:field
     }
     if(type==="edit")
       await request(`/api/device/edit`, 'POST', {...dataout},{Authorization: `Bearer ${auth.token}`})

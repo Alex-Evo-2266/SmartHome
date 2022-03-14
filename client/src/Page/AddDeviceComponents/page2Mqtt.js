@@ -81,7 +81,7 @@ export const AddDevicesPage2MQTT = ({form, setForm, next,backPage, begining = []
   }
 
   const nextPage = ()=>{
-    updata("config",fields)
+    updata("fields",fields)
     if(validFields())
       next()
   }

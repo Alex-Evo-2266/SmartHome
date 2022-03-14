@@ -10,7 +10,7 @@ const types = {
 }
 
 function filtredField(data, typeField) {
-  let condidats = data.config
+  let condidats = data.fields
   if(typeField === "sensor")
     return condidats
   return condidats.filter(item=>(item.control && typeField in types && types[typeField].indexOf(item.type) !== -1))

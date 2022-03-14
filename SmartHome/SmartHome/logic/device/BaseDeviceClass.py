@@ -5,6 +5,8 @@ import logging
 import asyncio
 import threading
 from datetime import datetime
+from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema
+
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +19,8 @@ def look_for_param(arr:list, val):
 class BaseDevice(object):
     """docstring for BaseDevice."""
 
-    def __init__(self, *args, **kwargs):
-        self.systemName = kwargs["systemName"]
+    def __init__(self, systemName:str):
+        self.systemName = systemName
         deviceData = Devices.get(systemName=self.systemName)
         self.status = deviceData.status
         self.name = deviceData.name
@@ -30,8 +32,8 @@ class BaseDevice(object):
         self.valueType = deviceData.valueType
         self.values = []
         self.device = None
-        for item in deviceData.values:
-            self.values.append(DeviceElement(**item.get(), deviceName=self.systemName))
+        for item in deviceData.fields:
+            self.values.append(DeviceElement(**item.dict(), deviceName=self.systemName))
 
     def get_value(self, name):
         value = look_for_param(self.values, name)
@@ -68,7 +70,7 @@ class BaseDevice(object):
     def save(self):
         dev = Devices.get(systemName=self.systemName)
         for item in self.values:
-            value = look_for_param(dev.values, item.name)
+            value = look_for_param(dev.fields, item.name)
             if value:
                 value.value = item.get()
         dev.save()
@@ -77,33 +79,34 @@ class BaseDevice(object):
     async def save_and_addrecord(self):
         dev = Devices.get(systemName=self.systemName)
         for item in self.values:
-            value = look_for_param(dev.values, item.name)
+            value = look_for_param(dev.fields, item.name)
             if value:
                 value.value = item.get()
             await DeviceHistory.objects.create(deviceName=self.systemName, field=item.name, type=item.type, value=value.value, unit=value.unit, datatime=datetime.now().timestamp())
         dev.save()
         logger.info(f'save {self.name}')
 
-    def get_Base_Info(self):
-        res = {
-        "address": self.coreAddress,
-        "information": self.info,
-        "name": self.name,
-        "status": self.status,
-        "systemName":self.systemName,
-        "token":self.token,
-        "type":self.type,
-        "typeConnect": self.typeConnect,
-        "RoomId": None,
-        "valueType":self.valueType,
-        }
+    def get_Base_Info(self)->DeviceSchema:
+        res = DeviceSchema(
+            address=self.coreAddress,
+            information=self.info,
+            name=self.name,
+            status=self.status,
+            systemName=self.systemName,
+            token=self.token,
+            type=self.type,
+            typeConnect=self.typeConnect,
+            valueType=self.valueType,
+            fields=[],
+            value=None
+            )
         values = []
         vals = dict()
         for item in self.values:
-            values.append(item.getDict())
+            values.append(item.getData())
             vals[item.name] = item.get()
-        res["config"] = values
-        res["value"] = vals
+        res.fields = values
+        res.value = vals
         return res
 
     def get_All_Info(self):

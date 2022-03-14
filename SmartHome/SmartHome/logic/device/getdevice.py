@@ -1,7 +1,7 @@
 from .devicesArrey import devicesArrey
 from .DeviceFile import Devices
 
-from SmartHome.schemas.device import DeviceSchema, DeviceFieldConfigSchema
+from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from castom_moduls import getDevicesClass
 
@@ -13,18 +13,14 @@ logger = logging.getLogger(__name__)
 def confdecod(elements):
     arr2 = []
     for element in elements:
-        arr2.append(
-            DeviceFieldConfigSchema(
-                **element.get()
-            )
-        )
+        arr2.append(element.getData())
     return arr2
 
 def confdecod2(elements):
     arr2 = []
     for element in elements:
         arr2.append(
-            DeviceFieldConfigSchema(
+            DeviceFieldSchema(
                 **element
             )
         )
@@ -38,53 +34,30 @@ async def device(item):
     try:
         if(not item.status):
             # control = item.control
-            data = item.getDict()
-            data.pop('config', None)
-            data.pop('status', None)
-            return DeviceSchema(
-                **data,
-                config=confdecod(item.values),
-                value=None,
-                status="unlink"
-            )
+            data = item.dict()
+            data['fields']=confdecod(item.values),
+            data['value']=None
+            data['status']="unlink"
+            return DeviceSchema(**data)
         element = devicesArrey.get(systemName)
         if(not element):
             dev = await getDevicesClass(typeConnect, systemName)
             if(not dev):
                 dev = BaseDevice(systemName=systemName)
                 data = dev.get_Base_Info()
-                config = data['config']
-                data.pop('config', None)
-                data.pop('status', None)
-                return DeviceSchema(
-                    **data,
-                    config=confdecod2(config),
-                    status="not supported"
-                )
+                data.status = "not supported"
+                return data
             if(not dev.get_device()):
                 data = dev.get_Base_Info()
-                config = data['config']
-                data.pop('config', None)
-                data.pop('status', None)
-                return DeviceSchema(
-                    **data,
-                    config=confdecod2(config),
-                    status="offline"
-                )
+                data.status="offline",
+                return data
             devicesArrey.addDevice(systemName,dev)
-
         else:
             status = "online"
             dev = element["device"]
         data = dev.get_All_Info()
-        config = data['config']
-        data.pop('config', None)
-        data.pop('status', None)
-        return DeviceSchema(
-            **data,
-            config=confdecod2(config),
-            status=status
-        )
+        data.status = status
+        return data
     except Exception as e:
         logger.warning(f'device not found. {e}')
         el = devicesArrey.get(item.systemName)
@@ -92,14 +65,8 @@ async def device(item):
             dev = el['device']
             devicesArrey.delete(item.systemName)
             data = dev.get_Base_Info()
-            config = data['config']
-            data.pop('config', None)
-            data.pop('status', None)
-            return DeviceSchema(
-                **data,
-                config=confdecod2(config),
-                status="offline"
-            )
+            data.status="offline",
+            return data
         return None
 
 async def giveDevice(systemName):

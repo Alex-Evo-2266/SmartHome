@@ -21,7 +21,6 @@ class Yeelight(BaseDevice):
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
-
         self.device = Bulb(self.coreAddress)
         try:
             values = self.device.get_properties()

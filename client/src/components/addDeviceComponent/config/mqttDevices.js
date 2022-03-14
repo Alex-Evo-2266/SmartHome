@@ -5,13 +5,13 @@ import {HidingLi} from '../../hidingLi.js'
 
 export const DeviceMqtt = ({onChange,back,type})=>{
   const [configForm, setConfigForm] = useState(getConf(type));
-  const [form, setForm] = useState(configForm.config);
+  const [form, setForm] = useState(configForm.fields);
   const [count, setCount] = useState(1);
 
   useEffect(()=>{
     setConfigForm(getConf(type))
-    setForm(getConf(type).config)
-    onChange(getConf(type).config)
+    setForm(getConf(type).fields)
+    onChange(getConf(type).fields)
   },[type,onChange])
 
   const addField = ()=>{

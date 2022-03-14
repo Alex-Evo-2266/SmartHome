@@ -1,0 +1,23 @@
+INFO:uvicorn.error:Started server process [103099]
+INFO:uvicorn.error:Waiting for application startup.
+INFO:databases:Connected to database mysql+pymysql://roothome:********@localhost:3306/SmartHome
+WARNING:SmartHome.logic.weather:error get weather forecast. detail 'list'
+WARNING:module.Yeelight:yeelight initialize error. 'Device' object has no attribute 'values'
+WARNING:SmartHome.logic.device.getdevice:device not found. 1 validation error for DeviceSchema
+fields
+  field required (type=value_error.missing)
+ERROR:asyncio:Task exception was never retrieved
+future: <Task finished name='Task-3' coro=<RunFunctions.run() done, defined at /home/alex/Project/SmartHomePython/SmartHome/./SmartHome/logic/call_functions.py:32> exception=AttributeError("'NoneType' object has no attribute 'dict'")>
+Traceback (most recent call last):
+  File "/home/alex/Project/SmartHomePython/SmartHome/./SmartHome/logic/call_functions.py", line 35, in run
+    await f()
+  File "/home/alex/Project/SmartHomePython/SmartHome/./SmartHome/logic/device/sendDevice.py", line 9, in sendDevice
+    devicesdict.append(item.dict())
+AttributeError: 'NoneType' object has no attribute 'dict'
+INFO:main:starting
+INFO:uvicorn.error:Application startup complete.
+INFO:uvicorn.error:Shutting down
+INFO:uvicorn.error:Waiting for application shutdown.
+INFO:databases:Disconnected from database mysql+pymysql://roothome:********@localhost:3306/SmartHome
+INFO:uvicorn.error:Application shutdown complete.
+INFO:uvicorn.error:Finished server process [103099]

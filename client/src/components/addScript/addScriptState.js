@@ -13,7 +13,7 @@ export const AddScriptState = ({children}) =>{
   const {message} = useMessage();
   const auth = useContext(AuthContext)
   const {request, error, clearError} = useHttp();
-  const {deviceBlock} = useScriptDevices()
+  const {deviceBlock, groupBlock} = useScriptDevices()
 
   const addTarget = (result=null)=>{
     let targets = devices.map((item)=>({title:item.name, data:item}))
@@ -32,6 +32,7 @@ export const AddScriptState = ({children}) =>{
   const typeAct = (result=null)=>{
     let items = [
       {title: "device", data: "device"},
+      {title: "group", data: "group"},
       {title: "script", data: "script"},
       {title: "delay", data: "delay"},
     ]
@@ -109,7 +110,7 @@ export const AddScriptState = ({children}) =>{
 
   return(
     <AddScriptContext.Provider
-    value={{typeValue,addTarget,typeAct,deviceBlock,typeIf,addScriptBlock}}>
+    value={{typeValue,addTarget,typeAct,deviceBlock,groupBlock,typeIf,addScriptBlock}}>
       {children}
     </AddScriptContext.Provider>
   )

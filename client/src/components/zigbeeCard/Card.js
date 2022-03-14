@@ -113,7 +113,7 @@ export const ZigbeeElement = ({data}) =>{
       type: data1,
       address: data.allAddress,
       valueType: "json",
-      config: conf
+      fields: conf
     })
     hide()
   }
