@@ -82,9 +82,13 @@ class BaseDevice(object):
             value = look_for_param(dev.fields, item.name)
             if value:
                 value.value = item.get()
+            if not value.unit:
+                value.unit = ""
+            if not value.value:
+                value.value = "0"
             await DeviceHistory.objects.create(deviceName=self.systemName, field=item.name, type=item.type, value=value.value, unit=value.unit, datatime=datetime.now().timestamp())
         dev.save()
-        logger.info(f'save {self.name}')
+        logger.info(f'save history {self.name}')
 
     def get_Base_Info(self)->DeviceSchema:
         res = DeviceSchema(

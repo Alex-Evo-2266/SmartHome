@@ -36,7 +36,7 @@ async def device(item):
             # control = item.control
             data = item.dict()
             data['fields']=confdecod(item.values),
-            data['value']=None
+            data['value']=dict()
             data['status']="unlink"
             return DeviceSchema(**data)
         element = devicesArrey.get(systemName)

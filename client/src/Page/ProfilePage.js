@@ -37,11 +37,11 @@ export const ProfilePage = () => {
     if(!data) return;
     setUser(data);
     setNewuser({
-      UserName:data.UserName,
-      UserSurname:data.UserSurname,
-      Mobile:data.Mobile,
-      Email:data.Email,
-      ImageId:data.ImageId
+      UserName:data.UserName||"",
+      UserSurname:data.UserSurname||"",
+      Mobile:data.Mobile||"",
+      Email:data.Email||"",
+      ImageId:data.ImageId||""
     });
   },[request,auth.token])
 

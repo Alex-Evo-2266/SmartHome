@@ -26,6 +26,7 @@ async def addDevice(data:DeviceSchema)->FunctionRespons:
         data.fields = []
         newDevice = Devices.create(data)
         for item in fields:
+            item.value = item.low
             newDevice.addField(item)
         newDevice.save()
         return FunctionRespons(status=TypeRespons.OK, data="ok")

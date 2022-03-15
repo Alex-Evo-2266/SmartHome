@@ -19,7 +19,7 @@ class DeviceElement(object):
         self.low = getParams(kwargs, "low")
         self.icon = getParams(kwargs, "icon")
         self.type = getParams(kwargs, "type")
-        self.unit = getParams(kwargs, "unit")
+        self.unit = getParams(kwargs, "unit", "")
         self.values = getParams(kwargs, "values")
         self.__value = getParams(kwargs, "value")
 

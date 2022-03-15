@@ -1,7 +1,7 @@
 
 const getConfig = (device, key)=>{
   if(!device) return null;
-  for (var item of device.config) {
+  for (var item of device.fields) {
     if(item.name === key){
       return item
     }
