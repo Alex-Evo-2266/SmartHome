@@ -1,6 +1,8 @@
 from SmartHome.settings import DEVICES
 from SmartHome.logic.utils.file import readYMLFile, writeYMLFile
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema
+from SmartHome.logic.groups.deleteDevicefromGroups import dleteDevicesFromGroups
+from SmartHome.models import DeviceHistory
 
 import json
 import ast
@@ -68,7 +70,7 @@ class Device(DeviceSchema):
             devices[index] = self.dict()
         writeYMLFile(DEVICES, devices)
 
-    def delete(self):
+    async def delete(self):
         devices = readYMLFile(DEVICES)
         device = None
         for item in devices:
@@ -77,6 +79,8 @@ class Device(DeviceSchema):
                 break
         if(device):
             devices.remove(device)
+        dleteDevicesFromGroups(self.systemName)
+        await DeviceHistory.objects.delete(deviceName=self.systemName)
         writeYMLFile(DEVICES, devices)
 
     def addField(self, data: DeviceFieldSchema):

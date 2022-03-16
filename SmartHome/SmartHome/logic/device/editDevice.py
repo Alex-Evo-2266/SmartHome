@@ -59,7 +59,7 @@ async def deleteDevice(systemName: str):
     try:
         dev = Devices.get(systemName=systemName)
         devicesArrey.delete(systemName)
-        dev.delete()
+        await dev.delete()
         deleteDeviceinpage(systemName)
         logger.info(f'delete device, systemName:{systemName}')
         return FunctionRespons(status=TypeRespons.OK, data="ok")
