@@ -2,7 +2,6 @@ import asyncio, logging
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
-from sqlalchemy import create_engine
 from fastapi.middleware.cors import CORSMiddleware
 
 from castom_moduls import init_moduls
@@ -35,7 +34,7 @@ from SmartHome.settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI();
+app = FastAPI()
 
 logging.basicConfig(encoding='utf-8', level=logging.INFO)
 

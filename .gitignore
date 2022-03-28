@@ -1,6 +1,7 @@
 *.pot
 *.pyc
 env
+!.env.development
 celerybeat-schedule
 __pycache__/
 local_settings.py

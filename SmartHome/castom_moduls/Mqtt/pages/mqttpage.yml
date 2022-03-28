@@ -1,0 +1,38 @@
+menu: []
+pages:
+  - name: "base"
+    content:
+      src: "url"
+      ws_src: "url"
+      display:
+        type: "table"
+        content: "root.data"
+        fields:
+          - name: "address"
+            type: "path"
+            content: "item.address"
+            search: false
+          - name: "message"
+            content: "item.message"
+        controls:
+          - title: "linc"
+            type: "LINC"
+            url:
+  - name: "card"
+    content:
+      src: "url"
+      ws_src: "url"
+      display:
+        type: "card"
+        content: "root.data"
+        fields:
+          - name: "address"
+            type: "path"
+            content: "item.address"
+            search: false
+          - name: "message"
+            content: "item.message"
+        controls:
+          - title: "linc"
+            type: "LINC"
+            url:

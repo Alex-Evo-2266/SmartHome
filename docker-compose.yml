@@ -10,10 +10,10 @@ services:
     volumes:
       - bd_data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=SmartHome
-      - MYSQL_USER=roothome
-      - MYSQL_PASSWORD=root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
   mosquitto:
     container_name: mosquitto
     build: ./mosquitto
@@ -25,7 +25,7 @@ services:
     ports:
       - 1883:1883
     environment:
-      - MQTT_BROKER_URL=mqtt://mosquitto
+      MQTT_BROKER_URL: mqtt://mosquitto
   client:
     build: ./client
     volumes:
@@ -36,11 +36,11 @@ services:
     command: bash -c "alembic upgrade head &&
               uvicorn main:app --reload --port=8000 --host='0.0.0.0'"
     environment:
-      - SMARTHOME_BD_HOST=sh_db
-      - SMARTHOME_BD_PORT=3306
-      - SMARTHOME_BD_NAME=SmartHome
-      - SMARTHOME_BD_USER=roothome
-      - SMARTHOME_BD_PASSWORD=root
+      SMARTHOME_BD_HOST: ${SMARTHOME_BD_HOST}
+      SMARTHOME_BD_PORT: ${SMARTHOME_BD_PORT}
+      SMARTHOME_BD_NAME: ${MYSQL_DATABASE}
+      SMARTHOME_BD_USER: ${MYSQL_USER}
+      SMARTHOME_BD_PASSWORD: ${MYSQL_PASSWORD}
     expose:
       - 8000
     volumes:
