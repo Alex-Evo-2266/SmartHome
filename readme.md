@@ -13,6 +13,7 @@ Deployment requires docker and docker-compass to be installed.
 clone the repository.
 
 ``` bash
-git clone https://github.com/Alex-Evo-2266/SmartHomePython.git SmartHome
+git clone https://github.com/Alex-Evo-2266/SmartHomePython.git SmartHome 
 cd SmartHome
 ```
+

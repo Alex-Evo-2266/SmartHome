@@ -15,7 +15,11 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
   client:
-    build: ./client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_WS_HOST: ${HOST}
     volumes:
       - client_voluem:/client/build
   smart_home:
