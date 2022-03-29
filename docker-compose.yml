@@ -14,18 +14,6 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-  mosquitto:
-    container_name: mosquitto
-    build: ./mosquitto
-    restart: always
-    volumes:
-      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - ./mosquitto/data:/mosquitto/data
-      - ./mosquitto/log:/mosquitto/log
-    ports:
-      - 1883:1883
-    environment:
-      MQTT_BROKER_URL: mqtt://mosquitto
   client:
     build: ./client
     volumes:
@@ -59,6 +47,24 @@ services:
     volumes:
       - media_voluem:/home/smart_home/web/media
       - client_voluem:/client/build
+  mosquitto:
+    container_name: mosquitto
+    build:
+    build:
+      context: ./mosquitto
+      dockerfile: Dockerfile
+      args:
+        MOSQUITTO_USER: ${MOSQUITTO_USER}
+        MOSQUITTO_PASSWD: ${MOSQUITTO_PASSWD}
+    restart: always
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+    environment:
+      MQTT_BROKER_URL: mqtt://mosquitto
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt:latest
