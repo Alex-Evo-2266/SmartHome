@@ -2,13 +2,19 @@ import logging
 import bcrypt
 import os
 from SmartHome.models import User
-from SmartHome.settings import SCRIPTS_DIR, DEVICES, MEDIA_ROOT, BACKGROUND_DIR
+from SmartHome.settings import SCRIPTS_DIR, DEVICES, MEDIA_ROOT, BACKGROUND_DIR, GROUPS, ROOMS
 
 logger = logging.getLogger(__name__)
 
 async def initdir():
     if not os.path.exists(DEVICES):
         file = open(DEVICES, "w+")
+        file.close()
+    if not os.path.exists(GROUPS):
+        file = open(GROUPS, "w+")
+        file.close()
+    if not os.path.exists(ROOMS):
+        file = open(ROOMS, "w+")
         file.close()
     if not os.path.exists(SCRIPTS_DIR):
         os.mkdir(SCRIPTS_DIR)
