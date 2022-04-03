@@ -1,4 +1,5 @@
 from SmartHome.logic.server.modulesconfig import configManager
+from castom_moduls.Mqtt.settings import DEVICE_NAME
 
 from typing import Callable, Any
 from moduls_src.services import get
@@ -33,7 +34,7 @@ class Service():
             logger.error(f'error reception mqtt message {e}')
 
     def connect(self):
-        get("Mqtt_MqttValue").addConnect("Mqtt_MQTTDevice")
+        get("Mqtt_MqttValue").addConnect(DEVICE_NAME)
         try:
             logger.debug("mqtt conecting...")
             conf = configManager.getConfig("mqttBroker")

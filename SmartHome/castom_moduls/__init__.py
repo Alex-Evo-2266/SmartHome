@@ -42,7 +42,11 @@ def __init_device__(dir=__name__):
             dev_file = [_ for _ in os.listdir(dir+os.sep+module+os.sep+"devices") if _.endswith(r".py")]
             for dev in dev_file:
                 foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"devices"+os.sep+dev)
-                devices[module+"_"+dev.split(".")[0]] = {
+                name_device = module+"_"+dev.split(".")[0]
+                if foo.Device.name:
+                    print("d")
+                    name_device = foo.Device.name
+                devices[name_device] = {
                     "class":foo.Device,
                     "typeDevices":foo.Device.typesDevice
                 }

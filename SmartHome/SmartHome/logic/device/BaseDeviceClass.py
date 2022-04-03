@@ -20,6 +20,7 @@ class BaseDevice(object):
     """docstring for BaseDevice."""
 
     typesDevice = ["all"]
+    name = None
 
     def __init__(self, systemName:str):
         self.systemName = systemName

@@ -1,6 +1,7 @@
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from SmartHome.logic.device.DeviceElement import DeviceElement
 from moduls_src.services import get
+from castom_moduls.Mqtt.settings import DEVICE_NAME
 import json
 
 
@@ -20,7 +21,7 @@ def look_for_by_topic(arr:list, val):
 
 class Device(BaseDevice):
 
-    Name="mqtt"
+    name=DEVICE_NAME
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)

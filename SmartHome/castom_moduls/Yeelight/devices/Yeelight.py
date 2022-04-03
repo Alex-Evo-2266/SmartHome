@@ -1,6 +1,7 @@
 from yeelight import Bulb,PowerMode
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from SmartHome.logic.device.DeviceElement import DeviceElement
+from castom_moduls.Yeelight.settings import DEVICE_NAME
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,7 +21,7 @@ def saveNewDate(val, status):
 class Device(BaseDevice):
 
     typesDevice = ["light"]
-    Name="yeelight"
+    name = DEVICE_NAME
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
