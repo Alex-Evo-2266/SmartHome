@@ -30,3 +30,5 @@ SmartHome/files/*.yml
 SmartHome/staticfile/
 SmartHome/logs
 settings_local.py
+
+castom_moduls-*

@@ -154,7 +154,7 @@ export const MQTTElement = ({data, onClickMessage}) =>{
           conf.push(confel)
         }
         form.show("LinkDevices",null,{
-          typeConnect: "mqtt",
+          typeConnect: "Mqtt_MQTTDevice",
           type: ret,
           address: address,
           valueType: typeMessage,

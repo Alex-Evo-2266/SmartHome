@@ -108,8 +108,9 @@ export const ZigbeeElement = ({data}) =>{
   }
 
   function addDev(data1,conf) {
+    console.log("dfg");
     form.show("LinkDevices",null,{
-      typeConnect: "zigbee",
+      typeConnect: "Zigbee_ZigbeeDevice",
       type: data1,
       address: data.allAddress,
       valueType: "json",

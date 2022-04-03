@@ -1,40 +1,21 @@
 import imp,os,logging
+import copy
 from fastapi import APIRouter
+from moduls_src.services import add
 # from .models_schema import TypeDevice, DeviceData, ModelAPIData, ModelData
 
 devices = dict()
-modules = {}
+modules = dict()
 
 logger = logging.getLogger(__name__)
 
-def getModule(data: list, name: str):
-    for item in data:
-        info = item.getInfo()
-        if(info.name == name):
-            return item
-    return None
-
-def getsequence(data: list, name: str):
-    Module = getModule(data, name)
-    if not Module:
-        raise ModuleNotFoundError
-    info = Module.getInfo()
-    moduleq = 1
-    if not len(info.dependencies):
-        return 1
-    for item in info.dependencies:
-        newq = getsequence(data, item)
-        if moduleq < newq:
-            moduleq = newq
-    return 1 +  moduleq
-
-def module_sequence(data: list):
-    moduls_dict = dict()
-    data2 = data
-    for module in data:
-        info = module.getInfo()
-        moduls_dict[info.name] = {"module":module ,"order": getsequence(data2, info.name)}
-    return moduls_dict
+def getModuls(dir=__name__, init = True):
+    list_modules=os.listdir(dir)
+    if not init and '__init__.py' in list_modules:
+        list_modules.remove('__init__.py')
+    if "__pycache__" in list_modules:
+        list_modules.remove("__pycache__")
+    return list_modules
 
 def dict_to_list(data: dict):
     arr = list()
@@ -42,81 +23,58 @@ def dict_to_list(data: dict):
         arr.append({"name": key, **data[key]})
     return arr
 
-def deviceType(module):
+def __init_service__(dir=__name__):
+    list_modules = getModuls(dir, False)
+    for module in list_modules:
+        list_dirs = getModuls(dir+os.sep+module, False)
+        if "services" in list_dirs:
+            service_file = [_ for _ in os.listdir(dir+os.sep+module+os.sep+"services") if _.endswith(r".py")]
+            for service in service_file:
+                foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"services"+os.sep+service)
+                add(module+"_"+service.split(".")[0], copy.copy(foo.Service()))
+
+def __init_device__(dir=__name__):
+    list_modules = getModuls(dir, False)
     global devices
-    items = module.getItems()
-    if items and "devices" in items:
-        moduldevices = items["devices"]
-        for item in moduldevices:
-            devices[item.name] = {
-                "class":item.deviceClass,
-                "typeDevices":item.typeDevices
-            }
+    for module in list_modules:
+        list_dirs = getModuls(dir+os.sep+module, False)
+        if "devices" in list_dirs:
+            dev_file = [_ for _ in os.listdir(dir+os.sep+module+os.sep+"devices") if _.endswith(r".py")]
+            for dev in dev_file:
+                foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"devices"+os.sep+dev)
+                devices[module+"_"+dev.split(".")[0]] = {
+                    "class":foo.Device,
+                    "typeDevices":foo.Device.typesDevice
+                }
 
-
-def getModuls(dir="castom_moduls"):
-    list_modules=os.listdir(dir)
-    list_modules.remove('__init__.py')
-    # list_modules.remove('Zigbee')
-    flag = False
-    for item in list_modules:
-        if(item == "__pycache__"):
-            flag = True
-    if flag:
-        list_modules.remove('__pycache__')
-    return list_modules
-
-def __load_all__(dir="castom_moduls"):
-    list_modules = getModuls(dir)
-    list_model_control = list()
-    for module_name in list_modules:
-        list_modules_2=os.listdir(dir+os.sep+module_name)
-        if(list_modules_2.count("__init__.py") == 1):
-            foo = imp.load_source('module', dir+os.sep+module_name+os.sep+"__init__.py")
-            module = foo.ModuleControll()
-            deviceType(module)
-            list_model_control.append(module)
-    moduls = module_sequence(list_model_control)
-    moduls = dict_to_list(moduls)
-    moduls2 = moduls.copy()
-    q = 1
-    while len(moduls2) > 0:
-        for item in moduls:
-            if(item["order"] == q):
-                m = item["module"]
-                m.start()
-                modules[item["name"]] = m
-                moduls2.remove(item)
-        q = q + 1
-        moduls = moduls2.copy()
+def __load_all__(dir=__name__):
+    __init_device__(dir)
+    __init_service__(dir)
+    list_modules = getModuls(dir, False)
+    for module in list_modules:
+        list_dirs = getModuls(dir+os.sep+module)
+        if "__init__.py" in list_dirs:
+            foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"__init__.py")
+            modules[module] = copy.copy(foo.Module())
+            modules[module].start()
 
 def getPages():
     arr = list()
-    for key in modules:
-        m = modules[key]
-        data = m.getPages()
-        if data:
-            arr.append(data)
     return arr
 
 def init_moduls():
     __load_all__()
 
-def init_routers(dir="castom_moduls"):
-    import copy
-    list_modules = getModuls(dir)
+def init_routers(dir=__name__):
+    list_modules = getModuls(dir, False)
     list_routers = list()
-    for module_name in list_modules:
-        try:
-            list_modules_2=os.listdir(dir+os.sep+module_name)
-            if(list_modules_2.count("__init__.py") == 1):
-                foo = imp.load_source('module', dir+os.sep+module_name+os.sep+"__init__.py")
-                module = foo.ModuleControll()
-                router = module.getRouter()
-                if router:
-                    list_routers.append(router)
-        except Exception as e:
-            logger.error(f"error import router. detail:{e}")
+    for module in list_modules:
+        list_dirs = getModuls(dir+os.sep+module, False)
+        if "routs" in list_dirs:
+            rout_file = [_ for _ in os.listdir(dir+os.sep+module+os.sep+"routs") if _.endswith(r".py")]
+            for rout in rout_file:
+                foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"routs"+os.sep+rout)
+                list_routers.append(copy.copy(foo.router))
     return list_routers
 
 async def getDevicesClass(type, systemName):
@@ -129,4 +87,6 @@ async def getDevicesClass(type, systemName):
     return None
 
 def getDevices():
+    global devices
+    print(devices)
     return devices

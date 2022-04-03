@@ -6,7 +6,7 @@ from SmartHome.logic.device.DeviceFile import Devices
 from .schemas import ZigbeeDeviceSchema
 import json
 
-async def editAdressLincDevices(topic, message):
+async def editAdressLincDevices(obj, topic, message):
     data = json.loads(message)
     zigbee = configManager.getConfig("zigbee2mqtt")
     oldadress = data["data"]
@@ -24,7 +24,7 @@ async def editAdressLincDevices(topic, message):
         item.address = newadress
         item.save()
 
-async def decodRemove(topic, message):
+async def decodRemove(obj, topic, message):
     data = json.loads(message)
     if(data["status"]=="ok"):
         pass

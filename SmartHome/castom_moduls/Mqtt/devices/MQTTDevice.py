@@ -1,7 +1,8 @@
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from SmartHome.logic.device.DeviceElement import DeviceElement
-from castom_moduls.Mqtt.mqttConnect import getManager
+from moduls_src.services import get
 import json
+
 
 def look_for_param(arr:list, val):
     for item in arr:
@@ -17,7 +18,9 @@ def look_for_by_topic(arr:list, val):
 
 # def createValue()
 
-class MQTTDevice(BaseDevice):
+class Device(BaseDevice):
+
+    Name="mqtt"
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
@@ -28,7 +31,7 @@ class MQTTDevice(BaseDevice):
             data = dict()
             data[self.values[0].address] = ""
             data = json.dumps(data)
-            getManager().publish(self.coreAddress+"/get", data)
+            get("Mqtt_MqttConnect").publish(self.coreAddress+"/get", data)
 
     def get_device(self):
         return True
@@ -55,7 +58,7 @@ class MQTTDevice(BaseDevice):
             data = dict()
             data[val.address] = message
             data = json.dumps(data)
-            getManager().publish(self.coreAddress+"/set", data)
+            get("Mqtt_MqttConnect").publish(self.coreAddress+"/set", data)
         else:
             alltopic = self.coreAddress + "/" + val.address
-            getManager().publish(alltopic, message)
+            get("Mqtt_MqttConnect").publish(alltopic, message)

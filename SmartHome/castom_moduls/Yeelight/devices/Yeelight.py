@@ -17,7 +17,10 @@ def saveNewDate(val, status):
 
 # def createValue()
 
-class Yeelight(BaseDevice):
+class Device(BaseDevice):
+
+    typesDevice = ["light"]
+    Name="yeelight"
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)

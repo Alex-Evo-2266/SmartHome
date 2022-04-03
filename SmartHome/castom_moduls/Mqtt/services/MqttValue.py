@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 #             return item.value
 #     return None
 
-class MqttValue():
+class Service():
     def __init__(self):
         self.typeConnects = []
 
@@ -67,7 +67,6 @@ class MqttValue():
             for item in values:
                 if item.name==type:
                     if(item.type=="binary"):
-                        print(value, item.high, item.low)
                         if(str(value).lower()==str(item.high).lower()):
                             value = "1";
                         elif(str(value).lower()==str(item.low).lower()):
@@ -79,35 +78,3 @@ class MqttValue():
         except Exception as e:
             logger.error(f'set value error. systemName:{systemName}, detail:{e}')
             return None
-
-from moduls_src.managers import add, get
-
-def initManager():
-    add("MqttValue", MqttValue())
-    return get("MqttValue")
-
-def getManager():
-    return get("MqttValue")
-
-
-# def GetTopicks():
-#     arr = []
-#     def a(str):
-#         for it in arr:
-#             if it==str:
-#                 return False
-#         return True
-#
-#     devices = Device.objects.all()
-#     for item in devices:
-#         base_address = item.DeviceAddress
-#         if(item.DeviceValueType=="json"):
-#             address = base_address
-#             if a(address):
-#                 arr.append(address)
-#         else:
-#             for item2 in item.valuedevice_set.all():
-#                 address = base_address + "/" + item2.address
-#                 if a(address):
-#                     arr.append(address)
-#     return arr

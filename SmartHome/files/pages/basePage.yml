@@ -10,36 +10,6 @@ cards:
     typeAction: null
     typeItem: system
     width: 4
-  - deviceName: lamp1
-    height: 1
-    index: 1
-    name: lamp1
-    order: 0
-    title: lamp1
-    type: button
-    typeAction: state
-    typeItem: device
-    width: 1
-  - deviceName: lamp1
-    height: 1
-    index: 2
-    name: lamp1
-    order: 0
-    title: lamp1
-    type: slider
-    typeAction: brightness
-    typeItem: device
-    width: 2
-  - deviceName: lamp1
-    height: 1
-    index: 3
-    name: lamp1
-    order: 0
-    title: lamp1
-    type: button
-    typeAction: night_light
-    typeItem: device
-    width: 1
   index: 0
   name: ''
   order: 0

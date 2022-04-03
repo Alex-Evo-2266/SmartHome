@@ -19,6 +19,8 @@ def look_for_param(arr:list, val):
 class BaseDevice(object):
     """docstring for BaseDevice."""
 
+    typesDevice = ["all"]
+
     def __init__(self, systemName:str):
         self.systemName = systemName
         deviceData = Devices.get(systemName=self.systemName)

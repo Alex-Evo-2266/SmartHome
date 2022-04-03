@@ -58,11 +58,11 @@ export const AddDevicesPage = () => {
     {
       (page === 1)?
       <AddDevicesPage1 form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && form.typeConnect === "mqtt")?
+      (page === 2 && form.typeConnect === "Mqtt_MQTTDevice")?
       <AddDevicesPage2MQTT form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && (form.typeConnect === "yeelight"))?
+      (page === 2 && (form.typeConnect === "Yeelight_Yeelight"))?
       <AddDevicesPage2Yeelight form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && (form.typeConnect === "zigbee"))?
+      (page === 2 && (form.typeConnect === "Zigbee_ZigbeeDevice"))?
       <AddDevicesPage2Zigbee form={form} setForm={setForm} backPage={backPage} next={next}/>:
       (page === 2 && (form.typeConnect === "variable"))?
       <AddDevicesPage2Variable form={form} setForm={setForm} backPage={backPage} next={next}/>:

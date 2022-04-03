@@ -1,8 +1,8 @@
 from SmartHome.logic.server.modulesconfig import configManager
 
 from typing import Callable, Any
-from .deviceValue import getManager as getValue
-from .mqttScan import TopicHistory
+from moduls_src.services import get
+from castom_moduls.Mqtt.src.mqttScan import TopicHistory
 # from ..zigbee.zigbeeDevices import zigbeeInfoSearch
 
 import paho.mqtt.client as mqtt
@@ -10,7 +10,7 @@ import logging, asyncio
 
 logger = logging.getLogger(__name__)
 
-class MqttManagerClass():
+class Service():
     def __init__(self):
         self.mqttClient = None
         self.callbacks = {}
@@ -25,7 +25,7 @@ class MqttManagerClass():
             for item in self.callbacks:
                 f = self.callbacks[item]
                 asyncio.run(f(msg.topic,str(msg.payload.decode('utf-8'))))
-            getValue().setValueAtToken(msg.topic,str(msg.payload.decode('utf-8')))
+            get("Mqtt_MqttValue").setValueAtToken(msg.topic,str(msg.payload.decode('utf-8')))
             asyncio.run(self.history.add(msg.topic,str(msg.payload.decode('utf-8'))))
 
             # zigbeeInfoSearch(msg.topic,str(msg.payload.decode('utf-8')))
@@ -33,7 +33,7 @@ class MqttManagerClass():
             logger.error(f'error reception mqtt message {e}')
 
     def connect(self):
-        getValue().addConnect("mqtt")
+        get("Mqtt_MqttValue").addConnect("Mqtt_MQTTDevice")
         try:
             logger.debug("mqtt conecting...")
             conf = configManager.getConfig("mqttBroker")
@@ -77,13 +77,3 @@ class MqttManagerClass():
 
     def getHistory(self):
         return self.history
-
-
-from moduls_src.managers import add, get
-
-def initManager():
-    add("mqtt", MqttManagerClass())
-    return get("mqtt")
-
-def getManager():
-    return get("mqtt")

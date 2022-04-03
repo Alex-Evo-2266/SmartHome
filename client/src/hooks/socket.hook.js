@@ -14,8 +14,12 @@ export const SocketState = ({children}) =>{
 
       // let path = `ws://${window.location.host}/ws/base`
       // let path = `ws://localhost:5000/ws/base`
+      let path
       console.log(process.env.REACT_APP_WS_HOST);
-      let path = `ws://${process.env.REACT_APP_WS_HOST}/ws/base`
+      if (process.env.REACT_APP_WS_HOST)
+        path = `ws://${process.env.REACT_APP_WS_HOST}/ws/base`
+      else
+        path = `ws://localhost:5000/ws/base`
 
       // console.log(process.env.REACT_APP_WS_HOST);
 

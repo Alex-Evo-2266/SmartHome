@@ -1,26 +1,14 @@
-import os
-
-from .MQTTDevice import MQTTDevice as Mqtt
-
-from moduls_src.models_schema import ModelData, DeviceData, TypeDevice
-from moduls_src.baseClassControll import BaseControllModule
-from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
+from moduls_src.baseClassModule import BaseControllModule
+from moduls_src.services import get
 from SmartHome.logic.server.modulesconfig import configManager
-from .mqttConnect import initManager as initManagerCon
-from .deviceValue import initManager as initManagerVal
-# from .router import routerInit
-from .pages.page import page
-from .router import router
+from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
 
-def installdepModule():
-    os.system("poetry add paho-mqtt")
+print("init", __name__)
 
-
-
-class ModuleControll(BaseControllModule):
+class Module(BaseControllModule):
     def start(self):
-        self.manager = initManagerCon()
-        initManagerVal()
+        print(get("Mqtt_MqttValue"))
+        self.manager = get("Mqtt_MqttConnect")
         configManager.addConfig(
             ServerModuleConfigSchema(
                 name="mqttBroker",
@@ -46,39 +34,6 @@ class ModuleControll(BaseControllModule):
             self.manager.reconnect_async
         )
         self.manager.connect()
-        return self.getInfo()
-
-    def addcallback(self, name, callback):
-        self.manager.addcallback(name,callback)
-
 
     def end(self):
         self.manager.desconnect()
-
-
-    def restart(self):
-        self.end()
-        self.start()
-
-    def getInfo(self):
-        return ModelData(
-            name="mqtt",
-            dependencies=[],
-        )
-
-    def getPages(self):
-        return page()
-
-    def getItems(self):
-        return {
-        "devices":[DeviceData(
-            name="mqtt",
-            deviceClass=Mqtt,
-            typeDevices=["all"]
-        )]}
-
-    def getRouter(self):
-        from moduls_src.managers import add
-        add("mqttrouter",router)
-        return "mqttrouter"
-        # return routerInit()
