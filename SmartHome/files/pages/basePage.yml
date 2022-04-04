@@ -1,15 +1,15 @@
 cards:
 - children:
-  - deviceName: null
-    height: 2
+  - deviceName: lamp1
+    height: 1
     index: 0
-    name: weather
+    name: lamp2
     order: 0
-    title: null
-    type: weather
-    typeAction: null
-    typeItem: system
-    width: 4
+    title: lamp1
+    type: button
+    typeAction: state
+    typeItem: device
+    width: 1
   index: 0
   name: ''
   order: 0

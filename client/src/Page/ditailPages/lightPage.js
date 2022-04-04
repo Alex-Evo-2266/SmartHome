@@ -76,6 +76,7 @@ export const LightPage = ({device})=>{
       <div className="topContainer top-center">
         {
           [generalBlub(device.fields)]?.map((item,index)=>{
+            if(!item) return (null)
             return(
             <div key={index}>
               <div className="blubContainer">

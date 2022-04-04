@@ -12,7 +12,7 @@ export const getValue = (device, key)=>{
   if(!device) return null;
   let config = getConfig(device, key)
   let val = device?.value[key]
-  if(config.type === "binary"){
+  if(config?.type === "binary"){
     if(val === "1")
       return true
     else

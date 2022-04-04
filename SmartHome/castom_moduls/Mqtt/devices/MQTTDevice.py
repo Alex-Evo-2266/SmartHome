@@ -4,6 +4,7 @@ from moduls_src.services import get
 from castom_moduls.Mqtt.settings import DEVICE_NAME
 import json
 
+from moduls_src.models_schema import AddDevice, TypeAddDevice
 
 def look_for_param(arr:list, val):
     for item in arr:
@@ -22,6 +23,9 @@ def look_for_by_topic(arr:list, val):
 class Device(BaseDevice):
 
     name=DEVICE_NAME
+    add=AddDevice(
+    type=TypeAddDevice.MANUAL
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)

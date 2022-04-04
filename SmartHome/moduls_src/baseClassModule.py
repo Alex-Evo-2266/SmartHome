@@ -1,6 +1,9 @@
 
 
 class BaseControllModule(object):
+
+    dependencies = []
+
     def start(self):
         pass
 

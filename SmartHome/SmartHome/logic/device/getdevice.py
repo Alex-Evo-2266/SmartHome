@@ -63,6 +63,7 @@ async def device(item):
         data.status = status
         return data
     except Exception as e:
+        print("p10")
         logger.warning(f'device not found. {e}')
         el = devicesArrey.get(item.systemName)
         if(el):

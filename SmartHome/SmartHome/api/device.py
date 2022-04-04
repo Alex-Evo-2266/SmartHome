@@ -24,12 +24,13 @@ router = APIRouter(
 async def types(auth_data: dict = Depends(token_dep)):
     res = await getDeviceTypes()
     if res['status'] == 'error':
-        return JSONResponse(status_code=400, content={"message": res["ditail"]})
+        return JSONResponse(status_code=400, content={"message": res["detail"]})
     return res["data"]
 
 @router.get("/get/{systemName}", response_model=DeviceSchema)
 async def get_device(systemName:str, auth_data: dict = Depends(token_dep)):
     res = await giveDevice(systemName)
+    print(res)
     if not res:
         return JSONResponse(status_code=400, content={"message": "error get device"})
     return res

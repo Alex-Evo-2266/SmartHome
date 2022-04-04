@@ -135,7 +135,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "databases"
-version = "0.5.3"
+version = "0.5.5"
 description = "Async database support for Python."
 category = "main"
 optional = false
@@ -146,6 +146,7 @@ sqlalchemy = ">=1.4,<1.5"
 
 [package.extras]
 mysql = ["aiomysql"]
+mysql_asyncmy = ["asyncmy"]
 postgresql = ["asyncpg"]
 postgresql_aiopg = ["aiopg"]
 sqlite = ["aiosqlite"]
@@ -278,7 +279,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "ormar"
-version = "0.10.23"
+version = "0.10.25"
 description = "A simple async ORM with fastapi in mind and pydantic validation."
 category = "main"
 optional = false
@@ -287,17 +288,17 @@ python-versions = ">=3.6.2,<4.0.0"
 [package.dependencies]
 aiomysql = {version = ">=0.0.21,<0.0.23", optional = true, markers = "extra == \"mysql\" or extra == \"dev\""}
 aiosqlite = ">=0.17.0,<0.18.0"
-databases = ">=0.3.2,<0.5.4"
-pydantic = ">=1.6.1,<1.7 || >1.7,<1.7.1 || >1.7.1,<1.7.2 || >1.7.2,<1.7.3 || >1.7.3,<1.8 || >1.8,<1.8.1 || >1.8.1,<=1.8.2"
-SQLAlchemy = ">=1.3.18,<1.4.29"
+databases = ">=0.3.2,<0.5.0 || >0.5.0,<0.5.1 || >0.5.1,<0.5.2 || >0.5.2,<0.5.3 || >0.5.3,<=0.5.5"
+pydantic = ">=1.6.1,<1.7 || >1.7,<1.7.1 || >1.7.1,<1.7.2 || >1.7.2,<1.7.3 || >1.7.3,<1.8 || >1.8,<1.8.1 || >1.8.1,<=1.9.1"
+SQLAlchemy = ">=1.3.18,<=1.4.31"
 
 [package.extras]
 postgresql = ["asyncpg (>=0.24,<0.26)", "psycopg2-binary (>=2.9.1,<3.0.0)"]
 postgres = ["asyncpg (>=0.24,<0.26)", "psycopg2-binary (>=2.9.1,<3.0.0)"]
-dev = ["asyncpg (>=0.24,<0.26)", "psycopg2-binary (>=2.9.1,<3.0.0)", "aiomysql (>=0.0.21,<0.0.23)", "cryptography (>=35,<37)", "orjson (>=3.6.4,<4.0.0)"]
+dev = ["asyncpg (>=0.24,<0.26)", "psycopg2-binary (>=2.9.1,<3.0.0)", "aiomysql (>=0.0.21,<0.0.23)", "cryptography (>=35,<37)", "orjson (>=3.6.4)"]
 mysql = ["aiomysql (>=0.0.21,<0.0.23)"]
 crypto = ["cryptography (>=35,<37)"]
-orjson = ["orjson (>=3.6.4,<4.0.0)"]
+orjson = ["orjson (>=3.6.4)"]
 
 [[package]]
 name = "paho-mqtt"
@@ -309,14 +310,6 @@ python-versions = "*"
 
 [package.extras]
 proxy = ["pysocks"]
-
-[[package]]
-name = "pathlib"
-version = "1.0.1"
-description = "Object-oriented filesystem paths"
-category = "main"
-optional = false
-python-versions = "*"
 
 [[package]]
 name = "pycparser"
@@ -570,7 +563,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "yeelight"
-version = "0.7.8"
+version = "0.7.10"
 description = "A Python library for controlling YeeLight RGB bulbs."
 category = "main"
 optional = false
@@ -595,8 +588,8 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 
 [metadata]
 lock-version = "1.1"
-python-versions = "3.8"
-content-hash = "0f8a811e88ef2aab586169078bc11b33cfb5f0fcd88491faad6e600f759984cb"
+python-versions = "^3.8"
+content-hash = "542809099d42a69244e3577f8c6d3ada05e4f723e2c833a0865461e6db5784ef"
 
 [metadata.files]
 aiomysql = [
@@ -620,10 +613,13 @@ asgiref = [
     {file = "asgiref-3.4.1.tar.gz", hash = "sha256:4ef1ab46b484e3c706329cedeff284a5d40824200638503f5768edb6de7d58e9"},
 ]
 bcrypt = [
+    {file = "bcrypt-3.2.0-cp36-abi3-macosx_10_10_universal2.whl", hash = "sha256:b589229207630484aefe5899122fb938a5b017b0f4349f769b8c13e78d99a8fd"},
     {file = "bcrypt-3.2.0-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:c95d4cbebffafcdd28bd28bb4e25b31c50f6da605c81ffd9ad8a3d1b2ab7b1b6"},
     {file = "bcrypt-3.2.0-cp36-abi3-manylinux1_x86_64.whl", hash = "sha256:63d4e3ff96188e5898779b6057878fecf3f11cfe6ec3b313ea09955d587ec7a7"},
     {file = "bcrypt-3.2.0-cp36-abi3-manylinux2010_x86_64.whl", hash = "sha256:cd1ea2ff3038509ea95f687256c46b79f5fc382ad0aa3664d200047546d511d1"},
     {file = "bcrypt-3.2.0-cp36-abi3-manylinux2014_aarch64.whl", hash = "sha256:cdcdcb3972027f83fe24a48b1e90ea4b584d35f1cc279d76de6fc4b13376239d"},
+    {file = "bcrypt-3.2.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl", hash = "sha256:a0584a92329210fcd75eb8a3250c5a941633f8bfaf2a18f81009b097732839b7"},
+    {file = "bcrypt-3.2.0-cp36-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:56e5da069a76470679f312a7d3d23deb3ac4519991a0361abc11da837087b61d"},
     {file = "bcrypt-3.2.0-cp36-abi3-win32.whl", hash = "sha256:a67fb841b35c28a59cebed05fbd3e80eea26e6d75851f0574a9273c80f3e9b55"},
     {file = "bcrypt-3.2.0-cp36-abi3-win_amd64.whl", hash = "sha256:81fec756feff5b6818ea7ab031205e1d323d8943d237303baca2c5f9c7846f34"},
     {file = "bcrypt-3.2.0.tar.gz", hash = "sha256:5b93c1726e50a93a033c36e5ca7fdcd29a5c7395af50a6892f5d9e7c6cfbfb29"},
@@ -697,8 +693,8 @@ colorama = [
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
 ]
 databases = [
-    {file = "databases-0.5.3-py3-none-any.whl", hash = "sha256:23862bd96241d8fcbf97eea82995ccb3baa8415c3cb106832b7509f296322f86"},
-    {file = "databases-0.5.3.tar.gz", hash = "sha256:b69d74ee0b47fa30bb6e76db0c58da998e973393259d29215d8fb29352162bd6"},
+    {file = "databases-0.5.5-py3-none-any.whl", hash = "sha256:97d9b9647216d1ab53ca61c059412b5c7b6e1f0bf8ce985477982ebcc7f278f3"},
+    {file = "databases-0.5.5.tar.gz", hash = "sha256:02c6b016c1c951c21cca281dc8e2e002c60dc44026c0084aabbd8c37514aeb37"},
 ]
 fastapi = [
     {file = "fastapi-0.70.1-py3-none-any.whl", hash = "sha256:5367226c7bcd7bfb2e17edaf225fd9a983095b1372281e9a3eb661336fb93748"},
@@ -886,14 +882,11 @@ markupsafe = [
     {file = "MarkupSafe-2.0.1.tar.gz", hash = "sha256:594c67807fb16238b30c44bdf74f36c02cdf22d1c8cda91ef8a0ed8dabf5620a"},
 ]
 ormar = [
-    {file = "ormar-0.10.23-py3-none-any.whl", hash = "sha256:168541fd1e59e5a2f193ec97a97b6af3125eb2a1468e9ecb93c3e1e1c1bb0f43"},
-    {file = "ormar-0.10.23.tar.gz", hash = "sha256:bd8f86389db87f3844b25d7e1e47e18fa52b113877dcbad180f67d5a9597c9d3"},
+    {file = "ormar-0.10.25-py3-none-any.whl", hash = "sha256:8b68833bc037ae746080d0dce9a1b29c8944f8afb15d84580aa0b696ad9bb265"},
+    {file = "ormar-0.10.25.tar.gz", hash = "sha256:27c771581417814f6933bc9ae38e1147b1435b1435b6c3f08b90301e9dc77de4"},
 ]
 paho-mqtt = [
     {file = "paho-mqtt-1.6.1.tar.gz", hash = "sha256:2a8291c81623aec00372b5a85558a372c747cbca8e9934dfe218638b8eefc26f"},
-]
-pathlib = [
-    {file = "pathlib-1.0.1.tar.gz", hash = "sha256:6940718dfc3eff4258203ad5021090933e5c04707d5ca8cc9e73c94a7894ea9f"},
 ]
 pycparser = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
@@ -1129,8 +1122,8 @@ websockets = [
     {file = "websockets-10.1.tar.gz", hash = "sha256:181d2b25de5a437b36aefedaf006ecb6fa3aa1328ec0236cdde15f32f9d3ff6d"},
 ]
 yeelight = [
-    {file = "yeelight-0.7.8-py3-none-any.whl", hash = "sha256:562d9882f732059255d9d86c1348c45a07fb6da1320120e42f7b7e7f75f0ad8e"},
-    {file = "yeelight-0.7.8.tar.gz", hash = "sha256:32139829f68ba5741c06b68254fca7990f42399cb0e8bc46d5942ccb3ab7201a"},
+    {file = "yeelight-0.7.10-py3-none-any.whl", hash = "sha256:6c93ccf8e643a058b90bf20bf0e60cb1cbad1145eadcb8907e9538500f056acf"},
+    {file = "yeelight-0.7.10.tar.gz", hash = "sha256:0b0e1b2be58b3524a31f51d28610d2a6e459b74ea6770bd7cfd1c8a4622c64a3"},
 ]
 zipp = [
     {file = "zipp-3.6.0-py3-none-any.whl", hash = "sha256:9fe5ea21568a0a70e50f273397638d39b03353731e6cbbb3fd8502a33fec40bc"},

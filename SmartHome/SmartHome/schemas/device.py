@@ -1,9 +1,11 @@
 from pydantic import BaseModel
 from typing import Optional, List, Dict
+from moduls_src.models_schema import AddDevice, ValidTypeDevice
 
 class TypesDeviceSchema(BaseModel):
     title: str
-    interface: List[str]
+    typs: List[ValidTypeDevice]
+    config: AddDevice
 
 class DeviceFieldSchema(BaseModel):
     address: Optional[str]

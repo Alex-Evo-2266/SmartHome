@@ -38,7 +38,7 @@ export const EditDevicesForm = (props)=>{
     )
   }
 
-if(device.typeConnect==="mqtt" || device.typeConnect==="zigbee"){
+if(device.typeConnect==="Mqtt_MQTTDevice" || device.typeConnect==="Zigbee_ZigbeeDevice"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">
@@ -47,7 +47,7 @@ if(device.typeConnect==="mqtt" || device.typeConnect==="zigbee"){
     </div>
   )
 }
-if(device.typeConnect==="yeelight"){
+if(device.typeConnect==="Yeelight_Yeelight"){
   return(
     <div className = "form">
       <div className="editDevicesForm moreInput">

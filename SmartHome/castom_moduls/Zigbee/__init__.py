@@ -4,9 +4,8 @@ from SmartHome.logic.server.modulesconfig import configManager
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
 from .settings import DEVICE_NAME
 
-print("init", __name__)
-
 class Module(BaseControllModule):
+
     def start(self):
         configManager.addConfig(
             ServerModuleConfigSchema(

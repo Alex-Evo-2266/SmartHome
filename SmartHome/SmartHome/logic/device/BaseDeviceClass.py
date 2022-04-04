@@ -6,6 +6,7 @@ import asyncio
 import threading
 from datetime import datetime
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema
+from moduls_src.models_schema import AddDevice
 
 
 logger = logging.getLogger(__name__)
@@ -21,6 +22,7 @@ class BaseDevice(object):
 
     typesDevice = ["all"]
     name = None
+    add = AddDevice()
 
     def __init__(self, systemName:str):
         self.systemName = systemName

@@ -3,11 +3,14 @@ from moduls_src.services import get
 from SmartHome.logic.server.modulesconfig import configManager
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
 
-print("init", __name__)
 
 class Module(BaseControllModule):
+
+    dependencies = [
+    "paho-mqtt"
+    ]
+
     def start(self):
-        print(get("Mqtt_MqttValue"))
         self.manager = get("Mqtt_MqttConnect")
         configManager.addConfig(
             ServerModuleConfigSchema(

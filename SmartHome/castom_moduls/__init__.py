@@ -1,5 +1,6 @@
 import imp,os,logging
 import copy
+import subprocess
 from fastapi import APIRouter
 from moduls_src.services import add
 # from .models_schema import TypeDevice, DeviceData, ModelAPIData, ModelData
@@ -44,12 +45,21 @@ def __init_device__(dir=__name__):
                 foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"devices"+os.sep+dev)
                 name_device = module+"_"+dev.split(".")[0]
                 if foo.Device.name:
-                    print("d")
                     name_device = foo.Device.name
                 devices[name_device] = {
                     "class":foo.Device,
                     "typeDevices":foo.Device.typesDevice
                 }
+
+def addlib(dir=__name__):
+    list_modules = getModuls(dir, False)
+    for module in list_modules:
+        list_dirs = getModuls(dir+os.sep+module)
+        if "__init__.py" in list_dirs:
+            foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"__init__.py")
+            d = ["poetry", "add"] + foo.Module.dependencies
+            if len(d) > 2:
+                subprocess.run(d)
 
 def __load_all__(dir=__name__):
     __init_device__(dir)
@@ -68,8 +78,12 @@ def getPages():
 
 def init_moduls():
     __load_all__()
+    # list_files = subprocess.run(["poetry", "show"], stdout=subprocess.PIPE, text=True)
+    # list_files = subprocess.run(["poetry", "add", "yeelight"], stdout=subprocess.DEVNULL)
+    # print(list_files)
 
 def init_routers(dir=__name__):
+    addlib()
     list_modules = getModuls(dir, False)
     list_routers = list()
     for module in list_modules:

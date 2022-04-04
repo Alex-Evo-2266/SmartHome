@@ -141,9 +141,9 @@ export const AddDevicesPage2Zigbee = ({form, setForm, next, backPage}) => {
   },[error,message, clearError])
 
   useEffect(()=>{
-    request('/api/zigbee2mqtt/permit_join', 'POST',{state:true},{Authorization: `Bearer ${auth.token}`})
+    request('/api/module/zigbee2mqtt/permit_join/set', 'POST',{state:true},{Authorization: `Bearer ${auth.token}`})
     return ()=>{
-      request('/api/zigbee2mqtt/permit_join', 'POST',{state:false},{Authorization: `Bearer ${auth.token}`})
+      request('/api/module/zigbee2mqtt/permit_join/set', 'POST',{state:false},{Authorization: `Bearer ${auth.token}`})
     }
   },[request,auth.token])
 
