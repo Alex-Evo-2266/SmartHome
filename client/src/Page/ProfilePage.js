@@ -18,7 +18,7 @@ export const ProfilePage = () => {
     UserSurname:"",
     Mobile:"",
     Email:"",
-    ImageId:""
+    ImageId:0
   });
   const [password, setPassword] = useState({
     Old:"",
@@ -41,7 +41,7 @@ export const ProfilePage = () => {
       UserSurname:data.UserSurname||"",
       Mobile:data.Mobile||"",
       Email:data.Email||"",
-      ImageId:data.ImageId||""
+      ImageId:data.ImageId||0
     });
   },[request,auth.token])
 
