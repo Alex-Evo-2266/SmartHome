@@ -30,7 +30,6 @@ async def types(auth_data: dict = Depends(token_dep)):
 @router.get("/get/{systemName}", response_model=DeviceSchema)
 async def get_device(systemName:str, auth_data: dict = Depends(token_dep)):
     res = await giveDevice(systemName)
-    print(res)
     if not res:
         return JSONResponse(status_code=400, content={"message": "error get device"})
     return res
@@ -64,7 +63,6 @@ async def add_device(systemName:str, auth_data: dict = Depends(token_dep)):
 
 @router.post("/status/set")
 async def editstatusdevice(data:DeviceStatusSchema, auth_data: dict = Depends(token_dep)):
-    print(data)
     res = await editStatusDevice(data.systemName, data.status)
     if res.status == TypeRespons.INVALID:
         return JSONResponse(status_code=400, content={"message": f"error edit status device. {res.detail}"})

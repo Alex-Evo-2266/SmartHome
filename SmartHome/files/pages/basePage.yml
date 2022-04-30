@@ -1,18 +1,2 @@
-cards:
-- children:
-  - deviceName: lamp1
-    height: 1
-    index: 0
-    name: lamp2
-    order: 0
-    title: lamp1
-    type: button
-    typeAction: state
-    typeItem: device
-    width: 1
-  index: 0
-  name: ''
-  order: 0
-  type: base
-  width: 2
+cards: []
 name: basePage

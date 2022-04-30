@@ -33,13 +33,8 @@ async def device(item):
     dev = None
     status = "offline"
     try:
-        if(not item.status):
-            # control = item.control
-            data = item.dict()
-            data['fields']=confdecod(item.values),
-            data['value']=dict()
-            data['status']="unlink"
-            return DeviceSchema(**data)
+        if(item.status == "unlink"):
+            return item
         element = devicesArrey.get(systemName)
         if(not element):
             if typeConnect == 'variable':
@@ -63,7 +58,6 @@ async def device(item):
         data.status = status
         return data
     except Exception as e:
-        print("p10")
         logger.warning(f'device not found. {e}')
         el = devicesArrey.get(item.systemName)
         if(el):

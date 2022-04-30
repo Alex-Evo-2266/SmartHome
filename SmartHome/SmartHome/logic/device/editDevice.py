@@ -72,7 +72,10 @@ async def editStatusDevice(systemName: str, status: bool):
         dev = Devices.get(systemName=systemName)
         if(not dev):
             return FunctionRespons(status=TypeRespons.INVALID, detail="device not found")
-        dev.status = status
+        if status:
+            dev.status = 'online'
+        else:
+            dev.status = 'unlink'
         dev.save()
         logger.info(f'edit status device, systemName:{systemName}')
         return FunctionRespons(status=TypeRespons.OK, data="ok")
