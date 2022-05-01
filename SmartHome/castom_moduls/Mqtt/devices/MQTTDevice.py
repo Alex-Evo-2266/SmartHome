@@ -23,8 +23,9 @@ def look_for_by_topic(arr:list, val):
 class Device(BaseDevice):
 
     name=DEVICE_NAME
-    add=AddDevice(
-    type=TypeAddDevice.MANUAL
+    addConfig=AddDevice(
+    type=TypeAddDevice.MANUAL,
+    valueType=None
     )
 
     def __init__(self, *args, **kwargs):

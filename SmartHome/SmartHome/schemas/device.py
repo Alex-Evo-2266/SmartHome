@@ -1,11 +1,13 @@
 from pydantic import BaseModel
-from typing import Optional, List, Dict
-from moduls_src.models_schema import AddDevice, ValidTypeDevice
+from typing import Any, Optional, List, Dict
+from moduls_src.models_schema import AddDevice, EditDevice, ValidTypeDevice
 
 class TypesDeviceSchema(BaseModel):
     title: str
     typs: List[ValidTypeDevice]
-    config: AddDevice
+    addConfig: AddDevice
+    autoAddedConfig: Optional[Any] = None
+    editConfig: EditDevice
 
 class DeviceFieldSchema(BaseModel):
     address: Optional[str]

@@ -10,6 +10,7 @@ import {AddDevicesPage2Variable} from './AddDeviceComponents/page2Variable'
 import {AddDevicesPage3} from './AddDeviceComponents/page3'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
+import { AddDevicesPage2 } from './AddDeviceComponents/page2.js'
 
 export const AddDevicesPage = () => {
   const auth = useContext(AuthContext)
@@ -58,14 +59,8 @@ export const AddDevicesPage = () => {
     {
       (page === 1)?
       <AddDevicesPage1 form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && form.typeConnect === "Mqtt_MQTTDevice")?
-      <AddDevicesPage2MQTT form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && (form.typeConnect === "Yeelight_Yeelight"))?
-      <AddDevicesPage2Yeelight form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && (form.typeConnect === "Zigbee_ZigbeeDevice"))?
-      <AddDevicesPage2Zigbee form={form} setForm={setForm} backPage={backPage} next={next}/>:
-      (page === 2 && (form.typeConnect === "variable"))?
-      <AddDevicesPage2Variable form={form} setForm={setForm} backPage={backPage} next={next}/>:
+      (page === 2)?
+      <AddDevicesPage2 form={form} setForm={setForm} backPage={backPage} next={next}/>:
       (page === 3)?
       <AddDevicesPage3 form={form} setForm={setForm} backPage={backPage} next={outHandler}/>:
       null

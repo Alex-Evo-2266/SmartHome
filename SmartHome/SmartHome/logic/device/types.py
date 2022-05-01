@@ -5,7 +5,7 @@ import os, sys
 from castom_moduls import getDevices
 
 from SmartHome.schemas.device import TypesDeviceSchema
-from moduls_src.models_schema import AddDevice, TypeValueDevice, ValidTypeDevice
+from moduls_src.models_schema import AddDevice, EditDevice, EditField, TypeValueDevice, ValidTypeDevice
 
 logger = logging.getLogger(__name__)
 
@@ -24,18 +24,21 @@ async def convertFormat():
 
     for key in devices:
         devclass = devices[key]["class"]
+        print(devclass.addConfig)
         types.append(
             TypesDeviceSchema(
                 title=key,
                 typs=allTyps(devclass.typesDevice),
-                config=devclass.add
+                addConfig=devclass.addConfig,
+                editConfig=devclass.editConfig
                 )
             )
     types.append(
         TypesDeviceSchema(
             title="variable",
             typs=["variable"],
-            config=AddDevice(address="", token="", valueType=TypeValueDevice.TEXT)
+            addConfig=AddDevice(address="", token="", valueType=TypeValueDevice.TEXT),
+            editConfig=EditDevice(fields=EditField(name=True, value=True, type=True, high=True, low=True, values=True, control=True, icon=True, unit=True))
             )
         )
     # for key in devices:
