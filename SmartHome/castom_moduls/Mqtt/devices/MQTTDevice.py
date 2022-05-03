@@ -1,10 +1,12 @@
+from operator import iconcat
+from sqlalchemy import true
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from SmartHome.logic.device.DeviceElement import DeviceElement
 from moduls_src.services import get
 from castom_moduls.Mqtt.settings import DEVICE_NAME
 import json
 
-from moduls_src.models_schema import AddDevice, TypeAddDevice
+from moduls_src.models_schema import AddDevice, EditDevice, EditField, TypeAddDevice
 
 def look_for_param(arr:list, val):
     for item in arr:
@@ -27,6 +29,7 @@ class Device(BaseDevice):
     type=TypeAddDevice.MANUAL,
     valueType=None
     )
+    editConfig=EditDevice(address=True, valueType=True, fields=EditField(address=True, name=True, type=True, low=True, high=True, values=True, control=True, add=True, delete=True, icon=True, unit=True))
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)

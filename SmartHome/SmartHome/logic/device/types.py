@@ -38,7 +38,7 @@ async def convertFormat():
             title="variable",
             typs=["variable"],
             addConfig=AddDevice(address="", token="", valueType=TypeValueDevice.TEXT),
-            editConfig=EditDevice(fields=EditField(name=True, value=True, type=True, high=True, low=True, values=True, control=True, icon=True, unit=True))
+            editConfig=EditDevice(fields=EditField(name=True, value=True, type=True, high=True, low=True, values=True, control=True, icon=True, unit=True, add=True, delete=True))
             )
         )
     # for key in devices:

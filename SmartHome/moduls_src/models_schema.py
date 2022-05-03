@@ -54,7 +54,6 @@ class AddDevice(BaseModel):
 class EditField(BaseModel):
     address: bool = False
     name: bool = False
-    value: bool = False
     type: bool = False
     low: bool = False
     high: bool = False
@@ -62,6 +61,8 @@ class EditField(BaseModel):
     control: bool = False
     icon: bool = False
     unit: bool = False
+    add: bool = False
+    delete: bool = False
 
 class EditDevice(BaseModel):
     address: bool = False

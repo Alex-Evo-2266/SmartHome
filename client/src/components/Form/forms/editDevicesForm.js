@@ -6,6 +6,7 @@ import {AuthContext} from '../../../context/AuthContext.js'
 import {DeviceMiioEdit} from './editDevicesPage/DeviceMiio.js'
 import {DeviceVariableEdit} from './editDevicesPage/SistemVariable.js'
 import {DeviceMqttEdit} from './editDevicesPage/DeviceMqtt.js'
+import { CastomEdit } from './editDevicesPage/Castom'
 
 
 export const EditDevicesForm = (props)=>{
@@ -37,6 +38,14 @@ export const EditDevicesForm = (props)=>{
       <Loader/>
     )
   }
+
+  return (
+    <div className = "form">
+      <div className="editDevicesForm moreInput">
+        <CastomEdit deviceData = {device} hide={props.hide}/>
+      </div>
+    </div>
+  )
 
 if(device.typeConnect==="Mqtt_MQTTDevice" || device.typeConnect==="Zigbee_ZigbeeDevice"){
   return(

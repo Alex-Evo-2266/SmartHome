@@ -1,4 +1,4 @@
-from moduls_src.models_schema import AddDevice, TypeAddDevice
+from moduls_src.models_schema import AddDevice, EditDevice, EditField, TypeAddDevice
 from yeelight import Bulb,PowerMode
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from SmartHome.logic.device.DeviceElement import DeviceElement
@@ -24,6 +24,7 @@ class Device(BaseDevice):
     typesDevice = ["light"]
     name = DEVICE_NAME
     addConfig=AddDevice(fields=False)
+    editConfig=EditDevice(address=True, fields=EditField(icon=True))
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
