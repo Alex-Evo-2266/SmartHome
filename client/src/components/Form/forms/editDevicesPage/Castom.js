@@ -54,8 +54,8 @@ export const CastomEdit = ({deviceData,hide,type="edit"})=>{
   const [config] = useState(getConfig(types.type, device.typeConnect))
 
   useEffect(()=>{
-    console.log(field);
-  },[field])
+		console.log(device,field,config);
+  },[device, field])
 
   const changeHandler = event => {
     setDevice({ ...device, [event.target.name]: event.target.value })
@@ -95,16 +95,16 @@ const changeHandlerTest = event=>{
   function valid() {
     if(
       (!device.systemName && type !== "link")||
-      !device.newSystemName||
-      !device.valueType||
-      !device.address||
+      (!device.newSystemName)||
+      (!device.valueType && config.valueType)||
+      (!device.address && config.address)||
       !device.name||
       !device.type||
       !device.typeConnect
     ){return false}
     if(!field||!field[0]){return false}
     for (var item of field) {
-      if(!(item?.type&&item?.address)){return false}
+      if((!item?.type && config.fields.type) || (!item?.address && config.fields.address)){return false}
     }
     return true
   }

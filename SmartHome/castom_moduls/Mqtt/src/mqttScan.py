@@ -50,7 +50,7 @@ class TopicHistory():
                             "device": device.dict()
                             })
                     else:
-                        for devValue in device.values:
+                        for devValue in device.fields:
                             if ((device.address + "/" + devValue.address ==topic) and last != "set"):
                                 lincs.append({
                                 "device": device.dict(),

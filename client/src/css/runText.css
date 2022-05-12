@@ -6,6 +6,9 @@
   position: relative;
   justify-content: center;
 }
+.RunText.DeviceName{
+  overflow-x: hidden;
+}
 .RunText::before,
 .RunText::after{
   position: absolute;

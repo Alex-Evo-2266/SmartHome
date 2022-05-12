@@ -51,6 +51,7 @@ async def device(item):
                 data.status="offline",
                 return data
             devicesArrey.addDevice(systemName,dev)
+            print("adddev", dev.valueType, dev.name)
         else:
             status = "online"
             dev = element["device"]

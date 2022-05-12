@@ -4,6 +4,7 @@ from datetime import datetime
 import json
 from SmartHome.logic.device.devicesArrey import devicesArrey
 import logging
+from castom_moduls.Mqtt.settings import DEVICE_NAME
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 class Service():
     def __init__(self):
-        self.typeConnects = []
+        self.typeConnects = [DEVICE_NAME]
 
     def addConnect(self, name:str):
         for item in self.typeConnects:

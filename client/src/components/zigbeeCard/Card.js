@@ -62,12 +62,14 @@ export const ZigbeeElement = ({data}) =>{
     return arr
   }
 
-  const typeList = ()=>types?.type?.map(item=>{
-    return {
-      title: item.title,
-      data: item.title,
-    }
-  })
+  const typeList = ()=>[
+    {data: "light", title: "light"},
+    {data: "switchs", title: "switchs"},
+    {data: "wireless switchs", title: "wireless switchs"},
+    {data: "relay", title: "relay"},
+    {data: "socket", title: "socket"},
+    {data: "sensor", title: "sensor"}
+  ]
 
   const valmaxmin=(val, def)=>{
     if(val === 0)

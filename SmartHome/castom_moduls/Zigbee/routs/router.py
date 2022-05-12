@@ -19,21 +19,21 @@ router = APIRouter(
 #     return "zigbeerouter"
 
 @router.get("/reboot")
-async def get(auth_data: dict = Depends(token_dep)):
-    get("Zigbee_Coordinator").reboot()
+async def reboot(auth_data: dict = Depends(token_dep)):
+    get("Zigbee_ZigbeeCoordinator").reboot()
     return "ok"
 
 @router.get("/permit_join/get", response_model=PermitJoin)
-async def pjoin(auth_data: dict = Depends(token_dep)):
+async def permit_join_get(auth_data: dict = Depends(token_dep)):
     return PermitJoin(state=get("Zigbee_ZigbeeInMessage").permit_join)
 
 @router.post("/permit_join/set")
-async def pjoin(data: PermitJoin, auth_data: dict = Depends(token_dep)):
+async def permit_join_set(data: PermitJoin, auth_data: dict = Depends(token_dep)):
     get("Zigbee_ZigbeeCoordinator").permission_join(data.state)
     return "ok"
 
 @router.get("/device/all", response_model=List[ZigbeeDeviceSchema])
-async def device(auth_data: dict = Depends(token_dep)):
+async def devices(auth_data: dict = Depends(token_dep)):
     return get("Zigbee_ZigbeeInMessage").getDevices()
 
 @router.get("/device/delete/{address}")

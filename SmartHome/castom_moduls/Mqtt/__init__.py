@@ -2,6 +2,7 @@ from moduls_src.baseClassModule import BaseControllModule
 from moduls_src.services import get
 from SmartHome.logic.server.modulesconfig import configManager
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
+from .settings import DEVICE_NAME
 
 
 class Module(BaseControllModule):
@@ -37,6 +38,7 @@ class Module(BaseControllModule):
             self.manager.reconnect_async
         )
         self.manager.connect()
+        print("df")
 
     def end(self):
         self.manager.desconnect()
