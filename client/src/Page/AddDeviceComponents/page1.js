@@ -5,6 +5,7 @@ import sensorImg from '../../img/sensor.png'
 import lampImg from '../../img/lamp.png'
 import switchImg from '../../img/switch.png'
 import relayImg from '../../img/relay.jpg'
+import variableImage from '../../img/variable.png'
 
 const images = {
   lamp: lampImg,
@@ -12,7 +13,8 @@ const images = {
   switch: switchImg,
   relay: relayImg,
   socket: socketImg,
-  sensor: sensorImg
+  sensor: sensorImg,
+  variable: variableImage
 }
 
 function getImage(name) {
@@ -49,7 +51,8 @@ export const AddDevicesPage1 = ({form, setForm, next}) => {
                         <div className="imgConteiner">
                           <img src={item.img||getImage(item2)} alt={item2}/>
                         </div>
-                        <p>{`${item2} (${item.title})`}</p>
+                        <p>{`${item2}`}</p>
+                        <p>{`(${item.title})`}</p>
                       </div>
                     )
                   })

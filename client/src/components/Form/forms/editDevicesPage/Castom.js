@@ -93,6 +93,7 @@ const changeHandlerTest = event=>{
 }
 
   function valid() {
+    console.log(device)
     if(
       (!device.systemName && type !== "link")||
       (!device.newSystemName)||
@@ -102,7 +103,7 @@ const changeHandlerTest = event=>{
       !device.type||
       !device.typeConnect
     ){return false}
-    if(!field||!field[0]){return false}
+    if(!field){return false}
     for (var item of field) {
       if((!item?.type && config.fields.type) || (!item?.address && config.fields.address)){return false}
     }

@@ -30,7 +30,7 @@ def confdecod2(elements):
 async def device(item):
     systemName = item.systemName
     typeConnect = item.typeConnect
-    dev = None
+    dev: BaseDevice | None = None
     status = "offline"
     try:
         if(item.status == "unlink"):
@@ -48,7 +48,7 @@ async def device(item):
                 return data
             if(not dev.get_device()):
                 data = dev.get_Base_Info()
-                data.status="offline",
+                data.status="offline"
                 return data
             devicesArrey.addDevice(systemName,dev)
             print("adddev", dev.valueType, dev.name)
@@ -65,7 +65,7 @@ async def device(item):
             dev = el['device']
             devicesArrey.delete(item.systemName)
             data = dev.get_Base_Info()
-            data.status="offline",
+            data.status="offline"
             return data
         return None
 

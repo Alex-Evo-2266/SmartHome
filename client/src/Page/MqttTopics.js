@@ -145,7 +145,7 @@ export const MqttPage = ()=>{
         (loading||!deviceMqtt)?
         <Loader/>:
         <div>
-          <div className="mqttTableDiv">
+          <div className="mqttTableDiv normalFon">
             <table className="mqttTable">
               <thead>
                 <tr>

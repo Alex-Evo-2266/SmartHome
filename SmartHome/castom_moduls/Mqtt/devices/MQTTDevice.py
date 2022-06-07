@@ -1,5 +1,4 @@
 from operator import iconcat
-from sqlalchemy import true
 from SmartHome.logic.device.BaseDeviceClass import BaseDevice
 from SmartHome.logic.device.DeviceElement import DeviceElement
 from moduls_src.services import get

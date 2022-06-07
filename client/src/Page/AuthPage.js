@@ -61,7 +61,7 @@ const newpass = ()=>{
             <p>Password</p>
             <input placeholder="•••••••" id="password" type="password" name="password" value={form.password} onChange={changeHandler} required/>
             <input type="submit" onClick={loginHandler} disabled={loading} value="Sign In"/>
-            <p onClick={newpass} style={{marginTop:"5px"}} className="liteButton">забыли пароль?</p>
+            <p onClick={newpass} style={{marginTop:"5px"}} className="liteButton">restore password</p>
           </div>
       </div>
     </div>

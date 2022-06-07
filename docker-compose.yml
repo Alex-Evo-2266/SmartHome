@@ -68,17 +68,17 @@ services:
       - 1883:1883
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
-  zigbee2mqtt:
-    container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt:latest
-    # image: koenkk/zigbee2mqtt:arm32v6
-    restart: always
-    volumes:
-      - ./zigbee2mqtt:/app/data
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-    depends_on:
-      - mosquitto
+  # zigbee2mqtt:
+  #   container_name: zigbee2mqtt
+  #   image: koenkk/zigbee2mqtt:latest
+  #   # image: koenkk/zigbee2mqtt:arm32v6
+  #   restart: always
+  #   volumes:
+  #     - ./zigbee2mqtt:/app/data
+  #   devices:
+  #     - /dev/ttyACM0:/dev/ttyACM0
+  #   depends_on:
+  #     - mosquitto
 volumes:
   bd_data:
   media_voluem:

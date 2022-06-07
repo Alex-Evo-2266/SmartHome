@@ -23,7 +23,7 @@ class Device(BaseDevice):
 
     typesDevice = ["light"]
     name = DEVICE_NAME
-    addConfig=AddDevice(fields=False)
+    addConfig=AddDevice(fields=False, description="1. Through the original application, you must enable device management over the local network.\n2. Enter the ip-address of the device (it can be viewed in the same application).")
     editConfig=EditDevice(address=True, fields=EditField(icon=True))
 
     def __init__(self, *args, **kwargs):

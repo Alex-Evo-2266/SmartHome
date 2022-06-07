@@ -111,7 +111,7 @@ export const MenuOption = () =>{
           <div className="configElement">
             <div className="input-data">
               <input required id="titleurl" type = "text" name = "url"/>
-              <label>title</label>
+              <label>url</label>
             </div>
           </div>
           <div className="configElement">

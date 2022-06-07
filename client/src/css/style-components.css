@@ -68,6 +68,13 @@
   z-index: 98;
 }
 
+.baseFon{
+  background-color: var(--color-base);
+}
+.normalFon{
+  background-color: var(--color-normal);
+}
+
 .btn{
   cursor: pointer;
 }

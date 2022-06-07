@@ -63,7 +63,7 @@ export const AddDevicesPage2 = ({form, setForm, next,backPage, begining = []}) =
 
   const validFields = ()=>{
     let arrType = []
-    if(!form.address){
+    if(!form.address && [null, undefined].includes(config?.address)){
       message("нет адреса","error")
       return false
     }
@@ -117,10 +117,10 @@ export const AddDevicesPage2 = ({form, setForm, next,backPage, begining = []}) =
   return(
     <div className="allFon">
 		{
-			(config.information)?
+			(config.description)?
 			<div className="configElement block">
 				{
-					informationParse(config.information).map((item, index)=>(<p key={index}>{item}</p>))
+					informationParse(config.description).map((item, index)=>(<p key={index}>{item}</p>))
 				}
 			</div>
 			:null
