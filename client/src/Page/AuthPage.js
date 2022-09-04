@@ -1,9 +1,10 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext, useCallback} from 'react'
 // import {Link} from 'react-router-dom'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
 import {DialogWindowContext} from '../components/dialogWindow/dialogWindowContext'
+import {FirstPage} from './FirstPage'
 
 
 export const AuthPage = function (){
@@ -11,6 +12,8 @@ export const AuthPage = function (){
   const dialog = useContext(DialogWindowContext)
   const {message} = useMessage();
   const {loading, request, error, clearError} = useHttp();
+  const [clientId, setClientId] = useState(null)
+  const [authservice, setAuthservice] = useState(null)
   const [form, setForm] = useState({
     name: '', password: ''
   });
@@ -21,6 +24,19 @@ export const AuthPage = function (){
       clearError();
     }
   },[error,message, clearError])
+
+  const getClientId = useCallback(async () => {
+    const data = await request('/api/auth/clientid', 'GET', null)
+    if (data && data.authservice)
+    {
+      setClientId(data.clientId)
+      setAuthservice(!!data.authservice)
+    }
+  },[request])
+
+  useEffect(()=>{
+    getClientId()
+  },[getClientId])
 
   const changeHandler = event => {
     setForm({ ...form, [event.target.name]: event.target.value })
@@ -46,6 +62,9 @@ const newpass = ()=>{
     }
   })
 }
+
+  if (clientId === null || authservice === null)
+    return <FirstPage/>
 
   return(
     <div className="row">

@@ -54,7 +54,6 @@ services:
   mosquitto:
     container_name: mosquitto
     build:
-    build:
       context: ./mosquitto
       dockerfile: Dockerfile
       args:
