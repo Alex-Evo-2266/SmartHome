@@ -1,4 +1,4 @@
-from SmartHome.settings import DEVICES
+from settings import DEVICES
 
 from datetime import datetime
 import json

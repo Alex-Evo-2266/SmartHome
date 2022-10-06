@@ -1,31 +1,24 @@
-from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
-from SmartHome.settings import SERVER_CONFIG
-from typing import Optional, List
+from typing import Dict, Optional, List
 import yaml, logging
 from typing import Callable
 
 logger = logging.getLogger(__name__)
 
-def convert(data: List[ServerModuleConfigFieldSchema]):
-    out = dict()
-    for item in data:
-        out[item.name] = item.value
-    return out
-
 class ModuleConfig(object):
-    def __init__(self):
+    def __init__(self, file: str):
         self.callbacks = {}
+        self.file = file
 
     def readConfig(self):
         try:
             templates = None
-            with open(SERVER_CONFIG) as f:
+            with open(self.file) as f:
                 templates = yaml.safe_load(f)
             if not templates:
                 return dict()
             return templates
         except FileNotFoundError as e:
-            logger.error(f"file not found. file:{SERVER_CONFIG}")
+            logger.error(f"file not found. file:{self.file}")
             raise
 
     async def restartall(self):
@@ -34,22 +27,23 @@ class ModuleConfig(object):
             await f()
 
     def writeConfig(self, templates: dict):
-        with open(SERVER_CONFIG, 'w') as f:
+        with open(self.file, 'w') as f:
             yaml.dump(templates, f, default_flow_style=False)
 
-    def addConfig(self, data: ServerModuleConfigSchema, callback: Callable = None):
+    def addConfig(self, name:str, data: Dict[str, str], callback: Callable = None):
         templates = self.readConfig()
         if(templates == None):
             return
-        if data.name in templates:
-            conf = templates[data.name]
-            for item in data.fields:
-                if item.name in conf:
-                    item.value = conf[item.name]
-        templates[data.name] = convert(data.fields)
+        block = templates[name]
+        if not block:
+            block = dict()
+        for key in data:
+            if key not in block:
+                block[key] = data[key]
+        templates[name] = block
         self.writeConfig(templates)
         if callback:
-            self.callbacks[data.name] = callback
+            self.callbacks[name] = callback
 
     def removeConfig(self, name: str):
         self.callbacks.pop(name, None)
@@ -57,38 +51,26 @@ class ModuleConfig(object):
         templates.pop(name, None)
         self.writeConfig(templates)
 
-    def getConfig(self, name: str):
+    def getConfig(self, name: str)->Dict[str, str]:
         templates = self.readConfig()
         if name in templates:
             return templates[name]
         return None
 
-    async def set(self, data: ServerModuleConfigSchema):
+    async def set(self, name:str, data: Dict[str, str]):
         templates = self.readConfig()
-        templates[data.name] = convert(data.fields)
+        block = templates[name]
+        if not block:
+            block = dict()
+        for key in block:
+            if key not in data:
+                data[key] = block[key]
+        templates[name] = data
         self.writeConfig(templates)
-        if data.name in self.callbacks:
-            f = self.callbacks[data.name]
+        if name in self.callbacks:
+            f = self.callbacks[name]
             await f()
 
-    def allConfig(self)->List[ServerModuleConfigSchema]:
-        out = []
+    def allConfig(self)->Dict[str, Dict[str, str]]:
         templates = self.readConfig()
-        for key in templates:
-            fields = []
-            for key2 in templates[key]:
-                fields.append(
-                    ServerModuleConfigFieldSchema(
-                        name=key2,
-                        value=templates[key][key2]
-                    )
-                )
-            out.append(
-                ServerModuleConfigSchema(
-                    name=key,
-                    fields=fields
-                )
-            )
-        return out
-
-configManager = ModuleConfig()
+        return templates

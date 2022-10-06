@@ -1,4 +1,4 @@
-from SmartHome.settings import DEVICES
+from settings import DEVICES
 from SmartHome.logic.utils.file import readYMLFile, writeYMLFile
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema
 from SmartHome.logic.groups.deleteDevicefromGroups import dleteDevicesFromGroups

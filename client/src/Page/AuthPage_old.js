@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useContext, useCallback, useRef} from 'react'
+import React, {useState, useEffect, useContext, useCallback} from 'react'
 // import {Link} from 'react-router-dom'
-import {AuthServiceBtn} from '../components/authServiceBtn/AutuServiceBtnComponent'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext.js'
@@ -13,7 +12,6 @@ const STATE = "sdrtfyujkllhmgfdsfgncfghcfgfnb"
 
 export const AuthPage = function (){
   const auth = useContext(AuthContext)
-  const authServiceBtn = useRef(null)
   const dialog = useContext(DialogWindowContext)
   const {message} = useMessage();
   let {search} = useLocation();
@@ -24,6 +22,28 @@ export const AuthPage = function (){
   const [form, setForm] = useState({
     name: '', password: ''
   });
+
+
+  useEffect(()=>{
+    message(error,"general")
+    return ()=>{
+      clearError();
+    }
+  },[error,message, clearError])
+
+  const getClientId = useCallback(async () => {
+    const data = await request('/api/auth/clientid', 'GET', null)
+    if (data && data.authservice)
+    {
+      setClientId(data.clientId)
+      setAuthservice(!!data.authservice)
+      setAuthserviceHost(data.host)
+    }
+  },[request])
+
+  useEffect(()=>{
+    getClientId()
+  },[getClientId])
 
   const changeHandler = event => {
     setForm({ ...form, [event.target.name]: event.target.value })
@@ -39,11 +59,57 @@ export const AuthPage = function (){
     }
   }
 
-  const newpass = () => {}
+const newpass = ()=>{
+  dialog.show("text",{
+    title:"Password recovery",
+    text:"input login",
+    placeholder:"login",
+    active:(data)=>{
+      request('/api/user/password/new', 'POST', {name:data})
+    }
+  })
+}
 
-  useEffect(()=>{
+const getHost = ()=>{
+  console.log(window.location.host)
+  let host = window.location.host
+  host = "http://" + host
+  return host
+}
 
-  },[])
+const getAccess = useCallback(async(code)=>{
+  const data = await request('/api/auth', 'POST', {"code": code})
+  console.log(data)
+},[])
+
+useEffect(()=>{
+  if (search)
+  {
+    let obj = parseURL(search)
+    if (obj.state != STATE)
+    {
+      console.error("stеte error")
+      return null
+    }
+    console.log(obj.code)
+    getAccess(obj.code)
+  }
+},[getAccess])
+
+  if (clientId === null || authservice === null || authservicehost == null)
+    return <FirstPage/>
+
+  else if (search)
+  {
+    return null
+  }
+  else if (authservicehost && clientId)
+  {
+    console.log(authservicehost)
+    window.location.replace(`${authservicehost}/authorize?response_type=code&client_id=${clientId}&redirect_uri=${getHost()}&state=${STATE}&scope=profile`)
+  }
+
+  
 
   return(
     <div className="row">
@@ -54,7 +120,6 @@ export const AuthPage = function (){
       <div className="left-auth"></div>
       <div className="right-auth">
           <div className={`formBox-auth`}>
-            <AuthServiceBtn/>
             <p>Name</p>
             <input placeholder="Login" id="name" type="text" name="name" value={form.name} onChange={changeHandler} required/>
             <p>Password</p>

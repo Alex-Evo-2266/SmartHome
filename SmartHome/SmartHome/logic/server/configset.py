@@ -1,18 +1,18 @@
+from typing import Any, Dict
 import yaml, logging
 
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigSchema
-from SmartHome.settings import SERVER_CONFIG
-from .modulesconfig import configManager
+from settings import SERVER_CONFIG, configManager
 # from ..deviceControl.mqttDevice.connect import reconnect,publish
 # from ..deviceControl.mqttDevice.mqttScan import ClearTopicks
 # from ..weather import updateWeather
 
 logger = logging.getLogger(__name__)
 
-async def ServerConfigEdit(data: ServerConfigSchema):
+async def ServerConfigEdit(data: Dict[str, Any]):
     try:
-        for item in data.moduleConfig:
-            await configManager.set(item)
+        for key in data:
+            await configManager.set(key, data[key])
         return {"status":"ok"}
     except FileNotFoundError as e:
         logger.error(f"file not fount. file:{SERVER_CONFIG}, detail:{e}. ")

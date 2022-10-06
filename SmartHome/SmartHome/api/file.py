@@ -5,7 +5,7 @@ from typing import Optional, List
 from SmartHome.depends.auth import token_dep
 import shutil
 from SmartHome.schemas.base import FunctionRespons
-from SmartHome.settings import MEDIA_ROOT
+from settings import MEDIA_ROOT
 from SmartHome.logic.gallery import getimageName, backgroundDelete, backgroundLinc
 
 router = APIRouter(

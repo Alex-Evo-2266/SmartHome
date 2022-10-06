@@ -1,4 +1,4 @@
-from SmartHome.logic.server.modulesconfig import configManager
+from settings import configManager
 from SmartHome.logic.call_functions import call_functions
 from SmartHome.logic.device.sendDevice import sendDevice
 

@@ -1,10 +1,12 @@
 import logging
 
-from SmartHome.logic.server.modulesconfig import configManager
+from settings import configManager
 from SmartHome.logic.device.devicesArrey import devicesArrey
 from SmartHome.logic.device.DeviceFile import Devices
 from .schemas import ZigbeeDeviceSchema
 import json
+
+logger = logging.getLogger(__name__)
 
 async def editAdressLincDevices(obj, topic, message):
     data = json.loads(message)

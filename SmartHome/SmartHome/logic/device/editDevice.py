@@ -5,7 +5,7 @@ from .devicesArrey import devicesArrey
 from ..utils.file import readYMLFile, writeYMLFile
 from .DeviceFile import Devices
 
-from SmartHome.settings import DEVICES
+from settings import DEVICES
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema, DeviceEditSchema
 
 from SmartHome.logic.homePage import deleteDevice as deleteDeviceinpage

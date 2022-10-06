@@ -6,7 +6,7 @@ import {AuthContext} from '../context/AuthContext.js'
 import {DialogWindowContext} from '../components/dialogWindow/dialogWindowContext'
 
 
-export const FirstPage = function (){
+export const FirstPage = function ({updata}){
   const auth = useContext(AuthContext)
   const dialog = useContext(DialogWindowContext)
   const {message} = useMessage();
@@ -14,15 +14,22 @@ export const FirstPage = function (){
   const [clientId, setClientId] = useState(null)
   const [authservice, setAuthservice] = useState(null)
   const [form, setForm] = useState({
-    host: '', clientId: ''
+    host: '', clientId: '', clientSecret: ''
   });
 
   const changeHandler = event => {
     setForm({ ...form, [event.target.name]: event.target.value })
   }
 
-  const sendAuthService = () => {
-
+  const sendAuthService = async() => {
+    try
+    {
+      await request('/api/firststart', 'POST', {...form})
+      if (typeof(updata) === "function") 
+        updata()
+    }
+    catch
+    {}
   }
 
   return(
@@ -38,6 +45,8 @@ export const FirstPage = function (){
             <input placeholder="host" id="host" type="text" name="host" value={form.host} onChange={changeHandler} required/>
             <p>Client id</p>
             <input placeholder="clientId" id="clientId" type="text" name="clientId" value={form.clientId} onChange={changeHandler} required/>
+            <p>Client secret</p>
+            <input placeholder="clientSecret" id="clientSecret" type="text" name="clientSecret" value={form.clientSecret} onChange={changeHandler} required/>
             <input type="submit" onClick={sendAuthService} disabled={false} value="Sign In"/>
           </div>
       </div>

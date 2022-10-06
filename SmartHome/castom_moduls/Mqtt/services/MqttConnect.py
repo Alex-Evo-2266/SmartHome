@@ -1,4 +1,4 @@
-from SmartHome.logic.server.modulesconfig import configManager
+from settings import configManager
 from castom_moduls.Mqtt.settings import DEVICE_NAME
 
 from typing import Callable, Any

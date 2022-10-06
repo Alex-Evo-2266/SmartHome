@@ -1,10 +1,14 @@
 from pathlib import Path
+import datetime
 import os, sys
+from SmartHome.logic.server.modulesconfig import ModuleConfig
+
+
 
 try:
-    from .settings_local import *
+    from settings_local import *
 except Exception as e:
-    from .settings_prod import *
+    from settings_prod import *
 
 
 DB_URL = "".join(["mysql+pymysql://",
@@ -17,13 +21,17 @@ print("bd: ",DB_URL)
 
 ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 
+
+AUTH_SERVICE_URL="http://localhost:1337/token"
+
+
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 2
 SECRET_JWT_KEY = "dxkhbg5hth56"
 SECRET_REFRESH_JWT_KEY = "dxkhbgefrthjyuvligukytrtyug5hth56"
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 
 SERVER_CONFIG = os.path.join(BASE_DIR, "files","server-config.yml")
 DEVICETYPES = os.path.join(BASE_DIR, "files","devTypes.yml")
@@ -37,6 +45,15 @@ ROOMS = os.path.join(BASE_DIR, "files","rooms.yml")
 TIME_UPPDATA = 6
 LENGTHPASS = 10
 
+TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
+
+data = {
+	"email_login":"",
+	"email_password":""
+}
+
+configManager = ModuleConfig(SERVER_CONFIG)

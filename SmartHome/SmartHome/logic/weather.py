@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 
 from SmartHome.schemas.weather import WeatherSchema, NowWeatherSchema, WeatherTimeSchema, WeatherDateSchema
-from SmartHome.logic.server.modulesconfig import configManager
+from settings import configManager
 
 logger = logging.getLogger(__name__)
 

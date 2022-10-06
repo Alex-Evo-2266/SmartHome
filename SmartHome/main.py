@@ -11,7 +11,7 @@ from SmartHome.logic.call_functions import call_functions
 from SmartHome.logic.weather import updateWeather
 from SmartHome.logic.device.sendDevice import sendDevice
 from SmartHome.websocket.manager import manager
-from SmartHome.logic.server.modulesconfig import configManager
+from settings import configManager
 from SmartHome.logic.server.serverData import sendServerData
 from SmartHome.logic.script.runScript import runTimeScript
 from SmartHome.logic.device.deviceSave import saveDevice
@@ -19,18 +19,20 @@ from SmartHome.logic.device.deviceSave import saveDevice
 from SmartHome.logic.server.configInit import confinit
 from initapp import initAdmin, initdir
 
-from SmartHome.api.auth import router as router_auth
-from SmartHome.api.user import router as router_user
-from SmartHome.api.style import router as router_style
-from SmartHome.api.device import router as router_device
-from SmartHome.api.homePage import router as router_homePage
-from SmartHome.api.server import router as router_server
-from SmartHome.api.script import router as router_script
-from SmartHome.api.deviceGroup import router_groups
-from SmartHome.api.moduls import router_moduls
-from SmartHome.api.pages import router_pages
-from SmartHome.api.file import router as router_file
-from SmartHome.settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS
+from SmartHome.api.first_start import router as router_first_start
+from authtorization.api import router as router_auth
+from SmartHome.api.auth import router as router_id
+# from SmartHome.api.user import router as router_user
+# from SmartHome.api.style import router as router_style
+# from SmartHome.api.device import router as router_device
+# from SmartHome.api.homePage import router as router_homePage
+# from SmartHome.api.server import router as router_server
+# from SmartHome.api.script import router as router_script
+# from SmartHome.api.deviceGroup import router_groups
+# from SmartHome.api.moduls import router_moduls
+# from SmartHome.api.pages import router_pages
+# from SmartHome.api.file import router as router_file
+from settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS
 
 logger = logging.getLogger(__name__)
 
@@ -91,14 +93,16 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
+app.include_router(router_first_start)
 app.include_router(router_auth)
-app.include_router(router_server)
-app.include_router(router_device)
-app.include_router(router_script)
-app.include_router(router_style)
-app.include_router(router_file)
-app.include_router(router_groups)
-app.include_router(router_homePage)
-app.include_router(router_user)
-app.include_router(router_moduls)
-app.include_router(router_pages)
+app.include_router(router_id)
+# app.include_router(router_server)
+# app.include_router(router_device)
+# app.include_router(router_script)
+# app.include_router(router_style)
+# app.include_router(router_file)
+# app.include_router(router_groups)
+# app.include_router(router_homePage)
+# app.include_router(router_user)
+# app.include_router(router_moduls)
+# app.include_router(router_pages)

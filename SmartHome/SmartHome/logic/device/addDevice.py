@@ -6,7 +6,7 @@ from .devicesArrey import devicesArrey
 from ..utils.file import readYMLFile, writeYMLFile
 from .DeviceFile import Devices
 
-from SmartHome.settings import DEVICES
+from settings import DEVICES
 # from SmartHome.logic.Cart import deleteDeviceCart
 from SmartHome.schemas.base import FunctionRespons, TypeRespons
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema

@@ -2,7 +2,7 @@ import logging
 import os, sys
 import yaml
 
-from SmartHome import settings
+import settings
 from SmartHome.schemas.style import StyleSchemas
 
 logger = logging.getLogger(__name__)

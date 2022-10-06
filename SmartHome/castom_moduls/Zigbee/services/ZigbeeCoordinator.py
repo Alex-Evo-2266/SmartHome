@@ -1,7 +1,7 @@
 import logging, json
 
 from SmartHome.websocket.manager import manager
-from SmartHome.logic.server.modulesconfig import configManager
+from settings import configManager
 
 from castom_moduls.Zigbee.src.schemas import ZigbeeDeviceSchema
 from castom_moduls.Zigbee.src.utils import editAdressLincDevices, decodRemove, formatDev

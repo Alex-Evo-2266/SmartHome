@@ -2,7 +2,7 @@ import logging
 import bcrypt
 import os
 from SmartHome.models import User
-from SmartHome.settings import SCRIPTS_DIR, DEVICES, MEDIA_ROOT, BACKGROUND_DIR, GROUPS, ROOMS
+from settings import SCRIPTS_DIR, DEVICES, MEDIA_ROOT, BACKGROUND_DIR, GROUPS, ROOMS
 
 logger = logging.getLogger(__name__)
 

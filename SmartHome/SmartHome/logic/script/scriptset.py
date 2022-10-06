@@ -1,5 +1,5 @@
 # from .runScript import runscript
-from SmartHome.settings import SCRIPTS_DIR
+from settings import SCRIPTS_DIR
 from SmartHome.schemas.script import ScriptSchema
 from SmartHome.schemas.base import FunctionRespons
 import yaml

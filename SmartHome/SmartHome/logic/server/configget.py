@@ -1,8 +1,7 @@
 import yaml, logging
 
-from SmartHome.settings import SERVER_CONFIG
+from settings import SERVER_CONFIG, configManager
 from SmartHome.schemas.server import ServerConfigSchema
-from .modulesconfig import configManager
 from SmartHome.logic.homePage import getPagesName
 
 logger = logging.getLogger(__name__)

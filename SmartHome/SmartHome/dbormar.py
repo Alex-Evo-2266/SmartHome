@@ -2,7 +2,7 @@ import databases
 import sqlalchemy
 from sqlalchemy import create_engine
 import ormar
-from SmartHome.settings import DB_URL
+from settings import DB_URL
 
 metadata = sqlalchemy.MetaData()
 database = databases.Database(DB_URL)

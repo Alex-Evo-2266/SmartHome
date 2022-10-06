@@ -2,7 +2,7 @@ from SmartHome.logic.device.deviceSetValue import setValue
 from SmartHome.logic.groups.setValueGroup import setValueGroup
 from SmartHome.logic.groups.GroupFile import Groups
 from SmartHome.schemas.device import DeviceValueSchema
-from SmartHome.settings import SCRIPTS_DIR
+from settings import SCRIPTS_DIR
 import os, sys
 import yaml, asyncio
 import threading

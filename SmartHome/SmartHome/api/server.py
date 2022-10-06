@@ -21,7 +21,7 @@ async def getconfig(auth_data: dict = Depends(token_dep)):
 
 @router.post("/config/edit")
 async def getconfig(data:ServerConfigSchema, auth_data: dict = Depends(token_dep)):
-    res = await ServerConfigEdit(data)
+    res = await ServerConfigEdit(data.moduleConfig)
     if res["status"] == "ok":
         return "ok"
     return JSONResponse(status_code=400, content={"message": "error write file"})
