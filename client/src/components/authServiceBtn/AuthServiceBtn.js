@@ -70,7 +70,7 @@ export function AuthBtn(root,option = {})
 	return {
 		component: btn,
 		destroy(){
-			root.pop()
+			root?.remove()
 		}
 	}
 }

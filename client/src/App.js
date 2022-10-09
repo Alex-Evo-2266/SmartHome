@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {BrowserRouter} from 'react-router-dom'
 import {Alert} from './components/alert/alert.js'
 import {DialogWindow} from './components/dialogWindow/dialogWindow.js'
@@ -11,7 +11,6 @@ import {FormState} from './components/Form/formState'
 import {TerminalState} from './components/terminal/terminalState'
 import {AddScriptState} from './components/addScript/addScriptState'
 import {useRoutes} from './routes.js'
-import {useAuth} from './hooks/auth.hook.js'
 import {CastomizeStyle} from './components/UserStyle/StyleState.js'
 import {GroupsState} from './components/Groups/groupsState.js'
 import {AuthContext} from './context/AuthContext'
@@ -19,35 +18,36 @@ import {TerminalCart} from './components/terminal/terminalCart'
 import {SocketState} from './hooks/socket.hook.js'
 import {TypesDeviceState} from './components/typeDevices/typeDevicesState'
 import {PageState} from './components/Menu/pageState'
+import { useSelector } from 'react-redux';
 
 import './css/style-auth.css'
 import './icon/css/all.css'
 import './css/style-alert.css'
 import './css/style-components.css'
 
-function App() {
-  const {token, login, logout, userId, userLevel,ready} = useAuth();
-  const isAuthenticated = !!token;
-  const routes = useRoutes(isAuthenticated,userLevel);
+import { LOAD } from './store/types.js'
 
-  if (!ready) {
-    return(
-      <h1>Loding</h1>
-    )
-  }
+function App() {
+  const data = useSelector(state => state.auth)
+  const routes = useRoutes(data.isAuthenticated,data.role);
+
+  console.log(data)
+
+  // if (!ready) {
+  //   return(
+  //     <h1>Loding</h1>
+  //   )
+  // }
 
   return (
-    <AuthContext.Provider value={{
-      token, login, logout, userId, userLevel, isAuthenticated
-    }}>
-    <PageState token={token}>
+    <PageState token={data.token}>
     <MenuState>
     <SocketState>
     <AlertState>
     <DialogWindowState>
-    <CastomizeStyle token={token} ready={ready}>
-    <TypesDeviceState token={token} ready={ready}>
-    <GroupsState token={token}>
+    <CastomizeStyle token={data.token} ready={true}>
+    <TypesDeviceState token={data.token} ready={true}>
+    <GroupsState token={data.token}>
     <FormState>
     <TerminalState>
     <AddScriptState>
@@ -58,7 +58,7 @@ function App() {
         <Alert/>
         <Form/>
         <TerminalCart/>
-        {(isAuthenticated)?<Menu/>:null}
+        {(data.isAuthenticated)?<Menu/>:null}
         {routes}
       </div>
     </BrowserRouter>
@@ -74,7 +74,6 @@ function App() {
     </SocketState>
     </MenuState>
     </PageState>
-    </AuthContext.Provider>
   );
 }
 

@@ -1,9 +1,11 @@
-import React, {useContext} from 'react'
-import {AuthContext} from '../../../context/AuthContext.js'
+import React from 'react'
+import { useDispatch } from 'react-redux'
 import {NavLink} from 'react-router-dom'
+import { LOGOUT } from '../../../store/types'
 
 export const LeftMenu = ({hide,show, visible, insluedField, otherField, user})=>{
-  const auth = useContext(AuthContext)
+
+  const dispatch = useDispatch()
 
   const closeMenu=(e)=>{
     let el = e.target.closest("li[data-el=sub]")
@@ -94,7 +96,7 @@ export const LeftMenu = ({hide,show, visible, insluedField, otherField, user})=>
       <div className="dividers"></div>
       <ul className="otherMenu">
         <li>
-          <button className="menu-btn" onClick={auth.logout}>
+          <button className="menu-btn" onClick={()=>dispatch({type:LOGOUT})}>
             <i className="fas fa-sign-out-alt"></i>
             <span>logout</span>
           </button>

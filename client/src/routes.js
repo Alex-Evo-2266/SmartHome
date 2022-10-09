@@ -24,7 +24,7 @@ import {GroupsAddPage} from './Page/addGroupPage'
 import {EditStylePage} from './Page/EditStylePage'
 import AddUser from './Page/AddUser'
 
-export const useRoutes = (isAuthenticated,level)=>{
+export const useRoutes = (isAuthenticated,role)=>{
   if(isAuthenticated){
     return(
       <Switch>
@@ -60,14 +60,14 @@ export const useRoutes = (isAuthenticated,level)=>{
         </Route>
         <Route path="/config/users" exact>
         {
-          (level>=3)?
+          (role=='admin')?
           <OptionsPage/>:
           <Redirect to="/config"/>
         }
         </Route>
         <Route path="/config/server" exact>
         {
-          (level>=3)?
+          (role=='admin')?
           <OptionsPage/>:
           <Redirect to="/config"/>
         }

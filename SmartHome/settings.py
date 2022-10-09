@@ -23,6 +23,7 @@ ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 
 
 AUTH_SERVICE_URL="http://localhost:1337/token"
+AUTH_SERVICE_GET_TOKENS_PATH="/api/auth/token"
 
 
 ALGORITHM = 'HS256'
@@ -50,10 +51,5 @@ TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
-
-data = {
-	"email_login":"",
-	"email_password":""
-}
 
 configManager = ModuleConfig(SERVER_CONFIG)

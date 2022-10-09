@@ -3,6 +3,7 @@ import asyncio, logging
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from authtorization.initAdmin import initAdmin
 
 from castom_moduls import init_moduls
 
@@ -17,7 +18,7 @@ from SmartHome.logic.script.runScript import runTimeScript
 from SmartHome.logic.device.deviceSave import saveDevice
 
 from SmartHome.logic.server.configInit import confinit
-from initapp import initAdmin, initdir
+from initapp import initdir
 
 from SmartHome.api.first_start import router as router_first_start
 from authtorization.api import router as router_auth

@@ -8,6 +8,8 @@ import {useLocation} from "react-router-dom"
 import {DialogWindowContext} from '../components/dialogWindow/dialogWindowContext'
 import {FirstPage} from './FirstPage'
 import { parseURL } from '../utils/urlParse'
+import { useDispatch } from 'react-redux'
+import { LOGIN } from '../store/types'
 
 const STATE = "sdrtfyujkllhmgfdsfgncfghcfgfnb"
 
@@ -17,6 +19,7 @@ export const AuthPage = function (){
   const dialog = useContext(DialogWindowContext)
   const {message} = useMessage();
   let {search} = useLocation();
+  const dispatch = useDispatch()
   const {loading, request, error, clearError} = useHttp();
   const [clientId, setClientId] = useState(null)
   const [authservice, setAuthservice] = useState(null)
@@ -32,8 +35,12 @@ export const AuthPage = function (){
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', {...form})
-      if(data)
-        auth.login(data.token, data.userId, data.userLavel)
+      if (!data) return ;
+      dispatch({type: LOGIN, payload:{
+        id: data?.id,
+        role: data?.role,
+        token: data?.token
+      }})
     } catch (e) {
       console.error(e);
     }
@@ -42,8 +49,9 @@ export const AuthPage = function (){
   const newpass = () => {}
 
   useEffect(()=>{
-
-  },[])
+    message(error, 'error');
+    clearError();
+  },[error, message, clearError])
 
   return(
     <div className="row">
