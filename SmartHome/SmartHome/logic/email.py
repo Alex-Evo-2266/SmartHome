@@ -1,7 +1,8 @@
 import yaml, smtplib
 import logging
+from SmartHome.exceptions import NoConfigurationDataException
 
-from SmartHome import settings
+import settings
 
 logger = logging.getLogger(__name__)
 
@@ -12,12 +13,11 @@ async def send_email(subject, to_email, message):
     logger.debug(f"send email input param. subject: {subject}, to_email: {to_email}, message: {message}")
 
     try:
-        templates = None
-        with open(settings.SERVER_CONFIG) as f:
-            templates = yaml.safe_load(f)
-        acaunt = templates["email"]
-        from_email = acaunt["login"]
-        password = acaunt["password"]
+        email_data = settings.configManager.getConfig("email")
+        if not email_data:
+            raise NoConfigurationDataException("email config not found")
+        from_email = email_data["login"]
+        password = email_data["password"]
         if(from_email == '' or password == ''):
             logger.warning("no login or password from email")
             return
@@ -34,4 +34,4 @@ async def send_email(subject, to_email, message):
         server.sendmail(from_email,to_email,BODY)
         server.quit()
     except Exception as e:
-        logger.error(f"error send email. detail: {e}")
+        logger.warning(f"error send email. detail: {e}")

@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, LOAD } from "../types"
+import { LOGIN, LOGOUT} from "../types"
 
 const SMARTHOME_USER_DATA = 'smarthome_user_data';
 

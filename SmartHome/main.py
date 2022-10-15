@@ -23,7 +23,7 @@ from initapp import initdir
 from SmartHome.api.first_start import router as router_first_start
 from authtorization.api import router as router_auth
 from SmartHome.api.auth import router as router_id
-# from SmartHome.api.user import router as router_user
+from SmartHome.api.user import router as router_user
 # from SmartHome.api.style import router as router_style
 # from SmartHome.api.device import router as router_device
 # from SmartHome.api.homePage import router as router_homePage
@@ -104,6 +104,6 @@ app.include_router(router_id)
 # app.include_router(router_file)
 # app.include_router(router_groups)
 # app.include_router(router_homePage)
-# app.include_router(router_user)
+app.include_router(router_user)
 # app.include_router(router_moduls)
 # app.include_router(router_pages)

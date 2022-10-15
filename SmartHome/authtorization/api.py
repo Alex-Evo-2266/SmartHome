@@ -4,7 +4,7 @@ from unicodedata import name
 from fastapi import APIRouter, Response
 from fastapi.responses import JSONResponse
 from authtorization.exceptions import InvalidInputException
-from authtorization.auth_service import get_auth_service_tokens
+from auth_service.auth_service import get_auth_service_tokens
 from authtorization.models import AuthType, User
 from authtorization.logic import create_session, create_tokens_oauth, create_valid_user_name, get_token, local_login
 

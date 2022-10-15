@@ -1,37 +1,36 @@
 from pydantic import BaseModel
 from typing import Optional, List
+from authtorization.models import AuthType
+
+from authtorization.schema import UserLevel
 
 class UserForm(BaseModel):
     name: str
     password: str
     email: str
-    mobile: str
 
 class UserSchema(BaseModel):
-    UserId: int
-    UserName: str
-    UserSurname: Optional[str]
-    Mobile: Optional[str]
-    Email: Optional[str]
-    Level: int
-    ImageId: Optional[int]
+    id: int
+    name: str
+    email: Optional[str]
+    role: UserLevel = UserLevel.BASE
+    image_id: Optional[int]
+    auth_type: AuthType
 
 class UserEditSchema(BaseModel):
-    UserName: str
-    UserSurname: Optional[str]
-    Mobile: Optional[str]
-    Email: Optional[str]
-    ImageId: Optional[int]
+    name: str
+    email: Optional[str]
+    image_id: Optional[int]
 
 class UserDeleteSchema(BaseModel):
-    UserId: int
+    id: int
 
 class UserNameSchema(BaseModel):
     name: str
 
 class UserEditLevelSchema(BaseModel):
     id: int
-    level: int
+    role: UserLevel = UserLevel.BASE
 
 class UserEditPasswordSchema(BaseModel):
     Old: str

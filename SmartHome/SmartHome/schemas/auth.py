@@ -15,7 +15,7 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    user_id: str
+    user_id: int
     user_level: str
 
 class AuthService(BaseModel):

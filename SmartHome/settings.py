@@ -1,7 +1,7 @@
 from pathlib import Path
 import datetime
 import os, sys
-from SmartHome.logic.server.modulesconfig import ModuleConfig
+from modulesconfig import ModuleConfig
 
 
 

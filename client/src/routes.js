@@ -1,28 +1,28 @@
 import React from 'react'
 import {Switch,Route,Redirect} from 'react-router-dom'
-import {HomePage} from './Page/HomePage'
-import {AuthPage} from './Page/AuthPage'
-import {DitailDevicePage} from './Page/DitailDevicePage'
-import {DevicesPage} from './Page/DevicesPage'
-import {ProfilePage} from './Page/ProfilePage'
-import {OptionsPage} from './Page/OptionsPage'
-import {ScriptsPage} from './Page/ScriptsPage'
-import {NewScriptsPage} from './Page/NewScriptsPage'
-import {UsersPage} from './Page/UsersPage'
-import {GalleryPage} from './Page/GalleryPage'
-import {AddDevicesPage} from './Page/AddDevicePage'
-import {AddMoviePage} from './Page/addFilesPages/NewMovie'
-import {AddActorPage} from './Page/addFilesPages/NewActors'
-import {AddGanrePage} from './Page/addFilesPages/NewGanre'
-import {ChartsPage} from './Page/ChartPage'
-import {MovieDitail} from './Page/filespage/movieDitail'
-import {MqttPage} from './Page/MqttTopics'
-import {ZigbeePage} from './Page/ZigbeePage'
-import {ModulsPage} from './Page/ModulsPage'
-import {GroupsPage} from './Page/GroupsPage'
-import {GroupsAddPage} from './Page/addGroupPage'
-import {EditStylePage} from './Page/EditStylePage'
-import AddUser from './Page/AddUser'
+import {HomePage} from './Page/HomePage/HomePage'
+import {AuthPage} from './Page/AuthPage/AuthPage'
+// import {DitailDevicePage} from './Page/DitailDevicePage'
+// import {DevicesPage} from './Page/DevicesPage'
+// import {ProfilePage} from './Page/ProfilePage'
+// import {OptionsPage} from './Page/OptionsPage'
+// import {ScriptsPage} from './Page/ScriptsPage'
+// import {NewScriptsPage} from './Page/NewScriptsPage'
+// import {UsersPage} from './Page/UsersPage'
+// import {GalleryPage} from './Page/GalleryPage'
+// import {AddDevicesPage} from './Page/AddDevicePage'
+// import {AddMoviePage} from './Page/addFilesPages/NewMovie'
+// import {AddActorPage} from './Page/addFilesPages/NewActors'
+// import {AddGanrePage} from './Page/addFilesPages/NewGanre'
+// import {ChartsPage} from './Page/ChartPage'
+// import {MovieDitail} from './Page/filespage/movieDitail'
+// import {MqttPage} from './Page/MqttTopics'
+// import {ZigbeePage} from './Page/ZigbeePage'
+// import {ModulsPage} from './Page/ModulsPage'
+// import {GroupsPage} from './Page/GroupsPage'
+// import {GroupsAddPage} from './Page/addGroupPage'
+// import {EditStylePage} from './Page/EditStylePage'
+// import AddUser from './Page/AddUser'
 
 export const useRoutes = (isAuthenticated,role)=>{
   if(isAuthenticated){
@@ -31,7 +31,7 @@ export const useRoutes = (isAuthenticated,role)=>{
         <Route path="/home" exact>
           <HomePage/>
         </Route>
-        <Route path="/devices" exact>
+        {/* <Route path="/devices" exact>
           <DevicesPage/>
         </Route>
         <Route path="/scripts" exact>
@@ -143,7 +143,7 @@ export const useRoutes = (isAuthenticated,role)=>{
         </Route>
         <Route path="/serial/:id" exact>
           <MovieDitail type="serial"/>
-        </Route>
+        </Route> */}
         <Redirect to="/home"/>
       </Switch>
     )
