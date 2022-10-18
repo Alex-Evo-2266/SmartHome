@@ -1,6 +1,6 @@
 export const LOGIN = "login"
 export const LOGOUT = "logout"
-export const LOAD_PAGE = "load_page"
+export const SET_PAGE = "SET_PAGE"
 export const SHOW_MENU = "show_menu"
 export const HIDE_MENU = "hide_menu"
 export const TOGLE_MENU = "togle_menu"
@@ -9,4 +9,9 @@ export const SET_TITLE = "set_title"
 export const SET_USER = "set_user"
 export const SHOW_DIALOG = 'SHOW_DIALOG'
 export const HIDE_DIALOG = 'HIDE_DIALOG'
+export const SHOW_ALERT = 'SHOW_ALERT'
+export const HIDE_ALERT = 'HIDE_ALERT'
 export const SET_SEARCH_FUN = "set_search_fun"
+export const SET_DOP_MENU = "SET_DOP_MENU"
+export const SET_TABS = "SET_TABS"
+export const SET_STYLE = "SET_STYLE"

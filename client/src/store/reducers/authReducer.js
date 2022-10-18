@@ -30,3 +30,6 @@ export const authReducer = (state = initState(), action) =>{
 			return state
 	}
 }
+
+export const login = (token, id, role, expires_at) => ({type: LOGIN, payload:{token, id, role, expires_at}})
+export const logout = () => ({type: LOGOUT})

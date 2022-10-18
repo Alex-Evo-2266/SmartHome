@@ -6,6 +6,8 @@ import thunk from "redux-thunk"
 import { TopBarReducer } from './reducers/topBarReducer'
 import { UserReducer } from './reducers/userReducer'
 import { DialogReducer } from './reducers/dialogReducer'
+import { alertReducer } from './reducers/alertReducer'
+import { StyleReducer } from './reducers/styleReducer'
 
 export const rootReducer = combineReducers({
 	auth: authReducer,
@@ -14,6 +16,8 @@ export const rootReducer = combineReducers({
 	topBar: TopBarReducer,
 	user: UserReducer,
 	dialog: DialogReducer,
+	alert: alertReducer,
+	style: StyleReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

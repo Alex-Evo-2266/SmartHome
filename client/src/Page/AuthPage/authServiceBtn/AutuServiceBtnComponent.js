@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import {AuthBtn} from "./AuthServiceBtn"
 import {useHttp} from '../../../hooks/http.hook'
 import { useMessage } from '../../../hooks/message.hook'
@@ -21,7 +21,7 @@ export const AuthServiceBtn = ()=>{
       role: data?.role,
       token: data?.token
     }})
-  },[request])
+  },[request, dispatch])
 
   const getClientId = useCallback(async () => {
     const data = await request('/api/auth/clientid', 'GET', null)
@@ -47,7 +47,7 @@ export const AuthServiceBtn = ()=>{
       if (authBtnController.current)
         authBtnController.current.destroy()
     }
-  },[])
+  },[getClientId])
 
   return(
     <div ref={authBtn} id="auth-service" className='auth-btn-containeer'></div>

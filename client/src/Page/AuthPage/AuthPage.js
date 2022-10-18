@@ -1,11 +1,10 @@
-import React, {useState, useEffect, useContext, useCallback, useRef} from 'react'
+import React, {useState, useEffect} from 'react'
 import {AuthServiceBtn} from './authServiceBtn/AutuServiceBtnComponent'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import { useDispatch } from 'react-redux'
 import { LOGIN } from '../../store/types'
 
-const STATE = "sdrtfyujkllhmgfdsfgncfghcfgfnb"
 
 export const AuthPage = function (){
   const {message} = useMessage();

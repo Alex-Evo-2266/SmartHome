@@ -4,7 +4,6 @@ const initState = {
 	name: "",
 	email: "",
 	id: null,
-
 }
 
 export const UserReducer = (state = initState, action) =>{

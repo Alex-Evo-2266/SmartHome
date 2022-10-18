@@ -11,7 +11,6 @@ export const TextDialog = ({hide, title, text, active, placeholder})=>{
 
   return(
     <>
-    <div className="backGlass" onClick={hide}></div>
     <div className="dialogCoteiner">
       <div className="dialogHeader">{title}</div>
       <div className="dialogBody">

@@ -10,7 +10,6 @@ export const ConfirmationDialog = ({title, hide, active, items, buttons, activeT
 
   return(
     <>
-    <div className="backGlass" onClick={hide}></div>
     <div className="dialogCoteiner">
       <div className="dialogHeader">{title}</div>
       <div className="dividers"></div>

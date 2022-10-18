@@ -4,7 +4,6 @@ export const AlertDialog = ({hide, text, title, buttons})=>{
 
   return(
     <>
-    <div className="backGlass" onClick={hide}></div>
     <div className="dialogCoteiner">
       <div className="dialogHeader">{title}</div>
       <div className="dialogBody">

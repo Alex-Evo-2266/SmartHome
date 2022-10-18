@@ -1,19 +1,29 @@
-import React,{useState,useEffect,useContext,useCallback,useRef} from 'react'
+import React,{useEffect} from 'react'
+import { useDispatch} from 'react-redux'
+import { setTitle } from '../../store/reducers/menuReducer'
 
-const cardsList = [
-  {
-    title:"base card",
-    data:"base"
-  },
-  {
-    title:"list card",
-    data:"line"
-  },
-]
+// const cardsList = [
+//   {
+//     title:"base card",
+//     data:"base"
+//   },
+//   {
+//     title:"list card",
+//     data:"line"
+//   },
+// ]
 
 export const HomePage = () => {
 
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    dispatch(setTitle("Home"))
+  },[dispatch])
+
   return(
-    null
+    <div>
+
+    </div>
   )
 }

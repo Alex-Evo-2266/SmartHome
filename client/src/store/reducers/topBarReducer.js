@@ -15,6 +15,3 @@ export const TopBarReducer = (state = initState, action) =>{
 			return state
 	}
 }
-
-export const setTitle = (title) => ({type: SET_TITLE, payload:{title}})
-export const setSearch = (fun) => ({type: SET_SEARCH_FUN, payload:{search: fun}})
