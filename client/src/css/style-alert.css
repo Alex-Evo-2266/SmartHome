@@ -1,4 +1,100 @@
-.alert p{
+.alert_wrapper .alert_item.alert_info{
+	background: #cde8f5;
+	color: #4480ae;
+}
+
+.alert_wrapper .alert_item.alert_error{
+	background: #ecc8c5;
+	color: #b32f2d;
+}
+
+.alert_wrapper .alert_item.alert_warning{
+	background: #f8f3d6;
+	color: #967132;
+}
+
+.alert_wrapper .alert_item.alert_success{
+	background: #def2d6;
+	color: #5a7052;
+}
+
+.backdrop{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: var(--color-base);
+	opacity: 0.9;
+	z-index: 2;
+}
+
+.alert_wrapper{
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: map-get(999, alert);
+}
+.alert_wrapper .alert_item{
+	z-index: 3;
+	top: 0;
+	position: fixed;
+	display: flex;
+	padding: 25px 50px;
+	border-radius: 4px;
+	left: 50%;
+	transform: translateX(-50%);
+	min-width: 60%;
+	justify-content: space-between;
+	transition: all 0.2s ease;
+	align-items: center;
+	animation: animateOpen 0.4s linear;
+}
+.alert_wrapper .alert_item .data{
+  margin: 0 25px;
+}
+.alert_wrapper .alert_item .data .title{
+	font-size: 18px;
+	margin-bottom: 5px;
+}
+.alert_wrapper .alert_item .data span{
+	font-weight: 700;
+}
+.alert_wrapper .alert_item .data.sub{
+	font-size: 14px;
+	font-weight: 100;
+}
+.alert_wrapper .alert_item .icon{
+			font-size: 32px;
+		}
+.alert_wrapper .alert_item .close{
+			cursor: pointer;
+		}
+.alert_wrapper .alert_item.closeing{
+			animation: animateClose 0.4s linear;
+}
+
+@keyframes animateOpen{
+	0%{
+		transform: translate(-50%, -100%);
+	}
+	100%{
+		transform: translate(-50%, 0);
+	}
+}
+@keyframes animateClose{
+	0%{
+		transform: translate(-50%, 0);
+	}
+	100%{
+		transform: translate(-50%, -100%);
+	}
+}
+
+
+
+
+/* .alert p{
   margin: 0 30px 0 0;
   padding: 0;
   font-size: 20px;
@@ -45,7 +141,7 @@
   border: 2px solid #751212;
   color: #fff;
 } */
-
+/*
 .alert-ok,
 .alert-success{
   background: rgba(10,255,10,0.8);
@@ -58,7 +154,7 @@
   border: 2px solid var(--head-color);
   color: var(--text-color);
 } */
-
+/*
 .alert-messageDialog input{
   width: 50%;
   background: var(--content-color);
@@ -90,7 +186,7 @@
 }
 .alert.alert-info button,
 .alert.alert-information button{
-  /* font-weight: bold; */
+  /* font-weight: bold; 
   position: absolute;
   right: 10px;
   top:10px;
@@ -119,4 +215,4 @@
 }
 .div-alert-btnConteiner button:hover{
   box-shadow: inset 0 0 10px #000;
-}
+} */

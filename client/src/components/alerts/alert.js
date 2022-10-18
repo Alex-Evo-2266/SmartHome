@@ -36,7 +36,7 @@ export const Alert = () =>{
 			setclousing("")
 		},350)
 	}
-
+console.log(alert)
 	if(!alert.visible)
 		return null;
 

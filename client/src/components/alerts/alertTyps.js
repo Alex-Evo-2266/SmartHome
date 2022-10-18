@@ -1,4 +1,4 @@
-export const INFO = "INFO"
-export const ERROR = "ERROR"
-export const WARNING = "WARNING"
-export const SUCCESS = "SUCCESS"
+export const INFO = "info"
+export const ERROR = "error"
+export const WARNING = "warning"
+export const SUCCESS = "success"
