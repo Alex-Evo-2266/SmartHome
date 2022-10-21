@@ -1,17 +1,22 @@
-# from fastapi import APIRouter, Depends
-# from fastapi.responses import JSONResponse
-# from typing import Optional, List
+from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
+from typing import Optional, List
+from auth_service.config import StyleData, get_style
+from authtorization.models import Session
 
-# from SmartHome.logic.auth import auth
-# from SmartHome.schemas.style import StyleSchemas, StyleDeleteSchemas
-# from SmartHome.depends.auth import token_dep
-# from SmartHome.logic.style import addstyle, getStyles, removeStyle
+from SmartHome.depends.auth import session, token_dep
+from SmartHome.logic.style import addstyle, getStyles, removeStyle
 
-# router = APIRouter(
-#     prefix="/api/style",
-#     tags=["style"],
-#     responses={404: {"description": "Not found"}},
-# )
+router = APIRouter(
+	prefix="/api/style",
+	tags=["style"],
+	responses={404: {"description": "Not found"}},
+)
+
+@router.get("", response_model=StyleData)
+async def add(auth_data: dict = Depends(token_dep), session:Session = Depends(session)):
+	style = await get_style(session)
+	return style
 
 # @router.post("/add")
 # async def add(data: StyleSchemas, auth_data: dict = Depends(token_dep)):

@@ -1,11 +1,10 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { LOGOUT } from '../../store/types'
+import { useAuth } from '../../hooks/auth.hook'
 import { CastomLink } from './castomLink'
 
 
 export const LeftMenu = ({visible, hide, insluedField, otherField})=>{
-	const dispatch = useDispatch()
+	const {logout} = useAuth()
 
 	const close = ()=>{
 		if (typeof(hide) == "function")
@@ -72,7 +71,7 @@ export const LeftMenu = ({visible, hide, insluedField, otherField})=>{
 					<div className="dividers"></div>
 					<ul className="otherMenu">
 						<li>
-		  					<button className="menu-btn" onClick={()=>dispatch({type:LOGOUT})}>
+		  					<button className="menu-btn" onClick={()=>logout()}>
 								<i className="fas fa-sign-out-alt"></i>
 								<span>logout</span>
 		  					</button>

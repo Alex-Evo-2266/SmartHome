@@ -1,5 +1,5 @@
 import {useState, useCallback} from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch} from 'react-redux'
 import { login, logout } from '../store/reducers/authReducer.js'
 
 export const useHttp = () => {
@@ -14,6 +14,7 @@ export const useHttp = () => {
       dispatch(logout())
       throw new Error(data.message||'что-то пошло не так')
     }
+    // await auth.login(data.token, data.userId, data.userLavel)
     dispatch(login(data.token, data.id, data.role, data.expires_at))
     return data.token
   },[dispatch])
@@ -24,6 +25,7 @@ export const useHttp = () => {
       if(headers['Authorization'])
       {
         headers['Authorization-Token'] = headers['Authorization']
+        // headers['Authorization'] = undefined
       }
       if(body&&!file){
         headers['Content-Type'] = 'application/json'

@@ -1,12 +1,15 @@
 from lib2to3.pgen2 import token
 import logging
+from os import access
+from typing import Optional
 from unicodedata import name
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, Depends, Cookie
 from fastapi.responses import JSONResponse
+from SmartHome.depends.auth import session, token_dep
 from authtorization.exceptions import InvalidInputException
 from auth_service.auth_service import get_auth_service_tokens
-from authtorization.models import AuthType, User
-from authtorization.logic import create_session, create_tokens_oauth, create_valid_user_name, get_token, local_login
+from authtorization.models import AuthType, Session, User
+from authtorization.logic import create_session, create_tokens_oauth, create_valid_user_name, get_token, local_login, refresh_token
 
 from settings import AUTH_SERVICE_URL, configManager
 
@@ -34,6 +37,22 @@ async def login(response:Response = Response("ok", 200), data: Login = Login(nam
 		logger.error(str(e))
 		return JSONResponse(status_code=400, content={"message": str(e)})
 
+@router.get("/refresh", response_model=ResponseLogin)
+async def refrash(response:Response = Response("ok", 200), refresh_toket: Optional[str] = Cookie(None)):
+	try:
+		tokens = await refresh_token(refresh_toket)
+		response.set_cookie(key="refresh_toket", value=tokens.refresh, httponly=True)
+		session = await Session.objects.get_or_none(access=tokens.access)
+		user = await User.objects.get_or_none(id=session.id)
+		if not session:
+			raise Exception("create tokens error")
+		return ResponseLogin(token=tokens.access, expires_at=tokens.expires_at, id=user.id, role=user.role)
+	except InvalidInputException as e:
+		return JSONResponse(status_code=403, content={"message": str(e)})
+	except Exception as e:
+		logger.error(str(e))
+		return JSONResponse(status_code=400, content={"message": str(e)})
+
 @router.post("", response_model=ResponseLogin)
 async def login_auth_service(response:Response = Response("ok", 200), data: ServiceLogin = ServiceLogin(code="")):
 	try:
@@ -50,4 +69,15 @@ async def login_auth_service(response:Response = Response("ok", 200), data: Serv
 		return ResponseLogin(token=tokens.access, expires_at=tokens.expires_at, id=user.id, role=user.role)
 	except Exception as e:
 		logger.error(e)
+		return JSONResponse(status_code=400, content={"message": str(e)})
+
+@router.get("/logout")
+async def logout(auth_data: dict = Depends(token_dep), session:Session = Depends(session)):
+	try:
+		await session.delete()
+		return "ok"
+	except InvalidInputException as e:
+		return JSONResponse(status_code=403, content={"message": str(e)})
+	except Exception as e:
+		logger.error(str(e))
 		return JSONResponse(status_code=400, content={"message": str(e)})

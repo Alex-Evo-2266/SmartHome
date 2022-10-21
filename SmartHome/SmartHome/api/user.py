@@ -4,7 +4,7 @@ import json, logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List
-from auth_service.config import get_color
+from auth_service.config import get_style
 from SmartHome.schemas.auth import TokenData
 from authtorization.models import Session
 
@@ -90,9 +90,9 @@ async def newpass(data: UserNameSchema):
 async def getconfig(auth_data: dict = Depends(token_dep), session:Session = Depends(session)):
 	# res = await getConfig(auth_data['user_id'])
 	# if res['status'] == 'error':
-	if not session.access_oauth:
-		return JSONResponse(status_code=400, content={"message": 'not relise'})
-	f = await get_color(session)
+	# if not session.access_oauth:
+	# 	return JSONResponse(status_code=400, content={"message": 'not relise'})
+	# f = await get_color(session)
 	return JSONResponse(status_code=400, content={"message": 'user not found'})
 	# return res["data"]
 

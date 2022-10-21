@@ -12,3 +12,4 @@ class StyleSchemas(BaseModel):
 
 class StyleDeleteSchemas(BaseModel):
     name: str
+

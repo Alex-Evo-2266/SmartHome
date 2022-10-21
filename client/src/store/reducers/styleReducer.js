@@ -20,12 +20,14 @@ const initState = {
 		active: "#1e90ff"
 	},
 	backgrounds:[],
-	specialStyleFlag: false
+	special_topic: false
 }
 
 export const StyleReducer = (state = initState, action) =>{
+	console.log(state)
 	switch (action.type){
 		case SET_STYLE:
+			console.log({...state, ...action.payload})
 			return ({...state, ...action.payload})
 		default:
 			return state

@@ -1,4 +1,4 @@
-import {useCallback, useRef, useEffect} from 'react';
+import {useCallback, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import defFon from '../img/fon-base.jpg'
 import { useHttp } from './http.hook';
@@ -67,7 +67,6 @@ const textColor = (fon)=>{
 }
 
 function setColors(data) {
-  console.log(typeof(data.active))
   document.body.style.setProperty('--color-base',data.color1)
   document.body.style.setProperty('--color-normal',data.color2)
   document.body.style.setProperty('--color-active',data.active)
@@ -111,7 +110,6 @@ export const useStyle = () => {
 
   const style = useSelector(state => state.style)
   const auth = useSelector(state => state.auth)
-  const iterId = useRef()
   const dispatch = useDispatch()
   const {request, error, clearError} = useHttp()
   const {message} = useMessage()
@@ -126,17 +124,20 @@ export const useStyle = () => {
     {
       let data = await request("/api/style", "GET", null, {Authorization: `Bearer ${auth.token}`})
       if (data && data.light_style && data.night_style && data.special_style && data.backgrounds)
-      dispatch(set_style({
-        nightStyle: data.night_style, 
-        lightStyle: data.light_style, 
-        specialStyle: data.special_style, 
-        backgrounds: data.backgrounds
-      }))
-
+      {
+        console.log(data)
+        dispatch(set_style({
+          nightStyle: data.night_style, 
+          lightStyle: data.light_style, 
+          specialStyle: data.special_style, 
+          backgrounds: data.backgrounds,
+          special_topic: data.special_topic
+        }))
+      }
     }
     catch
     {}
-  },[request])
+  },[request, dispatch, auth.token])
 
   // const 
 
@@ -151,7 +152,7 @@ export const useStyle = () => {
     if(!style.active)
       style.active = "#1E90FF";
     setColors(style)
-  },[style])
+  },[])
 
   const setBackground = useCallback((url)=>{
     if(!url)
@@ -164,20 +165,22 @@ export const useStyle = () => {
   const adaptiveBackground = useCallback(()=>{
     if(!style.backgrounds)
       return defbacground()
-    if(style.specialStyleFlag)
-      return setBackground(getimage(style.backgrounds,"special")?.image)
+    if(style.special_topic)
+      return setBackground(getimage(style.backgrounds,"SPECIAL")?.image)
     setBackground(getimage(style.backgrounds,backgroundType())?.image)
-  },[setBackground, style.backgrounds, style.specialStyleFlag])
+  },[setBackground, style])
 
   const avtoNightStyle = useCallback(()=>{
     console.log(style)
     if(!style)
       return defstyle()
-    if(backgroundType() === "night")
+    if(style.special_topic)
+      setStyle(style.specialStyle)
+    else if(backgroundType() === "night")
       setStyle(style.nightStyle)
     else
       setStyle(style.lightStyle)
-  },[setStyle])
+  },[setStyle, style])
 
   return {loadStyle, setStyle, setBackground, adaptiveBackground, avtoNightStyle}
 }

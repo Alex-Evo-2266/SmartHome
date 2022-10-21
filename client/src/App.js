@@ -15,20 +15,17 @@ import './css/style-components.css'
 function App() {
   const data = useSelector(state => state.auth)
   const routes = useRoutes(data.isAuthenticated,data.role);
-  const {loadStyle, avtoNightStyle, setBackground} = useStyle()
-
-  console.log(data)
+  const {loadStyle, avtoNightStyle, adaptiveBackground} = useStyle()
 
   useEffect(()=>{
     if (data.isAuthenticated)
-    {
       loadStyle()
-      setBackground()
-      setTimeout(()=>{
-        avtoNightStyle()
-      },100)
-    }
-  },[loadStyle,setBackground, avtoNightStyle])
+  },[loadStyle])
+
+  useEffect(()=>{
+    adaptiveBackground()
+    avtoNightStyle()
+  },[adaptiveBackground, avtoNightStyle])
 
   
 

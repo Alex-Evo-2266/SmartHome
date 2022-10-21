@@ -1,19 +1,53 @@
 import logging
-from auth_service.castom_requests import castom_auth_service_requests
+from turtle import title
+from typing import List
+from auth_service.castom_requests import ThisLocalSession, castom_auth_service_requests
 from authtorization.models import Session
 import settings
+from pydantic import BaseModel
 import requests
 from authtorization.exceptions import AuthServiceException, InvalidArgumentException, NoDataToConnectException
 
 logger = logging.getLogger(__name__)
 
-async def get_color(session:Session):
-	response = castom_auth_service_requests(session, "/api/color")
-	if response.status_code != 200:
-		logger.warning(response.text)
-		raise AuthServiceException(response.text)
-	print(response.json())
-	return response.json()
+class Colors(BaseModel):
+	title: str
+	color1: str
+	color2: str
+	active: str
+
+class Background(BaseModel):
+	url: str
+	type: str
+	title: str
+
+class StyleData(BaseModel):
+	backgrounds: List[Background]
+	light_style: Colors
+	night_style: Colors
+	special_style: Colors
+	special_topic: bool
+
+def_style_data = StyleData(
+	backgrounds=[],
+	light_style=Colors(title="deflight", color1="#303030", color2="#505050", active="#1e90ff"),
+	night_style=Colors(title="defnight", color1="#303030", color2="#505050", active="#1e90ff"),
+	special_style=Colors(title="defspec", color1="#303030", color2="#505050", active="#1e90ff"),
+	special_topic=False
+)
+
+
+async def get_style(session:Session)->StyleData:
+	try:
+		response = castom_auth_service_requests(session, "/api/users/config")
+		if response.status_code != 200:
+			logger.warning(response.text)
+			raise AuthServiceException(response.text)
+		res = response.json()
+		styles = StyleData(backgrounds=res.get("backgrounds"), light_style=res.get("colors"), night_style=res.get("night_colors"), special_style=res.get("special_colors"), special_topic=res.get("special_topic"))
+		return styles
+	except ThisLocalSession:
+		return def_style_data
 
 # async def get_user_config(session:Session):
 # 	base_config = settings.configManager.getConfig("base")
