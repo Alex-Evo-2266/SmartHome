@@ -4,6 +4,8 @@ const initState = {
 	name: "",
 	email: "",
 	id: null,
+	auth_type: "",
+	image_url: ""
 }
 
 export const UserReducer = (state = initState, action) =>{
@@ -14,3 +16,5 @@ export const UserReducer = (state = initState, action) =>{
 			return state
 	}
 }
+
+export const setUserAction = (payload) => ({type:SET_USER, payload})

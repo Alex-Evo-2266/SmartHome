@@ -11,16 +11,23 @@ import './css/style-auth.css'
 import './icon/css/all.css'
 import './css/style-alert.css'
 import './css/style-components.css'
+import { useUser } from './hooks/user.hook.js'
 
 function App() {
   const data = useSelector(state => state.auth)
   const routes = useRoutes(data.isAuthenticated,data.role);
   const {loadStyle, avtoNightStyle, adaptiveBackground} = useStyle()
+  const {loadData} = useUser()
 
   useEffect(()=>{
     if (data.isAuthenticated)
       loadStyle()
-  },[loadStyle])
+  },[loadStyle, data.isAuthenticated])
+
+  useEffect(()=>{
+    if (data.isAuthenticated)
+      loadData()
+  },[loadData, data.isAuthenticated])
 
   useEffect(()=>{
     adaptiveBackground()

@@ -43,9 +43,9 @@ async def refrash(response:Response = Response("ok", 200), refresh_toket: Option
 		tokens = await refresh_token(refresh_toket)
 		response.set_cookie(key="refresh_toket", value=tokens.refresh, httponly=True)
 		session = await Session.objects.get_or_none(access=tokens.access)
-		user = await User.objects.get_or_none(id=session.id)
 		if not session:
 			raise Exception("create tokens error")
+		user = await User.objects.get_or_none(id=session.id)
 		return ResponseLogin(token=tokens.access, expires_at=tokens.expires_at, id=user.id, role=user.role)
 	except InvalidInputException as e:
 		return JSONResponse(status_code=403, content={"message": str(e)})

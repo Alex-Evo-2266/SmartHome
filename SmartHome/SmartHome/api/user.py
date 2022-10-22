@@ -1,12 +1,14 @@
 from asyncio.log import logger
+import email
 import json, logging
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List
-from auth_service.config import get_style
+from auth_service.castom_requests import ThisLocalSession
+from auth_service.config import get_style, get_user_data
 from SmartHome.schemas.auth import TokenData
-from authtorization.models import Session
+from authtorization.models import AuthType, Session
 
 from SmartHome.logic.user import addUser, setActivePage, getUser, menuConfEdit, userConfEdit, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass, getConfig
 from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, UserEditSchema, UserDeleteSchema, UserEditLevelSchema, UserEditPasswordSchema, UserNameSchema, MenuElementsSchema, UserConfigSchema
@@ -29,9 +31,14 @@ async def add(data: UserForm, auth_data: dict = Depends(token_dep)):
 		return {"message":"ok"}
 	return JSONResponse(status_code=400, content={"message": res['detail']})
 
-@router.get("/get", response_model=UserSchema)   #new
-async def get(auth_data:TokenData = Depends(token_dep)):
+@router.get("", response_model=UserSchema)   #new
+async def get(auth_data:TokenData = Depends(token_dep), session:Session = Depends(session)):
 	try:
+		data = await get_user_data(session)
+		user = await getUser(auth_data.user_id)
+		ret = UserSchema(id=auth_data.user_id, name=user.name, email=data.email, role=user.role, image_url=data.imageURL, auth_type=AuthType.AUTH_SERVICE)
+		return ret
+	except ThisLocalSession:
 		user = await getUser(auth_data.user_id)
 		return user
 	except Exception as e:

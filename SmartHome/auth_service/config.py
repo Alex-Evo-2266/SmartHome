@@ -1,6 +1,6 @@
 import logging
 from turtle import title
-from typing import List
+from typing import List, Optional
 from auth_service.castom_requests import ThisLocalSession, castom_auth_service_requests
 from authtorization.models import Session
 import settings
@@ -48,6 +48,33 @@ async def get_style(session:Session)->StyleData:
 		return styles
 	except ThisLocalSession:
 		return def_style_data
+
+class ResponseUserData(BaseModel):
+	id: int
+	name: str
+	email: str
+	level: int
+	imageURL: Optional[str]
+
+async def get_user_data(session:Session)->ResponseUserData:
+	response = castom_auth_service_requests(session, "/api/users")
+	print(response)
+	if response.status_code != 200:
+		logger.warning(response.text)
+		raise AuthServiceException(response.text)
+	res = response.json()
+	data = ResponseUserData(
+		id = res["id"],
+		name = res["name"],
+		email = res["email"],
+		level = res["level"],
+		imageURL = res["imageURL"]
+	)
+	return data
+
+
+
+
 
 # async def get_user_config(session:Session):
 # 	base_config = settings.configManager.getConfig("base")

@@ -47,7 +47,7 @@ async def getUser(id:int)->UserSchema:
 		name=user.name,
 		email=user.email,
 		role=user.role,
-		image_id=None,
+		image_url=None,
 		auth_type=user.auth_type
 	)
 
