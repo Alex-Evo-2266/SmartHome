@@ -1,0 +1,44 @@
+  .table-box{
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow-y: scroll;
+	background: var(--color-normal);
+	color: var(--text-color-normal-fon);
+	box-shadow: 0 10px 100px #000a;
+  }
+  table{
+	width: 100%;
+  }
+  
+  table, th, td{
+	border: 1px solid var(--color-base-light);
+	border-collapse: collapse;
+	text-align: left;
+  }
+  
+  table tr td, table tr th{
+	  padding: 15px;
+	  font-size: 24px;
+  }
+
+  th{
+	background: var(--color-base-light);
+	color: var(--text-color-base-fon);
+	position: sticky;
+	top: 0;
+  }
+  
+  tr th.__check{
+	width: 60px;
+	text-align: center;
+	background: var(--color-base)
+  }
+  
+  tr td.__check{
+	width: 60px;
+	text-align: center;
+	background: var(--color-base-light);
+	color: var(--text-color-base-fon);
+  }
+  

@@ -15,9 +15,9 @@ export const useUser = ()=>{
 		clearError();
 	},[error, message, clearError])
 
-	const loadData = useCallback(() =>{
+	const loadData = useCallback(async() =>{
 		try{
-			let data = request("/api/user", "GET", null, {Authorization: `Bearer ${auth.token}`})
+			let data = await request("/api/user", "GET", null, {Authorization: `Bearer ${auth.token}`})
 			if (data)
 			{
 				dispatch(setUserAction({
@@ -30,7 +30,7 @@ export const useUser = ()=>{
 			}
 		}
 		catch{}
-	},[request])
+	},[request, dispatch, auth.token])
 
 	return {loadData}
 }

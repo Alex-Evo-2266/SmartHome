@@ -25,9 +25,10 @@ from authtorization.api import router as router_auth
 from SmartHome.api.auth import router as router_id
 from SmartHome.api.user import router as router_user
 from SmartHome.api.style import router as router_style
+from SmartHome.api.menu import router as router_menu
 # from SmartHome.api.device import router as router_device
 # from SmartHome.api.homePage import router as router_homePage
-# from SmartHome.api.server import router as router_server
+from SmartHome.api.server import router as router_server
 # from SmartHome.api.script import router as router_script
 # from SmartHome.api.deviceGroup import router_groups
 # from SmartHome.api.moduls import router_moduls
@@ -97,7 +98,8 @@ async def websocket_endpoint(websocket: WebSocket):
 app.include_router(router_first_start)
 app.include_router(router_auth)
 app.include_router(router_id)
-# app.include_router(router_server)
+app.include_router(router_menu)
+app.include_router(router_server)
 # app.include_router(router_device)
 # app.include_router(router_script)
 app.include_router(router_style)

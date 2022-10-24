@@ -2,6 +2,7 @@ import React from 'react'
 import {Switch,Route,Redirect} from 'react-router-dom'
 import {HomePage} from './Page/HomePage/HomePage'
 import {AuthPage} from './Page/AuthPage/AuthPage'
+import { SettingsPage } from './Page/Settings/SettingsPage'
 // import {DitailDevicePage} from './Page/DitailDevicePage'
 // import {DevicesPage} from './Page/DevicesPage'
 // import {ProfilePage} from './Page/ProfilePage'
@@ -30,6 +31,9 @@ export const useRoutes = (isAuthenticated,role)=>{
       <Switch>
         <Route path="/home" exact>
           <HomePage/>
+        </Route>
+        <Route path="/settings">
+          <SettingsPage/>
         </Route>
         {/* <Route path="/devices" exact>
           <DevicesPage/>

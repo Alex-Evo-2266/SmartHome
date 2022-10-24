@@ -10,7 +10,7 @@ const initState = () => {
 	return{
 		token: data?.token || '',
 		id: data?.id || null,
-		level: data?.role || "base",
+		role: data?.role || "base",
 		isAuthenticated: !!data.token,
 		expires_at: (data?.expires_at)?new Date(data?.expires_at):new Date(),
 	}

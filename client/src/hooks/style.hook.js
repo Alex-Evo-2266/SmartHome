@@ -74,9 +74,9 @@ function setColors(data) {
   document.body.style.setProperty('--color-ok',"green")
 
 
-  document.body.style.setProperty('--btn-color-base',LightenDarkenColor(data.color1,25))
-  document.body.style.setProperty('--btn-color-normal',LightenDarkenColor(data.color2,25))
-  document.body.style.setProperty('--btn-color-active',LightenDarkenColor(data.active,25))
+  document.body.style.setProperty('--color-base-light',LightenDarkenColor(data.color1,25))
+  document.body.style.setProperty('--color-normal-light',LightenDarkenColor(data.color2,25))
+  document.body.style.setProperty('--color-active-light',LightenDarkenColor(data.active,25))
 
 // "#5e6367"
   document.body.style.setProperty('--text-color-base-fon',textColor(data.color1))

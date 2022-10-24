@@ -97,6 +97,8 @@ async def refresh_token(token: str)->Tokens:
 		logger.debug(f"outdated jwt")
 		raise ExpiredSignatureError("outdated jwt")
 	u = await User.objects.get_or_none(id=data["user_id"])
+	if not u:
+		raise UserNotFoundException()
 	old_token = await Session.objects.get_or_none(refresh=token)
 	encoded_jwt = None
 	if (not old_token):
@@ -105,7 +107,7 @@ async def refresh_token(token: str)->Tokens:
 			raise InvalidInputException("not found token")
 		encoded_jwt = Tokens(expires_at=old_token2.expires_at, access=old_token2.new_access, refresh=old_token2.new_refresh)
 	else:
-		encoded_jwt = await create_tokens(u.id)
+		encoded_jwt = await create_tokens(u)
 		OldTokens.add(old_token.refresh, old_token.access, encoded_jwt.refresh, encoded_jwt.access, encoded_jwt.expires_at)
 		loop = asyncio.get_running_loop()
 		loop.create_task(OldTokens.delete_delay(old_token.refresh, 10))

@@ -42,20 +42,6 @@ class ImageBackgroundSchema(BaseModel):
     title: str
     image: str
 
-class MenuElementsSchema(BaseModel):
-    id: Optional[int]
-    title:str
-    iconClass:str
-    url:str
-
-class UserConfigSchema(BaseModel):
-    Style: str
-    auteStyle: bool
-    staticBackground: bool
-    images: Optional[List[ImageBackgroundSchema]]
-    page: str
-    MenuElements: Optional[List[MenuElementsSchema]]
-
 class EditUserConfigSchema(BaseModel):
     style: str
     auteStyle: bool

@@ -29,7 +29,7 @@ async def login(response:Response = Response("ok", 200), data: Login = Login(nam
 		user = await local_login(data)
 		session = await create_session(user)
 		tokens = await get_token(session)
-		response.set_cookie(key="refresh_toket", value=tokens.refresh, httponly=True)
+		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
 		return ResponseLogin(token=tokens.access, expires_at=tokens.expires_at, id=user.id, role=user.role)
 	except InvalidInputException as e:
 		return JSONResponse(status_code=403, content={"message": str(e)})
@@ -38,14 +38,20 @@ async def login(response:Response = Response("ok", 200), data: Login = Login(nam
 		return JSONResponse(status_code=400, content={"message": str(e)})
 
 @router.get("/refresh", response_model=ResponseLogin)
-async def refrash(response:Response = Response("ok", 200), refresh_toket: Optional[str] = Cookie(None)):
+async def refrash(response:Response = Response("ok", 200), smart_home: Optional[str] = Cookie(None)):
 	try:
-		tokens = await refresh_token(refresh_toket)
-		response.set_cookie(key="refresh_toket", value=tokens.refresh, httponly=True)
+		print("p00")
+		tokens = await refresh_token(smart_home)
+		print("p2")
+		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
+		print("p3")
 		session = await Session.objects.get_or_none(access=tokens.access)
+		print("p4")
 		if not session:
 			raise Exception("create tokens error")
-		user = await User.objects.get_or_none(id=session.id)
+		print("p4")
+		user = await User.objects.get_or_none(id=session.user.id)
+		print("p5")
 		return ResponseLogin(token=tokens.access, expires_at=tokens.expires_at, id=user.id, role=user.role)
 	except InvalidInputException as e:
 		return JSONResponse(status_code=403, content={"message": str(e)})
@@ -65,7 +71,7 @@ async def login_auth_service(response:Response = Response("ok", 200), data: Serv
 				user_name = await create_valid_user_name(body.user_name)
 			user = await User.objects.create(name=user_name, auth_service_name = body.user_name, auth_type=AuthType.AUTH_SERVICE)
 		tokens = await create_tokens_oauth(user, body.access_token, body.refresh_token)
-		response.set_cookie(key="refresh_toket", value=tokens.refresh, httponly=True)
+		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
 		return ResponseLogin(token=tokens.access, expires_at=tokens.expires_at, id=user.id, role=user.role)
 	except Exception as e:
 		logger.error(e)

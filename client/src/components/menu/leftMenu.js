@@ -33,7 +33,7 @@ export const LeftMenu = ({visible, hide, insluedField, otherField})=>{
 					</CastomLink>
 				</li>
 				<li>
-					<CastomLink to = "/config">
+					<CastomLink to = "/settings">
 						<i className="fas fa-cogs"></i>
 						<span>Options</span>
 					</CastomLink>
@@ -41,8 +41,8 @@ export const LeftMenu = ({visible, hide, insluedField, otherField})=>{
 				{
 					(insluedField)?
 					insluedField.map((item,index)=>(
-						<li>
-							<CastomLink to={item.url} key={index}>
+						<li key={index}>
+							<CastomLink to={item.url}>
 								<i className={item.iconClass}></i>
 								<span>{item.title}</span>
 							</CastomLink>
@@ -59,8 +59,8 @@ export const LeftMenu = ({visible, hide, insluedField, otherField})=>{
 				{
 					(otherField)?
 					otherField.map((item,index)=>(
-						<li>
-							<CastomLink to={item.url} key={index}>
+						<li key={index}>
+							<CastomLink to={item.url}>
 								<i className={item.iconClass}></i>
 								<span>{item.title}</span>
 							</CastomLink>

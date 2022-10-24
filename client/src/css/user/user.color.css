@@ -1,10 +1,10 @@
-
+/* 
 .pagecontent label.textLabel{
   border: 1px solid var(--color-base);
   background: var(--color-normal);
   color: var(--text-color-normal-fon);
   /* padding-bottom: 8px; */
-}
+/* }
 .pagecontent label p{
   border: none;
   background: #0000;
@@ -26,4 +26,4 @@
 .pagecontent button:hover{
   background: var(--btn-color-active);
   color: var(--text-color-active-fon);
-}
+} */ 

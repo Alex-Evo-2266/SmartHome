@@ -13,7 +13,7 @@ from SmartHome.exceptions import UserAlreadyExistsException
 from .images.fon import getBackgroundUser
 
 import settings
-from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, MenuElementsSchema, UserEditSchema, UserConfigSchema
+from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, UserEditSchema
 from SmartHome.models import User, MenuElement
 from SmartHome.logic.homePage import lookForPage
 from SmartHome.logic.email import send_email
@@ -124,72 +124,28 @@ async def newGenPass(name: str):
 	await user.update(_columns=["password"])
 	logger.debug(f'gen new password. id:{id}')
 
-async def getMenuUser(id: int)->List[MenuElementsSchema]:
-	user = await User.objects.get_or_none(id=id)
-	if not user:
-		logger.error(f"none user")
-		raise UserNotFoundException()
-	menu = await MenuElement.objects.all(user=user)
-	Menulist = list()
-	for item in menu:
-		Menulist.append(MenuElementsSchema(
-			id=item.id,
-			title=item.title,
-			url=item.url,
-			iconClass=item.iconClass
-		))
-	return Menulist
+# async def setActivePage(name:str, id: int):
+# 	user = await User.objects.get_or_none(id=id)
+# 	if not user:
+# 		logger.error(f"none user")
+# 		return {"status":"error", "detail": f"none user"}
+# 	res = lookForPage(name + ".yml")
+# 	if res.status != "ok":
+# 		logger.error(f"none page")
+# 		return {"status":"error", "detail": f"none page"}
+# 	user.page = name
+# 	await user.update(_columns=["page"])
+# 	return {"status":"ok"}
 
-async def getConfig(id: int):
-	user = await User.objects.get_or_none(id=id)
-	if not user:
-		logger.error(f"none user")
-		raise UserNotFoundException()
-	res = UserConfigSchema(
-		Style=user.Style,
-		auteStyle=user.auteStyle,
-		staticBackground=user.staticBackground,
-		page=user.page,
-		images= await getBackgroundUser(id),
-		MenuElements= await getMenuUser(id)
-	)
-	return res
-
-async def setActivePage(name:str, id: int):
-	user = await User.objects.get_or_none(id=id)
-	if not user:
-		logger.error(f"none user")
-		return {"status":"error", "detail": f"none user"}
-	res = lookForPage(name + ".yml")
-	if res.status != "ok":
-		logger.error(f"none page")
-		return {"status":"error", "detail": f"none page"}
-	user.page = name
-	await user.update(_columns=["page"])
-	return {"status":"ok"}
-
-async def userConfEdit(id: int, data: EditUserConfigSchema):
-	logger.debug(f"userConfEdit input. id:{id}, data:{data.dict()}")
-	user = await User.objects.get_or_none(id=id)
-	if not user:
-		logger.error(f"user does not exist. id:{id}. detail: {e}")
-		return {"status":"error"}
-	user.Style = data.style
-	user.auteStyle = data.auteStyle
-	user.staticBackground = data.staticBackground
-	await user.update(_columns=["Style", "auteStyle", "staticBackground"])
-	logger.debug(f"user edit config. id:{id}")
-	return {"status":"ok"}
-
-async def menuConfEdit(id: int, data: List[MenuElementsSchema]):
-	logger.debug(f"menuConfEdit input. id:{id}, data:{data}")
-	user = await User.objects.get_or_none(id=id)
-	if not user:
-		logger.error(f"user does not exist. id:{id}. detail: {e}")
-		return {"status":'error'}
-	await MenuElement.objects.delete(user=user)
-	for item in data:
-		element = await MenuElement.objects.create(title = item.title,iconClass=item.iconClass,url=item.url)
-		await user.menuelements.add(element)
-	logger.debug(f"user edit menu. id:{id}")
-	return {"status":'ok'}
+# async def userConfEdit(id: int, data: EditUserConfigSchema):
+# 	logger.debug(f"userConfEdit input. id:{id}, data:{data.dict()}")
+# 	user = await User.objects.get_or_none(id=id)
+# 	if not user:
+# 		logger.error(f"user does not exist. id:{id}. detail: {e}")
+# 		return {"status":"error"}
+# 	user.Style = data.style
+# 	user.auteStyle = data.auteStyle
+# 	user.staticBackground = data.staticBackground
+# 	await user.update(_columns=["Style", "auteStyle", "staticBackground"])
+# 	logger.debug(f"user edit config. id:{id}")
+# 	return {"status":"ok"}

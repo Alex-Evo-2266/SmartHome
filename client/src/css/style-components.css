@@ -41,6 +41,7 @@
 @import "./styleLoader.css";
 @import "./style-reg.css";
 @import "./style-indicator.css";
+@import "./table.css";
 
 @import "./terminal.css";
 @import "./home.css";

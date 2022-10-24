@@ -13,16 +13,6 @@ class MenuElement(ormar.Model):
     url:str = ormar.String(max_length=200)
     user: Optional[User] = ormar.ForeignKey(User, related_name="menu_elements")
 
-# class ImageBackground(ormar.Model):
-#     class Meta(BaseMeta):
-#         pass
-
-#     id: int = ormar.Integer(primary_key=True)
-#     type: str = ormar.String(max_length=200, default="base")
-#     title: str = ormar.String(max_length=200)
-#     image: str = ormar.String(max_length=1000)
-#     user: Optional[User] = ormar.ForeignKey(User, related_name="background")
-
 class DeviceHistory(ormar.Model):
     class Meta(BaseMeta):
         pass

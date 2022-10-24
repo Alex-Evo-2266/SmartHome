@@ -14,6 +14,7 @@ export const Menu = () =>{
 	const [otherField, setOtherField] = useState([])
 
 	const sortMenuField = useCallback(()=>{
+		console.log(menu)
 		let arr1 = menu?.fields?.slice()
 		let arr2 = []
 		for (let item of menu.insluedField)

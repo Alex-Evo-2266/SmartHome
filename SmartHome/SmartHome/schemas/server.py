@@ -12,7 +12,6 @@ class ServerModuleConfigSchema(BaseModel):
     fields: List[ServerModuleConfigFieldSchema]
 
 class ServerConfigSchema(BaseModel):
-    pages: List = []
     moduleConfig: Optional[Dict[str, Dict[str, str]]] = dict()
 
 class ServerDataSchema(BaseModel):
