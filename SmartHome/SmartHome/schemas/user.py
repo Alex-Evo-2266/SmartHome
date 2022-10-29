@@ -16,6 +16,7 @@ class UserSchema(BaseModel):
     role: UserLevel = UserLevel.BASE
     image_url: Optional[str]
     auth_type: AuthType
+    host: Optional[str]
 
 class UserEditSchema(BaseModel):
     name: str

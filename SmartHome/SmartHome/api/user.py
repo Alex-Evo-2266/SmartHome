@@ -36,7 +36,7 @@ async def get(auth_data:TokenData = Depends(token_dep), session:Session = Depend
 	try:
 		data = await get_user_data(session)
 		user = await getUser(auth_data.user_id)
-		ret = UserSchema(id=auth_data.user_id, name=user.name, email=data.email, role=user.role, image_url=data.imageURL, auth_type=AuthType.AUTH_SERVICE)
+		ret = UserSchema(id=auth_data.user_id, name=user.name,host=data.host, email=data.email, role=user.role, image_url=data.imageURL, auth_type=AuthType.AUTH_SERVICE)
 		return ret
 	except ThisLocalSession:
 		user = await getUser(auth_data.user_id)

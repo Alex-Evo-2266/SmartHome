@@ -5,9 +5,9 @@ const initState = {
 	email: "",
 	id: null,
 	auth_type: "",
-	image_url: ""
+	image_url: "",
+	host: ""
 }
-
 export const UserReducer = (state = initState, action) =>{
 	switch (action.type){
 		case SET_USER:

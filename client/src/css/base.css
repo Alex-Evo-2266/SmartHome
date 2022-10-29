@@ -57,6 +57,12 @@
 .conteiner{
     margin-top: var(--height-menu);
     margin-left: var(--width-menu);
+    min-height: calc(100vh - var(--height-menu));
+}
+
+.glass-normal{
+    background: var(--color-glass);
+    color: var(--text-color-normal-fon);
 }
 
 .normal-color{

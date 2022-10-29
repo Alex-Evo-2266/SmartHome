@@ -1,7 +1,7 @@
 import logging
 from turtle import title
 from typing import List, Optional
-from auth_service.castom_requests import ThisLocalSession, castom_auth_service_requests
+from auth_service.castom_requests import ThisLocalSession, castom_auth_service_requests, get_connect_data
 from authtorization.models import Session
 import settings
 from pydantic import BaseModel
@@ -20,6 +20,7 @@ class Background(BaseModel):
 	url: str
 	type: str
 	title: str
+	host: Optional[str]
 
 class StyleData(BaseModel):
 	backgrounds: List[Background]
@@ -39,12 +40,17 @@ def_style_data = StyleData(
 
 async def get_style(session:Session)->StyleData:
 	try:
-		response = castom_auth_service_requests(session, "/api/users/config")
+		response = await castom_auth_service_requests(session, "/api/users/config")
 		if response.status_code != 200:
 			logger.warning(response.text)
 			raise AuthServiceException(response.text)
 		res = response.json()
-		styles = StyleData(backgrounds=res.get("backgrounds"), light_style=res.get("colors"), night_style=res.get("night_colors"), special_style=res.get("special_colors"), special_topic=res.get("special_topic"))
+		images = res.get("backgrounds")
+		connect_data = get_connect_data()
+		if images:
+			for item in images:
+				item["host"] = connect_data.host
+		styles = StyleData(backgrounds=images, light_style=res.get("colors"), night_style=res.get("night_colors"), special_style=res.get("special_colors"), special_topic=res.get("special_topic"))
 		return styles
 	except ThisLocalSession:
 		return def_style_data
@@ -55,20 +61,23 @@ class ResponseUserData(BaseModel):
 	email: str
 	level: int
 	imageURL: Optional[str]
+	host: Optional[str]
 
 async def get_user_data(session:Session)->ResponseUserData:
-	response = castom_auth_service_requests(session, "/api/users")
+	response = await castom_auth_service_requests(session, "/api/users")
 	print(response)
 	if response.status_code != 200:
 		logger.warning(response.text)
 		raise AuthServiceException(response.text)
 	res = response.json()
+	connect_data = get_connect_data()
 	data = ResponseUserData(
 		id = res["id"],
 		name = res["name"],
 		email = res["email"],
 		level = res["level"],
-		imageURL = res["imageURL"]
+		imageURL = connect_data.host + res["imageURL"],
+		host = connect_data.host
 	)
 	return data
 

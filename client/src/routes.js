@@ -3,6 +3,7 @@ import {Switch,Route,Redirect} from 'react-router-dom'
 import {HomePage} from './Page/HomePage/HomePage'
 import {AuthPage} from './Page/AuthPage/AuthPage'
 import { SettingsPage } from './Page/Settings/SettingsPage'
+import { ProfilePage } from './Page/ProfilePage/ProfilePage'
 // import {DitailDevicePage} from './Page/DitailDevicePage'
 // import {DevicesPage} from './Page/DevicesPage'
 // import {ProfilePage} from './Page/ProfilePage'
@@ -32,8 +33,11 @@ export const useRoutes = (isAuthenticated,role)=>{
         <Route path="/home" exact>
           <HomePage/>
         </Route>
-        <Route path="/settings">
+        <Route path="/settings" exact>
           <SettingsPage/>
+        </Route>
+        <Route path="/profile" exact>
+          <ProfilePage/>
         </Route>
         {/* <Route path="/devices" exact>
           <DevicesPage/>

@@ -40,13 +40,23 @@ const defstyle = ()=>{
 
 const getimage = (images, name)=>{
   try {
+    console.log (images, name)
     for (var item of images) {
       if(name === item.type)
         return item
     }
-  } catch{
+  } catch(e){
+    console.error (e)
     return
   }
+}
+
+const geturl = (images, name)=>{
+  let image = getimage(images, name)
+  console.log(image)
+  if(image?.host)
+    return image?.host + image?.url
+  return image?.url
 }
 
 const textColor = (fon)=>{
@@ -155,6 +165,7 @@ export const useStyle = () => {
   },[])
 
   const setBackground = useCallback((url)=>{
+    console.log(url)
     if(!url)
       return defbacground()
     document.body.style = `background: url(${url});
@@ -163,11 +174,12 @@ export const useStyle = () => {
   },[])
 
   const adaptiveBackground = useCallback(()=>{
+    console.log(style)
     if(!style.backgrounds)
       return defbacground()
     if(style.special_topic)
-      return setBackground(getimage(style.backgrounds,"SPECIAL")?.image)
-    setBackground(getimage(style.backgrounds,backgroundType())?.image)
+      return setBackground(geturl(style.backgrounds,"BASE"))
+    setBackground(geturl(style.backgrounds,backgroundType()))
   },[setBackground, style])
 
   const avtoNightStyle = useCallback(()=>{

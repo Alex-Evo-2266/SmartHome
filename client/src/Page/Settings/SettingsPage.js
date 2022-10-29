@@ -37,7 +37,7 @@ export const SettingsPage = () => {
 
 	if(page === "menu")
 		return(
-			<div className='container'>
+			<div className='conteiner'>
 				<SettingsMenuPage/>
 			</div>
 	  	)
