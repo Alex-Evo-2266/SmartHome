@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import {NavLink} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTitle } from '../../store/reducers/menuReducer'
+import userDefault from '../../img/userNuN.png'
 
 export const ProfilePage = () => {
   const auth = useSelector(state=>state.auth)
@@ -12,15 +13,18 @@ export const ProfilePage = () => {
 	dispatch(setTitle("Profile"))
   },[dispatch])
 
-  console.log(user)
 
   return(
-	<div className = {`conteiner glass-normal`}>
+	<div className = {`container glass-normal`}>
 			<i className="fas fa-sign-out-alt logout-btn" onClick={auth.logout}></i>
 			<div className = "pagecontent">
 				<h2>Profile</h2>
 				<div className='img-container'>
-					<img alt="profile_img" src={user.image_url}/>
+					{
+						(user.image_url)?
+						<img alt="profile_img" src={user.image_url}/>:
+						<img alt="profile_img" src={userDefault}/>
+					}
 				</div>
 				<p>User Name: {user.name}</p>
 				<p>User Email: {user.email||"NuN"}</p>
@@ -32,7 +36,7 @@ export const ProfilePage = () => {
 					(user.auth_type === "login")?
 					<>
 						<NavLink to = "/profile/edit" className="btn">Edit profile</NavLink>
-						<NavLink to = "/profile/editPass" className="btn">Edit password</NavLink>
+						<NavLink to = "/profile/edit/password" className="btn">Edit password</NavLink>
 					</>:
 					<>
 						<a href= {`${user.host}/profile/edit`} className="btn">Edit profile</a>

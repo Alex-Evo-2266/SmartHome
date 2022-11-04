@@ -9,7 +9,7 @@ from authtorization.exceptions import UserNotFoundException
 from authtorization.models import AuthType
 from authtorization.schema import UserLevel
 
-from SmartHome.exceptions import UserAlreadyExistsException
+from SmartHome.exceptions import InvalidInputException, UserAlreadyExistsException
 from .images.fon import getBackgroundUser
 
 import settings
@@ -97,7 +97,7 @@ async def editLevel(id: int, role: UserLevel):
 	await user.update(_columns=["role"])
 	logger.debug(f'edit level user {id}')
 
-async def editPass(id: int, oldpass: str, newpass: str):
+async def editPass(id: int, oldpass: str, newpass: str)->None:
 	u = await User.objects.get_or_none(id=id)
 	if not u:
 		logger.error(f"user does not exist. id:{id}")
@@ -106,6 +106,9 @@ async def editPass(id: int, oldpass: str, newpass: str):
 		hashedPass = bcrypt.hashpw(newpass.encode('utf-8'),bcrypt.gensalt())
 		u.password = hashedPass
 		await u.update(_columns=["password"])
+		await send_email("password", u.email,"password changed")
+	else:
+		raise InvalidInputException("invalid input data")
 	logger.debug(f"user edit pass id:{id}")
 
 async def newGenPass(name: str):

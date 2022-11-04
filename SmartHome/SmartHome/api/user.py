@@ -22,14 +22,14 @@ router = APIRouter(
 	responses={404: {"description": "Not found"}},
 )
 
-@router.post("/add")
-async def add(data: UserForm, auth_data: TokenData = Depends(token_dep)):
-	if auth_data['user_level'] != 3:
-		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
-	res = await addUser(data)
-	if res['status'] == 'ok':
-		return {"message":"ok"}
-	return JSONResponse(status_code=400, content={"message": res['detail']})
+# @router.post("")
+# async def add(data: UserForm, auth_data: TokenData = Depends(token_dep)):
+# 	if auth_data['user_level'] != 3:
+# 		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
+# 	res = await addUser(data)
+# 	if res['status'] == 'ok':
+# 		return {"message":"ok"}
+# 	return JSONResponse(status_code=400, content={"message": res['detail']})
 
 @router.get("", response_model=UserSchema)   #new
 async def get(auth_data:TokenData = Depends(token_dep), session:Session = Depends(session)):
@@ -46,52 +46,56 @@ async def get(auth_data:TokenData = Depends(token_dep), session:Session = Depend
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.put("")
-async def edit(data: UserEditSchema, auth_data: dict = Depends(token_dep)):
-	res = await editUser(auth_data['user_id'], data)
-	if res['status'] == 'error':
-		return JSONResponse(status_code=400, content={"message": 'user not found'})
-	return "ok"
+async def edit(data: UserEditSchema, auth_data: TokenData = Depends(token_dep)):
+	try:
+		await editUser(auth_data.user_id, data)
+		return "ok"
+	except Exception as e:
+		logger.warning(e)
+		return JSONResponse(status_code=400, content=str(e)) 
 
-@router.delete("")
-async def delete(data: UserDeleteSchema, auth_data: dict = Depends(token_dep)):
-	if auth_data['user_level'] != 3:
-		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
-	if (auth_data['user_id'] == data.UserId):
-		return JSONResponse(status_code=400, content={"message": "you can not delete yourself"})
-	res = await deleteUser(data.UserId)
-	if res['status'] == 'error':
-		return JSONResponse(status_code=400, content={"message": 'user not found'})
-	return "ok"
+# @router.delete("")
+# async def delete(data: UserDeleteSchema, auth_data: TokenData = Depends(token_dep)):
+# 	if auth_data['user_level'] != 3:
+# 		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
+# 	if (auth_data['user_id'] == data.UserId):
+# 		return JSONResponse(status_code=400, content={"message": "you can not delete yourself"})
+# 	res = await deleteUser(data.UserId)
+# 	if res['status'] == 'error':
+# 		return JSONResponse(status_code=400, content={"message": 'user not found'})
+# 	return "ok"
 
-@router.get("/all", response_model=List[UserSchema])
-async def all(auth_data: dict = Depends(token_dep)):
-	res = await getUsers()
-	if res['status'] == 'error':
-		return JSONResponse(status_code=400, content={"message": 'user not found'})
-	return res['data']
+# @router.get("/all", response_model=List[UserSchema])
+# async def all(auth_data: TokenData = Depends(token_dep)):
+# 	res = await getUsers()
+# 	if res['status'] == 'error':
+# 		return JSONResponse(status_code=400, content={"message": 'user not found'})
+# 	return res['data']
 
-@router.post("/level/edit")
-async def level(data: UserEditLevelSchema, auth_data: dict = Depends(token_dep)):
-	if auth_data['user_level'] != 3:
-		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
-	res = await editLevel(data.id, data.level)
-	if res['status'] == 'error':
-		return JSONResponse(status_code=400, content={"message": 'user not found'})
-	return "ok"
+# @router.post("/level/edit")
+# async def level(data: UserEditLevelSchema, auth_data: TokenData = Depends(token_dep)):
+# 	if auth_data['user_level'] != 3:
+# 		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
+# 	res = await editLevel(data.id, data.level)
+# 	if res['status'] == 'error':
+# 		return JSONResponse(status_code=400, content={"message": 'user not found'})
+# 	return "ok"
 
-@router.post("/password/edit")
-async def editpass(data: UserEditPasswordSchema, auth_data: dict = Depends(token_dep)):
-	res = await editPass(auth_data['user_id'], data.Old, data.New)
-	if res['status'] == 'error':
-		return JSONResponse(status_code=400, content={"message": 'user not found'})
-	return "ok"
+@router.put("/password")
+async def edit_password(data: UserEditPasswordSchema, auth_data: TokenData = Depends(token_dep)):
+	try:
+		await editPass(auth_data.user_id, data.old_password, data.new_password)
+		return "ok"
+	except Exception as e:
+		logger.warning(e)
+		return JSONResponse(status_code=400, content=str(e)) 
 
-@router.post("/password/new")
-async def newpass(data: UserNameSchema):
-	res = await newGenPass(data.name)
-	if res['status'] == 'error':
-		return JSONResponse(status_code=400, content={"message": 'user not found'})
-	return "ok"
+# @router.post("/password/new")
+# async def newpass(data: UserNameSchema):
+# 	res = await newGenPass(data.name)
+# 	if res['status'] == 'error':
+# 		return JSONResponse(status_code=400, content={"message": 'user not found'})
+# 	return "ok"
 
 # @router.get("/config", response_model=UserConfigSchema)
 # async def getconfig(auth_data: dict = Depends(token_dep), session:Session = Depends(session)):
@@ -103,12 +107,6 @@ async def newpass(data: UserNameSchema):
 # 	return JSONResponse(status_code=400, content={"message": 'user not found'})
 # 	# return res["data"]
 
-@router.post("/config/edit")
-async def editconfig(data: EditUserConfigSchema, auth_data: dict = Depends(token_dep)):
-	# res = await userConfEdit(auth_data['user_id'], data)
-	# if res['status'] == 'error':
-		# return JSONResponse(status_code=400, content={"message": 'user not found'})
-	return "ok"
 
 # @router.post("/menu/edit")
 # async def editconfig(data: List[MenuElementsSchema], auth_data: dict = Depends(token_dep)):

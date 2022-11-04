@@ -21,7 +21,6 @@ class UserSchema(BaseModel):
 class UserEditSchema(BaseModel):
     name: str
     email: Optional[str]
-    image_id: Optional[int]
 
 class UserDeleteSchema(BaseModel):
     id: int
@@ -34,8 +33,8 @@ class UserEditLevelSchema(BaseModel):
     role: UserLevel = UserLevel.BASE
 
 class UserEditPasswordSchema(BaseModel):
-    Old: str
-    New: str
+    old_password: str
+    new_password: str
 
 class ImageBackgroundSchema(BaseModel):
     id: int

@@ -33,11 +33,14 @@ export const SettingsPage = () => {
 
   useEffect(()=>{
 	setTimeout(() => dispatch(setTabs(getTabs())), 0);
+	return ()=>{
+		setTimeout(() => dispatch(setTabs([])), 0);
+	}
   },[dispatch, getTabs])
 
 	if(page === "menu")
 		return(
-			<div className='conteiner'>
+			<div className='container'>
 				<SettingsMenuPage/>
 			</div>
 	  	)

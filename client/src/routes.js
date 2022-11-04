@@ -4,6 +4,8 @@ import {HomePage} from './Page/HomePage/HomePage'
 import {AuthPage} from './Page/AuthPage/AuthPage'
 import { SettingsPage } from './Page/Settings/SettingsPage'
 import { ProfilePage } from './Page/ProfilePage/ProfilePage'
+import { EditProfilePage } from './Page/ProfilePage/EditProfile'
+import { EditPasswordPage } from './Page/ProfilePage/EditPassword'
 // import {DitailDevicePage} from './Page/DitailDevicePage'
 // import {DevicesPage} from './Page/DevicesPage'
 // import {ProfilePage} from './Page/ProfilePage'
@@ -38,6 +40,12 @@ export const useRoutes = (isAuthenticated,role)=>{
         </Route>
         <Route path="/profile" exact>
           <ProfilePage/>
+        </Route>
+        <Route path="/profile/edit" exact>
+          <EditProfilePage/>
+        </Route>
+        <Route path="/profile/edit/password" exact>
+          <EditPasswordPage/>
         </Route>
         {/* <Route path="/devices" exact>
           <DevicesPage/>

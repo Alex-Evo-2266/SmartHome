@@ -25,7 +25,6 @@ async def get_menu_list()->List[MenuElementsSchema]:
 			url=item["url"],
 			iconClass=item["iconClass"]
 		))
-	print(menu_list, arr)
 	return arr
 
 async def get_added_menu_element(user_id: int)->List[MenuElementsSchema]:
@@ -34,7 +33,6 @@ async def get_added_menu_element(user_id: int)->List[MenuElementsSchema]:
 		logger.error(f"none user")
 		raise UserNotFoundException()
 	menu = await MenuElement.objects.all(user=user)
-	print(menu)
 	if menu == None:
 		logger.error(f"menu not found")
 		raise ModelElementNotFound()

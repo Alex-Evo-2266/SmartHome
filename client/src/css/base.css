@@ -54,15 +54,34 @@
     background-color: var(--text-color-base-fon);
 }
 
-.conteiner{
+.container{
     margin-top: var(--height-menu);
     margin-left: var(--width-menu);
     min-height: calc(100vh - var(--height-menu));
 }
 
 .glass-normal{
-    background: var(--color-glass);
+    background: var(--color-glass-normal);
     color: var(--text-color-normal-fon);
+    transition: 0.5s;
+}
+
+.glass-base{
+    background: var(--color-glass-base);
+    color: var(--text-color-normal-fon);
+    transition: 0.5s;
+}
+
+.glass-normal-dark{
+    background: var(--color-glass-normal-dark);
+    color: var(--text-color-normal-fon);
+    transition: 0.5s;
+}
+
+.glass-base-dark{
+    background: var(--color-glass-base-dark);
+    color: var(--text-color-normal-fon);
+    transition: 0.5s;
 }
 
 .normal-color{

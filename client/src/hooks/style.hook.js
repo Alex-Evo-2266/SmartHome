@@ -94,7 +94,13 @@ function setColors(data) {
   document.body.style.setProperty('--text-color-active-fon',"#fff")
 
 
-  document.body.style.setProperty('--color-glass',data.color2 + "90")
+  document.body.style.setProperty('--color-glass-normal',data.color2 + "90")
+  document.body.style.setProperty('--color-glass-base',data.color1 + "90")
+  document.body.style.setProperty('--color-glass-active',data.active + "90")
+
+  document.body.style.setProperty('--color-glass-normal-dark',data.color2 + "d0")
+  document.body.style.setProperty('--color-glass-base-dark',data.color1 + "d0")
+  document.body.style.setProperty('--color-glass-active-dark',data.active + "d0")
 }
 
 const backgroundType = function () {

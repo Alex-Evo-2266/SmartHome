@@ -4,8 +4,8 @@ base:
   frequency: '3'
   host: http://localhost:2000
 email:
-  login: ''
-  password: ''
+  login: smarthome2244@mail.ru
+  password: UwJGndgX265myMTyHybJ
 mqttBroker:
   host: localhost
   password: admin

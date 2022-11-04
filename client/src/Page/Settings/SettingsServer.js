@@ -101,7 +101,7 @@ export const SettingsServerPage = () => {
 	},[config])
 
 	return (
-		<div className = "conteiner pagecontent normal-color">
+		<div className = "container pagecontent normal-color">
 		{
 			config.map((item, index)=>(
 				<div key={index}>
