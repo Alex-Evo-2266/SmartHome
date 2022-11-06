@@ -1,20 +1,19 @@
 from asyncio.log import logger
-import email
 import json, logging
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List
 from authtorization.logic import delete_session
-from authtorization.schema import AuthType, SessionSchema, UserLevel
+from authtorization.schema import AuthType, SessionSchema, UserForm, UserLevel
 from auth_service.castom_requests import ThisLocalSession
 from auth_service.config import get_style, get_user_data
-from SmartHome.schemas.auth import TokenData
+from authtorization.schema import TokenData
 from authtorization.models import Session, User
 
-from SmartHome.logic.user import addUser, getUser, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass
-from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, UserEditSchema, UserDeleteSchema, UserEditLevelSchema, UserEditPasswordSchema, UserNameSchema
-from SmartHome.depends.auth import session, token_dep, token_dep_all_user
+from authtorization.user import addUser, getUser, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass
+from authtorization.schema import UserSchema, UserEditSchema, UserEditLevelSchema, UserEditPasswordSchema
+from authtorization.auth_depends import session, token_dep, token_dep_all_user
 
 logger = logging.getLogger(__name__)
 
@@ -24,14 +23,15 @@ router = APIRouter(
 	responses={404: {"description": "Not found"}},
 )
 
-# @router.post("")
-# async def add(data: UserForm, auth_data: TokenData = Depends(token_dep)):
-# 	if auth_data['user_level'] != 3:
-# 		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
-# 	res = await addUser(data)
-# 	if res['status'] == 'ok':
-# 		return {"message":"ok"}
-# 	return JSONResponse(status_code=400, content={"message": res['detail']})
+@router.post("")
+async def add(data: UserForm, auth_data: TokenData = Depends(token_dep)):
+	try:
+		if auth_data.user_level != UserLevel.ADMIN:
+			return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
+		await addUser(data)
+		return "ok"
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("", response_model=UserSchema)   #new
 async def get(auth_data:TokenData = Depends(token_dep_all_user), session:Session = Depends(session)):

@@ -34,9 +34,9 @@ class ModuleConfig(object):
         templates = self.readConfig()
         if(templates == None):
             return
-        block = templates[name]
-        if not block:
-            block = dict()
+        block = dict()
+        if name in templates:
+            block = templates[name]
         for key in data:
             if key not in block:
                 block[key] = data[key]

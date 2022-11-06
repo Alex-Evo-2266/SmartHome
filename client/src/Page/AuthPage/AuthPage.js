@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {AuthServiceBtn} from './authServiceBtn/AutuServiceBtnComponent'
 import {useHttp} from '../../hooks/http.hook'
 import {useMessage} from '../../hooks/message.hook'
 import { useDispatch } from 'react-redux'
 import { LOGIN } from '../../store/types'
+import { showTextDialog } from '../../store/reducers/dialogReducer'
 
 
 export const AuthPage = function (){
@@ -32,7 +33,18 @@ export const AuthPage = function (){
     }
   }
 
-  const newpass = () => {}
+  const genNewPass = useCallback(async(name)=>{
+    console.log(name)
+  },[])
+
+  const newpass = () => {
+    dispatch(showTextDialog(
+      "Password recovery", 
+      "Enter your username and you will receive an email with a new password.", 
+      "user name", 
+      genNewPass
+    ))
+  }
 
   useEffect(()=>{
     message(error, 'error');

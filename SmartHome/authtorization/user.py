@@ -3,23 +3,23 @@ import bcrypt
 import jwt
 import random
 
-from typing import Optional, List
-from datetime import datetime, timedelta
+from typing import List
+from send_email.email import send_email
 from auth_service.castom_requests import ThisLocalSession
 from auth_service.config import get_user_data, get_user_data_by_id
 from authtorization.exceptions import UserNotFoundException
 from authtorization.models import AuthType, Session
 from authtorization.schema import UserLevel
 
-from SmartHome.exceptions import InvalidInputException, UserAlreadyExistsException
-from .images.fon import getBackgroundUser
+from exceptions.exceptions import InvalidInputException, UserAlreadyExistsException
 
 import settings
-from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, UserEditSchema
-from SmartHome.models import User, MenuElement
-from SmartHome.logic.homePage import lookForPage
-from SmartHome.logic.email import send_email
+from authtorization.schema import UserForm, UserSchema, UserEditSchema
+from authtorization.models import User
+
+
 # from SmartHome
+from SmartHome.models import MenuElement
 
 logger = logging.getLogger(__name__)
 

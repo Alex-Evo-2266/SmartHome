@@ -1,4 +1,4 @@
-from ..weather import Weather
+from weather.weather import Weather
 from datetime import datetime
 from SmartHome.websocket.manager import manager
 

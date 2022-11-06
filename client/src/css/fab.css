@@ -1,0 +1,31 @@
+.fab-btn{
+	position: fixed;
+	bottom: 16px;
+	right: 16px;
+	height: 56px;
+	line-height: 56px;
+	width: 56px;
+	border: none;
+	background: var(--color-active);
+	color: var(--text-color-active-fon);
+	font-size: 40px;
+	font-weight: 500;
+	border-radius: 16px;
+	box-shadow: 0 0 10px #000;
+	transition: 0.5s;
+	text-decoration: none;
+	text-align: center;
+}
+
+.fab-btn.text{
+	min-width: 80px;
+}
+
+.fab-btn:hover{
+	box-shadow: none;
+	cursor: pointer;
+}
+
+.fab-btn i{
+	font-size: 24px;
+}

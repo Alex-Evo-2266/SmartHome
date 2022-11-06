@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from SmartHome.depends.auth import token_dep
+from SmartHome.authtorization.auth_depends import token_dep
 from SmartHome.schemas.group import GroupSchema
 from SmartHome.logic.groups.GroupFile import Groups
 from fastapi.responses import JSONResponse

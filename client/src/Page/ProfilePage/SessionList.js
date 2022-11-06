@@ -23,7 +23,7 @@ export const SessionList = () => {
 			await request(`/api/user/sessions/${id}`, "DELETE", null, {Authorization: `Bearer ${auth.token}`})
 			dispatch(hideDialog())
 		}catch{}
-	},[request, auth.token])
+	},[request, auth.token, dispatch])
 
 	useEffect(()=>{
 		getSessions()

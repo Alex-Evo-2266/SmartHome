@@ -4,9 +4,9 @@ from typing import Optional, List, Dict
 
 from SmartHome.schemas.homePage import HomePage
 from SmartHome.logic.homePage import getPage, setPage, addHomePage, deleteHomePage
-from SmartHome.logic.user import setActivePage
+from SmartHome.authtorization.user import setActivePage
 
-from SmartHome.depends.auth import token_dep
+from SmartHome.authtorization.auth_depends import token_dep
 
 router = APIRouter(
     prefix="/api/homePage",

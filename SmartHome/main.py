@@ -9,7 +9,7 @@ from castom_moduls import init_moduls
 
 from SmartHome.dbormar import metadata, database, engine
 from SmartHome.logic.call_functions import call_functions
-from SmartHome.logic.weather import updateWeather
+from weather.weather import updateWeather
 from SmartHome.logic.device.sendDevice import sendDevice
 from SmartHome.websocket.manager import manager
 from settings import configManager
@@ -17,14 +17,13 @@ from SmartHome.logic.server.serverData import sendServerData
 from SmartHome.logic.script.runScript import runTimeScript
 from SmartHome.logic.device.deviceSave import saveDevice
 
-from SmartHome.logic.server.configInit import confinit
+from config.configInit import confinit
 from initapp import initdir
 
-from SmartHome.api.first_start import router as router_first_start
+# from SmartHome.api.first_start import router as router_first_start
 from authtorization.api import router as router_auth
-from SmartHome.api.auth import router as router_id
-from SmartHome.api.user import router as router_user
-from SmartHome.api.style import router as router_style
+from authtorization.api_user import router as router_user
+from authtorization.api_style import router as router_style
 from SmartHome.api.menu import router as router_menu
 # from SmartHome.api.device import router as router_device
 # from SmartHome.api.homePage import router as router_homePage
@@ -95,9 +94,8 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
-app.include_router(router_first_start)
+# app.include_router(router_first_start)
 app.include_router(router_auth)
-app.include_router(router_id)
 app.include_router(router_menu)
 app.include_router(router_server)
 # app.include_router(router_device)

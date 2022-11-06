@@ -72,7 +72,7 @@
 	bottom: 0;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: end;
+	justify-content: flex-end;
 	margin: 10px;
 	margin-bottom: 5px;
 }

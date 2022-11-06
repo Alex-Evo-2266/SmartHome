@@ -8,6 +8,7 @@ import { EditProfilePage } from './Page/ProfilePage/EditProfile'
 import { EditPasswordPage } from './Page/ProfilePage/EditPassword'
 import { UsersPage } from './Page/UsersPage/UsersPage'
 import { NonePage } from './Page/NonePage/NonePage'
+import { AddUser } from './Page/UsersPage/AddUserPage'
 // import {DitailDevicePage} from './Page/DitailDevicePage'
 // import {DevicesPage} from './Page/DevicesPage'
 // import {ProfilePage} from './Page/ProfilePage'
@@ -63,6 +64,9 @@ export const useRoutes = (isAuthenticated,role)=>{
         </Route>
         <Route path="/users" exact>
           <UsersPage/>
+        </Route>
+        <Route path="/users/add" exact>
+          <AddUser/>
         </Route>
         <Redirect to="/home"/>
       </Switch>

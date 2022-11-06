@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List
-from SmartHome.schemas.auth import TokenData
+from authtorization.schema import TokenData
 
 from SmartHome.schemas.server import ServerConfigSchema, ServerDataSchema
-from SmartHome.logic.server.configset import ServerConfigEdit
-from SmartHome.depends.auth import token_dep
-from SmartHome.logic.server.configget import GiveServerConfig
+from config.configset import ServerConfigEdit
+from authtorization.auth_depends import token_dep
+from config.configget import GiveServerConfig
 from SmartHome.logic.server.serverData import getServerData
 
 router = APIRouter(

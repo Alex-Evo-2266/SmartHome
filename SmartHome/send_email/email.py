@@ -1,6 +1,6 @@
 import yaml, smtplib
 import logging
-from SmartHome.exceptions import NoConfigurationDataException
+from exceptions.exceptions import NoConfigurationDataException
 
 import settings
 

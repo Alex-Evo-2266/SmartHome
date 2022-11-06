@@ -4,7 +4,7 @@ import logging
 from turtle import title
 from typing import List
 from SmartHome.models import MenuElement
-from SmartHome.exceptions import InvalidFileStructure, ModelElementNotFound
+from exceptions.exceptions import InvalidFileStructure, ModelElementNotFound
 from SmartHome.schemas.menu import MenuElementsSchema
 from authtorization.exceptions import UserNotFoundException
 from authtorization.models import User

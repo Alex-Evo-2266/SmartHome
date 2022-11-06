@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from SmartHome.depends.auth import token_dep
+from SmartHome.authtorization.auth_depends import token_dep
 from SmartHome.schemas.room import getPages
 from fastapi.responses import JSONResponse
 from moduls_src.pages import Pages, LincDevice, LincDeviceOut

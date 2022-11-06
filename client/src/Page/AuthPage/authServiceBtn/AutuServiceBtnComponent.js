@@ -25,7 +25,7 @@ export const AuthServiceBtn = ()=>{
 
   const getClientId = useCallback(async () => {
     const data = await request('/api/auth/clientid', 'GET', null)
-    if (data)
+    if (data?.clientId && data?.host)
     {
       console.log(data)
       authBtnController.current = AuthBtn(authBtn.current, {

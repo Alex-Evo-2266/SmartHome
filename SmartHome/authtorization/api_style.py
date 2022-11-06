@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List
-from SmartHome.schemas.auth import TokenData
+from authtorization.schema import TokenData
 from auth_service.config import StyleData, get_style
 from authtorization.models import Session
 
-from SmartHome.depends.auth import session, token_dep_all_user
+from authtorization.auth_depends import session, token_dep_all_user
 
 router = APIRouter(
 	prefix="/api/style",

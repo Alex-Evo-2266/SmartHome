@@ -5,7 +5,7 @@ from SmartHome.schemas.script import ScriptSchema, StatusScriptSchema
 from SmartHome.logic.script.scriptset import addscript, scriptDelete, scriptsetstatus
 from SmartHome.logic.script.scriptget import script, scripts, runScript
 
-from SmartHome.depends.auth import token_dep
+from SmartHome.authtorization.auth_depends import token_dep
 
 router = APIRouter(
     prefix="/api/script",

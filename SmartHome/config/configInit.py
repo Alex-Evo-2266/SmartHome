@@ -3,7 +3,7 @@ from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigField
 from SmartHome.logic.device.deviceSendControl import updataSendTime
 import yaml, logging
 
-from ..weather import updateWeather
+from weather.weather import updateWeather
 
 logger = logging.getLogger(__name__)
 

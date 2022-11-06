@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import { useSelector } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 import { useHttp } from '../../hooks/http.hook'
 import { useMessage } from '../../hooks/message.hook'
 import { UserCard } from './userCard'
@@ -35,6 +36,7 @@ export const UsersPage = () => {
 				<UserCard key={index} user={item} updata={getUsers}/>
 			))
 		}
+		<NavLink className='fab-btn' to="/users/add">+</NavLink>
 		</div>
 	)
 }

@@ -7,7 +7,7 @@ from SmartHome.schemas.device import TypesDeviceSchema, DeviceValueSchema, Devic
 from SmartHome.logic.device.types import getDeviceTypes
 from SmartHome.logic.device.getdevice import giveDevice
 from SmartHome.logic.device.addDevice import addDevice
-from SmartHome.depends.auth import token_dep
+from SmartHome.authtorization.auth_depends import token_dep
 from SmartHome.logic.device.deviceSetValue import setValue
 from SmartHome.logic.device.editDevice import editDevice, deleteDevice, editStatusDevice
 from SmartHome.schemas.base import FunctionRespons, TypeRespons

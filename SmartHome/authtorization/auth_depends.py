@@ -5,9 +5,9 @@ from typing import Optional
 from jwt import ExpiredSignatureError
 import jwt, settings, logging
 from authtorization.schema import UserLevel
-from SmartHome.exceptions import InvalidInputException
+from exceptions.exceptions import InvalidInputException
 
-from SmartHome.schemas.auth import TokenData
+from authtorization.schema import TokenData
 from authtorization.models import Session, User
 
 logger = logging.getLogger(__name__)

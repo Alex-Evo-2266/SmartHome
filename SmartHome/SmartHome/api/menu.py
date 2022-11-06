@@ -4,11 +4,11 @@ from fastapi.responses import JSONResponse
 from typing import Optional, List
 from authtorization.models import User
 from authtorization.schema import UserLevel
-from SmartHome.schemas.auth import TokenData
+from authtorization.schema import TokenData
 from SmartHome.schemas.menu import MenuElementsSchema
 from SmartHome.logic.menu import get_added_menu_element, get_menu_list, set_menu
 
-from SmartHome.depends.auth import session, token_dep, token_dep_all_user
+from authtorization.auth_depends import session, token_dep, token_dep_all_user
 
 logger = logging.getLogger(__name__)
 

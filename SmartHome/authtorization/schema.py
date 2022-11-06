@@ -57,28 +57,95 @@ class SessionSchema(BaseModel):
 	expires_at: datetime.datetime
 	id: int
 
+class TokenData(BaseModel):
+    user_id: int
+    user_level: str
 
-# from pydantic import BaseModel
-# from enum import Enum
-# from typing import Type, TypeVar, List, Optional, Any
-# import logging
 
-# logger = logging.getLogger(__name__)
+# class Login(BaseModel):
+#     name: str
+#     password: str
 
-# class TypeRespons(str, Enum):
-# 	OK = "ok"
-# 	ERROR = "error"
-# 	INVALID = "invalid"
-# 	NOT_FOUND = "not_found"
+# class Tokens(BaseModel):
+# 	expires_at: datetime.datetime
+# 	access: str
+# 	refresh: str
 
-# class FunctionRespons(BaseModel):
-# 	status: TypeRespons
-# 	data: Any = ""
-# 	detail: str = ""
+# class Token(BaseModel):
+#     token: str
 
-# 	def __init__(self, *args, **kwargs):
-# 		super().__init__(*args, **kwargs)
-# 		if self.status == TypeRespons.ERROR:
-# 			logger.warning(self.detail)
-# 		if self.status == TypeRespons.INVALID:
-# 			logger.info(self.detail)
+
+
+class AuthService(BaseModel):
+    clientId: str
+    authservice: str
+    host: str
+
+# class OAuthLogin(BaseModel):
+#     code: str
+
+# class ResponseLogin(BaseModel):
+# 	token: str
+# 	expires_at: datetime.datetime
+# 	userId: int
+# 	userLevel: int
+
+class UserForm(BaseModel):
+    name: str
+    password: str
+    email: str
+
+class UserSchema(BaseModel):
+    id: int
+    name: str
+    email: Optional[str]
+    role: UserLevel = UserLevel.BASE
+    image_url: Optional[str]
+    auth_type: AuthType
+    host: Optional[str]
+    auth_name: Optional[str]
+
+class UserEditSchema(BaseModel):
+    name: str
+    email: Optional[str]
+
+# class UserDeleteSchema(BaseModel):
+#     id: int
+
+# class UserNameSchema(BaseModel):
+#     name: str
+
+class UserEditLevelSchema(BaseModel):
+    id: int
+    role: UserLevel = UserLevel.NONE
+
+class UserEditPasswordSchema(BaseModel):
+    old_password: str
+    new_password: str
+
+# class ImageBackgroundSchema(BaseModel):
+#     id: int
+#     type: str
+#     title: str
+#     image: str
+
+# class EditUserConfigSchema(BaseModel):
+#     style: str
+#     auteStyle: bool
+#     staticBackground: bool
+
+# class Message(BaseModel):
+#     message: str
+
+class StyleSchemas(BaseModel):
+    name: str
+    active: str
+    c1: str
+    c2: str
+    icon: Optional[str]
+    ok: str
+    error: str
+
+class StyleDeleteSchemas(BaseModel):
+    name: str
+

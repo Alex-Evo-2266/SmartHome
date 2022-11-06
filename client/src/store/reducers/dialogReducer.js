@@ -29,11 +29,11 @@ export const showAlertDialog = (title, text="", buttons=[]) => ({type: SHOW_DIAL
 	text,
 	buttons
 }})
-export const showTextDialog = (title, text="", payload, active) => ({type: SHOW_DIALOG, payload:{
+export const showTextDialog = (title, text="", placeholder, active) => ({type: SHOW_DIALOG, payload:{
 	type: "text",
 	title,
 	text,
-	payload,
+	placeholder,
 	active
 }})
 export const showConfirmationDialog = (title, items, active) => ({type: SHOW_DIALOG, payload:{

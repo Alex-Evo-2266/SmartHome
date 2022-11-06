@@ -5,7 +5,7 @@ from typing import Optional
 from unicodedata import name
 from fastapi import APIRouter, Response, Depends, Cookie
 from fastapi.responses import JSONResponse
-from SmartHome.depends.auth import session, token_dep
+from authtorization.auth_depends import session, token_dep
 from authtorization.exceptions import InvalidInputException
 from auth_service.auth_service import get_auth_service_tokens
 from authtorization.models import Session, User
@@ -13,7 +13,7 @@ from authtorization.logic import create_session, create_tokens_oauth, create_val
 
 from settings import AUTH_SERVICE_URL, configManager
 
-from .schema import AuthType, Login, ResponseLogin, ServiceLogin, Tokens
+from .schema import AuthService, AuthType, Login, ResponseLogin, ServiceLogin, Tokens
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +22,11 @@ router = APIRouter(
 	tags=["auth"],
 	responses={404: {"description": "Not found"}},
 )
+
+@router.get("/clientid", response_model=AuthService)
+async def ref():
+	data = configManager.getConfig("base")
+	return AuthService(clientId=data["client_id"], authservice="True", host=data["host"])
 
 @router.post("/login", response_model=ResponseLogin)
 async def login(response:Response = Response("ok", 200), data: Login = Login(name="", password="")):
@@ -40,18 +45,12 @@ async def login(response:Response = Response("ok", 200), data: Login = Login(nam
 @router.get("/refresh", response_model=ResponseLogin)
 async def refrash(response:Response = Response("ok", 200), smart_home: Optional[str] = Cookie(None)):
 	try:
-		print("p00")
 		tokens = await refresh_token(smart_home)
-		print("p2")
 		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
-		print("p3")
 		session = await Session.objects.get_or_none(access=tokens.access)
-		print("p4")
 		if not session:
 			raise Exception("create tokens error")
-		print("p4")
 		user = await User.objects.get_or_none(id=session.user.id)
-		print("p5")
 		return ResponseLogin(token=tokens.access, expires_at=tokens.expires_at, id=user.id, role=user.role)
 	except InvalidInputException as e:
 		return JSONResponse(status_code=403, content={"message": str(e)})
