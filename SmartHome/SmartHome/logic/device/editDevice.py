@@ -3,7 +3,7 @@ import logging
 from .devicesArrey import devicesArrey
 # from smartHomeApi.logic.Cart import deleteDeviceCart
 from ..utils.file import readYMLFile, writeYMLFile
-from .DeviceFile import Devices
+from ..deviceFile.DeviceFile import Devices
 
 from settings import DEVICES
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema, DeviceEditSchema

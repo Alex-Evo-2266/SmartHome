@@ -2,7 +2,7 @@ from settings import DEVICES
 
 from datetime import datetime
 import json
-from SmartHome.logic.device.devicesArrey import devicesArrey
+from SmartHome.logic.device.devicesArrey import DevicesArrey
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ class Service():
                 return
 
     def setValueAtToken(self, address,value):
-        devices = devicesArrey.all()
+        devices = DevicesArrey.all()
         for item in devices:
             dev = item["device"]
             flag = True
@@ -61,16 +61,16 @@ class Service():
         try:
             if(value==None or type=="background"):
                 return None
-            dev = devicesArrey.get(systemName)
+            dev = DevicesArrey.get(systemName)
             dev = dev["device"]
             values = dev.values
             for item in values:
                 if item.name==type:
                     if(item.type=="binary"):
                         if(str(value).lower()==str(item.high).lower()):
-                            value = "1";
+                            value = "1"
                         elif(str(value).lower()==str(item.low).lower()):
-                            value = "0";
+                            value = "0"
                         else:
                             return None
                     item.set(value)

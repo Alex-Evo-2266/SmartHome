@@ -5,10 +5,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from authtorization.initAdmin import initAdmin
 
-from castom_moduls import init_moduls
+from castom_moduls import init_modules
 
 from SmartHome.dbormar import metadata, database, engine
-from SmartHome.logic.call_functions import call_functions
+from SmartHome.logic.call_functions import RunFunctions
 from weather.weather import updateWeather
 from SmartHome.logic.device.sendDevice import sendDevice
 from SmartHome.websocket.manager import manager
@@ -58,22 +58,22 @@ app.state.database = database
 @app.on_event("startup")
 async def startup() -> None:
     await initdir()
-    call_functions.subscribe("weather", updateWeather, 43200)
-    call_functions.subscribe("script", runTimeScript, 60)
-    call_functions.subscribe("serverData", sendServerData, 30)
-    call_functions.subscribe("saveDevice", saveDevice, 120)
+    RunFunctions.subscribe("weather", updateWeather, 43200)
+    RunFunctions.subscribe("script", runTimeScript, 60)
+    RunFunctions.subscribe("serverData", sendServerData, 30)
+    RunFunctions.subscribe("saveDevice", saveDevice, 120)
     confinit()
     base = configManager.getConfig("base")
     if "frequency" in base:
-        call_functions.subscribe("devices", sendDevice, int(base['frequency']))
+        RunFunctions.subscribe("devices", sendDevice, int(base['frequency']))
     else:
-        call_functions.subscribe("devices", sendDevice, 6)
-    init_moduls()
+        RunFunctions.subscribe("devices", sendDevice, 6)
+    await init_modules()
     database_ = app.state.database
     if not database_.is_connected:
         await database_.connect()
     loop = asyncio.get_running_loop()
-    loop.create_task(call_functions.run())
+    loop.create_task(RunFunctions.run())
     await initAdmin()
     logger.info("starting")
 

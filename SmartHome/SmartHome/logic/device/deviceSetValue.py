@@ -1,4 +1,4 @@
-from .devicesArrey import devicesArrey
+from .devicesArrey import DevicesArrey
 import logging
 
 logger = logging.getLogger(__name__)
@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 async def setValue(systemName, type, value):
     logger.debug(f'setValue input data:(systemName:{systemName},type:{type},value:{value})')
     try:
-        deviceDect = devicesArrey.get(systemName)
+        deviceDect = DevicesArrey.get(systemName)
         device = deviceDect["device"]
         field = device.get_field(type)
         if not field:

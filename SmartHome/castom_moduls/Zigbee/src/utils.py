@@ -1,8 +1,7 @@
 import logging
 
 from settings import configManager
-from SmartHome.logic.device.devicesArrey import devicesArrey
-from SmartHome.logic.device.DeviceFile import Devices
+from SmartHome.logic.deviceFile.DeviceFile import Devices
 from .schemas import ZigbeeDeviceSchema
 import json
 

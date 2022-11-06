@@ -5,20 +5,23 @@ logger = logging.getLogger(__name__)
 class DevicesArrey():
     devices = []
 
-    def __str__(self):
-        return devices
+    def __str__():
+        return DevicesArrey.devices
 
-    def addDevice(self,id,device):
+    @staticmethod
+    def addDevice(id,device):
         for item in DevicesArrey.devices:
             if(item["id"]==id):
-                return None;
+                return None
         DevicesArrey.devices.append({"id":id,"device":device})
         return DevicesArrey.devices
 
-    def all(self):
+    @staticmethod
+    def all():
         return DevicesArrey.devices
 
-    def delete(self,id):
+    @staticmethod
+    def delete(id):
         try:
             for item in DevicesArrey.devices:
                 if(item["id"]==id):
@@ -30,10 +33,10 @@ class DevicesArrey():
             logger.error(f"delete device from device list. {e}")
             return None
 
-    def get(self,id):
+    @staticmethod
+    def get(id):
         for item in DevicesArrey.devices:
             if(item["id"]==id):
                 return item
         return None
 
-devicesArrey = DevicesArrey()

@@ -1,5 +1,4 @@
-from SmartHome.logic.device.BaseDeviceClass import BaseDevice
-from SmartHome.logic.device.DeviceElement import DeviceElement
+from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 from moduls_src.services import get
 from castom_moduls.Mqtt.settings import DEVICE_NAME
 import json

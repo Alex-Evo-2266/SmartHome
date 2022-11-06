@@ -1,5 +1,5 @@
 from SmartHome.models import DeviceHistory
-from .DeviceFile import Devices
+from ..deviceFile.DeviceFile import Devices
 from SmartHome.schemas.base import FunctionRespons, TypeRespons
 from typing import List
 

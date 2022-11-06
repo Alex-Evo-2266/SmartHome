@@ -1,7 +1,7 @@
-from .devicesArrey import devicesArrey
+from .devicesArrey import DevicesArrey
 
 async def saveDevice():
-    devices = devicesArrey.all()
+    devices = DevicesArrey.all()
     for item in devices:
         dev = item["device"]
         await dev.save_and_addrecord()

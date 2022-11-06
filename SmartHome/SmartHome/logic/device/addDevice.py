@@ -4,7 +4,7 @@ import logging
 
 from .devicesArrey import devicesArrey
 from ..utils.file import readYMLFile, writeYMLFile
-from .DeviceFile import Devices
+from ..deviceFile.DeviceFile import Devices
 
 from settings import DEVICES
 # from SmartHome.logic.Cart import deleteDeviceCart

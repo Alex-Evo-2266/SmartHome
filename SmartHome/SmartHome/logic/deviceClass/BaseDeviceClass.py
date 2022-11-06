@@ -1,11 +1,10 @@
-from .DeviceFile import Devices
+from SmartHome.logic.deviceClass.DeviceMeta import DeviceMeta
+from ..deviceFile.DeviceFile import Devices
 from .DeviceElement import DeviceElement
 from SmartHome.models import DeviceHistory
 import logging
-import asyncio
-import threading
 from datetime import datetime
-from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema
+from SmartHome.schemas.device import DeviceSchema
 from moduls_src.models_schema import AddDevice
 
 
@@ -17,7 +16,7 @@ def look_for_param(arr:list, val):
             return(item)
     return None
 
-class BaseDevice(object):
+class BaseDevice(metaclass=DeviceMeta):
     """docstring for BaseDevice."""
 
     typesDevice = ["all"]

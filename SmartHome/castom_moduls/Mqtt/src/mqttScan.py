@@ -1,6 +1,6 @@
 # from SmartHome.logic.server.modulesconfig import configManager
 from SmartHome.websocket.manager import manager
-from SmartHome.logic.device.DeviceFile import Devices
+from SmartHome.logic.deviceFile.DeviceFile import Devices
 import ast
 import json
 import logging

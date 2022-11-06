@@ -1,49 +1,53 @@
 from datetime import datetime, timedelta
+from pydantic import BaseModel
 import asyncio
 import logging
+from typing import Any, Callable, List
 
 logger = logging.getLogger(__name__)
 
+class RunFunctionsItem(BaseModel):
+    name: str
+    interval: int
+    function: Callable[[Any],Any]
+    time_run: datetime
+
 class RunFunctions():
-    def __init__(self):
-        self.functions = []
+    functions:List[RunFunctionsItem] = []
 
-    def subscribe(self, name: str, function, interval: int = 0):
-        for item in self.functions:
-            if(item['name'] == name):
-                item['interval'] = interval
-                item['function'] = function
+    def subscribe(name: str, function, interval: int = 0):
+        for item in RunFunctions.functions:
+            if(item.name == name):
+                item.interval = interval
+                item.function = function
                 return None
-        self.functions.append({
-            "function":function,
-            "name":name,
-            "interval":interval,
-            "time_run":datetime.now()
-        })
+        RunFunctions.functions.append(RunFunctionsItem(
+            function=function,
+            name=name,
+            interval=interval,
+            time_run=datetime.now()
+        ))
 
-    def unsubscribe(self, name: str):
-        for item in self.functions:
-            if(item['name'] == name):
+    def unsubscribe(name: str):
+        for item in RunFunctions.functions:
+            if(item.name == name):
                 del item
 
-    def clear(self):
-        self.functions = []
+    def clear():
+        RunFunctions.functions = []
 
-    async def run(self):
-        for item in self.functions:
-            f = item['function']
+    async def run():
+        for item in RunFunctions.functions:
+            f = item.function
             await f()
         while True:
-            for item in self.functions:
-                if(item['interval'] > 0 and datetime.now() > (timedelta(seconds=item['interval']) + item['time_run'])):
+            for item in RunFunctions.functions:
+                if(item.interval > 0 and datetime.now() > (timedelta(seconds=item.interval) + item.time_run)):
                     try:
-                        item['time_run'] = datetime.now()
-                        f = item['function']
+                        item.time_run = datetime.now()
+                        f = item.function
                         await f()
                     except Exception as e:
-                        logger.error(f"error call function {item['name']}. detail:{e}")
+                        logger.error(f"error call function {item.name}. detail:{e}")
 
             await asyncio.sleep(1)
-
-
-call_functions = RunFunctions()

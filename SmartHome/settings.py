@@ -1,7 +1,7 @@
 from pathlib import Path
 import datetime
 import os, sys
-from modulesconfig import ModuleConfig
+from config.modulesconfig import ModuleConfig
 
 
 

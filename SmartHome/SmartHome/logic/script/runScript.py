@@ -8,7 +8,7 @@ import yaml, asyncio
 import threading
 import time
 from datetime import datetime
-from SmartHome.logic.device.devicesArrey import devicesArrey
+from SmartHome.logic.device.devicesArrey import DevicesArrey
 import logging
 
 logger = logging.getLogger(__name__)
@@ -111,7 +111,7 @@ def ifblock(data):
     try:
         if(data["type"]=="device"):
             systemName = data["systemName"]
-            device = devicesArrey.get(systemName)
+            device = DevicesArrey.get(systemName)
             device = device["device"]
             values = device.values
             for item in values:
@@ -198,7 +198,7 @@ def getvalue(data,option):
             return v1//v2
     if(data["type"]== "device"):
         systemName = data["systemName"]
-        device = devicesArrey.get(systemName)
+        device = DevicesArrey.get(systemName)
         device = device["device"]
         values = device.values
         for item in values:
@@ -210,7 +210,7 @@ async def actiondev(data):
     for item in data:
         if(item["type"]=="device"):
             systemName = item["systemName"]
-            device = devicesArrey.get(systemName)
+            device = DevicesArrey.get(systemName)
             device = device["device"]
             val = getvalue(item["value"],{"device":device,"field":item["action"]})
             await setValue(device.systemName,item["action"],val)
@@ -233,7 +233,7 @@ async def actiondev(data):
 def lockforScript(systemName,type):
     if not systemName:
         return []
-    device = devicesArrey.get(systemName)
+    device = DevicesArrey.get(systemName)
     device = device["device"]
     fileList = os.listdir(SCRIPTS_DIR)
     listscripts = list()

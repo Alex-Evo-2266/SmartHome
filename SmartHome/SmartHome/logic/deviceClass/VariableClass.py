@@ -1,4 +1,4 @@
-from SmartHome.logic.device.BaseDeviceClass import BaseDevice
+from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 
 class Variable(BaseDevice):
     name="variable"

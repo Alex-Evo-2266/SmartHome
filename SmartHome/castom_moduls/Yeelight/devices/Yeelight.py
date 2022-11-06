@@ -1,6 +1,6 @@
 from yeelight import Bulb,PowerMode
-from SmartHome.logic.device.BaseDeviceClass import BaseDevice
-from SmartHome.logic.device.DeviceElement import DeviceElement
+from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
+from SmartHome.logic.deviceClass.DeviceElement import DeviceElement
 from castom_moduls.Yeelight.settings import DEVICE_NAME
 import logging
 

@@ -1,10 +1,10 @@
-from .devicesArrey import devicesArrey
-from .DeviceFile import Devices
+from .devicesArrey import DevicesArrey
+from ..deviceFile.DeviceFile import Devices
 
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema
-from SmartHome.logic.device.BaseDeviceClass import BaseDevice
-from SmartHome.logic.device.VariableClass import Variable
-from castom_moduls import getDevicesClass
+from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
+from SmartHome.logic.deviceClass.VariableClass import Variable
+# from castom_moduls import getDevicesClass
 
 import json
 import ast, logging
@@ -40,12 +40,12 @@ async def device(item):
             data['value']=dict()
             data['status']="unlink"
             return DeviceSchema(**data)
-        element = devicesArrey.get(systemName)
+        element = DevicesArrey.get(systemName)
         if(not element):
             if typeConnect == 'variable':
                 dev = Variable(systemName=systemName)
-            else:
-                dev = await getDevicesClass(typeConnect, systemName)
+            # else:
+            #     dev = await getDevicesClass(typeConnect, systemName)
             if(not dev):
                 dev = BaseDevice(systemName=systemName)
                 data = dev.get_Base_Info()
@@ -55,7 +55,7 @@ async def device(item):
                 data = dev.get_Base_Info()
                 data.status="offline",
                 return data
-            devicesArrey.addDevice(systemName,dev)
+            DevicesArrey.addDevice(systemName,dev)
         else:
             status = "online"
             dev = element["device"]
@@ -65,10 +65,10 @@ async def device(item):
     except Exception as e:
         print("p10")
         logger.warning(f'device not found. {e}')
-        el = devicesArrey.get(item.systemName)
+        el = DevicesArrey.get(item.systemName)
         if(el):
             dev = el['device']
-            devicesArrey.delete(item.systemName)
+            DevicesArrey.delete(item.systemName)
             data = dev.get_Base_Info()
             data.status="offline",
             return data
