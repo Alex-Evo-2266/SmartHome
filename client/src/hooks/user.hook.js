@@ -26,7 +26,8 @@ export const useUser = ()=>{
 					id: data.id,
 					auth_type: data.auth_type,
 					image_url: data.image_url,
-					host: data.host
+					host: data.host,
+					auth_name: data.auth_name
 				}))
 			}
 		}

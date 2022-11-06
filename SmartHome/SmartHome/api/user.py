@@ -5,14 +5,16 @@ import json, logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List
+from authtorization.logic import delete_session
+from authtorization.schema import AuthType, SessionSchema, UserLevel
 from auth_service.castom_requests import ThisLocalSession
 from auth_service.config import get_style, get_user_data
 from SmartHome.schemas.auth import TokenData
-from authtorization.models import AuthType, Session
+from authtorization.models import Session, User
 
 from SmartHome.logic.user import addUser, getUser, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass
 from SmartHome.schemas.user import UserForm, UserSchema, EditUserConfigSchema, UserEditSchema, UserDeleteSchema, UserEditLevelSchema, UserEditPasswordSchema, UserNameSchema
-from SmartHome.depends.auth import session, token_dep
+from SmartHome.depends.auth import session, token_dep, token_dep_all_user
 
 logger = logging.getLogger(__name__)
 
@@ -32,14 +34,15 @@ router = APIRouter(
 # 	return JSONResponse(status_code=400, content={"message": res['detail']})
 
 @router.get("", response_model=UserSchema)   #new
-async def get(auth_data:TokenData = Depends(token_dep), session:Session = Depends(session)):
+async def get(auth_data:TokenData = Depends(token_dep_all_user), session:Session = Depends(session)):
 	try:
+		print(session.user)
 		data = await get_user_data(session)
-		user = await getUser(auth_data.user_id)
+		user = await getUser(auth_data.user_id, session)
 		ret = UserSchema(id=auth_data.user_id, name=user.name,host=data.host, email=data.email, role=user.role, image_url=data.imageURL, auth_type=AuthType.AUTH_SERVICE)
 		return ret
 	except ThisLocalSession:
-		user = await getUser(auth_data.user_id)
+		user = await getUser(auth_data.user_id, session)
 		return user
 	except Exception as e:
 		logger.warning(e)
@@ -54,32 +57,37 @@ async def edit(data: UserEditSchema, auth_data: TokenData = Depends(token_dep)):
 		logger.warning(e)
 		return JSONResponse(status_code=400, content=str(e)) 
 
-# @router.delete("")
-# async def delete(data: UserDeleteSchema, auth_data: TokenData = Depends(token_dep)):
-# 	if auth_data['user_level'] != 3:
-# 		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
-# 	if (auth_data['user_id'] == data.UserId):
-# 		return JSONResponse(status_code=400, content={"message": "you can not delete yourself"})
-# 	res = await deleteUser(data.UserId)
-# 	if res['status'] == 'error':
-# 		return JSONResponse(status_code=400, content={"message": 'user not found'})
-# 	return "ok"
+@router.delete("/{id}")
+async def delete(id: int, auth_data: TokenData = Depends(token_dep)):
+	try:
+		if auth_data.user_level != UserLevel.ADMIN:
+			return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
+		if (auth_data.user_id == id):
+			return JSONResponse(status_code=400, content={"message": "you can not delete yourself"})
+		await deleteUser(id)
+		return "ok"
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
 
-# @router.get("/all", response_model=List[UserSchema])
-# async def all(auth_data: TokenData = Depends(token_dep)):
-# 	res = await getUsers()
-# 	if res['status'] == 'error':
-# 		return JSONResponse(status_code=400, content={"message": 'user not found'})
-# 	return res['data']
 
-# @router.post("/level/edit")
-# async def level(data: UserEditLevelSchema, auth_data: TokenData = Depends(token_dep)):
-# 	if auth_data['user_level'] != 3:
-# 		return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
-# 	res = await editLevel(data.id, data.level)
-# 	if res['status'] == 'error':
-# 		return JSONResponse(status_code=400, content={"message": 'user not found'})
-# 	return "ok"
+@router.get("/all", response_model=List[UserSchema])
+async def all(auth_data: TokenData = Depends(token_dep), session:Session = Depends(session)):
+	try:
+		users = await getUsers(session)
+		return users
+	except Exception as e:
+		logger.warning(e)
+		return JSONResponse(status_code=400, content=str(e))
+
+@router.put("/level")
+async def level(data: UserEditLevelSchema, auth_data: TokenData = Depends(token_dep)):
+	try:
+		if auth_data.user_level != UserLevel.ADMIN:
+			return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
+		await editLevel(data.id, data.role)
+		return "ok"
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
 
 @router.put("/password")
 async def edit_password(data: UserEditPasswordSchema, auth_data: TokenData = Depends(token_dep)):
@@ -88,7 +96,36 @@ async def edit_password(data: UserEditPasswordSchema, auth_data: TokenData = Dep
 		return "ok"
 	except Exception as e:
 		logger.warning(e)
-		return JSONResponse(status_code=400, content=str(e)) 
+		return JSONResponse(status_code=400, content=str(e))
+
+@router.get("/sessions", response_model=List[SessionSchema])
+async def get_session_user(auth_data: TokenData = Depends(token_dep)):
+	try:
+		user = await User.objects.get_or_none(id=auth_data.user_id)
+		sessions = await Session.objects.all(user=user)
+		arr = list()
+		for item in sessions:
+			arr.append(SessionSchema(id=item.id, auth_type=item.auth_type, expires_at=item.expires_at))
+		return arr
+	except Exception as e:
+		logger.warning(e)
+		return JSONResponse(status_code=400, content=str(e))
+
+
+@router.delete("/sessions/{id}")
+async def get_session_user(id:int, auth_data: TokenData = Depends(token_dep)):
+	try:
+		session = await Session.objects.get_or_none(id=id)
+		if not session:
+			return JSONResponse(status_code=400, content="session not found")
+		user = await User.objects.get_or_none(id=auth_data.user_id)
+		if session.user != user:
+			return JSONResponse(status_code=400, content="alien session")
+		await delete_session(session)
+		return "ok"
+	except Exception as e:
+		logger.warning(e)
+		return JSONResponse(status_code=400, content=str(e))
 
 # @router.post("/password/new")
 # async def newpass(data: UserNameSchema):

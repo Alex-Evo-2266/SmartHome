@@ -2,6 +2,8 @@
 @import "./style-page.css";
 
 @import "./variable/base.css";
+@import "./nonePage.css";
+
 
 @import "./Menu/Menu.base.css";
 /* @import "./header/header.base.css"; */
@@ -25,7 +27,6 @@
 @import "./switch/switch.base.css";
 @import "./sidebar/sidebar.base.css";
 @import "./gallery/gallery.base.css";
-@import "./dialog/dialog.base.css";
 @import "./tableMqtt/tableMqtt.base.css";
 @import "./chart/chart.base.css";
 @import "./device.css";
@@ -43,6 +44,7 @@
 @import "./style-indicator.css";
 @import "./table.css";
 
+@import "./cards.css";
 @import "./terminal.css";
 @import "./home.css";
 @import "./EditCartWindow.css";

@@ -2,6 +2,7 @@ import { SET_USER } from "../types"
 
 const initState = {
 	name: "",
+	auth_name: null,
 	email: "",
 	id: null,
 	auth_type: "",

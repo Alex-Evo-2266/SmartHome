@@ -39,7 +39,7 @@ export const useHttp = () => {
       }
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.message||'что-то пошло не так')
+        throw new Error(data.detail||'что-то пошло не так')
       }
       setLoading(false);
       return data;

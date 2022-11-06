@@ -272,11 +272,6 @@
 .bottomMenuAll ul li .menu-btn span{
   margin-left: 5px;
 }
-.dividers{
-  width: 100%;
-  height: 1px;
-  background: var(--text-color-normal-fon);
-}
 .navigationRail .profifileConteiner{
   height: 56px;
   color: var(--text-color-normal-fon);

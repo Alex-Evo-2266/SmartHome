@@ -10,10 +10,10 @@ export const ConfirmationDialog = ({title, hide, active, items, buttons, activeT
 
   return(
     <>
-    <div className="dialogCoteiner">
-      <div className="dialogHeader">{title}</div>
+    <div className="dialogCoteiner card-container">
+      <div className="card-head">{title}</div>
       <div className="dividers"></div>
-      <div className="dialogBody scroll">
+      <div className="card-content scroll">
         {items?.map((item, index)=>{
           return(
             <label key={index} className="dialogItem">
@@ -24,20 +24,20 @@ export const ConfirmationDialog = ({title, hide, active, items, buttons, activeT
         })}
       </div>
       <div className="dividers"></div>
-      <div className="dialogFooter">
+      <div className="card-btn-container">
       {
         buttons?.map((item, index)=>{
           return(
-            <button key={index} className="dialogButton button normalSelection" onClick={item.action}>{item.title}</button>
+            <button key={index} className="btn" onClick={item.action}>{item.title}</button>
           )
         })
       }
       {
         (!buttons)?
-        <button className="dialogButton button normalSelection" onClick={hide}>CANCEL</button>
+        <button className="btn" onClick={hide}>CANCEL</button>
         :null
       }
-        <button className="dialogButton button normalSelection" onClick={out} disabled={data===""}>{activeText||"OK"}</button>
+        <button className="btn" onClick={out} disabled={data===""}>{activeText||"OK"}</button>
       </div>
     </div>
     </>

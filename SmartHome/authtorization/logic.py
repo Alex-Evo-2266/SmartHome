@@ -6,6 +6,7 @@ import logging
 from os import access
 import jwt, bcrypt
 from jwt import ExpiredSignatureError
+from auth_service.logout import logout_service
 from authtorization.old_token import OldTokens
 from authtorization.exceptions import InvalidInputException, TooManyTriesException, UserNotFoundException
 from authtorization.schema import Login, Tokens
@@ -117,3 +118,11 @@ async def refresh_token(token: str)->Tokens:
 		await old_token.update(["access", "refresh", "expires_at"])
 	logger.info(f"login user: {u.name}, id: {u.id}")
 	return encoded_jwt
+
+async def delete_session(session: Session):
+	try:
+		if session.auth_type == AuthType.AUTH_SERVICE:
+			await logout_service(session)
+	except Exception as e:
+		logger.warning(f"failed to exit the authorization service.")
+	await session.delete()

@@ -5,7 +5,7 @@ from SmartHome.schemas.auth import TokenData
 from auth_service.config import StyleData, get_style
 from authtorization.models import Session
 
-from SmartHome.depends.auth import session, token_dep
+from SmartHome.depends.auth import session, token_dep_all_user
 
 router = APIRouter(
 	prefix="/api/style",
@@ -14,6 +14,6 @@ router = APIRouter(
 )
 
 @router.get("", response_model=StyleData)
-async def add(auth_data: TokenData = Depends(token_dep), session:Session = Depends(session)):
+async def get_style_api(auth_data: TokenData = Depends(token_dep_all_user), session:Session = Depends(session)):
 	style = await get_style(session)
 	return style

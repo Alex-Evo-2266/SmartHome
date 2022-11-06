@@ -1,3 +1,4 @@
+import json
 import logging
 import settings
 from pydantic import BaseModel
@@ -43,7 +44,8 @@ async def refrash(session: Session)->Session:
 	host = connect_data.host + "/api/auth/refresh"
 	headers = {'Content-Type': 'application/json'}
 	data = {"refresh_token": session.refresh_oauth}
-	response = requests.post(host, headers=headers, data=data, timeout=10)
+	data_json = json.dumps(data)
+	response = requests.post(host, headers=headers, data=data_json, timeout=10)
 	if response.status_code == 200:
 		new_tokens = response.json()
 		session.refresh_oauth = new_tokens["refresh"]
@@ -77,3 +79,20 @@ async def castom_auth_service_requests(session: Session, url:str, params:dict | 
 			raise Exception("invalid request")
 		return response_new
 	return response
+
+# async def castom_auth_service_requests_post(session: Session, url:str, body:dict | None = {}):
+# 	connect_data = get_connect_data()
+# 	host = connect_data.host + url
+# 	if not session.access_oauth:
+# 		raise ThisLocalSession()
+# 	headers = {'authorization-token': f"Bearer {session.access_oauth}"}
+# 	data_json = json.dumps(body)
+# 	response = requests.get(host, headers=headers, data=data_json, timeout=10)
+# 	if response.status_code == 401:
+# 		await refrash(session)
+# 		headers_new = {'authorization-token': f"Bearer {session.access_oauth}"}
+# 		response_new = requests.get(host, headers=headers_new, params=params, timeout=10)
+# 		if response_new.status_code != 200:
+# 			raise Exception("invalid request")
+# 		return response_new
+# 	return response

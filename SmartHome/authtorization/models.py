@@ -1,13 +1,9 @@
 from email.policy import default
 from enum import Enum
 import ormar, datetime
-from authtorization.schema import UserLevel
+from authtorization.schema import AuthType, UserLevel
 from SmartHome.dbormar import BaseMeta
 from typing import Optional, List
-
-class AuthType(str, Enum):
-	AUTH_SERVICE = "auth_service",
-	LOGIN = "login"
 
 class User(ormar.Model):
 	class Meta(BaseMeta):
@@ -17,9 +13,10 @@ class User(ormar.Model):
 	name: str = ormar.String(max_length=100, nullable=False)
 	email: str = ormar.String(max_length=200, default="")
 	auth_service_name: str = ormar.String(max_length=400, nullable=True)
+	auth_service_id: int = ormar.Integer(nullable=True)
 	auth_type: AuthType = ormar.String(max_length=50, nullable=False)
 	password: str = ormar.String(max_length=400, nullable=True)
-	role: UserLevel = ormar.String(max_length=10, default=UserLevel.BASE)
+	role: UserLevel = ormar.String(max_length=10, default=UserLevel.NONE)
 
 
 class Session(ormar.Model):

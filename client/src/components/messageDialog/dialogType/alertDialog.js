@@ -4,16 +4,16 @@ export const AlertDialog = ({hide, text, title, buttons})=>{
 
   return(
     <>
-    <div className="dialogCoteiner">
-      <div className="dialogHeader">{title}</div>
-      <div className="dialogBody">
+    <div className="dialogCoteiner card-container">
+      <div className="card-head">{title}</div>
+      <div className="card-content">
         <p>{text}</p>
       </div>
-      <div className="dialogFooter" onClick={hide}>
+      <div className="card-btn-container" onClick={hide}>
       {
         buttons?.map((item, index)=>{
           return(
-            <button key={index} className="dialogButton button normalSelection" onClick={item.action}>{item.title}</button>
+            <button key={index} className="dialogButton btn" onClick={item.action}>{item.title}</button>
           )
         })
       }

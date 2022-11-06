@@ -17,6 +17,7 @@ class UserSchema(BaseModel):
     image_url: Optional[str]
     auth_type: AuthType
     host: Optional[str]
+    auth_name: Optional[str]
 
 class UserEditSchema(BaseModel):
     name: str
@@ -30,7 +31,7 @@ class UserNameSchema(BaseModel):
 
 class UserEditLevelSchema(BaseModel):
     id: int
-    role: UserLevel = UserLevel.BASE
+    role: UserLevel = UserLevel.NONE
 
 class UserEditPasswordSchema(BaseModel):
     old_password: str

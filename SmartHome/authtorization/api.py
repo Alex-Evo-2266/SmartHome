@@ -8,12 +8,12 @@ from fastapi.responses import JSONResponse
 from SmartHome.depends.auth import session, token_dep
 from authtorization.exceptions import InvalidInputException
 from auth_service.auth_service import get_auth_service_tokens
-from authtorization.models import AuthType, Session, User
-from authtorization.logic import create_session, create_tokens_oauth, create_valid_user_name, get_token, local_login, refresh_token
+from authtorization.models import Session, User
+from authtorization.logic import create_session, create_tokens_oauth, create_valid_user_name, delete_session, get_token, local_login, refresh_token
 
 from settings import AUTH_SERVICE_URL, configManager
 
-from .schema import Login, ResponseLogin, ServiceLogin, Tokens
+from .schema import AuthType, Login, ResponseLogin, ServiceLogin, Tokens
 
 logger = logging.getLogger(__name__)
 
@@ -63,13 +63,13 @@ async def refrash(response:Response = Response("ok", 200), smart_home: Optional[
 async def login_auth_service(response:Response = Response("ok", 200), data: ServiceLogin = ServiceLogin(code="")):
 	try:
 		body = await get_auth_service_tokens(data.code)
-		user = await User.objects.get_or_none(auth_service_name = body.user_name)
+		user = await User.objects.get_or_none(auth_service_id = body.user_id)
 		if not user:
 			user_dubl = await User.objects.get_or_none(name = body.user_name)
 			user_name = body.user_name
 			if user_dubl:
 				user_name = await create_valid_user_name(body.user_name)
-			user = await User.objects.create(name=user_name, auth_service_name = body.user_name, auth_type=AuthType.AUTH_SERVICE)
+			user = await User.objects.create(name=user_name, auth_service_id=body.user_id, auth_service_name = body.user_name, auth_type=AuthType.AUTH_SERVICE)
 		tokens = await create_tokens_oauth(user, body.access_token, body.refresh_token)
 		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
 		return ResponseLogin(token=tokens.access, expires_at=tokens.expires_at, id=user.id, role=user.role)
@@ -80,7 +80,7 @@ async def login_auth_service(response:Response = Response("ok", 200), data: Serv
 @router.get("/logout")
 async def logout(auth_data: dict = Depends(token_dep), session:Session = Depends(session)):
 	try:
-		await session.delete()
+		await delete_session(session)
 		return "ok"
 	except InvalidInputException as e:
 		return JSONResponse(status_code=403, content={"message": str(e)})

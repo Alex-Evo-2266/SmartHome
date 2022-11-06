@@ -1,7 +1,7 @@
 import logging
 from turtle import title
 from typing import List, Optional
-from auth_service.castom_requests import ThisLocalSession, castom_auth_service_requests, get_connect_data
+from auth_service.castom_requests import ConnectData, ThisLocalSession, castom_auth_service_requests, get_connect_data
 from authtorization.models import Session
 import settings
 from pydantic import BaseModel
@@ -63,9 +63,31 @@ class ResponseUserData(BaseModel):
 	imageURL: Optional[str]
 	host: Optional[str]
 
+def image_format(connect_data: ConnectData, url:str)->str:
+	if not url:
+		return None
+	return connect_data.host + url
+
 async def get_user_data(session:Session)->ResponseUserData:
 	response = await castom_auth_service_requests(session, "/api/users")
-	print(response)
+	if response.status_code != 200:
+		logger.warning(response.text)
+		raise AuthServiceException(response.text)
+	res = response.json()
+	connect_data = get_connect_data()
+	print(res)
+	data = ResponseUserData(
+		id = res["id"],
+		name = res["name"],
+		email = res["email"],
+		level = res["level"],
+		imageURL = image_format(connect_data, res["imageURL"]),
+		host = connect_data.host
+	)
+	return data
+
+async def get_user_data_by_id(session:Session, id:int)->ResponseUserData:
+	response = await castom_auth_service_requests(session, f"/api/users/{id}")
 	if response.status_code != 200:
 		logger.warning(response.text)
 		raise AuthServiceException(response.text)
@@ -76,11 +98,10 @@ async def get_user_data(session:Session)->ResponseUserData:
 		name = res["name"],
 		email = res["email"],
 		level = res["level"],
-		imageURL = connect_data.host + res["imageURL"],
+		imageURL = image_format(connect_data, res["imageURL"]),
 		host = connect_data.host
 	)
 	return data
-
 
 
 

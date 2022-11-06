@@ -35,7 +35,3 @@
   grid-column-start: 3;
   grid-row-start: 1;
 }
-.flex{
-  display: flex;
-  justify-content: space-between;
-}

@@ -1,9 +1,14 @@
 import datetime
 from enum import Enum
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
+class AuthType(str, Enum):
+	AUTH_SERVICE = "auth_service",
+	LOGIN = "login"
+
 class UserLevel(str, Enum):
+	NONE = "none",
 	BASE = "base",
 	ADMIN = "admin",
 	TERMINAL = "terminal",
@@ -39,12 +44,18 @@ class Token(BaseModel):
 	expires_at: datetime.datetime
 
 class AuthServiceTokens(BaseModel):
+	user_id: Optional[int]
 	user_name: str
 	access_token: str
 	expires_at: datetime.datetime
 	token_type: str
 	refresh_token: str
 	scope: List[str]
+
+class SessionSchema(BaseModel):
+	auth_type: AuthType
+	expires_at: datetime.datetime
+	id: int
 
 
 # from pydantic import BaseModel

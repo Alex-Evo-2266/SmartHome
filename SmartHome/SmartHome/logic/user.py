@@ -5,8 +5,10 @@ import random
 
 from typing import Optional, List
 from datetime import datetime, timedelta
+from auth_service.castom_requests import ThisLocalSession
+from auth_service.config import get_user_data, get_user_data_by_id
 from authtorization.exceptions import UserNotFoundException
-from authtorization.models import AuthType
+from authtorization.models import AuthType, Session
 from authtorization.schema import UserLevel
 
 from SmartHome.exceptions import InvalidInputException, UserAlreadyExistsException
@@ -37,18 +39,27 @@ async def addUser(data: UserForm):
 		logger.error(f"error add user: {e}")
 		raise
 
-async def getUser(id:int)->UserSchema:
+async def getUser(id:int, session:Session)->UserSchema:
 	user = await User.objects.get_or_none(id=id)
 	if not user:
 		logger.error(f"none user")
 		raise UserNotFoundException()
+	try:
+		if user.auth_type == AuthType.AUTH_SERVICE:
+			data = await get_user_data(session)
+			user.email = data.email
+			user.auth_service_name = data.name
+			await user.update(_columns=["email", "auth_service_name"])
+	except Exception as e:
+		pass
 	return UserSchema(
 		id=user.id,
 		name=user.name,
 		email=user.email,
 		role=user.role,
 		image_url=None,
-		auth_type=user.auth_type
+		auth_type=user.auth_type,
+		auth_name=user.auth_service_name
 	)
 
 async def editUser(id: int,data: UserEditSchema)->None:
@@ -67,24 +78,45 @@ async def deleteUser(id:int):
 		logger.error(f"none user")
 		raise UserNotFoundException()
 	message = "Account deleted name = " + u.name
+	menu = await MenuElement.objects.all(user=u)
+	for item in menu:
+		await item.delete()
+	sessions = await Session.objects.all(user=u)
+	for item in sessions:
+		await item.delete()
 	await send_email("Account smart home",u.email,message)
 	logger.info(f"user delete. id:{id}. user name:{u.name}")
 	await u.delete()
 
-async def getUsers()->List[UserSchema]:
+async def get_image(user:User, session: Session):
+	try:
+		image = None
+		if user.auth_type == AuthType.AUTH_SERVICE:
+			print(user)
+			data = await get_user_data_by_id(session, user.auth_service_id)
+			image = data.imageURL
+		return image
+	except ThisLocalSession as e:
+		return None
+	except Exception as e:
+		raise e
+
+async def getUsers(session: Session)->List[UserSchema]:
 	outUsers:List[UserSchema] = list()
 	users = await User.objects.all()
 	if not users:
 		logger.error(f"none users")
 		raise UserNotFoundException()
 	for item in users:
+		image = await get_image(item, session)
 		outUsers.append(UserSchema(
 			id=item.id,
 			name=item.name,
 			email=item.email,
 			role=item.role,
-			ImageId=None,
-			auth_type=item.auth_type
+			image_url=image,
+			auth_type=item.auth_type,
+			auth_name=item.auth_service_name
 		))
 	return outUsers
 

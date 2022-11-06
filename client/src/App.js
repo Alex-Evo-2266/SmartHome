@@ -19,7 +19,7 @@ function App() {
   const routes = useRoutes(data.isAuthenticated,data.role);
   const {loadStyle, avtoNightStyle, adaptiveBackground} = useStyle()
   const {loadData} = useUser()
-  const {loadMenuData} = useMenu() 
+  const {loadMenuData} = useMenu()
 
   useEffect(()=>{
     if (!!data.token)
@@ -41,6 +41,11 @@ function App() {
     avtoNightStyle()
   },[adaptiveBackground, avtoNightStyle])
 
+  useEffect(()=>{
+    if(data.isAuthenticated && window.location.search && window.location.search !== "")
+      window.location = window.location.pathname
+  },[data.isAuthenticated])
+
   
 
   return (
@@ -48,7 +53,7 @@ function App() {
       <div className="App">
         <DialogWindow/>
         <Alert/>
-        {(data.isAuthenticated)?<Menu/>:null}
+        {(data.isAuthenticated && data.role !== "none")?<Menu/>:null}
         {routes}
       </div>
     </BrowserRouter>
