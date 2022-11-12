@@ -1,6 +1,6 @@
 import logging
 
-from .devicesArrey import devicesArrey
+from .devicesArrey import DevicesArrey
 # from smartHomeApi.logic.Cart import deleteDeviceCart
 from ..utils.file import readYMLFile, writeYMLFile
 from ..deviceFile.DeviceFile import Devices
@@ -49,7 +49,7 @@ async def editDevice(data: DeviceEditSchema):
             dev.save()
         if(data.newSystemName):
             dev.editSysemName(data.newSystemName)
-        devicesArrey.delete(data.systemName)
+        DevicesArrey.delete(data.systemName)
         return FunctionRespons(status=TypeRespons.OK, data="ok")
     except Exception as e:
         logger.error(f"error edit device. detail:{e}")
@@ -58,7 +58,7 @@ async def editDevice(data: DeviceEditSchema):
 async def deleteDevice(systemName: str):
     try:
         dev = Devices.get(systemName=systemName)
-        devicesArrey.delete(systemName)
+        DevicesArrey.delete(systemName)
         await dev.delete()
         deleteDeviceinpage(systemName)
         logger.info(f'delete device, systemName:{systemName}')

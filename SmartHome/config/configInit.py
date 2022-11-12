@@ -1,6 +1,6 @@
 from settings import configManager
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
-from SmartHome.logic.device.deviceSendControl import updataSendTime
+# from SmartHome.logic.device.deviceSendControl import updataSendTime
 import yaml, logging
 
 from weather.weather import updateWeather
@@ -23,4 +23,4 @@ def confinit():
         "host":"",
         "client_id":"",
         "client_secret":""
-    }, updataSendTime)
+    })

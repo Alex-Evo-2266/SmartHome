@@ -1,4 +1,5 @@
 
+
 class NoConfigurationDataException(Exception):
 	def __init__(self, *args: object) -> None:
 		if args:
@@ -11,6 +12,19 @@ class NoConfigurationDataException(Exception):
 			return f"NoConfigurationDataException, {self.message}"
 		else:
 			return "NoConfigurationDataException"
+
+class InvalidAttributeException(Exception):
+	def __init__(self, *args: object) -> None:
+		if args:
+			self.message = args[0]
+		else:
+			self.message = "invalid attribute"
+	
+	def __str__(self) -> str:
+		if self.message:
+			return f"InvalidAttributeException, {self.message}"
+		else:
+			return "InvalidAttributeException"
 
 class InvalidInputException(Exception):
 	def __init__(self, *args: object) -> None:
@@ -76,3 +90,16 @@ class ModelElementNotFound(Exception):
 			return f"ModelElementNotFound, {self.message}"
 		else:
 			return "ModelElementNotFound"
+
+class DeviceNotFound(Exception):
+	def __init__(self, *args: object) -> None:
+		if args:
+			self.message = args[0]
+		else:
+			self.message = "device not found."
+	
+	def __str__(self) -> str:
+		if self.message:
+			return f"DeviceNotFound, {self.message}"
+		else:
+			return "DeviceNotFound"

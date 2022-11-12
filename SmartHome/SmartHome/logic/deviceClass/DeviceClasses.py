@@ -1,6 +1,12 @@
 
+import logging
 from optparse import Option
 from typing import Any, Dict
+from SmartHome.logic.deviceFile.schema import DeviceSchema
+
+from exceptions.exceptions import DeviceNotFound
+
+logger = logging.getLogger(__name__)
 
 class ClassAlreadyExistsException(Exception):
 	def __init__(self, *args: object) -> None:
@@ -23,6 +29,7 @@ class DeviceClasses(object):
 	def add(class_name:str, cls:Any)->None:
 		if class_name in DeviceClasses._classes:
 			raise ClassAlreadyExistsException()
+		logger.info("added device class",class_name)
 		DeviceClasses._classes[class_name] = cls
 
 	@staticmethod
@@ -40,5 +47,9 @@ class DeviceClasses(object):
 		return DeviceClasses._classes
 
 	@staticmethod
-	def get_device(class_name:str, system_name)->Dict[str, Any]:
-		return DeviceClasses._classes
+	def get_device(class_name:str, device_data:DeviceSchema):
+		if not class_name in DeviceClasses._classes:
+			raise DeviceNotFound("Class not fount")
+		deviceClass = DeviceClasses._classes[class_name]
+		device = deviceClass(device_data)
+		return device

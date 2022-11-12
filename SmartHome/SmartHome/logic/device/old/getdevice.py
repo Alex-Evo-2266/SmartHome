@@ -1,10 +1,10 @@
+from SmartHome.SmartHome.logic.deviceClass.DeviceClasses import DeviceClasses
 from .devicesArrey import DevicesArrey
 from ..deviceFile.DeviceFile import Devices
 
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 from SmartHome.logic.deviceClass.VariableClass import Variable
-# from castom_moduls import getDevicesClass
 
 import json
 import ast, logging
@@ -44,8 +44,8 @@ async def device(item):
         if(not element):
             if typeConnect == 'variable':
                 dev = Variable(systemName=systemName)
-            # else:
-            #     dev = await getDevicesClass(typeConnect, systemName)
+            else:
+                dev = await DeviceClasses.get_device(typeConnect, systemName)
             if(not dev):
                 dev = BaseDevice(systemName=systemName)
                 data = dev.get_Base_Info()
