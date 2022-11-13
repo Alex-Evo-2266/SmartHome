@@ -9,6 +9,8 @@ import { EditPasswordPage } from './Page/ProfilePage/EditPassword'
 import { UsersPage } from './Page/UsersPage/UsersPage'
 import { NonePage } from './Page/NonePage/NonePage'
 import { AddUser } from './Page/UsersPage/AddUserPage'
+import { DevicePage } from './Page/DevicePages/DevicePage'
+import { AddDevicePage } from './Page/DevicePages/AddDevicePage'
 // import {DitailDevicePage} from './Page/DitailDevicePage'
 // import {DevicesPage} from './Page/DevicesPage'
 // import {ProfilePage} from './Page/ProfilePage'
@@ -67,6 +69,12 @@ export const useRoutes = (isAuthenticated,role)=>{
         </Route>
         <Route path="/users/add" exact>
           <AddUser/>
+        </Route>
+        <Route path="/devices" exact>
+          <DevicePage/>
+        </Route>
+        <Route path="/devices/add" exact>
+          <AddDevicePage/>
         </Route>
         <Redirect to="/home"/>
       </Switch>

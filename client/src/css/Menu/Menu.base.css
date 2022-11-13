@@ -214,8 +214,7 @@
   text-align: center;
   line-height: 40px;
 }
-.navigationRail ul li,
-.bottomMenuAll ul li{
+.navigationRail ul li{
   line-height: var(--height-menu);
   font-size: 24px;
   height: var(--height-menu);
@@ -223,13 +222,10 @@
   cursor: pointer;
   width: 255px;
 }
-.navigationRail ul li:hover,
-.bottomMenuAll ul li:hover{
+.navigationRail ul li:hover{
   background: var(--color-active);
 }
 .navigationRail ul li a,
-.bottomMenuAll ul li a,
-.bottomMenuAll ul li .menu-btn,
 .navigationRail ul li .menu-btn{
   height: 100%;
   width: 100%;
@@ -238,14 +234,11 @@
   text-decoration: none;
   color: var(--text-color-base-fon);
 }
-.navigationRail ul li a.active,
-.bottomMenuAll ul li a.active{
+.navigationRail ul li a.active{
   background-color: var(--color-active);
 }
-.navigationRail ul li a i,
-.bottomMenuAll ul li a i,
-.navigationRail ul li .menu-btn i,
-.bottomMenuAll ul li .menu-btn i{
+.navigationRail ul li a i
+.navigationRail ul li .menu-btn i{
   width: var(--width-menu);
   text-align: center;
   line-height: var(--height-menu);
@@ -266,26 +259,24 @@
   left: 0;
   top: 0;
 }
-.navigationRail ul li a span,
-.bottomMenuAll ul li a span,
-.navigationRail ul li .menu-btn span,
-.bottomMenuAll ul li .menu-btn span{
+.navigationRail ul li a span
+.navigationRail ul li .menu-btn span{
   margin-left: 5px;
 }
 .navigationRail .profifileConteiner{
-  height: 56px;
+  height: var(--height-menu);
   color: var(--text-color-normal-fon);
   display: flex;
   width: 100%;
 }
 .navigationRail .profifileConteiner .out{
-  width: 56px;
-  line-height: 56px;
+  width: var(--width-menu);
+  line-height: var(--height-menu);
   font-size: 24px;
   text-align: center;
 }
 .navigationRail .profifileConteiner .profile{
-  height: 56px;
+  height: var(--height-menu);
   display: inline-block;
 }
 .navigationRail .bottomField{
@@ -294,7 +285,7 @@
 }
 .toolbarConteainer{
   position: fixed;
-  height: 56px;
+  height: var(--height-menu);
   width: 100%;
   background: var(--color-base);
   left: 0;

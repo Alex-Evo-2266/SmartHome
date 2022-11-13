@@ -13,7 +13,7 @@ export const TopMenu = ({title, togle, buttons, dopmenuBtn, searchTogle})=>{
       </div>
       :null
     }
-      <h2>{title}</h2>
+      <h2 className={`${(Array.isArray(buttons) && buttons[0])?"min-hide":""}`}>{title}</h2>
       <Tabs buttons={buttons}/>
       <div className="controlConteiner">
       {

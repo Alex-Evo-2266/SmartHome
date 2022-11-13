@@ -2,9 +2,9 @@
 	position: fixed;
 	bottom: 16px;
 	right: 16px;
-	height: 56px;
-	line-height: 56px;
-	width: 56px;
+	height: var(--height-menu);
+	line-height: var(--height-menu);
+	width: var(--width-menu);
 	border: none;
 	background: var(--color-active);
 	color: var(--text-color-active-fon);
