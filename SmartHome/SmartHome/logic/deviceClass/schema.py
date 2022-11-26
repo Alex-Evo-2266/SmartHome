@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 class ChangeField(BaseModel):
@@ -27,4 +27,7 @@ class AdditionDevice(BaseModel):
 class OptionalDevice(BaseModel):
 	class_name: str
 	added: AdditionDevice
+	added_url: Optional[str] = None
+	change_url: Optional[str] = None
 	change: ChangeDevice
+	types: List[str] = ["base"]

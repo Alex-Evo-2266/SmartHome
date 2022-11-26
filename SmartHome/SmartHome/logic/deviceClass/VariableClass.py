@@ -4,6 +4,8 @@ from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 
 class Variable(BaseDevice):
 
+	types = ["variable"]
+
 	class Config(DefConfig):
 		fields_change: ChangeField = ChangeField(value=True, address=False)
 		address: bool = False

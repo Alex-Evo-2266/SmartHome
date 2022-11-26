@@ -40,7 +40,7 @@ export const EditProfilePage = () => {
 
   const outForm = async() =>{
     try{
-      await request("/api/user", "PUT", userData, {Authorization: `Bearer ${auth.token}`})
+      await request("/api/users", "PUT", userData, {Authorization: `Bearer ${auth.token}`})
       message("config update", "success")
     }
     catch{}

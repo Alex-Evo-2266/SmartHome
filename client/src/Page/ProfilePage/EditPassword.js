@@ -33,7 +33,7 @@ export const EditPasswordPage = () => {
 
   const outForm = async() =>{
 	try{
-		await request("/api/user/password", "PUT", password, {Authorization: `Bearer ${auth.token}`})
+		await request("/api/users/password", "PUT", password, {Authorization: `Bearer ${auth.token}`})
 		message("config update", "success")
 	}
 	catch{}

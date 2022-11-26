@@ -1,11 +1,11 @@
-import { HIDE_MENU, SET_DOP_MENU, SET_MENU_ALL_FIELD, SET_MENU_FIELD, SET_MENU_USER_FIELD, SET_SEARCH_FUN, SET_TABS, SET_TITLE, SHOW_MENU, TOGLE_MENU} from "../types"
+import { CLEAR_MENU, HIDE_MENU, SET_DOP_MENU, SET_MENU_ALL_FIELD, SET_MENU_FIELD, SET_MENU_USER_FIELD, SET_SEARCH_FUN, SET_TABS, SET_TITLE, SHOW_MENU, TOGLE_MENU} from "../types"
 
 const initState = {
 	visible: false,
 	fields:[],
 	insluedField: [],
 	title: "",
-	search: ()=>{},
+	search: null,
 	dopmenu: [],
 	tabs: []
 }
@@ -42,12 +42,15 @@ export const menuReducer = (state = initState, action) =>{
 				...state, 
 				insluedField: (action?.payload?.insluedField)?action.payload.insluedField:[]
 			})
+		case CLEAR_MENU:
+			return ({...initState, fields:state.fields, insluedField:state.insluedField})
 		default:
 			return state
 	}
 }
 
 export const show_menu = () => ({type: SHOW_MENU})
+export const clear_menu = () => ({type: CLEAR_MENU})
 export const hide_menu = () => ({type: HIDE_MENU})
 export const togle_menu = () => ({type: TOGLE_MENU})
 export const setTitle = (title) => ({type: SET_TITLE, payload:{title}})

@@ -26,6 +26,6 @@ async def getconfig(data:ServerConfigSchema, auth_data: TokenData = Depends(toke
         return "ok"
     return JSONResponse(status_code=400, content={"message": "error write file"})
 
-@router.get("/data/get", response_model=ServerDataSchema)
+@router.get("", response_model=ServerDataSchema)
 async def getdata(auth_data: TokenData = Depends(token_dep)):
     return await getServerData()

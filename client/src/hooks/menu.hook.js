@@ -16,7 +16,7 @@ export const useMenu = ()=>{
 	},[error, message, clearError])
 
 	const loadAllFields = useCallback(async()=>{
-		let data = await request("/api/menu/all", "GET", null, {Authorization: `Bearer ${auth.token}`})
+		let data = await request("/api/users/menu/all", "GET", null, {Authorization: `Bearer ${auth.token}`})
 		if (data)
 		{
 			dispatch(setAllFields(data))
@@ -24,7 +24,7 @@ export const useMenu = ()=>{
 	},[request, dispatch, auth.token])
 
 	const loadUserFields = useCallback(async()=>{
-		let data = await request("/api/menu", "GET", null, {Authorization: `Bearer ${auth.token}`})
+		let data = await request("/api/users/menu", "GET", null, {Authorization: `Bearer ${auth.token}`})
 		if (data)
 		{
 			dispatch(setUserFields(data))

@@ -186,7 +186,11 @@
 		width: 100%;
 		margin-right: 0;
 	}
+	.topMenu .tabs .tabButton{
+		width: 100%;
+	}
 	.topMenu .tabs{
+		justify-content: space-around;
 		margin-left: 0;
 	}
 	.navigationRail{

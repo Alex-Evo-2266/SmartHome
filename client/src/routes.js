@@ -67,15 +67,21 @@ export const useRoutes = (isAuthenticated,role)=>{
         <Route path="/users" exact>
           <UsersPage/>
         </Route>
-        <Route path="/users/add" exact>
-          <AddUser/>
-        </Route>
         <Route path="/devices" exact>
           <DevicePage/>
         </Route>
-        <Route path="/devices/add" exact>
-          <AddDevicePage/>
-        </Route>
+        {
+          (role === "admin")?
+          <>
+          <Route path="/users/add" exact>
+            <AddUser/>
+          </Route>
+          <Route path="/devices/add" exact>
+            <AddDevicePage/>
+          </Route>
+          </>:
+          null
+        }        
         <Redirect to="/home"/>
       </Switch>
     )

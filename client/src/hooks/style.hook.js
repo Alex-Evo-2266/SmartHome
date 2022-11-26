@@ -138,7 +138,7 @@ export const useStyle = () => {
   const loadStyle = useCallback(async()=>{
     try
     {
-      let data = await request("/api/style", "GET", null, {Authorization: `Bearer ${auth.token}`})
+      let data = await request("/api/users/styles", "GET", null, {Authorization: `Bearer ${auth.token}`})
       if (data && data.light_style && data.night_style && data.special_style && data.backgrounds)
       {
         console.log(data)

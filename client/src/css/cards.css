@@ -3,12 +3,19 @@
 	color: var(--text-color-normal-fon);
 	border-radius: var(--card-border-radius);
 	box-shadow: 0 0 10px #000;
+	transition: 0.5s;
 	max-width: 400px;
 	min-width: 300px;
 	margin: 10px;
 	min-height: 250px;
 	position: relative;
 	flex-basis: auto;
+}
+
+.base-card-container.min{
+	max-width: 300px;
+	min-width: 150px;
+	min-height: 100px;
 }
 
 .card-container .card-head{
@@ -30,11 +37,19 @@
 	left: 0;
 }
 
+.card-container .card-img.min{
+	height: 100px;
+}
+
 .card-container .card-img.circle{
 	border-radius: 50%;
 	margin-top: 10px;
 	height: 250px;
 	width: 250px;
+}
+.card-container .card-img.circle.min{
+	height: 130px;
+	width: 130px;
 }
 
 .card-container .card-img img{

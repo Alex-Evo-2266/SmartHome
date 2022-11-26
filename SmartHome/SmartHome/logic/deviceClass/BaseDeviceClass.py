@@ -25,6 +25,8 @@ def look_for_param(arr:List[T], name:str)->T|None:
 class BaseDevice(metaclass=DeviceMeta):
 	"""docstring for BaseDevice."""
 
+	types=["base"]
+
 	class Config(DefConfig):
 		pass
 

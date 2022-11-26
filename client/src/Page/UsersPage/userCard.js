@@ -12,13 +12,13 @@ export const UserCard = ({user,updata})=>{
 	const {request, error, clearError} = useHttp()
 	const {message} = useMessage()
 	const auth = useSelector(state=>state.auth)
-	const userself = useSelector(state=>state.user)
+	const userself = useSelector(state=>state.user) 
 
 	const dispatch = useDispatch()
 
 	const deleteUser = useCallback(async() =>{
 		try{
-			await request(`/api/user/${user.id}`, "DELETE", null, {Authorization: `Bearer ${auth.token}`})
+			await request(`/api/users/${user.id}`, "DELETE", null, {Authorization: `Bearer ${auth.token}`})
 			message("user delete", SUCCESS)
 			if(typeof(updata) === "function")
 				updata()
@@ -37,7 +37,7 @@ export const UserCard = ({user,updata})=>{
 
 	const editRole = useCallback(async(role) =>{
 		try{
-			await request(`/api/user/level`, "PUT", {id:user.id, role}, {Authorization: `Bearer ${auth.token}`})
+			await request(`/api/users/level`, "PUT", {id:user.id, role}, {Authorization: `Bearer ${auth.token}`})
 			if(typeof(updata) === "function")
 				updata()
 			dispatch(hideDialog())

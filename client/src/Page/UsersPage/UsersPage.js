@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { useHttp } from '../../hooks/http.hook'
 import { useMessage } from '../../hooks/message.hook'
-import { setSearch, setTitle } from '../../store/reducers/menuReducer'
+import { clear_menu, setSearch, setTitle } from '../../store/reducers/menuReducer'
 import { UserCard } from './userCard'
 
 export const UsersPage = () => {
@@ -15,7 +15,7 @@ export const UsersPage = () => {
 	const [allUsers, setAllUsers] = useState([])
 
 	const getUsers = useCallback(async()=>{
-		const data = await request("/api/user/all", "GET", null, {Authorization: `Bearer ${auth.token}`})
+		const data = await request("/api/users/all", "GET", null, {Authorization: `Bearer ${auth.token}`})
 		console.log(data)
 		if(data)
 		{
@@ -36,6 +36,7 @@ export const UsersPage = () => {
 	useEffect(()=>{
 		dispatch(setTitle("Users"))
 		dispatch(setSearch(searchout))
+		return ()=>dispatch(clear_menu())
 	  },[dispatch, searchout])
 
 	useEffect(()=>{

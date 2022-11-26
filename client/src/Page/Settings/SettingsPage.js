@@ -13,14 +13,14 @@ export const SettingsPage = () => {
   const getTabs = useCallback(()=>{
 	let tabs = [
 		{
-			title:"settings menu",
+			title:"menu",
 			onClick:()=>setPage("menu"),
 			active:(page==="menu")
 		}
 	]
 	if (auth.role === "admin")
 		tabs.push({
-			title:"settings server",
+			title:"server",
 			onClick:()=>setPage("server"),
 			active:(page==="server")
 		})

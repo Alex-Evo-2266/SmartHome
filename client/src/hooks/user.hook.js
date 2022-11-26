@@ -17,7 +17,7 @@ export const useUser = ()=>{
 
 	const loadData = useCallback(async() =>{
 		try{
-			let data = await request("/api/user", "GET", null, {Authorization: `Bearer ${auth.token}`})
+			let data = await request("/api/users", "GET", null, {Authorization: `Bearer ${auth.token}`})
 			if (data)
 			{
 				dispatch(setUserAction({

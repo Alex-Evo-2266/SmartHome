@@ -27,17 +27,25 @@ export const Menu = () =>{
 		setOtherField(arr1)
 	},[menu])
 
-	const search = useCallback(()=>{
-		dispatch(showTextDialog("Search", "", "name", menu.search))
+	const get_search = useCallback(()=>{
+		if (typeof(menu.search) === "function")
+			return ()=>{
+				dispatch(showTextDialog("Search", "", "name", menu.search))
+			}
+		return null
 	},[dispatch, menu.search])
 
 	useEffect(()=>{
 		sortMenuField()
 	},[sortMenuField])
 
+	useEffect(()=>{
+		console.log(menu.search)
+	},[menu.search])
+
 	return(
 		<>
-			<TopMenu buttons={menu.tabs} dopmenuBtn={menu.dopmenu} togle={()=>dispatch(togle_menu())} title={menu.title} searchTogle={search}/>
+			<TopMenu buttons={menu.tabs} dopmenuBtn={menu.dopmenu} togle={()=>dispatch(togle_menu())} title={menu.title} searchTogle={get_search()}/>
 			<LeftMenu visible={menu.visible} hide={()=>dispatch({type:HIDE_MENU})} insluedField={insluedField} otherField={otherField}/>
 		</>
 	)

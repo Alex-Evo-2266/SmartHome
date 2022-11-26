@@ -14,6 +14,6 @@ def get_option():
 		option = _class.Config
 		added = AdditionDevice(address=option.address, token=option.token, fields=option.fields_addition)
 		change = ChangeDevice(address=option.address, token=option.token, fields=option.fields_change)
-		arr.append(OptionalDevice(class_name=key, added=added, change=change))
+		arr.append(OptionalDevice(class_name=key, added=added, change=change, types=_class.types, added_url=option.added_url, change_url=option.change_url))
 	return arr
 	

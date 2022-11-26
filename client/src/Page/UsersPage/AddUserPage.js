@@ -32,7 +32,7 @@ export function AddUser(){
 
   const registerHandler = async () => {
     try {
-      const data = await request('/api/user', 'POST', {...form}, {Authorization: `Bearer ${auth.token}`})
+      const data = await request('/api/users', 'POST', {...form}, {Authorization: `Bearer ${auth.token}`})
       if(data){
         history.push('/users')
         message("user registered",SUCCESS)

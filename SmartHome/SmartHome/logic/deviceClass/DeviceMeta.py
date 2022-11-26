@@ -9,6 +9,8 @@ class DefConfig():
 	token:bool = False
 	fields_addition:bool = True
 	fields_change:ChangeField = ChangeField()
+	added_url=None
+	change_url=None
 
 class DeviceMeta(type):
 	def __new__(cls, clsname, bases, dct, config = None):

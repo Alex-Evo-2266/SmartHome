@@ -8,8 +8,8 @@ from authtorization.models import Session
 from authtorization.auth_depends import session, token_dep_all_user
 
 router = APIRouter(
-	prefix="/api/style",
-	tags=["style"],
+	prefix="/api/users/styles",
+	tags=["styles"],
 	responses={404: {"description": "Not found"}},
 )
 

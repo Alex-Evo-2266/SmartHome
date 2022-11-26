@@ -13,7 +13,7 @@ from authtorization.auth_depends import session, token_dep, token_dep_all_user
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
-	prefix="/api/menu",
+	prefix="/api/users/menu",
 	tags=["menu"],
 	responses={404: {"description": "Not found"}},
 )

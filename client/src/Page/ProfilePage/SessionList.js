@@ -13,14 +13,14 @@ export const SessionList = () => {
 	const dispatch = useDispatch()
 
 	const getSessions = useCallback(async()=>{
-		const data = await request("/api/user/sessions", "GET", null, {Authorization: `Bearer ${auth.token}`})
+		const data = await request("/api/users/sessions", "GET", null, {Authorization: `Bearer ${auth.token}`})
 		if (data)
 			setSessions(data)
 	},[request, auth.token])
 
 	const deleteSession = useCallback(async(id) =>{
 		try{
-			await request(`/api/user/sessions/${id}`, "DELETE", null, {Authorization: `Bearer ${auth.token}`})
+			await request(`/api/users/sessions/${id}`, "DELETE", null, {Authorization: `Bearer ${auth.token}`})
 			dispatch(hideDialog())
 		}catch{}
 	},[request, auth.token, dispatch])

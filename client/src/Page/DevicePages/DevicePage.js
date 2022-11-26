@@ -1,12 +1,13 @@
 import React,{useCallback, useEffect} from 'react'
-import { useDispatch} from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { setSearch, setTitle } from '../../store/reducers/menuReducer'
+import { clear_menu, setSearch, setTitle } from '../../store/reducers/menuReducer'
 
 
 export const DevicePage = () => {
 
   const dispatch = useDispatch()
+  const auth = useSelector(state=>state.auth)
 
   const searchout = useCallback((search)=>{
 	// if(search===""){
@@ -20,12 +21,16 @@ export const DevicePage = () => {
 useEffect(()=>{
 	dispatch(setTitle("Devices"))
 	dispatch(setSearch(searchout))
+	return ()=>dispatch(clear_menu())
   },[dispatch, searchout])
 
   return(
     <div className='contaimer fab'>
-
-		<NavLink className='fab-btn' to="/devices/add">+</NavLink>
+	{
+		(auth.role === "admin")?
+		<NavLink className='fab-btn' to="/devices/add">+</NavLink>:
+		null
+	}
     </div>
   )
 }

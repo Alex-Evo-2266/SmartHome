@@ -23,7 +23,7 @@ from authtorization.auth_depends import token_dep
 # from SmartHome.models import DeviceHistory
 
 router = APIRouter(
-	prefix="/api/device",
+	prefix="/api/devices",
 	tags=["device"],
 	responses={404: {"description": "Not found"}},
 )
