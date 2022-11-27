@@ -11,7 +11,7 @@
 /* @import "./header/header.base.css"; */
 @import "./deviceCart/deviceCart.base.css";
 @import "./infoCard/infoCard.css";
-@import "./hidingLi/hidingLi.base.css";
+@import "./hiding-div.css";
 @import "./form/form.base.css";
 @import "./homeCart/homeCart.base.css";
 @import "./modalWindow/modalWindow.base.css";

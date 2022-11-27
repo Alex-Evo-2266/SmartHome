@@ -1,6 +1,6 @@
 .base-card-container{
-	background: var(--color-normal);
-	color: var(--text-color-normal-fon);
+	background: var(--color-base-light);
+	color: var(--text-color-base-fon);
 	border-radius: var(--card-border-radius);
 	box-shadow: 0 0 10px #000;
 	transition: 0.5s;
@@ -107,7 +107,7 @@
 	height: 60px;
     width: 60px;
     line-height: 60px;
-    background: var(--color-normal);
+    background: var(--color-base-light);
     text-align: center;
     border-radius: 4px;
     transition: .5s;
@@ -133,11 +133,11 @@
 	transform: translate(-50%, -50%);
 	width: 560px;
 	z-index: 99;
-	background: var(--color-normal);
+	background: var(--color-base-light);
 	position: fixed;
 	box-shadow: 0 0 10px #000;
 	border-radius: var(--card-border-radius);
-	color: var(--text-color-normal-fon);
+	color: var(--text-color-base-fon);
   }
   @media (max-width: 600px){
 	.dialogCoteiner{
