@@ -3,6 +3,7 @@ import asyncio, logging
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from SmartHome.logic.device.sendDevice import sendDevice
 from authtorization.initAdmin import initAdmin
 
 from castom_moduls import init_modules
@@ -66,10 +67,10 @@ async def startup() -> None:
 	# RunFunctions.subscribe("saveDevice", saveDevice, 120)
 	confinit()
 	base = configManager.getConfig("base")
-	# if "frequency" in base:
-	#     RunFunctions.subscribe("devices", sendDevice, int(base['frequency']))
-	# else:
-	#     RunFunctions.subscribe("devices", sendDevice, 6)
+	if "frequency" in base:
+		RunFunctions.subscribe("devices", sendDevice, int(base['frequency']))
+	else:
+		RunFunctions.subscribe("devices", sendDevice, 6)
 	await init_modules()
 	database_ = app.state.database
 	if not database_.is_connected:

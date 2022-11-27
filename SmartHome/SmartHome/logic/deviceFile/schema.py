@@ -10,6 +10,7 @@ class Status_Device(str, Enum):
     ONLINE = "online"
     OFFLINE = "offline"
     NOT_SUPPORTED = "not_supported"
+    UNLINC = "unlinc"
 
 class DeviceFieldSchema(BaseModel):
     address: Optional[str]

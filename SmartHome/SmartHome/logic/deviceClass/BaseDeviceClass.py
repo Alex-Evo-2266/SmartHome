@@ -70,7 +70,10 @@ class BaseDevice(metaclass=DeviceMeta):
 
 	@property
 	def is_conected(self):
-		return bool(self.device)
+		'''
+		if the device does not require a connection, then always "true"
+		'''
+		return True
 
 	def get_device(self):
 		return self.device
