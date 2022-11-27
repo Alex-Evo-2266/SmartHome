@@ -21,9 +21,6 @@ export const FieldDevicePage = ({options, setDevice, device, next, prev}) => {
 
 	const [loading, setLoading] = useState(false)
 
-	useEffect(()=>{
-	},[device])
-
 	const changeHandler = (e)=>{
 		setDevice(prev=>({...prev, [e.target.name]:e.target.value}))
 	}
@@ -56,7 +53,7 @@ export const FieldDevicePage = ({options, setDevice, device, next, prev}) => {
 		return(<Loader/>)
 
   return(
-	<div className='pagecontent'>
+	<div className='pagecontent card-container'>
 		<h2>Field</h2>
 		{
 		(options.address)?
@@ -66,16 +63,28 @@ export const FieldDevicePage = ({options, setDevice, device, next, prev}) => {
 					<option value="json">json</option>
 					<option value="value">value</option>
 				</select>
-        		<label>Name</label>
+        		<label>value type</label>
       		</div>
     	</div>:
+		null
+		}
+		{
+		(options.address)?
+		<div className="configElement">
+			<div className="input-data">
+				<input onChange={changeHandler} required name="address" type="text" value={device.address}></input>
+				<label>address</label>
+			</div>
+		</div>:
 		null
 		}
 		{
 			device?.fields.map((item, index)=><FieldComponent del={()=>delField(index)} setField={(data)=>setField(data, index)} options={options} key={index} field={item}/>)
 		}
 		<div className="card-btn-container">
+			<button className='btn border' onClick={prev}>back</button>
 			<button className='btn' onClick={addField}>add field</button>
+			<button className='btn' onClick={next}>next</button>
 		</div>
 	</div>
   )

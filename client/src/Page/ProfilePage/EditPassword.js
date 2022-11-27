@@ -9,7 +9,7 @@ export const EditPasswordPage = () => {
   const user = useSelector(state=>state.user)
   const {request, error, clearError} = useHttp()
   const dispatch = useDispatch()
-	const {message} = useMessage();
+  const {message} = useMessage();
   const [focus, setFocus] = useState(false)
   const [password, setPassword] = useState({
 	new_password: "",

@@ -50,12 +50,12 @@ export const FieldComponent = ({options, setField, field, del}) => {
 
 	const changeType = (e)=>{
 		let newField = {...fieldL, [e.target.name]:e.target.value}
-		if(e.target.name==="number")
+		if(e.target.value==="number")
 		{
 			newField.low = "0"
 			newField.high = "100"
 		}
-		else if(e.target.name==="binary")
+		else if(e.target.value==="binary")
 		{
 			newField.low = "true"
 			newField.high = "false"
