@@ -21,7 +21,8 @@ export const AddDevicePage = () => {
     name: "",
     system_name: "",
     address: "",
-    token: ""
+    token: "",
+    fields:[]
   })
 
   const getOptions = useCallback(async()=>{
@@ -29,6 +30,14 @@ export const AddDevicePage = () => {
     if(data && Array.isArray(data))
       setOptions(data)
   },[request, auth.token])
+
+  const getOptionsDevice = useCallback(()=>{
+    if(device.class_device)
+    {
+      let d = options.filter((item)=>item.class_name === device.class_device)
+      return d[0]
+    }
+  },[options, device])
 
   useEffect(()=>{
     getOptions()
@@ -54,7 +63,7 @@ export const AddDevicePage = () => {
       (page === 1)?
       <ChoiseDevicePage options={options} setDevice={setDevice} next={()=>setPage(prev=>prev+1)}/>:
       (page === 2)?
-      <FieldDevicePage options={options} device={device}/>:
+      <FieldDevicePage setDevice={setDevice} options={getOptionsDevice().added} device={device} next={()=>setPage(prev=>prev+1)}/>:
       null
     }
     </div>

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react'
 
-export const HidingDiv = ({children, title, show=false})=>{
+export const HidingDiv = ({children, title, show=false, dopHeight = 0})=>{
   const [visible, setVisible] = useState(show)
   const [height, setHeight] = useState("56px")
   const container = useRef(null)
@@ -15,7 +15,7 @@ export const HidingDiv = ({children, title, show=false})=>{
       {
         let height2 = window.getComputedStyle(container.current).getPropertyValue('height')
         height2 = Number(height2.slice(0, -2))
-        setHeight((height2 + 15 + 56) + "px")
+        setHeight((height2 + 15 + 56 + dopHeight) + "px")
       }
       setVisible(!visible)
     }

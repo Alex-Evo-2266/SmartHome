@@ -28,11 +28,15 @@ export const ChoiseDevicePage = ({options, setDevice, next, prev}) => {
 			dispatch(showConfirmationDialog("choise type", types, (data)=>{
 				setDevice(prev=>({...prev, class_device:device_class, type:data}))
 				dispatch(hideDialog())
+				if(typeof(next)==="function")
+					next()
 			}))
 		else
+		{
 			setDevice(prev=>({...prev, class_device:device_class, type:type}))
-		if(typeof(next)==="function")
-			next()
+			if(typeof(next)==="function")
+				next()
+		}
 	}
 
   return options.map((item, index)=>(
