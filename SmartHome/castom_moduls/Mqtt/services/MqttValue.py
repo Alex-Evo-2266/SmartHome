@@ -1,8 +1,11 @@
-from settings import DEVICES
+from SmartHome.logic.device.devicesArrey import DevicesArrey
+from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
+from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
+from SmartHome.logic.deviceFile.schema import Received_Data_Format
+from moduls_src.services import BaseService
 
 from datetime import datetime
 import json
-from SmartHome.logic.device.devicesArrey import DevicesArrey
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,58 +18,61 @@ logger = logging.getLogger(__name__)
 #             return item.value
 #     return None
 
-class Service():
-    def __init__(self):
-        self.typeConnects = []
+class Mqtt_MqttValue(BaseService):
+    typeConnects = []
 
-    def addConnect(self, name:str):
-        for item in self.typeConnects:
+    @staticmethod
+    def addConnect(name:str):
+        for item in Mqtt_MqttValue.typeConnects:
             if item == name:
                 return False
-        self.typeConnects.append(name)
+        Mqtt_MqttValue.typeConnects.append(name)
         return True
 
-    def removeConnect(self, name:str):
-        arr = self.typeConnects
+    @staticmethod
+    def removeConnect(name:str):
+        arr = Mqtt_MqttValue.typeConnects
         for item in arr:
             if item == name:
-                self.typeConnects.remove(name)
+                Mqtt_MqttValue.typeConnects.remove(name)
                 return
 
-    def setValueAtToken(self, address,value):
+    @staticmethod
+    def setValueAtToken(address,value):
         devices = DevicesArrey.all()
         for item in devices:
-            dev = item["device"]
+            dev:BaseDevice = item.device
             flag = True
-            for connect in self.typeConnects:
-                if dev.typeConnect == connect:
+            for connect in Mqtt_MqttValue.typeConnects:
+                if dev.device_data.class_device == connect:
                     flag = False
                     break
             if(flag):
                 continue
-            if(dev.valueType=="json"):
-                if(dev.coreAddress == address):
+            if(dev.device_data.value_type==Received_Data_Format.JSON):
+                if(dev.device_data.address == address):
                     data = json.loads(value)
                     for key in data:
                         for item2 in dev.values:
                             if(item2.address==key):
-                                self.deviceSetStatus(dev.systemName,item2.name,data[key])
+                                Mqtt_MqttValue.deviceSetStatus(dev.device_data.system_name,item2.name,data[key])
             else:
                 for item2 in dev.values:
-                    if dev.coreAddress + '/' + item2.address==address:
-                        return self.deviceSetStatus(dev.systemName,item2.name,value)
+                    if dev.device_data.address + '/' + item2.address==address:
+                        return Mqtt_MqttValue.deviceSetStatus(dev.device_data.system_name,item2.name,value)
 
 
-    def deviceSetStatus(self, systemName, type,value,script=True):
+    @staticmethod
+    def deviceSetStatus(systemName, type,value,script=True):
         try:
             if(value==None or type=="background"):
                 return None
             dev = DevicesArrey.get(systemName)
-            dev = dev["device"]
+            dev:BaseDevice = dev.device
             values = dev.values
             for item in values:
                 if item.name==type:
-                    if(item.type=="binary"):
+                    if(item.type==TypeField.BINARY):
                         if(str(value).lower()==str(item.high).lower()):
                             value = "1"
                         elif(str(value).lower()==str(item.low).lower()):

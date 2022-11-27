@@ -1,11 +1,10 @@
 import logging, json
+from castom_moduls.Zigbee.settings import CONFIG_NAME
+from moduls_src.services import BaseService
 
 from SmartHome.websocket.manager import manager
 from settings import configManager
 
-from castom_moduls.Zigbee.src.schemas import ZigbeeDeviceSchema
-from castom_moduls.Zigbee.src.utils import editAdressLincDevices, decodRemove, formatDev
-from moduls_src.services import get
 
 logger = logging.getLogger(__name__)
 
@@ -16,10 +15,10 @@ def objectlist_to_dictlist(data: list):
         arr.append(item.dict())
     return arr
 
-class Service:
+class ZigbeeCoordinator(BaseService):
     def __init__(self):
         self.permit_join = True
-        zigbee = configManager.getConfig('zigbee')
+        zigbee = configManager.getConfig(CONFIG_NAME)
         if not zigbee:
             self.topic = "zigbee2mqtt"
             logger.error("no zigbee config")

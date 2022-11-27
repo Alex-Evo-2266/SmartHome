@@ -43,7 +43,7 @@ class DevicesFile(object):
 		DevicesFile.devices = readYMLFile(DEVICES)
 
 	@staticmethod
-	def all():
+	def all()->List[Any]:
 		devs = list()
 		if(DevicesFile.devices == None):
 			return devs

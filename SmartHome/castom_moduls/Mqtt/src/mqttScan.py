@@ -1,6 +1,8 @@
 # from SmartHome.logic.server.modulesconfig import configManager
+from typing import List
+from SmartHome.logic.deviceFile.schema import Received_Data_Format
 from SmartHome.websocket.manager import manager
-from SmartHome.logic.deviceFile.DeviceFile import Devices
+from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
 import ast
 import json
 import logging
@@ -14,47 +16,46 @@ def dict_to_list(data):
     return arr
 
 class TopicHistory():
-
-    def __init__(self):
-        self.mqttTopics = {}
+    mqttTopics = {}
 
     def clear(self):
-        self.mqttTopics = {}
+        TopicHistory.mqttTopics = {}
 
     async def add(self,topic,message):
         t = {
             "topic":topic,
             "message":message
         }
-        self.mqttTopics[topic] = t
-        await manager.send_information("mqtt",dict_to_list(self.mqttTopics))
+        TopicHistory.mqttTopics[topic] = t
+        await manager.send_information("mqtt",dict_to_list(TopicHistory.mqttTopics))
         return t
 
     def all(self):
-        return dict_to_list(self.mqttTopics)
+        return dict_to_list(TopicHistory.mqttTopics)
 
     def getTopicksAndLinc(self):
         try:
-            topics = dict_to_list(self.mqttTopics)
+            topics = dict_to_list(TopicHistory.mqttTopics)
             newArr = list()
             for item in topics:
-                topic = item["topic"]
+                topic:str = item["topic"]
                 last = topic.split('/')[-1]
                 first = topic.split('/')[0:-1]
                 first = "/".join(first)
                 lincs = list()
-                for device in Devices.all():
-                    if device.valueType=="json":
+                devices:List[DeviceData] = DevicesFile.all()
+                for device in devices:
+                    if device.value_type==Received_Data_Format.JSON:
                         if(device.address==topic or (device.address==first and last == "set")):
                             lincs.append({
                             "device": device.dict()
                             })
                     else:
-                        for devValue in device.values:
-                            if ((device.address + "/" + devValue.address ==topic) and last != "set"):
+                        for devValue in device.fields:
+                            if ((device.address + "/" + devValue.address==topic) and last != "set"):
                                 lincs.append({
                                 "device": device.dict(),
-                                "field": devValue.get()
+                                "field": devValue.dict()
                                 })
                 item["lincs"] = lincs
                 if(last == "set"):

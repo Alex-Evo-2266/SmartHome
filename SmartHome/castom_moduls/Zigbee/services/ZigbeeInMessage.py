@@ -1,9 +1,10 @@
 import logging, json
+from castom_moduls.Zigbee.settings import CONFIG_NAME
+from moduls_src.services import BaseService
 
 from SmartHome.websocket.manager import manager
 from settings import configManager
 
-from castom_moduls.Zigbee.src.schemas import ZigbeeDeviceSchema
 from castom_moduls.Zigbee.src.utils import editAdressLincDevices, decodRemove, formatDev
 
 logger = logging.getLogger(__name__)
@@ -18,7 +19,7 @@ def objectlist_to_dictlist(data: list):
 async def decodeZigbeeDevices(self, topic, message):
     try:
         data = json.loads(message)
-        config = configManager.getConfig('zigbee')
+        config = configManager.getConfig(CONFIG_NAME)
         self.devices = []
         for item in data:
             dev = formatDev(item)
@@ -43,12 +44,12 @@ async def decodEvent(self, topic, message):
         await manager.send_information("leave",newdata.dict())
     if(data["type"]=="device_announce"):
         await manager.send_information("announced",newdata.dict())
-        for item in zigbeeDevices:
-            if(item["id"]==newdata["address"]):
-                await manager.send_information("newZigbeesDevice",item["data"])
+        # for item in zigbeeDevices:
+        #     if(item["id"]==newdata["address"]):
+        #         await manager.send_information("newZigbeesDevice",item["data"])
 
 
-class Service:
+class ZigbeeInMessage(BaseService):
     def __init__(self):
         self.permit_join = True
         self.callbacks = {}

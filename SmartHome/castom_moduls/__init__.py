@@ -1,8 +1,6 @@
 import imp,os,logging
-import copy
-import subprocess
-from fastapi import APIRouter
-from moduls_src.services import add
+
+from moduls_src.moduls import Modules
 # from .models_schema import TypeDevice, DeviceData, ModelAPIData, ModelData
 
 # devices = dict()
@@ -10,29 +8,19 @@ from moduls_src.services import add
 
 logger = logging.getLogger(__name__)
 
-# def getModuls(dir=__name__, init = True):
-#     list_modules=os.listdir(dir)
-#     if not init and '__init__.py' in list_modules:
-#         list_modules.remove('__init__.py')
-#     if "__pycache__" in list_modules:
-#         list_modules.remove("__pycache__")
-#     return list_modules
+def getModuls(dir=__name__, init = True):
+    list_modules=os.listdir(dir)
+    if not init and '__init__.py' in list_modules:
+        list_modules.remove('__init__.py')
+    if "__pycache__" in list_modules:
+        list_modules.remove("__pycache__")
+    return list_modules
 
 # def dict_to_list(data: dict):
 #     arr = list()
 #     for key in data:
 #         arr.append({"name": key, **data[key]})
 #     return arr
-
-# def __init_service__(dir=__name__):
-#     list_modules = getModuls(dir, False)
-#     for module in list_modules:
-#         list_dirs = getModuls(dir+os.sep+module, False)
-#         if "services" in list_dirs:
-#             service_file = [_ for _ in os.listdir(dir+os.sep+module+os.sep+"services") if _.endswith(r".py")]
-#             for service in service_file:
-#                 foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"services"+os.sep+service)
-#                 add(module+"_"+service.split(".")[0], copy.copy(foo.Service()))
 
 # def __init_device__(dir=__name__):
 #     list_modules = getModuls(dir, False)
@@ -111,4 +99,10 @@ logger = logging.getLogger(__name__)
 
 
 async def init_modules():
-    pass
+    dir=__name__
+    list_modules = getModuls(dir, False)
+    for module in list_modules:
+        foo = imp.load_source(module, "castom_moduls"+os.sep+module+os.sep+"__init__.py")
+    modules = Modules.all()
+    for key in modules:
+        modules[key].start()

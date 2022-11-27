@@ -1,19 +1,26 @@
 import logging
+from pydantic import BaseModel
+from typing import Any, List
 
 logger = logging.getLogger(__name__)
 
+
+class DevicesArreyItem(BaseModel):
+	id:str
+	device: Any
+
 class DevicesArrey():
-    devices = []
+    devices:List[DevicesArreyItem] = []
 
     def __str__():
         return DevicesArrey.devices
 
     @staticmethod
-    def addDevice(id,device):
+    def addDevice(id:str,device):
         for item in DevicesArrey.devices:
-            if(item["id"]==id):
+            if(item.id==id):
                 return None
-        DevicesArrey.devices.append({"id":id,"device":device})
+        DevicesArrey.devices.append(DevicesArreyItem(id=id, device=device))
         return DevicesArrey.devices
 
     @staticmethod
@@ -21,10 +28,10 @@ class DevicesArrey():
         return DevicesArrey.devices
 
     @staticmethod
-    def delete(id):
+    def delete(id:str):
         try:
             for item in DevicesArrey.devices:
-                if(item["id"]==id):
+                if(item.id==id):
                     ret = item
                     DevicesArrey.devices.pop(DevicesArrey.devices.index(item))
                     return ret
@@ -34,9 +41,9 @@ class DevicesArrey():
             return None
 
     @staticmethod
-    def get(id):
+    def get(id:str)->DevicesArreyItem|None:
         for item in DevicesArrey.devices:
-            if(item["id"]==id):
+            if(item.id==id):
                 return item
         return None
 

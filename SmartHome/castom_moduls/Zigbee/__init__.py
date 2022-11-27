@@ -1,14 +1,16 @@
-from moduls_src.baseClassModule import BaseControllModule
-from moduls_src.services import get
+from castom_moduls.Zigbee.services.ZigbeeCoordinator import ZigbeeCoordinator
+from castom_moduls.Zigbee.services.ZigbeeInMessage import ZigbeeInMessage
+from castom_moduls.Zigbee.settings import CONFIG_NAME
+from moduls_src.moduls import BaseModule
+from moduls_src.services import Services
 from settings import configManager
-from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
-from .settings import DEVICE_NAME
 
-class Module(BaseControllModule):
+class ZigbeeModule(BaseModule):
 
-    def start(self):
-        configManager.addConfig("zigbee",{
+    @staticmethod
+    def start():
+        configManager.addConfig(CONFIG_NAME,{
             "topic":'zigbee2mqtt'
         })
-        get("Mqtt_MqttValue").addConnect(DEVICE_NAME)
-        get("Mqtt_MqttConnect").addcallback("zigbee",get("Zigbee_ZigbeeInMessage").decodTopic)
+        Services.get("Mqtt_MqttValue").addConnect("ZigbeeDevice")
+        Services.get("Mqtt_connect").addcallback("zigbee",Services.get("ZigbeeInMessage").decodTopic)

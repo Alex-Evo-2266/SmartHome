@@ -2,7 +2,7 @@ import json
 import ast
 import logging
 
-from .devicesArrey import devicesArrey
+from ..devicesArrey import devicesArrey
 from ..utils.file import readYMLFile, writeYMLFile
 from ..deviceFile.DeviceFile import Devices
 

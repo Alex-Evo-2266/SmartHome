@@ -1,7 +1,7 @@
 from yeelight import Bulb,PowerMode
+from SmartHome.logic.deviceClass.DeviceMeta import DefConfig
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
-from SmartHome.SmartHome.logic.deviceClass.Fields.BaseField import DeviceElement
-from castom_moduls.Yeelight.settings import DEVICE_NAME
+from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,14 +18,16 @@ def saveNewDate(val, status):
 
 # def createValue()
 
-class Device(BaseDevice):
+class YeelightDevice(BaseDevice):
 
-    typesDevice = ["light"]
-    name = DEVICE_NAME
+    types = ["light"]
+
+    class Config(DefConfig):
+        pass
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
-        self.device = Bulb(self.coreAddress)
+        self.device = Bulb(self.device_data.address)
         try:
             values = self.device.get_properties()
             self.minmaxValue = self.device.get_model_specs()
@@ -33,17 +35,17 @@ class Device(BaseDevice):
                 val = "0"
                 if(values["power"] == "on"):
                     val = "1"
-                self.values.append(DeviceElement(name="state", systemName=self.systemName, control=True, high=1, low=0, type="binary", icon="fas fa-power-off", value=val))
+                self.values.append(BaseField(name="state", device_name=self.device_data.system_name, control=True, high=1, low=0, type="binary", icon="fas fa-power-off", value=val))
             if(not look_for_param(self.values, "brightness") and "current_brightness" in values):
-                self.values.append(DeviceElement(name="brightness", systemName=self.systemName, control=True, high=100, low=0, type="number", icon="far fa-sun", value=values["current_brightness"]))
+                self.values.append(BaseField(name="brightness", device_name=self.device_data.system_name, control=True, high=100, low=0, type="number", icon="far fa-sun", value=values["current_brightness"]))
             if(not look_for_param(self.values, "night_light") and self.minmaxValue["night_light"] != False):
-                self.values.append(DeviceElement(name="night_light", systemName=self.systemName, control=True, high="1", low=0, type="binary", icon="fab fa-moon", value=values["active_mode"]))
+                self.values.append(BaseField(name="night_light", device_name=self.device_data.system_name, control=True, high="1", low=0, type="binary", icon="fab fa-moon", value=values["active_mode"]))
             if(not look_for_param(self.values, "color") and values["hue"] != None):
-                self.values.append(DeviceElement(name="color", systemName=self.systemName, control=True, high=360, low=0, type="number", icon="fab fa-medium-m", value=values["hue"]))
+                self.values.append(BaseField(name="color", device_name=self.device_data.system_name, control=True, high=360, low=0, type="number", icon="fab fa-medium-m", value=values["hue"]))
             if(not look_for_param(self.values, "saturation") and values["sat"] != None):
-                self.values.append(DeviceElement(name="saturation", systemName=self.systemName, control=True, high=100, low=0, type="number", icon="fab fa-medium-m", value=values["sat"]))
+                self.values.append(BaseField(name="saturation", device_name=self.device_data.system_name, control=True, high=100, low=0, type="number", icon="fab fa-medium-m", value=values["sat"]))
             if(not look_for_param(self.values, "temp") and "ct" in values):
-                self.values.append(DeviceElement(name="temp", systemName=self.systemName, control=True, high=self.minmaxValue["color_temp"]["max"], low=self.minmaxValue["color_temp"]["min"], type="number", icon="fas fa-adjust", value=values["ct"]))
+                self.values.append(BaseField(name="temp", device_name=self.device_data.system_name, control=True, high=self.minmaxValue["color_temp"]["max"], low=self.minmaxValue["color_temp"]["min"], type="number", icon="fas fa-adjust", value=values["ct"]))
             super().save()
         except Exception as e:
             logger.warning(f"yeelight initialize error. {e}")

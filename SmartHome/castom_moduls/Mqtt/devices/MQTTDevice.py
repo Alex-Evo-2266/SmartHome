@@ -1,11 +1,13 @@
+from typing import List
+from SmartHome.logic.deviceClass.DeviceMeta import DefConfig
+from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
+from SmartHome.logic.deviceFile.schema import Received_Data_Format
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
-from moduls_src.services import get
-from castom_moduls.Mqtt.settings import DEVICE_NAME
 import json
 
 from moduls_src.models_schema import AddDevice, TypeAddDevice
 
-def look_for_param(arr:list, val):
+def look_for_param(arr:List[BaseField], val):
     for item in arr:
         if(item.name == val):
             return(item)
@@ -19,23 +21,21 @@ def look_for_by_topic(arr:list, val):
 
 # def createValue()
 
-class Device(BaseDevice):
+class MqttDevice(BaseDevice):
 
-    name=DEVICE_NAME
-    add=AddDevice(
-    type=TypeAddDevice.MANUAL
-    )
+    class Config(DefConfig):
+        pass
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.update_value()
 
     def update_value(self, *args, **kwargs):
-        if(self.valueType=="json"):
+        if self.device_data.value_type==Received_Data_Format.JSON:
             data = dict()
             data[self.values[0].address] = ""
             data = json.dumps(data)
-            get("Mqtt_MqttConnect").publish(self.coreAddress+"/get", data)
+            Services.get("Mqtt_connect").publish(self.device_data.address+"/get", data)
 
     def get_device(self):
         return True
@@ -58,11 +58,11 @@ class Device(BaseDevice):
                 message = int(status)
         else:
             message = status
-        if(self.valueType=="json"):
+        if(self.device_data.value_type==Received_Data_Format.JSON):
             data = dict()
             data[val.address] = message
             data = json.dumps(data)
-            get("Mqtt_MqttConnect").publish(self.coreAddress+"/set", data)
+            Services.get("Mqtt_connect").publish(self.device_data.address+"/set", data)
         else:
-            alltopic = self.coreAddress + "/" + val.address
-            get("Mqtt_MqttConnect").publish(alltopic, message)
+            alltopic = self.device_data.address + "/" + val.address
+            Services.get("Mqtt_connect").publish(alltopic, message)

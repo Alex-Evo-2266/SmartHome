@@ -1,9 +1,14 @@
 import React from 'react'
 
-export const BaseCard = ({children, className})=>{
+export const BaseCard = ({children, className, onClick})=>{
 
+  const click = (e)=>{
+    if(typeof(onClick)==="function")
+      onClick(e)
+  }
+  
   return(
-    <div className={`base-card-container card-container ${className}`}>
+    <div onClick={click} className={`base-card-container card-container ${className}`}>
     	{children}
     </div>
   )

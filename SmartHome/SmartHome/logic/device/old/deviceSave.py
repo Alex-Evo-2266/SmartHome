@@ -1,4 +1,4 @@
-from .devicesArrey import DevicesArrey
+from ..devicesArrey import DevicesArrey
 
 async def saveDevice():
     devices = DevicesArrey.all()

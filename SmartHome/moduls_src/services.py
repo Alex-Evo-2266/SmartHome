@@ -1,11 +1,30 @@
-services = {}
+class Services():
+	services = {}
 
-def add(name, data):
-    global services
-    services[name] = data
+	@staticmethod
+	def add(name, data):
+		print(Services.services)
+		if name in Services.services:
+			return
+			# raise Exception("an element with the same name already exists")
+		Services.services[name] = data
+		print(Services.services)
 
-def get(name):
-    global services
-    if not name in services:
-        return None
-    return services[name]
+	@staticmethod
+	def get(name):
+		if not name in Services.services:
+			return None
+		return Services.services[name]
+	
+	@staticmethod
+	def all()->dict:
+		return Services.services
+
+class ServiceMeta(type):
+	def __new__(cls, clsname, bases, dct):
+		new_class = super(ServiceMeta, cls).__new__(cls, clsname, bases, dct)
+		Services.add(clsname, new_class)
+		return new_class
+
+class BaseService(metaclass=ServiceMeta):
+	pass

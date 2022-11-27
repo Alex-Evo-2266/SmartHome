@@ -1,4 +1,4 @@
-from .devicesArrey import DevicesArrey
+from ..devicesArrey import DevicesArrey
 import logging
 
 logger = logging.getLogger(__name__)
