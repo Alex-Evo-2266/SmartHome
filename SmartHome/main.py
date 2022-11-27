@@ -11,7 +11,7 @@ from SmartHome.dbormar import metadata, database, engine
 from SmartHome.logic.call_functions import RunFunctions
 from weather.weather import updateWeather
 # from SmartHome.logic.device.sendDevice import sendDevice
-from SmartHome.websocket.manager import manager
+from SmartHome.websocket import WebSocketMenager
 from settings import configManager
 from SmartHome.logic.server.serverData import sendServerData
 # from SmartHome.logic.script.runScript import runTimeScript
@@ -89,12 +89,12 @@ async def shutdown() -> None:
 
 @app.websocket("/ws/base")
 async def websocket_endpoint(websocket: WebSocket):
-	await manager.connect(websocket)
+	await WebSocketMenager.connect(websocket)
 	try:
 		while True:
 			data = await websocket.receive_text()
 	except WebSocketDisconnect:
-		manager.disconnect(websocket)
+		WebSocketMenager.disconnect(websocket)
 
 # app.include_router(router_first_start)
 app.include_router(router_auth)

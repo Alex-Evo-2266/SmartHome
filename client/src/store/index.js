@@ -8,6 +8,7 @@ import { UserReducer } from './reducers/userReducer'
 import { DialogReducer } from './reducers/dialogReducer'
 import { alertReducer } from './reducers/alertReducer'
 import { StyleReducer } from './reducers/styleReducer'
+import { socketReducer } from './reducers/socketReducer'
 
 export const rootReducer = combineReducers({
 	auth: authReducer,
@@ -17,7 +18,8 @@ export const rootReducer = combineReducers({
 	user: UserReducer,
 	dialog: DialogReducer,
 	alert: alertReducer,
-	style: StyleReducer
+	style: StyleReducer,
+	socket: socketReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

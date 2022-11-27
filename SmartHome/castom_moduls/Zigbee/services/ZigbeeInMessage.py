@@ -2,7 +2,7 @@ import logging, json
 from castom_moduls.Zigbee.settings import CONFIG_NAME
 from moduls_src.services import BaseService
 
-from SmartHome.websocket.manager import manager
+from SmartHome.websocket import WebSocketMenager
 from settings import configManager
 
 from castom_moduls.Zigbee.src.utils import editAdressLincDevices, decodRemove, formatDev
@@ -24,7 +24,7 @@ async def decodeZigbeeDevices(self, topic, message):
         for item in data:
             dev = formatDev(item)
             self.addzigbeeDevices(dev.address,dev)
-        await manager.send_information("zigbee",objectlist_to_dictlist(self.devices))
+        await WebSocketMenager.send_information("zigbee",objectlist_to_dictlist(self.devices))
     except Exception as e:
         logger.error(f'zigbee devices decod {e}')
 
@@ -37,13 +37,13 @@ async def decodEvent(self, topic, message):
     newdata = data["data"]
     newdata = formatDev(newdata)
     if(data["type"]=="device_interview"):
-        await manager.send_information("connect_device",newdata.dict())
+        await WebSocketMenager.send_information("connect_device",newdata.dict())
     if(data["type"]=="device_joined"):
-        await manager.send_information("start_connect",newdata.dict())
+        await WebSocketMenager.send_information("start_connect",newdata.dict())
     if(data["type"]=="device_leave"):
-        await manager.send_information("leave",newdata.dict())
+        await WebSocketMenager.send_information("leave",newdata.dict())
     if(data["type"]=="device_announce"):
-        await manager.send_information("announced",newdata.dict())
+        await WebSocketMenager.send_information("announced",newdata.dict())
         # for item in zigbeeDevices:
         #     if(item["id"]==newdata["address"]):
         #         await manager.send_information("newZigbeesDevice",item["data"])

@@ -1,7 +1,7 @@
 # from SmartHome.logic.server.modulesconfig import configManager
 from typing import List
 from SmartHome.logic.deviceFile.schema import Received_Data_Format
-from SmartHome.websocket.manager import manager
+from SmartHome.websocket import WebSocketMenager
 from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
 import ast
 import json
@@ -27,7 +27,7 @@ class TopicHistory():
             "message":message
         }
         TopicHistory.mqttTopics[topic] = t
-        await manager.send_information("mqtt",dict_to_list(TopicHistory.mqttTopics))
+        await WebSocketMenager.send_information("mqtt",dict_to_list(TopicHistory.mqttTopics))
         return t
 
     def all(self):
