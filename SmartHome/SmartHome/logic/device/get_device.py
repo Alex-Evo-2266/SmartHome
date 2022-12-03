@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 def get_device(device_data: DeviceData):
 	try:
-		print("p5")
 		logger.debug("get_device function")
 		device:BaseDevice
 		if not device_data:
@@ -42,7 +41,6 @@ def get_device(device_data: DeviceData):
 		data.status = Status_Device.ONLINE
 		return data
 	except Exception as e:
-		print("e5")
 		logger.warning(f'device not found. {e}')
 		element = DevicesArrey.get(device_data.system_name)
 		if element:
@@ -55,7 +53,6 @@ def get_device(device_data: DeviceData):
 
 def get_all_device():
 	devices = DevicesFile.all()
-	print(devices)
 	arr:List[DeviceData] = []
 	for item in devices:
 		device = get_device(item)

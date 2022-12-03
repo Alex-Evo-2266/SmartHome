@@ -31,7 +31,7 @@ class BaseField(object):
 		type:TypeField = TypeField.BASE,
 		unit:str = "",
 		enum_values:List[str] = [],
-		def_value:Any = None,
+		value:Any = None,
 		# change:ChangeField = ChangeField()
 		):
 		'''initial field'''
@@ -45,8 +45,8 @@ class BaseField(object):
 		self.type = type
 		self.unit = unit
 		self.enum_values = enum_values
-		self.change = change
-		self.__value = def_value
+		# self.change = change
+		self.__value = value
 
 	def __str__(self):
 		return str(self.name)
@@ -61,6 +61,7 @@ class BaseField(object):
 			# runScripts(self.device_name,self.name)
 
 	def get_data(self)->DeviceFieldSchema:
+		print("d0")
 		return DeviceFieldSchema(
 			name=self.name,
 			address=self.address,

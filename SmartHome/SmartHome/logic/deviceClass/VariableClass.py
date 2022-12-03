@@ -9,7 +9,3 @@ class Variable(BaseDevice):
 	class Config(DefConfig):
 		fields_change: ChangeField = ChangeField(value=True, address=False)
 		address: bool = False
-
-	@property
-	def is_conected(self):
-		return bool(self.device)

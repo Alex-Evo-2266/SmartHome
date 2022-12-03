@@ -3,12 +3,10 @@ class Services():
 
 	@staticmethod
 	def add(name, data):
-		print(Services.services)
 		if name in Services.services:
 			return
 			# raise Exception("an element with the same name already exists")
 		Services.services[name] = data
-		print(Services.services)
 
 	@staticmethod
 	def get(name):

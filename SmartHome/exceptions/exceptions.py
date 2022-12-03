@@ -13,6 +13,19 @@ class NoConfigurationDataException(Exception):
 		else:
 			return "NoConfigurationDataException"
 
+class ClassAlreadyExistsException(Exception):
+	def __init__(self, *args: object) -> None:
+		if args:
+			self.message = args[0]
+		else:
+			self.message = "the class already exists"
+	
+	def __str__(self) -> str:
+		if self.message:
+			return f"ClassAlreadyExistsException, {self.message}"
+		else:
+			return "ClassAlreadyExistsException"
+
 class InvalidAttributeException(Exception):
 	def __init__(self, *args: object) -> None:
 		if args:

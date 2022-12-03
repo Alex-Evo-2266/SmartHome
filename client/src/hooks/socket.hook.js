@@ -122,7 +122,7 @@ export const useSocket = () =>{
       clearInterval(timerId.current);
       socket.current.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        console.log(data.message);
+        console.log(data);
       }
       socket.current.onerror = closeSocket
       socket.current.onclose = () => {

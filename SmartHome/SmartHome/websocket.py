@@ -29,10 +29,7 @@ class WebSocketMenager:
 		for connection in WebSocketMenager.active_connections:
 			await connection.send_text(
 				json.dumps({
-				'type': 'chat_message',
-				'message': {
 					'type':type,
 					'data':data
-					}
-				})
+					})
 			)

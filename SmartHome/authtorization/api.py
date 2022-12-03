@@ -25,7 +25,7 @@ router = APIRouter(
 
 @router.get("/clientid", response_model=AuthService)
 async def ref():
-	data = configManager.getConfig("base")
+	data = configManager.getConfig("auth_service")
 	return AuthService(clientId=data["client_id"], authservice="True", host=data["host"])
 
 @router.post("/login", response_model=ResponseLogin)

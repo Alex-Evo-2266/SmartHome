@@ -1,3 +1,4 @@
+from SmartHome.logic.device.sendDevice import send_restart
 from settings import configManager
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
 # from SmartHome.logic.device.deviceSendControl import updataSendTime
@@ -18,9 +19,12 @@ def confinit():
         "password":""
     })
 
-    configManager.addConfig("base", {
-        "frequency":"3",
+    configManager.addConfig("auth_service", {
         "host":"",
         "client_id":"",
         "client_secret":""
     })
+
+    configManager.addConfig("send_message", {
+        "frequency":"3",
+    }, send_restart)

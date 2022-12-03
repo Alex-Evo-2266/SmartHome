@@ -1,3 +1,4 @@
+from copy import copy
 from typing import Any, Dict, List
 from SmartHome.logic.deviceFile.schema import DeviceFieldSchema, DeviceSchema
 from settings import DEVICES
@@ -50,8 +51,9 @@ class DevicesFile(object):
 		if(DevicesFile.devices == None):
 			return devs
 		for item in DevicesFile.devices:
-			item["fields"] = decodField(item["fields"])
-			devs.append(DeviceData(**item))
+			new_item = copy(item)
+			new_item["fields"] = decodField(item["fields"])
+			devs.append(DeviceData(**new_item))
 		return devs
 
 	@staticmethod
@@ -93,8 +95,9 @@ class DevicesFile(object):
 		device_raw = DevicesFile.get_raw(system_name)
 		if not device_raw:
 			return None
-		device_raw["fields"] = decodField(device_raw["fields"])
-		return DeviceData(**device_raw)
+		new_item = copy(device_raw)
+		new_item["fields"] = decodField(device_raw["fields"])
+		return DeviceData(**new_item)
 
 	@staticmethod
 	def create(data: DeviceSchema):

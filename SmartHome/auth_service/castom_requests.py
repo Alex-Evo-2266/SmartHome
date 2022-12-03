@@ -58,7 +58,7 @@ async def refrash(session: Session)->Session:
 
 
 def get_connect_data()->ConnectData:
-	base_config = settings.configManager.getConfig("base")
+	base_config = settings.configManager.getConfig("auth_service")
 	if not ("host" in base_config) or not ("client_id" in base_config) or not ("client_secret" in base_config):
 		logger.warning("Data for connection to the authorization server was not found.")
 		raise NoDataToConnectException("Data for connection to the authorization server was not found.")

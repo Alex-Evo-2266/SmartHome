@@ -22,7 +22,7 @@ def look_for_param(arr:List[T], name:str)->T|None:
 			return(item)
 	return None
 
-class BaseDevice(metaclass=DeviceMeta):
+class BaseDevice(metaclass=DeviceMeta, use=False):
 	"""docstring for BaseDevice."""
 
 	types=["base"]
