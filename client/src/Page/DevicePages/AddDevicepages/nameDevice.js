@@ -26,6 +26,16 @@ export const NameDevicePage = ({options, setDevice, device, next, prev}) => {
 			</div>
 		</div>
 		{
+		(options.address)?
+		<div className="configElement">
+			<div className="input-data">
+				<input onChange={changeHandler} required name="address" type="text" value={device.address}></input>
+				<label>address</label>
+			</div>
+		</div>:
+		null
+		}
+		{
 		(options.token)?
 		<div className="configElement">
 			<div className="input-data">

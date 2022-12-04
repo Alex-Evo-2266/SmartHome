@@ -69,16 +69,6 @@ export const FieldDevicePage = ({options, setDevice, device, next, prev}) => {
 		null
 		}
 		{
-		(options.address)?
-		<div className="configElement">
-			<div className="input-data">
-				<input onChange={changeHandler} required name="address" type="text" value={device.address}></input>
-				<label>address</label>
-			</div>
-		</div>:
-		null
-		}
-		{
 			device?.fields.map((item, index)=><FieldComponent del={()=>delField(index)} setField={(data)=>setField(data, index)} options={options} key={index} field={item}/>)
 		}
 		<div className="card-btn-container">

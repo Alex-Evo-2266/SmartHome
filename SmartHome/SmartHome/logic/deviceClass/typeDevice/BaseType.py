@@ -1,7 +1,7 @@
 
 
-from SmartHome.logic.deviceClass.TypeDevice.TypeMeta import DeviceTypeMeta
+from SmartHome.logic.deviceClass.typeDevice.TypeMeta import DeviceTypeMeta
 
 
-class BaseType(metaclass=DeviceTypeMeta):
+class BaseType(metaclass=DeviceTypeMeta, use=False):
 	pass

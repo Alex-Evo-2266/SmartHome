@@ -46,9 +46,9 @@ class DevicesFile(object):
 	@staticmethod
 	def all()->List[Any]:
 		devs = list()
-		if len(DevicesFile.devices) == 0:
+		if(DevicesFile.devices == None or len(DevicesFile.devices) == 0):
 			DevicesFile.load()
-		if(DevicesFile.devices == None):
+		if DevicesFile.devices == None:
 			return devs
 		for item in DevicesFile.devices:
 			new_item = copy(item)

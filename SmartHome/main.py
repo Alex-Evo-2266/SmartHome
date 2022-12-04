@@ -117,4 +117,7 @@ app.include_router(router_user)
 # class Test(metaclass=DeviceMeta, config=Config):
 # 	def test_put(self):
 # 		print("test")
+from SmartHome.logic.deviceClass.typeDevice.BaseType import BaseType
 	
+print(str(BaseType))
+print(BaseType.__name__)

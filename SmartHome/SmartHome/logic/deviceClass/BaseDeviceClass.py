@@ -1,4 +1,5 @@
 from typing import Any, List, TypeVar
+from SmartHome.logic.deviceClass.typeDevice.BaseType import BaseType
 from SmartHome.logic.deviceClass.schema import AdditionDevice, ChangeDevice
 from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
 from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
@@ -25,7 +26,7 @@ def look_for_param(arr:List[T], name:str)->T|None:
 class BaseDevice(metaclass=DeviceMeta, use=False):
 	"""docstring for BaseDevice."""
 
-	types=["base"]
+	types=[BaseType]
 
 	class Config(DefConfig):
 		pass

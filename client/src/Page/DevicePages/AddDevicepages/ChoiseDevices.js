@@ -8,15 +8,15 @@ import { useDispatch } from 'react-redux'
 import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dialogReducer'
 
 const typeImages = {
-  "light": lampImg,
-  "switch": switchImg,
-  "variable": variableImg,
+  "Light": lampImg,
+  "Switch": switchImg,
+  "Variable": variableImg,
 }
 
 const types = [
-	{title:"light", data:"light"},
-	{title:"switch", data:"switch"},
-	{title:"sensors", data:"sensors"}
+	{title:"light", data:"Light"},
+	{title:"switch", data:"Switch"},
+	{title:"sensor", data:"Sensor"}
 ]
 
 export const ChoiseDevicePage = ({options, setDevice, next, prev}) => {
@@ -24,7 +24,7 @@ export const ChoiseDevicePage = ({options, setDevice, next, prev}) => {
 	const dispatch = useDispatch()
 
 	const choise = (device_class, type)=>{
-		if(type === "base")
+		if(type === "BaseType")
 			dispatch(showConfirmationDialog("choise type", types, (data)=>{
 				setDevice(prev=>({...prev, class_device:device_class, type:data}))
 				dispatch(hideDialog())

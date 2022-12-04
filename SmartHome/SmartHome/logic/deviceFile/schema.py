@@ -40,6 +40,7 @@ class EditDeviceSchema(AddDeviceSchema):
 class DeviceSchema(BaseModel):
     class_device: str
     type: str
+    type_field: Dict[str,str] = {}
     value_type: str = Received_Data_Format.JSON
     name: str
     status: Optional[Status_Device] = None

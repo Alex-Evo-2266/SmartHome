@@ -1,4 +1,6 @@
 from yeelight import Bulb,PowerMode
+from SmartHome.logic.deviceClass.schema import ChangeField
+from SmartHome.logic.deviceClass.typeDevice.LightType import Light
 from SmartHome.logic.deviceClass.DeviceMeta import DefConfig
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
@@ -20,10 +22,21 @@ def saveNewDate(val, status):
 
 class YeelightDevice(BaseDevice):
 
-    types = ["light"]
+    types = [Light]
 
     class Config(DefConfig):
-        pass
+        fields_addition: bool = False
+        fields_change: ChangeField = ChangeField(
+            added=False,
+	        deleted=False,
+	        address=False,
+	        control=False,
+	        high=False,
+	        low=False,
+	        type=False,
+	        unit=False,
+	        enum_values=False
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)

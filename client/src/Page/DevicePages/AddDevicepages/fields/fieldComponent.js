@@ -57,8 +57,8 @@ export const FieldComponent = ({options, setField, field, del}) => {
 		}
 		else if(e.target.value==="binary")
 		{
-			newField.low = "true"
-			newField.high = "false"
+			newField.low = "false"
+			newField.high = "true"
 		}
 		setFieldL(newField)
 		setField(newField)
