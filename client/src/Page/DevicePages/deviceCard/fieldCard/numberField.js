@@ -6,14 +6,11 @@ import {useHttp} from '../../../../hooks/http.hook'
 
 export const NumberField = ({field, value, systemName})=>{
 	const [v, setV] = useState(false)
-	const read = useRef(true)
 	const {request, error, clearError} = useHttp();
 	const auth = useSelector(state=>state.auth)
 
 	useEffect(()=>{
-		if(read.current)
-			setV(value)
-		read.current = false
+		setV(value)
 	},[value])
 
 	const out = useCallback((e)=>{

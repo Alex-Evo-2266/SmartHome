@@ -61,7 +61,6 @@ class BaseField(object):
 			# runScripts(self.device_name,self.name)
 
 	def get_data(self)->DeviceFieldSchema:
-		print("d0")
 		return DeviceFieldSchema(
 			name=self.name,
 			address=self.address,

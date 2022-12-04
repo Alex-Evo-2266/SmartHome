@@ -1,5 +1,5 @@
 from castom_moduls.Zigbee.services.ZigbeeCoordinator import ZigbeeCoordinator
-from castom_moduls.Zigbee.services.ZigbeeInMessage import ZigbeeInMessage
+# from castom_moduls.Zigbee.services.ZigbeeInMessage import ZigbeeInMessage
 from castom_moduls.Zigbee.settings import CONFIG_NAME
 from moduls_src.moduls import BaseModule
 from moduls_src.services import Services
@@ -13,4 +13,4 @@ class ZigbeeModule(BaseModule):
             "topic":'zigbee2mqtt'
         })
         Services.get("Mqtt_MqttValue").addConnect("ZigbeeDevice")
-        Services.get("Mqtt_connect").addcallback("zigbee",Services.get("ZigbeeInMessage").decodTopic)
+        # Services.get("Mqtt_connect").addcallback("zigbee",Services.get("ZigbeeInMessage").decodTopic)

@@ -1,4 +1,5 @@
 from typing import List
+from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 from SmartHome.logic.deviceClass.DeviceMeta import DefConfig
 from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
 from SmartHome.logic.deviceFile.schema import Received_Data_Format
@@ -45,12 +46,13 @@ class MqttDevice(BaseDevice):
         super().set_value(name, status)
         message = ""
         val = look_for_param(self.values, name)
-        if(val.type=="binary"):
-            if(int(status)==1):
-                message = val.high
-            else:
-                message = val.low
-        elif(val.type=="number"):
+        if(val.type==TypeField.BINARY):
+            message = status
+            # if(int(status)==1):
+            #     message = val.high
+            # else:
+            #     message = val.low
+        elif(val.type==TypeField.NUMDER):
             if(int(status)>int(val.high)):
                 message = int(val.high)
             elif(int(status)<int(val.low)):

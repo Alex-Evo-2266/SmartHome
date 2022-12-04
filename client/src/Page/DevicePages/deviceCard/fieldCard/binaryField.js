@@ -7,19 +7,14 @@ import {useHttp} from '../../../../hooks/http.hook'
 
 export const BinaryField = ({field, value, systemName})=>{
 	const [v, setV] = useState(false)
-	const read = useRef(true)
 	const {request, error, clearError} = useHttp();
 	const auth = useSelector(state=>state.auth)
 
 	useEffect(()=>{
-		if(read.current)
-		{
-			if(field.hight === value)
-				setV(true)
-			else
-				setV(false)
-		}
-		read.current = false
+		if(field.high === String(value))
+			setV(true)
+		else
+			setV(false)
 	},[value])
 
 	const out = useCallback((e)=>{
@@ -27,7 +22,7 @@ export const BinaryField = ({field, value, systemName})=>{
 		if(e.target.checked)
 			newV = field.high
 		setV(e.target.checked)
-		request(`/api/devices/${systemName}/set_value/${field.name}/set/${(newV)}`, "GET", null, {Authorization: `Bearer ${auth.token}`})
+		request(`/api/devices/${systemName}/value/${field.name}/set/${(newV)}`, "GET", null, {Authorization: `Bearer ${auth.token}`})
 	},[request, systemName, field])
 
 	return(

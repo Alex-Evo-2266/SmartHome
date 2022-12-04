@@ -18,10 +18,12 @@ def dict_to_list(data):
 class TopicHistory():
     mqttTopics = {}
 
-    def clear(self):
+    @staticmethod
+    def clear():
         TopicHistory.mqttTopics = {}
 
-    async def add(self,topic,message):
+    @staticmethod
+    async def add(topic,message):
         t = {
             "topic":topic,
             "message":message
@@ -30,10 +32,12 @@ class TopicHistory():
         await WebSocketMenager.send_information("mqtt",dict_to_list(TopicHistory.mqttTopics))
         return t
 
-    def all(self):
+    @staticmethod
+    def all():
         return dict_to_list(TopicHistory.mqttTopics)
 
-    def getTopicksAndLinc(self):
+    @staticmethod
+    def getTopicksAndLinc():
         try:
             topics = dict_to_list(TopicHistory.mqttTopics)
             newArr = list()

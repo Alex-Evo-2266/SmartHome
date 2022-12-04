@@ -22,7 +22,7 @@ export const DeviceCard = ({user,updata, device})=>{
 			<div className='card-content'>
 			{
 				device?.fields?.map((item, index)=>(
-					<DeviceField key={index} field={item} value={getValue(device.value, item)}/>
+					<DeviceField key={index} field={item} value={getValue(device.value, item)} systemName={device.system_name}/>
 				))
 			}
 			</div>

@@ -37,7 +37,7 @@ def get_device(device_data: DeviceData):
 		else:
 			device = element.device
 		device.updata()
-		data = device.device_data
+		data = device.get_info()
 		data.status = Status_Device.ONLINE
 		return data
 	except Exception as e:

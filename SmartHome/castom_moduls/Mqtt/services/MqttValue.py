@@ -70,15 +70,16 @@ class Mqtt_MqttValue(BaseService):
             dev = DevicesArrey.get(systemName)
             dev:BaseDevice = dev.device
             values = dev.values
+            print("p0")
             for item in values:
                 if item.name==type:
-                    if(item.type==TypeField.BINARY):
-                        if(str(value).lower()==str(item.high).lower()):
-                            value = "1"
-                        elif(str(value).lower()==str(item.low).lower()):
-                            value = "0"
-                        else:
-                            return None
+                    # if(item.type==TypeField.BINARY):
+                    #     if(str(value).lower()==str(item.high).lower()):
+                    #         value = "1"
+                    #     elif(str(value).lower()==str(item.low).lower()):
+                    #         value = "0"
+                    #     else:
+                    #         return None
                     item.set(value)
             return value
         except Exception as e:

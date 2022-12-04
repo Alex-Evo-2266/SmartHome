@@ -3,6 +3,7 @@ from unicodedata import name
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List
+from SmartHome.logic.device.set_value import set_value
 from SmartHome.logic.device.get_option import get_option
 from SmartHome.logic.deviceClass.schema import OptionalDevice
 from SmartHome.logic.device.edit_device import edit_device
@@ -63,6 +64,14 @@ async def get_options(auth_data: dict = Depends(token_dep)):
 	try:
 		options = get_option()
 		return options
+	except Exception as e:
+		logger.warning(str(e))
+		return JSONResponse(status_code=400, content=str(e))
+
+@router.get("/{system_name}/value/{field_name}/set/{value}")
+async def get_options(system_name, field_name, value, auth_data: dict = Depends(token_dep)):
+	try:
+		await set_value(system_name, field_name, value)
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
