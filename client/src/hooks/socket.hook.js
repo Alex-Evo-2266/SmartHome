@@ -89,10 +89,13 @@
 
 
 import React,{useEffect,useState,useCallback,useContext,useRef} from 'react'
+import { useDispatch } from 'react-redux';
+import { setDevices } from '../store/reducers/socketReducer';
 
 export const useSocket = () =>{
   const socket = useRef(null);
   const timerId = useRef(null);
+  const dispatch = useDispatch()
 
   const connectSocket = useCallback(()=>{
     try{
@@ -123,6 +126,10 @@ export const useSocket = () =>{
       socket.current.onmessage = function(e) {
         const data = JSON.parse(e.data);
         console.log(data);
+        if(data.type==='devices')
+        {
+          dispatch(setDevices(data.data)) 
+        }
       }
       socket.current.onerror = closeSocket
       socket.current.onclose = () => {
@@ -134,14 +141,10 @@ export const useSocket = () =>{
     }
   },[closeSocket, connectSocket])
 
-  useEffect(()=>{
-    listenSocket()
-    return ()=>closeSocket()
-  },[listenSocket, closeSocket])
-
   return{
+    listenSocket,
     connectSocket,
-    closeSocket,
+    closeSocket
   }
   
 }

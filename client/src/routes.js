@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {Switch,Route,Redirect} from 'react-router-dom'
 import {HomePage} from './Page/HomePage/HomePage'
 import {AuthPage} from './Page/AuthPage/AuthPage'
@@ -11,6 +11,7 @@ import { NonePage } from './Page/NonePage/NonePage'
 import { AddUser } from './Page/UsersPage/AddUserPage'
 import { DevicePage } from './Page/DevicePages/DevicePage'
 import { AddDevicePage } from './Page/DevicePages/AddDevicePage'
+import { useSocket } from './hooks/socket.hook'
 // import {DitailDevicePage} from './Page/DitailDevicePage'
 // import {DevicesPage} from './Page/DevicesPage'
 // import {ProfilePage} from './Page/ProfilePage'
@@ -34,6 +35,14 @@ import { AddDevicePage } from './Page/DevicePages/AddDevicePage'
 // import AddUser from './Page/AddUser'
 
 export const useRoutes = (isAuthenticated,role)=>{
+
+  const {listenSocket, closeSocket} = useSocket()
+
+  useEffect(()=>{
+    if (isAuthenticated)
+      listenSocket()
+    return ()=>closeSocket()
+  },[listenSocket, closeSocket])
 
   if(isAuthenticated){
     if(role === "none")

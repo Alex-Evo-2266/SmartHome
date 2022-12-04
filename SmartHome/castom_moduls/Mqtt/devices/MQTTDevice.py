@@ -4,6 +4,7 @@ from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
 from SmartHome.logic.deviceFile.schema import Received_Data_Format
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 import json
+from moduls_src.services import Services
 
 from moduls_src.models_schema import AddDevice, TypeAddDevice
 

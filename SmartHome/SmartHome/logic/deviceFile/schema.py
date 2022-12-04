@@ -49,7 +49,7 @@ class DeviceSchema(BaseModel):
     system_name: str
     fields: List[DeviceFieldSchema]
     token: Optional[str]
-    value: Optional[Dict[str,str]] = None
+    value: Optional[Dict[str,str]] = {}
 
 class DeviceEditSchema(DeviceSchema):
     newSystemName: str

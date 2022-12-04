@@ -9,7 +9,6 @@
 
 @import "./Menu/menu.css";
 /* @import "./header/header.base.css"; */
-@import "./deviceCart/deviceCart.base.css";
 @import "./infoCard/infoCard.css";
 @import "./hiding-div.css";
 @import "./form/form.base.css";
@@ -22,7 +21,6 @@
 @import "./newScriptsPage/newScriptsPage.base.css";
 @import "./usersPage/usersPage.base.css";
 @import "./addDevice/addDevice.base.css";
-@import "./deviceCart/newDeviceCart.base.css";
 @import "./custom1-checkbox/checkbox.base.css";
 @import "./addControls/addControls.base.css";
 @import "./menuOption/menuOption.base.css";
@@ -34,6 +32,7 @@
 @import "./device.css";
 @import "./styleEdit/styleEdit.base.css";
 @import "./select/select.css";
+@import "./device-card.css";
 
 
 @import "./runText.css";

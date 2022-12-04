@@ -13,7 +13,6 @@ import './css/style-alert.css'
 import './css/style-components.css'
 import { useUser } from './hooks/user.hook.js'
 import { useMenu } from './hooks/menu.hook.js'
-import { useSocket } from './hooks/socket.hook.js'
 
 function App() {
   const data = useSelector(state => state.auth)
@@ -21,7 +20,6 @@ function App() {
   const {loadStyle, avtoNightStyle, adaptiveBackground} = useStyle()
   const {loadData} = useUser()
   const {loadMenuData} = useMenu()
-  useSocket()
 
   useEffect(()=>{
     if (!!data.token)

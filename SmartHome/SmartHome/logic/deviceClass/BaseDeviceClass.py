@@ -125,7 +125,7 @@ class BaseDevice(metaclass=DeviceMeta, use=False):
 			class_device=self.device_data.class_device,
 			value_type=self.device_data.value_type,
 			fields=[],
-			value=None
+			value={}
 			)
 		values:List[DeviceFieldSchema] = []
 		vals = dict()
