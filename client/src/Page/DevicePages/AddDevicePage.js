@@ -1,5 +1,6 @@
 import React,{useCallback, useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useDeviceOptions } from '../../hooks/deviceOption.hook';
 import { useHttp } from '../../hooks/http.hook';
 import { useMessage } from '../../hooks/message.hook'
 import { setTitle } from '../../store/reducers/menuReducer';
@@ -13,8 +14,8 @@ export const AddDevicePage = () => {
   const {message} = useMessage();
   const auth = useSelector(state=>state.auth)
   const {request, error, clearError} = useHttp();
-  const [options, setOptions] = useState([])
   const [page, setPage] = useState(1)
+  const {getOptions, options} = useDeviceOptions()
   const [device, setDevice] = useState({
     type: "",
     class_device: "",
@@ -26,24 +27,6 @@ export const AddDevicePage = () => {
     fields:[]
   })
 
-  const getOptions = useCallback(async()=>{
-    const data = await request("/api/devices/options", "GET", null, {Authorization: `Bearer ${auth.token}`})
-    if(data && Array.isArray(data))
-      setOptions(data)
-  },[request, auth.token])
-
-  const getOptionsDevice = useCallback(()=>{
-    if(device.class_device)
-    {
-      let d = options.filter((item)=>item.class_name === device.class_device)
-      return d[0]
-    }
-  },[options, device])
-
-  useEffect(()=>{
-    getOptions()
-  },[getOptions])
-
   useEffect(()=>{
     message(error, 'error');
     clearError();
@@ -53,10 +36,6 @@ export const AddDevicePage = () => {
   useEffect(()=>{
     dispatch(setTitle("Add devices"))
   },[dispatch])
-
-  useEffect(()=>{
-    console.log(device)
-  },[device])
 
   const validFields = (field)=>{
     if (field.type === "")
@@ -69,7 +48,7 @@ export const AddDevicePage = () => {
       return false
     if (field.enum_values === "" && field.type === "enum") 
       return false
-    if (getOptionsDevice().added.address && field.address === "")
+    if (getOptions(device.class_device).added.address && field.address === "")
       return false
     return true
   }
@@ -83,9 +62,9 @@ export const AddDevicePage = () => {
       return false
     if (device.name === "" || device.system_name === "")
       return false
-    if (getOptionsDevice().added.address && device.address === "")
+    if (getOptions(device.class_device).added.address && device.address === "")
       return false
-    if (getOptionsDevice().added.token && device.token === "")
+    if (getOptions(device.class_device).added.token && device.token === "")
       return false
     for (const item of device.fields) {
       if (!validFields(item)) return false
@@ -119,9 +98,9 @@ export const AddDevicePage = () => {
       (page === 1)?
       <ChoiseDevicePage options={options} setDevice={setDevice} next={()=>setPage(prev=>prev+1)}/>:
       (page === 2)?
-      <FieldDevicePage setDevice={setDevice} options={getOptionsDevice().added} device={device} next={()=>setPage(prev=>prev+1)} prev={()=>setPage(prev=>prev-1)}/>:
+      <FieldDevicePage setDevice={setDevice} options={getOptions(device.class_device).added} device={device} next={()=>setPage(prev=>prev+1)} prev={()=>setPage(prev=>prev-1)}/>:
       (page === 3)?
-      <NameDevicePage setDevice={setDevice} options={getOptionsDevice().added} device={device} next={out} prev={()=>setPage(prev=>prev-1)}/>:
+      <NameDevicePage setDevice={setDevice} options={getOptions(device.class_device).added} device={device} next={out} prev={()=>setPage(prev=>prev-1)}/>:
       null
     }
     </div>
