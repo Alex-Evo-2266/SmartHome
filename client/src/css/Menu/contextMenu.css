@@ -8,6 +8,7 @@
   min-width: 180px;
   z-index: 99;
   font-size: 20px;
+  text-align: start;
 }
 .contextmenu .contextmenuElement{
   line-height: 48px;

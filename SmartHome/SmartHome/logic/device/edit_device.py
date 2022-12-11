@@ -1,5 +1,6 @@
 
 from typing import Any, List, Type
+from SmartHome.logic.device.devicesArrey import DevicesArrey
 from SmartHome.logic.deviceClass.schema import ChangeField
 from SmartHome.logic.deviceClass.DeviceClasses import DeviceClasses
 
@@ -89,7 +90,7 @@ def field_edit(fields_new:List[DeviceFieldSchema], fields_old:List[DeviceFieldSc
 	for field_old in fields_old:
 		for field_new in fields_new:
 			if field_new.name == field_old.name:
-				arr.append(edit_field(field_new, fields_old, option=option))
+				arr.append(edit_field(field_new, field_old, option=option))
 	return arr
 
 def edit_device(system_name:str, data:EditDeviceSchema):
@@ -114,4 +115,6 @@ def edit_device(system_name:str, data:EditDeviceSchema):
 	old_device_data.name = data.name
 	old_device_data.system_name = data.system_name
 	old_device_data.fields = field_edit(data.fields, old_device_data.fields, option.fields_change)
+	print(old_device_data)
 	old_device_data.save()
+	DevicesArrey.delete(system_name)

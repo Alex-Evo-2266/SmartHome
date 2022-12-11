@@ -1,6 +1,6 @@
 import React,{useCallback, useEffect, useRef, useState} from 'react'
 import { useDispatch, useSelector} from 'react-redux'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import { AdaptivGrid, AdaptivGridItem } from '../../components/adaptivGrid'
 import { useSocket } from '../../hooks/socket.hook'
 import { clear_menu, setDopMenu, setSearch, setTitle } from '../../store/reducers/menuReducer'

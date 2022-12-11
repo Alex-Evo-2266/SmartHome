@@ -1,4 +1,6 @@
 @import "./base.css";
+
+@import "./cards.css";
 @import "./style-page.css";
 
 @import "./variable/base.css";
@@ -35,7 +37,6 @@
 @import "./device-card.css";
 @import "./adaptivGrid.css";
 
-
 @import "./runText.css";
 
 @import "./style-title.css";
@@ -46,12 +47,11 @@
 @import "./style-indicator.css";
 @import "./table.css";
 
-@import "./cards.css";
-@import "./terminal.css";
+/* @import "./terminal.css";
 @import "./home.css";
 @import "./EditCartWindow.css";
 @import "./deviceDitail.css";
-@import "./groups.css";
+@import "./groups.css"; */
 /* @import "./light/light.css";
 @import "./night/night.css"; */
 

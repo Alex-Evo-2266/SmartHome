@@ -13,3 +13,8 @@
 .device-field .device-field-control{
 	display: flex;
 }
+
+.device-card{
+	padding-top: 10px;
+	min-height: 100px;
+}

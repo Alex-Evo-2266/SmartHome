@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class ChangeField(BaseModel):
 	added:bool = True
 	deleted:bool = True
+	name:bool = True
 	address:bool = True
 	control:bool = True
 	high:bool = True

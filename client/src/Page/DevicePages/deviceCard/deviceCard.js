@@ -1,10 +1,12 @@
 import React,{useCallback,useEffect} from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory, useParams } from 'react-router-dom'
 import { BaseCard } from '../../../components/cards/baseCard'
 import { DopMenu } from '../../../components/contextMenu/dopMenu'
 import { DeviceField } from './fieldCard/baseField'
 
 export const DeviceCard = ({user,updata, device})=>{
+
+	const history = useHistory()
 	
 	const getValue = (values, field)=>{
 		if (field.name in values)
@@ -15,7 +17,9 @@ export const DeviceCard = ({user,updata, device})=>{
 	const getButtons = [
 		{
 			title:"edit",
-			onClick: ()=>{},
+			onClick: ()=>{
+				history.push("/devices/edit/" + device.system_name)
+			},
 		},
 		{
 			title:"delete",
@@ -24,7 +28,7 @@ export const DeviceCard = ({user,updata, device})=>{
 	]
 
 	return(
-		<BaseCard>
+		<BaseCard className="device-card">
 			<DopMenu buttons={getButtons} style={{right: "0"}}/>
 			<div className='card-content'>
 				<h2>{device.name}</h2>
