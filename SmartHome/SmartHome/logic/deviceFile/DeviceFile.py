@@ -130,7 +130,7 @@ class DeviceData(DeviceSchema):
 		devices = DevicesFile.get_devices()
 		if not devices:
 			devices = list()
-		if not index:
+		if index == None:
 			devices.append(self.dict())
 		else:
 			devices[index] = self.dict()
@@ -139,7 +139,8 @@ class DeviceData(DeviceSchema):
 
 	async def delete(self):
 		index = DevicesFile.get_index(self.system_name)
-		if not index:
+		print(index)
+		if index == None:
 			raise Exception("not device")
 		devices = DevicesFile.get_devices()
 		devices.pop(index)

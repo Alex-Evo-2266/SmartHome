@@ -6,7 +6,7 @@ from typing import Optional, List
 from SmartHome.logic.device.set_value import set_value
 from SmartHome.logic.device.get_option import get_option
 from SmartHome.logic.deviceClass.schema import OptionalDevice
-from SmartHome.logic.device.edit_device import edit_device
+from SmartHome.logic.device.edit_device import delete_device, edit_device
 from SmartHome.logic.device.device import add_device
 
 from SmartHome.logic.deviceFile.schema import AddDeviceSchema, DeviceSchema, EditDeviceSchema
@@ -53,7 +53,16 @@ async def types(data:AddDeviceSchema, auth_data: dict = Depends(token_dep)):
 @router.put("/{system_name}")
 async def edit_dev(system_name:str, data:EditDeviceSchema, auth_data: dict = Depends(token_dep)):
 	try:
-		edit_device(system_name, data)
+		await edit_device(system_name, data)
+		return "ok"
+	except Exception as e:
+		logger.warning(str(e))
+		return JSONResponse(status_code=400, content=str(e))
+
+@router.delete("/{system_name}")
+async def delete_dev(system_name:str, auth_data: dict = Depends(token_dep)):
+	try:
+		await delete_device(system_name)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))

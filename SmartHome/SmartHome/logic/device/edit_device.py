@@ -93,7 +93,7 @@ def field_edit(fields_new:List[DeviceFieldSchema], fields_old:List[DeviceFieldSc
 				arr.append(edit_field(field_new, field_old, option=option))
 	return arr
 
-def edit_device(system_name:str, data:EditDeviceSchema):
+async def edit_device(system_name:str, data:EditDeviceSchema):
 	old_device_data = DevicesFile.get(system_name)
 	if not old_device_data:
 		raise DeviceNotFound
@@ -117,4 +117,14 @@ def edit_device(system_name:str, data:EditDeviceSchema):
 	old_device_data.fields = field_edit(data.fields, old_device_data.fields, option.fields_change)
 	print(old_device_data)
 	old_device_data.save()
+	DevicesArrey.delete(system_name)
+
+async def delete_device(system_name: str):
+	print("p0")
+	old_device_data = DevicesFile.get(system_name)
+	print("p1", old_device_data)
+	if not old_device_data:
+		raise DeviceNotFound
+	print("p2")
+	await old_device_data.delete()
 	DevicesArrey.delete(system_name)
