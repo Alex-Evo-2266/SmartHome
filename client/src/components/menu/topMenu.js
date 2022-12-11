@@ -1,5 +1,5 @@
 import React from 'react'
-import {DopMenu} from './dopMenu'
+import {DopMenu} from '../contextMenu/dopMenu'
 import {Tabs} from './tabs'
 
 export const TopMenu = ({title, togle, buttons, dopmenuBtn, searchTogle})=>{

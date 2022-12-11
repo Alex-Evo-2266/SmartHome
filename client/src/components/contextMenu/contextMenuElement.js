@@ -13,9 +13,16 @@ export const ContextMenuElement = ({item, hide}) =>{
   }
 
   return(
-    <>
     <div className="contextmenuElement" onClick={buttonClick}>
-      <span className="state">
+      {
+        (item.icon)?
+        <span className="icon">
+          <i className={item.icon}></i>
+        </span>
+        :null
+      }
+      <span className="content">{item.title}</span>
+      <span className={`state ${(visible)?"show":""}`}>
       {
         (item.active)?
         <i className="fas fa-check"></i>:
@@ -24,17 +31,22 @@ export const ContextMenuElement = ({item, hide}) =>{
         :null
       }
       </span>
-      <span className="content">{item.title}</span>
-    </div>
     {
       (visible && item.sub)?
-      <div className="contextSubMenu">
+      <div className="contextmenu sub">
       {
         item.sub?.map((item2,index)=>{
           return (
             <div key={index} className="contextmenuElement" onClick={item2.onClick}>
-              <span className="state">{(item2.active)?<i className="fas fa-check"></i>:null}</span>
+              {
+                (item2.icon)?
+                <span className="icon">
+                  <i className={item2.icon}></i>
+                </span>
+                :null
+              }
               <span className="content">{item2.title}</span>
+              <span className="state">{(item2.active)?<i className="fas fa-check"></i>:null}</span>
             </div>
           )
         })
@@ -42,6 +54,6 @@ export const ContextMenuElement = ({item, hide}) =>{
       </div>
       :null
     }
-    </>
+    </div>
   )
 }

@@ -1,6 +1,7 @@
 import React,{useCallback,useEffect} from 'react'
 import { NavLink } from 'react-router-dom'
 import { BaseCard } from '../../../components/cards/baseCard'
+import { DopMenu } from '../../../components/contextMenu/dopMenu'
 import { DeviceField } from './fieldCard/baseField'
 
 export const DeviceCard = ({user,updata, device})=>{
@@ -11,8 +12,20 @@ export const DeviceCard = ({user,updata, device})=>{
 		return field.low
 	}
 
+	const getButtons = [
+		{
+			title:"edit",
+			onClick: ()=>{},
+		},
+		{
+			title:"delete",
+			onClick: ()=>{},
+		},
+	]
+
 	return(
 		<BaseCard>
+			<DopMenu buttons={getButtons} style={{right: "0"}}/>
 			<div className='card-content'>
 				<h2>{device.name}</h2>
 				<p>system name: {device.system_name}</p>

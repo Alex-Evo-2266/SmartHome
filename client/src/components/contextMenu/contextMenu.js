@@ -1,11 +1,13 @@
 import React from 'react'
 import {ContextMenuElement} from './contextMenuElement'
 
-export const ContextMenu = ({buttons=[], className, style, hide}) =>{
+export const ContextMenu = ({buttons=[], className, style, hide, x, y}) =>{
 
   if(buttons?.length === 0){
     return null
   }
+
+  console.log(buttons)
 
   return(
     <>

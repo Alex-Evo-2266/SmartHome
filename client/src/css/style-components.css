@@ -33,6 +33,7 @@
 @import "./styleEdit/styleEdit.base.css";
 @import "./select/select.css";
 @import "./device-card.css";
+@import "./adaptivGrid.css";
 
 
 @import "./runText.css";
