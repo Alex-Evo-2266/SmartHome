@@ -1,7 +1,6 @@
-base:
+auth_service:
   client_id: VgbZ4wPoiwTOLdVkWkApv2aa3w1epryf
   client_secret: 5CXsEBX7r3
-  frequency: '3'
   host: http://localhost:2000
 email:
   login: smarthome2244@mail.ru
@@ -11,6 +10,8 @@ mqttBroker:
   password: admin
   port: '1883'
   user: admin
+send_message:
+  frequency: '3'
 weather:
   APPID: ''
   city: ''

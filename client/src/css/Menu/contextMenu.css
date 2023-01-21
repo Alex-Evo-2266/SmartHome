@@ -10,6 +10,9 @@
   font-size: 20px;
   text-align: start;
 }
+.context-menu-container{
+  z-index: 90;
+}
 .contextmenu .contextmenuElement{
   line-height: 48px;
   height: 48px;

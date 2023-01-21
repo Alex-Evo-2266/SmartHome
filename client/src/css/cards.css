@@ -63,6 +63,7 @@
 
 .card-container .card-content{
 	margin: 10px;
+	position: relative;
 }
 .card-container .card-content.scroll{
 	overflow-y: scroll;

@@ -13,7 +13,7 @@ export const SettingsMenuPage = () => {
 	const {message} = useMessage()
 
 	const save = useCallback(async() => {
-		await request("/api/menu", "PUT", menu.insluedField, {Authorization: `Bearer ${auth.token}`})
+		await request("/api/users/menu", "PUT", menu.insluedField, {Authorization: `Bearer ${auth.token}`})
 	},[auth.token, request, menu.insluedField])
 
 	const actionField = useCallback((field) => {

@@ -4,6 +4,7 @@ import { NavLink, useHistory, useParams } from 'react-router-dom'
 import { SUCCESS } from '../../../components/alerts/alertTyps'
 import { BaseCard } from '../../../components/cards/baseCard'
 import { DopMenu } from '../../../components/contextMenu/dopMenu'
+import { RunText } from '../../../components/runText'
 import { useHttp } from '../../../hooks/http.hook'
 import { useMessage } from '../../../hooks/message.hook'
 import { hideDialog, showAlertDialog } from '../../../store/reducers/dialogReducer'
@@ -71,7 +72,12 @@ export const DeviceCard = ({user,updata, device})=>{
 		<BaseCard className="device-card">
 			<DopMenu buttons={getButtons} style={{right: "0"}}/>
 			<div className='card-content'>
-				<h2>{device.name}</h2>
+				<div className={`device-module-name-container ${device.class_device}`}>
+					<p className={`device-module-name ${device.class_device}`}>{device.class_device}</p>
+				</div>
+				<div className='device-card-title'>
+					<RunText text={device.name} id={device.system_name}/>
+				</div>
 				<p>system name: {device.system_name}</p>
 				<p>type: {device.type}</p>
 			</div>

@@ -114,7 +114,7 @@ export const EditDevicePage = () => {
 		  return false
 		if (device.value_type === "")
 		  return false
-		if (device.name === "" || device.system_name === "")
+    	if (device.name === "" || device.system_name === "" || device.system_name === "system" || device.system_name === "variable" || device.system_name === "group" || device.system_name === "room" || device.system_name === "device")
 		  return false
 		if (getOptions(device.class_device).added.address && device.address === "")
 		  return false

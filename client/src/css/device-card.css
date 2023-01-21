@@ -6,6 +6,25 @@
 	font-size: 24px;
 }
 
+.device-card .device-module-name{
+	border-radius: 16px;
+	padding: 4px;
+	background: #ccc;
+	color: #000;
+	display: inline;
+	position: relative;
+}
+
+.device-module-name-container{
+	display: flex;
+	justify-content: center;
+}
+
+.device-card .device-module-name.Variable{
+	background: orange;
+	color: #000;
+}
+
 .device-field .device-field-title{
 	
 }
@@ -17,4 +36,13 @@
 .device-card{
 	padding-top: 10px;
 	min-height: 100px;
+}
+
+.device-card-title{
+	width: calc(100% - 20px);
+}
+
+.card-container .card-content .device-card-title p{
+	font-size: 34px;
+
 }
