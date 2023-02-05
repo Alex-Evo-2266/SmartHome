@@ -36,3 +36,5 @@ settings_local.py
 castom_moduls-*
 
 client/src/old
+
+.vscode

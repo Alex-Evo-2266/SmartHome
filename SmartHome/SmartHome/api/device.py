@@ -5,9 +5,10 @@ from fastapi.responses import JSONResponse
 from typing import Optional, List
 from SmartHome.logic.device.set_value import set_value
 from SmartHome.logic.device.get_option import get_option
-from SmartHome.logic.deviceClass.schema import OptionalDevice
-from SmartHome.logic.device.edit_device import delete_device, edit_device
+from SmartHome.logic.deviceClass.schema import OptionalDevice, ConsctionStatusForm
+from SmartHome.logic.device.edit_device import delete_device, edit_device, device_linc
 from SmartHome.logic.device.device import add_device
+from SmartHome.logic.device.get_types import get_type
 
 from SmartHome.logic.deviceFile.schema import AddDeviceSchema, DeviceSchema, EditDeviceSchema
 
@@ -32,7 +33,7 @@ router = APIRouter(
 logger = logging.getLogger(__name__)
 
 @router.get("", response_model=List[DeviceSchema])
-async def types(auth_data: dict = Depends(token_dep)):
+async def get_devices_url(auth_data: dict = Depends(token_dep)):
 	try:
 		devices = []
 		# devices = get_devices()
@@ -42,7 +43,7 @@ async def types(auth_data: dict = Depends(token_dep)):
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.post("")
-async def types(data:AddDeviceSchema, auth_data: dict = Depends(token_dep)):
+async def add_device_url(data:AddDeviceSchema, auth_data: dict = Depends(token_dep)):
 	try:
 		add_device(data)
 		return "ok"
@@ -77,8 +78,26 @@ async def get_options(auth_data: dict = Depends(token_dep)):
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 
+@router.get("/types", response_model=List[OptionalDevice])
+async def get_types():
+	try:
+		options = get_type()
+		return options
+	except Exception as e:
+		logger.warning(str(e))
+		return JSONResponse(status_code=400, content=str(e))
+
+@router.post("/{system_name}/connection")
+async def set_connection_status(system_name, data:ConsctionStatusForm, auth_data: dict = Depends(token_dep)):
+	try:
+		await device_linc(system_name, data.status)
+		return "ok"
+	except Exception as e:
+		logger.warning(str(e))
+		return JSONResponse(status_code=400, content=str(e))
+
 @router.get("/{system_name}/value/{field_name}/set/{value}")
-async def get_options(system_name, field_name, value, auth_data: dict = Depends(token_dep)):
+async def set_device_state(system_name, field_name, value, auth_data: dict = Depends(token_dep)):
 	try:
 		await set_value(system_name, field_name, value)
 	except Exception as e:

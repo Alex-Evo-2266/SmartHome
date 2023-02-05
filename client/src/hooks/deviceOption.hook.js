@@ -9,11 +9,18 @@ export const useDeviceOptions = () => {
 	const auth = useSelector(state=>state.auth)
 	const {request, error, clearError} = useHttp()
 	const [options, setOptions] = useState([])
+	const [types, setTypes] = useState([])
 
 	const loadOptions = useCallback(async()=>{
 		const data = await request("/api/devices/options", "GET", null, {Authorization: `Bearer ${auth.token}`})
 		if(data && Array.isArray(data))
 		  setOptions(data)
+	},[request, auth.token])
+
+	const loadTypes = useCallback(async()=>{
+		const data = await request("/api/devices/types", "GET", null, {Authorization: `Bearer ${auth.token}`})
+		if(data && Array.isArray(data))
+		setTypes(data)
 	},[request, auth.token])
 
 	const getOptions = useCallback((class_device)=>{
@@ -24,9 +31,21 @@ export const useDeviceOptions = () => {
 		}
 	  },[options])
 
+	  const getType = useCallback((type_name)=>{
+		if(type_name)
+		{
+		  let d = types.filter((item)=>item.name === type_name)
+		  return d[0]
+		}
+	  },[types])
+
 	useEffect(()=>{
 		loadOptions()
 	},[loadOptions])
+
+	useEffect(()=>{
+		loadTypes()
+	},[loadTypes])
 
 	useEffect(()=>{
 		message(error, 'error');
@@ -34,6 +53,6 @@ export const useDeviceOptions = () => {
 		return ()=>clearError()
 	},[error, message, clearError])
 
-	return {loadOptions, getOptions, options}
+	return {loadOptions, getOptions, getType, options, types}
   }
   

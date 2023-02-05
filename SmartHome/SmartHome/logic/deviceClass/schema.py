@@ -1,5 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
+from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 
 class ChangeField(BaseModel):
 	added:bool = True
@@ -25,6 +26,9 @@ class AdditionDevice(BaseModel):
 	address:bool = True
 	token:bool = False
 
+class ConsctionStatusForm(BaseModel):
+	status: bool
+
 class OptionalDevice(BaseModel):
 	class_name: str
 	added: AdditionDevice
@@ -32,3 +36,12 @@ class OptionalDevice(BaseModel):
 	change_url: Optional[str] = None
 	change: ChangeDevice
 	types: List[str] = ["base"]
+
+
+class FieldTypeDevice(BaseModel):
+	name: str
+	type: TypeField
+
+class TypeDevice(BaseModel):
+	name: str
+	fields: List[FieldTypeDevice] = []

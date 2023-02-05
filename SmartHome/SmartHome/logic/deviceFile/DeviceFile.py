@@ -57,7 +57,7 @@ class DevicesFile(object):
 		return devs
 
 	@staticmethod
-	def get_raw(system_name:str)->Dict[str, Any]:
+	def get_raw(system_name:str)->Dict[str, Any] | None:
 		devices = DevicesFile.devices
 		if devices == None:
 			devices = list()
@@ -130,10 +130,12 @@ class DeviceData(DeviceSchema):
 		devices = DevicesFile.get_devices()
 		if not devices:
 			devices = list()
+		dict_device = self.dict()
+		dict_device["status"] = dict_device["status"].value
 		if index == None:
-			devices.append(self.dict())
+			devices.append(dict_device)
 		else:
-			devices[index] = self.dict()
+			devices[index] = dict_device
 		DevicesFile.set_devices(devices)
 		writeYMLFile(DEVICES, devices)
 

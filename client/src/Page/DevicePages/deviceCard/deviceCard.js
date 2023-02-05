@@ -49,18 +49,34 @@ export const DeviceCard = ({user,updata, device})=>{
 		}
 	}
 
-	const getButtons = [
-		{
-			title:"edit",
-			onClick: ()=>{
-				history.push("/devices/edit/" + device.system_name)
-			},
-		},
+	const getButtons = ()=>{
+		let btns = [
+			{
+				title:"edit",
+				onClick: ()=>{
+					history.push("/devices/edit/" + device.system_name)
+				},
+			}
+		]
+		if (device.status === "unlinc"){
+			btns.push({
+				title: "connect",
+				onClick: ()=>request(`/api/devices/${device.system_name}/connection`,"POST", {status: true}, {Authorization: `Bearer ${auth.token}`})
+			})
+		}
+		else{
+			btns.push({
+				title: "disabling",
+				onClick: ()=>request(`/api/devices/${device.system_name}/connection`,"POST", {status: false}, {Authorization: `Bearer ${auth.token}`})
+			})
+		}
+		btns.push(
 		{
 			title:"delete",
 			onClick: deleteDevice,
-		},
-	]
+		})
+		return (btns)
+	}
 
 	useEffect(()=>{
 		message(error, 'error');
@@ -70,7 +86,7 @@ export const DeviceCard = ({user,updata, device})=>{
 
 	return(
 		<BaseCard className="device-card">
-			<DopMenu buttons={getButtons} style={{right: "0"}}/>
+			<DopMenu buttons={getButtons()} style={{right: "0"}}/>
 			<div className='card-content'>
 				<div className={`device-module-name-container ${device.class_device}`}>
 					<p className={`device-module-name ${device.class_device}`}>{device.class_device}</p>

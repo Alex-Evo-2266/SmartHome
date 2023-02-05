@@ -4,7 +4,7 @@ from SmartHome.logic.device.devicesArrey import DevicesArrey
 from SmartHome.logic.deviceClass.schema import ChangeField
 from SmartHome.logic.deviceClass.DeviceClasses import DeviceClasses
 
-from SmartHome.logic.deviceFile.schema import DeviceFieldSchema, EditDeviceSchema
+from SmartHome.logic.deviceFile.schema import DeviceFieldSchema, EditDeviceSchema, Status_Device
 from SmartHome.logic.deviceFile.DeviceFile import DevicesFile
 from exceptions.exceptions import DeviceNotFound
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
@@ -128,3 +128,13 @@ async def delete_device(system_name: str):
 	print("p2")
 	await old_device_data.delete()
 	DevicesArrey.delete(system_name)
+
+async def device_linc(system_name:str, status: bool):
+	device_data = DevicesFile.get(system_name)
+	if not device_data:
+		raise DeviceNotFound
+	if status:
+		device_data.status = Status_Device.ONLINE
+	else:
+		device_data.status = Status_Device.UNLINC
+	device_data.save()
