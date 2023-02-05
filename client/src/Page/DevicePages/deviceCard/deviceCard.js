@@ -84,9 +84,11 @@ export const DeviceCard = ({user,updata, device})=>{
 			<div className='dividers'></div>
 			<div className='card-content'>
 			{
+				(device.status === "online")?
 				device?.fields?.map((item, index)=>(
 					<DeviceField key={index} field={item} value={getValue(device.value, item)} systemName={device.system_name}/>
-				))
+				)):
+				<p>{device.status}</p>
 			}
 			</div>
 			<div className='card-btn-container'>
