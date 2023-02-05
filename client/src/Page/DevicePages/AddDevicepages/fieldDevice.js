@@ -69,7 +69,7 @@ export const FieldDevicePage = ({options, setDevice, device, next, prev}) => {
 		null
 		}
 		{
-			device?.fields.map((item, index)=><FieldComponent del={()=>delField(index)} setField={(data)=>setField(data, index)} options={options} key={index} field={item}/>)
+			device?.fields.map((item, index)=><FieldComponent deviceType={device.type} del={()=>delField(index)} setField={(data)=>setField(data, index)} options={options} key={index} field={item}/>)
 		}
 		<div className="card-btn-container">
 			<button className='btn border' onClick={prev}>back</button>

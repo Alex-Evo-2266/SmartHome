@@ -1,13 +1,19 @@
 import React,{useCallback, useEffect, useState} from 'react'
+import { useSelector } from 'react-redux'
 import { HidingDiv } from '../../../../components/hidingDiv'
+import { useDeviceOptions } from '../../../../hooks/deviceOption.hook'
 import { FieldBinary } from './binary'
 import { FieldEnum } from './enum'
 import { IconChoose } from './iconChoose'
 import { FieldNumber } from './number'
 import { FieldText } from './text'
 
-export const FieldComponent = ({options, setField, field, del}) => {
+export const FieldComponent = ({options, setField, field, del, deviceType}) => {
 
+	console.log(options, setField, field, del)
+	const types = useSelector(state=>state.options.types)
+	const [fieldName, setFieldName] = useState("other")
+	const {getType} = useDeviceOptions()
 	const [fieldL, setFieldL] = useState({
 		address: "",
 		name: "",
@@ -42,6 +48,25 @@ export const FieldComponent = ({options, setField, field, del}) => {
 		setField(newField)
 	}
 
+	const changeFieldName = (e)=>{
+		setFieldName(e.target.value)
+		if (e.target.value === "other")
+			return;
+		let t = types.filter(item=>item.name===deviceType)
+		let f = t[0]?.fields
+		f = f?.filter(item => item.name === e.target.value)
+		f = f[0]
+		console.log(f)
+		let newField = {...fieldL, name:e.target.value, type: f.type}
+		setFieldL(newField)
+		setField(newField)
+	}
+
+	const fieldNames = useCallback(()=>{
+		let t = types.filter(item=>item.name===deviceType)
+		return t[0]?.fields ?? []
+	},[types])
+
 	const IconField = (data)=>{
 		let newField = {...fieldL, icon:data}
 		setFieldL(newField)
@@ -73,21 +98,45 @@ export const FieldComponent = ({options, setField, field, del}) => {
 	<HidingDiv title={fieldL.name} dopHeight={200}>
 		<div className="configElement">
 			<div className="input-data">
-				<input onChange={changeField} required name="name" type="text" value={fieldL.name}></input>
-				<label>name</label>
-			</div>
-		</div>
-		<div className="configElement">
-			<div className="input-data">
-				<select onChange={changeType} required name="type" value={fieldL.type}>
-					<option value={"binary"}>binary</option>
-					<option value={"number"}>number</option>
-					<option value={"text"}>text</option>
-					<option value={"enum"}>enum</option>
+				<select onChange={changeFieldName} required name="fieldName" value={fieldName}>
+					<option value={"other"}>other</option>
+					{
+						fieldNames().map((item, index)=>
+							(<option key={index} value={item.name}>{item.name}</option>)
+						)
+					}
 				</select>
-				<label>type</label>
+				<label>choise name</label>
 			</div>
 		</div>
+		{
+			(fieldName === "other")?
+				<>
+				<div className="configElement">
+					<div className="input-data">
+						<input onChange={changeField} required name="name" type="text" value={fieldL.name}></input>
+						<label>name</label>
+					</div>
+				</div>
+				<div className="configElement">
+				<div className="input-data">
+					<select onChange={changeType} required name="type" value={fieldL.type}>
+						<option value={"binary"}>binary</option>
+						<option value={"number"}>number</option>
+						<option value={"text"}>text</option>
+						<option value={"enum"}>enum</option>
+					</select>
+					<label>type</label>
+				</div>
+			</div>
+			</>:
+			<div className="configElement">
+				<div className="input-data">
+					type: {fieldL.type}
+				</div>
+			</div>
+		}
+		
 		<div className="configElement">
 			<div className="input-data">
 				<select onChange={changeField} required name="control" value={fieldL.control}>

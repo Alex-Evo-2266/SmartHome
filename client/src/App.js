@@ -13,6 +13,7 @@ import './css/style-alert.css'
 import './css/style-components.css'
 import { useUser } from './hooks/user.hook.js'
 import { useMenu } from './hooks/menu.hook.js'
+import { useDeviceOptions } from './hooks/deviceOption.hook.js'
 
 function App() {
   const data = useSelector(state => state.auth)
@@ -20,6 +21,7 @@ function App() {
   const {loadStyle, avtoNightStyle, adaptiveBackground} = useStyle()
   const {loadData} = useUser()
   const {loadMenuData} = useMenu()
+  const {loadOptions, loadTypes} = useDeviceOptions()
 
   useEffect(()=>{
     if (!!data.token)
@@ -30,6 +32,16 @@ function App() {
     if (!!data.token)
       loadData()
   },[loadData, data.token])
+
+  useEffect(()=>{
+    if (!!data.token)
+      loadOptions()
+  },[loadOptions, data.token])
+
+  useEffect(()=>{
+    if (!!data.token)
+      loadTypes()
+  },[loadTypes, data.token])
 
   useEffect(()=>{
     if (!!data.token)

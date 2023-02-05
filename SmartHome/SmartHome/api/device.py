@@ -9,7 +9,7 @@ from SmartHome.logic.deviceClass.schema import OptionalDevice, ConsctionStatusFo
 from SmartHome.logic.device.edit_device import delete_device, edit_device, device_linc
 from SmartHome.logic.device.device import add_device
 from SmartHome.logic.device.get_types import get_type
-
+from SmartHome.logic.deviceClass.schema import FieldTypeDevice, TypeDevice
 from SmartHome.logic.deviceFile.schema import AddDeviceSchema, DeviceSchema, EditDeviceSchema
 
 # from SmartHome.logic.auth import auth
@@ -78,7 +78,7 @@ async def get_options(auth_data: dict = Depends(token_dep)):
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 
-@router.get("/types", response_model=List[OptionalDevice])
+@router.get("/types", response_model=List[TypeDevice])
 async def get_types():
 	try:
 		options = get_type()

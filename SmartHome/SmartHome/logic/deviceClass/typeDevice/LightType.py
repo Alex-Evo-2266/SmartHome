@@ -5,5 +5,6 @@ from SmartHome.logic.deviceClass.schema import FieldTypeDevice
 from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 
 
-class Light(BaseType):
+class Light(BaseType, page="fhmg"):
 	power = TypeField.BINARY
+

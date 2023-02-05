@@ -15,7 +15,8 @@ export const AddDevicePage = () => {
   const auth = useSelector(state=>state.auth)
   const {request, error, clearError} = useHttp();
   const [page, setPage] = useState(1)
-  const {getOptions, options} = useDeviceOptions()
+  const {getOptions} = useDeviceOptions()
+  const options = useSelector(state=>state.options.options)
   const [device, setDevice] = useState({
     type: "",
     class_device: "",

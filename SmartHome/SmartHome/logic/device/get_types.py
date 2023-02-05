@@ -4,8 +4,8 @@ from SmartHome.logic.deviceClass.schema import AdditionDevice, ChangeDevice, Cha
 from SmartHome.logic.deviceClass.DeviceClasses import DeviceClasses
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 from SmartHome.logic.deviceClass.VariableClass import Variable
-from SmartHome.logic.deviceClass.schema import FieldTypeDevice
 from SmartHome.logic.deviceClass.typeDevice.Types import DeviceTypeClasses
+from SmartHome.logic.deviceClass.schema import FieldTypeDevice, TypeDevice
 
 def filter_parametr(dct):
 	new_dict = dict()
@@ -15,10 +15,10 @@ def filter_parametr(dct):
 	return new_dict
 
 def get_type():
-	arr:List[FieldTypeDevice] = []
+	arr:List[TypeDevice] = []
 	devece_types = DeviceTypeClasses.all()
-	print(devece_types.__doc__)
+	print(devece_types)
 	for key in devece_types:
-		pass
+		arr.append(devece_types[key])
 	return arr
 	

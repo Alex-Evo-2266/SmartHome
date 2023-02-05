@@ -8,9 +8,9 @@ import { useDispatch } from 'react-redux'
 import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dialogReducer'
 
 const typeImages = {
-  "Light": lampImg,
-  "Switch": switchImg,
-  "Variable": variableImg,
+	"Light": lampImg,
+	"Switch": switchImg,
+	"Variable": variableImg,
 }
 
 const types = [
