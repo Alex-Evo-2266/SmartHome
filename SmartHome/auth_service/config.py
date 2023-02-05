@@ -1,5 +1,4 @@
 import logging
-from turtle import title
 from typing import List, Optional
 from auth_service.castom_requests import ConnectData, ThisLocalSession, castom_auth_service_requests, get_connect_data
 from authtorization.models import Session
