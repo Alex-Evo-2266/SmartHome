@@ -11,9 +11,7 @@ export const useDeviceOptions = () => {
 	const {request, error, clearError} = useHttp()
 	const DeviceOptions = useSelector(state=>state.options)
 	const dispatch = useDispatch()
-	// const [options, setOptions] = useState([])
-	// const [types, setTypes] = useState([])
-
+	
 	const loadOptions = useCallback(async()=>{
 		const data = await request("/api/devices/options", "GET", null, {Authorization: `Bearer ${auth.token}`})
 		if(data && Array.isArray(data))

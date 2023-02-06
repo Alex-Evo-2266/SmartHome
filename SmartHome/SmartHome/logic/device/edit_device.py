@@ -115,17 +115,22 @@ async def edit_device(system_name:str, data:EditDeviceSchema):
 	old_device_data.name = data.name
 	old_device_data.system_name = data.system_name
 	old_device_data.fields = field_edit(data.fields, old_device_data.fields, option.fields_change)
-	print(old_device_data)
+	for item in deleted_fields:
+		index = 0
+		for item2 in old_device_data.fields:
+			if item.name == item2.name:
+				old_device_data.fields.pop(index)
+				break
+			index = index + 1
+	for item in added_fields:
+		old_device_data.fields.append(item)
 	old_device_data.save()
 	DevicesArrey.delete(system_name)
 
 async def delete_device(system_name: str):
-	print("p0")
 	old_device_data = DevicesFile.get(system_name)
-	print("p1", old_device_data)
 	if not old_device_data:
 		raise DeviceNotFound
-	print("p2")
 	await old_device_data.delete()
 	DevicesArrey.delete(system_name)
 

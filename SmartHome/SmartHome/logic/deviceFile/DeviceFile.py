@@ -1,6 +1,6 @@
 from copy import copy
 from typing import Any, Dict, List
-from SmartHome.logic.deviceFile.schema import DeviceFieldSchema, DeviceSchema
+from SmartHome.logic.deviceFile.schema import DeviceFieldSchema, DeviceSchema, Status_Device
 from settings import DEVICES
 from SmartHome.logic.utils.file import readYMLFile, writeYMLFile
 from SmartHome.logic.groups.deleteDevicefromGroups import dleteDevicesFromGroups
@@ -130,6 +130,8 @@ class DeviceData(DeviceSchema):
 		devices = DevicesFile.get_devices()
 		if not devices:
 			devices = list()
+		if not self.status:
+			self.status = Status_Device.OFFLINE
 		dict_device = self.dict()
 		dict_device["status"] = dict_device["status"].value
 		if index == None:

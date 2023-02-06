@@ -50,7 +50,7 @@ export const EditDevicePage = () => {
 	})
 
   	const searchDevice = useCallback((systemNameF)=>{
-		if(read.current > 2) return;
+		if(read.current > 0) return;
 		let condidat = devices.filter((item)=>item.system_name === systemNameF)
 		condidat = condidat[0]
 		if(!condidat) return
