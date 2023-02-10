@@ -13,6 +13,8 @@ import { DevicePage } from './Page/DevicePages/DevicePage'
 import { AddDevicePage } from './Page/DevicePages/AddDevicePage'
 import { useSocket } from './hooks/socket.hook'
 import { EditDevicePage } from './Page/DevicePages/EditDevicepage'
+import { ScriptPage } from './Page/ScriptPage/ScriptPage'
+import { AddScriptPage } from './Page/ScriptPage/AddScriptPage/AddScriptPage'
 // import {DitailDevicePage} from './Page/DitailDevicePage'
 // import {DevicesPage} from './Page/DevicesPage'
 // import {ProfilePage} from './Page/ProfilePage'
@@ -82,6 +84,12 @@ export const useRoutes = (isAuthenticated,role)=>{
         </Route>
         <Route path="/devices/edit/:systemName">
           <EditDevicePage/>
+        </Route>
+        <Route path="/scripts" exact>
+          <ScriptPage/>
+        </Route>
+        <Route path="/scripts/add" exact>
+          <AddScriptPage/>
         </Route>
         {
           (role === "admin")?

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 export const ConfirmationDialog = ({title, hide, active, items, buttons, activeText})=>{
   const [data, setData] = useState("")
@@ -7,6 +7,10 @@ export const ConfirmationDialog = ({title, hide, active, items, buttons, activeT
     if(typeof(active)==="function")
       active(data)
   }
+
+  useEffect(() => {
+    setData("")
+  }, [items]);
 
   return(
     <>

@@ -19,8 +19,6 @@
 @import "./user/user.base.css";
 @import "./inputNumber/inputNumber.base.css";
 @import "./pages/pages.base.css";
-@import "./scriptsPage/scriptsPage.base.css";
-@import "./newScriptsPage/newScriptsPage.base.css";
 @import "./usersPage/usersPage.base.css";
 @import "./addDevice/addDevice.base.css";
 @import "./custom1-checkbox/checkbox.base.css";
@@ -36,6 +34,7 @@
 @import "./select/select.css";
 @import "./device-card.css";
 @import "./adaptivGrid.css";
+@import "./ScriptStyle/base.css";
 
 @import "./runText.css";
 
