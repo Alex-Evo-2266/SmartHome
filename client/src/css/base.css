@@ -18,6 +18,21 @@
 	border-radius: 10px;
 	background-color: var(--color-base-light);
 }
+
+*.scrollbar-base::-webkit-scrollbar{
+	width: 	12px;
+	background-color: var(--color-base-light);
+}
+*.scrollbar-base::-webkit-scrollbar-track{
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+	border-radius: 10px;
+	background-color: var(--color-base-light);
+}
+*.scrollbar-base::-webkit-scrollbar-thumb{
+	border-radius: 10px;
+	background-color: var(--color-normal-light);
+}
+
 /* 
 ::-webkit-scrollbar {
     width: 15px; 
@@ -129,6 +144,7 @@
     background: var(--color-active);
     color: var(--text-color-active-fon);
     height: 36px;
+    outline: none;
     line-height: 36px;
     text-align: center;
     border-radius: 8px;
@@ -175,8 +191,13 @@
     filter: brightness(90%);
 }
 .btn.min:active{
-        box-shadow: inset 0px 5px 5px -3px rgba(0, 0, 0, 0.2), inset 0px 4px 5px 0px rgba(0, 0, 0, 0.14), inset 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-        filter: brightness(90%);
+    box-shadow: inset 0px 5px 5px -3px rgba(0, 0, 0, 0.2), inset 0px 4px 5px 0px rgba(0, 0, 0, 0.14), inset 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+    filter: brightness(90%);
+}
+
+.btn.padding{
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 /* .dividers{

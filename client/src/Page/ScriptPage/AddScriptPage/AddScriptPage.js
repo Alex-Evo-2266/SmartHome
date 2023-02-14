@@ -1,10 +1,9 @@
 import React,{useCallback, useEffect, useState} from 'react'
 import { useDispatch, useSelector} from 'react-redux'
-import { NavLink } from 'react-router-dom/cjs/react-router-dom.min'
 import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dialogReducer'
 import { setTabs, setTitle } from '../../../store/reducers/menuReducer'
-import { ScriptBlock } from './scriptBlock'
-import { ScriptTrigger } from './trigger'
+import { ScriptBlock } from './ScriptBlock'
+import { ScriptTrigger } from './Trigger'
 
 const createBlock = (id, type)=>({
   id,

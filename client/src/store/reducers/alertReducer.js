@@ -1,5 +1,6 @@
-import { INFO } from "../../components/alerts/alertTyps"
+import { ERROR, INFO } from "../../components/alerts/alertTyps"
 import { HIDE_ALERT, SHOW_ALERT } from "../types"
+import { WARNING } from "../../components/alerts/alertTyps"
 
 const initialSate = {
 	type: INFO,
@@ -18,3 +19,6 @@ export const alertReducer = (state = initialSate, action) => {
 			return state
 	}
 }
+
+export const showWarningAlert = (title, text)=>({type:SHOW_ALERT, payload:{title, text, type:WARNING}})
+export const showErrorAlert = (title, text)=>({type:SHOW_ALERT, payload:{title, text, type:ERROR}})

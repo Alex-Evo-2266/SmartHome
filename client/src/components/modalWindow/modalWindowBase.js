@@ -1,6 +1,6 @@
 import React from "react"
 
-export const BaseModalWindow = ({visible, hide, children}) =>{
+export const BaseModalWindow = ({visible, hide, children, zIndex=98}) =>{
 
 	const close = ()=>{
 		if (typeof(hide) == "function")
@@ -12,7 +12,7 @@ export const BaseModalWindow = ({visible, hide, children}) =>{
 	
 	return(
 		<div className="modal_window_wrapper" style={{zIndex: 998}}>
-			<div className="backGlass" onClick={close}></div>
+			<div className="backGlass" onClick={close} style={{zIndex: zIndex}}></div>
 			{children}
 		</div>
 	)

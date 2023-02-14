@@ -14,6 +14,7 @@ import './css/style-components.css'
 import { useUser } from './hooks/user.hook.js'
 import { useMenu } from './hooks/menu.hook.js'
 import { useDeviceOptions } from './hooks/deviceOption.hook.js'
+import { CastomModalWindow } from './components/modalWindow/modalWindowHtml.js'
 
 function App() {
   const data = useSelector(state => state.auth)
@@ -64,6 +65,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <DialogWindow/>
+        <CastomModalWindow/>
         <Alert/>
         {(data.isAuthenticated && data.role !== "none")?<Menu/>:null}
         {routes}

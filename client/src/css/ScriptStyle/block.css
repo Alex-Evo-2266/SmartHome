@@ -17,7 +17,7 @@
 }
 
 .tab-list{
-    display: flex;
+    display: inline-block;
     padding: 10px;
 }
 
@@ -28,10 +28,11 @@
     align-items: center;
     color: var(--text-color-base-fon);
     position: relative;
-    height: 50px;
+    line-height: 50px;
     overflow: hidden;
     padding-left: 10px;
     margin-right: 10px;
+    min-width: 100px;
 }
 
 .tab-list-item-del{
@@ -40,10 +41,10 @@
     position: relative;
     right: 0;
     top: 0;
-    height: 50px;
-    line-height: 50px;
     padding: 0 10px;
+    height: 100%;
     cursor: pointer;
+    display: flex;
     transition: 0.2s;
 }
 
@@ -66,9 +67,44 @@
     position: relative;
 }
 
+.block-container h2{
+    color: var(--text-color-base-fon);
+    padding: 10px;
+}
+
 .script-block-container{
     position: absolute;
     background: var(--color-normal);
     min-height: 100px;
     border-radius: var(--card-border-radius);
+}
+
+.edit-block{
+    overflow-x: scroll;
+    width: calc(100% - 20px);
+}
+
+.block-device{
+    border-radius: var(--card-border-radius);
+    background: var(--color-base);
+    display: inline-flex;
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+    padding: 2px 4px;
+}
+
+.block-device .tab-list-item-del{
+    min-height: 50px;
+    min-width: 50px;
+    border-radius: var(--card-border-radius);
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.block-device .tab-list-item{
+    background: var(--color-normal);
+    padding: 4px;
+    margin: 4px;
 }

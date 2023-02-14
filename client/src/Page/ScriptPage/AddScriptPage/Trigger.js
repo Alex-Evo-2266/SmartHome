@@ -3,7 +3,7 @@ import { useDispatch, useSelector} from 'react-redux'
 import { NavLink } from 'react-router-dom/cjs/react-router-dom.min'
 import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dialogReducer'
 import { setTitle } from '../../../store/reducers/menuReducer'
-import { ScriptDeviceTrigger } from './deviceTrigger'
+import { ScriptDeviceTrigger } from './DeviceTrigger'
 
 export const ScriptTrigger = ({data = null, updata}) => {
 

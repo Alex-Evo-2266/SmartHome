@@ -10,6 +10,7 @@ import { alertReducer } from './reducers/alertReducer'
 import { StyleReducer } from './reducers/styleReducer'
 import { socketReducer } from './reducers/socketReducer'
 import { optionReducer } from './reducers/optionAddDeviceReducer'
+import { ModalWindowReducer } from './reducers/modalWindowReducer'
 
 export const rootReducer = combineReducers({
 	auth: authReducer,
@@ -21,7 +22,8 @@ export const rootReducer = combineReducers({
 	alert: alertReducer,
 	style: StyleReducer,
 	socket: socketReducer,
-	options: optionReducer
+	options: optionReducer,
+	window: ModalWindowReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))
