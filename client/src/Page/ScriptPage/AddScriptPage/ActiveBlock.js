@@ -5,7 +5,7 @@ import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dial
 import { setTitle } from '../../../store/reducers/menuReducer'
 import { ScriptDeviceTrigger } from './DeviceTrigger'
 
-export const ActiveBlock = ({data = null, updata}) => {
+export const ActiveBlock = ({data = null, update}) => {
 
   const dispatch = useDispatch()
   const auth = useSelector(state=>state.auth)

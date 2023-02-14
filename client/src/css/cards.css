@@ -133,7 +133,7 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 560px;
-	z-index: 99;
+	z-index: 100;
 	background: var(--color-base-light);
 	position: fixed;
 	box-shadow: 0 0 10px #000;

@@ -7,7 +7,6 @@ import { Value } from './Value'
 export const Select = ({data, update, values=[]})=>{
 
     useEffect(()=>{
-        console.log(data)
         if (data.arg1 === "")
             update(prev=>({...prev, arg1:values[0]}))
     },[data])

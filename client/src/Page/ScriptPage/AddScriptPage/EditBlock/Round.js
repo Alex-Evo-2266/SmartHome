@@ -11,17 +11,17 @@ export const Round = ({data, update})=>{
     },[update])
 
     const updateValue2 = useCallback((e)=>{
-        update(prev=>({...prev, arg2:e.target.value}))
+        update(prev=>({...prev, arg2:String(e.target.value)}))
     },[update])
 
     return(
         <>
             <div className='tab-list-item'>
-                <Value type="number" data={data.arg1} update={updateValue1}/>
+                <Value type="number" data={data?.arg1} update={updateValue1}/>
             </div>
             <p style={{textAlign: "center"}}>Round</p>
             <div className='tab-list-item input-data'>
-                <input type="number" value={data.arg1} onChange={updateValue2}/>
+                <input type="number" value={Number(data?.arg2)} onChange={updateValue2}/>
             </div>
         </>
     )

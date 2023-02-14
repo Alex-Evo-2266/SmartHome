@@ -31,8 +31,18 @@ const getNextId = (blocks)=>{
   return (max + 1)
 }
 
-const getElementById = ()=>{
-
+const updataElementById = (items, id, data)=>{
+  for (let item of items)
+  {
+    if (item.id === id)
+    {
+      item.arg1 = data.arg1
+      item.arg2 = data.arg2
+      item.operator = data.operator
+      item.value = data.value
+      item.type_object = data.type_object
+    }
+  }
 }
 
 export const AddScriptPage = () => {
@@ -89,13 +99,20 @@ export const AddScriptPage = () => {
     setScript(prev=>({...prev, trigger}))
   }
 
+  const updateBlock = (data, id) => {
+    console.log(data, id)
+    let blocks = script.blocks.slice()
+    updataElementById(blocks, id, data)
+    setScript(prev=>({...prev, blocks}))
+  }
+
   return(
     <div className='container scroll'>
-        <ScriptTrigger updata={updateTriggerScript} data={script.trigger}/>
+        <ScriptTrigger update={updateTriggerScript} data={script.trigger}/>
         <div className='block-container'>
           {
             script.blocks.map((item, index)=>(
-              <ScriptBlock key={index} data={item}/>
+              <ScriptBlock key={index} data={item} update={(data)=>updateBlock(data, item.id)}/>
             ))
           }
         </div>

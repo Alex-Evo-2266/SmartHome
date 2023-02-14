@@ -2,34 +2,33 @@ import React,{useCallback, useEffect, useRef, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { showWarningAlert } from '../../../../store/reducers/alertReducer'
 import { hideDialog, showAlertDialog, showConfirmationDialog } from '../../../../store/reducers/dialogReducer'
+import { formatDevice, formatField, formatObjects } from '../utils'
 import { Value } from './Value'
-
-const formatDevice = (devices) => devices.map(item=>({title:item.name, data:item}))
-const formatField = (fields) => fields.map(item=>({title:item.name, data:item}))
-const formatObjects = (objects) => objects.map(item=>({title:item, data:item}))
 
 const typesObject = ["device", "system", "datetime", "weather"]
 
-export const Condition = ({data, update, del, options={}})=>{
+const defCondition = {
+    type_object:"",
+    arg1:"",
+    arg2:"",
+    operator:"==",
+    value:null
+}
+
+// const defState = (data) => {
+//     if (data?.arg1) return data
+//     return defCondition
+// }
+
+export const Condition = ({data, update, options={}})=>{
 
     const read = useRef(0)
     const dispatch = useDispatch()
     const {devices} = useSelector(state=>state.socket)
-    const [dataCondition, setDataCondition] = useState({
-        type_object:"",
-        arg1:"",
-        arg2:"",
-        operator:"==",
-        value:null
-    })
-
-    useEffect(()=>{
-        console.log(dataCondition)
-    },[dataCondition])
+    const [dataCondition, setDataCondition] = useState(defCondition)
 
     useEffect(()=>{
         if (read.current > 0) return
-        console.log("p0")
         setDataCondition({
             type_object:data?.type_object||"",
             arg1:data?.arg1||"",
@@ -40,33 +39,50 @@ export const Condition = ({data, update, del, options={}})=>{
         read.current = read.current + 1
     },[read.current])
 
-    const selectionCondition = ()=>{
-        dispatch(showConfirmationDialog("Selection device", formatObjects(typesObject), data0=>{
-            setDataCondition(prev=>({...prev, type_object:data0}))
+    const setDataConditionAndUpdate = useCallback((newData)=>{
+        if (typeof(newData) === "function")
+        {
+            let data2 = newData(dataCondition)
+            setDataCondition(newData)
+            update(data2)
+        }
+        else
+        {
+            setDataCondition(newData)
+            update(newData)
+        }
+    },[update, dataCondition])
+
+    const selectionCondition = useCallback(()=>{
+        dispatch(showConfirmationDialog("Selection opject", formatObjects(typesObject), data0=>{
+            setDataConditionAndUpdate(prev=>({...prev, type_object:data0}))
             if(data0 === "device")
                 selectionDevice()
             else
                 console.log(data0)
         }))
-    }
+    },[setDataConditionAndUpdate])
 
-    const selectionDevice = ()=>{
+    const selectionDevice = useCallback(()=>{
         dispatch(showConfirmationDialog("Selection device", formatDevice(devices), data1=>{
-            setDataCondition(prev=>({...prev, arg1:data1.system_name}))
-            dispatch(showConfirmationDialog("Selection device", formatField(data1.fields), data2=>{
-                setDataCondition(prev=>({...prev, arg2:data2.name, operator:"=="}))
+            dispatch(showConfirmationDialog("Selection field", formatField(data1.fields), data2=>{
+                setDataConditionAndUpdate(prev=>({...prev, arg2:data2.name, arg1:data1.system_name, operator:"=="}))
                 dispatch(hideDialog())
             }))
         }))
-    }
+    },[setDataConditionAndUpdate])
 
-    const selectionOperator = (e)=>{
-        setDataCondition(prev=>({...prev, operator:e.target.value}))
-    }
+    const selectionOperator = useCallback((e)=>{
+        setDataConditionAndUpdate(prev=>({...prev, operator:e.target.value}))
+    },[setDataConditionAndUpdate])
 
     const updateValue = useCallback((data)=>{
-        setDataCondition(prev=>({...prev, value:data}))
-    },[])
+        setDataConditionAndUpdate(prev=>({...prev, value:data}))
+    },[setDataConditionAndUpdate])
+
+    const deleteCondition = useCallback(()=>{
+        setDataConditionAndUpdate(defCondition)
+    },[setDataConditionAndUpdate])
 
     return(
         <div className='block-device scroll'>
@@ -97,7 +113,7 @@ export const Condition = ({data, update, del, options={}})=>{
                 (dataCondition.arg1!=="" && dataCondition.arg2!=="" && dataCondition.type_object!=="")?
                 <Value deviceName={dataCondition.arg1} deviceField={dataCondition.arg2} data={dataCondition.value} update={updateValue}/>:null
             }
-            <div className='tab-list-item-del' onClick={del}>x</div>
+            <div className='tab-list-item-del' onClick={deleteCondition}>x</div>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import React from "react"
 
-export const BaseModalWindow = ({visible, hide, children, zIndex=98}) =>{
+export const BaseModalWindow = ({visible, hide, children, zIndex=99}) =>{
 
 	const close = ()=>{
 		if (typeof(hide) == "function")

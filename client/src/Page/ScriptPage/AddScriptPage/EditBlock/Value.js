@@ -2,64 +2,12 @@ import React,{useCallback, useEffect, useRef, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { showErrorAlert, showWarningAlert } from '../../../../store/reducers/alertReducer'
 import { hideDialog, showAlertDialog, showConfirmationDialog } from '../../../../store/reducers/dialogReducer'
+import { defValueData, formatObjects, getTypeField, getTypeValue, getValues, searchField } from '../utils'
 import { DeviceValue } from './Device'
 import { Math } from './Math'
-import { Number } from './Number'
+import { NumberComponent } from './Number'
 import { Round } from './Round'
 import { Select } from './Select'
-
-const formatObjects = (objects) => objects.map(item=>({title:item, data:item}))
-
-const searchField = (devices, systemName, fieldName) => {
-    let devCondidat = devices.filter(item=>item.system_name === systemName)
-    if (devCondidat.length == 0) return null
-    let fieldCondidat = devCondidat[0].fields.filter(item=>item.name === fieldName)
-    if (fieldCondidat.length == 0) return null
-    return fieldCondidat[0]
-}
-
-const getValues = (devices, systemName, fieldName) => {
-    let field = searchField(devices, systemName, fieldName)
-    if (!field) return null
-    if (field.type === "binary")
-        return ["off", "on"]
-    if (field.type === "enum")
-    {
-        console.log(field)
-        let arr = field.enum_values.split(",")
-        console.log(arr)
-        for (let item of arr)
-        {
-            item.trim()
-        }
-        console.log(arr)
-        return (arr)
-    }
-    return []
-}
-
-const getTypeValue = (typeField) => {
-    switch (typeField) {
-        case "binary":
-            return ["select", "device"]
-        case "number":
-            return ["number", "math", "round", "device"]
-        case "text":
-            return ["text"]
-        case "enum":
-            return ["select"]
-        default:
-            return ["text"]
-    }
-}
-
-const defValueData = {
-    type:"",
-    arg1:"",
-    arg2:"",
-    operator:"=="
-}
-
 
 export const Value = ({data, deviceName=null, deviceField=null, type=null, update, options={}})=>{
     // dispatch initialize
@@ -81,7 +29,6 @@ export const Value = ({data, deviceName=null, deviceField=null, type=null, updat
     const setDataValueAndUpdate = useCallback((newData)=>{
         if (typeof(newData) === "function")
         {
-            console.log(dataValue)
             let data2 = newData(dataValue)
             setDataValue(newData)
             update(data2)
@@ -92,10 +39,6 @@ export const Value = ({data, deviceName=null, deviceField=null, type=null, updat
             update(newData)
         }
     },[update, dataValue])
-
-    useEffect(()=>{
-        console.log(dataValue)
-    },[dataValue])
 
     useEffect(()=>{
         if (read.current > 0) return
@@ -157,7 +100,6 @@ export const Value = ({data, deviceName=null, deviceField=null, type=null, updat
                 return dispatch(showWarningAlert("field", "not foun device or field"))
             typsArray = getTypeValue(field.type)
         }
-        console.log(typsArray)
         if (typsArray.length === 1)
             selectValue2(typsArray[0])
         else if (typsArray.length > 1)
@@ -177,13 +119,13 @@ export const Value = ({data, deviceName=null, deviceField=null, type=null, updat
     return(
         <div className='block-device'>
             <div className='tab-list-item'>{
-                (dataValue.type==="")?
+                (!dataValue || dataValue?.type==="")?
                 <div className='tab-list-item-content'><button className='btn padding' onClick={selectValue}>value</button></div>:
                 <>
                 <div className='tab-list-item-content'>
                 {
                     (dataValue.type === "number")?
-                    <Number data={dataValue} update={setDataValueAndUpdate}/>:
+                    <NumberComponent data={dataValue} update={setDataValueAndUpdate}/>:
                     (dataValue.type === "math")?
                     <Math data={dataValue} update={setDataValueAndUpdate}/>:
                     (dataValue.type === "round")?
@@ -191,7 +133,7 @@ export const Value = ({data, deviceName=null, deviceField=null, type=null, updat
                     (dataValue.type === "select")?
                     <Select data={dataValue} update={setDataValueAndUpdate} values={getValues(devices, deviceName, deviceField)}/>:
                     (dataValue.type === "device")?
-                    <DeviceValue data={dataValue} update={setDataValueAndUpdate}/>:
+                    <DeviceValue data={dataValue} update={setDataValueAndUpdate} type={getTypeField(devices, deviceName, deviceField, type)}/>:
                     null
                 }
                 </div>

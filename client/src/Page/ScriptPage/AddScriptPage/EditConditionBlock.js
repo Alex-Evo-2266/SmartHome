@@ -1,42 +1,35 @@
 import React,{useEffect, useRef, useState} from 'react'
 import { Condition } from './EditBlock/Condition'
 
-const conditionDef = {
-    arg1:"",
-    arg2:"",
-    operatoe:"",
-    value:{}
-}
+export const EditConditionBlock = ({data, update, hide})=>{
 
-export const EditIfBlock = (data, update)=>{
+    const [condition, setCondition] = useState({
+        arg1:"",
+        arg2:"",
+        operatoe:"",
+        value:{}
+    })
 
-    const [condition, setCondition] = useState([])
-
-    const addCondition = ()=>{
-        let newCondition = condition.slice()
-        newCondition.push(conditionDef)
-        setCondition(newCondition)
+    const updateCondition = (newData)=>{
+        setCondition(newData)
     }
 
-    const updataCondition = (newData)=>{
-        console.log(data)
-    }
-
-    const deleteElement = (index)=>{
-        setCondition(prev => prev.filter((item, index2) => index2 !== index))
+    const saveCondition = () => {
+        if (typeof(update) === "function")
+            update(condition)
     }
 
     return(
-        <div>
-            {
-                condition.map((item, index)=>(
-                    <div key={index} className='edit-block tab-list scrollbar-base'>
-                        <Condition data={item} update={updataCondition} del={()=>deleteElement(index)}/>
-                    </div>
-                ))
-            }
-            <button className='btn' onClick={addCondition}>add</button>
-        </div>
-        
+        <>
+            <div>
+                <div className='edit-block tab-list scrollbar-base'>
+                    <Condition data={condition} update={updateCondition}/>
+                </div>
+            </div>
+            <div className="card-btn-container">
+                <button className="btn" onClick={saveCondition}>save</button>
+                <button className="btn" onClick={hide}>cencel</button>
+            </div>
+        </>
     )
 }

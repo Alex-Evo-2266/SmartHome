@@ -4,16 +4,16 @@ import { showErrorAlert, showWarningAlert } from '../../../../store/reducers/ale
 import { hideDialog, showAlertDialog, showConfirmationDialog } from '../../../../store/reducers/dialogReducer'
 import { Value } from './Value'
 
-export const Number = ({data, update})=>{
+export const NumberComponent = ({data, update})=>{
 
     const updateValue = useCallback((e)=>{
-        update(prev=>({...prev, arg1:e.target.value}))
+        update(prev=>({...prev, arg1:String(e.target.value)}))
     },[update])
 
     return(
         <>
             <div className='tab-list-item input-data'>
-                <input type="number" value={data.arg1} onChange={updateValue}/>
+                <input type="number" value={Number(data.arg1)} onChange={updateValue}/>
             </div>
         </>
     )

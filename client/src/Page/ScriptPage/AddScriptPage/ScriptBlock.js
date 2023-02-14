@@ -7,7 +7,7 @@ import { ActiveBlock } from './ActiveBlock'
 import { ScriptDeviceTrigger } from './DeviceTrigger'
 import { IfBlock } from './IfBlock'
 
-export const ScriptBlock = ({data = null, updata}) => {
+export const ScriptBlock = ({data = null, update}) => {
 
   const dispatch = useDispatch()
   const auth = useSelector(state=>state.auth)
@@ -46,9 +46,9 @@ export const ScriptBlock = ({data = null, updata}) => {
     <div ref={block} className='script-block-container card-container' style={{top:data.y, left:data.x}}>
       {
         (data.type === "action")?
-        <ActiveBlock/>:
+        <ActiveBlock data={data} update={update}/>:
         (data.type === "condition")?
-        <IfBlock/>:
+        <IfBlock data={data} update={update}/>:
         null
       }
     </div>
