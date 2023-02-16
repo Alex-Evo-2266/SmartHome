@@ -29,7 +29,7 @@ from SmartHome.api.menu import router as router_menu
 from SmartHome.api.device import router as router_device
 # from SmartHome.api.homePage import router as router_homePage
 from SmartHome.api.server import router as router_server
-# from SmartHome.api.script import router as router_script
+from SmartHome.api.script import router as router_script
 # from SmartHome.api.deviceGroup import router_groups
 # from SmartHome.api.moduls import router_moduls
 # from SmartHome.api.pages import router_pages
@@ -102,7 +102,7 @@ app.include_router(router_auth)
 app.include_router(router_menu)
 app.include_router(router_server)
 app.include_router(router_device)
-# app.include_router(router_script)
+app.include_router(router_script)
 app.include_router(router_style)
 # app.include_router(router_file)
 # app.include_router(router_groups)

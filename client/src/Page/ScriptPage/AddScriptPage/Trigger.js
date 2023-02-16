@@ -9,17 +9,14 @@ export const ScriptTrigger = ({data = null, update}) => {
   const dispatch = useDispatch()
   const {devices} = useSelector(state=>state.socket)
   const [deviceTrigges, setDeviceTrigger] = useState([]);
-  const [nextBlock, setNextBlock] = useState([]);
   const {connectStatus, connect} = useContext(ScriptContext);
   const read = useRef(0)
 
   useEffect(()=>{
-    if(data?.devices && Array.isArray(data.devices) && read.current < 1)
-      setDeviceTrigger(data.devices)
-    if(data?.next && Array.isArray(data.next) && read.current < 1)
-      setNextBlock(data.next)
+    if(data?.trigger && Array.isArray(data.trigger) && read.current < 1)
+      setDeviceTrigger(data.trigger)
     read.current = read.current + 1
-  },[data.next, data.devices])
+  },[data.next, data.trigger])
 
   const addTriggerDialog = () => {
     let deviceList = devices.map(item=>({title:item.name, data:item}))
@@ -28,13 +25,13 @@ export const ScriptTrigger = ({data = null, update}) => {
         dispatch(showConfirmationDialog("Add trigger", fieldList, data2=>{
           dispatch(hideDialog())
           let newTriggersList = deviceTrigges.slice()
-          newTriggersList.push({name:data.system_name, field:data2})
+          newTriggersList.push({arg1:data.system_name, arg2:data2})
           setDeviceTrigger(newTriggersList)
         }))
     }))
   }
 
-  const testFormat = data => data.name + "." + data.field
+  const testFormat = data => data.arg1 + "." + data.arg2
 
   const delTrigger = (index) => {
     setDeviceTrigger(prev => prev.filter((item, index2) => index2 !== index))
@@ -42,8 +39,8 @@ export const ScriptTrigger = ({data = null, update}) => {
 
   useEffect(()=>{
     if (typeof(update) === "function")
-      update({devices:deviceTrigges, next:nextBlock})
-  },[deviceTrigges, nextBlock, update])
+      update({trigger:deviceTrigges, next:data.next})
+  },[deviceTrigges, update])
 
   return(
     <div className='script-trigger-container card-container' id="trigger-block">

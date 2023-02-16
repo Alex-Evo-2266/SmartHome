@@ -133,7 +133,6 @@ class DeviceData(DeviceSchema):
 		if not self.status:
 			self.status = Status_Device.OFFLINE
 		dict_device = self.dict()
-		dict_device["status"] = dict_device["status"].value
 		if index == None:
 			devices.append(dict_device)
 		else:

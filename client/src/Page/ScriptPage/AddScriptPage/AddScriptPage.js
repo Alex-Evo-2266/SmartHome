@@ -15,7 +15,7 @@ const createBlock = (id, type)=>({
   y:0,
   next:{base:[]},
   type,
-  content_type:"",
+  type_object:"",
   arg1:"",
   arg2:"",
   value:"",
@@ -58,7 +58,7 @@ export const AddScriptPage = () => {
   const [script, setScript] = useState({
     name:"",
     trigger:{
-      devices:[],
+      trigger:[],
       next:[]
     },
     blocks:[]
@@ -87,8 +87,8 @@ export const AddScriptPage = () => {
 
   const save = useCallback(() => {
     dispatch(showTextDialog("save script", "", "script name", async(data)=>{
+      await request("/api/script", "POST", {...script, name: data}, {Authorization: `Bearer ${auth.token}`})
       setScript(prev=>({...prev, name:data}))
-      await request("/api/script", "POST", script, {Authorization: `Bearer ${auth.token}`})
     },script.name))
   },[script])
 
@@ -106,6 +106,7 @@ export const AddScriptPage = () => {
   useEffect(()=>{
     dispatch(setTitle("Add scripts"))
     dispatch(setTabs(tabs()))
+    return ()=>dispatch(setTabs([]))
   },[dispatch, tabs])
 
   useEffect(()=>{
