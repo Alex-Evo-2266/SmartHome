@@ -4,7 +4,7 @@ import { ScriptContext } from './ConnectContext'
 import { hideWindow, showCastomWindow } from '../../../store/reducers/modalWindowReducer'
 import { EditActiveBlock } from './EditActiveBlock'
 
-export const ActiveBlock = ({data = null, update}) => {
+export const ActiveBlock = ({data = null, update, deleteBlock}) => {
 
   const dispatch = useDispatch()
   const {connectStatus, connect} = useContext(ScriptContext);
@@ -21,7 +21,8 @@ export const ActiveBlock = ({data = null, update}) => {
           data={data} 
           update={update} 
           hide={()=>dispatch(hideWindow())}
-        />, 
+          deleteEl={deleteBlock}
+          />, 
         [],
         {
           width: "90%"
@@ -40,6 +41,7 @@ export const ActiveBlock = ({data = null, update}) => {
           <div className={`connect-dot script-block-no-move ${(isActive("input"))?"active":""}`} data-type="input" onClick={()=>connect(data.id, "input")}></div>
         </div>
         <h2>Active block</h2>
+        <p className='padding'>{data.arg1}.{data.arg2} {data.operator} {JSON.stringify(data.value)}</p>
         <div className='card-btn-container'>
             <button className='btn script-block-no-move' onClick={edit}>edit</button>
         </div>

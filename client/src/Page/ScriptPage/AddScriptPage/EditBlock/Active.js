@@ -28,7 +28,7 @@ export const Active = ({data, update})=>{
     const [dataCondition, setDataCondition] = useState(defCondition)
 
     useEffect(()=>{
-        if (read.current > 0) return
+        if (read.current > 2) return
         setDataCondition({
             type_object:data?.type_object||"",
             arg1:data?.arg1||"",

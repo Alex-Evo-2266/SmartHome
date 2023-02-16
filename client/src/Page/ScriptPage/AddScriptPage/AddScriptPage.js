@@ -129,6 +129,11 @@ export const AddScriptPage = () => {
       updateBlock(data, data.id)
   },[updateTriggerScript, updateBlock])
 
+  const deleteBlock = useCallback((id) => {
+    let newBlocks = script.blocks.filter(item=>String(item.id) !== String(id))
+    setScript(prev=>({...prev, blocks:newBlocks}))
+  },[script])
+
   useEffect(()=>{
     const svg = document.querySelector("#svg-script")
     const root = document.querySelector("#container-script")
@@ -145,7 +150,7 @@ export const AddScriptPage = () => {
         <ScriptTrigger update={updateTriggerScript} data={script.trigger}/>
           {
             script.blocks.map((item, index)=>(
-              <ScriptBlock key={index} data={item} update={(data)=>updateBlock(data, item.id)}/>
+              <ScriptBlock key={index} data={item} update={(data)=>updateBlock(data, item.id)} deleteBlock={()=>deleteBlock(item.id)}/>
             ))
           }
     </div>

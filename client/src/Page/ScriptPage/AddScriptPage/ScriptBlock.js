@@ -2,7 +2,7 @@ import React,{useEffect, useRef, useState} from 'react'
 import { ActiveBlock } from './ActiveBlock'
 import { IfBlock } from './IfBlock'
 
-export const ScriptBlock = ({data = null, update}) => {
+export const ScriptBlock = ({data = null, update, deleteBlock}) => {
 
   const block = useRef(null)
 
@@ -51,9 +51,9 @@ export const ScriptBlock = ({data = null, update}) => {
     <div ref={block} data-id={data.id} className='script-block-container card-container script-block' style={{top:data.y, left:data.x}}>
       {
         (data.type === "action")?
-        <ActiveBlock data={data} update={updateCard}/>:
+        <ActiveBlock data={data} update={updateCard} deleteBlock={deleteBlock}/>:
         (data.type === "condition")?
-        <IfBlock data={data} update={updateCard}/>:
+        <IfBlock data={data} update={updateCard} deleteBlock={deleteBlock}/>:
         null
       }
     </div>

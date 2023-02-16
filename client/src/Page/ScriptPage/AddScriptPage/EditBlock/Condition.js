@@ -15,12 +15,7 @@ const defCondition = {
     value:null
 }
 
-// const defState = (data) => {
-//     if (data?.arg1) return data
-//     return defCondition
-// }
-
-export const Condition = ({data, update, options={}})=>{
+export const Condition = ({data, update})=>{
 
     const read = useRef(0)
     const dispatch = useDispatch()
@@ -28,13 +23,18 @@ export const Condition = ({data, update, options={}})=>{
     const [dataCondition, setDataCondition] = useState(defCondition)
 
     useEffect(()=>{
-        if (read.current > 0) return
+        console.log(data)
+        console.log(dataCondition)
+    },[dataCondition])
+
+    useEffect(()=>{
+        if (read.current > 2) return;
         setDataCondition({
-            type_object:data?.type_object||"",
-            arg1:data?.arg1||"",
-            arg2:data?.arg2||"",
-            operator:data?.operator||"==",
-            value:data?.value||null
+            type_object: data?.type_object||"",
+            arg1: data?.arg1||"",
+            arg2: data?.arg2||"",
+            operator: data?.operator||"==",
+            value: data?.value||null
         })
         read.current = read.current + 1
     },[read.current])
