@@ -7,14 +7,14 @@ import { ScriptContext } from './ConnectContext'
 import { ScriptDeviceTrigger } from './DeviceTrigger'
 import { ScriptConnector } from './ScriptConnector'
 
-export const ScriptTrigger = ({data = null, update, ref2}) => {
+export const ScriptTrigger = ({data = null, update}) => {
 
   const dispatch = useDispatch()
   const auth = useSelector(state=>state.auth)
   const {devices} = useSelector(state=>state.socket)
   const [deviceTrigges, setDeviceTrigger] = useState([]);
   const [nextBlock, setNextBlock] = useState([]);
-  const {blocks, connect} = useContext(ScriptContext);
+  const {connectStatus, connect} = useContext(ScriptContext);
 
   useEffect(()=>{
     if(data?.devices && Array.isArray(data.devices))
@@ -49,7 +49,7 @@ export const ScriptTrigger = ({data = null, update, ref2}) => {
   },[deviceTrigges, nextBlock])
 
   return(
-    <div className='script-trigger-container card-container' ref={ref2}>
+    <div className='script-trigger-container card-container' id="trigger-block">
       <h2>Trigger</h2>
       <div className='dividers'></div>
       <div className='trigger-list tab-list'>
@@ -64,7 +64,7 @@ export const ScriptTrigger = ({data = null, update, ref2}) => {
         <button className='btn add-trigger-btn' onClick={addTriggerDialog}>add trigger</button>
       </div>
       <div className='connect-dot-container'>
-        <div className='connect-dot' onClick={()=>connect("trigger", "base")}></div>
+        <div className={`connect-dot ${(connectStatus.id === "trigger")?"active":""}`} onClick={()=>connect("trigger", "base")}></div>
       </div>
     </div>
   )

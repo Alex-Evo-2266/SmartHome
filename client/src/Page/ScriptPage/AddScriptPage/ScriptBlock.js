@@ -16,7 +16,7 @@ export const ScriptBlock = ({data = null, update}) => {
   const [nextBlock, setNextBlock] = useState([]);
   const block = useRef(null)
 
-  useEffect(()=>{
+  useEffect(()=>{                                         // move block
     if (!block.current) return;
     block.current.onmousedown = function(e) {
       if(e.target.closest(".script-block-no-move")) return
@@ -43,8 +43,6 @@ export const ScriptBlock = ({data = null, update}) => {
         let containerPoz = block.current.parentNode.getBoundingClientRect()
         document.onmousemove = null;
         block.current.onmouseup = null;
-        console.log(data)
-        console.log(e.pageY - containerPoz.y - block.current.offsetHeight / 2)
         update({
           ...data, 
           x:e.pageX - containerPoz.x - block.current.offsetWidth / 2,
