@@ -31,6 +31,12 @@
 
 .device-field .device-field-control{
 	display: flex;
+	margin: 0 10px;
+}
+
+.device-field .device-field-control select,
+.device-field .device-field-control input{
+	text-align: center;
 }
 
 .device-card{

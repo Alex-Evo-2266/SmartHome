@@ -1,17 +1,20 @@
-import React,{useEffect, useState} from 'react'
+import React,{useCallback, useContext, useEffect, useRef, useState} from 'react'
 import { useDispatch, useSelector} from 'react-redux'
 import { NavLink } from 'react-router-dom/cjs/react-router-dom.min'
 import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dialogReducer'
 import { setTitle } from '../../../store/reducers/menuReducer'
+import { ScriptContext } from './ConnectContext'
 import { ScriptDeviceTrigger } from './DeviceTrigger'
+import { ScriptConnector } from './ScriptConnector'
 
-export const ScriptTrigger = ({data = null, updata}) => {
+export const ScriptTrigger = ({data = null, update, ref2}) => {
 
   const dispatch = useDispatch()
   const auth = useSelector(state=>state.auth)
   const {devices} = useSelector(state=>state.socket)
   const [deviceTrigges, setDeviceTrigger] = useState([]);
   const [nextBlock, setNextBlock] = useState([]);
+  const {blocks, connect} = useContext(ScriptContext);
 
   useEffect(()=>{
     if(data?.devices && Array.isArray(data.devices))
@@ -41,25 +44,28 @@ export const ScriptTrigger = ({data = null, updata}) => {
   }
 
   useEffect(()=>{
-    if (typeof(updata) === "function")
-      updata({devices:deviceTrigges, next:nextBlock})
+    if (typeof(update) === "function")
+      update({devices:deviceTrigges, next:nextBlock})
   },[deviceTrigges, nextBlock])
 
   return(
-    <div className='script-trigger-container card-container'>
+    <div className='script-trigger-container card-container' ref={ref2}>
       <h2>Trigger</h2>
       <div className='dividers'></div>
-        <div className='trigger-list tab-list'>
-        {
-            deviceTrigges.map((item, index)=>(
-                <ScriptDeviceTrigger key={index} text={testFormat(item)} del={()=>delTrigger(index)}/>
-            ))
-        }
-        </div>
-        <div className='dividers'></div>
-        <div className='card-btn-container'>
-            <button className='btn add-trigger-btn' onClick={addTriggerDialog}>add trigger</button>
-        </div>
+      <div className='trigger-list tab-list'>
+      {
+          deviceTrigges.map((item, index)=>(
+            <ScriptDeviceTrigger key={index} text={testFormat(item)} del={()=>delTrigger(index)}/>
+          ))
+      }
+      </div>
+      <div className='dividers'></div>
+      <div className='card-btn-container'>
+        <button className='btn add-trigger-btn' onClick={addTriggerDialog}>add trigger</button>
+      </div>
+      <div className='connect-dot-container'>
+        <div className='connect-dot' onClick={()=>connect("trigger", "base")}></div>
+      </div>
     </div>
   )
 }
