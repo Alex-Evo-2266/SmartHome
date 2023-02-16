@@ -1,7 +1,9 @@
 import React,{useCallback, useEffect, useRef, useState} from 'react'
-import { useDispatch} from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
+import { useHttp } from '../../../hooks/http.hook'
+import { useMessage } from '../../../hooks/message.hook'
 import { useScriptConnectBlock } from '../../../hooks/scriptDotConnect.hook'
-import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dialogReducer'
+import { hideDialog, showConfirmationDialog, showTextDialog } from '../../../store/reducers/dialogReducer'
 import { setTabs, setTitle } from '../../../store/reducers/menuReducer'
 import { ScriptContext } from './ConnectContext'
 import { ScriptBlock } from './ScriptBlock'
@@ -31,7 +33,6 @@ const getNextId = (blocks)=>{
 }
 
 const updataElementById = (items, id, data)=>{
-  console.log(items, id, data)
   for (let item of items)
   {
     if (item.id === id)
@@ -51,13 +52,23 @@ export const AddScriptPage = () => {
 
   const dispatch = useDispatch()
   const {dotClick, connectStatus, printLinckLine} = useScriptConnectBlock()
+  const {request, error, clearError} = useHttp();
+  const {message} = useMessage();
+  const auth = useSelector(state=>state.auth)
   const [script, setScript] = useState({
+    name:"",
     trigger:{
       devices:[],
       next:[]
     },
     blocks:[]
   })
+
+  useEffect(()=>{
+    message(error, 'error');
+    clearError();
+    return ()=>clearError()
+  },[error, message, clearError])
 
   const addBlock = useCallback(()=>{
     dispatch(showConfirmationDialog("Add block", [
@@ -68,19 +79,29 @@ export const AddScriptPage = () => {
       dispatch(hideDialog())
       let id = getNextId(script.blocks)
       let blocks = script.blocks.slice()
-      console.log(id, blocks)
       blocks.push(createBlock(id, data))
       setScript(prev=>({...prev, blocks}))
     }
     ))
   },[script.blocks, dispatch])
 
+  const save = useCallback(() => {
+    dispatch(showTextDialog("save script", "", "script name", async(data)=>{
+      setScript(prev=>({...prev, name:data}))
+      await request("/api/script", "POST", script, {Authorization: `Bearer ${auth.token}`})
+    },script.name))
+  },[script])
+
   const tabs = useCallback(()=>[
     {
       title:"add block",
-      onClick:()=>addBlock()
-    }
-  ],[addBlock])
+      onClick:addBlock
+    },
+    {
+      title:"save",
+      onClick:save
+    },
+  ],[addBlock, save])
 
   useEffect(()=>{
     dispatch(setTitle("Add scripts"))

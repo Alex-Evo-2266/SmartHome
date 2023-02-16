@@ -1,7 +1,12 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
-export const TextDialog = ({hide, title, text, active, placeholder})=>{
+export const TextDialog = ({hide, title, text, active, placeholder, defText=null})=>{
   const [data, setData] = useState("")
+
+  useEffect(() => {
+    if (defText)
+      setData(defText)
+  }, [defText]);
 
   const ok = ()=>{
     if(typeof(active)==="function")

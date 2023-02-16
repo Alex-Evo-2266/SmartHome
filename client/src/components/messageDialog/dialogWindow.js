@@ -17,7 +17,7 @@ export const DialogWindow = ()=>{
       (dialog.type === "alert")?
       <AlertDialog hide={()=>dispatch(hide())} text={dialog.text} title={dialog.title} buttons={dialog.buttons}/>:
       (dialog.type === "text")?
-      <TextDialog hide={()=>dispatch(hide())} text={dialog.text} title={dialog.title} placeholder={dialog.placeholder} active={dialog.active}/>:
+      <TextDialog hide={()=>dispatch(hide())} text={dialog.text} title={dialog.title} placeholder={dialog.placeholder} active={dialog.active} defText={dialog.defText}/>:
       (dialog.type === "confirmation")?
       <ConfirmationDialog hide={()=>dispatch(hide())} text={dialog.text} title={dialog.title} active={dialog.active} items={dialog.items}/>:
       (dialog.type === "html")?

@@ -8,7 +8,8 @@ const initState = {
 	text: "",
 	buttons: [],
 	active: ()=>{},
-	items: []
+	items: [],
+	defText: null
 }
 
 export const DialogReducer = (state = initState, action) =>{
@@ -29,12 +30,13 @@ export const showAlertDialog = (title, text="", buttons=[]) => ({type: SHOW_DIAL
 	text,
 	buttons
 }})
-export const showTextDialog = (title, text="", placeholder, active) => ({type: SHOW_DIALOG, payload:{
+export const showTextDialog = (title, text="", placeholder, active, defText=null) => ({type: SHOW_DIALOG, payload:{
 	type: "text",
 	title,
 	text,
 	placeholder,
-	active
+	active,
+	defText
 }})
 export const showConfirmationDialog = (title, items, active) => ({type: SHOW_DIALOG, payload:{
 	type: "confirmation",

@@ -1,19 +1,9 @@
 import React,{useEffect, useRef, useState} from 'react'
-import { useDispatch, useSelector} from 'react-redux'
-import { NavLink } from 'react-router-dom/cjs/react-router-dom.min'
-import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dialogReducer'
-import { setTitle } from '../../../store/reducers/menuReducer'
 import { ActiveBlock } from './ActiveBlock'
-import { ScriptDeviceTrigger } from './DeviceTrigger'
 import { IfBlock } from './IfBlock'
 
 export const ScriptBlock = ({data = null, update}) => {
 
-  const dispatch = useDispatch()
-  const auth = useSelector(state=>state.auth)
-  const {devices} = useSelector(state=>state.socket)
-  const [deviceTrigges, setDeviceTrigger] = useState([]);
-  const [nextBlock, setNextBlock] = useState([]);
   const block = useRef(null)
 
   useEffect(()=>{                                         // move block

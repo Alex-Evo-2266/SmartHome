@@ -1,34 +1,31 @@
-import React,{useCallback, useContext, useEffect, useRef, useState} from 'react'
+import React,{useContext, useEffect, useRef, useState} from 'react'
 import { useDispatch, useSelector} from 'react-redux'
-import { NavLink } from 'react-router-dom/cjs/react-router-dom.min'
 import { hideDialog, showConfirmationDialog } from '../../../store/reducers/dialogReducer'
-import { setTitle } from '../../../store/reducers/menuReducer'
 import { ScriptContext } from './ConnectContext'
 import { ScriptDeviceTrigger } from './DeviceTrigger'
-import { ScriptConnector } from './ScriptConnector'
 
 export const ScriptTrigger = ({data = null, update}) => {
 
   const dispatch = useDispatch()
-  const auth = useSelector(state=>state.auth)
   const {devices} = useSelector(state=>state.socket)
   const [deviceTrigges, setDeviceTrigger] = useState([]);
   const [nextBlock, setNextBlock] = useState([]);
   const {connectStatus, connect} = useContext(ScriptContext);
+  const read = useRef(0)
 
   useEffect(()=>{
-    if(data?.devices && Array.isArray(data.devices))
+    if(data?.devices && Array.isArray(data.devices) && read.current < 1)
       setDeviceTrigger(data.devices)
-    if(data?.next && Array.isArray(data.next))
+    if(data?.next && Array.isArray(data.next) && read.current < 1)
       setNextBlock(data.next)
-  },[])
+    read.current = read.current + 1
+  },[data.next, data.devices])
 
   const addTriggerDialog = () => {
     let deviceList = devices.map(item=>({title:item.name, data:item}))
     dispatch(showConfirmationDialog("Add trigger", deviceList, data=>{
         let fieldList = data.fields.map(item=>({title:item.name, data:item.name}))
         dispatch(showConfirmationDialog("Add trigger", fieldList, data2=>{
-          console.log(fieldList,data2)
           dispatch(hideDialog())
           let newTriggersList = deviceTrigges.slice()
           newTriggersList.push({name:data.system_name, field:data2})
@@ -46,7 +43,7 @@ export const ScriptTrigger = ({data = null, update}) => {
   useEffect(()=>{
     if (typeof(update) === "function")
       update({devices:deviceTrigges, next:nextBlock})
-  },[deviceTrigges, nextBlock])
+  },[deviceTrigges, nextBlock, update])
 
   return(
     <div className='script-trigger-container card-container' id="trigger-block">

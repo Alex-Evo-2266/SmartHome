@@ -1,12 +1,10 @@
-import React,{useContext, useEffect, useRef, useState} from 'react'
+import React,{useContext, useEffect, useRef} from 'react'
 import { ScriptContext } from './ConnectContext';
 
 const getX = (blocks, id, defX)=>{
     if (!id)
         return (defX)
-    console.log(blocks, id)
-    let block = blocks.filter(item=>item.id == id)
-    console.log(block)
+    let block = blocks.filter(String(item=>item.id) === String(id))
     if (block.length === 0)
         return (defX)
     return (block[0].x)
@@ -15,7 +13,7 @@ const getX = (blocks, id, defX)=>{
 const getY = (blocks, id, defY)=>{
     if (!id)
         return (defY)
-    let block = blocks.filter(item=>item.id == id)
+    let block = blocks.filter(String(item=>item.id) === String(id))
     if (block.length === 0)
         return (defY)
     return (block[0].y)
@@ -42,7 +40,6 @@ export const ScriptConnector = ({x, y, endIdBlock, update}) => {
             moveAt(e);
           }
           block.current.onmouseup = function(e) {
-            console.log(e)
             document.onmousemove = null;
             block.current.onmouseup = null;
             block.current.style.left = getX(blocks, endIdBlock, x) + "px";

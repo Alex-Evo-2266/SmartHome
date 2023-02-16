@@ -1,6 +1,4 @@
 import {useState, useCallback} from 'react'
-import { useDispatch } from 'react-redux';
-import { HIDE_ALERT, SHOW_ALERT } from '../store/types';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 function map(n, a, b, _a, _b) {
@@ -10,6 +8,13 @@ function map(n, a, b, _a, _b) {
     return _a + n * u;
   }
 
+const getBlock = (blocks, id)=>{
+    let block = blocks.filter(item => item.id === id)
+    if (block.length === 0)
+      return (null)
+    return (block[0])
+}
+
 export const useScriptConnectBlock = () => {
 
     // connect dots 
@@ -18,13 +23,6 @@ export const useScriptConnectBlock = () => {
         id:null,
         metka:null
     })
-
-    const getBlock = (blocks, id)=>{
-        let block = blocks.filter(item => item.id === id)
-        if (block.length === 0)
-          return (null)
-        return (block[0])
-    }
 
     const triggerConnect = useCallback((trigger, id, updateBlock)=>{
         let ids = trigger.next.filter(item=>item === id)
@@ -59,7 +57,7 @@ export const useScriptConnectBlock = () => {
           else
             blockConnect(getBlock(blocks, b2.id), b2.metka, b1.id, updateBlock)
         }
-    },[getBlock, triggerConnect, blockConnect])
+    },[triggerConnect, blockConnect])
 
     const dotClick = useCallback((blocks, trigger, updateBlock)=>(
         (id, metka)=>{
@@ -105,7 +103,7 @@ export const useScriptConnectBlock = () => {
     })
   },[drawConnector])
 
-  const OutDot = (svg, blocks)=>{
+  const OutDot = useCallback((svg, blocks)=>{
     blocks.forEach(item=>{
       let blocksNode = document.querySelectorAll(".script-block")
       let filteredBlock = Array.prototype.filter.call(blocksNode, item2 => String(item2.dataset.id) === String(item.id))
@@ -113,10 +111,11 @@ export const useScriptConnectBlock = () => {
       filteredBlock = filteredBlock[0]
       for (const key in item.next) {
         let dot = filteredBlock.querySelector(`.connect-dot[data-type="${key}"]`)
+        if (!dot) continue;
         printBlockConnect(svg, dot, item.next[key])
       }
     })
-  }
+  },[printBlockConnect])
 
   const printLinckLine = useCallback((svg, root, trigger, blocks) => {
     OutDot(svg, blocks)
