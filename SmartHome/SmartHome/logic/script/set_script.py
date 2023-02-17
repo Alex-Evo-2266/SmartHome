@@ -19,7 +19,7 @@ class ScriptAlreadyExistsException(Exception):
 		else:
 			return "ScriptAlreadyExistsException"
 
-def addscript(script: ScriptSchema):
+def add_script(script: ScriptSchema):
     try:
         script.status = ScriptStatus.MANUAL
         if(len(script.trigger.trigger)>0):
@@ -38,3 +38,14 @@ def addscript(script: ScriptSchema):
     except FileNotFoundError as e:
         logger.error(f'file not found. file:{name}. detail:{e}')
         raise FileNotFoundError(e)
+
+def delete_script(name:str):
+    try:
+        logger.debug(f'delete script. script:{name}')
+        file_path = os.path.join(SCRIPTS_DIR,name)
+        file_path = file_path + ".yml"
+        os.remove(file_path)
+        return "ok"
+    except Exception as e:
+        logger.error(f'error delete script. file:{name}. detail:{e}')
+        raise

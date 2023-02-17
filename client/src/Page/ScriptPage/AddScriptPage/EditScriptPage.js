@@ -1,5 +1,6 @@
 import React,{useCallback, useEffect, useRef, useState} from 'react'
 import { useDispatch, useSelector} from 'react-redux'
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min'
 import { useHttp } from '../../../hooks/http.hook'
 import { useMessage } from '../../../hooks/message.hook'
 import { useScriptConnectBlock } from '../../../hooks/scriptDotConnect.hook'
@@ -48,9 +49,10 @@ const updataElementById = (items, id, data)=>{
   }
 }
 
-export const AddScriptPage = () => {
+export const EditScriptPage = ({}) => {
 
   const dispatch = useDispatch()
+  let { scriptName } = useParams();
   const {dotClick, connectStatus, printLinckLine} = useScriptConnectBlock()
   const {request, error, clearError} = useHttp();
   const {message} = useMessage();
@@ -63,6 +65,17 @@ export const AddScriptPage = () => {
     },
     blocks:[]
   })
+
+  const getScript = useCallback(async() => {
+    let data = await request(`/api/scripts/${scriptName}`, "GET", null, {Authorization: `Bearer ${auth.token}`})
+    if (data)  
+      setScript(data)
+  },[request, auth.token, scriptName])
+
+  useEffect(()=>{
+    if (!scriptName) return;
+    getScript()
+  },[getScript, scriptName])
 
   useEffect(()=>{
     message(error, 'error');
@@ -87,7 +100,10 @@ export const AddScriptPage = () => {
 
   const save = useCallback(() => {
     dispatch(showTextDialog("save script", "", "script name", async(data)=>{
-      await request("/api/script", "POST", {...script, name: data}, {Authorization: `Bearer ${auth.token}`})
+      if (!scriptName)
+        await request("/api/scripts", "POST", {...script, name: data}, {Authorization: `Bearer ${auth.token}`})
+      else
+        await request(`/api/scripts/${script.name}`, "PUT", {...script, name: data}, {Authorization: `Bearer ${auth.token}`})
       setScript(prev=>({...prev, name:data}))
     },script.name))
   },[script])

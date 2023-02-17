@@ -34,7 +34,7 @@ export const SessionList = () => {
 		return ()=>{
 			clearError();
 		}
-	  },[error,message, clearError])
+	},[error,message, clearError])
 
   return(
 	<>

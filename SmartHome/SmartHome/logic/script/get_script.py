@@ -19,8 +19,8 @@ def get_script_by_filename(file_name: str):
 
 def get_script(name: str):
     try:
-        file_name = os.path.join(name, ".yml")
-        get_script_by_filename(file_name)
+        file_name = name + ".yml"
+        return get_script_by_filename(file_name)
     except FileNotFoundError as e:
         logger.error(f'file not found. file:{name}. detail:{e}')
         raise

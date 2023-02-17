@@ -53,6 +53,10 @@ export const SettingsMenuPage = () => {
 		clearError();
 	  },[error, message, clearError])
 
+	  useEffect(()=>{
+		console.log(getFields())
+	  },[getFields])
+
 	return (
 		<div>
 			<Table col={[

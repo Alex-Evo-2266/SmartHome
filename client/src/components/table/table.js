@@ -69,6 +69,16 @@ export const Table = ({col, items})=>{
 												<i className={item.data[item2.name]}></i>
 											</td>
 										)
+									if (item2.type === "btn")
+										return(
+											<td key={index2}>
+												{
+													(!item.data[item2.name].onClick)?
+													item.data[item2.name].title:
+													<button className='btn' onClick={item.data[item2.name].onClick}>{item.data[item2.name].title}</button>
+												}	
+											</td>
+										)
 									return(
 										<td key={index2}>
 											{item.data[item2.name]}

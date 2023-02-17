@@ -13,10 +13,11 @@ export const ScriptTrigger = ({data = null, update}) => {
   const read = useRef(0)
 
   useEffect(()=>{
-    if(data?.trigger && Array.isArray(data.trigger) && read.current < 1)
+    console.log(data)
+    if(data?.trigger && Array.isArray(data.trigger) && read.current < 2)
       setDeviceTrigger(data.trigger)
     read.current = read.current + 1
-  },[data.next, data.trigger])
+  },[data.trigger])
 
   const addTriggerDialog = () => {
     let deviceList = devices.map(item=>({title:item.name, data:item}))
@@ -38,7 +39,7 @@ export const ScriptTrigger = ({data = null, update}) => {
   }
 
   useEffect(()=>{
-    if (typeof(update) === "function")
+    if (typeof(update) === "function", read.current > 2)
       update({trigger:deviceTrigges, next:data.next})
   },[deviceTrigges, update])
 
