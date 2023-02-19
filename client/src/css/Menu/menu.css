@@ -74,6 +74,11 @@
 	text-align: center;
 	cursor: pointer;
   }
+
+  .topMenu .tabs .tabButton:hover{
+	border-bottom: 2px solid var(--text-color-base-fon);
+  }
+  
   .topMenu .tabs .tabButton.active{
 	color: var(--color-active);
 	border-bottom: 2px solid var(--color-active);

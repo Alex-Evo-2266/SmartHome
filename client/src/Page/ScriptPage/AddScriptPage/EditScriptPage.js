@@ -162,14 +162,16 @@ export const EditScriptPage = ({}) => {
 
   return(
     <ScriptContext.Provider value={{blocks: script.blocks, connectStatus, connect: dotClick(script.blocks, script.trigger, updateBlockConnect)}}>
-    <svg className='' id="svg-script" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg>
-    <div id="container-script" className='container scroll block-container'>
+    <div className='full-scrin scroll'>
+      <svg className='' id="svg-script" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg>
+      <div id="container-script" className='block-container'>
         <ScriptTrigger update={updateTriggerScript} data={script.trigger}/>
           {
             script.blocks.map((item, index)=>(
               <ScriptBlock key={index} data={item} update={(data)=>updateBlock(data, item.id)} deleteBlock={()=>deleteBlock(item.id)}/>
             ))
           }
+      </div>
     </div>
     </ScriptContext.Provider>
   )

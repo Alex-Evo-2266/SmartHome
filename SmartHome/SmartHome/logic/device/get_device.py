@@ -10,7 +10,7 @@ from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 
 logger = logging.getLogger(__name__)
 
-def get_device(device_data: DeviceData):
+def get_device_data(device_data: DeviceData):
 	try:
 		logger.debug("get_device function")
 		device:BaseDevice
@@ -55,9 +55,15 @@ def get_all_device():
 	devices = DevicesFile.all()
 	arr:List[DeviceData] = []
 	for item in devices:
-		device = get_device(item)
+		device = get_device_data(item)
 		if not device:
 			raise
 		arr.append(device)
 	return arr
+	
+def get_device(sysyem_name: str):
+	device = DevicesFile.get(sysyem_name)
+	if device:
+		return get_device_data(device)
+	return None
 	

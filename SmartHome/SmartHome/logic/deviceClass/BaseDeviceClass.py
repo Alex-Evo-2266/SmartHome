@@ -7,6 +7,7 @@ from SmartHome.logic.deviceFile.schema import DeviceFieldSchema, DeviceSchema
 from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
 from exceptions.exceptions import DeviceNotFound, InvalidInputException
 from SmartHome.logic.deviceClass.DeviceMeta import DefConfig, DeviceMeta
+from SmartHome.logic.deviceClass.DeviceInterface import IGetDeviceData
 from SmartHome.models import DeviceHistory
 import logging
 from datetime import datetime
@@ -23,7 +24,7 @@ def look_for_param(arr:List[T], name:str)->T|None:
 			return(item)
 	return None
 
-class BaseDevice(metaclass=DeviceMeta, use=False):
+class BaseDevice(IGetDeviceData, metaclass=DeviceMeta, use=False):
 	"""docstring for BaseDevice."""
 
 	types=[BaseType]
@@ -54,7 +55,7 @@ class BaseDevice(metaclass=DeviceMeta, use=False):
 			self.values.append(BaseField(**item.dict(), device_name=self.device_data.name))
 		self.device = None		
 
-	def get_value(self, name:str)->DeviceFieldSchema|None:
+	def get_value(self, name:str)->DeviceFieldSchema | None:
 		value = look_for_param(self.values, name)
 		if not value:
 			return None
@@ -63,7 +64,7 @@ class BaseDevice(metaclass=DeviceMeta, use=False):
 	def get_field(self, name:str):
 		return look_for_param(self.values, name)
 
-	def get_values(self):
+	def get_values(self)->List[DeviceFieldSchema]:
 		res:List[DeviceFieldSchema] = []
 		for item in self.values:
 			res.append(item.get_data())

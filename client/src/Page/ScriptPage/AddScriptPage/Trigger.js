@@ -39,7 +39,7 @@ export const ScriptTrigger = ({data = null, update}) => {
   }
 
   useEffect(()=>{
-    if (typeof(update) === "function", read.current > 2)
+    if (typeof(update) === "function" && read.current >= 2)
       update({trigger:deviceTrigges, next:data.next})
   },[deviceTrigges, update])
 

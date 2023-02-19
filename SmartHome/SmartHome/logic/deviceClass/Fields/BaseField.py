@@ -1,4 +1,4 @@
-# from SmartHome.logic.script.runScript import runScripts
+from SmartHome.logic.script.run_script import run_by_trigger_scripts
 
 from enum import Enum
 from numbers import Number
@@ -56,9 +56,9 @@ class BaseField(object):
 
 	def set(self, status, script=True):
 		self.__value = status
+		print("p0", script, self)
 		if(script):
-			pass
-			# runScripts(self.device_name,self.name)
+			run_by_trigger_scripts(self.device_name,self.name)
 
 	def get_data(self)->DeviceFieldSchema:
 		return DeviceFieldSchema(

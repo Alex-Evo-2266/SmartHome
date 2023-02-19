@@ -46,8 +46,14 @@ export const IfBlock = ({data = null, update, deleteBlock}) => {
             <button className='btn script-block-no-move' onClick={edit}>edit</button>
         </div>
         <div className='connect-dot-container'>
-          <div data-type="base" className={`connect-dot script-block-no-move ${(isActive("base"))?"active":""}`} onClick={()=>connect(data.id, "base")}></div>
-          <div data-type="else" className={`connect-dot script-block-no-move ${(isActive("else"))?"active":""}`} onClick={()=>connect(data.id, "else")}></div>
+          <div>
+            <p>then</p>
+            <div data-type="base" className={`connect-dot script-block-no-move ${(isActive("base"))?"active":""}`} onClick={()=>connect(data.id, "base")}></div>
+          </div>
+          <div>
+            <p>else</p>
+            <div data-type="else" className={`connect-dot script-block-no-move ${(isActive("else"))?"active":""}`} onClick={()=>connect(data.id, "else")}></div>
+          </div>
         </div>
     </>
   )

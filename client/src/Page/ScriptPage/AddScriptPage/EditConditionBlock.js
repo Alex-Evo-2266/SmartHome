@@ -8,7 +8,7 @@ export const EditConditionBlock = ({data, update, hide, deleteEl})=>{
         type_object: "",
         arg1: "",
         arg2: "",
-        operatoe: "",
+        operator: "",
         value: {}
     })
 
@@ -19,7 +19,7 @@ export const EditConditionBlock = ({data, update, hide, deleteEl})=>{
             type_object: data?.type_object ?? "",
             arg1: data?.arg1 ?? "",
             arg2: data?.arg2 ?? "",
-            operatoe: data?.operatoe ?? "",
+            operator: data?.operator ?? "",
             value: data?.value ?? {},
         })
         read.current = read.current + 1

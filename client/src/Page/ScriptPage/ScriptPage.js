@@ -59,6 +59,7 @@ export const ScriptPage = () => {
         trigger: JSON.stringify(getTrigger(item.trigger)),
         action: {title: "action", onClick: ()=>{console.log(item)}},
         edit: {title: "edit", onClick: ()=>history.push(`/scripts/edit/${item.name}`)},
+        delete: {title: "delete", onClick: ()=>{console.log(item)}},
       }})
     })
     return arr
@@ -70,7 +71,8 @@ export const ScriptPage = () => {
 				{title: "title",name: "title"},
 				{title: "trigger", name:"trigger"},
 				{title: "action", type: "btn", name:"action"},
-				{title: "edit", type: "btn", name: "edit"}
+				{title: "edit", type: "btn", name: "edit"},
+				{title: "delete", type: "btn", name: "delete"}
 			]} items={getFields()}/>
         {
 		    (auth.role === "admin")?
