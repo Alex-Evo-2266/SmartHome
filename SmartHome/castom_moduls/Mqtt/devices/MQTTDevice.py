@@ -1,6 +1,6 @@
 from typing import List
 from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
-from SmartHome.logic.deviceClass.DeviceMeta import DefConfig
+from SmartHome.logic.deviceClass.schema import ConfigSchema
 from SmartHome.logic.deviceClass.Fields.base_field import BaseField
 from SmartHome.logic.deviceFile.schema import Received_Data_Format
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
@@ -25,7 +25,7 @@ def look_for_by_topic(arr:list, val):
 
 class MqttDevice(BaseDevice):
 
-    class Config(DefConfig):
+    class Config(ConfigSchema):
         pass
 
     def __init__(self, *args, **kwargs):

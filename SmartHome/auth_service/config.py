@@ -62,7 +62,7 @@ class ResponseUserData(BaseModel):
 	imageURL: Optional[str]
 	host: Optional[str]
 
-def image_format(connect_data: ConnectData, url:str)->str:
+def image_format(connect_data: ConnectData, url:str)->str | None:
 	if not url:
 		return None
 	return connect_data.host + url

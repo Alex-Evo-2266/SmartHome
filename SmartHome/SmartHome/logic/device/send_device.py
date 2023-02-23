@@ -17,7 +17,7 @@ async def send_device():
 
 async def send_restart():
 	base = configManager.getConfig("send_message")
-	if "frequency" in base:
+	if base and "frequency" in base:
 		RunFunctions.subscribe("devices", send_device, int(base['frequency']))
 	else:
 		RunFunctions.subscribe("devices", send_device, 6)

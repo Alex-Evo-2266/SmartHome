@@ -4,9 +4,9 @@ from typing import Optional, List
 from authtorization.schema import TokenData
 
 from SmartHome.schemas.server import ServerConfigSchema, ServerDataSchema
-from config.configset import ServerConfigEdit
+from config.config_set import server_config_edit
 from authtorization.auth_depends import token_dep
-from config.configget import GiveServerConfig
+from config.config_get import give_server_config
 from SmartHome.logic.server.serverData import getServerData
 
 router = APIRouter(
@@ -16,16 +16,14 @@ router = APIRouter(
 )
 
 @router.get("/config", response_model=ServerConfigSchema)
-async def getconfig(auth_data: TokenData = Depends(token_dep)):
-    return await GiveServerConfig()
+async def get_config(auth_data: TokenData = Depends(token_dep)):
+    return await give_server_config()
 
 @router.put("/config")
-async def getconfig(data:ServerConfigSchema, auth_data: TokenData = Depends(token_dep)):
-    res = await ServerConfigEdit(data.moduleConfig)
-    if res["status"] == "ok":
-        return "ok"
+async def edit_config(data:ServerConfigSchema, auth_data: TokenData = Depends(token_dep)):
+    await server_config_edit(data.moduleConfig)
     return JSONResponse(status_code=400, content={"message": "error write file"})
 
 @router.get("", response_model=ServerDataSchema)
-async def getdata(auth_data: TokenData = Depends(token_dep)):
+async def get_data(auth_data: TokenData = Depends(token_dep)):
     return await getServerData()

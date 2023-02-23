@@ -55,7 +55,7 @@ class ModuleConfig(object):
         templates.pop(name, None)
         self.writeConfig(templates)
 
-    def getConfig(self, name: str)->Dict[str, str]:
+    def getConfig(self, name: str)->Dict[str, str] | None:
         if name in self.config:
             return self.config[name]
         templates = self.readConfig()

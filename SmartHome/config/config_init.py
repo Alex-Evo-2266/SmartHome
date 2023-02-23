@@ -1,4 +1,4 @@
-from SmartHome.logic.device.sendDevice import send_restart
+from SmartHome.logic.device.send_device import send_restart
 from settings import configManager
 from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
 # from SmartHome.logic.device.deviceSendControl import updataSendTime
@@ -8,7 +8,7 @@ from weather.weather import updateWeather
 
 logger = logging.getLogger(__name__)
 
-def confinit():
+def conf_init():
     configManager.addConfig("weather", {
         "APPID":"",
         "city":""

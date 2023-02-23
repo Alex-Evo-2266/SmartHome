@@ -1,5 +1,5 @@
 from SmartHome.SmartHome.logic.deviceClass.DeviceClasses import DeviceClasses
-from ..devicesArrey import DevicesArrey
+from ..devices_arrey import DevicesArrey
 from ..deviceFile.DeviceFile import Devices
 
 from SmartHome.schemas.device import DeviceSchema, DeviceFieldSchema

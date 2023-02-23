@@ -45,6 +45,8 @@ async def login(response:Response = Response("ok", 200), data: Login = Login(nam
 @router.get("/refresh", response_model=ResponseLogin)
 async def refrash(response:Response = Response("ok", 200), smart_home: Optional[str] = Cookie(None)):
 	try:
+		if not smart_home:
+			raise Exception("tokens error")
 		tokens = await refresh_token(smart_home)
 		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
 		session = await Session.objects.get_or_none(access=tokens.access)

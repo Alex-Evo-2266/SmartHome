@@ -80,6 +80,7 @@ async def local_login(login_data:Login)->User:
 async def create_valid_user_name(name: str)->str:
 	user = await User.objects.get_or_none(name=name)
 	count_name = 0
+	new_name = ""
 	while user:
 		if count_name > 10000:
 			logger.error("too many attempts to create a valid name")

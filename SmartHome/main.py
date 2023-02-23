@@ -3,7 +3,7 @@ import asyncio, logging
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from SmartHome.logic.device.sendDevice import send_device
+from SmartHome.logic.device.send_device import send_device
 from authtorization.init_admin import init_admin
 
 from castom_moduls import init_modules
@@ -18,7 +18,7 @@ from SmartHome.logic.server.serverData import sendServerData
 # from SmartHome.logic.script.runScript import runTimeScript
 # from SmartHome.logic.device.deviceSave import saveDevice
 
-from config.configInit import confinit
+from config.config_init import conf_init
 from initapp import initdir
 
 # from SmartHome.api.first_start import router as router_first_start
@@ -35,8 +35,6 @@ from SmartHome.api.script import router as router_script
 # from SmartHome.api.pages import router_pages
 # from SmartHome.api.file import router as router_file
 from settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS
-
-from SmartHome.logic.deviceClass.DeviceMeta import DefConfig, DeviceMeta
 
 logger = logging.getLogger(__name__)
 
@@ -65,9 +63,9 @@ async def startup() -> None:
 	# RunFunctions.subscribe("script", runTimeScript, 60)
 	RunFunctions.subscribe("serverData", sendServerData, 30)
 	# RunFunctions.subscribe("saveDevice", saveDevice, 120)
-	confinit()
+	conf_init()
 	base = configManager.getConfig("send_message")
-	if "frequency" in base:
+	if base and "frequency" in base:
 		RunFunctions.subscribe("devices", send_device, int(base['frequency']))
 	else:
 		RunFunctions.subscribe("devices", send_device, 6)

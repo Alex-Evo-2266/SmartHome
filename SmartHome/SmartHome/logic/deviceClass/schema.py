@@ -45,3 +45,11 @@ class FieldTypeDevice(BaseModel):
 class TypeDevice(BaseModel):
 	name: str
 	fields: List[FieldTypeDevice] = []
+
+class ConfigSchema():
+	address: bool = True
+	token: bool = False
+	fields_addition: bool = True
+	fields_change: ChangeField = ChangeField()
+	added_url: Optional[str] = None
+	change_url: Optional[str] = None

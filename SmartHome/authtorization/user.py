@@ -23,7 +23,7 @@ from SmartHome.models import MenuElement
 
 logger = logging.getLogger(__name__)
 
-async def addUser(data: UserForm):
+async def add_user(data: UserForm):
 	try:
 		logger.debug(f"add user input data: {data.dict()}")
 		hashedPass = bcrypt.hashpw(data.password.encode('utf-8'), bcrypt.gensalt())
@@ -39,7 +39,7 @@ async def addUser(data: UserForm):
 		logger.error(f"error add user: {e}")
 		raise
 
-async def getUser(id:int, session:Session)->UserSchema:
+async def get_user(id:int, session:Session)->UserSchema:
 	user = await User.objects.get_or_none(id=id)
 	if not user:
 		logger.error(f"none user")
@@ -62,7 +62,7 @@ async def getUser(id:int, session:Session)->UserSchema:
 		auth_name=user.auth_service_name
 	)
 
-async def editUser(id: int,data: UserEditSchema)->None:
+async def edit_user(id: int,data: UserEditSchema)->None:
 	user = await User.objects.get_or_none(id=id)
 	if not user:
 		logger.error(f"user does not exist. id:{id}")
@@ -72,7 +72,7 @@ async def editUser(id: int,data: UserEditSchema)->None:
 	await user.update(_columns=["name", "email"])
 	logger.debug(f'edit user {id}')
 
-async def deleteUser(id:int):
+async def delete_user(id:int):
 	u = await User.objects.get_or_none(id=id)
 	if not u:
 		logger.error(f"none user")
@@ -92,7 +92,6 @@ async def get_image(user:User, session: Session):
 	try:
 		image = None
 		if user.auth_type == AuthType.AUTH_SERVICE:
-			print(user)
 			data = await get_user_data_by_id(session, user.auth_service_id)
 			image = data.imageURL
 		return image
@@ -101,7 +100,7 @@ async def get_image(user:User, session: Session):
 	except Exception as e:
 		raise e
 
-async def getUsers(session: Session)->List[UserSchema]:
+async def get_users(session: Session)->List[UserSchema]:
 	outUsers:List[UserSchema] = list()
 	users = await User.objects.all()
 	if not users:
@@ -120,7 +119,7 @@ async def getUsers(session: Session)->List[UserSchema]:
 		))
 	return outUsers
 
-async def editLevel(id: int, role: UserLevel):
+async def edit_level(id: int, role: UserLevel):
 	user = await User.objects.get_or_none(id=id)
 	if not user:
 		logger.error(f"user does not exist. id:{id}")
@@ -129,7 +128,7 @@ async def editLevel(id: int, role: UserLevel):
 	await user.update(_columns=["role"])
 	logger.debug(f'edit level user {id}')
 
-async def editPass(id: int, oldpass: str, newpass: str)->None:
+async def edit_pass(id: int, oldpass: str, newpass: str)->None:
 	u = await User.objects.get_or_none(id=id)
 	if not u:
 		logger.error(f"user does not exist. id:{id}")
@@ -143,7 +142,7 @@ async def editPass(id: int, oldpass: str, newpass: str)->None:
 		raise InvalidInputException("invalid input data")
 	logger.debug(f"user edit pass id:{id}")
 
-async def newGenPass(name: str):
+async def new_gen_pass(name: str):
 	user = await User.objects.get_or_none(name = name)
 	if not user:
 		logger.error(f"user does not exist. id:{id}")

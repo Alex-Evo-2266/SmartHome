@@ -1,6 +1,6 @@
 
 from typing import Any, List, Type
-from SmartHome.logic.device.devicesArrey import DevicesArrey
+from SmartHome.logic.device.devices_arrey import DevicesArrey
 from SmartHome.logic.deviceClass.schema import ChangeField
 from SmartHome.logic.deviceClass.DeviceClasses import DeviceClasses
 
@@ -99,13 +99,15 @@ async def edit_device(system_name:str, data:EditDeviceSchema):
 		raise DeviceNotFound
 	if old_device_data.class_device != data.class_device:
 		raise DeviceTypesNotMatch()
-	device_class:BaseDevice = DeviceClasses.get(data.class_device)
+	print("p0")
+	device_class:BaseDevice = BaseDevice(DeviceClasses.get(data.class_device))
+	print("p1")
 	option = device_class.Config
 	added_fields = added_field(data.fields, old_device_data.fields)
 	deleted_fields = deleted_field(data.fields, old_device_data.fields)
-	if not option.fields_change.added and len(added_fields != 0):
+	if not option.fields_change.added and len(added_fields) != 0:
 		raise DeviceInvalidFields()
-	if not option.fields_change.deleted and len(deleted_fields != 0):
+	if not option.fields_change.deleted and len(deleted_fields) != 0:
 		raise DeviceInvalidFields()
 	if not option.address and old_device_data.address != data.address:
 		raise DeviceInvalidFields("not change address")

@@ -2,7 +2,7 @@
 
 import logging
 from typing import List
-from SmartHome.logic.device.devicesArrey import DevicesArrey
+from SmartHome.logic.device.devices_arrey import DevicesArrey
 from SmartHome.logic.deviceFile.schema import DeviceSchema, Status_Device
 from SmartHome.logic.deviceClass.DeviceClasses import DeviceClasses
 from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile

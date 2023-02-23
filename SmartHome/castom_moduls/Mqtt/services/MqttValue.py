@@ -1,4 +1,4 @@
-from SmartHome.logic.device.devicesArrey import DevicesArrey
+from SmartHome.logic.device.devices_arrey import DevicesArrey
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 from SmartHome.logic.deviceFile.schema import Received_Data_Format

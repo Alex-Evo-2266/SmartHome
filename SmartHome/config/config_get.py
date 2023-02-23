@@ -5,7 +5,7 @@ from SmartHome.schemas.server import ServerConfigSchema
 
 logger = logging.getLogger(__name__)
 
-async def GiveServerConfig():
+async def give_server_config():
     try:
 
         return ServerConfigSchema(

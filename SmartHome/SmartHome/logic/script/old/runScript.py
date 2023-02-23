@@ -8,7 +8,7 @@ import yaml, asyncio
 import threading
 import time
 from datetime import datetime
-from SmartHome.logic.device.devicesArrey import DevicesArrey
+from SmartHome.logic.device.devices_arrey import DevicesArrey
 import logging
 
 logger = logging.getLogger(__name__)

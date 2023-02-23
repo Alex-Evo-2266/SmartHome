@@ -1,6 +1,6 @@
 import logging
 
-from ..devicesArrey import DevicesArrey
+from ..devices_arrey import DevicesArrey
 # from smartHomeApi.logic.Cart import deleteDeviceCart
 from ..utils.file import readYMLFile, writeYMLFile
 from ..deviceFile.DeviceFile import Devices

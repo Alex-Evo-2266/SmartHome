@@ -70,8 +70,9 @@ async def token_dep_all_user(authorization_token: Optional[str] = Header(None)):
 		raise HTTPException(status_code=403, detail="invalid jwt")
 
 async def session(authorization_token: Optional[str] = Header(None))->Session:
-	head = authorization_token
-	jwtdata = head.split(" ")[1]
+	if not authorization_token:
+		raise HTTPException(status_code=403, detail="invalid jwt")
+	jwtdata = authorization_token.split(" ")[1]
 	data = await auth(authorization_token)
 	data.user_id
 	user = await User.objects.get_or_none(id=data.user_id)

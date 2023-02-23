@@ -1,6 +1,6 @@
 from SmartHome.schemas.script import ScriptSchema, BlockSchema, TypeBlock, TypeObject, Value, TypeValue
 from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
-from SmartHome.logic.device.devicesArrey import DevicesArrey
+from SmartHome.logic.device.devices_arrey import DevicesArrey
 from SmartHome.logic.script.get_script import get_script, get_script_all
 from SmartHome.logic.device.set_value import set_value
 from SmartHome.logic.deviceClass.DeviceGetInterface import IGetDeviceData

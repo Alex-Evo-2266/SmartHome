@@ -11,7 +11,7 @@ from auth_service.config import get_style, get_user_data
 from authtorization.schema import TokenData
 from authtorization.models import Session, User
 
-from authtorization.user import addUser, getUser, editUser, deleteUser, getUsers, editLevel, editPass, newGenPass
+from authtorization.user import add_user, get_user, edit_user, delete_user, get_users, edit_level, edit_pass, new_gen_pass 
 from authtorization.schema import UserSchema, UserEditSchema, UserEditLevelSchema, UserEditPasswordSchema
 from authtorization.auth_depends import session, token_dep, token_dep_all_user
 
@@ -28,7 +28,7 @@ async def add(data: UserForm, auth_data: TokenData = Depends(token_dep)):
 	try:
 		if auth_data.user_level != UserLevel.ADMIN:
 			return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
-		await addUser(data)
+		await add_user(data)
 		return "ok"
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
@@ -36,13 +36,12 @@ async def add(data: UserForm, auth_data: TokenData = Depends(token_dep)):
 @router.get("", response_model=UserSchema)   #new
 async def get(auth_data:TokenData = Depends(token_dep_all_user), session:Session = Depends(session)):
 	try:
-		print(session.user)
 		data = await get_user_data(session)
-		user = await getUser(auth_data.user_id, session)
+		user = await get_user(auth_data.user_id, session)
 		ret = UserSchema(id=auth_data.user_id, name=user.name,host=data.host, email=data.email, role=user.role, image_url=data.imageURL, auth_type=AuthType.AUTH_SERVICE)
 		return ret
 	except ThisLocalSession:
-		user = await getUser(auth_data.user_id, session)
+		user = await get_user(auth_data.user_id, session)
 		return user
 	except Exception as e:
 		logger.warning(e)
@@ -51,7 +50,7 @@ async def get(auth_data:TokenData = Depends(token_dep_all_user), session:Session
 @router.put("")
 async def edit(data: UserEditSchema, auth_data: TokenData = Depends(token_dep)):
 	try:
-		await editUser(auth_data.user_id, data)
+		await edit_user(auth_data.user_id, data)
 		return "ok"
 	except Exception as e:
 		logger.warning(e)
@@ -64,7 +63,7 @@ async def delete(id: int, auth_data: TokenData = Depends(token_dep)):
 			return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
 		if (auth_data.user_id == id):
 			return JSONResponse(status_code=400, content={"message": "you can not delete yourself"})
-		await deleteUser(id)
+		await delete_user(id)
 		return "ok"
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
@@ -73,7 +72,7 @@ async def delete(id: int, auth_data: TokenData = Depends(token_dep)):
 @router.get("/all", response_model=List[UserSchema])
 async def all(auth_data: TokenData = Depends(token_dep), session:Session = Depends(session)):
 	try:
-		users = await getUsers(session)
+		users = await get_users(session)
 		return users
 	except Exception as e:
 		logger.warning(e)
@@ -84,7 +83,7 @@ async def level(data: UserEditLevelSchema, auth_data: TokenData = Depends(token_
 	try:
 		if auth_data.user_level != UserLevel.ADMIN:
 			return JSONResponse(status_code=403, content={"message": "not enough rights for the operation."})
-		await editLevel(data.id, data.role)
+		await edit_level(data.id, data.role)
 		return "ok"
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
@@ -92,14 +91,14 @@ async def level(data: UserEditLevelSchema, auth_data: TokenData = Depends(token_
 @router.put("/password")
 async def edit_password(data: UserEditPasswordSchema, auth_data: TokenData = Depends(token_dep)):
 	try:
-		await editPass(auth_data.user_id, data.old_password, data.new_password)
+		await edit_pass(auth_data.user_id, data.old_password, data.new_password)
 		return "ok"
 	except Exception as e:
 		logger.warning(e)
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/sessions", response_model=List[SessionSchema])
-async def get_session_user(auth_data: TokenData = Depends(token_dep)):
+async def get_sessions_user(auth_data: TokenData = Depends(token_dep)):
 	try:
 		user = await User.objects.get_or_none(id=auth_data.user_id)
 		sessions = await Session.objects.all(user=user)

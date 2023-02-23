@@ -1,5 +1,5 @@
 from SmartHome.logic.groups.GroupFile import Groups
-from SmartHome.logic.device.devicesArrey import DevicesArrey
+from SmartHome.logic.device.devices_arrey import DevicesArrey
 from SmartHome.schemas.device import DeviceValueSchema
 from SmartHome.schemas.base import FunctionRespons, TypeRespons
 from SmartHome.logic.device.deviceSetValue import setValue
