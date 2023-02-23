@@ -105,4 +105,5 @@ async def init_modules():
         foo = imp.load_source(module, "castom_moduls"+os.sep+module+os.sep+"__init__.py")
     modules = Modules.all()
     for key in modules:
+        print(modules[key])
         modules[key].start()

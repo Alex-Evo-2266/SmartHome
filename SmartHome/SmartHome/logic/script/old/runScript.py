@@ -13,8 +13,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-hour = 0;
-month = 13;
+hour = 0
+month = 13
 
 async def runTimeScript():
     fileList = os.listdir(SCRIPTS_DIR)

@@ -7,7 +7,7 @@ from SmartHome.logic.deviceClass.schema import ChangeField
 from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 from exceptions.exceptions import InvalidInputException
 from SmartHome.logic.deviceFile.schema import DeviceFieldSchema
-
+from SmartHome.logic.deviceClass.Fields.FieldInterface import IField
 def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:
 	if(param in d):
 		return d[param]
@@ -16,7 +16,7 @@ def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:
 	else:
 		return default
 
-class BaseField(object):
+class BaseField(IField):
 	"""docstring for DeviceElement."""
 	
 	def __init__(
@@ -53,10 +53,24 @@ class BaseField(object):
 
 	def get(self):
 		return self.__value
+	
+	def get_high(self):
+		return self.high
+
+	def get_low(self):
+		return self.low
+
+	def get_type(self):
+		return self.type
+
+	def get_unit(self):
+		return self.unit
+
+	def get_name(self):
+		return self.name
 
 	def set(self, status, script=True):
 		self.__value = status
-		print("p0", script, self)
 		if(script):
 			run_by_trigger_scripts(self.device_name,self.name)
 

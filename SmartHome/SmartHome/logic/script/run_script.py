@@ -2,9 +2,13 @@ from SmartHome.schemas.script import ScriptSchema, BlockSchema, TypeBlock, TypeO
 from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
 from SmartHome.logic.device.devicesArrey import DevicesArrey
 from SmartHome.logic.script.get_script import get_script, get_script_all
-from SmartHome.logic.deviceClass.DeviceInterface import IGetDeviceData
+from SmartHome.logic.device.set_value import set_value
+from SmartHome.logic.deviceClass.DeviceGetInterface import IGetDeviceData
+from SmartHome.logic.deviceClass.DeviceValueInterface import IValueDevice
+from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 from typing import Optional, List, Dict, Any
 import threading
+import asyncio
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,7 +25,7 @@ def run_by_trigger_scripts(system_name: str, field_name: str):
 def run_script(script: ScriptSchema):
 	def r_script():
 		for id in script.trigger.next:
-			run_block(script, get_block(script, id))
+			asyncio.run(run_block(script, id))
 	try:
 		s = threading.Thread(target=r_script)
 		s.daemon = True
@@ -30,33 +34,34 @@ def run_script(script: ScriptSchema):
 		logger.error(f'error run script:{e}.')
 
 
-def get_block(script: ScriptSchema, id: int)->BlockSchema | None:
+async def get_block(script: ScriptSchema, id: int)->BlockSchema | None:
 	for item in script.blocks:
 		if item.id == id:
 			return item
 	return None
 
-def run_block(script: ScriptSchema, block: BlockSchema | None):
+async def run_block(script: ScriptSchema, id: int):
+	block = await get_block(script, id)
 	if not block:
 		return
 	if block.type == TypeBlock.CNODITION:
-		if condition(block):
+		if await condition(block):
 			next = block.next.get("base")
 		else:
 			next = block.next.get("else")
 		if not next:
 			return
 		for id_block in next:
-			run_block(script, get_block(script, id_block))
+			await run_block(script, id_block)
 	if block.type == TypeBlock.ACTION:
-		action(block)
+		await action(block)
 
-def condition(block: BlockSchema):
+async def condition(block: BlockSchema):
 	if block.type_object == TypeObject.DEVICE:
-		return condition_device(block)
+		return await condition_device(block)
 	return False
 
-def get_value_device(system_name: str, field_name: str)->str | None:
+async def get_value_device(system_name: str, field_name: str)->str | None:
 	device = DevicesArrey.get(system_name)
 	if not device:
 		return None
@@ -71,27 +76,27 @@ def get_value_device(system_name: str, field_name: str)->str | None:
 		return None
 	return values.get(field_name)
 
-def get_value_block(value: Value):
+async def get_value_block(value: Value):
 	if value.type == TypeValue.TEXT and isinstance(value.arg1, str):
 		return value.arg1
 	if value.type == TypeValue.NUMBER and isinstance(value.arg1, str):
 		return value.arg1
 	if value.type == TypeValue.DEVICE and isinstance(value.arg1, str) and isinstance(value.arg2, str):
-		return get_value_device(value.arg1, value.arg2)
+		return await get_value_device(value.arg1, value.arg2)
 	if value.type == TypeValue.DEVICE:
 		return None
 	if value.type == TypeValue.SELECT and isinstance(value.arg1, str):
 		return value.arg1
 	if value.type == TypeValue.ROUND and isinstance(value.arg1, Any) and isinstance(value.arg2, str):
-		val = get_value_block(Value(**value.arg1))
+		val = await get_value_block(Value(**value.arg1))
 		if not val:
 			return None
 		val = float(val)
 		val = str(round(val, int(value.arg2)))
 		return val
 	if value.type == TypeValue.MATH and isinstance(value.arg1, Any) and isinstance(value.arg2, Any):
-		v1 = get_value_block(Value(**value.arg1))
-		v2 = get_value_block(Value(**value.arg2))
+		v1 = await get_value_block(Value(**value.arg1))
+		v2 = await get_value_block(Value(**value.arg2))
 		if not v1 or not v2:
 			return None
 		v = None
@@ -107,16 +112,13 @@ def get_value_block(value: Value):
 	logger.error(f'error type value:{value}.')
 	return None
 
-def condition_device(block: BlockSchema)->bool:
-	value = get_value_device(block.arg1, block.arg2)
-	v = get_value_block(block.value)
+async def condition_device(block: BlockSchema)->bool:
+	value = await get_value_device(block.arg1, block.arg2)
+	v = await get_value_block(block.value)
 	if not value or not v:
 		return False
-	print(value)
-	print(v, block.operator)
 	try:
 		if block.operator == "==" and str(value) == str(v):
-			print("p0")
 			return True
 		if block.operator == "!=" and str(value) != str(v):
 			return True
@@ -124,11 +126,31 @@ def condition_device(block: BlockSchema)->bool:
 			return True
 		if block.operator == "<" and float(value) < float(v):
 			return True
-		print("wat")
 		return False
 	except Exception as e:
 		logger.error(f'error type value:{e}.')
 		return False
 
-def action(block: BlockSchema):
-	print("act")
+def get_value(device: IValueDevice, field_name:str, value: str):
+	field = device.get_field(field_name)
+	if not field:
+		return str()
+	if field.get_type() == TypeField.BINARY:
+		if value == "off" or value == "turn_off":
+			return field.get_low()
+		if value == "on" or value == "turn_on":
+			return field.get_high()
+	return str()
+	
+
+async def action_device(block: BlockSchema):
+	device = DevicesArrey.get(block.arg1)
+	if not device:
+		return None
+	device: IValueDevice = device.device
+	await set_value(block.arg1, block.arg2, get_value(device, block.arg2, str(await get_value_block(block.value))))
+
+async def action(block: BlockSchema):
+	if block.type_object == TypeObject.DEVICE:
+		return await action_device(block)
+	return

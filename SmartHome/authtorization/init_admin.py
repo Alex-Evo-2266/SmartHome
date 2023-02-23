@@ -5,12 +5,12 @@ from authtorization.models import AuthType, User
 
 logger = logging.getLogger(__name__)
 
-async def initAdmin():
+async def init_admin():
     users = await User.objects.all()
     if len(users) == 0:
-        await addAdmin()
+        await add_admin()
 
-async def addAdmin():
+async def add_admin():
     try:
         logger.debug(f"add admin")
         hashedPass = bcrypt.hashpw("admin".encode('utf-8'), bcrypt.gensalt())

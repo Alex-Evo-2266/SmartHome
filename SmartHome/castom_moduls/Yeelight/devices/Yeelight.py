@@ -3,7 +3,7 @@ from SmartHome.logic.deviceClass.schema import ChangeField
 from SmartHome.logic.deviceClass.typeDevice.LightType import Light
 from SmartHome.logic.deviceClass.DeviceMeta import DefConfig
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
-from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
+from SmartHome.logic.deviceClass.Fields.base_field import BaseField
 import logging
 
 logger = logging.getLogger(__name__)

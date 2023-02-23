@@ -1,7 +1,7 @@
 from typing import List
 from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 from SmartHome.logic.deviceClass.DeviceMeta import DefConfig
-from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
+from SmartHome.logic.deviceClass.Fields.base_field import BaseField
 from SmartHome.logic.deviceFile.schema import Received_Data_Format
 from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 import json
@@ -65,6 +65,7 @@ class MqttDevice(BaseDevice):
             data = dict()
             data[val.address] = message
             data = json.dumps(data)
+            print(self.device_data.address+"/set", data)
             Services.get("Mqtt_connect").publish(self.device_data.address+"/set", data)
         else:
             alltopic = self.device_data.address + "/" + val.address

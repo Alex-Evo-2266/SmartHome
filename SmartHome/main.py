@@ -4,7 +4,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from SmartHome.logic.device.sendDevice import send_device
-from authtorization.initAdmin import initAdmin
+from authtorization.init_admin import init_admin
 
 from castom_moduls import init_modules
 
@@ -77,7 +77,7 @@ async def startup() -> None:
 		await database_.connect()
 	loop = asyncio.get_running_loop()
 	loop.create_task(RunFunctions.run())
-	await initAdmin()
+	await init_admin()
 	logger.info("starting")
 
 

@@ -4,10 +4,12 @@ from SmartHome.logic.deviceClass.schema import AdditionDevice, ChangeDevice
 from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
 from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 from SmartHome.logic.deviceFile.schema import DeviceFieldSchema, DeviceSchema
-from SmartHome.logic.deviceClass.Fields.BaseField import BaseField
+from SmartHome.logic.deviceClass.Fields.FieldInterface import IField
+from SmartHome.logic.deviceClass.Fields.base_field import BaseField
 from exceptions.exceptions import DeviceNotFound, InvalidInputException
 from SmartHome.logic.deviceClass.DeviceMeta import DefConfig, DeviceMeta
-from SmartHome.logic.deviceClass.DeviceInterface import IGetDeviceData
+from SmartHome.logic.deviceClass.DeviceGetInterface import IGetDeviceData
+from SmartHome.logic.deviceClass.DeviceValueInterface import IValueDevice
 from SmartHome.models import DeviceHistory
 import logging
 from datetime import datetime
@@ -24,7 +26,7 @@ def look_for_param(arr:List[T], name:str)->T|None:
 			return(item)
 	return None
 
-class BaseDevice(IGetDeviceData, metaclass=DeviceMeta, use=False):
+class BaseDevice(IGetDeviceData, IValueDevice, metaclass=DeviceMeta, use=False):
 	"""docstring for BaseDevice."""
 
 	types=[BaseType]
@@ -50,8 +52,8 @@ class BaseDevice(IGetDeviceData, metaclass=DeviceMeta, use=False):
 			self.device_data = device_data
 		if not self.device_data:
 			raise DeviceNotFound()
-		self.values:List[BaseField] = list()
-		for item in device_data.fields:
+		self.values:List[IField] = list()
+		for item in self.device_data.fields:
 			self.values.append(BaseField(**item.dict(), device_name=self.device_data.name))
 		self.device = None		
 
@@ -83,11 +85,11 @@ class BaseDevice(IGetDeviceData, metaclass=DeviceMeta, use=False):
 	def set_value(self, name:str, status:Any):
 		value = look_for_param(self.values, name)
 		if(value):
-			if(value.type == TypeField.NUMDER):
-				if(int(status) > int(value.high)):
-					status = value.high
-				if(int(status) < int(value.low)):
-					status = value.low
+			if(value.get_type() == TypeField.NUMDER):
+				if(int(status) > int(value.get_high())):
+					status = value.get_high()
+				if(int(status) < int(value.get_low())):
+					status = value.get_low()
 			value.set(status, False)
 		return status
 
@@ -95,15 +97,19 @@ class BaseDevice(IGetDeviceData, metaclass=DeviceMeta, use=False):
 		if not self.device_data:
 			raise DeviceNotFound()
 		for item in self.values:
-			value = look_for_param(self.device_data.fields, item.name)
+			value = look_for_param(self.device_data.fields, item.get_name())
 			if value:
 				value.value = item.get()
 		self.device_data.save()
 		logger.info(f'save {self.device_data.name}')
 
 	async def save_and_addrecord(self):
+		if not self.device_data:
+			raise DeviceNotFound()
 		for item in self.values:
-			value = look_for_param(self.device_data.fields, item.name)
+			value = look_for_param(self.device_data.fields, item.get_name())
+			if not value:
+				continue
 			if value:
 				value.value = item.get()
 			if not value.unit:
@@ -115,6 +121,8 @@ class BaseDevice(IGetDeviceData, metaclass=DeviceMeta, use=False):
 		logger.info(f'save history {self.device_data.name}')
 
 	def get_info(self)->DeviceSchema:
+		if not self.device_data:
+			raise DeviceNotFound()
 		res = DeviceSchema(
 			address=self.device_data.address,
 			information=self.device_data.information,
@@ -132,7 +140,7 @@ class BaseDevice(IGetDeviceData, metaclass=DeviceMeta, use=False):
 		vals = dict()
 		for item in self.values:
 			values.append(item.get_data())
-			vals[item.name] = item.get()
+			vals[item.get_name()] = item.get()
 		res.fields = values
 		res.value = vals
 		return res

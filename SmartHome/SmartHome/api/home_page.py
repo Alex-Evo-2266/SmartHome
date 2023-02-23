@@ -29,7 +29,7 @@ async def set(data:HomePage, auth_data: dict = Depends(token_dep)):
     return JSONResponse(status_code=400, content={"message": res.ditail})
 
 @router.get("/add")
-async def set(name:str, auth_data: dict = Depends(token_dep)):
+async def add(name:str, auth_data: dict = Depends(token_dep)):
     res = addHomePage(name)
     if res.status != "ok":
         return JSONResponse(status_code=400, content={"message": res.ditail})
@@ -39,7 +39,7 @@ async def set(name:str, auth_data: dict = Depends(token_dep)):
     return "ok"
 
 @router.get("/delete")
-async def set(name:str, auth_data: dict = Depends(token_dep)):
+async def delete_page(name:str, auth_data: dict = Depends(token_dep)):
     res = deleteHomePage(name)
     if res.status != "ok":
         return JSONResponse(status_code=400, content={"message": res.ditail})

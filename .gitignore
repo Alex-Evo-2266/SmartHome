@@ -36,5 +36,6 @@ settings_local.py
 castom_moduls-*
 
 client/src/old
+SmartHome/script/old
 
 .vscode
