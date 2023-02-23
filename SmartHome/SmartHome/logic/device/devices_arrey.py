@@ -1,6 +1,7 @@
 import logging
 from pydantic import BaseModel
 from typing import Any, List
+from SmartHome.logic.deviceClass.interfaces.device_interface import IDevice
 
 logger = logging.getLogger(__name__)
 
@@ -12,11 +13,8 @@ class DevicesArreyItem(BaseModel):
 class DevicesArrey():
     devices:List[DevicesArreyItem] = []
 
-    def __str__():
-        return DevicesArrey.devices
-
     @staticmethod
-    def addDevice(id:str,device):
+    def addDevice(id:str, device:IDevice):
         for item in DevicesArrey.devices:
             if(item.id==id):
                 return None

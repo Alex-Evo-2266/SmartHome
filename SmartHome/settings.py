@@ -50,6 +50,10 @@ LENGTHPASS = 10
 
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 
+DEFAULT_SEND_INTERVAL = 6
+DEFAULT_SEND_SERVER_DATA_INTERVAL = 30
+DEFAULT_SAVE_INTERVAL = 60
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')

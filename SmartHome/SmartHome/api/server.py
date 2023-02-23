@@ -7,7 +7,7 @@ from SmartHome.schemas.server import ServerConfigSchema, ServerDataSchema
 from config.config_set import server_config_edit
 from authtorization.auth_depends import token_dep
 from config.config_get import give_server_config
-from SmartHome.logic.server.serverData import getServerData
+from SmartHome.logic.server.server_data import get_server_data
 
 router = APIRouter(
     prefix="/api/server",
@@ -26,4 +26,4 @@ async def edit_config(data:ServerConfigSchema, auth_data: TokenData = Depends(to
 
 @router.get("", response_model=ServerDataSchema)
 async def get_data(auth_data: TokenData = Depends(token_dep)):
-    return await getServerData()
+    return await get_server_data()

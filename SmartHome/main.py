@@ -14,9 +14,9 @@ from weather.weather import updateWeather
 # from SmartHome.logic.device.sendDevice import sendDevice
 from SmartHome.websocket import WebSocketMenager
 from settings import configManager
-from SmartHome.logic.server.serverData import sendServerData
+from SmartHome.logic.server.server_data import send_server_data
 # from SmartHome.logic.script.runScript import runTimeScript
-# from SmartHome.logic.device.deviceSave import saveDevice
+from SmartHome.logic.device.save_device import save_device
 
 from config.config_init import conf_init
 from initapp import initdir
@@ -34,7 +34,7 @@ from SmartHome.api.script import router as router_script
 # from SmartHome.api.moduls import router_moduls
 # from SmartHome.api.pages import router_pages
 # from SmartHome.api.file import router as router_file
-from settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS
+from settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS, DEFAULT_SEND_SERVER_DATA_INTERVAL, DEFAULT_SAVE_INTERVAL, DEFAULT_SEND_INTERVAL
 
 logger = logging.getLogger(__name__)
 
@@ -61,14 +61,14 @@ async def startup() -> None:
 	await initdir()
 	RunFunctions.subscribe("weather", updateWeather, 43200)
 	# RunFunctions.subscribe("script", runTimeScript, 60)
-	RunFunctions.subscribe("serverData", sendServerData, 30)
-	# RunFunctions.subscribe("saveDevice", saveDevice, 120)
+	RunFunctions.subscribe("serverData", send_server_data, DEFAULT_SEND_SERVER_DATA_INTERVAL)
+	RunFunctions.subscribe("saveDevice", save_device, DEFAULT_SAVE_INTERVAL)
 	conf_init()
 	base = configManager.getConfig("send_message")
 	if base and "frequency" in base:
 		RunFunctions.subscribe("devices", send_device, int(base['frequency']))
 	else:
-		RunFunctions.subscribe("devices", send_device, 6)
+		RunFunctions.subscribe("devices", send_device, DEFAULT_SEND_INTERVAL)
 	await init_modules()
 	database_ = app.state.database
 	if not database_.is_connected:

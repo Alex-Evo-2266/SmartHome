@@ -4,7 +4,7 @@ from SmartHome.websocket import WebSocketMenager
 
 from SmartHome.schemas.server import ServerDataSchema
 
-async def getServerData():
+async def get_server_data():
     now = datetime.now()
     return ServerDataSchema(
         weather=Weather(),
@@ -12,6 +12,6 @@ async def getServerData():
         time="{}:{}".format(datetime.now().hour, datetime.now().minute)
     )
 
-async def sendServerData():
-    data = await getServerData()
+async def send_server_data():
+    data = await get_server_data()
     await WebSocketMenager.send_information("server", data.dict())

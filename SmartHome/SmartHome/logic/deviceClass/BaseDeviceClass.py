@@ -8,8 +8,7 @@ from SmartHome.logic.deviceClass.Fields.FieldInterface import IField
 from SmartHome.logic.deviceClass.Fields.base_field import BaseField
 from exceptions.exceptions import DeviceNotFound, InvalidInputException
 from SmartHome.logic.deviceClass.DeviceMeta import ConfigSchema, DeviceMeta
-from SmartHome.logic.deviceClass.DeviceGetInterface import IGetDeviceData
-from SmartHome.logic.deviceClass.DeviceValueInterface import IValueDevice
+from SmartHome.logic.deviceClass.interfaces.device_interface import IDevice
 from SmartHome.models import DeviceHistory
 import logging
 from datetime import datetime
@@ -26,7 +25,7 @@ def look_for_param(arr:List[T], name:str)->T|None:
 			return(item)
 	return None
 
-class BaseDevice(IGetDeviceData, IValueDevice, metaclass=DeviceMeta, use=False):
+class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	"""docstring for BaseDevice."""
 
 	types=[BaseType]
@@ -116,7 +115,7 @@ class BaseDevice(IGetDeviceData, IValueDevice, metaclass=DeviceMeta, use=False):
 				value.unit = ""
 			if not value.value:
 				value.value = "0"
-			await DeviceHistory.objects.create(deviceName=self.device_data.systemName, field=item.get_name(), type=item.get_type(), value=value.value, unit=value.unit, datatime=datetime.now().timestamp())
+			await DeviceHistory.objects.create(deviceName=self.device_data.system_name, field=item.get_name(), type=item.get_type(), value=value.value, unit=value.unit, datatime=datetime.now().timestamp())
 		self.device_data.save()
 		logger.info(f'save history {self.device_data.name}')
 

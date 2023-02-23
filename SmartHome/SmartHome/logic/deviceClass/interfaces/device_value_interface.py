@@ -14,5 +14,8 @@ class IValueDevice():
 	def set_value(self, name:str, status:Any):
 		pass
 
+	def get_value(self, name:str)->DeviceFieldSchema | None:
+		pass
+
 	def get_field(self, name:str)->IField | None:
 		pass

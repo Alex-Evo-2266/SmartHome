@@ -3,8 +3,8 @@ from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
 from SmartHome.logic.device.devices_arrey import DevicesArrey
 from SmartHome.logic.script.get_script import get_script, get_script_all
 from SmartHome.logic.device.set_value import set_value
-from SmartHome.logic.deviceClass.DeviceGetInterface import IGetDeviceData
-from SmartHome.logic.deviceClass.DeviceValueInterface import IValueDevice
+from SmartHome.logic.deviceClass.interfaces.device_get_info_interface import IGetDeviceData
+from SmartHome.logic.deviceClass.interfaces.device_value_interface import IValueDevice
 from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
 from typing import Optional, List, Dict, Any
 import threading

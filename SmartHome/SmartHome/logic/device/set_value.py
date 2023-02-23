@@ -2,7 +2,7 @@
 import logging
 
 from SmartHome.logic.device.devices_arrey import DevicesArrey
-from SmartHome.logic.deviceClass.DeviceValueInterface import IValueDevice
+from SmartHome.logic.deviceClass.interfaces.device_value_interface import IValueDevice
 
 
 logger = logging.getLogger(__name__)
