@@ -93,12 +93,13 @@ export const useScriptConnectBlock = () => {
     filteredBlock.forEach(block => {
       let dot = block.querySelector('.connect-dot[data-type="input"]')
       let cord = dot.getBoundingClientRect()
+      console.log(mainBox, outCord, window.scrollY)
       drawConnector(svg, {
-        x:map(outCord.x + outCord.width / 2, mainBox.left, mainBox.left + mainBox.width, 0, 1000), 
-        y:map(outCord.y + outCord.height / 2, mainBox.top, mainBox.top + mainBox.height, 0, 1000)
+        x:map(outCord.x + window.scrollX + outCord.width / 2, mainBox.left, mainBox.left + mainBox.width, 0, svg.viewBox.baseVal.width), 
+        y:map(outCord.y + window.scrollY + outCord.height / 2, mainBox.top, mainBox.top + mainBox.height, 0, svg.viewBox.baseVal.height)
       }, {
-        x:map(cord.x + cord.width / 2, mainBox.left, mainBox.left + mainBox.width, 0, 1000) , 
-        y:map(cord.y + cord.height / 2, mainBox.top, mainBox.top + mainBox.height, 0, 1000)
+        x:map(cord.x + window.scrollX + cord.width / 2, mainBox.left, mainBox.left + mainBox.width, 0, svg.viewBox.baseVal.width) , 
+        y:map(cord.y + window.scrollY + cord.height / 2, mainBox.top, mainBox.top + mainBox.height, 0, svg.viewBox.baseVal.height)
       })
     })
   },[drawConnector])

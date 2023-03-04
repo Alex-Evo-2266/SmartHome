@@ -1,2 +1,12 @@
 @import "./block.css";
 
+#container-script
+{
+    position: absolute;
+    height: 100%;
+}
+
+#edit-script-page
+{
+    padding-bottom: 20px;
+}

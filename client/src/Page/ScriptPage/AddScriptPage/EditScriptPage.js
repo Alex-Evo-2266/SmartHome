@@ -49,6 +49,15 @@ const updataElementById = (items, id, data)=>{
   }
 }
 
+const getMaxHeight = (script) =>{
+  let max = window.innerHeight
+  for (const item of script.blocks) {
+    if(item.y > max)
+      max = item.y
+  }
+  return (max)
+}
+
 export const EditScriptPage = ({}) => {
 
   const dispatch = useDispatch()
@@ -57,6 +66,8 @@ export const EditScriptPage = ({}) => {
   const {request, error, clearError} = useHttp();
   const {message} = useMessage();
   const auth = useSelector(state=>state.auth)
+  const [addHeight, setAddHeight] = useState(1)
+  const [read, setRead] = useState(false)
   const [script, setScript] = useState({
     name:"",
     trigger:{
@@ -76,6 +87,17 @@ export const EditScriptPage = ({}) => {
     if (!scriptName) return;
     getScript()
   },[getScript, scriptName])
+
+  useEffect(()=>{
+    if (scriptName && !read)
+    {
+      let y = getMaxHeight(script)
+      setAddHeight(y - window.innerHeight + 200)
+      console.log(y, document.body.clientHeight, window.innerHeight)
+    }
+    if (script.name === scriptName)
+      setRead(true)
+  },[script, scriptName])
 
   useEffect(()=>{
     message(error, 'error');
@@ -160,10 +182,38 @@ export const EditScriptPage = ({}) => {
     printLinckLine(svg, root, script.trigger, script.blocks)
   },[script, printLinckLine])
 
+  const infScrol = useCallback(() =>{
+           
+      var block = document.getElementById('edit-script-page');
+     
+      var contentHeight = block.offsetHeight;     
+      var yOffset       = window.pageYOffset;   
+      var window_height = window.innerHeight;     
+      var y             = yOffset + window_height;
+     
+      if(y >= contentHeight)
+      {
+          setAddHeight(prev=>prev += 200)
+      }
+  },[])
+
+  useEffect(()=>{
+    window.addEventListener("scroll", infScrol)
+    return () => {
+      window.removeEventListener("scroll", infScrol)
+    }
+  },[infScrol])
+
+  useEffect(()=>{
+    var block = document.getElementById('edit-script-page');
+    block.style.height = `calc(100vh + ${addHeight}px)`
+  },[addHeight])
+  
+
   return(
     <ScriptContext.Provider value={{blocks: script.blocks, connectStatus, connect: dotClick(script.blocks, script.trigger, updateBlockConnect)}}>
-    <div className='full-scrin scroll'>
-      <svg className='' id="svg-script" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg>
+    <div id="edit-script-page" className='full-scrin'>
+      <svg className='' id="svg-script" viewBox={`0 0 1000 ${1000 + addHeight}`} preserveAspectRatio="none"></svg>
       <div id="container-script" className='block-container'>
         <ScriptTrigger update={updateTriggerScript} data={script.trigger}/>
           {
