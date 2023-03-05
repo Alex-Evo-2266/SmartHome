@@ -99,9 +99,8 @@ async def edit_device(system_name:str, data:EditDeviceSchema):
 		raise DeviceNotFound
 	if old_device_data.class_device != data.class_device:
 		raise DeviceTypesNotMatch()
-	print("p0")
-	device_class:BaseDevice = BaseDevice(DeviceClasses.get(data.class_device))
-	print("p1")
+	# device_class:BaseDevice = BaseDevice(DeviceClasses.get(data.class_device))
+	device_class:BaseDevice = BaseDevice(system_name=system_name)
 	option = device_class.Config
 	added_fields = added_field(data.fields, old_device_data.fields)
 	deleted_fields = deleted_field(data.fields, old_device_data.fields)

@@ -84,7 +84,7 @@ class BaseField(IField):
 			icon=self.icon,
 			type=self.type,
 			unit=self.unit,
-			enum_values=self.enum_values,
+			enum_values=", ".join(self.enum_values),
 			value=self.__value,
 		)
 

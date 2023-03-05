@@ -131,6 +131,6 @@ class YeelightDevice(BaseDevice):
 			color = look_for_param(self.values, "color")
 			self.device.set_hsv(int(color.get()), int(status))
 
-	def get_All_Info(self):
-		self.update_value()
-		return super().get_All_Info()
+	# def get_All_Info(self):
+	# 	self.update_value()
+	# 	return super().get_All_Info()

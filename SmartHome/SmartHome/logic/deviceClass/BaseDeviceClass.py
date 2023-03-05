@@ -25,6 +25,14 @@ def look_for_param(arr:List[T], name:str)->T|None:
 			return(item)
 	return None
 
+def get_enum_values(s:str | None):
+	if not s:
+		return []
+	arr = s.split(",")
+	for index, item in enumerate(arr):
+		arr[index] = item.strip()
+	return arr
+
 class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	"""docstring for BaseDevice."""
 
@@ -53,7 +61,9 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			raise DeviceNotFound()
 		self.values:List[IField] = list()
 		for item in self.device_data.fields:
-			self.values.append(BaseField(**item.dict(), device_name=self.device_data.name))
+			field_data = item.dict()
+			field_data["enum_values"] = get_enum_values(item.enum_values)
+			self.values.append(BaseField(**field_data, device_name=self.device_data.name))
 		self.device = None		
 
 	def get_value(self, name:str)->DeviceFieldSchema | None:
