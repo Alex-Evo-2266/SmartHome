@@ -4,6 +4,7 @@ from typing import Optional, List, Union
 from SmartHome.schemas.script import ScriptSchema
 from SmartHome.logic.script.set_script import add_script, delete_script
 from SmartHome.logic.script.get_script import get_script, get_script_all
+from SmartHome.logic.script.run_script import run_script
 # from SmartHome.logic.script.scriptset import addscript, scriptDelete, scriptsetstatus
 # from SmartHome.logic.script.scriptget import script, scripts, runScript
 
@@ -29,7 +30,7 @@ async def get_scripts(name: Union[str, None] = None, auth_data: dict = Depends(t
 		data = get_script_all()
 	return data
 
-@router.get("/{script_name}", response_model = Union[ScriptSchema, List[ScriptSchema]])
+@router.get("/{script_name}", response_model = ScriptSchema)
 async def get(script_name: str, auth_data: dict = Depends(token_dep)):
 	data = get_script(script_name)
 	return data
@@ -38,6 +39,12 @@ async def get(script_name: str, auth_data: dict = Depends(token_dep)):
 async def edit_script(script_name:str, data:ScriptSchema, auth_data: dict = Depends(token_dep)):
 	delete_script(script_name)
 	add_script(data)
+	return "ok"
+
+@router.get("/{script_name}/activate")
+async def activate(script_name: str, auth_data: dict = Depends(token_dep)):
+	data = get_script(script_name)
+	run_script(data)
 	return "ok"
 
 

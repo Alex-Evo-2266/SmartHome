@@ -1,6 +1,7 @@
 import React,{useCallback, useEffect, useState} from 'react'
 import { useDispatch, useSelector} from 'react-redux'
 import { NavLink, useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min'
+import { SUCCESS } from '../../components/alerts/alertTyps'
 import { Table } from '../../components/table/table'
 import { useHttp } from '../../hooks/http.hook'
 import { useMessage } from '../../hooks/message.hook'
@@ -47,6 +48,12 @@ export const ScriptPage = () => {
       setScripts(data)
   },[request])
 
+  const activateScript = useCallback(async(scriptName)=>{
+    let data = await request(`/api/scripts/${scriptName}/activate`, "GET", null, {Authorization: `Bearer ${auth.token}`})
+    if (data == "ok")
+      message("script activated", SUCCESS)
+  },[request])
+
   useEffect(()=>getScripts(),[getScripts])
 
   const getTrigger = useCallback((trigger)=>trigger.trigger.map(item=>`${item.arg1}.${item.arg2}`),[])
@@ -57,7 +64,7 @@ export const ScriptPage = () => {
       arr.push({data:{
         title: item.name,
         trigger: JSON.stringify(getTrigger(item.trigger)),
-        action: {title: "action", onClick: ()=>{console.log(item)}},
+        action: {title: "action", onClick: ()=>activateScript(item.name)},
         edit: {title: "edit", onClick: ()=>history.push(`/scripts/edit/${item.name}`)},
         delete: {title: "delete", onClick: ()=>{console.log(item)}},
       }})
