@@ -1,4 +1,5 @@
 import React from 'react'
+import { TableCell } from './tableCell'
 
 export const Table = ({col, items})=>{
 
@@ -62,29 +63,9 @@ export const Table = ({col, items})=>{
 								</td>:null
 							}
 							{
-								col.map((item2, index2)=>{
-									if (item2.type === "icon")
-										return(
-											<td key={index2}>
-												<i className={item.data[item2.name]}></i>
-											</td>
-										)
-									if (item2.type === "btn")
-										return(
-											<td key={index2}>
-												{
-													(!item.data[item2.name].onClick)?
-													item.data[item2.name].title:
-													<button className='btn' onClick={item.data[item2.name].onClick}>{item.data[item2.name].title}</button>
-												}	
-											</td>
-										)
-									return(
-										<td key={index2}>
-											{item.data[item2.name]}
-										</td>
-									)	
-								})
+								col.map((item2, index2)=>(
+									<TableCell key={index2} col={item2} item={item}/>
+								))
 							}
 						</tr>
 					))

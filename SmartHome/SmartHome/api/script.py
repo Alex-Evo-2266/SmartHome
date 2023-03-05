@@ -23,7 +23,7 @@ async def create(data:ScriptSchema, auth_data: dict = Depends(token_dep)):
 	return "ok"
 
 @router.get("", response_model = List[ScriptSchema])
-async def get_scripts(name: Union[str, None] = None, auth_data: dict = Depends(token_dep)):
+async def get_all_scripts(name: Union[str, None] = None, auth_data: dict = Depends(token_dep)):
 	if name:
 		data = [get_script(name)]
 	else:
@@ -45,6 +45,11 @@ async def edit_script(script_name:str, data:ScriptSchema, auth_data: dict = Depe
 async def activate(script_name: str, auth_data: dict = Depends(token_dep)):
 	data = get_script(script_name)
 	run_script(data)
+	return "ok"
+
+@router.delete("/{script_name}")
+async def delete(script_name: str, auth_data: dict = Depends(token_dep)):
+	delete_script(script_name)
 	return "ok"
 
 

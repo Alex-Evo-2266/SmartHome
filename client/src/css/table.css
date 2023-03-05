@@ -14,7 +14,7 @@
   table, th, td{
 	border: 1px solid var(--color-base-light);
 	border-collapse: collapse;
-	text-align: left;
+	text-align: center;
   }
   
   table tr td, table tr th{

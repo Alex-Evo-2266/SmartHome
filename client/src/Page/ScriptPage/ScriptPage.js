@@ -5,6 +5,7 @@ import { SUCCESS } from '../../components/alerts/alertTyps'
 import { Table } from '../../components/table/table'
 import { useHttp } from '../../hooks/http.hook'
 import { useMessage } from '../../hooks/message.hook'
+import { showAlertDialog } from '../../store/reducers/dialogReducer'
 import { setTitle } from '../../store/reducers/menuReducer'
 
 // const cardsList = [
@@ -54,6 +55,13 @@ export const ScriptPage = () => {
       message("script activated", SUCCESS)
   },[request])
 
+  const deleteScript = useCallback(async(scriptName)=>{
+    dispatch(showAlertDialog("delete script", "delete script?", [{title:"ok", action: async()=>{
+      await request(`/api/scripts/${scriptName}`, "DELETE", null, {Authorization: `Bearer ${auth.token}`})
+      getScripts()
+    }}]))
+  },[getScripts, request, dispatch])
+
   useEffect(()=>getScripts(),[getScripts])
 
   const getTrigger = useCallback((trigger)=>trigger.trigger.map(item=>`${item.arg1}.${item.arg2}`),[])
@@ -66,7 +74,7 @@ export const ScriptPage = () => {
         trigger: JSON.stringify(getTrigger(item.trigger)),
         action: {title: "action", onClick: ()=>activateScript(item.name)},
         edit: {title: "edit", onClick: ()=>history.push(`/scripts/edit/${item.name}`)},
-        delete: {title: "delete", onClick: ()=>{console.log(item)}},
+        delete: {title: "fa fa-trash", color:"red", onClick: ()=>deleteScript(item.name)},
       }})
     })
     return arr
@@ -79,7 +87,7 @@ export const ScriptPage = () => {
 				{title: "trigger", name:"trigger"},
 				{title: "action", type: "btn", name:"action"},
 				{title: "edit", type: "btn", name: "edit"},
-				{title: "delete", type: "btn", name: "delete"}
+				{title: "delete", type: "btn-icon", name: "delete"}
 			]} items={getFields()}/>
         {
 		    (auth.role === "admin")?
