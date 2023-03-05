@@ -26,7 +26,6 @@ const initState = {
 export const StyleReducer = (state = initState, action) =>{
 	switch (action.type){
 		case SET_STYLE:
-			console.log({...state, ...action.payload})
 			return ({...state, ...action.payload})
 		default:
 			return state

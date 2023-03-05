@@ -8,7 +8,6 @@ const initState = {
 export const optionReducer = (state = initState, action) =>{
 	switch (action.type){
 		case SET_OPTIONS:
-            console.log(action)
 			return ({...state, options: action?.payload?.options})
 		case SET_TYPES:
 			return ({...state, types: action?.payload?.types})

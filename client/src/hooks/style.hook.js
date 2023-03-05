@@ -40,7 +40,6 @@ const defstyle = ()=>{
 
 const getimage = (images, name)=>{
   try {
-    console.log (images, name)
     for (var item of images) {
       if(name === item.type)
         return item
@@ -53,7 +52,6 @@ const getimage = (images, name)=>{
 
 const geturl = (images, name)=>{
   let image = getimage(images, name)
-  console.log(image)
   if(image?.host)
     return image?.host + image?.url
   return image?.url
@@ -141,7 +139,6 @@ export const useStyle = () => {
       let data = await request("/api/users/styles", "GET", null, {Authorization: `Bearer ${auth.token}`})
       if (data && data.light_style && data.night_style && data.special_style && data.backgrounds)
       {
-        console.log(data)
         dispatch(set_style({
           nightStyle: data.night_style, 
           lightStyle: data.light_style, 
@@ -158,7 +155,6 @@ export const useStyle = () => {
   // const 
 
   const setStyle = useCallback((style)=>{
-    console.log(style)
     if(!style)
       return defstyle()
     if(!style.color1)
@@ -171,7 +167,6 @@ export const useStyle = () => {
   },[])
 
   const setBackground = useCallback((url)=>{
-    console.log(url)
     if(!url)
       return defbacground()
     document.body.style = `background: url(${url});
@@ -180,7 +175,6 @@ export const useStyle = () => {
   },[])
 
   const adaptiveBackground = useCallback(()=>{
-    console.log(style)
     if(!style.backgrounds)
       return defbacground()
     if(style.special_topic)
@@ -189,7 +183,6 @@ export const useStyle = () => {
   },[setBackground, style])
 
   const avtoNightStyle = useCallback(()=>{
-    console.log(style)
     if(!style)
       return defstyle()
     if(style.special_topic)

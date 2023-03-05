@@ -39,9 +39,9 @@ export const Menu = () =>{
 		sortMenuField()
 	},[sortMenuField])
 
-	useEffect(()=>{
-		console.log(menu.search)
-	},[menu.search])
+	// useEffect(()=>{
+	// 	console.log(menu.search)
+	// },[menu.search])
 
 	return(
 		<>

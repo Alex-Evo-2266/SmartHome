@@ -16,7 +16,6 @@ export const DevicePage = () => {
   const [search, setSearch2] = useState("")
 
   const serchFilter = useCallback(()=>{
-	console.log(devices, search)
 	if(search===""){
 		setDevices(devices)
 	  return

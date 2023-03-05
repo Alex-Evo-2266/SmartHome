@@ -20,7 +20,6 @@ export const useDeviceOptions = () => {
 
 	const loadTypes = useCallback(async()=>{
 		const data = await request("/api/devices/types", "GET", null, {Authorization: `Bearer ${auth.token}`})
-		console.log(data)
 		if(data && Array.isArray(data))
 			dispatch(setTypes(data))
 	},[request, auth.token])
