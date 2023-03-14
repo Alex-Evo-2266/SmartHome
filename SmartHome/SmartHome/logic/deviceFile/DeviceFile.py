@@ -142,7 +142,6 @@ class DeviceData(DeviceSchema):
 
 	async def delete(self):
 		index = DevicesFile.get_index(self.system_name)
-		print(index)
 		if index == None:
 			raise Exception("not device")
 		devices = DevicesFile.get_devices()

@@ -39,3 +39,5 @@ client/src/old
 SmartHome/script/old
 
 .vscode
+
+test.py

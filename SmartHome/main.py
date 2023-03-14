@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from SmartHome.logic.device.send_device import send_device
 from authtorization.init_admin import init_admin
 
+# from test import test
+
 from castom_moduls import init_modules
 
 from SmartHome.dbormar import metadata, database, engine
@@ -77,7 +79,7 @@ async def startup() -> None:
 	loop.create_task(RunFunctions.run())
 	await init_admin()
 	logger.info("starting")
-
+	# test()
 
 
 @app.on_event("shutdown")
