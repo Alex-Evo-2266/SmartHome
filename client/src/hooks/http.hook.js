@@ -1,8 +1,9 @@
-import {useState, useCallback, useContext} from 'react'
-import {AuthContext} from '../context/AuthContext.js'
+import {useState, useCallback} from 'react'
+import { useDispatch} from 'react-redux'
+import { login, logout } from '../store/reducers/authReducer.js'
 
 export const useHttp = () => {
-  const auth = useContext(AuthContext)
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -10,12 +11,13 @@ export const useHttp = () => {
     const response = await fetch("/api/auth/refresh", {method:"GET", body:null, headers:{}});
     const data = await response.json()
     if (!response.ok) {
-      auth.logout()
+      dispatch(logout())
       throw new Error(data.message||'что-то пошло не так')
     }
-    await auth.login(data.token, data.userId, data.userLavel)
+    // await auth.login(data.token, data.userId, data.userLavel)
+    dispatch(login(data.token, data.id, data.role, data.expires_at))
     return data.token
-  },[auth])
+  },[dispatch])
 
   const request = useCallback(async (url, method="GET", body = null, headers = {},file=false) => {
     setLoading(true);
@@ -37,7 +39,7 @@ export const useHttp = () => {
       }
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.message||'что-то пошло не так')
+        throw new Error((data)?JSON.stringify(data):'что-то пошло не так')
       }
       setLoading(false);
       return data;

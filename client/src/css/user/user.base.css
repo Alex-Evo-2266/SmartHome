@@ -2,6 +2,23 @@
 @import "./user.night.css"; */
 @import "./user.color.css";
 
+.img-container{
+  padding: 20px;
+  position: relative;
+  height: 300px;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.img-container img{
+  position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .pagecontent{
   position: relative;
 }

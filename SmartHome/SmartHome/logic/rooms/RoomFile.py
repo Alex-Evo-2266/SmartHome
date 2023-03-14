@@ -1,4 +1,4 @@
-from SmartHome.settings import ROOMS
+from settings import ROOMS
 from SmartHome.schemas.room import RoomSchema
 from SmartHome.logic.utils.file import readYMLFile, writeYMLFile
 

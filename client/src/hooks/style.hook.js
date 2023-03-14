@@ -1,6 +1,9 @@
-import {useCallback} from 'react';
+import {useCallback, useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import defFon from '../img/fon-base.jpg'
-
+import { useHttp } from './http.hook';
+import { useMessage } from './message.hook';
+import {setStyle as set_style} from '../store/reducers/styleReducer'
 function LightenDarkenColor(col, amt) {
     var usePound = false;
     if (col[0] === "#") {
@@ -28,9 +31,8 @@ const defbacground = ()=>{
 
 const defstyle = ()=>{
   setColors({
-    c1:"#303030",
-    c2:"#505050",
-    c3:"#707070",
+    color1:"#303030",
+    color2:"#505050",
     active:"#1E90FF",
     ok:"#00d22d"
   })
@@ -42,9 +44,17 @@ const getimage = (images, name)=>{
       if(name === item.type)
         return item
     }
-  } catch{
+  } catch(e){
+    console.error (e)
     return
   }
+}
+
+const geturl = (images, name)=>{
+  let image = getimage(images, name)
+  if(image?.host)
+    return image?.host + image?.url
+  return image?.url
 }
 
 const textColor = (fon)=>{
@@ -65,24 +75,30 @@ const textColor = (fon)=>{
 }
 
 function setColors(data) {
-  document.body.style.setProperty('--color-base',(data.opasiryc1)?data.c1 + "dd":data.c1)
-  document.body.style.setProperty('--color-normal',(data.opasiryc2)?data.c2 + "dd":data.c2)
+  document.body.style.setProperty('--color-base',data.color1)
+  document.body.style.setProperty('--color-normal',data.color2)
   document.body.style.setProperty('--color-active',data.active)
-  document.body.style.setProperty('--color-error',data.error)
-  document.body.style.setProperty('--color-ok',data.ok)
+  document.body.style.setProperty('--color-error',"red")
+  document.body.style.setProperty('--color-ok',"green")
 
 
-  document.body.style.setProperty('--btn-color-base',LightenDarkenColor(data.c1,25))
-  document.body.style.setProperty('--btn-color-normal',LightenDarkenColor(data.c2,25))
-  document.body.style.setProperty('--btn-color-active',LightenDarkenColor(data.active,25))
+  document.body.style.setProperty('--color-base-light',LightenDarkenColor(data.color1,25))
+  document.body.style.setProperty('--color-normal-light',LightenDarkenColor(data.color2,25))
+  document.body.style.setProperty('--color-active-light',LightenDarkenColor(data.active,25))
 
 // "#5e6367"
-  document.body.style.setProperty('--text-color-base-fon',textColor(data.c1))
-  document.body.style.setProperty('--text-color-normal-fon',textColor(data.c2))
+  document.body.style.setProperty('--text-color-base-fon',textColor(data.color1))
+  document.body.style.setProperty('--text-color-normal-fon',textColor(data.color2))
   document.body.style.setProperty('--text-color-active-fon',"#fff")
 
 
-  document.body.style.setProperty('--color-glass',data.c2 + "90")
+  document.body.style.setProperty('--color-glass-normal',data.color2 + "90")
+  document.body.style.setProperty('--color-glass-base',data.color1 + "90")
+  document.body.style.setProperty('--color-glass-active',data.active + "90")
+
+  document.body.style.setProperty('--color-glass-normal-dark',data.color2 + "d0")
+  document.body.style.setProperty('--color-glass-base-dark',data.color1 + "d0")
+  document.body.style.setProperty('--color-glass-active-dark',data.active + "d0")
 }
 
 const backgroundType = function () {
@@ -104,22 +120,50 @@ const backgroundType = function () {
   return "sunrise";
 }
 
-export const useCastomStyle = () => {
+export const useStyle = () => {
 
-  const setStyle = useCallback((colors)=>{
-    if(!colors)
+  const style = useSelector(state => state.style)
+  const auth = useSelector(state => state.auth)
+  const dispatch = useDispatch()
+  const {request, error, clearError} = useHttp()
+  const {message} = useMessage()
+
+  useEffect(()=>{
+    message(error, 'error');
+    clearError();
+  },[error, message, clearError])
+
+  const loadStyle = useCallback(async()=>{
+    try
+    {
+      let data = await request("/api/users/styles", "GET", null, {Authorization: `Bearer ${auth.token}`})
+      if (data && data.light_style && data.night_style && data.special_style && data.backgrounds)
+      {
+        dispatch(set_style({
+          nightStyle: data.night_style, 
+          lightStyle: data.light_style, 
+          specialStyle: data.special_style, 
+          backgrounds: data.backgrounds,
+          special_topic: data.special_topic
+        }))
+      }
+    }
+    catch
+    {}
+  },[request, dispatch, auth.token])
+
+  // const 
+
+  const setStyle = useCallback((style)=>{
+    if(!style)
       return defstyle()
-    if(!colors.c1)
-      colors.c1 = "#333";
-    if(!colors.c2)
-      colors.c2 = "#555";
-    if(!colors.c3)
-      colors.c3 = "#777";
-    if(!colors.active)
-      colors.active = "#1E90FF";
-    if(!colors.ok)
-      colors.ok = "#00d22d";
-    setColors(colors)
+    if(!style.color1)
+      style.color1 = "#333";
+    if(!style.color2)
+      style.color2 = "#555";
+    if(!style.active)
+      style.active = "#1E90FF";
+    setColors(style)
   },[])
 
   const setBackground = useCallback((url)=>{
@@ -130,20 +174,24 @@ export const useCastomStyle = () => {
       background-attachment: fixed;`;
   },[])
 
-  const adaptiveBackground = useCallback((images)=>{
-    if(!images)
+  const adaptiveBackground = useCallback(()=>{
+    if(!style.backgrounds)
       return defbacground()
-    setBackground(getimage(images,backgroundType())?.image)
-  },[setBackground])
+    if(style.special_topic)
+      return setBackground(geturl(style.backgrounds,"BASE"))
+    setBackground(geturl(style.backgrounds,backgroundType()))
+  },[setBackground, style])
 
-  const avtoNightStyle = useCallback((style,nightStyle)=>{
-    if(!style || !nightStyle)
+  const avtoNightStyle = useCallback(()=>{
+    if(!style)
       return defstyle()
-    if(backgroundType() === "night")
-      setStyle(nightStyle)
+    if(style.special_topic)
+      setStyle(style.specialStyle)
+    else if(backgroundType() === "night")
+      setStyle(style.nightStyle)
     else
-      setStyle(style)
-  },[setStyle])
+      setStyle(style.lightStyle)
+  },[setStyle, style])
 
-  return {setStyle, setBackground, adaptiveBackground, avtoNightStyle}
+  return {loadStyle, setStyle, setBackground, adaptiveBackground, avtoNightStyle}
 }

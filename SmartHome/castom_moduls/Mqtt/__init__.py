@@ -1,44 +1,29 @@
-from moduls_src.baseClassModule import BaseControllModule
-from moduls_src.services import get
-from SmartHome.logic.server.modulesconfig import configManager
-from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigFieldSchema, ServerModuleConfigSchema
-from .settings import DEVICE_NAME
+from castom_moduls.Mqtt.devices.MQTTDevice import MqttDevice
+from castom_moduls.Mqtt.services.MqttValue import Mqtt_MqttValue
+from castom_moduls.Mqtt.services.MqttConnect import Mqtt_connect
+from moduls_src.moduls import BaseModule
+from moduls_src.services import Services
+from castom_moduls.Mqtt.settings import CONFIG_NAME
+from settings import configManager
 
-
-class Module(BaseControllModule):
+class MqttModule(BaseModule):
 
     dependencies = [
     "paho-mqtt"
     ]
 
-    def start(self):
-        self.manager = get("Mqtt_MqttConnect")
-        configManager.addConfig(
-            ServerModuleConfigSchema(
-                name="mqttBroker",
-                fields=[
-                    ServerModuleConfigFieldSchema(
-                        name="host",
-                        value='localhost'
-                    ),
-                    ServerModuleConfigFieldSchema(
-                        name="port",
-                        value='1883'
-                    ),
-                    ServerModuleConfigFieldSchema(
-                        name="user",
-                        value='admin'
-                    ),
-                    ServerModuleConfigFieldSchema(
-                        name="password",
-                        value='admin'
-                    )
-                ]
-            ),
-            self.manager.reconnect_async
-        )
-        self.manager.connect()
-        print("df")
+    manager:Mqtt_connect = Services.get("Mqtt_connect")
 
+    @staticmethod
+    def start():
+        configManager.addConfig(CONFIG_NAME,{
+            "host":'localhost',
+            "port": '1883',
+            "user":'admin',
+            "password":'admin'
+        }, MqttModule.manager.reconnect_async)
+        MqttModule.manager.connect()
+
+    @staticmethod
     def end(self):
         self.manager.desconnect()

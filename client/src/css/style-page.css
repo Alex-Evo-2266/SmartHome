@@ -1,4 +1,4 @@
-.conteiner{
+/* .conteiner{
   display: block;
   position: relative;
   max-width: 1170px;
@@ -7,10 +7,10 @@
   /* grid-column-start:  */
   /* transform: translateX(-50%); */
   /* width: calc(100% - 60px); */
-  padding: 56px 0 0 56px;
+  /* padding: 56px 0 0 56px; */
   /* height: 200vh; */
   /* overflow-y: scroll; */
-}
+/* } */
 .fullScrinContainer{
   padding: 56px 0 0 56px;
   min-height: calc(100vh - 56px);

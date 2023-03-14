@@ -1,8 +1,9 @@
-from SmartHome.settings import MEDIA_ROOT, MEDIA_URL
+from settings import MEDIA_ROOT, MEDIA_URL
 from SmartHome.schemas.image import ImageSchema
 from SmartHome.schemas.base import FunctionRespons
 from typing import Optional, List, Dict
-from SmartHome.models import User,ImageBackground
+from SmartHome.models import ImageBackground
+from authtorization.models import User
 import os, sys
 import logging
 
@@ -46,8 +47,8 @@ async def backgroundLinc(name:str, type:str, id: int)->FunctionRespons:
             if item.type == type:
                 await item.delete()
                 break
-        background = await ImageBackground.objects.create(type=type, title=name, image=os.path.join(MEDIA_URL, "backgrounds", name))
-        await u.background.add(background)
+        # background = await ImageBackground.objects.create(type=type, title=name, image=os.path.join(MEDIA_URL, "backgrounds", name))
+        # await u.background.add(background)
         return FunctionRespons(status="ok")
     except Exception as e:
         logger.error(f'error linc image. file:{name}. detail:{e}')

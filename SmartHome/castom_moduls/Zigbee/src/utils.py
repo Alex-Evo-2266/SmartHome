@@ -1,10 +1,13 @@
 import logging
+from typing import List
+from castom_moduls.Zigbee.settings import CONFIG_NAME
 
-from SmartHome.logic.server.modulesconfig import configManager
-from SmartHome.logic.device.devicesArrey import devicesArrey
-from SmartHome.logic.device.DeviceFile import Devices
+from settings import configManager
+from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
 from .schemas import ZigbeeDeviceSchema
 import json
+
+logger = logging.getLogger(__name__)
 
 async def editAdressLincDevices(obj, topic, message):
     data = json.loads(message)
@@ -14,7 +17,7 @@ async def editAdressLincDevices(obj, topic, message):
     newadress = data["data"]
     newadress = newadress["to"]
     address = '/'.join([zigbee["topic"],oldadress])
-    devs = Devices.all()
+    devs:List[DeviceData] = DevicesFile.all()
     devs2 = devs
     for item in devs2:
         if item.address != address:
@@ -33,7 +36,7 @@ async def decodRemove(obj, topic, message):
 
 
 def formatDev(item):
-    config = configManager.getConfig("zigbee")
+    config = configManager.getConfig(CONFIG_NAME)
     d = {}
     if("definition" in item):
         d = item["definition"]

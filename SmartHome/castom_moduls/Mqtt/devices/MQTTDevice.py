@@ -1,13 +1,15 @@
-from operator import iconcat
-from SmartHome.logic.device.BaseDeviceClass import BaseDevice
-from SmartHome.logic.device.DeviceElement import DeviceElement
-from moduls_src.services import get
-from castom_moduls.Mqtt.settings import DEVICE_NAME
+from typing import List
+from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
+from SmartHome.logic.deviceClass.schema import ConfigSchema
+from SmartHome.logic.deviceClass.Fields.base_field import BaseField
+from SmartHome.logic.deviceFile.schema import Received_Data_Format
+from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
 import json
+from moduls_src.services import Services
 
 from moduls_src.models_schema import AddDevice, EditDevice, EditField, TypeAddDevice
 
-def look_for_param(arr:list, val):
+def look_for_param(arr:List[BaseField], val):
     for item in arr:
         if(item.name == val):
             return(item)
@@ -21,25 +23,21 @@ def look_for_by_topic(arr:list, val):
 
 # def createValue()
 
-class Device(BaseDevice):
+class MqttDevice(BaseDevice):
 
-    name=DEVICE_NAME
-    addConfig=AddDevice(
-    type=TypeAddDevice.MANUAL,
-    valueType=None
-    )
-    editConfig=EditDevice(address=True, valueType=True, fields=EditField(address=True, name=True, type=True, low=True, high=True, values=True, control=True, add=True, delete=True, icon=True, unit=True))
+    class Config(ConfigSchema):
+        pass
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.update_value()
 
     def update_value(self, *args, **kwargs):
-        if(self.valueType=="json"):
+        if self.device_data.value_type==Received_Data_Format.JSON:
             data = dict()
             data[self.values[0].address] = ""
             data = json.dumps(data)
-            get("Mqtt_MqttConnect").publish(self.coreAddress+"/get", data)
+            Services.get("Mqtt_connect").publish(self.device_data.address+"/get", data)
 
     def get_device(self):
         return True
@@ -48,12 +46,13 @@ class Device(BaseDevice):
         super().set_value(name, status)
         message = ""
         val = look_for_param(self.values, name)
-        if(val.type=="binary"):
-            if(int(status)==1):
-                message = val.high
-            else:
-                message = val.low
-        elif(val.type=="number"):
+        if(val.type==TypeField.BINARY):
+            message = status
+            # if(int(status)==1):
+            #     message = val.high
+            # else:
+            #     message = val.low
+        elif(val.type==TypeField.NUMDER):
             if(int(status)>int(val.high)):
                 message = int(val.high)
             elif(int(status)<int(val.low)):
@@ -62,11 +61,12 @@ class Device(BaseDevice):
                 message = int(status)
         else:
             message = status
-        if(self.valueType=="json"):
+        if(self.device_data.value_type==Received_Data_Format.JSON):
             data = dict()
             data[val.address] = message
             data = json.dumps(data)
-            get("Mqtt_MqttConnect").publish(self.coreAddress+"/set", data)
+            print(self.device_data.address+"/set", data)
+            Services.get("Mqtt_connect").publish(self.device_data.address+"/set", data)
         else:
-            alltopic = self.coreAddress + "/" + val.address
-            get("Mqtt_MqttConnect").publish(alltopic, message)
+            alltopic = self.device_data.address + "/" + val.address
+            Services.get("Mqtt_connect").publish(alltopic, message)

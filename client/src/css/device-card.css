@@ -1,0 +1,54 @@
+.device-field{
+	display: flex;
+	height: 60px;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 24px;
+}
+
+.device-card .device-module-name{
+	border-radius: 16px;
+	padding: 4px;
+	background: #ccc;
+	color: #000;
+	display: inline;
+	position: relative;
+}
+
+.device-module-name-container{
+	display: flex;
+	justify-content: center;
+}
+
+.device-card .device-module-name.Variable{
+	background: orange;
+	color: #000;
+}
+
+.device-field .device-field-title{
+	
+}
+
+.device-field .device-field-control{
+	display: flex;
+	margin: 0 10px;
+}
+
+.device-field .device-field-control select,
+.device-field .device-field-control input{
+	text-align: center;
+}
+
+.device-card{
+	padding-top: 10px;
+	min-height: 100px;
+}
+
+.device-card-title{
+	width: calc(100% - 20px);
+}
+
+.card-container .card-content .device-card-title p{
+	font-size: 34px;
+
+}

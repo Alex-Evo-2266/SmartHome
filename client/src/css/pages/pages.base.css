@@ -1,5 +1,5 @@
-/* @import "./pages.light.css";
-@import "./pages.night.css"; */
+/* /* @import "./pages.light.css";
+@import "./pages.night.css"; 
 @import "./fonPage.base.css";
 @import "./pages.color.css";
 @import "./miniWindow/style.css";
@@ -52,6 +52,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+*/
+
+.pagecontent{
+  padding: 30px;
 }
 .configElement{
   min-height: 48px;

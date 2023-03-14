@@ -1,4 +1,4 @@
-from SmartHome.settings import PAGES_DIR
+from settings import PAGES_DIR
 from SmartHome.schemas.base import FunctionRespons
 from SmartHome.schemas.homePage import HomePage, HomeCard, CardChildren
 from typing import Optional, List, Dict

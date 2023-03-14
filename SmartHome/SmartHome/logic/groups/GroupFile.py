@@ -1,4 +1,4 @@
-from SmartHome.settings import GROUPS
+from settings import GROUPS
 from SmartHome.schemas.group import GroupSchema
 from SmartHome.logic.utils.file import readYMLFile, writeYMLFile
 

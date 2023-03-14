@@ -1,39 +1,21 @@
-import {useState, useCallback, useEffect} from 'react';
+import { useCallback } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import {login as login_a, logout as logout_a} from "../store/reducers/authReducer"
+import { useHttp } from "./http.hook"
 
-const storegeName = 'UserData';
+export const useAuth = ()=>{
+	const dispatch = useDispatch()
+	const {request} = useHttp()
+	const auth = useSelector(state => state.auth)
 
-export const useAuth = () => {
-  const [token, setToken] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [userLevel, setUserLevel] = useState(null);
-  const [ready, setReady] = useState(false)
+	const login = useCallback((id, token, expires_at, role) => {
+		dispatch(login_a(token, id, role, expires_at))
+	},[dispatch])
 
+	const logout = useCallback(() => {
+		request("/api/auth/logout", "GET", null, {Authorization: `Bearer ${auth.token}`})
+		dispatch(logout_a())
+	},[request, auth, dispatch])
 
-  const login = useCallback(async(jwtToken, id,level)=>{
-    setToken(jwtToken);
-    setUserId(id);
-    setUserLevel(level);
-
-    await localStorage.setItem(storegeName, JSON.stringify({
-      userId: id, userLevel:level, token:jwtToken
-    }))
-  },[])
-
-  const logout = useCallback(()=>{
-    setToken(null);
-    setUserId(null);
-    setUserLevel(null);
-    localStorage.removeItem(storegeName)
-  },[])
-
-  useEffect(()=>{
-    const data = JSON.parse(localStorage.getItem(storegeName))
-
-    if(data&&data.token){
-      login(data.token, data.userId, data.userLevel)
-    }
-    setReady(true);
-  },[login])
-
-  return {login, logout, token, userId, userLevel,ready}
+	return {login, logout}
 }

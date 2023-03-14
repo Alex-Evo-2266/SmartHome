@@ -1,5 +1,5 @@
 from SmartHome.logic.groups.GroupFile import Groups
-from SmartHome.logic.device.devicesArrey import devicesArrey
+from SmartHome.logic.device.devices_arrey import DevicesArrey
 from SmartHome.schemas.device import DeviceValueSchema
 from SmartHome.schemas.base import FunctionRespons, TypeRespons
 from SmartHome.logic.device.deviceSetValue import setValue
@@ -21,7 +21,7 @@ async def setValueGroup(data:DeviceValueSchema):
     if not group:
         return FunctionRespons(status=TypeRespons.INVALID, detail=f"group {data.systemName} not found")
     for item in group.devices:
-        device = devicesArrey.get(item.name)
+        device = DevicesArrey.get(item.name)
         print(device)
         if not device:
             logger.info(f'device {item.name} not found')

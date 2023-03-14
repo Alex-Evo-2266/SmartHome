@@ -1,0 +1,186 @@
+.base-card-container{
+	background: var(--color-base-light);
+	color: var(--text-color-base-fon);
+	border-radius: var(--card-border-radius);
+	box-shadow: 0 0 10px #000;
+	transition: 0.5s;
+	max-width: 400px;
+	min-width: 300px;
+	margin: 10px;
+	min-height: 250px;
+	position: relative;
+	flex-basis: auto;
+}
+
+.base-card-container.min{
+	max-width: 300px;
+	min-width: 150px;
+	min-height: 100px;
+}
+
+.card-container .card-head{
+	line-height: 60px;
+	text-align: center;
+	font-size: 30px;
+	font-weight: 500;
+	padding: 10px;
+}
+
+.card-container .card-img{
+	position: relative;
+	height: 200px;
+	width: 100%;
+	margin: 0 auto;
+	border-radius: var(--card-border-radius);
+	overflow: hidden;
+	top: 0;
+	left: 0;
+}
+
+.card-container .card-img.min{
+	height: 100px;
+}
+
+.card-container .card-img.circle{
+	border-radius: 50%;
+	margin-top: 10px;
+	height: 250px;
+	width: 250px;
+}
+.card-container .card-img.circle.min{
+	height: 130px;
+	width: 130px;
+}
+
+.card-container .card-img img{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.card-container .card-content{
+	margin: 10px;
+	position: relative;
+}
+.card-container .card-content.scroll{
+	overflow-y: scroll;
+	overflow-x: hidden;
+	max-height: 200px;
+	margin: 0;
+	margin-left: 10px;
+}
+
+.card-container .card-content h2{
+	text-align: center;
+	font-size: 26px;
+	margin: 10px;
+}
+
+.card-container .card-content p{
+	font-size: 20px;
+}
+
+.card-container .card-btn-container{
+	position: relative;
+	bottom: 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	margin: 10px;
+	margin-bottom: 5px;
+}
+
+.card-container .card-btn-container .btn{
+	width: auto;
+	min-width: 100px;
+	margin: 5px;
+}
+
+.card-field{
+	position: relative;
+	display: flex;
+}
+
+.card-field .field-btn{
+	height: 60px;
+    width: 60px;
+    line-height: 60px;
+    background: var(--color-base-light);
+    text-align: center;
+    border-radius: 4px;
+    transition: .5s;
+    font-size: 24px;
+    font-weight: bold;
+}
+.card-field .field-btn:hover,
+.card-field .field-btn:active{
+	filter: brightness(120%);
+}
+
+.content-scrollable{
+	padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+.dialogCoteiner{
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 560px;
+	z-index: 100;
+	background: var(--color-base-light);
+	position: fixed;
+	box-shadow: 0 0 10px #000;
+	border-radius: var(--card-border-radius);
+	color: var(--text-color-base-fon);
+  }
+
+  .modalWindowCoteiner{
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 560px;
+	z-index: 98;
+	background: var(--color-base-light);
+	position: fixed;
+	box-shadow: 0 0 10px #000;
+	border-radius: var(--card-border-radius);
+	color: var(--text-color-base-fon);
+  }
+
+  @media (max-width: 600px){
+	.dialogCoteiner,
+	.modalWindowCoteiner{
+	  width: 280px;
+	}
+  }
+  .dialogBody .input-data{
+	margin: 4px 24px 0 24px;
+	padding:0;
+	width: calc(100% - 48px);
+  }
+
+
+  .dialogBody.scroll{
+	overflow-y: scroll;
+	overflow-x: hidden;
+	max-height: 200px;
+  }
+  .dialogItem{
+	display: flex;
+	width: calc(100% - 24px);
+	line-height: 48px;
+	align-items: center;
+	font-size: 24px;
+  }
+  .dialogItem input[type="radio"]{
+	margin-right: 32px;
+	width: 24px;
+	height: 24px;
+  }

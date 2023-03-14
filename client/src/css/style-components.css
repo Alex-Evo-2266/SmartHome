@@ -1,37 +1,40 @@
 @import "./base.css";
+
+@import "./cards.css";
 @import "./style-page.css";
 
 @import "./variable/base.css";
+@import "./nonePage.css";
+@import "./fab.css";
 
-@import "./Menu/Menu.base.css";
+
+
+@import "./Menu/menu.css";
 /* @import "./header/header.base.css"; */
-@import "./deviceCart/deviceCart.base.css";
 @import "./infoCard/infoCard.css";
-@import "./hidingLi/hidingLi.base.css";
+@import "./hiding-div.css";
 @import "./form/form.base.css";
 @import "./homeCart/homeCart.base.css";
 @import "./modalWindow/modalWindow.base.css";
 @import "./user/user.base.css";
 @import "./inputNumber/inputNumber.base.css";
 @import "./pages/pages.base.css";
-@import "./scriptsPage/scriptsPage.base.css";
-@import "./newScriptsPage/newScriptsPage.base.css";
 @import "./usersPage/usersPage.base.css";
 @import "./addDevice/addDevice.base.css";
-@import "./deviceCart/newDeviceCart.base.css";
 @import "./custom1-checkbox/checkbox.base.css";
 @import "./addControls/addControls.base.css";
 @import "./menuOption/menuOption.base.css";
 @import "./switch/switch.base.css";
 @import "./sidebar/sidebar.base.css";
 @import "./gallery/gallery.base.css";
-@import "./dialog/dialog.base.css";
 @import "./tableMqtt/tableMqtt.base.css";
 @import "./chart/chart.base.css";
 @import "./device.css";
 @import "./styleEdit/styleEdit.base.css";
 @import "./select/select.css";
-
+@import "./device-card.css";
+@import "./adaptivGrid.css";
+@import "./ScriptStyle/base.css";
 
 @import "./runText.css";
 
@@ -41,12 +44,13 @@
 @import "./styleLoader.css";
 @import "./style-reg.css";
 @import "./style-indicator.css";
+@import "./table.css";
 
-@import "./terminal.css";
+/* @import "./terminal.css";
 @import "./home.css";
 @import "./EditCartWindow.css";
 @import "./deviceDitail.css";
-@import "./groups.css";
+@import "./groups.css"; */
 /* @import "./light/light.css";
 @import "./night/night.css"; */
 

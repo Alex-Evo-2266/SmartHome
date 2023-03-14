@@ -1,1 +1,1 @@
-DEVICE_NAME = "Zigbee_ZigbeeDevice"
+CONFIG_NAME = "zigbee"

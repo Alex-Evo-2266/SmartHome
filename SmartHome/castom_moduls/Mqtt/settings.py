@@ -1,1 +1,1 @@
-DEVICE_NAME = "Mqtt_MQTTDevice"
+CONFIG_NAME="mqttBroker"

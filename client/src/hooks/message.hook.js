@@ -1,25 +1,25 @@
-import {useState, useCallback, useContext} from 'react'
-import {AlertContext} from '../components/alert/alertContext'
+import {useState, useCallback} from 'react'
+import { useDispatch } from 'react-redux';
+import { HIDE_ALERT, SHOW_ALERT } from '../store/types';
 
-export const useMessage = (type = 'error') => {
+export const useMessage = () => {
   const [Message, setMessage] = useState('');
-  const {show,hide} = useContext(AlertContext);
+  const dispatch = useDispatch()
 
-
-  const message = useCallback((text, type,ok,no) =>{
+  const message = useCallback((text, type) =>{
       if(text){
         setMessage(text)
-        show(text, type,ok,no)
+        dispatch({type:SHOW_ALERT, payload:{type, text, title: type}})
       }
       // setTimeout(function () {
       //   setMessage('')
       //   hide()
       // }, 30000);
-    },[show])
+    },[dispatch])
 
   const clearMessage = () => {
     setMessage('')
-    hide()
+    dispatch({type:HIDE_ALERT})
   }
   return {message,Message,clearMessage}
 }

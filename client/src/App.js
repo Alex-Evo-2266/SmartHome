@@ -1,80 +1,76 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {BrowserRouter} from 'react-router-dom'
-import {Alert} from './components/alert/alert.js'
-import {DialogWindow} from './components/dialogWindow/dialogWindow.js'
-import {Menu} from './components/Menu/menu.js'
-import {Form} from './components/Form/form'
-import {AlertState} from './components/alert/alertState'
-import {DialogWindowState} from './components/dialogWindow/dialogWindowState'
-import {MenuState} from './components/Menu/menuState'
-import {FormState} from './components/Form/formState'
-import {TerminalState} from './components/terminal/terminalState'
-import {AddScriptState} from './components/addScript/addScriptState'
+import {Alert} from './components/alerts/alert.js'
+import {Menu} from './components/menu/menu.js'
 import {useRoutes} from './routes.js'
-import {useAuth} from './hooks/auth.hook.js'
-import {CastomizeStyle} from './components/UserStyle/StyleState.js'
-import {GroupsState} from './components/Groups/groupsState.js'
-import {AuthContext} from './context/AuthContext'
-import {TerminalCart} from './components/terminal/terminalCart'
-import {SocketState} from './hooks/socket.hook.js'
-import {TypesDeviceState} from './components/typeDevices/typeDevicesState'
-import {PageState} from './components/Menu/pageState'
+import { useSelector } from 'react-redux';
+import { DialogWindow } from './components/messageDialog/dialogWindow.js'
+import { useStyle } from './hooks/style.hook.js'
 
 import './css/style-auth.css'
 import './icon/css/all.css'
 import './css/style-alert.css'
 import './css/style-components.css'
+import { useUser } from './hooks/user.hook.js'
+import { useMenu } from './hooks/menu.hook.js'
+import { useDeviceOptions } from './hooks/deviceOption.hook.js'
+import { CastomModalWindow } from './components/modalWindow/modalWindowHtml.js'
 
 function App() {
-  const {token, login, logout, userId, userLevel,ready} = useAuth();
-  const isAuthenticated = !!token;
-  const routes = useRoutes(isAuthenticated,userLevel);
+  const data = useSelector(state => state.auth)
+  const routes = useRoutes(data.isAuthenticated,data.role);
+  const {loadStyle, avtoNightStyle, adaptiveBackground} = useStyle()
+  const {loadData} = useUser()
+  const {loadMenuData} = useMenu()
+  const {loadOptions, loadTypes} = useDeviceOptions()
 
-  if (!ready) {
-    return(
-      <h1>Loding</h1>
-    )
-  }
+  useEffect(()=>{
+    if (!!data.token)
+      loadStyle()
+  },[loadStyle, data.token])
+
+  useEffect(()=>{
+    if (!!data.token)
+      loadData()
+  },[loadData, data.token])
+
+  useEffect(()=>{
+    if (!!data.token)
+      loadOptions()
+  },[loadOptions, data.token])
+
+  useEffect(()=>{
+    if (!!data.token)
+      loadTypes()
+  },[loadTypes, data.token])
+
+  useEffect(()=>{
+    if (!!data.token)
+    loadMenuData()
+  },[loadMenuData, data.token])
+
+  useEffect(()=>{
+    adaptiveBackground()
+    avtoNightStyle()
+  },[adaptiveBackground, avtoNightStyle])
+
+  useEffect(()=>{
+    if(data.isAuthenticated && window.location.search && window.location.search !== "")
+      window.location = window.location.pathname
+  },[data.isAuthenticated])
+
+  
 
   return (
-    <AuthContext.Provider value={{
-      token, login, logout, userId, userLevel, isAuthenticated
-    }}>
-    <PageState token={token}>
-    <MenuState>
-    <SocketState>
-    <AlertState>
-    <DialogWindowState>
-    <CastomizeStyle token={token} ready={ready}>
-    <TypesDeviceState token={token} ready={ready}>
-    <GroupsState token={token}>
-    <FormState>
-    <TerminalState>
-    <AddScriptState>
-
     <BrowserRouter>
       <div className="App">
         <DialogWindow/>
+        <CastomModalWindow/>
         <Alert/>
-        <Form/>
-        <TerminalCart/>
-        {(isAuthenticated)?<Menu/>:null}
+        {(data.isAuthenticated && data.role !== "none")?<Menu/>:null}
         {routes}
       </div>
     </BrowserRouter>
-
-    </AddScriptState>
-    </TerminalState>
-    </FormState>
-    </GroupsState>
-    </TypesDeviceState>
-    </CastomizeStyle>
-    </DialogWindowState>
-    </AlertState>
-    </SocketState>
-    </MenuState>
-    </PageState>
-    </AuthContext.Provider>
   );
 }
 

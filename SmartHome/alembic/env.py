@@ -1,6 +1,7 @@
 from logging.config import fileConfig
-from SmartHome.settings import DB_URL
+from settings import DB_URL
 import SmartHome.models
+import authtorization.models
 
 from sqlalchemy import create_engine
 from sqlalchemy import engine_from_config
