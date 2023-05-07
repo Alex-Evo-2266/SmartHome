@@ -41,3 +41,8 @@ SmartHome/script/old
 .vscode
 
 test.py
+
+logic/device/old/*
+old
+
+clientold
