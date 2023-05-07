@@ -28,3 +28,75 @@ body{
 	background-size: cover;
 	background-attachment: fixed;
 }
+
+// --------background text---------
+
+.sh-bg-active{
+	background-color: var(--text-active);
+}
+
+.sh-text-bg-ct-1,
+.sh-text-bg-ct-1-1,
+.sh-text-bg-ct-1-2
+{
+	background-color: var(--text-base);
+}
+
+.sh-text-bg-ct-2,
+.sh-text-bg-ct-2-1,
+.sh-text-bg-ct-2-2
+{
+	background-color: var(--text-normal);
+}
+
+// ---------background--------
+
+.sh-bg-active{
+	background-color: var(--color-active);
+}
+
+.sh-bg-ct-1,
+.sh-bg-ct-1-1
+{
+	background-color: var(--color-base);
+}
+
+.sh-bg-ct-2,
+.sh-bg-ct-2-1
+{
+	background-color: var(--color-normal);
+}
+
+.sh-bg-ct-1-2{
+	background-color: var(--color-base-v2);
+}
+
+.sh-bg-ct-2-2{
+	background-color: var(--color-normal-v2);
+}
+
+// ---------color--------
+
+.sh-text-active{
+	color: var(--color-active);
+}
+
+.sh-text-ct-1,
+.sh-text-ct-1-1
+{
+	color: var(--color-base);
+}
+
+.sh-text-ct-2,
+.sh-text-ct-2-1
+{
+	color: var(--color-normal);
+}
+
+.sh-text-ct-1-2{
+	color: var(--color-base-v2);
+}
+
+.sh-text-ct-2-2{
+	color: var(--color-normal-v2);
+}

@@ -31,6 +31,7 @@ export const TextField:React.FC<textFieldProps> = ({onChange, name, value, place
             onFocus={onFocus}
             onBlur={onBlur}/>
 			<label>{placeholder}</label>
+            <span className="text-field-line"></span>
 		</div>
     )
 }

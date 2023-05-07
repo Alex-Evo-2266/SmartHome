@@ -1,58 +1,45 @@
 .text-field{
-	height: 47px;
-	width: calc(100%);
+	height: 56px;
+	padding-left: 16px;
+	padding-right: 16px;
+	padding-top: 8px;
+	padding-bottom: 8px;
 	position: relative;
-	$top: -25px;
-	padding-bottom: 2px;
-	background: transparent;
-	input{
-		height: 100%;
-		background: transparent;
-		width: 100%;
-		border: none;
-		outline: none;
-		color: var(--text-normal);
-		border-bottom: 2px solid var(--color-normal-v2);
-		font-size: 17px;
-		&:focus, &:valid{
-			border-bottom: 2px solid var(--color-active);
-		}
-	}
-	&.area{
-		height: auto;
-	}
-	input:focus ~ label,
-	input:valid ~ label{
-		transform: translateY($top);
-		font-size: 13px;
-		color: var(--color-active);
-	}
 	label{
 		position: absolute;
-		bottom: 10px;
-		left: 0;
-		transform: translateY(0);
-		font-size: 17px;
-		color: var(--text-normal);
-		pointer-events: none;
-		transition: 0.3s;
-		&.silver{
-	 		color: silver
-		}
+		line-height: calc(56px - 16px);
+		left: 16px;
+		transition: .3s;
+		z-index: 3;
 	}
-	select{
-		font-size: 20px;
-		padding: 5px;
+	input{
+		position: absolute;
+		background-color: transparent;
 		outline: none;
-		border-bottom: 2px solid var(--color-normal-v2);
+		width: 100%;
+		bottom: 8px;
+		z-index: 4;
+		line-height: 26px;
+		font-size: 18px;
+		&:focus ~ label,
+		&:valid ~ label{
+			top: 8px;
+			font-size: 10px;
+			color: var(--color-active);
+			line-height: 13px;
+		}
+		&:focus ~ .text-field-line,
+		&:valid ~ .text-field-line{
+			background-color: var(--color-active);
+		}	
 	}
-	textarea{
-		font-size: 20px;
-		padding: 5px;
-		max-width: 100%;
+	.text-field-line{
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 2px;
+		background-color: var(--color-normal-v2);
 	}
-	&.big{
-		height: auto;
-		min-height: 45px;
- 	}
 }

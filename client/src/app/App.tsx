@@ -1,4 +1,3 @@
-import './App.css'
 import { BorderButton, Button, MinButton } from '../shared/ui/Button/Button';
 import { TextField } from '../shared/ui/TextField/TextField';
 import "../shared/colors.scss"
