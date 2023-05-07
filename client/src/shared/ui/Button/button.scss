@@ -1,0 +1,81 @@
+
+
+.btn{
+    box-sizing: border-box;
+    margin: 5px;
+    display: block;
+    width: calc(100% - 10px);
+    // width: 100%;
+    border: none;
+    font-size: 18px;
+    text-decoration: none;
+    background: var(--color-active);
+    color: var(--text-active);
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.226),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: filter 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    &.red,
+    &.delete{
+      background: red;
+      color: #fff;
+    }
+    &:hover{
+      box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+    }
+    &:active{
+      box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+      filter: brightness(90%);
+    }
+    &.border{
+      background: transparent;
+      border: 2px solid var(--color-active);
+      color: var(--color-active);
+      &:hover{
+        background: rgba(var(--color-active), 0.2);
+      }
+      &:active{
+        background: rgba(var(--color-active), 0.5);
+      }
+      &.red,
+      &.delete{
+        &:hover{
+          background: rgba(red, 0.2);
+        }
+        &:active{
+          background: rgba(red, 0.5);
+        }
+        border-color: red;
+        color: red;
+        background: transparent;
+      }
+    }
+    &.min{
+      color: var(--color-active);
+      background: transparent;
+      box-shadow: none;
+      transition: .3s;
+      &.red,
+      &.delete{
+        color: red;
+        background: transparent;
+      }
+      &:hover{
+        filter: brightness(90%);
+      }
+      &:active{
+        box-shadow: inset 0px 5px 5px -3px rgba(0, 0, 0, 0.2), inset 0px 4px 5px 0px rgba(0, 0, 0, 0.14), inset 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+        filter: brightness(90%);
+      }
+    }
+    &.btn-square{
+      height: 45px;
+      width: 45px;
+      margin: 6px;
+    }
+  }

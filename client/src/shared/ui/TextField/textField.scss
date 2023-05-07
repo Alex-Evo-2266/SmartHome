@@ -1,0 +1,58 @@
+.text-field{
+	height: 47px;
+	width: calc(100%);
+	position: relative;
+	$top: -25px;
+	padding-bottom: 2px;
+	background: transparent;
+	input{
+		height: 100%;
+		background: transparent;
+		width: 100%;
+		border: none;
+		outline: none;
+		color: var(--text-normal);
+		border-bottom: 2px solid var(--color-normal-v2);
+		font-size: 17px;
+		&:focus, &:valid{
+			border-bottom: 2px solid var(--color-active);
+		}
+	}
+	&.area{
+		height: auto;
+	}
+	input:focus ~ label,
+	input:valid ~ label{
+		transform: translateY($top);
+		font-size: 13px;
+		color: var(--color-active);
+	}
+	label{
+		position: absolute;
+		bottom: 10px;
+		left: 0;
+		transform: translateY(0);
+		font-size: 17px;
+		color: var(--text-normal);
+		pointer-events: none;
+		transition: 0.3s;
+		&.silver{
+	 		color: silver
+		}
+	}
+	select{
+		font-size: 20px;
+		padding: 5px;
+		outline: none;
+		border-bottom: 2px solid var(--color-normal-v2);
+	}
+	textarea{
+		font-size: 20px;
+		padding: 5px;
+		max-width: 100%;
+	}
+	&.big{
+		height: auto;
+		min-height: 45px;
+ 	}
+}
