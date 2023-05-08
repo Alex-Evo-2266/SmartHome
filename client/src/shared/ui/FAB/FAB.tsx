@@ -1,5 +1,5 @@
 import React from "react"
-import "./ExtendedFAB.scss"
+import "./FAB.scss"
 
 interface ExtendedFABProps{
     icon?: React.ReactNode
@@ -9,9 +9,13 @@ interface ExtendedFABProps{
     children?: React.ReactNode
   }
 
-export const ExtendedFAB = ({icon, className, onClick, onContextMenu, children}: ExtendedFABProps) => (
+export const FAB = ({icon, className, onClick, onContextMenu, children}: ExtendedFABProps) => (
     <button className={`${className} extendedFAB`} onClick={onClick} onContextMenu={onContextMenu}>
         {icon}
-        <span>{children}</span>
+        {
+            (children)?
+            <span>{children}</span>:
+            null
+        }
     </button>
 )

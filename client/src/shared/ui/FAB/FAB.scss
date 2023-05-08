@@ -1,8 +1,9 @@
 .extendedFAB{
     position: fixed;
+    justify-content: center;
     margin-right: 16px;
     margin-bottom: 16px;
-    min-width: 80px;
+    min-width: 56px;
     height: 56px;
     color: #000;
     display: flex;
@@ -13,8 +14,8 @@
     border-radius: 16px;
     padding: 16px;
     transition: .1s;
-    svg{
-        margin-right: 16px;
+    *:not(:first-child){
+        margin-left: 16px;
     }
     box-shadow: 1px 1px 6px -2px #000;
     &:hover{
