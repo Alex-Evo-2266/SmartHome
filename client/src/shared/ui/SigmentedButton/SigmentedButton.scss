@@ -1,0 +1,36 @@
+.sigmentedbutton-container{
+    // display: inline-flex;
+    display: flex;
+    align-items: center;
+    .sigmentedbutton-item-container{
+        flex: 100%;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        .sigmentedbutton-item-button{
+            display: flex;
+            width: 100%;
+            min-width: 48px;
+            border: 1px solid #000;
+            height: 40px;
+            padding: 0 12px;
+            align-items: center;
+            justify-content: center;
+            .icon-container{
+                margin-right: 12px;
+            }
+            &.active{
+                background: var(--color-active);
+                color: var(--text-active);
+            }
+        }
+        &:first-child > .sigmentedbutton-item-button{
+            border-bottom-left-radius: 20px;
+            border-top-left-radius: 20px;
+        }
+        &:last-child > .sigmentedbutton-item-button{
+            border-bottom-right-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+    }
+}

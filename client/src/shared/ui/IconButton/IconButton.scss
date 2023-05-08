@@ -36,8 +36,8 @@
     }
     &:disabled{
         .iconbutton-container{
-            background-color: rgba(#1C1B1F, 38%);
-            color: rgba(#1C1B1F, 12%);
+            background-color: var(--color-disabled);
+            color: var(--color-disabled-text);
             box-shadow: none;
         }
         &:hover > .iconbutton-container{
