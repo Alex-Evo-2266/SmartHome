@@ -31,7 +31,10 @@
 		&:focus ~ .text-field-line,
 		&:valid ~ .text-field-line{
 			background-color: var(--color-active);
-		}	
+		}
+		&.error ~ .text-field-line{
+			background-color: #ee0000;
+		}
 	}
 	.text-field-line{
 		content: '';

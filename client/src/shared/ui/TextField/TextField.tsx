@@ -9,18 +9,21 @@ interface textFieldProps{
     className?: string
     onFocus?: (event:React.FocusEvent<HTMLInputElement>)=>void
     onBlur?: (event:React.FocusEvent<HTMLInputElement>)=>void
+    error?: boolean
 }
 
-export const TextField:React.FC<textFieldProps> = ({onChange, name, value, placeholder, className, validEmptyValue, onFocus, onBlur}) => {
+export const TextField:React.FC<textFieldProps> = ({onChange, name, value, placeholder, className, validEmptyValue, onFocus, onBlur, error}) => {
 
     const emptyValueClass = (validEmptyValue?:boolean, value?: string | number) => {
+        if(error)
+            return "error"
         if(validEmptyValue && (!value || value === ""))
             return "error"
-        return ""
+        return ""	
     }
 
     return(
-        <div className="text-field">
+        <div className={`text-field`}>
 			<input 
             required 
             type="text" 
