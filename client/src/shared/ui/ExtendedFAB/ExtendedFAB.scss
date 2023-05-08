@@ -1,0 +1,26 @@
+.extendedFAB{
+    position: fixed;
+    margin-right: 16px;
+    margin-bottom: 16px;
+    min-width: 80px;
+    height: 56px;
+    color: #000;
+    display: flex;
+    bottom: 0;
+    right: 0;
+    background-color: var(--color-active);
+    color: var(--text-active);
+    border-radius: 16px;
+    padding: 16px;
+    transition: .1s;
+    svg{
+        margin-right: 16px;
+    }
+    box-shadow: 1px 1px 6px -2px #000;
+    &:hover{
+        box-shadow: 1px 1px 4px -2px #000;
+    }
+    &:active{
+        box-shadow: none;
+    }
+}
