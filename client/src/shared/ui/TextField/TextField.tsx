@@ -53,8 +53,8 @@ export const TextField = ({onClear, icon, onChange, name, value, placeholder, cl
                 onFocus={onFocus}
                 onBlur={onBlur}/>
                 <label>{placeholder}</label>
+                <span className="text-field-line"></span>
             </div>
-            <span className="text-field-line"></span>
             {
                 (onClear)?
                 <div className="clear-container"><XCircle onClick={onClear}/></div>:
