@@ -56,4 +56,8 @@
 		    filter: brightness(90%);
 		  }
 		}
+		&:disabled{
+			background-color: rgba(#1C1B1F, 38%);
+            color: rgba(#1C1B1F, 12%);
+		}
 	}
