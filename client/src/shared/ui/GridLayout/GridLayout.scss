@@ -1,0 +1,8 @@
+.adaptiv-grid-layout{
+    min-height: calc(100vh - 100px);
+}
+
+.adaptiv-grid-item-container{
+    display: flex;
+    justify-content: center;
+}

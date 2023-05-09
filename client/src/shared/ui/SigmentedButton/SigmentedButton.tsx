@@ -49,7 +49,7 @@ export const SigmentedButton = ({multiple, value, items, className, onClick, onC
     <div className={`sigmentedbutton-container ${className ?? ""}`}>
     {
         items.map((item, index)=>(
-            <div className="sigmentedbutton-item-container">
+            <div className="sigmentedbutton-item-container" key={index}>
                 <button data-el={item} onContextMenu={onContextMenu} onClick={click} key={index} className={`sigmentedbutton-item-button ${(values.includes(item))?"active":""}`}>
                     {(values.includes(item))?<div className="icon-container"><Check/></div>:null}
                     <div className="text-container">{item}</div>
