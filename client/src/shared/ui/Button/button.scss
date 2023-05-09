@@ -15,6 +15,9 @@
 		transition: .5s;
 		text-align: center;
 		box-shadow: 1px 1px 6px -2px #000;
+		display: inline-block;
+		overflow: hidden;
+		position: relative;
     	&:hover{
        		box-shadow: 1px 1px 4px -2px #000;
     	}

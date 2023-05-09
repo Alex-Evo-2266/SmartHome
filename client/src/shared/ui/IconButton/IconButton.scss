@@ -3,6 +3,8 @@
     height: 48px;
 	transition: .5s;
     line-height: 48px;
+    position: relative;
+    overflow: hidden;
     .iconbutton-container{
         box-shadow: 1px 1px 6px -2px #000;
         margin: auto;
