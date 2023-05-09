@@ -23,9 +23,10 @@ interface IAdaptivGridProps{
 	gridColumnGap?: string
 	itemMinWith?: string
 	itemMaxWith?: string
+	itemWith?: string
 }
 
-const GridLayout = ({children, className, gridRowGap = "10px", gridColumnGap = "5px", itemMinWith="100px", itemMaxWith="400px"}:IAdaptivGridProps)=>{
+const GridLayout = ({children, className, gridRowGap = "10px", gridColumnGap = "5px", itemMinWith, itemMaxWith, itemWith="400px"}:IAdaptivGridProps)=>{
 	const root = useRef<HTMLDivElement>(null)
 	const [items, setItems] = useState<HTMLDivElement[]>([])
 
@@ -34,7 +35,9 @@ const GridLayout = ({children, className, gridRowGap = "10px", gridColumnGap = "
 		root.current.style.display = 'grid';
 		root.current.style.gridRowGap = gridRowGap;
 		root.current.style.gridColumnGap = gridColumnGap;
-		root.current.style.gridTemplateColumns = 'repeat(auto-fill, minmax(' + itemMinWith + ', ' + itemMaxWith + '))';
+		let itemMinWith2: string = itemMinWith ?? itemWith
+		let itemMaxWith2: string = itemMaxWith ?? itemWith
+		root.current.style.gridTemplateColumns = 'repeat(auto-fill, minmax(' + itemMinWith2 + ', ' + itemMaxWith2 + '))';
 		root.current.style.gridAutoRows = '0';
 		items.forEach(item => {
 		  item.style.gridAutoRows = '0';

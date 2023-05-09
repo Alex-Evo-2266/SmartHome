@@ -15,6 +15,7 @@
     border-radius: 16px;
     padding: 0 16px;
     transition: .1s;
+    z-index: 100;
     font-size: 24px;
     *:not(:first-child){
         margin-left: 16px;
