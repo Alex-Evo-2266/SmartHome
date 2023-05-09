@@ -12,8 +12,8 @@ export const Button = (props: ButtonProps) => {
         props.onClick && props.onClick(e)
         let overlay = document.createElement('span')
         overlay.classList.add("btn-overlay")
-        let x = e.clientX - e.currentTarget.offsetLeft
-        let y = e.clientY - e.currentTarget.offsetTop
+        let x = e.pageX - e.currentTarget.offsetLeft
+        let y = e.pageY - e.currentTarget.offsetTop
         overlay.style.left = x + "px"
         overlay.style.top = y + "px"
         e.currentTarget.appendChild(overlay)
