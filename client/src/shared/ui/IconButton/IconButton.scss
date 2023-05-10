@@ -6,7 +6,6 @@
     position: relative;
     overflow: hidden;
     .iconbutton-container{
-        box-shadow: 1px 1px 6px -2px #000;
         margin: auto;
         width: 40px;
 	    transition: .5s;
@@ -25,12 +24,16 @@
         &.shadow-none{
             box-shadow: none;
         }
+        &.filled{
+            box-shadow: 1px 1px 6px -2px #000;
+            box-shadow: 1px 1px 4px -2px #000;
+            &.shadow-none{
+                box-shadow: none;
+            }
+        }
     }
     &:hover > .iconbutton-container{
-    	box-shadow: 1px 1px 4px -2px #000;
-        &.shadow-none{
-            box-shadow: none;
-        }
+    	
     }
     &:active > .iconbutton-container{
     	box-shadow: none;
