@@ -5,6 +5,14 @@
     line-height: 48px;
     position: relative;
     overflow: hidden;
+    border-radius: 50%;
+    color: var(--On-surface-variant-color);
+    .btn-overlay{
+        background-color: var(--On-surface-variant-color);
+    }
+    &.active{
+        color: var(--Primary-color);
+    }
     .iconbutton-container{
         margin: auto;
         width: 40px;
@@ -21,15 +29,15 @@
             height: 24px;
             font-size: 24px;
         }
-        &.shadow-none{
-            box-shadow: none;
-        }
+        // &.shadow-none{
+        //     box-shadow: none;
+        // }
         &.filled{
             box-shadow: 1px 1px 6px -2px #000;
             box-shadow: 1px 1px 4px -2px #000;
-            &.shadow-none{
-                box-shadow: none;
-            }
+            // &.shadow-none{
+            //     box-shadow: none;
+            // }
         }
     }
     &:hover > .iconbutton-container{
@@ -41,8 +49,9 @@
     }
     &:disabled{
         .iconbutton-container{
-            background-color: var(--color-disabled);
-            color: var(--color-disabled-text);
+            // background-color: var(--On-surface-color);
+            opacity: 38%;
+            color: var(--On-surface-color);
             box-shadow: none;
         }
         &:hover > .iconbutton-container{

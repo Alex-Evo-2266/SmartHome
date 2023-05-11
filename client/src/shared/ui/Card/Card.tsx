@@ -27,17 +27,17 @@ export const Card = ({className, action, imgSrc, alt, header, subhead, text, chi
         onClick && onClick(e)
 		if(!isCard(e))
 			return
-        let overlay = document.createElement('span')
 		let rootContainer = e.currentTarget.closest(".card-container")
 		let clickContainer = rootContainer?.querySelector(".blick-container")
 		if(!clickContainer)
 			return
+        let overlay = document.createElement('span')
         overlay.classList.add("btn-overlay")
         let x = e.pageX - e.currentTarget.offsetLeft
         let y = e.pageY - e.currentTarget.offsetTop
         overlay.style.left = x + "px"
         overlay.style.top = y + "px"
-			clickContainer.appendChild(overlay)
+		clickContainer.appendChild(overlay)
 
         setTimeout(()=>{
             overlay.remove()

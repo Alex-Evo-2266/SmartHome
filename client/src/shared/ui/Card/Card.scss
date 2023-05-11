@@ -8,13 +8,19 @@
     }
     min-width: 150px;
     min-height: 150px;
-    background-color: var(--color-normal);
-    color: var(--text-normal);
+    background-color: var(--Surface-container-low-color);
+    box-shadow: 1px 1px 6px -2px var(--Shadow-color);
+    color: var(--Primary-color);
     border-radius: 12px;
     position: relative;
+    &:disabled,
+    &.disabled{
+        opacity: 50%;
+    }
     &.filled{
-        background-color: var(--color-base);
-        color: var(--text-base);
+        background-color: var(--Surface-container-highest-color);
+        box-shadow: 0 0 5px -3px var(--Shadow-color);
+        color: var(--Primary-color);
     }
     .card-img-container{
         border-radius: 12px;

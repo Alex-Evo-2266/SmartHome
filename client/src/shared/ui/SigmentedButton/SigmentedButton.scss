@@ -11,7 +11,8 @@
             display: flex;
             width: 100%;
             min-width: 48px;
-            border: 1px solid #000;
+            border: 1px solid var(--Outline-color);
+            color: var(--On-surface-color);
             height: 40px;
             padding: 0 12px;
             align-items: center;
@@ -20,8 +21,8 @@
                 margin-right: 12px;
             }
             &.active{
-                background: var(--color-active);
-                color: var(--text-active);
+                background: var(--Secondary-container-color);
+                color: var(--On-secondary-container-color);
             }
         }
         &:first-child > .sigmentedbutton-item-button{

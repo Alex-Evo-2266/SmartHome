@@ -2,9 +2,13 @@ import "./button.scss"
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 
-export const BorderButton= (props: ButtonProps) => Button({...props, className:(props.className ?? "") + " border"})
+export const OutlineButton= (props: ButtonProps) => Button({...props, className:(props.className ?? "") + " outline-button"})
 
-export const MinButton = (props: ButtonProps) => Button({...props, className:(props.className ?? "") + " min"})
+export const TextButton = (props: ButtonProps) => Button({...props, className:(props.className ?? "") + " text-button"})
+
+export const FilledTotalButton = (props: ButtonProps) => Button({...props, className:(props.className ?? "") + " total-button"})
+
+export const FilledButton = (props: ButtonProps) => Button({...props, className:(props.className ?? "") + " filled-button"})
 
 export const Button = (props: ButtonProps) => {
 
@@ -25,6 +29,7 @@ export const Button = (props: ButtonProps) => {
 
     return(
     <button {...{...props, className:(props.className ?? "") + " btn", onClick: click}}>
+        <span>{props.children}</span>
     </button>
     )
 }
