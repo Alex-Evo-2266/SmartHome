@@ -9,6 +9,7 @@
     color: var(--On-surface-variant-color);
     .btn-overlay{
         background-color: var(--On-surface-variant-color);
+        position: absolute;
     }
     &.active{
         color: var(--Primary-color);
