@@ -1,5 +1,4 @@
 import { Clock3 } from "lucide-react"
-import { useEffect, useState } from "react"
 import "./TimePickers.scss"
 import { TextButton } from "../Button/Button"
 
@@ -30,10 +29,6 @@ export const EnterTime = ({setHours, setMinutes, switchMode, minutes, hours}:Sel
             minute = 60
         setMinutes(minute)
     }
-
-    useEffect(()=>{
-        console.log(hours, minutes)
-    },[hours, minutes])
 
     return(
         <div className="enter-time-container">

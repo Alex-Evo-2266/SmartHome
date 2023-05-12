@@ -31,11 +31,12 @@
         top: 0;
         left: 0;
         width: 100%;
+        background-color: var(--Surface-container-highest-color);
+	    color: var(--On-surface-variant-color);
         height: 100%;
         cursor: pointer;
-        background-color: transparent;
         border: none;
-        border-bottom: 2px solid var(--color-normal-v2);
+        border-bottom: 2px solid var(--On-surface-variant-color);;
         outline: none;
         z-index: 3;
         // box-shadow: 0 5px 20px rgba(0,0,0,0.05);
@@ -60,22 +61,25 @@
         top: 50px;
         width: 100%;
         z-index: 6;
-        background: var(--color-normal-v2);
-        color: var(--text-normal);
-        box-shadow: 0 30px 30px rgba(0,0,0,0.05);
-        border-bottom-right-radius: 20px;
-        border-bottom-left-radius: 20px;
+        background: var(--Surface-container-color);
+        padding: 4px 0;
+        color: var(--On-surface-color);
+        box-shadow: 0 10px 10px -10px var(--Shadow-color),
+                    10px 0 10px -10px var(--Shadow-color),
+                    -10px 0 10px -10px var(--Shadow-color);
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
         overflow: hidden;
         display: none;
         div{
-            padding: 12px 20px;
+            padding: 12px 12px;
             cursor: pointer;
             display: flex;
             svg{
                 margin-right: 10px;
             }
             &:hover{
-                background-color: var(--color-active);
+                background-color: var(--Surface-dim-color);
             }
         }
     }

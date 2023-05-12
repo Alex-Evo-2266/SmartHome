@@ -1,5 +1,5 @@
-import { Clock3, Keyboard } from "lucide-react"
-import { useEffect, useState } from "react"
+import { Keyboard } from "lucide-react"
+import { useState } from "react"
 import "./TimePickers.scss"
 import { TextButton } from "../Button/Button"
 
