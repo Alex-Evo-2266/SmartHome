@@ -1,5 +1,5 @@
 import { Keyboard } from "lucide-react"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import "./TimePickers.scss"
 import { TextButton } from "../Button/Button"
 
@@ -17,22 +17,29 @@ interface SelectTimeProps{
 	switchMode: ()=>void
 	minutes: number
 	hours: number
+	onCancel: ()=>void
+	onOK: ()=>void
 }
 
 
-export const SelectTime = ({setHours, setMinutes, switchMode, hours, minutes}:SelectTimeProps) => {
+export const SelectTime = ({setHours, setMinutes, switchMode, hours, minutes, onCancel, onOK}:SelectTimeProps) => {
 
 	const [minutePage, setMinutePage] = useState<boolean>(false)
 
-	const changeHours = (hour:number) => {
+	const changeHours = useCallback((hour:number) => {
 		setHours(hour)
 		setMinutePage(true)
-	}
+	},[setHours])
 
-	const changeMinuts = (minute:number) => {
+	const changeMinuts = useCallback((minute:number) => {
 		setMinutes(minute)
 		setMinutePage(false)
-	}
+	},[setMinutes])
+
+	const hide = useCallback(() => {
+		setMinutePage(false)
+		onCancel()
+	},[])
 
 	return(
 		<div className="enter-time-container">
@@ -51,8 +58,8 @@ export const SelectTime = ({setHours, setMinutes, switchMode, hours, minutes}:Se
 			</div>
 			<div className="enter-time-action">
 				<div className="enter-time-icon" onClick={()=>switchMode()}><Keyboard/></div>
-				<TextButton className="little">Cancel</TextButton>
-				<TextButton className="little">OK</TextButton>
+				<TextButton className="little" onClick={hide}>Cancel</TextButton>
+				<TextButton className="little" onClick={onOK}>OK</TextButton>
 			</div>
 		</div>
 	)

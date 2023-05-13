@@ -8,9 +8,11 @@ interface SelectTimeProps{
 	switchMode: ()=>void
 	minutes: number
 	hours: number
+    onCancel:()=>void
+    onOK:()=>void
 }
 
-export const EnterTime = ({setHours, setMinutes, switchMode, minutes, hours}:SelectTimeProps) => {
+export const EnterTime = ({setHours, setMinutes, switchMode, minutes, hours, onCancel, onOK}:SelectTimeProps) => {
 
     const changeHours = (e:React.ChangeEvent<HTMLInputElement>) => {
         let hour = Number(e.target.value)
@@ -40,8 +42,8 @@ export const EnterTime = ({setHours, setMinutes, switchMode, minutes, hours}:Sel
             </div>
             <div className="enter-time-action">
                 <div className="enter-time-icon" onClick={()=>switchMode()}><Clock3/></div>
-                <TextButton className="little">Cancel</TextButton>
-                <TextButton className="little">OK</TextButton>
+                <TextButton className="little" onClick={onCancel}>Cancel</TextButton>
+                <TextButton className="little" onClick={onOK}>OK</TextButton>
             </div>
         </div>
     )
