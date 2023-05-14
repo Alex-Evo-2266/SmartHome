@@ -63,13 +63,15 @@
         z-index: 6;
         background: var(--Surface-container-color);
         padding: 4px 0;
+        max-height: 250px;
+        overflow-y: scroll;
         color: var(--On-surface-color);
         box-shadow: 0 10px 10px -10px var(--Shadow-color),
                     10px 0 10px -10px var(--Shadow-color),
                     -10px 0 10px -10px var(--Shadow-color);
         border-bottom-right-radius: 8px;
         border-bottom-left-radius: 8px;
-        overflow: hidden;
+        overflow-x: hidden;
         display: none;
         div{
             padding: 12px 12px;

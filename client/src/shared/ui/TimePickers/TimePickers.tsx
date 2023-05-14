@@ -4,10 +4,10 @@ import { SelectTime } from "./SelectTime"
 import { EnterTime } from "./EnterTime"
 
 interface TimePickersProps{
-    onChange:(hours:number, minutes:number)=>void
-    hours: number
-    minutes: number
-    onHide:()=>void
+    onChange?:(hours:number, minutes:number)=>void
+    hours?: number
+    minutes?: number
+    onHide?:()=>void
 }
 
 export const TimePickers = (props: TimePickersProps) => {
@@ -17,20 +17,20 @@ export const TimePickers = (props: TimePickersProps) => {
     const [selectMode, setSelectMode] = useState<boolean>(true)
 
     const hide = () => {
-        props.onHide()
+        props.onHide && props.onHide()
         setMinutes(0)
         setHours(0)
     }
 
     const setMenuAndExit = useCallback((minutes: number) => {
         setMinutes(minutes)
-        props.onChange(hours, minutes)
-        props.onHide()
+        props.onChange && props.onChange(hours, minutes)
+        props.onHide && props.onHide()
     },[hours])
 
     const OK = useCallback(()=>{
-        props.onChange(hours, minutes)
-        props.onHide()
+        props.onChange && props.onChange(hours, minutes)
+        props.onHide && props.onHide()
     },[hours, minutes])
 
     if(selectMode)

@@ -20,7 +20,7 @@ export const TimeField = ({onChange, name, value, className, validEmptyValue, er
     const emptyValueClass = (validEmptyValue?:boolean, value?: string | number) => {
         if(error)
             return "error"
-        if(validEmptyValue && (!value || value === ""))
+        if(validEmptyValue && (!timeValue || timeValue === ""))
             return "error"
         return ""	
     }
