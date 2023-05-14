@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import "./DatePickers.scss"
 import { Check, ChevronDown } from "lucide-react";
+import { TextButton } from "..";
 
 const MAX_YEAR = 2050
 const MIN_YEAR = 1900
@@ -54,7 +55,7 @@ export const СalendarPickers = ({onChange, onHide}:IСalendarPickersProps) => {
 
     const [month, setMonth] = useState<string>(months[new Date().getMonth()])
     const [year, setYear] = useState<number>(new Date().getFullYear())
-    // const [date, setDate] = useState<number>(new Date().getDate())
+    const [day, setDate] = useState<IDay>({day: new Date().getDate(), type: Month.NOW_MONTH})
 
     const [page, setPage] = useState<СalendarPage>(СalendarPage.DAYS)
 
@@ -93,7 +94,11 @@ export const СalendarPickers = ({onChange, onHide}:IСalendarPickersProps) => {
         setMonth(month)
     }
 
-    const selectDay = useCallback((day: IDay) => {
+    const selectDay = (day:IDay) => {
+        setDate(day)
+    }
+
+    const selectDate = useCallback(() => {
         let date = new Date()
         date.setFullYear(year)
         if (day.type === Month.NEXT_MONTH)
@@ -126,7 +131,7 @@ export const СalendarPickers = ({onChange, onHide}:IСalendarPickersProps) => {
         date.setDate(day.day)
         onChange && onChange(date.getFullYear(), date.getMonth(), date.getDate())
         onHide && onHide()
-    },[month, year, onChange, onHide])
+    },[month, year, onChange, onHide, day])
 
 	return(
 		<div className="calendar-body-container">
@@ -178,7 +183,7 @@ export const СalendarPickers = ({onChange, onHide}:IСalendarPickersProps) => {
                     <div className="calendar-body-days-container">
                     {
                         getDataMount(year, months.indexOf(month)).map((item, index)=>(
-                            <div className={`day ${(item.type !== Month.NOW_MONTH)?"other":""} ${(nowDate === item.day && year === nowYear && month === nowMonth)?"now":""}`} key={index} onClick={()=>selectDay(item)}>
+                            <div className={`day ${(item.type !== Month.NOW_MONTH)?"other":""} ${(nowDate === item.day && year === nowYear && month === nowMonth)?"now":""} ${(item.day === day.day && item.type === day.type)?"select":""}`} key={index} onClick={()=>selectDay(item)}>
                                 {item.day}
                             </div>
                         ))
@@ -189,7 +194,8 @@ export const СalendarPickers = ({onChange, onHide}:IСalendarPickersProps) => {
             }
 			
 			<div className="calendar-body-action-container">
-				
+				<TextButton className="little m-0" onClick={onHide}>Cancel</TextButton>
+				<TextButton className="little m-0" onClick={selectDate}>OK</TextButton>
 			</div>
 		</div>
 	)

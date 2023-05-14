@@ -18,6 +18,9 @@
 	background-color: var(--Surface-container-low-color);
 	color: var(--Primary-color);
 	box-shadow: 1px 1px 6px -2px var(--Shadow-color);
+	&.m-0{
+		margin: 0;
+	}
 	&:disabled{
 		box-shadow: none;
 		background-color: var(--Primary-color);
