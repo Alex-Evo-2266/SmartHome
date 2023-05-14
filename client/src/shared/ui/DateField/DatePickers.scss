@@ -1,10 +1,12 @@
 .calendar-body-container{
     padding: 20px 12px 12px;
     width: 328px;
+    height: 428px;
     background-color: var(--Surface-container-high-color);
     color: var(--On-surface-variant-color);
     box-shadow: 0 0 5px -3px var(--Shadow-color);
     border-radius: 10px;
+    z-index: 101;
     .calendar-body-select-container{
         display: flex;
         padding-bottom: 30px;

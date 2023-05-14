@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import "./DatePickers.scss"
 import { Check, ChevronDown } from "lucide-react";
 
@@ -30,16 +30,23 @@ enum СalendarPage {
 	YEARS = "YEARS"
 }
 
+enum Month {
+	PREV_MONTH = "PREV_MONTH",
+	NOW_MONTH = "NOW_MONTH",
+	NEXT_MONTH = "NEXT_MONTH"
+}
+
 interface IDay{
     day:number
-    type: string
+    type: Month
 }
 
 interface IСalendarPickersProps{
     onChange?:(year: number, month:number, day:number)=>void
+    onHide?: ()=>void
 }
 
-export const СalendarPickers = ({onChange}:IСalendarPickersProps) => {
+export const СalendarPickers = ({onChange, onHide}:IСalendarPickersProps) => {
 
     const [nowMonth] = useState<string>(months[new Date().getMonth()])
     const [nowYear] = useState<number>(new Date().getFullYear())
@@ -63,14 +70,14 @@ export const СalendarPickers = ({onChange}:IСalendarPickersProps) => {
 	const getDataMount = (year: number, month: number) => {
 		let data = Array(getMonthDays(year, month))
 					.fill(0)
-					.map((_, index) => ({type: "month", day: index + 1}))
+					.map((_, index) => ({type: Month.NOW_MONTH, day: index + 1}))
 		let endDay = getDay(year, month, getMonthDays(year, month))
 		let nextMount = Array(7 - endDay)
 						.fill(0)
-						.map((_, index) => ({type: "nextMonth", day: index + 1}))
+						.map((_, index) => ({type: Month.NEXT_MONTH, day: index + 1}))
 		let prevMount = Array(getDay(year, month, 0))
 						.fill(0)
-						.map((_, index) => ({type:"prevMonth", day:getMonthDays((!month)?year-1:year, (!month)?11:month - 1) - index}))
+						.map((_, index) => ({type: Month.PREV_MONTH, day:getMonthDays((!month)?year-1:year, (!month)?11:month - 1) - index}))
 						.reverse()
 		data = prevMount.concat(data).concat(nextMount)
 		return data
@@ -86,9 +93,40 @@ export const СalendarPickers = ({onChange}:IСalendarPickersProps) => {
         setMonth(month)
     }
 
-    const selectDay = (day: IDay) => {
-        // onChange(year)
-    }
+    const selectDay = useCallback((day: IDay) => {
+        let date = new Date()
+        date.setFullYear(year)
+        if (day.type === Month.NEXT_MONTH)
+        {
+            if(month === months[11])
+            {
+                date.setMonth(0)
+                date.setFullYear(year + 1)
+            }
+            else
+            {
+                date.setMonth((months.indexOf(month) + 1))
+            }  
+        }
+        else if (day.type === Month.PREV_MONTH)
+        {
+            if(month === months[0])
+            {
+                date.setMonth(11)
+                date.setFullYear(year - 1)
+            }
+            else
+            {
+                date.setMonth((months.indexOf(month) - 1))
+            }  
+        }
+        else{
+            date.setMonth(months.indexOf(month))
+        }
+        date.setDate(day.day)
+        onChange && onChange(date.getFullYear(), date.getMonth(), date.getDate())
+        onHide && onHide()
+    },[month, year, onChange, onHide])
 
 	return(
 		<div className="calendar-body-container">
@@ -140,7 +178,7 @@ export const СalendarPickers = ({onChange}:IСalendarPickersProps) => {
                     <div className="calendar-body-days-container">
                     {
                         getDataMount(year, months.indexOf(month)).map((item, index)=>(
-                            <div className={`day ${(item.type !== "month")?"other":""} ${(nowDate === item.day && year === nowYear && month === nowMonth)?"now":""}`} key={index} onClick={()=>selectDay(item)}>
+                            <div className={`day ${(item.type !== Month.NOW_MONTH)?"other":""} ${(nowDate === item.day && year === nowYear && month === nowMonth)?"now":""}`} key={index} onClick={()=>selectDay(item)}>
                                 {item.day}
                             </div>
                         ))
