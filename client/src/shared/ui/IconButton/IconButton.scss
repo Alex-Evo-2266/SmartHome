@@ -3,6 +3,7 @@
     height: 48px;
 	transition: .5s;
     line-height: 48px;
+    outline: none;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
@@ -34,6 +35,9 @@
             box-shadow: 1px 1px 6px -2px #000;
             box-shadow: 1px 1px 4px -2px #000;
         }
+    }
+    &:active{
+        outline: none;
     }
     &:active > .iconbutton-container{
     	box-shadow: none;

@@ -1,4 +1,4 @@
-import { Clock3 } from "lucide-react"
+import { CalendarDays } from "lucide-react"
 import { useCallback, useState } from "react"
 import "./DateField.scss"
 import { СalendarPickers } from "./DatePickers"
@@ -51,7 +51,7 @@ export const DateField = ({onChange, name, value, className, validEmptyValue, er
     return(
         <>
         <div className={`date-field`}>
-            <div className="icon-container" onClick={click}><Clock3/></div>
+            <div className="icon-container" onClick={click}><CalendarDays/></div>
             <div className="input-container" onClick={click}>
                 <input
                 required 
@@ -59,6 +59,7 @@ export const DateField = ({onChange, name, value, className, validEmptyValue, er
                 className={`${className} ${emptyValueClass(validEmptyValue)}`} 
                 name={name} 
                 value={dateValue}
+                readOnly
                 />
                 <span className="text-field-line"></span>
             </div>

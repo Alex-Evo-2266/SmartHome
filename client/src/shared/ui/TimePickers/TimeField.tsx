@@ -52,16 +52,18 @@ export const TimeField = ({onChange, name, value, className, validEmptyValue, er
                 className={`${className} ${emptyValueClass(validEmptyValue, value)}`} 
                 name={name} 
                 value={timeValue}
+                readOnly
                 />
                 <span className="text-field-line"></span>
             </div>
 		</div>
         {
             (visible)?
+            <>
+            <div className="backplate" onClick={()=>setVisible(false)}></div>
             <div className={`select-time-dialog`}>
-                <div className="backplate" onClick={()=>setVisible(false)}></div>
                 <TimePickers onChange={change} hours={0} minutes={0} onHide={()=>setVisible(false)}/>
-            </div>:null
+            </div></>:null
         }
         </>
         

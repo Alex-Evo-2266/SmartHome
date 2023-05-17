@@ -27,8 +27,8 @@ export const EnterTime = ({setHours, setMinutes, switchMode, minutes, hours, onC
         let minute = Number(e.target.value)
         if(minute < 0)
             minute = 0
-        if(minute > 60)
-            minute = 60
+        if(minute > 59)
+            minute = 59
         setMinutes(minute)
     }
 
@@ -38,7 +38,7 @@ export const EnterTime = ({setHours, setMinutes, switchMode, minutes, hours, onC
             <div className="time-input-container">
                 <div className="time-input hours"><div className="input-container"><input type="number" min={0} max={23} value={hours} onChange={changeHours}/></div><span className="text-sm">Hour</span></div>
                 <div className="time-separator">:</div>
-                <div className="time-input minutes"><div className="input-container"><input type="number" value={minutes} min={0} max={60} onChange={changeMinuts}/></div><span className="text-sm">Minute</span></div>
+                <div className="time-input minutes"><div className="input-container"><input type="number" value={minutes} min={0} max={59} onChange={changeMinuts}/></div><span className="text-sm">Minute</span></div>
             </div>
             <div className="enter-time-action">
                 <div className="enter-time-icon" onClick={()=>switchMode()}><Clock3/></div>
