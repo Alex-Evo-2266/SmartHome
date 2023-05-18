@@ -2,16 +2,12 @@ import { useCallback, useState } from "react"
 import "./TimePickers.scss"
 import { SelectTime } from "./SelectTime"
 import { EnterTime } from "./EnterTime"
+import { useAppSelector } from "../../hooks/redux"
+import { BasicTemplateDialog } from "../Dialog/TemplateDialog/BasicDialog"
 
-interface TimePickersProps{
-    onChange?:(hours:number, minutes:number)=>void
-    hours?: number
-    minutes?: number
-    onHide?:()=>void
-}
+export const TimePicker = () => {
 
-export const TimePickers = (props: TimePickersProps) => {
-
+    const props = useAppSelector(state => state.timePicker)
     const [minutes, setMinutes] = useState<number>(props.minutes ?? 0)
     const [hours, setHours] = useState<number>(props.hours ?? 0)
     const [selectMode, setSelectMode] = useState<boolean>(true)
@@ -33,8 +29,21 @@ export const TimePickers = (props: TimePickersProps) => {
         props.onHide && props.onHide()
     },[hours, minutes])
 
-    if(selectMode)
-        return(<SelectTime setMinutes={setMenuAndExit} setHours={setHours} minutes={minutes} hours={hours} switchMode={()=>setSelectMode(false)} onCancel={hide} onOK={OK}/>)
+    console.log(props)
 
-    return(<EnterTime setMinutes={setMinutes} setHours={setHours} minutes={minutes} hours={hours} switchMode={()=>setSelectMode(true)} onCancel={hide} onOK={OK}/>)
+    if(!props.visible)
+        return(null)
+
+    if(selectMode)
+        return(
+            <BasicTemplateDialog className="enter-time-container">
+                <SelectTime setMinutes={setMenuAndExit} setHours={setHours} minutes={minutes} hours={hours} switchMode={()=>setSelectMode(false)} onCancel={hide} onOK={OK}/>
+            </BasicTemplateDialog>
+        )
+
+    return(
+        <BasicTemplateDialog className="enter-time-container">
+            <EnterTime setMinutes={setMinutes} setHours={setHours} minutes={minutes} hours={hours} switchMode={()=>setSelectMode(true)} onCancel={hide} onOK={OK}/>
+        </BasicTemplateDialog>
+   )
 }

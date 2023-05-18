@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-
+import dialog from "../../shared/slices/baseDialogSlice"
+import timePicker from "../../shared/slices/timePickerSlice";
 
 const rootReducer = combineReducers({
-
+    dialog,
+    timePicker
 })
 
 export const setupStore = () => {

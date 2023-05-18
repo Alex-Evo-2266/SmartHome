@@ -1,7 +1,8 @@
 import { Clock3 } from "lucide-react"
 import { useState } from "react"
 import "./TimeField.scss"
-import { TimePickers } from "./TimePickers"
+import { useAppDispatch } from "../../hooks/redux"
+import { hideTimePicker, showTimePicker } from "../../slices/timePickerSlice"
 
 interface ITimeFieldProps{
     onChange?:(value: string)=>void
@@ -14,8 +15,9 @@ interface ITimeFieldProps{
 
 export const TimeField = ({onChange, name, value, className, validEmptyValue, error}:ITimeFieldProps) => {
 
-    const [visible, setVisible] = useState<boolean>(false)
     const [timeValue, setTimeValue] = useState<string>(value ?? "")
+
+    const dispatch = useAppDispatch()
 
     const emptyValueClass = (validEmptyValue?:boolean, value?: string | number) => {
         if(error)
@@ -23,10 +25,6 @@ export const TimeField = ({onChange, name, value, className, validEmptyValue, er
         if(validEmptyValue && (!timeValue || timeValue === ""))
             return "error"
         return ""	
-    }
-
-    const click = () => {
-        setVisible(true)
     }
 
     const change = (hours: number, minutes: number) => {
@@ -40,9 +38,17 @@ export const TimeField = ({onChange, name, value, className, validEmptyValue, er
         onChange && onChange(`${hoursStr}:${minutesStr}`)
     }
 
+    const click = () => {
+        dispatch(showTimePicker({
+            hours: 0,
+            minutes: 0,
+            onChange: change,
+            onHide: () => dispatch(hideTimePicker())
+        }))
+    }
+
 
     return(
-        <>
         <div className={`time-field`}>
             <div className="icon-container" onClick={click}><Clock3/></div>
             <div className="input-container" onClick={click}>
@@ -56,16 +62,6 @@ export const TimeField = ({onChange, name, value, className, validEmptyValue, er
                 />
                 <span className="text-field-line"></span>
             </div>
-		</div>
-        {
-            (visible)?
-            <>
-            <div className="backplate" onClick={()=>setVisible(false)}></div>
-            <div className={`select-time-dialog`}>
-                <TimePickers onChange={change} hours={0} minutes={0} onHide={()=>setVisible(false)}/>
-            </div></>:null
-        }
-        </>
-        
+		</div>  
     )
 }

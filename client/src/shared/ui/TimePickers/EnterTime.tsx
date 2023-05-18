@@ -33,7 +33,7 @@ export const EnterTime = ({setHours, setMinutes, switchMode, minutes, hours, onC
     }
 
     return(
-        <div className="enter-time-container">
+        <>
             <div className="time-type"><p className="text-sm">Enter time</p></div>
             <div className="time-input-container">
                 <div className="time-input hours"><div className="input-container"><input type="number" min={0} max={23} value={hours} onChange={changeHours}/></div><span className="text-sm">Hour</span></div>
@@ -45,6 +45,6 @@ export const EnterTime = ({setHours, setMinutes, switchMode, minutes, hours, onC
                 <TextButton className="little" onClick={onCancel}>Cancel</TextButton>
                 <TextButton className="little" onClick={onOK}>OK</TextButton>
             </div>
-        </div>
+        </>
     )
 }
