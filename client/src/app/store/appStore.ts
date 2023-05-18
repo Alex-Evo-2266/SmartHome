@@ -1,19 +1,8 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import dialog from "../../shared/slices/baseDialogSlice"
-import timePicker from "../../shared/slices/timePickerSlice";
+import { createStore } from "redux";
+import { rootReducer } from "./rootReducer";
 
-const rootReducer = combineReducers({
-    dialog,
-    timePicker
-})
-
-export const setupStore = () => {
-    return configureStore({
-        reducer: rootReducer
-    })
-}
+export const store = createStore(rootReducer)
 
 
 export type RootState = ReturnType<typeof rootReducer>
-export type AppStore = ReturnType<typeof setupStore>
-export type AppDispatch = AppStore['dispatch']
+export type AppDispatch = typeof store.dispatch

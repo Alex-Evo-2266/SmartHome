@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react"
 import { X } from "lucide-react"
 import { IconButton } from "../../IconButton/IconButton"
-import "../Dialog.scss"
-import { BasicTemplateDialog } from "./BasicDialog"
+import "./Dialog.scss"
+import { BasicTemplateDialog } from "./BasicTemplateDialog"
 import { TextButton } from "../../Button/Button"
 
 interface DialogProps{
@@ -25,7 +25,7 @@ const ButtonDialog = ({onHide, onSave}:ButtonDialogProps) => (
 	</div>
 )
 
-export const FullScrinDialog = ({className, header, children, onSave, onHide}:DialogProps) => {
+export const FullScrinTemplateDialog = ({className, header, children, onSave, onHide}:DialogProps) => {
 
 	const [fullScreenDisplay, setFullScreenDisplay] = useState<boolean>(false)
 

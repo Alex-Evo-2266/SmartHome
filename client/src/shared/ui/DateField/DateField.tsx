@@ -2,6 +2,8 @@ import { CalendarDays } from "lucide-react"
 import { useCallback, useState } from "react"
 import "./DateField.scss"
 import { СalendarPickers } from "./DatePickers"
+import { useDispatch } from "react-redux"
+import { DialogType, addDialog, deleteDialog } from "../../lib/reducers/baseDialogReducer"
 
 interface ITimeFieldProps{
     onChange?:(value: string)=>void
@@ -14,8 +16,8 @@ interface ITimeFieldProps{
 
 export const DateField = ({onChange, name, value, className, validEmptyValue, error}:ITimeFieldProps) => {
 
-    const [visible, setVisible] = useState<boolean>(false)
     const [dateValue, setDateValue] = useState<string>(value ?? "")
+    const dispatch = useDispatch()
 
     const emptyValueClass = useCallback((validEmptyValue?:boolean) => {
         if(error)
@@ -26,7 +28,13 @@ export const DateField = ({onChange, name, value, className, validEmptyValue, er
     },[dateValue])
 
     const click = () => {
-        setVisible(true)
+        dispatch(addDialog({
+            type: DialogType.BASE_DIALOG,
+            dialog: <div className={`select-date-dialog`}>
+                        <div className="backplate"></div>
+                        <СalendarPickers onChange={change} onHide={()=>dispatch(deleteDialog(DialogType.BASE_DIALOG))}/>
+                    </div>
+        }))
     }
 
     const formatMonth = (month: number):string => {
@@ -64,13 +72,6 @@ export const DateField = ({onChange, name, value, className, validEmptyValue, er
                 <span className="text-field-line"></span>
             </div>
 		</div>
-        {
-            (visible)?
-            <div className={`select-date-dialog`}>
-                <div className="backplate" onClick={()=>setVisible(false)}></div>
-                <СalendarPickers onChange={change} onHide={()=>setVisible(false)}/>
-            </div>:null
-        }
         </>
         
     )

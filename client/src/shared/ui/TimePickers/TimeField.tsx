@@ -1,8 +1,9 @@
 import { Clock3 } from "lucide-react"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import "./TimeField.scss"
-import { useAppDispatch } from "../../hooks/redux"
-import { hideTimePicker, showTimePicker } from "../../slices/timePickerSlice"
+import { useAppDispatch } from "../../lib/hooks/redux"
+import { DialogType, addDialog, deleteDialog } from "../../lib/reducers/baseDialogReducer"
+import { TimePicker } from "./TimePickers"
 
 interface ITimeFieldProps{
     onChange?:(value: string)=>void
@@ -19,13 +20,13 @@ export const TimeField = ({onChange, name, value, className, validEmptyValue, er
 
     const dispatch = useAppDispatch()
 
-    const emptyValueClass = (validEmptyValue?:boolean, value?: string | number) => {
+    const emptyValueClass = useCallback((validEmptyValue?:boolean, value?: string | number) => {
         if(error)
             return "error"
         if(validEmptyValue && (!timeValue || timeValue === ""))
             return "error"
         return ""	
-    }
+    },[timeValue])
 
     const change = (hours: number, minutes: number) => {
         let hoursStr = String(hours)
@@ -39,11 +40,14 @@ export const TimeField = ({onChange, name, value, className, validEmptyValue, er
     }
 
     const click = () => {
-        dispatch(showTimePicker({
-            hours: 0,
-            minutes: 0,
-            onChange: change,
-            onHide: () => dispatch(hideTimePicker())
+        dispatch(addDialog({
+            type: DialogType.BASE_DIALOG,
+            dialog: <TimePicker 
+                    onHide={()=>dispatch(deleteDialog(DialogType.BASE_DIALOG))}
+                    onChange={change}
+                    hours={0}
+                    minutes={0}
+                    />
         }))
     }
 

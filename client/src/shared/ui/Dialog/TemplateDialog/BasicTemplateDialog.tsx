@@ -1,4 +1,4 @@
-import "../Dialog.scss"
+import "./Dialog.scss"
 
 interface DialogProps{
     children: React.ReactNode

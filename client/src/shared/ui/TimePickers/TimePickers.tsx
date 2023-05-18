@@ -2,12 +2,17 @@ import { useCallback, useState } from "react"
 import "./TimePickers.scss"
 import { SelectTime } from "./SelectTime"
 import { EnterTime } from "./EnterTime"
-import { useAppSelector } from "../../hooks/redux"
-import { BasicTemplateDialog } from "../Dialog/TemplateDialog/BasicDialog"
+import { BasicTemplateDialog } from "../Dialog/TemplateDialog/BasicTemplateDialog"
 
-export const TimePicker = () => {
+interface ITimePickerProps{
+    onHide: ()=>void
+    onChange: (hours: number, minutes: number)=>void
+    hours: number
+    minutes: number
+}
 
-    const props = useAppSelector(state => state.timePicker)
+export const TimePicker = (props: ITimePickerProps) => {
+
     const [minutes, setMinutes] = useState<number>(props.minutes ?? 0)
     const [hours, setHours] = useState<number>(props.hours ?? 0)
     const [selectMode, setSelectMode] = useState<boolean>(true)
@@ -28,11 +33,6 @@ export const TimePicker = () => {
         props.onChange && props.onChange(hours, minutes)
         props.onHide && props.onHide()
     },[hours, minutes])
-
-    console.log(props)
-
-    if(!props.visible)
-        return(null)
 
     if(selectMode)
         return(
