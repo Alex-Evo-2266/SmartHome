@@ -24,6 +24,13 @@
     .dialog-content{
         color: var(--On-surface-variant-color);
     }
+    .dialog-button-container{
+        display: flex;
+        justify-content: end;
+    }
+    .dialog-input-container{
+        margin: 8px 0 0 0;
+    }
 }
 
 .full-screen-dialog-container{
