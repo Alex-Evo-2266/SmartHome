@@ -12,15 +12,16 @@ interface ITimeFieldProps{
     validEmptyValue?: boolean
     className?: string
     error?: boolean
+    border?: boolean
 }
 
-export const TimeField = ({onChange, name, value, className, validEmptyValue, error}:ITimeFieldProps) => {
+export const TimeField = ({border, onChange, name, value, className, validEmptyValue, error}:ITimeFieldProps) => {
 
     const [timeValue, setTimeValue] = useState<string>(value ?? "")
 
     const dispatch = useAppDispatch()
 
-    const emptyValueClass = useCallback((validEmptyValue?:boolean, value?: string | number) => {
+    const emptyValueClass = useCallback((validEmptyValue?:boolean) => {
         if(error)
             return "error"
         if(validEmptyValue && (!timeValue || timeValue === ""))
@@ -53,13 +54,13 @@ export const TimeField = ({onChange, name, value, className, validEmptyValue, er
 
 
     return(
-        <div className={`time-field`}>
+        <div className={`time-field ${border?"border":""}`}>
             <div className="icon-container" onClick={click}><Clock3/></div>
             <div className="input-container" onClick={click}>
                 <input
                 required 
                 type="time" 
-                className={`${className} ${emptyValueClass(validEmptyValue, value)}`} 
+                className={`${className} ${emptyValueClass(validEmptyValue)}`} 
                 name={name} 
                 value={timeValue}
                 readOnly

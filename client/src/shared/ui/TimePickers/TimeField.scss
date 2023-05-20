@@ -60,6 +60,31 @@
 			background-color: var(--On-surface-variant-color);
 		}
 	}
+	&.border{
+		border-radius: 10px;
+		.text-field-line{
+			border: 1px solid var(--On-surface-variant-color);
+			width: 100%;
+			background-color: transparent;
+			height: 100%;
+			border-radius: 10px;
+			z-index: 2;
+		}
+		input{
+			z-index: 3;
+			bottom: 50%;
+			transform: translateY(50%);
+			&:focus ~ .text-field-line,
+			&:valid ~ .text-field-line{
+				border: 1px solid var(--Primary-color);
+				background-color: transparent;
+			}
+			&.error ~ .text-field-line{
+				border: 1px solid var(--Error-color);
+				background-color: transparent;
+			}
+		}
+	}
 }
 .select-time-dialog{
     position: fixed;

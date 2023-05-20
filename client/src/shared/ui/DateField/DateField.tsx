@@ -12,9 +12,10 @@ interface ITimeFieldProps{
     validEmptyValue?: boolean
     className?: string
     error?: boolean
+    border?: boolean
 }
 
-export const DateField = ({onChange, name, value, className, validEmptyValue, error}:ITimeFieldProps) => {
+export const DateField = ({border, onChange, name, value, className, validEmptyValue, error}:ITimeFieldProps) => {
 
     const [dateValue, setDateValue] = useState<string>(value ?? "")
     const dispatch = useDispatch()
@@ -58,7 +59,7 @@ export const DateField = ({onChange, name, value, className, validEmptyValue, er
 
     return(
         <>
-        <div className={`date-field`}>
+        <div className={`date-field ${border?"border":""}`}>
             <div className="icon-container" onClick={click}><CalendarDays/></div>
             <div className="input-container" onClick={click}>
                 <input
