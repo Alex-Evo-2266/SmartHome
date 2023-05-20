@@ -68,6 +68,6 @@ const dialogReducer = (state:IDialogState = initState, action:DialogAction) => {
     }
 }
 
-export const addDialog = (payload: PayloadDialog):DialogAction => ({type: DialogActionType.ADD_DIALOG, payload})
-export const deleteDialog = (payload: DialogType):DialogAction => ({type: DialogActionType.DELETE_DIALOG, payload})
+export const showDialog = (payload: PayloadDialog):DialogAction => ({type: DialogActionType.ADD_DIALOG, payload})
+export const hideDialog = (payload: DialogType):DialogAction => ({type: DialogActionType.DELETE_DIALOG, payload})
 export default dialogReducer

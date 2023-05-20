@@ -21,6 +21,8 @@ export { TimeField } from './TimePickers/TimeField'
 export { BasicTemplateDialog } from './Dialog/TemplateDialog/BasicTemplateDialog'
 export { FullScrinTemplateDialog } from './Dialog/TemplateDialog/FullScreenTemplateDialog'
 
+export { BaseDialog } from './Dialog/BaseDialog/BaseDialog'
+
 // FAB
 
 export { FAB } from './FAB/FAB'

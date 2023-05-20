@@ -3,7 +3,7 @@ import { useCallback, useState } from "react"
 import "./DateField.scss"
 import { СalendarPickers } from "./DatePickers"
 import { useDispatch } from "react-redux"
-import { DialogType, addDialog, deleteDialog } from "../../lib/reducers/baseDialogReducer"
+import { DialogType, hideDialog, showDialog } from "../../lib/reducers/baseDialogReducer"
 
 interface ITimeFieldProps{
     onChange?:(value: string)=>void
@@ -28,11 +28,11 @@ export const DateField = ({onChange, name, value, className, validEmptyValue, er
     },[dateValue])
 
     const click = () => {
-        dispatch(addDialog({
+        dispatch(showDialog({
             type: DialogType.BASE_DIALOG,
             dialog: <div className={`select-date-dialog`}>
                         <div className="backplate"></div>
-                        <СalendarPickers onChange={change} onHide={()=>dispatch(deleteDialog(DialogType.BASE_DIALOG))}/>
+                        <СalendarPickers onChange={change} onHide={()=>dispatch(hideDialog(DialogType.BASE_DIALOG))}/>
                     </div>
         }))
     }
