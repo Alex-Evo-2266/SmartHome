@@ -4,6 +4,7 @@
     box-shadow: 1px 1px 6px -2px var(--Shadow-color);
     min-width: 280px;
     max-width: 560px;
+    width: calc(100% - 40px);
     border-radius: 28px;
     position: fixed;
     top: 50%;
