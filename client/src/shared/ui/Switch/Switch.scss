@@ -1,54 +1,45 @@
+
 .swich-container{
-    height: 44px;
-    width: 88px;
+    height: 32px;
+    width: 52px;
     display: flex;
     justify-content: center;
     align-items: center;
-    input[type="checkbox"]
-    {
+    input[type="checkbox"]{
         position: relative;
-        width: 80px;
-        height: 40px;
+        width: 52px;
+        height: 32px;
         -webkit-appearance: none;
-        background-color: #c6c6c6;
-        outline: none;
-        border-radius: 20px;
-        box-shadow: inset 0 0 5px rgba(0,0,0,.2);
-        transition: .5s;
-        &:checked{
-            background-color: var(--Primary-color);
-        }
         &::before{
             content: '';
+            width: 52px;
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
-            top: 0;
-            left: 0;
-            background-color: var(--Surface-container-low-color);
-            transform: scale(1.1);
-            box-shadow: 0 2px 5px rgba(0,0,0,.2);
-            transition: .5s;
+            height: 32px;
+            background: var(--Surface-variant-color);
+            border-radius: 32px;
+            border: 2px solid var(--Outline-color);
         }
         &:checked::before{
-            left: 40px;
+            background-color: var(--Primary-color);
         }
-    }
-    &.little{
-        height: 34px;
-        width: 64px;
-        input[type="checkbox"]{
-            width: 60px;
-            height: 30px;
-            &::before{
-                width: 30px;
-                height: 30px;
-            }
-            &:checked::before{
-                left: 30px;
-            }
+        &::after{
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            transition: .3s;
+            background-color: var(--Outline-color);
+            border-radius: 50%;
+            box-sizing: border-box;
+        }
+        &:checked::after{
+            left: 25px;
+            background-color: var(--On-primary-color);
+            width: 24px;
+            height: 24px;
+            top: 4px;
         }
     }
 }
-
