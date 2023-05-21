@@ -6,11 +6,14 @@ interface ListItemContainerProps{
     text?: string
     control?: React.ReactNode
     value?: string
+    onClick?: (e:React.MouseEvent<HTMLLIElement>)=>void
+    hovered?: boolean
+    className?: string
 }
 
-export const ListItem = ({icon, control, text, header, value}:ListItemContainerProps) => {
+export const ListItem = ({icon, control, text, header, value, onClick, hovered, className}:ListItemContainerProps) => {
     return(
-        <li className="list-item-container">
+        <li className={`list-item-container ${className} ${hovered?"hovered":""}`} onClick={onClick}>
             {
                 (icon)?
                 <div className="icon-container">

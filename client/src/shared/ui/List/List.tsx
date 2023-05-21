@@ -2,11 +2,14 @@ import "./List.scss"
 
 interface ListContainerProps{
     children?: React.ReactNode
+    className?: string
+    maxHeight?: string
+    scroll?: boolean
 }
 
-export const ListContainer = ({children}:ListContainerProps) => {
+export const ListContainer = ({children, className, maxHeight, scroll}:ListContainerProps) => {
     return(
-        <ul className="list-container">
+        <ul style={{maxHeight:maxHeight}} className={`list-container ${className} ${scroll?"scroll":""}`}>
             {children}
         </ul>
     )
