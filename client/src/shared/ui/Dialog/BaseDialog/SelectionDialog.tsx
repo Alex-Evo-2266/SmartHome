@@ -19,13 +19,12 @@ interface BaseDialogButtonProps{
 interface SelectionDialogProps<T>{
     onSuccess?: (data:T)=>void
     items: IItem<T>[]
-    text?: string
     header: string
     onHide?: ()=>void
     name?: string
 }
 
-export function SelectionDialog<T>({onSuccess, items, text, header, onHide, name="dailog_name"}:SelectionDialogProps<T>) {
+export function SelectionDialog<T>({onSuccess, items, header, onHide, name="dailog_name"}:SelectionDialogProps<T>) {
 
     const [value, setValue] = useState<T | undefined>(undefined)
 

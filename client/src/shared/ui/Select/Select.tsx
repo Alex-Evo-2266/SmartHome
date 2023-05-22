@@ -21,9 +21,6 @@ interface ISelectFieldProps{
     error?: boolean
 }
 
-const getValue = (item:IOption | string) => (typeof(item) === "string")?item:item.value
-const getTitle = (item:IOption | string) => (typeof(item) === "string")?item:item.title
-
 const getTitleByValue = (items:(IOption | string)[], value: string) => {
     for(let item of items)
     {
