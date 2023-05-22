@@ -68,6 +68,8 @@ const dialogReducer = (state:IDialogState = initState, action:DialogAction) => {
     }
 }
 
-export const showDialog = (payload: PayloadDialog):DialogAction => ({type: DialogActionType.ADD_DIALOG, payload})
-export const hideDialog = (payload: DialogType):DialogAction => ({type: DialogActionType.DELETE_DIALOG, payload})
+export const showDialog = (dialog: React.ReactNode):DialogAction => ({type: DialogActionType.ADD_DIALOG, payload:{type: DialogType.BASE_DIALOG, dialog}})
+export const showFullScreenDialog = (dialog: React.ReactNode):DialogAction => ({type: DialogActionType.ADD_DIALOG, payload:{type: DialogType.FULL_SCREEN_DIALOG, dialog}})
+export const hideDialog = ():DialogAction => ({type: DialogActionType.DELETE_DIALOG, payload:DialogType.BASE_DIALOG})
+export const hideFullScreenDialog = ():DialogAction => ({type: DialogActionType.DELETE_DIALOG, payload: DialogType.FULL_SCREEN_DIALOG})
 export default dialogReducer

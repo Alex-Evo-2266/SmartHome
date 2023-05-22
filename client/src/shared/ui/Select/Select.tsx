@@ -1,5 +1,5 @@
 import { useAppDispatch } from "../../lib/hooks/redux"
-import { DialogType, hideDialog, showDialog } from "../../lib/reducers/baseDialogReducer"
+import { hideDialog, showDialog } from "../../lib/reducers/dialogReducer"
 import { SelectionDialog } from "../Dialog/BaseDialog/SelectionDialog"
 import "./Select.scss"
 import { useCallback, useState } from "react"
@@ -50,15 +50,12 @@ export const SelectField = ({items, onChange, value, placeholder, className, bor
     },[items])
 
     const show = useCallback(() => {
-        dispatch(showDialog({
-            type: DialogType.BASE_DIALOG,
-            dialog: <SelectionDialog 
-                        items={items.map(selectMap)} 
-                        header={placeholder ?? ""} 
-                        onHide={()=>dispatch(hideDialog(DialogType.BASE_DIALOG))}
-                        onSuccess={change}
-                        />
-        }))
+        dispatch(showDialog(<SelectionDialog 
+            items={items.map(selectMap)} 
+            header={placeholder ?? ""} 
+            onHide={()=>dispatch(hideDialog())}
+            onSuccess={change}
+            />))
     },[dispatch, showDialog, hideDialog, change])
    
     // return(

@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import dialogReducer from "../../shared/lib/reducers/baseDialogReducer";
+import dialogReducer from "../../shared/lib/reducers/dialogReducer";
 
 
 export const rootReducer = combineReducers({
