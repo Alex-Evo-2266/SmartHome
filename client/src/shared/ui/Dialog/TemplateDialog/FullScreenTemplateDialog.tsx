@@ -43,7 +43,7 @@ export const FullScrinTemplateDialog = ({className, header, children, onSave, on
     useEffect(()=>{
 		window.addEventListener('resize', resize)
 		return ()=>{
-			window.addEventListener('resize', resize)
+			window.removeEventListener('resize', resize)
 		}
 	},[resize])
 
