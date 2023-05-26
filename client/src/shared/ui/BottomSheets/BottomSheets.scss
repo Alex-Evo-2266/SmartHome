@@ -7,6 +7,8 @@
     position: fixed;
     bottom: 0;
     width: 100%;
+    overflow-y: auto;
+    max-height: 80vh;
     left: 50%;
     transform: translate(-50%, 0);
     border-top-right-radius: 28px;

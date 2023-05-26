@@ -6,22 +6,24 @@ export enum BottomSheetsActionType{
 interface IBottomSheetsState{
     children: React.ReactNode
     visible: boolean
+    onHide?: ()=>void
 }
 
 interface PayloadBottomSheets{
     children: React.ReactNode
+    onHide?: ()=>void
 }
 
-interface BottomSheetsAddAction{
+interface BottomSheetsShowAction{
     type: BottomSheetsActionType.SHOW_BOTTOM_SHEETS
     payload: PayloadBottomSheets
 }
 
-interface BottomSheetsDeleteAction{
+interface BottomSheetsHideAction{
     type: BottomSheetsActionType.HIDE_BOTTOM_SHEETS
 }
 
-type BottomSheetsAction = BottomSheetsAddAction | BottomSheetsDeleteAction
+type BottomSheetsAction = BottomSheetsShowAction | BottomSheetsHideAction
 
 const initState: IBottomSheetsState = {
     children: [],
@@ -31,7 +33,7 @@ const initState: IBottomSheetsState = {
 const bottomSheetsReducer = (state:IBottomSheetsState = initState, action:BottomSheetsAction) => {
     switch (action.type){
         case BottomSheetsActionType.SHOW_BOTTOM_SHEETS:
-            return {...state, children: action.payload.children, visible: true}
+            return {...state, children: action.payload.children, visible: true, onHide: action.payload.onHide}
         case BottomSheetsActionType.HIDE_BOTTOM_SHEETS:
             return initState
 
@@ -40,6 +42,6 @@ const bottomSheetsReducer = (state:IBottomSheetsState = initState, action:Bottom
     }
 }
 
-export const showBottomSheets = (children: React.ReactNode):BottomSheetsAction => ({type: BottomSheetsActionType.SHOW_BOTTOM_SHEETS, payload:{children}})
+export const showBottomSheets = (children: React.ReactNode, onHide?:()=>void):BottomSheetsAction => ({type: BottomSheetsActionType.SHOW_BOTTOM_SHEETS, payload:{children, onHide}})
 export const hideBottomSheets = ():BottomSheetsAction => ({type: BottomSheetsActionType.HIDE_BOTTOM_SHEETS})
 export default bottomSheetsReducer

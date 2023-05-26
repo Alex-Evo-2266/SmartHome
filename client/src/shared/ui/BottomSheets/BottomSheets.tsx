@@ -12,6 +12,7 @@ export const BottomSheets = () => {
     const hide = () => {
         setHided(true)
         setTimeout(()=>{
+            data.onHide && data.onHide()
             dispatch(hideBottomSheets())
             setHided(false)
         },200)
