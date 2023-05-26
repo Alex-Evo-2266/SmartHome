@@ -20,7 +20,6 @@ export const Menu = () => {
 	const menu = useAppSelector(state=>state.menu)
 	const dispatch = useAppDispatch()
 
-
 	const container = useRef<HTMLDivElement>(null)
 	const [smallDisplay, setSmallDisplay] = useState<boolean>(false)
 	const [cord, setCord] = useState<ICord>({left:"0px", top:"0px"})
@@ -47,6 +46,11 @@ export const Menu = () => {
     useEffect(()=>{
         resize()
     },[resize])
+
+	useEffect(()=>{
+		if(!menu.visible)
+			dispatch(hideBottomSheets())
+	},[menu.visible])
 
 	useEffect(()=>{
 		window.addEventListener('resize', resize)
