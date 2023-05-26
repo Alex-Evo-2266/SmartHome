@@ -9,6 +9,7 @@ interface PayloadMenu{
     blocks: IBlock[]
     x: number
     y: number
+    width?: number
 }
 
 interface IMenuState{
@@ -16,6 +17,7 @@ interface IMenuState{
     visible: boolean
     x: number
     y: number
+    width?: number
 }
 
 interface MenuShowAction{
@@ -39,7 +41,7 @@ const initState: IMenuState = {
 const menuReducer = (state:IMenuState = initState, action:MenuAction) => {
     switch (action.type){
         case MenuActionType.SHOW_MENU:
-            return {...state, blocks: action.payload.blocks, visible: true, x: action.payload.x, y: action.payload.y}
+            return {...state, blocks: action.payload.blocks, visible: true, x: action.payload.x, y: action.payload.y, width: action.payload.width}
         case MenuActionType.HIDE_MENU:
             return {...state, ...initState}
         default:
@@ -47,7 +49,7 @@ const menuReducer = (state:IMenuState = initState, action:MenuAction) => {
     }
 }
 
-export const showMenu = (blocks: IBlock[], x:number, y:number):MenuAction => ({type: MenuActionType.SHOW_MENU, payload:{x, y, blocks}})
-export const showBaseMenu = (items: IMenuItem[], x:number, y:number):MenuAction => ({type: MenuActionType.SHOW_MENU, payload:{x, y, blocks:[{items}]}})
+export const showMenu = (blocks: IBlock[], x:number, y:number, width?: number):MenuAction => ({type: MenuActionType.SHOW_MENU, payload:{x, y, blocks, width}})
+export const showBaseMenu = (items: IMenuItem[], x:number, y:number, width?: number):MenuAction => ({type: MenuActionType.SHOW_MENU, payload:{x, y, width,blocks:[{items}]}})
 export const hideMenu = ():MenuAction => ({type: MenuActionType.HIDE_MENU})
 export default menuReducer

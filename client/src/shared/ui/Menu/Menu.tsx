@@ -71,7 +71,7 @@ export const Menu = () => {
 
 	return(
 		<>
-		<div ref={container} className="menu-container" style={{...cord, opacity:(cord.top !== "0px")?"100%":"0%"}}>
+		<div ref={container} className="menu-container" style={{...cord, opacity:(cord.top !== "0px")?"100%":"0%", width:menu.width, maxWidth:(menu.width)?"100%":undefined}}>
 		{
 			menu.blocks.map((item, index)=>(
 				<React.Fragment key={index}>

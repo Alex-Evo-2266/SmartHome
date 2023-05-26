@@ -1,5 +1,8 @@
+import { getContainerData } from "../../lib/helpers/getModalCord"
 import { useAppDispatch } from "../../lib/hooks/redux"
 import { hideDialog, showDialog } from "../../lib/reducers/dialogReducer"
+import { hideMenu, showBaseMenu } from "../../lib/reducers/menuReducer"
+import { IMenuItem } from "../../model/menu"
 import { SelectionDialog } from "../Dialog/BaseDialog/SelectionDialog"
 import "./Select.scss"
 import { useCallback, useState } from "react"
@@ -30,14 +33,7 @@ const getTitleByValue = (items:(IOption | string)[], value: string) => {
             return item.title
     }
     return ""
-}
-
-const selectMap = (item: IOption | string) => {
-    if(typeof(item) === "string")
-        return {title: item, data: item}
-    return {title: item.title, data: item.value}
-}
-        
+}        
 
 export const SelectField = ({items, onChange, value, placeholder, className, border, name, error}:ISelectFieldProps) => {
 
@@ -47,44 +43,22 @@ export const SelectField = ({items, onChange, value, placeholder, className, bor
     const change = useCallback((data: string) => {
         setSelectTitle(getTitleByValue(items, data))
         onChange && onChange(data)
+        dispatch(hideMenu())
     },[items])
 
-    const show = useCallback(() => {
-        dispatch(showDialog(<SelectionDialog 
-            items={items.map(selectMap)} 
-            header={placeholder ?? ""} 
-            onHide={()=>dispatch(hideDialog())}
-            onSuccess={change}
-            />))
-    },[dispatch, showDialog, hideDialog, change])
-   
-    // return(
-    //     <div className={`dropdown ${className} ${(visible)?"active":""} ${border?"border":""}`}>
-    //         <div className="backplate" onClick={()=>setVisible(false)}></div>
-    //         <div className={`select-field ${border?"border":""}`}>
-    //         <div className="input-container" onClick={focus}>
-    //             <input
-    //             required 
-    //             type="text"
-    //             onClick={()=>setVisible(prev=>!prev)} 
-    //             className={`${className} ${error?"error":""}`} 
-    //             name={name} 
-    //             value={selectTitle}
-    //             placeholder={placeholder}
-    //             readOnly
-    //             />
-    //             <span className="text-field-line"></span>
-    //         </div>
-	// 	</div>
-    //         <div className={`options`}>
-    //         {
-    //             items.map((item, index)=>(
-    //                 <div key={index} onClick={()=>change(getTitle(item), getValue(item))} data-value={getValue(item)}>{(typeof(item) !== "string" && item.icon)?item.icon:null}{getTitle(item)}</div>
-    //             ))
-    //         }
-    //         </div>
-    //     </div>
-    // )
+    const selectMap = useCallback((item: IOption | string):IMenuItem => {
+        if(typeof(item) === "string")
+            return {title: item, onClick:()=>change(item)}
+        return {title: item.title, onClick:()=>change(item.value)}
+    },[])
+
+    const show = useCallback((event: React.MouseEvent<HTMLDivElement>)=>{
+        event.preventDefault()
+        let data = getContainerData(event.currentTarget)
+        let x = data?.left ?? event.pageX
+        let y = (data?.top)?data.top + data.height : event.pageY
+        dispatch(showBaseMenu(items.map(selectMap), x, y, data?.width))
+    },[])
 
     return(
         <>
