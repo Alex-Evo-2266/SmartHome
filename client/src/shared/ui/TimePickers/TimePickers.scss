@@ -80,7 +80,7 @@
             height: 100%;
             position: absolute;
             top: 0;
-            left: 0;
+            left: 24px;
             color: var(--Primary-color);
             display: flex;
             align-items: center;
@@ -99,6 +99,7 @@
         width: calc(var(--clock-radius) * 2);
         height: calc(var(--clock-radius) * 2);
         position: relative;
+        margin: auto;
         background-color: var(--Surface-container-highest-color);
         border-radius: 50%;
         span.center{

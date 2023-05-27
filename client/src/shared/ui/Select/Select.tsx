@@ -1,9 +1,7 @@
 import { getContainerData } from "../../lib/helpers/getModalCord"
 import { useAppDispatch } from "../../lib/hooks/redux"
-import { hideDialog, showDialog } from "../../lib/reducers/dialogReducer"
 import { hideMenu, showBaseMenu } from "../../lib/reducers/menuReducer"
 import { IMenuItem } from "../../model/menu"
-import { SelectionDialog } from "../Dialog/BaseDialog/SelectionDialog"
 import "./Select.scss"
 import { useCallback, useState } from "react"
 
