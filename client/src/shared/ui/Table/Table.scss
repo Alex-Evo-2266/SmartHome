@@ -1,0 +1,102 @@
+.table-container{
+    max-width: 1170px;
+    margin: auto;
+    padding: 0 15px;
+    overflow-x: auto;
+    table{
+        .table-actions-header{
+            height: 68px;
+        }
+        width: 100%;
+        box-shadow: var(--Shadow-base);
+        border-collapse: collapse;
+        .min-width{
+            min-width: 150px;
+        }
+        th, td{
+            text-align: center;
+            padding: 10px;
+        }
+        th{
+            background-color: var(--Primary-color);
+            color: var(--On-primary-color);
+        }
+        td{
+            background-color: var(--Surface-container-high-color);
+            color: var(--On-surface-color);
+            transition: .2s;
+            p{
+                display: flex;
+                justify-content: center;
+            }
+            .table-edit-button{
+                display: flex;
+                flex-wrap: nowrap;
+            }
+        }
+        tr:nth-child(even) td{
+            background-color: var(--Surface-container-color);
+        }
+        tr:hover td{
+            background-color: var(--Surface-container-highest-color);
+        }
+    }
+    &.clicked table{
+        tr td{
+            cursor: pointer;
+        }
+        tr:active td{
+            background-color: var(--Surface-container-low-color);
+        }
+    }
+}
+
+@media (max-width: 720px){
+    .table-container.auto-rotate{
+        table{
+            *{
+                outline: none;
+            }
+            display: flex;
+            position: relative;
+            width: 100%;
+            white-space: nowrap;
+            height: 100%;
+            align-items: stretch;
+            thead,
+            tbody,
+            thead th{
+                display: block;
+                position: relative;
+            }
+            thead{
+                height: 100%;
+                flex-grow: 1;
+            }
+            tbody{
+                overflow-x: auto;
+                flex: 100%;
+                width: 100%;
+            }
+            tbody tr{
+                display: table-cell;
+                td{
+                    display: block;
+                    max-width: 180px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 400px){
+    .table-container.auto-rotate{
+        table{
+            .min-width{
+                min-width: auto;
+            }
+        }
+    }
+}
