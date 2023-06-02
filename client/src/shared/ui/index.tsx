@@ -43,3 +43,18 @@ export { SelectField } from './Select/Select'
 
 export { Switch } from './Switch/Switch'
 
+export {Checkbox} from './Checkbox/Checkbox'
+
+//BottomSheets
+
+export {BottomSheets} from './BottomSheets/BottomSheets'
+
+//Menu 
+export {Menu} from './Menu/Menu'
+
+//Snackbar
+export {Snackbar} from './Snackbar/Snackbar'
+
+//Divider
+
+export {Divider} from './Divider/Divider'
