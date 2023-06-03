@@ -10,6 +10,7 @@ from authtorization.exceptions import InvalidInputException
 from auth_service.auth_service import get_auth_service_tokens
 from authtorization.models import Session, User
 from authtorization.logic import create_session, create_tokens_oauth, create_valid_user_name, delete_session, get_token, local_login, refresh_token
+from exceptions.exception_response import BaseErrorResponse
 
 from settings import AUTH_SERVICE_URL, configManager
 
@@ -20,12 +21,17 @@ logger = logging.getLogger(__name__)
 router = APIRouter(
 	prefix="/api/auth",
 	tags=["auth"],
-	responses={404: {"description": "Not found"}},
+	responses={
+		404: {"description": "Not found"},
+		400: {"model": BaseErrorResponse}
+		},
 )
 
 @router.get("/clientid", response_model=AuthService)
 async def ref():
 	data = configManager.getConfig("auth_service")
+	if not data:
+		return JSONResponse(status_code=400, content={"message": "data not found"}) 
 	return AuthService(clientId=data["client_id"], authservice="True", host=data["host"])
 
 @router.post("/login", response_model=ResponseLogin)
