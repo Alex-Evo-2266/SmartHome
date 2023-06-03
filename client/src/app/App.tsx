@@ -1,22 +1,22 @@
-import { BorderButton, Button, MinButton } from '../shared/ui/Button/Button';
-import { TextField } from '../shared/ui/TextField/TextField';
-import "../shared/colors.scss"
+import { BrowserRouter } from 'react-router-dom';
+import InitModalComponents from './InitModalComponents';
+import { useRoutes } from './routs';
+import { useAppSelector } from '../shared/lib/hooks/redux';
 
 function App() {
 
-  return (
-    <div className="App">
-      <div className='test-container'>
-        <Button>ergthjm</Button>
-        <Button>ergthjm</Button>
-        <MinButton>ergthjm</MinButton>
-        <BorderButton>fsdg</BorderButton>
-      </div>
-      <div className='test-container'>
-        <TextField placeholder='name'/>
-      </div>
-    </div>
-);
+	const user = useAppSelector(state=>state.auth)
+
+	const route = useRoutes(user.isAuthenticated)
+
+	return (
+		<div className="App">
+			<InitModalComponents/>
+			<BrowserRouter>
+				{route}
+			</BrowserRouter>
+		</div>
+	)
 }
 
 export default App

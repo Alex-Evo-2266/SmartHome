@@ -3,11 +3,13 @@ import dialogReducer from "../../shared/lib/reducers/dialogReducer";
 import bottomSheetsReducer from "../../shared/lib/reducers/bottomSheetsReducer";
 import menuReducer from "../../shared/lib/reducers/menuReducer";
 import snackbarReducer from "../../shared/lib/reducers/snackbarReducer";
+import { authReducer } from "../../entites/User";
 
 
 export const rootReducer = combineReducers({
     dialog: dialogReducer,
     bottomSheets: bottomSheetsReducer,
     menu: menuReducer,
-    snackbar: snackbarReducer
+    snackbar: snackbarReducer,
+    auth: authReducer
 })

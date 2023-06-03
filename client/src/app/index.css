@@ -11,14 +11,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+*::-webkit-scrollbar{ 
+  width: 0; 
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-
-.test-container{
-  background-color: #eee;
-  color: red;
-  border: 5px solid orange;
 }
