@@ -1,0 +1,34 @@
+.auth-form-container{
+    background-color: var(--Surface-container-high-color);
+    max-width: 400px;
+    min-width: 300px;
+    border-radius: 10px;
+    box-shadow: var(--Shadow-base);
+    margin: 0 auto;
+    min-height: 300px;
+    padding: 0 10px;
+    .auth-form-header{
+        font-size: 32px;
+        font-weight: 600;
+        text-align: center;
+        padding: 20px 0;
+    }
+    .auth-form-buttom{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        button{
+            width: 200px;
+        }
+    }
+    .auth-btn-container{
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 400px){
+    .auth-form-container{
+        width: 100%;
+    }
+}
