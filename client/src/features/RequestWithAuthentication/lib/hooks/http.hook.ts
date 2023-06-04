@@ -11,7 +11,7 @@ export const useHttp = () => {
 	const [error, setError] = useState<string | null>(null);
 	const dispatch = useAppDispatch()
 
-	const request = useCallback(async (url:string, method:TypeRequest = TypeRequest.GET, body?:Dict, headers:Dict = {}, file:boolean = false) => {
+	const request = useCallback(async (url:string, method:TypeRequest = TypeRequest.GET, body?:Dict | Dict[], headers:Dict = {}, file:boolean = false) => {
 		setLoading(true);
 		try {
 			let response = await baseAPI(url, method, body, headers ,file)
@@ -20,6 +20,8 @@ export const useHttp = () => {
 					()=>dispatch(logout()), 
 					(data:LoginData)=>dispatch(login(data.token, data.id, data.role, new Date(data.expires_at)))
 				)
+				if(!token)
+					throw new Error("invalid token")
 				response = await APIWitchToken(url, method, body, token, headers ,file)
 			}
 			const data = await response.json()
