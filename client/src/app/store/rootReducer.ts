@@ -4,6 +4,7 @@ import bottomSheetsReducer from "../../shared/lib/reducers/bottomSheetsReducer";
 import menuReducer from "../../shared/lib/reducers/menuReducer";
 import snackbarReducer from "../../shared/lib/reducers/snackbarReducer";
 import { authReducer } from "../../entites/User";
+import { navigationReducer } from "../../features/Navigation";
 
 
 export const rootReducer = combineReducers({
@@ -11,5 +12,6 @@ export const rootReducer = combineReducers({
     bottomSheets: bottomSheetsReducer,
     menu: menuReducer,
     snackbar: snackbarReducer,
-    auth: authReducer
+    auth: authReducer,
+    navigation: navigationReducer
 })
