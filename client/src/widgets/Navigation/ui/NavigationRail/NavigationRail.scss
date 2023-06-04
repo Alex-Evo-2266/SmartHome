@@ -1,0 +1,40 @@
+.navigation-rail-container{
+	position: fixed;
+	top:0;
+	left: 0;
+	z-index: 1100;
+	width: 80px;
+	overflow: hidden;
+	background-color: var(--Surface-container-low-color);
+	color: var(--On-surface-variant-color);
+	height: 100vh;
+	transition: .3s;
+	box-shadow: var(--Shadow-base);
+	.navigation-item{
+		height: 56px;
+		margin: 5px 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		padding: 0 24px 0 16px;
+		border-radius: 25px;
+		transition: .3s;
+		.navigation-item-icon{
+			width: 64px;
+			height: 32px;
+			border-radius: 16px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		&:hover .navigation-item-icon{
+			background-color: var(--Surface-container-highest-color);
+			color: var(--On-surface-color);
+		}
+		&.active .navigation-item-icon{
+			background-color: var(--Secondary-container-color);
+			color: var(--On-secondary-container-color);
+		}
+	}
+}
