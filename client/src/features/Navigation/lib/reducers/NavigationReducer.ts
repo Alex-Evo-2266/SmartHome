@@ -3,6 +3,7 @@ import { NavItem } from "../.."
 enum NavigationActionType{
     SHOW_NAVIGATION = "SHOW_NAVIGATION",
     HIDE_NAVIGATION = "HIDE_NAVIGATION",
+    TOGGLE_NAVIGATION = "TOGGLE_NAVIGATION",
     SET_ITEMS_NAVIGATION = "SET_ITEMS_NAVIGATION",
 }
 
@@ -22,15 +23,11 @@ interface NavigationSetItemsAction{
     payload: PayloadNavigation
 }
 
-interface NavigationShowAction{
-    type: NavigationActionType.SHOW_NAVIGATION
+interface NavigationToggleAction{
+    type: NavigationActionType.SHOW_NAVIGATION | NavigationActionType.HIDE_NAVIGATION | NavigationActionType.TOGGLE_NAVIGATION
 }
 
-interface NavigationHideAction{
-    type: NavigationActionType.HIDE_NAVIGATION
-}
-
-type NavigationAction = NavigationShowAction | NavigationHideAction | NavigationSetItemsAction
+type NavigationAction = NavigationToggleAction | NavigationSetItemsAction
 
 const initState: INavigationState = {
     visible: false,
@@ -44,6 +41,8 @@ export const navigationReducer = (state:INavigationState = initState, action:Nav
             return {...state, visible: true}
         case NavigationActionType.HIDE_NAVIGATION:
             return {...state, visible: false}
+        case NavigationActionType.TOGGLE_NAVIGATION:
+            return {...state, visible: !state.visible}
         case NavigationActionType.SET_ITEMS_NAVIGATION:
             return {...state, ...action.payload}
         default:
@@ -53,4 +52,5 @@ export const navigationReducer = (state:INavigationState = initState, action:Nav
 
 export const showNavigation = ():NavigationAction => ({type: NavigationActionType.SHOW_NAVIGATION})
 export const hideNavigation = ():NavigationAction => ({type: NavigationActionType.HIDE_NAVIGATION})
+export const toggleNavigation = ():NavigationAction => ({type: NavigationActionType.TOGGLE_NAVIGATION})
 export const setNavigation = (payload: PayloadNavigation):NavigationAction => ({type: NavigationActionType.SET_ITEMS_NAVIGATION, payload})
