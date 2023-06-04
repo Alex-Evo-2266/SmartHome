@@ -40,11 +40,12 @@ async def auth(Authorization)->TokenData:
 	logger.info(f"the user is logged in. id:{data['user_id']}")
 	return TokenData(user_id = data['user_id'], user_level = user.role)
 
-async def token_dep(authorization_token: Optional[str] = Header(None)):
-	if not authorization_token:
+async def token_dep(Authorization: Optional[str] = Header(None)):
+	print(Authorization)
+	if not Authorization:
 		raise HTTPException(status_code=403, detail="token not found")
 	try:
-		auth_data = await auth(authorization_token)
+		auth_data = await auth(Authorization)
 		user = await User.objects.get_or_none(id=auth_data.user_id)
 		if user.role == UserLevel.NONE:
 			raise HTTPException(status_code=403, detail="user is not assigned a role")
@@ -57,11 +58,11 @@ async def token_dep(authorization_token: Optional[str] = Header(None)):
 		logger.warning(f"token_dep error {e}")
 		raise HTTPException(status_code=403, detail="invalid jwt")
 
-async def token_dep_all_user(authorization_token: Optional[str] = Header(None)):
-	if not authorization_token:
+async def token_dep_all_user(Authorization: Optional[str] = Header(None)):
+	if not Authorization:
 		raise HTTPException(status_code=403, detail="token not found")
 	try:
-		auth_data = await auth(authorization_token)
+		auth_data = await auth(Authorization)
 		return auth_data
 	except ExpiredSignatureError as e:
 		raise HTTPException(status_code=401, detail="outdated jwt")
@@ -69,11 +70,11 @@ async def token_dep_all_user(authorization_token: Optional[str] = Header(None)):
 		logger.warning(f"token_dep error {e}")
 		raise HTTPException(status_code=403, detail="invalid jwt")
 
-async def session(authorization_token: Optional[str] = Header(None))->Session:
-	if not authorization_token:
+async def session(Authorization: Optional[str] = Header(None))->Session:
+	if not Authorization:
 		raise HTTPException(status_code=403, detail="invalid jwt")
-	jwtdata = authorization_token.split(" ")[1]
-	data = await auth(authorization_token)
+	jwtdata = Authorization.split(" ")[1]
+	data = await auth(Authorization)
 	data.user_id
 	user = await User.objects.get_or_none(id=data.user_id)
 	if not user:

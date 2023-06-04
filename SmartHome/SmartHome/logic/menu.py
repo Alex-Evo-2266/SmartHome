@@ -22,7 +22,8 @@ async def get_menu_list()->List[MenuElementsSchema]:
 		arr.append(MenuElementsSchema(
 			title=item["title"],
 			url=item["url"],
-			iconClass=item["iconClass"]
+			iconClass=item["iconClass"],
+			icon=item["icon"]
 		))
 	return arr
 
@@ -41,7 +42,8 @@ async def get_added_menu_element(user_id: int)->List[MenuElementsSchema]:
 			id=item.id,
 			title=item.title,
 			url=item.url,
-			iconClass=item.iconClass
+			iconClass=item.iconClass,
+			icon=item.icon
 		))
 	return Menulist
 
@@ -53,4 +55,4 @@ async def set_menu(data: List[MenuElementsSchema], user_id:int):
 	for item in menu_list:
 		await item.delete()
 	for item in data:
-		await MenuElement.objects.create(title=item.title, url=item.url, iconClass=item.iconClass, user=user)
+		await MenuElement.objects.create(title=item.title, url=item.url, icon=item.icon, user=user)

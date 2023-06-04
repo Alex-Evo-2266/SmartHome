@@ -19,7 +19,7 @@ router = APIRouter(
 )
 
 @router.get("/all", response_model=List[MenuElementsSchema])
-async def get_menu():
+async def get_all_menu():
 	try:
 		res = await get_menu_list()
 		return res
@@ -40,7 +40,7 @@ async def get_menu(auth_data: TokenData = Depends(token_dep_all_user)):
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.put("")
-async def get_menu(auth_data: TokenData = Depends(token_dep), data: List[MenuElementsSchema] = [MenuElementsSchema(title="", iconClass="",url="")]):
+async def get_menu(auth_data: TokenData = Depends(token_dep), data: List[MenuElementsSchema] = [MenuElementsSchema(title="", iconClass="",url="", icon="")]):
 	try:
 		await set_menu(data, auth_data.user_id)
 		return "ok"
