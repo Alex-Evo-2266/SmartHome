@@ -9,4 +9,8 @@ function isFavouritesItems(item:NavItem, favouritesItems:NavItem[]) {
     return false
 }
 
-export {isFavouritesItems}
+function getOtherNavigationItem(items: NavItem[], favouritesItems: NavItem[]) {
+    return items.filter(item=>!isFavouritesItems(item, favouritesItems))
+}
+
+export {isFavouritesItems, getOtherNavigationItem}
