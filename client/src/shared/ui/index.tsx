@@ -58,3 +58,7 @@ export {Snackbar} from './Snackbar/Snackbar'
 //Divider
 
 export {Divider} from './Divider/Divider'
+
+
+import './Table/Table.scss'
+export {Table} from './Table/Table'
