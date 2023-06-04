@@ -1,0 +1,17 @@
+.root-container{
+    margin-left: 80px;
+    overflow: auto;
+    width: calc(100% - 80px);
+    height: 100vh;
+    margin-bottom: 0;
+    &.big{
+        margin-left: 360px;
+        width: calc(100% - 360px);
+    }
+    &.mobile{
+        margin-left: 0;
+        margin-bottom: 80px;
+        width: 100%;
+        height: calc(100vh - 80px);
+    }
+}
