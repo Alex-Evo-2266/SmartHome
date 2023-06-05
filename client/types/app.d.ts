@@ -4,11 +4,11 @@ declare global {
     declare type AppDispatch = import('../src/app/store/appStore').AppDispatch
     // declare type AppStore = import('../src/app/store/appStore').AppStore
 
-    interface IDict{
-      [key:string]: any
+    interface IDict<T>{
+      [key:string]: T
     }
 
-    declare type Dict = IDict
+    declare type Dict<T> = IDict<T>
   }
 
 export {}
