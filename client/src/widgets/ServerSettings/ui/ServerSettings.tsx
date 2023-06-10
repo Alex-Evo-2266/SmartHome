@@ -6,7 +6,11 @@ import { ConfigData } from '../models/serverConfig'
 import { mapServerSettingsToDict, mapServerSettingsToList } from '../lib/helpers/mapServerSetting'
 import { ServerSettingsButtons } from './ServerSettingsButton'
 
-export const ServerSettings = () => {
+interface ServerSettingsProps{
+	className?: string
+}
+
+export const ServerSettings = ({className}:ServerSettingsProps) => {
 
 	const {getServerSettings, setServerSettings} = useServerSettingsApi()
 	const [settings, setSettings] = useState<ConfigData[]>([])
@@ -45,7 +49,7 @@ export const ServerSettings = () => {
 	},[settings])
 
 	return(
-		<Card className='settings-card' header='Server settings' action={<ServerSettingsButtons onSave={save}/>}>
+		<Card className={`settings-card ${className ?? ""}`} header='Server settings' action={<ServerSettingsButtons onSave={save}/>}>
 			<div className='server-settings-container'>
 			{
 				settings.map((item, index)=>(
