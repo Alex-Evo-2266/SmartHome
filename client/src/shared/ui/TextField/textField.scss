@@ -35,15 +35,24 @@
 			line-height: 26px;
 			font-size: 18px;
 			&:focus ~ label,
-			&:valid ~ label{
+			&:valid ~ label
+			{
 				top: 8px;
 				font-size: 10px;
 				color: var(--Primary-color);
 				font-weight: bold;
 				line-height: 13px;
 			}
+			&:read-only ~ label
+			{
+				top: 8px;
+				font-size: 10px;
+				font-weight: bold;
+				line-height: 13px;
+			}
 			&:focus ~ .text-field-line,
-			&:valid ~ .text-field-line{
+			&:valid ~ .text-field-line
+			{
 				background-color: var(--Primary-color);
 			}
 			&.error ~ .text-field-line{
@@ -78,7 +87,8 @@
 			bottom: 50%;
 			transform: translateY(50%);
 			&:focus ~ .text-field-line,
-			&:valid ~ .text-field-line{
+			&:valid ~ .text-field-line
+			{
 				border: 1px solid var(--Primary-color);
 				background-color: transparent;
 			}
@@ -87,11 +97,20 @@
 				background-color: transparent;
 			}
 			&:focus ~ label,
-			&:valid ~ label{
+			&:valid ~ label
+			{
 				top: -7px;
 				padding: 0 3px;
 				font-size: 10px;
 				color: var(--Primary-color);
+				font-weight: bold;
+				line-height: 13px;
+			}
+			&:read-only ~ label
+			{
+				top: -7px;
+				padding: 0 3px;
+				font-size: 10px;
 				font-weight: bold;
 				line-height: 13px;
 			}

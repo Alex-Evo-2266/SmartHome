@@ -30,7 +30,7 @@ export const UserCard = ({user, update}:UserCardProps) => {
     return(
         <Card className='users-card' header={user.name} action={
             <BaseActionCard>
-                <UserCardAction onClick={editClick}/>
+                <UserCardAction onClick={editClick} user={user}/>
             </BaseActionCard>
         } imgSrc={user.imageUrl ?? userDefault}>
             <p>Email: {user.email}</p>
@@ -45,13 +45,14 @@ export const UserCard = ({user, update}:UserCardProps) => {
 
 interface UserCardActionProps{
     onClick?: ()=>void
+    user: UserData
 }
 
-function UserCardAction({onClick}:UserCardActionProps) {
+function UserCardAction({onClick, user}:UserCardActionProps) {
 
 	const auth = useAppSelector(state => state.auth)
 
-	if(auth.role !== UserRole.ADMIN)
+	if(auth.role !== UserRole.ADMIN && auth.id !== user.id)
 		return null
 
     return(

@@ -3,24 +3,21 @@
 	padding: 15px;
 	grid-gap: 15px;
 	grid-template-columns: 1fr 1fr;
-	grid-auto-rows: 20px;
+	grid-auto-rows: auto;
 	.navigete-settings{
 		grid-column-start: 1;
 		grid-column-end: 3;
 		grid-row-start: 1;
-		grid-row-end: 16;
 	}
 	.server-settings{
 		grid-column-start: 1;
 		grid-column-end: 2;
-		grid-row-start: 16;
-		grid-row-end: 50;
+		grid-row-start: 2;
 	}
 	.profile-settings{
 		grid-column-start: 2;
 		grid-column-end: 3;
-		grid-row-start: 16;
-		grid-row-end: 33;
+		grid-row-start: 2;
 	}
 }
 

@@ -107,7 +107,7 @@ class UserSchema(BaseModel):
 
 class UserEditSchema(BaseModel):
     name: str
-    email: Optional[str]
+    email: Optional[str] = ""
 
 # class UserDeleteSchema(BaseModel):
 #     id: int

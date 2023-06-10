@@ -78,3 +78,18 @@ class TooManyTriesException(Exception):
 			return f"TooManyTriesException, {self.message}"
 		else:
 			return "TooManyTriesException"
+		
+
+class UserExistException(Exception):
+	def __init__(self, *args: object) -> None:
+		if args:
+			self.message = args[0]
+		else:
+			self.message = "a user with this name already exists."
+	
+	def __str__(self) -> str:
+		if self.message:
+			return f"UserExistException, {self.message}"
+		else:
+			return "UserExistException"
+	

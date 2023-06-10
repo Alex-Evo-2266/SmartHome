@@ -21,8 +21,11 @@ async def get_config(auth_data: TokenData = Depends(token_dep)):
 
 @router.put("/config")
 async def edit_config(data:ServerConfigSchema, auth_data: TokenData = Depends(token_dep)):
-    await server_config_edit(data.moduleConfig)
-    return JSONResponse(status_code=400, content={"message": "error write file"})
+    try:
+        await server_config_edit(data.moduleConfig)
+        return "ok"
+    except:
+        return JSONResponse(status_code=400, content={"message": "error write file"})
 
 @router.get("", response_model=ServerDataSchema)
 async def get_data(auth_data: TokenData = Depends(token_dep)):

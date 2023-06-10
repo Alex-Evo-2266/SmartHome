@@ -1,7 +1,7 @@
 import './ProfileSettings.scss'
 import { useAppSelector } from "../../../shared/lib/hooks/redux"
 import { Card, TextField } from "../../../shared/ui"
-import { UpdateUserData } from "../../../entites/User/model/user"
+import { AuthType, UpdateUserData } from "../../../entites/User/model/user"
 import userDefault from '../../../shared/img/userNuN.png'
 import { ProfileSettingsButtons } from './ProfileSettingsButton'
 import { useCallback, useEffect, useState } from 'react'
@@ -51,7 +51,7 @@ export const ProfileSettings = ({className}:ProfileSettingsProps) => {
 							<TextField border onChange={changeHandler} name="name" value={profileForm.name} placeholder='name'/>
 						</div>
 						<div className='field-container'>
-							<TextField border onChange={changeHandler} name="email" value={profileForm.email} placeholder='email'/>
+							<TextField border onChange={changeHandler} name="email" value={profileForm.email} placeholder='email' readOnly={user.authType === AuthType.AUTH_SERVICE}/>
 						</div>
 					</div>
 				</div>

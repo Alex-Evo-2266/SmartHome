@@ -7,7 +7,7 @@ from typing import List
 from send_email.email import send_email
 from auth_service.castom_requests import ThisLocalSession
 from auth_service.config import get_user_data, get_user_data_by_id
-from authtorization.exceptions import UserNotFoundException
+from authtorization.exceptions import UserNotFoundException, UserExistException
 from authtorization.models import AuthType, Session
 from authtorization.schema import UserLevel
 
@@ -63,10 +63,14 @@ async def get_user(id:int, session:Session)->UserSchema:
 	)
 
 async def edit_user(id: int,data: UserEditSchema)->None:
-	user = await User.objects.get_or_none(id=id)
+	user: User | None = await User.objects.get_or_none(id=id)
 	if not user:
 		logger.error(f"user does not exist. id:{id}")
 		raise UserNotFoundException()
+	user2: User | None = await User.objects.get_or_none(name=data.name)
+	if(user2 and user2.id != user.id):
+		logger.info(f"user does not exist. id:{id}")
+		raise UserExistException()
 	user.name = data.name
 	user.email = data.email
 	await user.update(_columns=["name", "email"])
