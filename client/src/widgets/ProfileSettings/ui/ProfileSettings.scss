@@ -1,0 +1,32 @@
+.profile-settings-container{
+	.img-container{
+		padding: 20px;
+		position: relative;
+		height: 300px;
+		width: 300px;
+		margin: 0 auto;
+		border-radius: 50%;
+	}
+	
+	.img-container img{
+		position: absolute;
+		left: 0;
+		top: 0;
+		border-radius: 50%;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.field-container{
+		padding: 5px;
+	}
+}
+
+@media (max-width: 720px){
+	.profile-settings-container{
+		.img-container{
+			height: 150px;
+			width: 150px;
+		}
+	}
+}
