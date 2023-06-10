@@ -8,7 +8,11 @@ import { NavigationSettingsButtons } from './NavigationSettingsButton'
 import { isFavouritesItems } from '../../../features/Navigation'
 import { IconOrString } from '../../../entites/Icon'
 
-export const SettingsNavigationTable = () => {
+interface SettingsNavigationTableProps{
+	className?: string
+}
+
+export const SettingsNavigationTable = ({className}:SettingsNavigationTableProps) => {
 
 	const navigation = useAppSelector(state=>state.navigation)
 
@@ -22,7 +26,7 @@ export const SettingsNavigationTable = () => {
 	},[navigation])
 	
 	return(
-		<Card header='Navigation settings' action={<NavigationSettingsButtons/>}>
+		<Card header='Navigation settings' action={<NavigationSettingsButtons/>} className={className}>
 			<div className='settings-navigation-container table-container'>
 				<table>
 					<thead>
