@@ -1,10 +1,11 @@
-import { AlignJustify, Home } from 'lucide-react'
+import { AlignJustify, Home, LogOut } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../../shared/lib/hooks/redux'
 import './NavigationRail.scss'
 import { NavigationRailItem } from './NavigationRailItem'
 import { IconOrString } from '../../../../entites/Icon'
 import { NavButton } from './NavButton'
 import { toggleNavigation } from '../../../../features/Navigation/lib/reducers/NavigationReducer'
+import { logout } from '../../../../entites/User'
 
 export const NavigationRail = () => {
 
@@ -22,6 +23,7 @@ export const NavigationRail = () => {
                         <NavigationRailItem key={index} title={item.title} icon={<IconOrString iconName={item.icon}/>} to={item.url}/>
                     ))
                 }
+                    <NavButton title='Home' icon={<LogOut/>} onClick={()=>dispatch(logout())}/>
                 </div>
             </div>
         </div>
