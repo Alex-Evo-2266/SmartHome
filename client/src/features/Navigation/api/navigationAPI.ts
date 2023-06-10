@@ -13,6 +13,10 @@ export const useNavigationAPI = () => {
 	const {showSnackbar} = useSnackbar()
 	const dispatch = useAppDispatch()
 
+	const requestError = useCallback((error: string) => {
+		showSnackbar(error, {}, 10000)
+	},[showSnackbar])
+
 	const getAllNavigationItem = useCallback(async() => {
 		try{
 			let data: NavItem[] = await requestWithRefrash('/api/users/menu/all')
@@ -24,7 +28,7 @@ export const useNavigationAPI = () => {
 			else if(e instanceof Error)
 				requestError(e.message)
 		}
-	},[])
+	},[requestError])
 
 	const getUserNavigationItem = useCallback(async() => {
 		try{
@@ -45,12 +49,7 @@ export const useNavigationAPI = () => {
 			else if(e instanceof Error)
 				requestError(e.message)
 		}
-    },[authData.token])
-
-	function requestError(error: string)
-	{
-		showSnackbar(error, {}, 10000)
-	}
+    },[authData.token, requestError, dispatch])
 
 	return{
 		getAllNavigationItem,
