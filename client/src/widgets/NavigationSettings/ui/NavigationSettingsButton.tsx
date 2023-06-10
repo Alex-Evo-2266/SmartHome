@@ -1,8 +1,7 @@
 import { useCallback } from "react"
-import { Button } from "../../../shared/ui"
+import { FilledButton } from "../../../shared/ui"
 import { useAppSelector } from "../../../shared/lib/hooks/redux"
 import { useSaveNavigationItems } from "../api/saveNavigationItems"
-
 
 export const NavigationSettingsButtons = ()=>{
 
@@ -15,7 +14,7 @@ export const NavigationSettingsButtons = ()=>{
 
     return(
         <div className="settings-navigation-button">
-            <Button onClick={save}>save</Button>
+            <FilledButton onClick={save}>save</FilledButton>
         </div>
     )
 } 
