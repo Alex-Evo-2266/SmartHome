@@ -1,4 +1,4 @@
-import { AuthType, UserData, UserDataResponse } from "../../model/user";
+import { AuthType, UserData, UserDataResponse, UserRole } from "../../model/user";
 
 
 export const mapUserData = (data:UserDataResponse):UserData => {
@@ -8,6 +8,12 @@ export const mapUserData = (data:UserDataResponse):UserData => {
     if(data.auth_type === "auth_service" || data.auth_type === AuthType.AUTH_SERVICE)
         authType = AuthType.AUTH_SERVICE
 
+    let newRole: UserRole = UserRole.WITHOUT
+	if(data.role === UserRole.ADMIN || data.role === "admin")
+		newRole = UserRole.ADMIN
+    else if(data.role === UserRole.BASE || data.role === "base")
+		newRole = UserRole.BASE
+
     return{
         name: data.name,
         email: data.email,
@@ -16,5 +22,6 @@ export const mapUserData = (data:UserDataResponse):UserData => {
         host: data.host,
         authType: authType,
         authName: data.auth_name,
+        role: newRole
     }
 }

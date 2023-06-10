@@ -9,3 +9,6 @@ export type { UserData, UpdateUserData, UserDataResponse } from './model/user'
 export { UserRole, AuthType } from './model/user'
 
 export {useInitUser} from './lib/hooks/initUser.hook'
+export {useUserAllAPI} from './api/getUserAll'
+
+export {getRole} from './lib/helpers/getRole'

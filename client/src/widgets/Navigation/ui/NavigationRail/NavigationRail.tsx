@@ -23,7 +23,7 @@ export const NavigationRail = () => {
                         <NavigationRailItem key={index} title={item.title} icon={<IconOrString iconName={item.icon}/>} to={item.url}/>
                     ))
                 }
-                    <NavButton title='Home' icon={<LogOut/>} onClick={()=>dispatch(logout())}/>
+                    <NavButton title='Logout' icon={<LogOut/>} onClick={()=>dispatch(logout())}/>
                 </div>
             </div>
         </div>

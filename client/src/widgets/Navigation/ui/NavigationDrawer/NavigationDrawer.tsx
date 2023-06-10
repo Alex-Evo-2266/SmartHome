@@ -3,9 +3,11 @@ import { IconOrString } from '../../../../entites/Icon'
 import { useAppDispatch, useAppSelector } from '../../../../shared/lib/hooks/redux'
 import { Divider } from '../../../../shared/ui'
 import { getOtherNavigationItem } from '../../../../features/Navigation'
-import { Home, Settings } from 'lucide-react'
+import { Home, LogOut, Settings } from 'lucide-react'
 import { NavigationDrawerItem } from './NavigationDrawerItem'
 import { hideNavigation } from '../../../../features/Navigation/lib/reducers/NavigationReducer'
+import { NavButton } from './NavButton'
+import { logout } from '../../../../entites/User'
 
 interface NavigationDrawerProps{
 	openAlways?: boolean
@@ -42,6 +44,7 @@ export const NavigationDrawer = ({openAlways}:NavigationDrawerProps) => {
 					))
 				}
 				<NavigationDrawerItem onClick={()=>dispatch(hideNavigation())} title='Settings' icon={<Settings/>} to='/settings'/>
+				<NavButton onClick={()=>dispatch(logout())} title='Logout' icon={<LogOut/>}/>
 				</div>
 			</div>
 		</div>

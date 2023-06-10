@@ -18,6 +18,7 @@ export interface UserData{
     host?: string
     authType?: AuthType
     authName?: string
+    role?: UserRole
 }
 
 export interface UserDataResponse{
@@ -28,6 +29,7 @@ export interface UserDataResponse{
     host?: string
     auth_type?: string
     auth_name: string
+    role?: string
 }
 
 export interface UpdateUserData{

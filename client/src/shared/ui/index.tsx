@@ -8,6 +8,7 @@ export { SigmentedButton } from './SigmentedButton/SigmentedButton'
 
 // CARD
 export { Card } from './Card/Card'
+export {BaseActionCard} from './BaseActionCard/BaseActionCard'
 
 // DateField
 
