@@ -1,7 +1,7 @@
 import { refresh } from "./refresh";
 import { TypeRequest } from "./type";
 
-export const baseAPI = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict | Dict[] |undefined | null = undefined, headers:Dict = {}, file:boolean = false) => {
+export const baseAPI = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict<any> | Dict<any>[] |undefined | null = undefined, headers:Dict<any> = {}, file:boolean = false) => {
 	let newBody: BodyInit | undefined | null = undefined
 	if(body && !file){
 		headers['Content-Type'] = 'application/json'
@@ -11,7 +11,7 @@ export const baseAPI = async(url:string, method: TypeRequest = TypeRequest.GET, 
 	return response
 }
 
-export const APIWitchToken = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict | Dict[] | undefined | null = undefined, token:string | undefined | null, headers:Dict = {}, file:boolean = false) => {
+export const APIWitchToken = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict<any> | Dict<any>[] | undefined | null = undefined, token:string | undefined | null, headers:Dict<any> = {}, file:boolean = false) => {
 	if(token)
 		headers["Authorization"] = "Bearer " + token
 	return await baseAPI(url, method, body, headers, file)
@@ -20,9 +20,9 @@ export const APIWitchToken = async(url:string, method: TypeRequest = TypeRequest
 export const requestWithRefrash = async (
 	url:string, 
 	method: TypeRequest = TypeRequest.GET, 
-	body:Dict | Dict[] | undefined | null = undefined, 
+	body:Dict<any> | Dict<any>[] | undefined | null = undefined, 
 	token:string | undefined | null = null, 
-	headers:Dict = {}, 
+	headers:Dict<any> = {}, 
 	onErrorRefrash?:()=>void, 
 	onSuccessRefrash?:(data:any)=>void,
 	file: boolean = false

@@ -36,7 +36,7 @@ export const useUserAllAPI = () => {
             else if(e instanceof Error)
                 requestError(e.message)
         }
-    },[requestError, dispatch])
+    },[requestError, dispatch, auth.token])
 
     
 

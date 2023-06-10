@@ -16,7 +16,7 @@ export const NavigationInit = () => {
             items: allItems ?? [],
             favouritesItems: items ?? []
         }))
-    },[getAllNavigationItem])
+    },[getAllNavigationItem, getUserNavigationItem])
 
     return { init }
 }
