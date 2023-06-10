@@ -66,9 +66,9 @@ export const authReducer = (state:AuthState = initState(), action:UserAuthAction
 export const logout = ():UserAuthAction => ({type: TypeAction.LOGOUT})
 export const login = (token:string, id:number, role: UserRole | string | undefined, expires_at: Date):UserAuthAction => {
 	let newRole: UserRole = UserRole.WITHOUT
-	if(role === UserRole.ADMIN)
+	if(role === UserRole.ADMIN || role === "admin")
 		newRole = UserRole.ADMIN
-    else if(role === UserRole.BASE)
+    else if(role === UserRole.BASE || role === "base")
 		newRole = UserRole.BASE
 	return{type: TypeAction.LOGIN, payload:{token, id, role: newRole, expires_at}}
 }
