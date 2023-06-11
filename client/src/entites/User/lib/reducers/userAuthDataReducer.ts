@@ -1,4 +1,5 @@
 import { getRole } from "../..";
+import { logoutInSession } from "../../api/logout";
 import { UserRole } from "../../model/user";
 
 const SMARTHOME_USER_DATA = 'smarthome_user_data';
@@ -58,6 +59,8 @@ export const authReducer = (state:AuthState = initState(), action:UserAuthAction
 			return ({token: action.payload.token, id: action.payload.id, role: action.payload.role, isAuthenticated:true, expires_at: new Date(action.payload.expires_at)})
 		case TypeAction.LOGOUT:
 			localStorage.removeItem(SMARTHOME_USER_DATA)
+			if(state.token)
+				logoutInSession(state.token)
 			return ({token: '', id: undefined, role: UserRole.WITHOUT, isAuthenticated:false, expires_at: new Date()})
 		default:
 			return state
