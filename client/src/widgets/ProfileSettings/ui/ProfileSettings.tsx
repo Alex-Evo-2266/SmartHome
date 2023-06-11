@@ -38,22 +38,18 @@ export const ProfileSettings = ({className}:ProfileSettingsProps) => {
 	return(
 		<Card className={className} header='Profile settings' action={<ProfileSettingsButtons onSave={outForm}/>}>
 			<div className="profile-settings-container">
-				<div className = {`container glass-normal`}>
-					<div className = "pagecontent">
-						<div className='img-container'>
-							{
-								(user.imageUrl)?
-								<img alt="profile_img" src={user.imageUrl}/>:
-								<img alt="profile_img" src={userDefault}/>
-							}
-						</div>
-						<div className='field-container'>
-							<TextField border onChange={changeHandler} name="name" value={profileForm.name} placeholder='name'/>
-						</div>
-						<div className='field-container'>
-							<TextField border onChange={changeHandler} name="email" value={profileForm.email} placeholder='email' readOnly={user.authType === AuthType.AUTH_SERVICE}/>
-						</div>
-					</div>
+				<div className='img-container'>
+					{
+						(user.imageUrl)?
+						<img alt="profile_img" src={user.imageUrl}/>:
+						<img alt="profile_img" src={userDefault}/>
+					}
+				</div>
+				<div className='field-container'>
+					<TextField border onChange={changeHandler} name="name" value={profileForm.name} placeholder='name'/>
+				</div>
+				<div className='field-container'>
+					<TextField border onChange={changeHandler} name="email" value={profileForm.email} placeholder='email' readOnly={user.authType === AuthType.AUTH_SERVICE}/>
 				</div>
 			</div>
 		</Card>

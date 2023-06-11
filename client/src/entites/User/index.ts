@@ -12,3 +12,4 @@ export {useInitUser} from './lib/hooks/initUser.hook'
 export {useUserAllAPI} from './api/getUserAll'
 
 export {getRole} from './lib/helpers/getRole'
+export {getAuthType} from './lib/helpers/getAuthType'

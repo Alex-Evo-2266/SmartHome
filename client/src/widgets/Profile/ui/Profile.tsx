@@ -1,11 +1,12 @@
 import './Profile.scss'
 import { NavLink } from "react-router-dom"
-import { logout } from "../../../entites/User"
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
-import { Card, IconButton } from "../../../shared/ui"
-import { AuthType } from "../../../entites/User/model/user"
+import { BaseActionCard, Card } from "../../../shared/ui"
+import { AuthType, UserData } from "../../../entites/User/model/user"
 import userDefault from '../../../shared/img/userNuN.png'
-import { LogOut } from "lucide-react"
+import { useCallback } from 'react'
+import { hideDialog, showDialog } from '../../../shared/lib/reducers/dialogReducer'
+import { SessionListDialog } from '../../Sessions'
 
 interface ProfileSettingsProps{
     className?:string
@@ -13,46 +14,54 @@ interface ProfileSettingsProps{
 
 export const Profile = ({className}:ProfileSettingsProps) => {
 
-    const dispatch = useAppDispatch()
     const user = useAppSelector(state=>state.user)
     const auth = useAppSelector(state=>state.auth)
 
     return(
-        <Card className={className}>
+        <Card className={className} header='Profile' action={<ProfineCardAction user={user}/>}>
             <div className="profile-container">
-            <div className = {`container glass-normal`}>
-                <IconButton icon={<LogOut/>} onClick={()=>dispatch(logout())}/>
-			<div className = "pagecontent">
-				<h2>Profile</h2>
-				<div className='img-container' style={{borderRadius:"50%", overflow:"hidden"}}>
+				<div className='img-container'>
 					{
 						(user.imageUrl)?
 						<img alt="profile_img" src={user.imageUrl}/>:
 						<img alt="profile_img" src={userDefault}/>
 					}
 				</div>
-				<p>User Name: {user.name}</p>
-				<p>User Email: {user.email||"NuN"}</p>
-				<p>User Role: {auth.role}</p>
-				<p>User authorization type: {user.authType}</p>
-				<div className="dividers"></div>
-				<div className="controlElement">
-				{
-					(user.authType === AuthType.LOGIN)?
-					<>
-						<NavLink to = "/profile/edit" className="btn">Edit profile</NavLink>
-						<NavLink to = "/profile/edit/password" className="btn">Edit password</NavLink>
-					</>:(user.authType === AuthType.AUTH_SERVICE)?
-					<>
-						<a href= {`${user.host}/profile/edit`} className="btn">Edit profile</a>
-						<a href = {`${user.host}/profile`} className="btn">Edit password</a>
-					</>:null
-				}
-				{/* <button onClick={showSession} className="btn">Sessions</button> */}
-			  </div>
-			</div>
-		  </div>
+				<p>Name: {user.name}</p>
+				<p>Email: {user.email||"NuN"}</p>
+				<p>Role: {auth.role.toLocaleLowerCase()}</p>
+				<p>Authorization type: {user.authType?.toLocaleLowerCase()}</p>
             </div>
         </Card>
     )
+}
+
+interface ProfineCardActionProps{
+	user:UserData
+}
+
+function ProfineCardAction({user}:ProfineCardActionProps) {
+
+	const dispatch = useAppDispatch()
+
+	const showSession = useCallback(() => {
+		dispatch(showDialog(<SessionListDialog onHide={()=>dispatch(hideDialog())}/>))
+	},[dispatch])
+
+	return(
+		<BaseActionCard>
+			{
+			(user.authType === AuthType.LOGIN)?
+			<>
+				<NavLink to = "/settings" className="btn">Edit profile</NavLink>
+				<NavLink to = "/profile/edit/password" className="btn">Edit password</NavLink>
+			</>:(user.authType === AuthType.AUTH_SERVICE)?
+			<>
+				<a href= {`${user.host}/profile/edit`} className="btn">Edit profile</a>
+				<a href = {`${user.host}/profile`} className="btn">Edit password</a>
+			</>:null
+			}
+			<button onClick={showSession} className="btn">Sessions</button>
+		</BaseActionCard>
+	)
 }
