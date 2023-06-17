@@ -3,7 +3,7 @@ import { IconOrString } from '../../../../entites/Icon'
 import { useAppDispatch, useAppSelector } from '../../../../shared/lib/hooks/redux'
 import { Divider } from '../../../../shared/ui'
 import { getOtherNavigationItem } from '../../../../features/Navigation'
-import { Home, LogOut, Settings } from 'lucide-react'
+import { Home, LogOut, Plug, Settings } from 'lucide-react'
 import { NavigationDrawerItem } from './NavigationDrawerItem'
 import { hideNavigation } from '../../../../features/Navigation/lib/reducers/NavigationReducer'
 import { NavButton } from './NavButton'
@@ -25,6 +25,7 @@ export const NavigationDrawer = ({openAlways}:NavigationDrawerProps) => {
 				<div className='block-header'></div>
 				<div className='block-content'>
 					<NavigationDrawerItem onClick={()=>dispatch(hideNavigation())} title='Home' icon={<Home/>} to='/home'/>
+					<NavigationDrawerItem onClick={()=>dispatch(hideNavigation())} title='Devices' icon={<Plug/>} to='/devices'/>
 				{
 					navigation.favouritesItems.map((item, index)=>(
 						<NavigationDrawerItem onClick={()=>dispatch(hideNavigation())} key={index} title={item.title} icon={<IconOrString iconName={item.icon}/>} to={item.url}/>

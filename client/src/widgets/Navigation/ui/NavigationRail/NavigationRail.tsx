@@ -1,4 +1,4 @@
-import { AlignJustify, Home, LogOut } from 'lucide-react'
+import { AlignJustify, Home, LogOut, Plug } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../../shared/lib/hooks/redux'
 import './NavigationRail.scss'
 import { NavigationRailItem } from './NavigationRailItem'
@@ -18,6 +18,7 @@ export const NavigationRail = () => {
                 <div className='block-content'>
                     <NavButton icon={<AlignJustify/>} onClick={()=>dispatch(toggleNavigation())}/>
                     <NavigationRailItem title='Home' icon={<Home/>} to='/home'/>
+					<NavigationRailItem title='Devices' icon={<Plug/>} to='/devices'/>
                 {
                     navigation.favouritesItems.map((item, index)=>(
                         <NavigationRailItem key={index} title={item.title} icon={<IconOrString iconName={item.icon}/>} to={item.url}/>

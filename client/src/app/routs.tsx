@@ -7,6 +7,7 @@ import { ProfilePage } from "../pages/Profile"
 import { UserRole } from "../entites/User"
 import { Page403 } from "../pages/403Page"
 import { UsersPage } from "../pages/Users"
+import { DevicePage } from "../pages/Devices"
 
 
 export const useRoutes = (isAuthenticated:boolean, role: UserRole)=>{
@@ -24,6 +25,7 @@ export const useRoutes = (isAuthenticated:boolean, role: UserRole)=>{
 					(isAuthenticated)?
 					<Route path="/" element={<RootPage/>}>
 						<Route path="home" element={<HomePage/>}/>
+						<Route path="devices" element={<DevicePage/>}/>
 						<Route path="settings" element={<SettingsPage/>}/>
 						<Route path="profile" element={<ProfilePage/>}/>
 						<Route path="users" element={<UsersPage/>}/>
