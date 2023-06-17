@@ -1,7 +1,9 @@
-import json
+import json, logging
 
 from typing import List
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+
+logger = logging.getLogger(__name__)
 
 class WebSocketMenager:
 	active_connections: List[WebSocket] = []
@@ -17,7 +19,11 @@ class WebSocketMenager:
 
 	@staticmethod
 	async def send_personal_message(message: str, websocket: WebSocket):
-		await websocket.send_text(message)
+		try:
+			await websocket.send_text(message)
+		except Exception as e:
+			logger.warning("send_personal_message: client not found")
+			WebSocketMenager.disconnect(websocket)
 
 	@staticmethod
 	async def broadcast(message: str):
@@ -27,9 +33,13 @@ class WebSocketMenager:
 	@staticmethod
 	async def send_information(type: str, data):
 		for connection in WebSocketMenager.active_connections:
-			await connection.send_text(
-				json.dumps({
-					'type':type,
-					'data':data
-					})
-			)
+			try:
+				await connection.send_text(
+					json.dumps({
+						'type':type,
+						'data':data
+						})
+				)
+			except Exception as e:
+				logger.warning("\x1b[33;20m" + "send_information: client not found")
+				WebSocketMenager.disconnect(connection)
