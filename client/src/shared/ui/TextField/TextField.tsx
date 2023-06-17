@@ -43,7 +43,7 @@ export const TextField = ({readOnly, password, border, onClear, icon, onChange, 
     }
 
     return(
-        <div className={`text-field ${border?"border":""}`}>
+        <div className={`text-field ${border?"border":""} ${className}`}>
             {
                 (icon)?
                 <div className="icon-container" onClick={focus}>{icon}</div>:
@@ -55,7 +55,7 @@ export const TextField = ({readOnly, password, border, onClear, icon, onChange, 
                 readOnly={readOnly}
                 required 
                 type={password?"password":"text"} 
-                className={`${className} ${isError?"error":""}`} 
+                className={`${isError?"error":""}`} 
                 name={name} 
                 value={value} 
                 onChange={onChange}

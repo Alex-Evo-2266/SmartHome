@@ -60,12 +60,12 @@ export const SelectField = ({items, onChange, value, placeholder, className, bor
 
     return(
         <>
-            <div className={`select-field ${border?"border":""}`}>
+            <div className={`select-field ${className} ${border?"border":""}`}>
                 <div className="input-container" onClick={show}>
                     <input
                     required 
                     type="text"
-                    className={`${className} ${error?"error":""}`} 
+                    className={`${error?"error":""}`} 
                     name={name} 
                     value={selectTitle}
                     placeholder={placeholder}
