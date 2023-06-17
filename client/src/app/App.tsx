@@ -5,12 +5,14 @@ import { useAppSelector } from '../shared/lib/hooks/redux';
 import { useEffect } from 'react';
 import { NavigationInit } from '../features/Navigation';
 import { UserRole, useInitUser } from '../entites/User';
+import { useSocket } from '../features/WebSocket';
 
 function App() {
 
 	const user = useAppSelector(state=>state.auth)
 	const {init} = NavigationInit()
 	const {userInit} = useInitUser()
+	const {listenSocket, closeSocket} = useSocket()
 
 	const route = useRoutes(user.isAuthenticated, user.role)
 
@@ -23,6 +25,12 @@ function App() {
 		if(user.isAuthenticated && user.role !== UserRole.WITHOUT)
 			userInit()
 	},[user.isAuthenticated, userInit])
+
+	useEffect(()=>{
+		if (user.isAuthenticated)
+		  listenSocket()
+		return ()=>closeSocket()
+	  },[listenSocket, closeSocket, user.isAuthenticated])
 
 	return (
 		<div className="App">

@@ -5,6 +5,7 @@ import menuReducer from "../../shared/lib/reducers/menuReducer";
 import snackbarReducer from "../../shared/lib/reducers/snackbarReducer";
 import { authReducer, userReducer } from "../../entites/User";
 import { navigationReducer } from "../../features/Navigation";
+import { deviceReducer } from "../../entites/Device";
 
 
 export const rootReducer = combineReducers({
@@ -14,5 +15,6 @@ export const rootReducer = combineReducers({
     snackbar: snackbarReducer,
     auth: authReducer,
     navigation: navigationReducer,
-    user: userReducer
+    user: userReducer,
+    device: deviceReducer,
 })
