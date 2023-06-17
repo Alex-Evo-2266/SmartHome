@@ -1,7 +1,9 @@
 import { Check } from "lucide-react"
 import { IMenuItem } from "../../model/menu"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { SubMenuItemBlock } from "./SubMenuItemBlock"
+import { useAppDispatch, useAppSelector } from "../../lib/hooks/redux"
+import { hideMenu } from "../../lib/reducers/menuReducer"
 
 interface MenuItemProps{
     item: IMenuItem
@@ -9,18 +11,20 @@ interface MenuItemProps{
     smallDisplay: boolean
 }
 
-
-
 const MenuItem = ({item, isIcon, smallDisplay}:MenuItemProps) => {
 
     const [visible, setVisible] = useState<boolean>(false)
+    const menu = useAppSelector(state=>state.menu)
+    const dispath = useAppDispatch()
 
-    const subMenuToggle = () => {
+    const subMenuToggle = useCallback(() => {
         if(item.subItems)
             setVisible(prev=>!prev)
         else
             item.onClick && item.onClick()
-    }
+        if(menu.autoHide)
+            dispath(hideMenu())
+    },[menu, item.onClick])
 
     return(
         <div className="menu-item-conatiner">

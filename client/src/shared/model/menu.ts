@@ -18,5 +18,7 @@ export interface IBlock{
     items: IMenuItem[]
 }
 
-
-
+export interface IMenuOption{
+    width?: number
+    autoHide?: boolean
+}
