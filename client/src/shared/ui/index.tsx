@@ -63,3 +63,5 @@ export {Divider} from './Divider/Divider'
 
 import './Table/Table.scss'
 export {Table} from './Table/Table'
+
+export {FieldContainer} from './FieldContainer/FieldContainer'
