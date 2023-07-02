@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../lib/hooks/redux"
 import { hideMenu, showBaseMenu } from "../../lib/reducers/menuReducer"
 import { IMenuItem } from "../../model/menu"
 import "./Select.scss"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export interface IOption{
     title: string
@@ -20,6 +20,8 @@ interface ISelectFieldProps{
     border?: boolean
     name?: string
     error?: boolean
+    onFocus?: (e:React.FocusEvent<HTMLInputElement>)=>void
+    onBlur?: (e:React.FocusEvent<HTMLInputElement>)=>void
 }
 
 const getTitleByValue = (items:(IOption | string)[], value: string) => {
@@ -33,10 +35,14 @@ const getTitleByValue = (items:(IOption | string)[], value: string) => {
     return ""
 }        
 
-export const SelectField = ({items, onChange, value, placeholder, className, border, name, error}:ISelectFieldProps) => {
+export const SelectField = ({items, onChange, value, placeholder, className, border, name, error, onBlur, onFocus}:ISelectFieldProps) => {
 
-    const [selectTitle, setSelectTitle] = useState<string>(getTitleByValue(items, value ?? ""))
+    const [selectTitle, setSelectTitle] = useState<string>("")
     const dispatch = useAppDispatch()
+
+    useEffect(()=>{
+        setSelectTitle(getTitleByValue(items, value ?? ""))
+    },[value, items])
 
     const change = useCallback((data: string) => {
         setSelectTitle(getTitleByValue(items, data))
@@ -55,8 +61,8 @@ export const SelectField = ({items, onChange, value, placeholder, className, bor
         let data = getContainerData(event.currentTarget)
         let x = data?.left ?? event.pageX
         let y = (data?.top)?data.top + data.height : event.pageY
-        dispatch(showBaseMenu(items.map(selectMap), x, y, data?.width))
-    },[])
+        dispatch(showBaseMenu(items.map(selectMap), x, y, {width: data?.width}))
+    },[items])
 
     return(
         <>
@@ -69,6 +75,8 @@ export const SelectField = ({items, onChange, value, placeholder, className, bor
                     name={name} 
                     value={selectTitle}
                     placeholder={placeholder}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
                     readOnly
                     />
                     <span className="text-field-line"></span>

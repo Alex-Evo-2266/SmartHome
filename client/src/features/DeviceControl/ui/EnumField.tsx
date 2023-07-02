@@ -2,6 +2,7 @@ import {useCallback,useEffect, useState} from 'react'
 import { useControlDeviceAPI } from '../api/setDeviceValue'
 import { SelectField } from '../../../shared/ui'
 import { FieldDevice } from '../../../entites/Device'
+import { splitValue } from '../../../shared/lib/helpers/stringSplitAndJoin'
 
 interface FieldProps{
 	field: FieldDevice
@@ -12,11 +13,6 @@ interface FieldProps{
 export const EnumField = ({field, value, systemName}:FieldProps)=>{
 	const [v, setV] = useState<string>('')
 	const {setValueDevice} = useControlDeviceAPI()
-
-    const getValues = (enum_values: string) => {
-        let arr = enum_values.split(",")
-        return arr.map(item=>item.trim())
-    }
 
 	useEffect(()=>{
 		setV(value)
@@ -33,7 +29,7 @@ export const EnumField = ({field, value, systemName}:FieldProps)=>{
 			{field.name}
 			</div>
 			<div className='device-field-control input-data'>
-				<SelectField placeholder='select value' className='bg-transparent device-field-control-text-input' items={getValues(field.enum_values)} onChange={out} value={v}/>
+				<SelectField placeholder='select value' className='bg-transparent device-field-control-text-input' items={splitValue(field.enum_values)} onChange={out} value={v}/>
 			</div>
 		</div>
 	)

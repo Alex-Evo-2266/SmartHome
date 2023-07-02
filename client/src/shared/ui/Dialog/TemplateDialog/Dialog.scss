@@ -7,12 +7,15 @@
     width: calc(100% - 40px);
     border-radius: 28px;
     position: fixed;
+    display: flex;
+    flex-direction: column;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
     
     .dialog-header{
+        flex: 100%;
         padding-bottom: 16px;
         padding-left: 24px;
         padding-right: 24px;
@@ -22,11 +25,14 @@
         }
     }
     .dialog-action{
+        flex: 100%;
         padding-top: 24px;
         padding-left: 24px;
         padding-right: 24px;
     }
     .dialog-content{
+        flex: 100%;
+        overflow-y: auto;
         color: var(--On-surface-variant-color);
         & > *{
             padding-left: 24px;
@@ -42,13 +48,17 @@
     }
 }
 
+.full-screen-dialog-base-format{
+    max-height: 85vh;
+}
+
 .full-screen-dialog-container{
     position: fixed;
     z-index: 900;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 80px);
     background-color: var(--Surface-container-high-color);
     .full-screen-dialog-header{
         display: flex;
@@ -74,5 +84,9 @@
             color: var(--Primary-color);
             align-items: center;
         }
+    }
+    .full-screen-dialog-content{
+        height: calc(100% - 56px);
+        padding: 0 10px;
     }
 }

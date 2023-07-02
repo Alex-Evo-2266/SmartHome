@@ -65,3 +65,8 @@ import './Table/Table.scss'
 export {Table} from './Table/Table'
 
 export {FieldContainer} from './FieldContainer/FieldContainer'
+
+
+export {ScrollContainer} from './ScrollContainer/ScrollContainer'
+
+export {Chips} from './Chips/Chips'

@@ -57,7 +57,7 @@ export const FullScrinTemplateDialog = ({className, header, children, onSave, on
 
 	if(!fullScreenDisplay)
 		return(
-			<BasicTemplateDialog className={className} onHide={hide} children={children} action={<ButtonDialog onHide={hide} onSave={save}/>}/>
+			<BasicTemplateDialog header={header} className={`full-screen-dialog-base-format ${className}`} onHide={hide} children={children} action={<ButtonDialog onHide={hide} onSave={save}/>}/>
 		)
 
 	return(
@@ -69,7 +69,7 @@ export const FullScrinTemplateDialog = ({className, header, children, onSave, on
 				<div className="header">{header}</div>
 				<div className="save-container"><TextButton onClick={save}>save</TextButton></div>
 			</div>
-			<div className="full-screen-dialog-content">
+			<div className="full-screen-dialog-content" style={{overflowY:"auto"}}>
 				{children}
 			</div>
 		</div>

@@ -19,18 +19,24 @@ export const NumberField = ({field, value, systemName}:FieldProps)=>{
 		setV(Number(value))
 	},[value])
 
-	const out = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
+	const change = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
 		setV(Number(e.target.value))
-		setValueDevice(systemName, field.name, e.target.value)
 	},[systemName, field, setValueDevice])
+
+	const mouseUp = useCallback(() => {
+		setValueDevice(systemName, field.name, String(v))
+	},[v])
 
 	return(
 		<div className='device-field'>
 			<div className='device-field-title'>
-			{field.name}
+				{field.name}
 			</div>
 			<div className='device-field-control slider'>
-				<Slider maxMinDisplay value={Number(v)} onChange={out}/>
+				<Slider value={Number(v)} onChange={change} onMouseUp={mouseUp} max={Number(field.high)} min={Number(field.low)}/>
+			</div>
+			<div className='device-field-value'>
+				{Number(v)}
 			</div>
 		</div>
 	)
