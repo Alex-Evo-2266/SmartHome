@@ -5,6 +5,7 @@ from typing import Dict
 
 class Modules():
 	services = {}
+	routers = []
 
 	@staticmethod
 	def add(name, data):

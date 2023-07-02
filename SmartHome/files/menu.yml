@@ -1,6 +1,6 @@
 - title: "Scripts"
   iconClass: "fas fa-code-branch"
-  icon: "settings"
+  icon: "fork"
   url: "/scripts"
 - title: "Profile"
   iconClass: "fas fa-user"

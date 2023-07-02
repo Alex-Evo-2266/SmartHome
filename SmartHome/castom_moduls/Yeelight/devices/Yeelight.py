@@ -98,6 +98,9 @@ class YeelightDevice(BaseDevice):
 		if(saturation and "sat" in values):
 			saveNewDate(saturation,values["sat"])
 
+	def updata(self):
+		return self.update_value()
+
 	def get_value(self, name):
 		self.update_value()
 		return super().get_value(name)

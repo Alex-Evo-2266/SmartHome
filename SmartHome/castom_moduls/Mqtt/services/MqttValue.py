@@ -7,7 +7,6 @@ from moduls_src.services import BaseService
 from datetime import datetime
 import json
 import logging
-from castom_moduls.Mqtt.settings import DEVICE_NAME
 
 logger = logging.getLogger(__name__)
 
