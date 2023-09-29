@@ -1,7 +1,7 @@
 import ormar, datetime
 from app.dbormar import BaseMeta
 from typing import Optional, List, Dict, Union
-from app.device.schemas import Received_Data_Format, Status_Device, Type_device_field
+from app.device.enums import Received_Data_Format, Status_Device, Type_device_field
 
 
 class Device(ormar.Model):
@@ -18,6 +18,7 @@ class Device(ormar.Model):
 	device_polling: bool = ormar.Boolean(default=True)
 	device_status: Optional[Status_Device] = Status_Device.OFFLINE
 	value: Optional[Dict[str,str]] = dict()
+	
 	# type_field: Dict[str,str] = {}
 	
 class Device_field(ormar.Model):
@@ -34,7 +35,8 @@ class Device_field(ormar.Model):
 	read_only: bool = ormar.Boolean()
 	icon: str = ormar.String(max_length=200, default="fas fa-circle-notch")
 	unit: Optional[str] = ormar.String(max_length=200, default="")
-	device: Optional[Union[Device, Dict]] = ormar.ForeignKey(Device)
+	virtual_field: bool = ormar.Boolean(default=True)
+	device: Optional[Union[Device, Dict]] = ormar.ForeignKey(Device, related_name="fields")
 
 class Value(ormar.Model):
 	class Meta(BaseMeta):
@@ -43,7 +45,7 @@ class Value(ormar.Model):
 	id: int = ormar.Integer(primary_key=True)
 	datatime: str = ormar.String(max_length=20)
 	deviceName: str = ormar.String(max_length=200)
-	field: Optional[Union[Device_field, Dict]] = ormar.ForeignKey(Device_field)
+	field: Optional[Union[Device_field, Dict]] = ormar.ForeignKey(Device_field, related_name="value")
 
 
 
