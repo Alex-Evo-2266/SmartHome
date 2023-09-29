@@ -2,24 +2,24 @@
 name = "smarthome"
 version = "0.1.0"
 description = ""
-authors = ["Avex-Evo-2244 <ghbdtn2266@mail.ru>"]
+authors = ["Alex-Evo-2266 <ghbdtn2266@mail.ru>"]
+readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-fastapi = "^0.70.1"
-alembic = "^1.7.5"
-ormar = {extras = ["mysql"], version = "^0.10.23"}
-uvicorn = {extras = ["standard"], version = "^0.16.0"}
-bcrypt = "^3.2.0"
-PyJWT = "^2.3.0"
-PyYAML = "^6.0"
-requests = "^2.26.0"
-python-multipart = "^0.0.5"
+python = "^3.10"
+fastapi = "^0.103.1"
+alembic = "^1.12.0"
+ormar = {extras = ["mysql"], version = "^0.12.2"}
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+bcrypt = "^4.0.1"
+requests = "^2.31.0"
+pyjwt = "^2.8.0"
+pyyaml = "^6.0.1"
+python-multipart = "^0.0.6"
 paho-mqtt = "^1.6.1"
-yeelight = "^0.7.10"
+yeelight = "^0.7.13"
 
-[tool.poetry.dev-dependencies]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

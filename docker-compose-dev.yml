@@ -68,6 +68,13 @@ services:
       - 1883:1883
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8088:80
+    environment:
+      - PMA_ARBITRARY=1
   # zigbee2mqtt:
   #   container_name: zigbee2mqtt
   #   image: koenkk/zigbee2mqtt:latest
