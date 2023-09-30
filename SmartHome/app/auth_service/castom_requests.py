@@ -4,7 +4,7 @@ from app import settings
 from pydantic import BaseModel
 from app.authtorization.models import Session
 import requests
-from app.authtorization.exceptions import AuthServiceException, InvalidArgumentException, NoDataToConnectException
+from app.exceptions.exceptions_user import NoDataToConnectException
 
 logger = logging.getLogger(__name__)
 

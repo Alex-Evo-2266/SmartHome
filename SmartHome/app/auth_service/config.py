@@ -3,7 +3,7 @@ from typing import List, Optional
 from app.auth_service.castom_requests import ConnectData, ThisLocalSession, castom_auth_service_requests, get_connect_data
 from app.authtorization.models import Session
 from pydantic import BaseModel
-from app.authtorization.exceptions import AuthServiceException, InvalidArgumentException, NoDataToConnectException
+from app.exceptions.exceptions_user import AuthServiceException
 
 logger = logging.getLogger(__name__)
 

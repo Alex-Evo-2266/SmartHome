@@ -6,7 +6,7 @@ from unicodedata import name
 from fastapi import APIRouter, Response, Depends, Cookie
 from fastapi.responses import JSONResponse
 from app.authtorization.auth_depends import session, token_dep
-from app.authtorization.exceptions import InvalidInputException
+from app.exceptions.exceptions import InvalidInputException
 from app.auth_service.auth_service import get_auth_service_tokens
 from app.authtorization.models import Session, User
 from app.authtorization.logic import create_session, create_tokens_oauth, create_valid_user_name, delete_session, get_token, local_login, refresh_token

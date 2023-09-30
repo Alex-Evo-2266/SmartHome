@@ -8,7 +8,8 @@ import jwt, bcrypt
 from jwt import ExpiredSignatureError
 from app.auth_service.logout import logout_service
 from app.authtorization.old_token import OldTokens
-from app.authtorization.exceptions import InvalidInputException, TooManyTriesException, UserNotFoundException
+from app.exceptions.exceptions_user import TooManyTriesException, UserNotFoundException
+from app.exceptions.exceptions import InvalidInputException
 from app.authtorization.schema import Login, Tokens
 from app.authtorization.models import AuthType, Session, User
 from app import settings

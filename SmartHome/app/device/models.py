@@ -1,4 +1,5 @@
 import ormar, datetime
+from ormar import ReferentialAction
 from app.dbormar import BaseMeta
 from typing import Optional, List, Dict, Union
 from app.device.enums import Received_Data_Format, Status_Device, Type_device_field
@@ -36,16 +37,16 @@ class Device_field(ormar.Model):
 	icon: str = ormar.String(max_length=200, default="fas fa-circle-notch")
 	unit: Optional[str] = ormar.String(max_length=200, default="")
 	virtual_field: bool = ormar.Boolean(default=True)
-	device: Optional[Union[Device, Dict]] = ormar.ForeignKey(Device, related_name="fields")
+	device: Optional[Union[Device, Dict]] = ormar.ForeignKey(Device, related_name="fields", ondelete=ReferentialAction.CASCADE)
 
 class Value(ormar.Model):
 	class Meta(BaseMeta):
 		pass
 
-	id: int = ormar.Integer(primary_key=True)
+	id: int = ormar.Integer(primary_key=True, autoincrement=True)
 	datatime: str = ormar.String(max_length=20)
-	deviceName: str = ormar.String(max_length=200)
-	field: Optional[Union[Device_field, Dict]] = ormar.ForeignKey(Device_field, related_name="value")
+	value: str = ormar.String(max_length=500)
+	field: Optional[Union[Device_field, Dict]] = ormar.ForeignKey(Device_field, related_name="value", ondelete=ReferentialAction.CASCADE)
 
 
 

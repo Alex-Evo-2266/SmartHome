@@ -1,6 +1,6 @@
 
 from app.authtorization.schema import AuthServiceTokens
-from app.authtorization.exceptions import AuthServiceException, InvalidArgumentException, NoDataToConnectException
+from app.exceptions.exceptions_user import AuthServiceException, InvalidArgumentException, NoDataToConnectException
 
 import logging
 from app import settings

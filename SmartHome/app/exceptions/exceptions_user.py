@@ -13,19 +13,6 @@ class UserNotFoundException(Exception):
 		else:
 			return "UserNotFoundException"
 
-class InvalidInputException(Exception):
-	def __init__(self, *args: object) -> None:
-		if args:
-			self.message = args[0]
-		else:
-			self.message = "invalid input data"
-	
-	def __str__(self) -> str:
-		if self.message:
-			return f"InvalidInputException, {self.message}"
-		else:
-			return "InvalidInputException"
-
 class NoDataToConnectException(Exception):
 	def __init__(self, *args: object) -> None:
 		if args:
@@ -78,18 +65,16 @@ class TooManyTriesException(Exception):
 			return f"TooManyTriesException, {self.message}"
 		else:
 			return "TooManyTriesException"
-		
-
-class UserExistException(Exception):
+	
+class AccessRightsErrorException(Exception):
 	def __init__(self, *args: object) -> None:
 		if args:
 			self.message = args[0]
 		else:
-			self.message = "a user with this name already exists."
+			self.message = "the user does not have sufficient rights to perform this action."
 	
 	def __str__(self) -> str:
 		if self.message:
-			return f"UserExistException, {self.message}"
+			return f"AccessRightsErrorException, {self.message}"
 		else:
-			return "UserExistException"
-	
+			return "AccessRightsErrorException"

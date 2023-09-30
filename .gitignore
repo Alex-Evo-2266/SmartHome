@@ -46,3 +46,5 @@ logic/device/old/*
 old
 
 clientold
+
+tests

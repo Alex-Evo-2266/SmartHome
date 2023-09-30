@@ -1,5 +1,4 @@
 import logging, requests, json
-from app.authtorization.exceptions import AuthServiceException
 from app.auth_service.castom_requests import ThisLocalSession, castom_auth_service_requests, get_connect_data, refrash
 from app.authtorization.models import Session
 

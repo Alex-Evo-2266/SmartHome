@@ -46,7 +46,7 @@ class TypeDevice(BaseModel):
 	name: str
 	fields: List[FieldTypeDevice] = []
 
-class ConfigSchema():
+class ConfigSchema(BaseModel):
 	address: bool = True
 	token: bool = False
 	fields_addition: bool = True

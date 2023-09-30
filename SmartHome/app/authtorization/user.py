@@ -7,7 +7,7 @@ from typing import List
 from app.send_email.email import send_email
 from app.auth_service.castom_requests import ThisLocalSession
 from app.auth_service.config import get_user_data, get_user_data_by_id
-from app.authtorization.exceptions import UserNotFoundException, UserExistException
+from app.exceptions.exceptions_user import UserNotFoundException
 from app.authtorization.models import AuthType, Session
 from app.authtorization.schema import UserLevel
 
@@ -70,7 +70,7 @@ async def edit_user(id: int,data: UserEditSchema)->None:
 	user2: User | None = await User.objects.get_or_none(name=data.name)
 	if(user2 and user2.id != user.id):
 		logger.info(f"user does not exist. id:{id}")
-		raise UserExistException()
+		raise UserAlreadyExistsException()
 	user.name = data.name
 	user.email = data.email
 	await user.update(_columns=["name", "email"])

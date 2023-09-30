@@ -15,7 +15,7 @@ class AddDeviceFieldSchema(BaseModel):
 	icon: str = "fas fa-circle-notch"
 	unit: Optional[str]
 	virtual_field: bool
-	
+
 	class Config:  
 		use_enum_values = True
 
@@ -31,4 +31,32 @@ class AddDeviceSchema(BaseModel):
 	
 	class Config:  
 		use_enum_values = True
+
+class EditDeviceSchema(AddDeviceSchema):
+	pass
 		
+class FieldDeviceSchema(BaseModel):
+	name: str
+	address: Optional[str]
+	type: Type_device_field
+	low: Optional[str]
+	high: Optional[str]
+	enum_values: Optional[str]
+	read_only: bool
+	icon: str
+	unit: Optional[str] 
+	virtual_field: bool
+	value: Optional[str]
+
+class DeviceSchema(BaseModel):
+	name: str
+	system_name: str
+	class_device: str
+	type: str 
+	address: Optional[str]
+	token: Optional[str]
+	type_command: Received_Data_Format
+	device_polling: bool
+	device_status: Optional[Status_Device] = Status_Device.OFFLINE
+	value: Optional[Dict[str,str]] = dict()
+	fields: List[FieldDeviceSchema] = []
