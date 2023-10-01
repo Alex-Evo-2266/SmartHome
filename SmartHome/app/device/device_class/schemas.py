@@ -1,6 +1,5 @@
 from typing import List, Optional, Dict
 from pydantic import BaseModel
-from app.device.enums import Type_device_field, Received_Data_Format, Status_Device
 
 class ChangeField(BaseModel):
 	added:bool = True

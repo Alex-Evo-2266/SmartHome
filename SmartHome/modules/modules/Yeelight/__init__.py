@@ -1,5 +1,5 @@
-from castom_moduls.Yeelight.devices.Yeelight import YeelightDevice
-from moduls_src.moduls import BaseModule
+from modules.modules.Yeelight.devices.Yeelight import YeelightDevice
+from modules.modules_src.modules import BaseModule
 
 
 class Module(BaseModule):

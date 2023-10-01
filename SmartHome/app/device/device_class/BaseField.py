@@ -3,9 +3,9 @@
 from enum import Enum
 from numbers import Number
 from typing import Any, Dict, List
-from app.device.device_class.interfaces.type_field import TypeField
+from app.device.enums import TypeDeviceField
 from app.exceptions.exceptions import InvalidInputException
-from app.device.device_class.interfaces.field_interface import IField
+from app.device.device_class.field_interface import IField
 from app.device.schemas import FieldDeviceSchema
 
 def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:
@@ -28,7 +28,7 @@ class BaseField(IField):
 		high:str|None = None, 
 		low:str|None = None,
 		icon:str = "fas fa-circle-notch",
-		type:TypeField = TypeField.BASE,
+		type:TypeDeviceField = TypeDeviceField.BASE,
 		unit:str = "",
 		enum_values:List[str] = [],
 		value:Any = None,

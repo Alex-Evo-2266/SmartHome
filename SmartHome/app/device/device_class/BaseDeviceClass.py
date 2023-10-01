@@ -1,9 +1,9 @@
 from typing import Any, List, TypeVar, Optional, Dict
-from app.device.models import Device, Received_Data_Format, Status_Device, Device_field, Value
+from app.device.models import Device, Device_field, Value
 from app.device.device_class.DeviceMeta import DeviceMeta
 from app.device.device_class.schemas import ConfigSchema, ChangeDevice, AdditionDevice
-from app.device.device_class.base_field import BaseField
-from app.device.device_class.interfaces.type_field import TypeField
+from app.device.device_class.BaseField import BaseField
+from app.device.enums import TypeDeviceField, ReceivedDataFormat, StatusDevice
 from app.device.schemas import DeviceSchema, FieldDeviceSchema
 
 from app.exceptions.exceptions import DeviceNotFound, InvalidInputException
@@ -54,9 +54,9 @@ class BaseDevice(metaclass=DeviceMeta, use=False):
 			fields: List[Device_field],
 			address: Optional[str] = None,
 			token: Optional[str] = None,
-			type_command: Received_Data_Format = Received_Data_Format.JSON,
+			type_command: ReceivedDataFormat = ReceivedDataFormat.JSON,
 			device_polling: bool = True,
-			device_status: Optional[Status_Device] = Status_Device.OFFLINE,
+			device_status: Optional[StatusDevice] = StatusDevice.OFFLINE,
 			value: Optional[Dict[str,str]] = dict()
 			):
 		if not system_name or system_name == "":
@@ -105,7 +105,7 @@ class BaseDevice(metaclass=DeviceMeta, use=False):
 	def set_value(self, name:str, status:Any):
 		value = look_for_param(self.values, name)
 		if(value):
-			if(value.get_type() == TypeField.NUMDER):
+			if(value.get_type() == TypeDeviceField.NUMBER):
 				if(int(status) > int(value.get_high())):
 					status = value.get_high()
 				if(int(status) < int(value.get_low())):

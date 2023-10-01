@@ -1,10 +1,10 @@
 
 
-from typing import Dict
+from typing import Dict, Any
 
 
 class Modules():
-	services = {}
+	services:Dict[str, Any] = {}
 	routers = []
 
 	@staticmethod
@@ -27,7 +27,8 @@ class Modules():
 class ModuleMeta(type):
 	def __new__(cls, clsname, bases, dct):
 		new_class = super(ModuleMeta, cls).__new__(cls, clsname, bases, dct)
-		Modules.add(clsname, new_class)
+		if clsname != "BaseModule":
+			Modules.add(clsname, new_class)
 		return new_class
 
 class BaseModule(metaclass=ModuleMeta):

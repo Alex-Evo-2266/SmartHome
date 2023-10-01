@@ -2,7 +2,7 @@ import ormar, datetime
 from ormar import ReferentialAction
 from app.dbormar import BaseMeta
 from typing import Optional, List, Dict, Union
-from app.device.enums import Received_Data_Format, Status_Device, Type_device_field
+from app.device.enums import ReceivedDataFormat, StatusDevice, TypeDeviceField
 
 
 class Device(ormar.Model):
@@ -15,9 +15,9 @@ class Device(ormar.Model):
 	type: str = ormar.String(max_length=200)
 	address: Optional[str] = ormar.String(max_length=200, nullable=True)
 	token: Optional[str] = ormar.String(max_length=200, nullable=True)
-	type_command: Received_Data_Format = ormar.String(max_length=200, default=Received_Data_Format.JSON)
+	type_command: ReceivedDataFormat = ormar.String(max_length=200, default=ReceivedDataFormat.JSON)
 	device_polling: bool = ormar.Boolean(default=True)
-	device_status: Optional[Status_Device] = Status_Device.OFFLINE
+	device_status: Optional[StatusDevice] = StatusDevice.OFFLINE
 	value: Optional[Dict[str,str]] = dict()
 	
 	# type_field: Dict[str,str] = {}
@@ -29,7 +29,7 @@ class Device_field(ormar.Model):
 	id: int = ormar.Integer(primary_key=True, autoincrement=True)
 	name: str = ormar.String(max_length=200)
 	address: Optional[str] = ormar.String(max_length=200, nullable=True)
-	type: Type_device_field = ormar.String(max_length=200)
+	type: TypeDeviceField = ormar.String(max_length=200)
 	low: Optional[str] = ormar.String(max_length=200, nullable=True)
 	high: Optional[str] = ormar.String(max_length=200, nullable=True)
 	enum_values: Optional[str] = ormar.String(max_length=200, nullable=True)

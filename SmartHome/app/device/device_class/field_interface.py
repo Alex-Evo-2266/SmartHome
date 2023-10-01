@@ -1,5 +1,5 @@
 from typing import Any, Dict, List
-from app.device.device_class.interfaces.type_field import TypeField
+from app.device.enums import TypeDeviceField
 from app.exceptions.exceptions import InvalidInputException
 from app.device.schemas import FieldDeviceSchema
 
@@ -18,8 +18,8 @@ class IField(object):
 	def get_low(self) -> str:
 		return ""
 
-	def get_type(self) -> TypeField:
-		return TypeField.BASE
+	def get_type(self) -> TypeDeviceField:
+		return TypeDeviceField.BASE
 
 	def get_unit(self) -> str:
 		return ""

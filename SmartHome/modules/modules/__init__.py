@@ -1,6 +1,6 @@
 import imp,os,logging
 
-from modules.moduls_src.moduls import Modules
+from modules.modules_src.modules import Modules, BaseModule
 # from .models_schema import TypeDevice, DeviceData, ModelAPIData, ModelData
 
 # devices = dict()
@@ -104,9 +104,11 @@ async def init_modules():
     dir = '/'.join(dir)
     print(dir)
     list_modules = getModuls(dir, False)
-    # for module in list_modules:
-    #     foo = imp.load_source(module, "castom_moduls"+os.sep+module+os.sep+"__init__.py")
-    # modules = Modules.all()
-    # for key in modules:
-    #     print(modules[key])
-    #     modules[key].start()
+    print(list_modules)
+    for module in list_modules:
+        foo = imp.load_source(module, "modules" + os.sep + "modules" + os.sep + module + os.sep + "__init__.py")
+    modules = Modules.all()
+    for key in modules:
+        module: BaseModule = modules[key]
+        print(module)
+        module.start()

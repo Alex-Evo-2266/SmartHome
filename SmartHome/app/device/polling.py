@@ -4,7 +4,7 @@ from app.exceptions.exceptions import DeviceNotFound
 from app.device.device_class.BaseDeviceClass import BaseDevice
 from app.device.devices_arrey import DevicesArrey
 from app.device.device_class.DeviceClasses import DeviceClasses
-from app.device.enums import Status_Device
+from app.device.enums import StatusDevice
 from app.device.schemas import DeviceSchema, FieldDeviceSchema
 from app.device.map import device_db_to_schema
 
@@ -21,7 +21,7 @@ async def polling(device_data: Device):
 		if device_data.device_polling == False:
 			data = await device_db_to_schema(device_data)
 			data.value = dict()
-			data.device_status = Status_Device.UNLINC
+			data.device_status = StatusDevice.UNLINC
 			return data
 		element = DevicesArrey.get(device_data.system_name)
 		if not element:
@@ -29,11 +29,11 @@ async def polling(device_data: Device):
 			if not device:
 				data = await device_db_to_schema(device_data)
 				data.value = dict()
-				data.device_status = Status_Device.NOT_SUPPORTED
+				data.device_status = StatusDevice.NOT_SUPPORTED
 				return data
 			if not device.is_conected:
 				data = await device_db_to_schema(device_data)
-				data.device_status = Status_Device.OFFLINE
+				data.device_status = StatusDevice.OFFLINE
 				data.value = dict()
 				return data
 			DevicesArrey.addDevice(device_data.system_name,device)
@@ -41,7 +41,7 @@ async def polling(device_data: Device):
 			device = element.device
 		device.updata()
 		data = device.get_data()
-		data.device_status = Status_Device.ONLINE
+		data.device_status = StatusDevice.ONLINE
 		return data
 	except Exception as e:
 		logger.warning(f'device not found. {e}')
@@ -49,7 +49,7 @@ async def polling(device_data: Device):
 		if element:
 			DevicesArrey.delete(device_data.system_name)
 		data = await device_db_to_schema(device_data)
-		data.device_status = Status_Device.OFFLINE
+		data.device_status = StatusDevice.OFFLINE
 		data.value = dict()
 		return data
 		
