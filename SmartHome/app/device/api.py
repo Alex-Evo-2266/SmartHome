@@ -7,6 +7,7 @@ from app.authtorization.schema import TokenData, UserLevel
 from app.device.schemas import AddDeviceSchema, EditDeviceSchema, DeviceSchema
 from app.device.CRUD import add_device, edit_device, delete_device, get_device, get_all_device
 from app.exceptions.exceptions_user import AccessRightsErrorException
+from app.device.options.options import get_option, OptionsDevice
 
 
 router = APIRouter(
@@ -53,10 +54,22 @@ async def delete_dev(system_name:str):
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 	
+@router.get("/options", response_model=List[OptionsDevice])
+async def get_options_dev():
+	try:
+		# if auth_data.user_level != UserLevel.ADMIN:
+		# 	raise AccessRightsErrorException()
+		data = get_option()
+		print(data)
+		return data
+	except Exception as e:
+		logger.warning(str(e))
+		return JSONResponse(status_code=400, content=str(e))
+	
 @router.get("/{system_name}", response_model=DeviceSchema)
 async def get_dev(system_name:str):
 	try:
-		# if auth_data.user_level != UserLevel.ADMIN:
+		# if auth_data.user_level == UserLevel.ADMIN:
 		# 	raise AccessRightsErrorException()
 		data = get_device(system_name)
 		return data
@@ -67,10 +80,12 @@ async def get_dev(system_name:str):
 @router.get("", response_model=List[DeviceSchema])
 async def get_all_dev():
 	try:
-		# if auth_data.user_level != UserLevel.ADMIN:
+		# if auth_data.user_level == UserLevel.ADMIN:
 		# 	raise AccessRightsErrorException()
 		data = await get_all_device()
 		return data
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
+	
+

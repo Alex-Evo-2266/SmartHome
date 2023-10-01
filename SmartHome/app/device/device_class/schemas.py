@@ -20,7 +20,7 @@ class ChangeDevice(BaseModel):
 	address:bool = True
 	token:bool = False
 
-class ConfigSchema(BaseModel):
+class ConfigSchema():
 	address: bool = True
 	token: bool = False
 	fields_addition: bool = True
