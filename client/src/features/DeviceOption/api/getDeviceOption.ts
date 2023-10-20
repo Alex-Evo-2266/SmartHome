@@ -4,9 +4,9 @@ import { TypeRequest } from "../../../shared/api/type"
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
 import { LoginData, login, logout } from "../../../entites/User"
-import { IDeviceOptionResponse, mapResponseOptionDevice } from ".."
+import { DeviceOption } from "../models/deviceOption"
 
-export const useDeviceOption = () => {
+export const useDeviceOptionAPI = () => {
 
     const auth = useAppSelector(state=>state.auth)
     const dispatch = useAppDispatch()
@@ -18,7 +18,7 @@ export const useDeviceOption = () => {
 
     const getDevicesOption = useCallback(async() => {
         try{
-            const data:IDeviceOptionResponse[] = await requestWithRefrash(
+            const data:DeviceOption[] = await requestWithRefrash(
                 "/api/devices/options", 
                 TypeRequest.GET, 
                 null, 
@@ -27,7 +27,7 @@ export const useDeviceOption = () => {
                 ()=>dispatch(logout()),
                 (data:LoginData)=>dispatch(login(data.token, data.id, data.role, new Date(data.expires_at)))
             )
-            return data.map(item=>mapResponseOptionDevice(item)) 
+            return data
         }
         catch(e){
             if(typeof e === "string")
@@ -41,7 +41,7 @@ export const useDeviceOption = () => {
         const options = await getDevicesOption()
         if (!options)
             return null
-        const condidat = options.filter(item=>item.className===className)
+        const condidat = options.filter(item=>item.class_name===className)
         if(condidat.length > 0)
             return condidat[0]
         return null

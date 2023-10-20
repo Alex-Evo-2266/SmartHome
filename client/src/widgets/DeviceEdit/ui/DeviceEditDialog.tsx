@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
 import { hideFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
 import { Divider, FullScrinTemplateDialog } from "../../../shared/ui"
 import { DeviceData, findDevice } from "../../../entites/Device"
-import { IDeviceOption, useDeviceOption } from "../../../features/DeviceOption"
 import { DeviceEditBaseData } from "./DeviceEditBaseData"
 import { DeviceEditField } from "./DeviceEditFields"
 import { UseEditDevice } from '../api/putDevice'
@@ -16,20 +15,14 @@ interface DeviceEditDialogProps{
 export const DeviceEditDialog = ({systemName}:DeviceEditDialogProps) => {
 
 	const {devices} = useAppSelector(state=>state.device)
+	const deviceOptions = useAppSelector(state=>state.deviceOptions)
 	const [device, setDevice] = useState<DeviceData | null>(findDevice(devices, systemName))
-	const {getDeviceOption} = useDeviceOption()
 	const dispatch = useAppDispatch()
-	const [optionDevice, setOptionDevice] = useState<IDeviceOption | null>(null)
 	const {editDevice} = UseEditDevice()
 
-	const getOption = useCallback(async()=>{
-		const data = await getDeviceOption(device?.class_device ?? "")
-		setOptionDevice(data)
+	const getOption = useCallback(()=>{
+		return deviceOptions.filter(item => item.class_name == device?.class_device)
 	},[device])
-
-	useEffect(()=>{
-		getOption()
-	},[getOption])
 
 	const hide = () => {
 		dispatch(hideFullScreenDialog())
@@ -57,11 +50,11 @@ export const DeviceEditDialog = ({systemName}:DeviceEditDialogProps) => {
 				</div>
 				<div className="device-edit-body">
 				{
-					(device && optionDevice)?
+					(device && getOption())?
 					<>
-						<DeviceEditBaseData device={device} option={optionDevice} setDevice={changeDevice}/>
+						<DeviceEditBaseData device={device} option={getOption()} setDevice={changeDevice}/>
 						<Divider/>
-						<DeviceEditField device={device} option={optionDevice} setDevice={changeDevice}/>
+						<DeviceEditField device={device} option={getOption()} setDevice={changeDevice}/>
 					</>:
 					null
 				}

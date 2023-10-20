@@ -19,7 +19,15 @@ export const useNavigationAPI = () => {
 
 	const getAllNavigationItem = useCallback(async() => {
 		try{
-			let data: NavItem[] = await requestWithRefrash('/api/users/menu/all')
+			let data: NavItem[] = await requestWithRefrash(
+				'/api/users/menu/all', 
+				TypeRequest.GET, 
+				null, 
+				authData.token, 
+				{},
+				()=>dispatch(logout()),
+				(data:LoginData)=>dispatch(login(data.token, data.id, data.role, new Date(data.expires_at)))
+			)
 			return data
 		}
 		catch(e){

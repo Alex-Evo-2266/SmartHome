@@ -6,6 +6,7 @@ import snackbarReducer from "../../shared/lib/reducers/snackbarReducer";
 import { authReducer, userReducer } from "../../entites/User";
 import { navigationReducer } from "../../features/Navigation";
 import { deviceReducer } from "../../entites/Device";
+import { deviceOptionReducer } from "../../features/DeviceOption/lib/reducers/deviceOptionReducer";
 
 
 export const rootReducer = combineReducers({
@@ -17,4 +18,5 @@ export const rootReducer = combineReducers({
     navigation: navigationReducer,
     user: userReducer,
     device: deviceReducer,
+    deviceOptions: deviceOptionReducer,
 })

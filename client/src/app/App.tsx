@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { NavigationInit } from '../features/Navigation';
 import { UserRole, useInitUser } from '../entites/User';
 import { useSocket } from '../features/WebSocket';
+import { useInitDeviceOption } from '../features/DeviceOption/lib/hooks/useInitDeviceOption';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
 	const {init} = NavigationInit()
 	const {userInit} = useInitUser()
 	const {listenSocket, closeSocket} = useSocket()
+	const {initDeviceOption} = useInitDeviceOption()
 
 	const route = useRoutes(user.isAuthenticated, user.role)
 
@@ -20,6 +22,11 @@ function App() {
 		if(user.isAuthenticated && user.role !== UserRole.WITHOUT)
 			init()
 	},[user.isAuthenticated, init])
+
+	useEffect(()=>{
+		if(user.isAuthenticated && user.role !== UserRole.WITHOUT)
+			initDeviceOption()
+	},[user.isAuthenticated, initDeviceOption])
 
 	useEffect(()=>{
 		if(user.isAuthenticated && user.role !== UserRole.WITHOUT)
