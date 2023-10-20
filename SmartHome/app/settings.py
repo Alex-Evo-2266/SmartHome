@@ -36,12 +36,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SERVER_CONFIG = os.path.join(BASE_DIR, "files","server-config.yml")
 # DEVICETYPES = os.path.join(BASE_DIR, "files","devTypes.yml")
-SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
+# SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
 # STYLES_DIR = os.path.join(BASE_DIR, "files","styles")
-PAGES_DIR =  os.path.join(BASE_DIR, "files","pages")
-DEVICES = os.path.join(BASE_DIR, "files","devices.yml")
-GROUPS = os.path.join(BASE_DIR, "files","groups.yml")
-ROOMS = os.path.join(BASE_DIR, "files","rooms.yml")
+# PAGES_DIR =  os.path.join(BASE_DIR, "files","pages")
+# DEVICES = os.path.join(BASE_DIR, "files","devices.yml")
+# GROUPS = os.path.join(BASE_DIR, "files","groups.yml")
+# ROOMS = os.path.join(BASE_DIR, "files","rooms.yml")
 
 MENU_LIST = os.path.join(BASE_DIR, "files", "menu.yml")
 

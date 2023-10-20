@@ -19,7 +19,7 @@ from app.authtorization.models import User
 
 
 # from SmartHome
-from app.authtorization.models import MenuElement
+from app.menu.models import MenuElement
 
 logger = logging.getLogger(__name__)
 
