@@ -2,7 +2,7 @@ from typing import List
 from app.exceptions.exceptions import InvalidAttributeException
 from app.device.device_class.schemas import ConfigSchema
 from app.device.device_class.DeviceClasses import DeviceClasses
-
+import os
 
 def convert_list_types(types):
 	arr = []

@@ -99,9 +99,9 @@ def getModuls(dir=__name__, init = True):
 
 
 async def init_modules():
-    dir=__name__
+    dir =__name__
     dir = dir.split('.')
-    dir = '/'.join(dir)
+    dir = os.sep.join(dir)
     print(dir)
     list_modules = getModuls(dir, False)
     print(list_modules)
@@ -112,3 +112,16 @@ async def init_modules():
         module: BaseModule = modules[key]
         print(module)
         module.start()
+
+async def get_img_dir():
+    dir =__name__
+    dir = dir.split('.')
+    dir = os.sep.join(dir)
+    list_modules=getModuls(dir, False)
+    img_paths = []
+    for module in list_modules:
+        module_path = [dir, module]
+        module_path = os.sep.join(module_path)
+        if os.path.exists(module_path + os.sep + "img"):
+            img_paths.append(module_path)
+    return img_paths

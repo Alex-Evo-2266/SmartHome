@@ -27,6 +27,7 @@ class ConfigSchema():
 	fields_change: ChangeField = ChangeField()
 	added_url: Optional[str] = None
 	change_url: Optional[str] = None
+	class_img: Optional[str] = None
 	
 class AdditionDevice(BaseModel):
 	fields:bool = True
