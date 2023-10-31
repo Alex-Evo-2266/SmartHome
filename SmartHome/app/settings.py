@@ -55,7 +55,9 @@ DEFAULT_SEND_SERVER_DATA_INTERVAL = 30
 DEFAULT_SAVE_INTERVAL = 60
 
 MEDIA_URL = '/media/'
+MODULES_URL = '/media/modules/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
+MODULES_DIR = os.path.join(MEDIA_ROOT, 'modules')
 
 configManager = ModuleConfig(SERVER_CONFIG)
