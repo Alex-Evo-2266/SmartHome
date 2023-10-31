@@ -31,17 +31,38 @@ export interface FieldDevice{
     value: string
 }
 
+// name: str = ormar.String(max_length=200)
+// 	system_name: str = ormar.String(max_length=200, primary_key=True)
+// 	class_device: str = ormar.String(max_length=200)
+// 	type: str = ormar.String(max_length=200)
+// 	address: Optional[str] = ormar.String(max_length=200, nullable=True)
+// 	token: Optional[str] = ormar.String(max_length=200, nullable=True)
+// 	type_command: ReceivedDataFormat = ormar.String(max_length=200, default=ReceivedDataFormat.JSON)
+// 	device_polling: bool = ormar.Boolean(default=True)
+// 	device_status: Optional[StatusDevice] = StatusDevice.OFFLINE
+
 export interface DeviceData{
-    address: string
-    class_device: string
-    fields: FieldDevice[]
-    information: string
-    name: string
-    status: DeviceStatus | string
+    name: string 
     system_name: string
+    class_device: string
+    type_field: string
+    address: string
     token?: string
-    type: string
-    type_field: any
+    device_status: DeviceStatus | string
+    fields: FieldDevice[]
+    device_polling:boolean
+    type_command: ValueType | string
     value: Dict<string>
-    value_type: ValueType | string
+}
+
+export interface DeviceAddData{
+    name: string 
+    system_name: string
+    class_device: string
+    type_field: string
+    address?: string
+    token?: string
+    fields: FieldDevice[]
+    type_command: ValueType | string
+    type: string
 }

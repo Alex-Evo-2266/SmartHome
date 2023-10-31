@@ -6,7 +6,7 @@ import { PlusCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { showFullScreenDialog } from '../../../shared/lib/reducers/dialogReducer'
 import { DeviceEditDialog } from '../../../widgets/DeviceEdit'
-import { DeviceAddDialog } from '../../../widgets/DeviceAdd'
+import { DeviceAddDialog } from '../../../widgets/DeviceAddManual'
 
 export const DevicePage = () => {
 

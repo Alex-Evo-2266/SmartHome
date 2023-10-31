@@ -32,6 +32,7 @@ export interface DeviceOption{
     added: DeviceOptionAdded
     added_url?: string
     change_url?: string
+    class_img_url?: string
     change:DeviceOptionChange
     types: string[]
 }

@@ -18,9 +18,10 @@ interface ITextFieldProps{
     password?: boolean
     readOnly?: boolean
     type?:string
+    transparent?: boolean
 }
 
-export const TextField = ({type = "text", readOnly, password, border, onClear, icon, onChange, name, value, placeholder, className, validEmptyValue, onFocus, onBlur, error}:ITextFieldProps) => {
+export const TextField = ({type = "text", transparent, readOnly, password, border, onClear, icon, onChange, name, value, placeholder, className, validEmptyValue, onFocus, onBlur, error}:ITextFieldProps) => {
 
     const inputElement = useRef<HTMLInputElement>(null)
     const [isError, setError] = useState<boolean>(false)
@@ -44,7 +45,7 @@ export const TextField = ({type = "text", readOnly, password, border, onClear, i
     }
 
     return(
-        <div className={`text-field ${border?"border":""} ${className}`}>
+        <div className={`text-field ${border?"border":""} ${transparent?"transparent":""} ${className}`}>
             {
                 (icon)?
                 <div className="icon-container" onClick={focus}>{icon}</div>:

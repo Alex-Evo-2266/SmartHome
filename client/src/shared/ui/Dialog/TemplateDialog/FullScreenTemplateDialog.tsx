@@ -21,7 +21,7 @@ interface ButtonDialogProps{
 const ButtonDialog = ({onHide, onSave}:ButtonDialogProps) => (
 	<div className="dialog-button-container">
 		<TextButton onClick={onHide}>cancel</TextButton>
-		<TextButton onClick={onSave}>save</TextButton>
+		{(onSave)?<TextButton onClick={onSave}>save</TextButton>:null}
 	</div>
 )
 
@@ -54,10 +54,10 @@ export const FullScrinTemplateDialog = ({className, header, children, onSave, on
 	const save = () => {
 		onSave && onSave()
 	}
-
+	
 	if(!fullScreenDisplay)
 		return(
-			<BasicTemplateDialog header={header} className={`full-screen-dialog-base-format ${className}`} onHide={hide} children={children} action={<ButtonDialog onHide={hide} onSave={save}/>}/>
+			<BasicTemplateDialog header={header} className={`full-screen-dialog-base-format ${className}`} onHide={hide} children={children} action={<ButtonDialog onHide={hide} onSave={onSave?save:undefined}/>}/>
 		)
 
 	return(
@@ -67,7 +67,7 @@ export const FullScrinTemplateDialog = ({className, header, children, onSave, on
 					<IconButton onClick={hide} icon={<X/>}/>
 				</div>
 				<div className="header">{header}</div>
-				<div className="save-container"><TextButton onClick={save}>save</TextButton></div>
+				<div className="save-container">{onSave?<TextButton onClick={save}>save</TextButton>:null}</div>
 			</div>
 			<div className="full-screen-dialog-content" style={{overflowY:"auto"}}>
 				{children}
