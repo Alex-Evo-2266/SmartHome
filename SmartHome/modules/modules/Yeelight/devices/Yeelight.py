@@ -41,9 +41,9 @@ class YeelightDevice(BaseDevice):
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(**kwargs)
-		if not self.device_data:
+		if not self.address:
 			return
-		self.device = Bulb(self.device_data.address)
+		self.device = Bulb(self.address)
 		try:
 			values = self.device.get_properties()
 			self.minmaxValue = self.device.get_model_specs()
@@ -51,18 +51,17 @@ class YeelightDevice(BaseDevice):
 				val = "0"
 				if(values["power"] == "on"):
 					val = "1"
-				self.values.append(BaseField(name="state", device_name=self.device_data.system_name, control=True, high="1", low="0", type=TypeDeviceField.BINARY, icon="fas fa-power-off", value=val))
+				self.values.append(BaseField(name="state", device_system_name=self.system_name, read_only=False, high="1", low="0", type=TypeDeviceField.BINARY, icon="fas fa-power-off", value=val))
 			if(not look_for_param(self.values, "brightness") and "current_brightness" in values):
-				self.values.append(BaseField(name="brightness", device_name=self.device_data.system_name, control=True, high="100", low="0", type=TypeDeviceField.NUMDER, icon="far fa-sun", value=values["current_brightness"]))
+				self.values.append(BaseField(name="brightness", device_system_name=self.system_name, read_only=False, high="100", low="0", type=TypeDeviceField.NUMBER, icon="far fa-sun", value=values["current_brightness"]))
 			if(not look_for_param(self.values, "night_light") and self.minmaxValue["night_light"] != False):
-				self.values.append(BaseField(name="night_light", device_name=self.device_data.system_name, control=True, high="1", low="0", type=TypeDeviceField.BINARY, icon="fab fa-moon", value=values["active_mode"]))
+				self.values.append(BaseField(name="night_light", device_system_name=self.system_name, read_only=False, high="1", low="0", type=TypeDeviceField.BINARY, icon="fab fa-moon", value=values["active_mode"]))
 			if(not look_for_param(self.values, "color") and values["hue"] != None):
-				self.values.append(BaseField(name="color", device_name=self.device_data.system_name, control=True, high="360", low="0", type=TypeDeviceField.NUMDER, icon="fab fa-medium-m", value=values["hue"]))
+				self.values.append(BaseField(name="color", device_system_name=self.system_name, read_only=False, high="360", low="0", type=TypeDeviceField.NUMBER, icon="fab fa-medium-m", value=values["hue"]))
 			if(not look_for_param(self.values, "saturation") and values["sat"] != None):
-				self.values.append(BaseField(name="saturation", device_name=self.device_data.system_name, control=True, high="100", low="0", type=TypeDeviceField.NUMDER, icon="fab fa-medium-m", value=values["sat"]))
+				self.values.append(BaseField(name="saturation", device_system_name=self.system_name, read_only=False, high="100", low="0", type=TypeDeviceField.NUMBER, icon="fab fa-medium-m", value=values["sat"]))
 			if(not look_for_param(self.values, "temp") and "ct" in values):
-				self.values.append(BaseField(name="temp", device_name=self.device_data.system_name, control=True, high=self.minmaxValue["color_temp"]["max"], low=self.minmaxValue["color_temp"]["min"], type=TypeDeviceField.NUMDER, icon="fas fa-adjust", value=values["ct"]))
-			super().save()
+				self.values.append(BaseField(name="temp", device_system_name=self.system_name, read_only=False, high=self.minmaxValue["color_temp"]["max"], low=self.minmaxValue["color_temp"]["min"], type=TypeDeviceField.NUMBER, icon="fas fa-adjust", value=values["ct"]))
 		except Exception as e:
 			logger.warning(f"yeelight initialize error. {e}")
 			self.device = None

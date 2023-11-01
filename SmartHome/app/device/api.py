@@ -30,6 +30,8 @@ async def add_device_url(data:AddDeviceSchema):
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))
+		if str(e) == f"(1062, \"Duplicate entry '{data.system_name}' for key 'PRIMARY'\")":
+			return JSONResponse(status_code=400, content="device with that name already exists")
 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.put("/{system_name}")

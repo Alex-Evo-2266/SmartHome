@@ -6,7 +6,7 @@ from typing import Any, Dict, List
 from app.device.enums import TypeDeviceField
 from app.exceptions.exceptions import InvalidInputException
 from app.device.device_class.field_interface import IField
-from app.device.schemas import FieldDeviceSchema
+from app.device.schemas import FieldDeviceSchema, AddDeviceFieldSchema
 
 def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:
 	if(param in d):
@@ -102,9 +102,23 @@ class BaseField(IField):
 			icon=self.icon,
 			type=self.type,
 			unit=self.unit,
-			enum_values=self.enum_values,
+			enum_values=", ".join(self.enum_values),
 			virtual_field=self.virtual_field,
 			value=self.__value
+		)
+	
+	def _get_initial_data(self)->AddDeviceFieldSchema:
+		return AddDeviceFieldSchema(
+			name=self.name,
+			address=self.address,
+			type=self.type,
+			low=self.low,
+			high=self.high,
+			enum_values=", ".join(self.enum_values),
+			read_only=self.read_only,
+			icon=self.icon,
+			unit=self.unit,
+			virtual_field=self.virtual_field,
 		)
 
 	# def get_allowed_fields(self)->ChangeField:

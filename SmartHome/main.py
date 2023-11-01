@@ -29,6 +29,7 @@ from app.authtorization.api_user import router as router_user
 from app.authtorization.api_style import router as router_style
 from app.menu.api import router as router_menu
 from app.device.api import router as router_device
+from app.device.send_device import send_restart
 # from SmartHome.api.homePage import router as router_homePage
 # from SmartHome.api.server import router as router_server
 # from SmartHome.api.script import router as router_script
@@ -66,11 +67,12 @@ async def startup() -> None:
 	# RunFunctions.subscribe("serverData", send_server_data, DEFAULT_SEND_SERVER_DATA_INTERVAL)
 	RunFunctions.subscribe("saveDevice", save_device, DEFAULT_SAVE_INTERVAL)
 	conf_init()
-	base = configManager.getConfig("send_message")
+	await send_restart()
+	# base = configManager.getConfig("send_message")
 	# if base and "frequency" in base:
-		# RunFunctions.subscribe("devices", send_device, int(base['frequency']))
+	# 	RunFunctions.subscribe("devices", send_device, int(base['frequency']))
 	# else:
-		# RunFunctions.subscribe("devices", send_device, DEFAULT_SEND_INTERVAL)
+	# 	RunFunctions.subscribe("devices", send_device, DEFAULT_SEND_INTERVAL)
 	await init_modules()
 	database_ = app.state.database
 	if not database_.is_connected:

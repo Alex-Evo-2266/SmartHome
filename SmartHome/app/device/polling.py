@@ -7,6 +7,7 @@ from app.device.device_class.DeviceClasses import DeviceClasses
 from app.device.enums import StatusDevice
 from app.device.schemas import DeviceSchema, FieldDeviceSchema
 from app.device.map import device_db_to_schema
+from app.device.edit_field import edit_fields
 
 from typing import List
 
@@ -36,6 +37,7 @@ async def polling(device_data: Device):
 				data.device_status = StatusDevice.OFFLINE
 				data.value = dict()
 				return data
+			await edit_fields(device_data, [x._get_initial_data() for x in device.values])
 			DevicesArrey.addDevice(device_data.system_name,device)
 		else:
 			device = element.device
