@@ -125,7 +125,7 @@ class BaseDevice(metaclass=DeviceMeta, use=False):
 			if field:
 				field_data = item.dict()
 				await Value.objects.create(field=field, datatime=datetime.now().timestamp(), value=item.get())
-				await field.update(unit=field_data["unit"], high=field_data["high"], low=field_data["low"], control=field_data['control'], icon=field_data['icon'])
+				await field.update(unit=field_data["unit"], high=field_data["high"], low=field_data["low"], read_only=field_data['read_only'], icon=field_data['icon'])
 		logger.info(f'save {self.system_name}')
 
 	async def save_and_addrecord(self):

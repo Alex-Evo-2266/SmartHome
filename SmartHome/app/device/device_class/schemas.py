@@ -28,6 +28,7 @@ class ConfigSchema():
 	added_url: Optional[str] = None
 	change_url: Optional[str] = None
 	class_img: Optional[str] = None
+	init_field: bool = False
 	
 class AdditionDevice(BaseModel):
 	fields:bool = True

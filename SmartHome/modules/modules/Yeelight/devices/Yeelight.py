@@ -27,6 +27,7 @@ class YeelightDevice(BaseDevice):
 	class Config(ConfigSchema):
 		class_img = "Yeelight/unnamed.jpg"
 		fields_addition: bool = False
+		init_field = True
 		fields_change: ChangeField = ChangeField(
 			added=False,
 			deleted=False,

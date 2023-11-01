@@ -1,7 +1,7 @@
 import './DeviceCard.scss'
 import { DeviceData } from "../../../entites/Device"
 import { Card, IconButton } from "../../../shared/ui"
-import { DeviceField } from '../../../features/DeviceControl'
+import { DefaultFieldControl, DeviceField } from '../../../features/DeviceControl'
 import { MoreVertical } from 'lucide-react'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { showBaseMenu } from '../../../shared/lib/reducers/menuReducer'
@@ -24,7 +24,7 @@ export const DeviceCard = ({device, onClickEditButton}:DeviceCardProps) => {
 			title: "edit",
 			onClick: onClickEditButton
 		}]
-		if(device.status === "unlinc")
+		if(device.device_status === "unlinc")
 			arr.push({
 				title: "linc",
 				onClick: ()=>linc(device.system_name)
@@ -45,10 +45,16 @@ export const DeviceCard = ({device, onClickEditButton}:DeviceCardProps) => {
 		<Card header={device.name} className="device-card" iconButtonCell={<IconButton icon={<MoreVertical/>} onClick={onMenu}/>}>
 			<div className='device-card-content'>
 			{
-				(device.status !== "online")?
+				(device.device_status !== "online")?
+				<>
 				<div className='status-field'>
-					{device.status}
-				</div>:
+					<DefaultFieldControl value={device.device_status} className={`${(device.device_status == "offline")?"offline-field":(device.device_status == "unlink")?"unlink-field":""}`}/>
+				</div>
+				<div className='disable-control'></div>
+				</>:
+				null
+			}
+			{
 				device.fields.map((item, index)=>(
 					<DeviceField key={index} field={item} systemName={device.system_name} value={device.value[item.name]}/>
 				))

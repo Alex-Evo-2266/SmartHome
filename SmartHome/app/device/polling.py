@@ -37,7 +37,10 @@ async def polling(device_data: Device):
 				data.device_status = StatusDevice.OFFLINE
 				data.value = dict()
 				return data
-			await edit_fields(device_data, [x._get_initial_data() for x in device.values])
+			class_device = DeviceClasses.get(device_data.class_device)
+			if class_device and class_device.Config.init_field:
+				print("p0")
+				await edit_fields(device_data, [x._get_initial_data() for x in device.values])
 			DevicesArrey.addDevice(device_data.system_name,device)
 		else:
 			device = element.device

@@ -6,11 +6,13 @@ import { NumberField } from './NumberField'
 import { TextFieldControl } from './TextField'
 import { FieldDevice } from '../../../entites/Device'
 import { DeviceFieldType } from '../../../entites/Device/models/deviceData'
+import { DefaultFieldControl } from './DeviceDefaultField'
 
 interface FieldProps{
 	field: FieldDevice
 	value: string
 	systemName: string
+	
 }
 
 export const DeviceField = ({field, value, systemName}:FieldProps)=>{
@@ -22,5 +24,5 @@ export const DeviceField = ({field, value, systemName}:FieldProps)=>{
 		return <EnumField field={field} value={value} systemName={systemName}/>
 	if (field.type === DeviceFieldType.TEXT)
 		return <TextFieldControl field={field} value={value} systemName={systemName}/>
-	return null
+	return <DefaultFieldControl value={value}/>
 }
