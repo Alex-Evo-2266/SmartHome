@@ -31,7 +31,7 @@ from app.menu.api import router as router_menu
 from app.device.api import router as router_device
 from app.device.send_device import send_restart
 # from SmartHome.api.homePage import router as router_homePage
-# from SmartHome.api.server import router as router_server
+from app.server.api import router as router_server
 # from SmartHome.api.script import router as router_script
 # from SmartHome.api.deviceGroup import router_groups
 # from SmartHome.api.moduls import router_moduls
@@ -102,7 +102,7 @@ async def websocket_endpoint(websocket: WebSocket):
 # app.include_router(router_first_start)
 app.include_router(router_auth)
 app.include_router(router_menu)
-# app.include_router(router_server)
+app.include_router(router_server)
 app.include_router(router_device)
 # app.include_router(router_script)
 app.include_router(router_style)

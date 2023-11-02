@@ -1,7 +1,7 @@
 import yaml, logging
 
-from settings import SERVER_CONFIG, configManager
-from SmartHome.schemas.server import ServerConfigSchema
+from app.settings import SERVER_CONFIG, configManager
+from app.server.schemas import ServerConfigSchema
 
 logger = logging.getLogger(__name__)
 

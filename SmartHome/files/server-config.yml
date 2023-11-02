@@ -1,19 +1,12 @@
 auth_service:
-  client_id: VgbZ4wPoiwTOLdVkWkApv2aa3w1epryf
-  client_secret: 5CXsEBX7r3
-  host: http://localhost:2000
+  client_id: ''
+  client_secret: ''
+  host: ''
 email:
-  login: smarthome2244@mail.ru
-  password: UwJGndgX265myMTyHybJ
-mqttBroker:
-  host: localhost
-  password: admin
-  port: '1883'
-  user: admin
+  login: ''
+  password: ''
 send_message:
   frequency: '3'
 weather:
   APPID: ''
   city: ''
-zigbee:
-  topic: zigbee2mqtt

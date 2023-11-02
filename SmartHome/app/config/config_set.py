@@ -1,8 +1,8 @@
 from typing import Any, Dict
 import yaml, logging
 
-from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigSchema
-from settings import SERVER_CONFIG, configManager
+# from SmartHome.schemas.server import ServerConfigSchema, ServerModuleConfigSchema
+from app.settings import SERVER_CONFIG, configManager
 # from ..deviceControl.mqttDevice.connect import reconnect,publish
 # from ..deviceControl.mqttDevice.mqttScan import ClearTopicks
 # from ..weather import updateWeather
