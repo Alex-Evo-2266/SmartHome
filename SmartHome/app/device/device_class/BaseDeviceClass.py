@@ -5,6 +5,7 @@ from app.device.device_class.schemas import ConfigSchema, ChangeDevice, Addition
 from app.device.device_class.BaseField import BaseField
 from app.device.enums import TypeDeviceField, ReceivedDataFormat, StatusDevice
 from app.device.schemas import DeviceSchema, FieldDeviceSchema
+from app.device.interfaces.device_interface import IDevice
 
 from app.exceptions.exceptions import DeviceNotFound, InvalidInputException
 import logging
@@ -28,7 +29,7 @@ def get_enum_values(s:str | None):
 		arr[index] = item.strip()
 	return arr
 
-class BaseDevice(metaclass=DeviceMeta, use=False):
+class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	"""docstring for BaseDevice."""
 
 	types=[]

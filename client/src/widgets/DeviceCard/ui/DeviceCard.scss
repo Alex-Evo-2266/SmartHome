@@ -1,28 +1,34 @@
 .device-card{
-    min-width: 350px;
-    .device-field.offline-field{
-        background-color: var(--Error-color);
-        border-radius: 10px;
-        color: var(--Error-container-color);
-        opacity: .8;
-    }
-    .device-card-content{
-        position: relative;
-        .disable-control{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fff2;
-            z-index: 10;
-        }
-    }
+	min-width: 350px;
+	.device-field.offline-field{
+		background-color: var(--Error-color);
+		border-radius: 10px;
+		color: var(--Error-container-color);
+		opacity: .8;
+	}
+	.device-field.unlink-field{
+		background-color: #DDC844;
+		border-radius: 10px;
+		color: #222;
+		opacity: .8;
+	}
+	.device-card-content{
+		position: relative;
+		.disable-control{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #fff2;
+			z-index: 10;
+		}
+	}
 }
 
 @media (max-width:400px) {
-    .device-card{
-        min-width: 100%;
-        width: 100%;
-    }
+	.device-card{
+		min-width: 100%;
+		width: 100%;
+	}
 }

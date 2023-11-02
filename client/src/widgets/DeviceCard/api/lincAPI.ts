@@ -13,14 +13,14 @@ export const useLincDeviceAPI = () => {
 
     const unlinc = useCallback(async(systemName: string)=>{
         try{
-            await request(`/api/devices/${systemName}/connection`, TypeRequest.POST, {status: false}, {Authorization: "Bearer " + authData.token})
+            await request(`/api/devices/${systemName}/polling`, TypeRequest.POST, {status: false}, {Authorization: "Bearer " + authData.token})
         }
         catch{}
     },[request, authData.token])
 
     const linc = useCallback(async(systemName: string)=>{
         try{
-            await request(`/api/devices/${systemName}/connection`, TypeRequest.POST, {status: true}, {Authorization: "Bearer " + authData.token})
+            await request(`/api/devices/${systemName}/polling`, TypeRequest.POST, {status: true}, {Authorization: "Bearer " + authData.token})
         }
         catch{}
     },[request, authData.token])

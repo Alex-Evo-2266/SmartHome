@@ -60,3 +60,6 @@ class DeviceSchema(BaseModel):
 	device_status: Optional[StatusDevice] = StatusDevice.OFFLINE
 	value: Optional[Dict[str,str]] = dict()
 	fields: List[FieldDeviceSchema] = []
+
+class ConsctionStatusForm(BaseModel):
+	status: bool

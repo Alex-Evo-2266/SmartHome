@@ -24,14 +24,14 @@ export const DeviceCard = ({device, onClickEditButton}:DeviceCardProps) => {
 			title: "edit",
 			onClick: onClickEditButton
 		}]
-		if(device.device_status === "unlinc")
+		if(device.device_status === "unlink")
 			arr.push({
 				title: "linc",
 				onClick: ()=>linc(device.system_name)
 			})
 		else
 			arr.push({
-				title: "unlinc",
+				title: "unlink",
 				onClick: ()=>unlinc(device.system_name)
 			})
 		return arr
@@ -40,6 +40,8 @@ export const DeviceCard = ({device, onClickEditButton}:DeviceCardProps) => {
 	const onMenu = useCallback((event:React.MouseEvent<HTMLElement>) => {
 		dispatch(showBaseMenu(getMenu(), event.pageX, event.pageY, {autoHide: true}))
 	},[getMenu, dispatch])
+
+	console.log(device?.device_status ?? "")
 
 	return(
 		<Card header={device.name} className="device-card" iconButtonCell={<IconButton icon={<MoreVertical/>} onClick={onMenu}/>}>

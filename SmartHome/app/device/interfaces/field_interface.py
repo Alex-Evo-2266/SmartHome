@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 from app.device.enums import TypeDeviceField
 from app.exceptions.exceptions import InvalidInputException
-from app.device.schemas import FieldDeviceSchema
+from app.device.schemas import FieldDeviceSchema, AddDeviceFieldSchema
 
 class IField(object):
 	"""docstring for DeviceElement."""
@@ -45,4 +45,7 @@ class IField(object):
 		'''
 		information about the field in the form of a dictionary.
 		'''
+		pass
+
+	def _get_initial_data(self)->AddDeviceFieldSchema:
 		pass

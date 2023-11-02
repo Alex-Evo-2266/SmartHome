@@ -5,7 +5,7 @@ from numbers import Number
 from typing import Any, Dict, List
 from app.device.enums import TypeDeviceField
 from app.exceptions.exceptions import InvalidInputException
-from app.device.device_class.field_interface import IField
+from app.device.interfaces.field_interface import IField
 from app.device.schemas import FieldDeviceSchema, AddDeviceFieldSchema
 
 def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:

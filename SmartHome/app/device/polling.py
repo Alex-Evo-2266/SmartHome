@@ -22,7 +22,7 @@ async def polling(device_data: Device):
 		if device_data.device_polling == False:
 			data = await device_db_to_schema(device_data)
 			data.value = dict()
-			data.device_status = StatusDevice.UNLINC
+			data.device_status = StatusDevice.UNLINK
 			return data
 		element = DevicesArrey.get(device_data.system_name)
 		if not element:
@@ -58,3 +58,10 @@ async def polling(device_data: Device):
 		data.value = dict()
 		return data
 		
+
+async def device_polling_edit(system_name: str, poling: bool):
+	device: Device | None = await Device.objects.get_or_none(system_name=system_name)
+	if not device:
+		raise DeviceNotFound()
+	device.device_polling = poling
+	await device.update(_columns=["device_polling"])

@@ -9,7 +9,7 @@ class StatusDevice(str, Enum):
 	ONLINE = "online"
 	OFFLINE = "offline"
 	NOT_SUPPORTED = "not_supported"
-	UNLINC = "unlinc"
+	UNLINK = "unlink"
 
 class TypeDeviceField(str, Enum):
 	BINARY = "binary"
