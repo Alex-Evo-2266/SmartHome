@@ -73,7 +73,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		self.device_polling = device_polling
 		self.values:List[BaseField] = []
 		for item in self.fields:
-			field_data = item.dict()
+			field_data = item.dict(exclude={"id", "device"})
 			field_data["enum_values"] = get_enum_values(item.enum_values)
 			self.values.append(BaseField(**field_data, device_system_name=self.system_name))
 		self.device = None		
@@ -118,9 +118,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		# device_obj = await Device.objects.get_or_none(system_name=self.system_name)
 		# if not device_obj:
 		# 	raise DeviceNotFound()
-		print("p0")
 		dev_fields:List[Device_field] = await Device_field.objects.all(device__system_name=self.system_name)
-		print("p1")
 		for item in self.values:
 			field = look_for_param(dev_fields, item.get_name())
 			if field:

@@ -52,7 +52,7 @@ TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 
 DEFAULT_SEND_INTERVAL = 6
 DEFAULT_SEND_SERVER_DATA_INTERVAL = 30
-DEFAULT_SAVE_INTERVAL = 12
+DEFAULT_SAVE_INTERVAL = 60
 
 MEDIA_URL = '/media/'
 MODULES_URL = '/media/modules/'

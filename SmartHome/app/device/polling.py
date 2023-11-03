@@ -1,8 +1,8 @@
 import logging
-from app.device.models import Device
+from app.device.models import Device, Device_field
 from app.exceptions.exceptions import DeviceNotFound
 from app.device.device_class.BaseDeviceClass import BaseDevice
-from app.device.devices_arrey import DevicesArrey
+from app.device.devices_arrey import DevicesArrey, DevicesArreyItem
 from app.device.device_class.DeviceClasses import DeviceClasses
 from app.device.enums import StatusDevice
 from app.device.schemas import DeviceSchema, FieldDeviceSchema
@@ -13,7 +13,19 @@ from typing import List
 
 logger = logging.getLogger(__name__)
 
-async def polling(device_data: Device):
+async def polling(element: DevicesArreyItem):
+	try:
+		device:BaseDevice = element.device
+		device.updata()
+		data = device.get_data()
+		data.device_status = StatusDevice.ONLINE
+		return data
+	except Exception as e:
+		logger.warning(f'device not found. {e}')
+		DevicesArrey.delete(element.id)
+
+
+async def polling_and_init(device_data: Device):
 	try:
 		logger.debug("get_device function")
 		device:BaseDevice
@@ -26,7 +38,8 @@ async def polling(device_data: Device):
 			return data
 		element = DevicesArrey.get(device_data.system_name)
 		if not element:
-			device:BaseDevice = DeviceClasses.get_device(device_data.class_device, data=device_data.dict())
+			device_full_data = {**device_data.dict(), "fields": await Device_field.objects.all(device=device_data)}
+			device:BaseDevice = DeviceClasses.get_device(device_data.class_device, data=device_full_data)
 			if not device:
 				data = await device_db_to_schema(device_data)
 				data.value = dict()
@@ -39,8 +52,7 @@ async def polling(device_data: Device):
 				return data
 			class_device = DeviceClasses.get(device_data.class_device)
 			if class_device and class_device.Config.init_field:
-				print("p0")
-				await edit_fields(device_data, [x._get_initial_data() for x in device.values])
+				await edit_fields(device_data, [x._get_initial_data() for x in device.values], option=class_device.Config)
 			DevicesArrey.addDevice(device_data.system_name,device)
 		else:
 			device = element.device

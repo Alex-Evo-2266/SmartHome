@@ -12,7 +12,7 @@ class AddDeviceFieldSchema(BaseModel):
 	high: Optional[str]
 	enum_values: Optional[str]
 	read_only: bool
-	icon: str = "fas fa-circle-notch"
+	icon: str = "room"
 	unit: Optional[str]
 	virtual_field: bool
 

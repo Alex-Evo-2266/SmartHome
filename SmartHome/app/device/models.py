@@ -34,7 +34,7 @@ class Device_field(ormar.Model):
 	high: Optional[str] = ormar.String(max_length=200, nullable=True)
 	enum_values: Optional[str] = ormar.String(max_length=200, nullable=True)
 	read_only: bool = ormar.Boolean()
-	icon: str = ormar.String(max_length=200, default="fas fa-circle-notch")
+	icon: str = ormar.String(max_length=200, default="room")
 	unit: Optional[str] = ormar.String(max_length=200, default="")
 	virtual_field: bool = ormar.Boolean(default=True)
 	device: Optional[Union[Device, Dict]] = ormar.ForeignKey(Device, related_name="fields", ondelete=ReferentialAction.CASCADE)
