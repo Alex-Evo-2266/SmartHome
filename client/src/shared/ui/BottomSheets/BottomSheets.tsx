@@ -29,7 +29,7 @@ export const BottomSheets = () => {
                 {data.children}
             </div>
         </div>
-        <div className="backplate bottom-sheets-backplate" style={{zIndex:500}} onClick={hide}></div>
+        <div className="backplate bottom-sheets-backplate" style={{zIndex:1101}} onClick={hide}></div>
         </>
     )
 }

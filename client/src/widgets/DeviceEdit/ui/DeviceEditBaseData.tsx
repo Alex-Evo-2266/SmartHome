@@ -1,10 +1,10 @@
 import { DeviceData } from "../../../entites/Device"
-import { IDeviceOption } from "../../../features/DeviceOption"
+import { DeviceOption } from "../../../features/DeviceOption"
 import { FieldContainer, TextField } from "../../../shared/ui"
 
 interface DeviceEditBaseDataProps{
 	device: DeviceData
-	option: IDeviceOption
+	option: DeviceOption
 	setDevice: (value:React.SetStateAction<DeviceData | null>)=>void
 }
 

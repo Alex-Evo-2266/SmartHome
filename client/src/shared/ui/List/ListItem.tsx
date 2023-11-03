@@ -12,8 +12,14 @@ interface ListItemContainerProps{
 }
 
 export const ListItem = ({icon, control, text, header, value, onClick, hovered, className}:ListItemContainerProps) => {
+
+    const click = (event: React.MouseEvent<HTMLLIElement>) => {
+        if(!(event.target as HTMLElement).closest(".control-container"))
+            onClick && onClick(event)
+    }
+
     return(
-        <li className={`list-item-container ${className} ${hovered?"hovered":""}`} onClick={onClick}>
+        <li className={`list-item-container ${className} ${hovered?"hovered":""}`} onClick={click}>
             {
                 (icon)?
                 <div className="icon-container">

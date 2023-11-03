@@ -8,14 +8,14 @@ export const RootDialog = () => {
     return(
         <>
         {
-            dialog.baseDialog.map((item, index, arr)=>(
+            dialog.fullScreenDialog.map((item, index, arr)=>(
                 <div key={index} style={{display: (arr.length - 1 === index)?"block":"none"}}>
                     {item}
                 </div>
             ))
         }
         {
-            dialog.fullScreenDialog.map((item, index, arr)=>(
+            dialog.baseDialog.map((item, index, arr)=>(
                 <div key={index} style={{display: (arr.length - 1 === index)?"block":"none"}}>
                     {item}
                 </div>

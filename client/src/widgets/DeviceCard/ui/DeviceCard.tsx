@@ -41,8 +41,6 @@ export const DeviceCard = ({device, onClickEditButton}:DeviceCardProps) => {
 		dispatch(showBaseMenu(getMenu(), event.pageX, event.pageY, {autoHide: true}))
 	},[getMenu, dispatch])
 
-	console.log(device?.device_status ?? "")
-
 	return(
 		<Card header={device.name} className="device-card" iconButtonCell={<IconButton icon={<MoreVertical/>} onClick={onMenu}/>}>
 			<div className='device-card-content'>

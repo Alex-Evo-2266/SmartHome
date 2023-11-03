@@ -14,6 +14,7 @@
     border-top-right-radius: 28px;
     border-top-left-radius: 28px;
     animation: .2s linear showBottomSheets;
+    box-shadow: 0 0 10 10 var(--Outline-color);
     &.hide{
         animation: .2s linear hideBottomSheets;
         transform: translate(-50%, 100%);

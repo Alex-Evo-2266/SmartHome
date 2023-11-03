@@ -47,6 +47,7 @@ export interface DeviceData{
     class_device: string
     type_field: string
     address: string
+    type: string
     token?: string
     device_status: DeviceStatus | string
     fields: FieldDevice[]
