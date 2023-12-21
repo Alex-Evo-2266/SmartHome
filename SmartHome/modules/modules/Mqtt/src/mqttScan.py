@@ -1,8 +1,8 @@
 # from SmartHome.logic.server.modulesconfig import configManager
 from typing import List
-from SmartHome.logic.deviceFile.schema import Received_Data_Format
-from SmartHome.app.websocket import WebSocketMenager
-from SmartHome.logic.deviceFile.DeviceFile import DeviceData, DevicesFile
+from app.device.enums import ReceivedDataFormat
+from app.websocket import WebSocketMenager
+from app.device.models import Device, Device_field
 import ast
 import json
 import logging
@@ -47,15 +47,16 @@ class TopicHistory():
                 first = topic.split('/')[0:-1]
                 first = "/".join(first)
                 lincs = list()
-                devices:List[DeviceData] = DevicesFile.all()
+                devices:List[Device] = Device.objects.all()
                 for device in devices:
-                    if device.value_type==Received_Data_Format.JSON:
+                    if device.type_command==ReceivedDataFormat.JSON:
                         if(device.address==topic or (device.address==first and last == "set")):
                             lincs.append({
                             "device": device.dict()
                             })
                     else:
-                        for devValue in device.fields:
+                        fields: List[Device_field] = Device_field.objects.all(device=device)
+                        for devValue in fields:
                             if ((device.address + "/" + devValue.address==topic) and last != "set"):
                                 lincs.append({
                                 "device": device.dict(),

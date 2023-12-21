@@ -20,14 +20,37 @@ export const DeviceFinishDialog = (prop:DeviceFinishDialogProps) => {
             prop.onNext()
 	}
 
-
+// 	<p>name: {prop.device.name}</p>
+// 	<p>system name: {prop.device.system_name}</p>
+// 	<p>address: {prop.device.address}</p>
+// 	<p>token: {prop.device.token}</p>
+// </div>
 	return(
 		<>
-		<div className="device-add-container">
-			<p>name {prop.device.name}</p>
-			<p>system name {prop.device.system_name}</p>
-			<p>address {prop.device.address}</p>
-			<p>token {prop.device.token}</p>
+		<div className='device-add-container table-container'>
+			<table>
+				<tbody>
+					<tr>
+						<td>name</td>
+						<td>{prop.device.name}</td>
+					</tr>
+					<tr>
+						<td>system name</td>
+						<td>{prop.device.system_name}</td>
+					</tr>
+					<tr>
+						<td>address</td>
+						<td>{prop.device.address}</td>
+					</tr>
+					<tr>
+						<td>token</td>
+						<td>{prop.device.token}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div>
+			Fields : не реализованно
 		</div>
 		<div className="device-add-container btn-container">
             <Button onClick={prop.onPrev}>Back</Button>

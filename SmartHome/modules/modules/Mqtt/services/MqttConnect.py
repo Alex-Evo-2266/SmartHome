@@ -1,9 +1,9 @@
-from settings import configManager
-from castom_moduls.Mqtt.settings import CONFIG_NAME
+from app.settings import configManager
+from modules.modules.Mqtt.settings import CONFIG_NAME
 
 from typing import Callable, Any
-from moduls_src.services import BaseService, Services
-from castom_moduls.Mqtt.src.mqttScan import TopicHistory
+from modules.modules_src.services import BaseService, Services
+from modules.modules.Mqtt.src.mqttScan import TopicHistory
 # from ..zigbee.zigbeeDevices import zigbeeInfoSearch
 import paho.mqtt.client as mqtt
 import logging, asyncio

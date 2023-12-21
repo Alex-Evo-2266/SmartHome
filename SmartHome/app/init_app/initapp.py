@@ -21,11 +21,12 @@ async def initdir():
         if not os.path.exists(module_img_media):
             os.mkdir(module_img_media)
         imgs:List[str] = os.listdir(path + os.sep + "img")
+        print(imgs)
         for img in imgs:
             img_extension = img.split(".")[1]
             try:
-                if(["png", "jpeg", "jpg"].index(img_extension)):
+                if(["png", "jpeg", "jpg"].index(img_extension) != None):
                     if not (os.path.exists(module_img_media + os.sep + img) and filecmp.cmp(path + os.sep + "img" + os.sep + img, module_img_media + os.sep + img)):
                         shutil.copyfile(path + os.sep + "img" + os.sep + img, module_img_media + os.sep + img)
             except ValueError as e:
-                pass
+                print(e)

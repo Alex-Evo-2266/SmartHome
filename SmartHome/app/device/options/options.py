@@ -16,6 +16,8 @@ def get_option():
 		change = ChangeDevice(address=option.address, token=option.token, fields=option.fields_change)
 		class_img_url = None
 		print(option.class_img)
+		types = _class.types
+		print("p0", types)
 		if (option.class_img):
 			class_img_url = MODULES_URL + option.class_img
 		arr.append(OptionsDevice(class_name=key, class_img_url = class_img_url, added=added, change=change, types=_class.types, added_url=option.added_url, change_url=option.change_url))

@@ -18,6 +18,13 @@ export const UseEditDevice = () => {
         catch{}
     },[request, authData])
 
+    const deleteDevice = useCallback(async (systemName: string) => {
+        try{
+            request(`/api/devices/${systemName}`, TypeRequest.DELETE, null, {Authorization: "Bearer " + authData.token})
+        }
+        catch{}
+    },[request, authData])
+
     useEffect(()=>{
 		if (error)
 			showSnackbar(error, {}, 10000)
@@ -26,5 +33,5 @@ export const UseEditDevice = () => {
 		}
 	},[error, clearError, showSnackbar])
 
-    return {editDevice}
+    return {editDevice, deleteDevice}
 }

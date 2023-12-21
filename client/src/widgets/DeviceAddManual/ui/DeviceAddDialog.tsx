@@ -2,18 +2,21 @@ import { useEffect, useState } from 'react'
 import './DeviceAddDialog.scss'
 import { DeviceAddChoiceSlassDialog } from './DeviceСhoiceClass'
 import { DeviceOption } from '../../../features/DeviceOption'
-import { DeviceAddData, ValueType } from '../../../entites/Device/models/deviceData'
+import { DeviceAddData, FieldDevice, ValueType } from '../../../entites/Device/models/deviceData'
 import { DeviceEnterAddressDialog } from './DeviceEnterAddress'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { hideFullScreenDialog } from '../../../shared/lib/reducers/dialogReducer'
 import { FullScrinTemplateDialog } from '../../../shared/ui'
 import { DeviceEnterNameDialog } from './DeviceName'
 import { DeviceFinishDialog } from './DeviceFinishConfig'
+import { DeviceTypeDialog } from './DeviceType'
+import { DeviceAddFieldDialog } from './DeviceAddField'
 
 
 export enum Pages{
     CLASS_PAGE = 'class_page',
     ADDRESS_PAGE = 'address_page',
+	TYPE_PAGE = "type_page",
 	FIELDS_PAGE = "fields_page",
 	NAME_PAGE = "name_page",
 	FINISH_PAGE = "finish_page"
@@ -46,7 +49,7 @@ export const DeviceAddDialog = () => {
 	const setClass = (data:DeviceOption) => {
 		setDeviceOption(data)
 		setDeviceData({...emptyDeviceData, class_device:data.class_name})
-		let pages = [Pages.CLASS_PAGE]
+		let pages = [Pages.CLASS_PAGE, Pages.TYPE_PAGE]
 		if(data?.added.address || data?.added.token)
 			pages.push(Pages.ADDRESS_PAGE)
 		if(data?.added.fields)
@@ -67,9 +70,19 @@ export const DeviceAddDialog = () => {
 		setPage(prev=>prev + 1)
 	}
 
+	const setType = (type: string) => {
+		setDeviceData(prev=>({...prev, type}))
+		setPage(prev=>prev + 1)
+	}
+
+	const setFields = (fields: FieldDevice[]) => {
+		setDeviceData(prev=>({...prev, fields}))
+		setPage(prev=>prev + 1)
+	}
+
 	useEffect(()=>{
-		console.log(deviceData)
-	},[deviceData])
+		console.log(deviceData, pages, pages[page])
+	},[deviceData, page, pages])
 
 
 	return(
@@ -77,10 +90,12 @@ export const DeviceAddDialog = () => {
 			{
 				(!deviceOption || pages[page] == Pages.CLASS_PAGE)?
 				<DeviceAddChoiceSlassDialog onClick={setClass}/>:
+				(pages[page] == Pages.TYPE_PAGE)?
+				<DeviceTypeDialog option={deviceOption} onNext={setType} onPrev={()=>setPage(prev=>prev - 1)}/>:
 				(pages[page] == Pages.ADDRESS_PAGE)?
 				<DeviceEnterAddressDialog option={deviceOption} token={deviceData.token ?? ""} address={deviceData.address ?? ""} onNext={setAddress} onPrev={()=>setPage(prev=>prev - 1)}/>:
 				(pages[page] == Pages.FIELDS_PAGE)?
-				null:
+				<DeviceAddFieldDialog fields={deviceData.fields} option={deviceOption} onPrev={()=>setPage(prev=>prev - 1)} onNext={setFields}/>:
 				(pages[page] == Pages.NAME_PAGE)?
 				<DeviceEnterNameDialog option={deviceOption} name={deviceData.name} systemName={deviceData.system_name} onNext={setName} onPrev={()=>setPage(prev=>prev - 1)}/>:
 				(pages[page] == Pages.FINISH_PAGE)?

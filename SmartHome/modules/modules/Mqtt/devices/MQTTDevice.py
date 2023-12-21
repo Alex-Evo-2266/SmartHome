@@ -1,13 +1,21 @@
 from typing import List
-from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
-from SmartHome.logic.deviceClass.schema import ConfigSchema
-from SmartHome.logic.deviceClass.Fields.base_field import BaseField
-from SmartHome.logic.deviceFile.schema import Received_Data_Format
-from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
-import json
-from moduls_src.services import Services
+from app.device.enums import TypeDeviceField, ReceivedDataFormat
+from app.device.device_class.BaseDeviceClass import BaseDevice
+from app.device.device_class.BaseField import BaseField
+from app.device.device_class.schemas import ConfigSchema
 
-from moduls_src.models_schema import AddDevice, EditDevice, EditField, TypeAddDevice
+from modules.modules_src.services import Services
+# from SmartHome.logic.deviceClass.Fields.TypeDeviceField import TypeDeviceField
+# from SmartHome.logic.deviceClass.schema import ConfigSchema
+# from SmartHome.logic.deviceClass.Fields.base_field import BaseField
+# from SmartHome.logic.deviceFile.schema import Received_Data_Format
+# from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
+import json
+# from moduls_src.services import Services
+
+# from moduls_src.models_schema import AddDevice, EditDevice, EditField, TypeAddDevice
+
+from app.device.type_class.Types import DeviceTypeClasses
 
 def look_for_param(arr:List[BaseField], val):
     for item in arr:
@@ -26,18 +34,18 @@ def look_for_by_topic(arr:list, val):
 class MqttDevice(BaseDevice):
 
     class Config(ConfigSchema):
-        pass
+        class_img = "Mqtt/mqtt-ver.png"
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.update_value()
 
     def update_value(self, *args, **kwargs):
-        if self.device_data.value_type==Received_Data_Format.JSON:
+        if self.type_command==ReceivedDataFormat.JSON:
             data = dict()
             data[self.values[0].address] = ""
             data = json.dumps(data)
-            Services.get("Mqtt_connect").publish(self.device_data.address+"/get", data)
+            Services.get("Mqtt_connect").publish(self.address+"/get", data)
 
     def get_device(self):
         return True
@@ -46,13 +54,13 @@ class MqttDevice(BaseDevice):
         super().set_value(name, status)
         message = ""
         val = look_for_param(self.values, name)
-        if(val.type==TypeField.BINARY):
+        if(val.type==TypeDeviceField.BINARY):
             message = status
             # if(int(status)==1):
             #     message = val.high
             # else:
             #     message = val.low
-        elif(val.type==TypeField.NUMDER):
+        elif(val.type==TypeDeviceField.NUMBER):
             if(int(status)>int(val.high)):
                 message = int(val.high)
             elif(int(status)<int(val.low)):
@@ -61,7 +69,7 @@ class MqttDevice(BaseDevice):
                 message = int(status)
         else:
             message = status
-        if(self.device_data.value_type==Received_Data_Format.JSON):
+        if(self.device_data.value_type==ReceivedDataFormat.JSON):
             data = dict()
             data[val.address] = message
             data = json.dumps(data)

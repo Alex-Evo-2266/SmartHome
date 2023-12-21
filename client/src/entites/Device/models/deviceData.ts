@@ -20,7 +20,7 @@ export enum ValueType{
 
 export interface FieldDevice{
     address: string
-    control: boolean
+    read_only: boolean
     enum_values: string
     high: string
     icon: string
@@ -29,6 +29,7 @@ export interface FieldDevice{
     type: DeviceFieldType
     unit: string
     value: string
+    virtual_field: boolean
 }
 
 // name: str = ormar.String(max_length=200)

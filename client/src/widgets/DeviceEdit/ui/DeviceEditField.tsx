@@ -1,12 +1,13 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { DeviceFieldType, FieldDevice } from "../../../entites/Device/models/deviceData"
 import { DeviceOption } from "../../../features/DeviceOption"
 import { SelectIconField } from "../../../features/IconSelect"
 import { splitValue } from "../../../shared/lib/helpers/stringSplitAndJoin"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
-import { hideFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
+import { hideFullScreenDialog, showFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
 import { Divider, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
 import { MoreText } from "../../../shared/ui/MoreText/MoreText"
+import { DeviceEditAddField } from "./DeviceEditAddFieldDialog"
 
 interface DeviceEditFieldProps{
 	field: FieldDevice
@@ -28,12 +29,14 @@ export const DeviceEditField = (prop:DeviceEditFieldProps) => {
 	}
 
 	const changeControl = (value: string) => {
-		setField(prev=>({...prev, control: (value==="true")}))
+		setField(prev=>({...prev, read_only: (value==="true")}))
 	}
 
 	const changeIcon = (value: string) => {
 		setField(prev=>({...prev, icon: value}))
 	}
+
+
 
 	const save = () => {
 		prop.setField && prop.setField(field)
@@ -52,7 +55,14 @@ export const DeviceEditField = (prop:DeviceEditFieldProps) => {
 					</FieldContainer>
 				}
 				{
-					(prop.option.change.fields.address)?
+					(prop.option.change.fields.icon)?
+					<FieldContainer header="icon">
+						<SelectIconField border value={field.icon} onChange={(data)=>changeIcon(data)}/>
+					</FieldContainer>:
+					null
+				}
+				{
+					(prop.option.change.fields.address && !field.virtual_field)?
 					<FieldContainer header="Address">
 						<TextField border value={field.address} name="address" onChange={(e)=>changeValue(e)}/>
 					</FieldContainer>:
@@ -89,7 +99,7 @@ export const DeviceEditField = (prop:DeviceEditFieldProps) => {
 				{
 					(prop.option.change.fields.control)?
 					<FieldContainer header="Control">
-						<SelectField items={[{title: "read only", value: "false"}, {title: "control", value: "true"}]} border value={String(field.control)} name="type" onChange={(value)=>changeControl(value)}/>
+						<SelectField items={[{title: "read only", value: "false"}, {title: "control", value: "true"}]} border value={String(field.read_only)} name="type" onChange={(value)=>changeControl(value)}/>
 					</FieldContainer>:
 					null
 				}
@@ -109,11 +119,6 @@ export const DeviceEditField = (prop:DeviceEditFieldProps) => {
 					<FieldContainer header="values">
 						<TextField border value={field.value} name="value" onChange={(e)=>changeValue(e)}/>
 					</FieldContainer>:
-					null
-				}
-				{
-					(prop.option.change.fields.icon)?
-					<SelectIconField value={field.icon} onChange={(data)=>changeIcon(data)}/>:
 					null
 				}
 				<Divider/>

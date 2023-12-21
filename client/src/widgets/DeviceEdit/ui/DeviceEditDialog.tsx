@@ -2,13 +2,14 @@ import './DeviceEditDialog.scss'
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
 import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { BaseDialog, Divider, FullScrinTemplateDialog, ListContainer, ListItem } from "../../../shared/ui"
+import { BaseDialog, Button, Divider, FilledButton, FullScrinTemplateDialog, ListContainer, ListItem } from "../../../shared/ui"
 import { DeviceData, findDevice } from "../../../entites/Device"
 import { DeviceEditBaseData } from "./DeviceEditBaseData"
 import { DeviceEditField } from "./DeviceEditField"
-import { UseEditDevice } from '../api/putDevice'
+import { UseEditDevice } from '../api/apiDevice'
 import { Trash2 } from 'lucide-react'
 import { DeviceFieldType, FieldDevice } from '../../../entites/Device/models/deviceData'
+import { DeviceEditAddField } from './DeviceEditAddFieldDialog'
 
 interface DeviceEditDialogProps{
 	systemName: string 
@@ -20,7 +21,7 @@ export const DeviceEditDialog = ({systemName}:DeviceEditDialogProps) => {
 	const deviceOptions = useAppSelector(state=>state.deviceOptions)
 	const [device, setDevice] = useState<DeviceData | null>(findDevice(devices, systemName))
 	const dispatch = useAppDispatch()
-	const {editDevice} = UseEditDevice()
+	const {editDevice, deleteDevice} = UseEditDevice()
 
 	const getOption = useCallback(()=>{
 		let option = deviceOptions.deviceOption.filter(item => item.class_name == device?.class_device)
@@ -54,6 +55,36 @@ export const DeviceEditDialog = ({systemName}:DeviceEditDialogProps) => {
 		hide()
 	},[editDevice, systemName, device])
 
+	const showaddFieldDialog = useCallback(() => {
+		dispatch(showFullScreenDialog(<DeviceEditAddField 
+			field={{
+				name:"",
+				type: DeviceFieldType.NUMBER,
+				low:"0",
+				high:"100",
+				unit:"",
+				address:"",
+				value:"",
+				read_only: true,
+				enum_values: "",
+				icon: "",
+				virtual_field: false
+			}} 
+			option={getOption()} 
+		setField={(field)=>{
+			setDevice(prev=>{
+				if(!prev)
+					return prev
+				else{
+					let fields = prev.fields.slice()
+					fields.push(field)
+					return {...prev, fields}
+				}
+			})
+		}}/>))
+        
+	},[dispatch])
+
 	const showEditFieldDialog = useCallback((index:number) => {
 		if(!device)
 			return
@@ -81,33 +112,35 @@ export const DeviceEditDialog = ({systemName}:DeviceEditDialogProps) => {
 		/>))
 	},[dispatch, deleteField])
 
-	const addField = () => {
-		setDevice(prev=>{
-			if(!prev)
-				return prev
-			return {...prev, fields: [...prev.fields, {
-				name:"",
-				type: DeviceFieldType.NUMBER,
-				low:"0",
-				high:"100",
-				unit:"",
-				address:"",
-				value:"",
-				control: true,
-				enum_values: "",
-				icon: ""
-			}]}
-		})
-	}
+	const deleteDeviceBtnClick = useCallback(() => {
+		dispatch(showDialog(<BaseDialog 
+			actionText='delete device' 
+			header='delete device' 
+			text='are you sure you want to delete the device.' 
+			onHide={()=>dispatch(hideDialog())}
+			onSuccess={()=>{
+				deleteDevice(systemName)
+				hide()
+			}}
+		/>))
+	},[dispatch, deleteDevice])
 
 	return(
 		<FullScrinTemplateDialog onHide={hide} header={`Edit ${device?.name}`} onSave={save}>
 			<div className="device-edit-container">
-				<div className="base-data">
-					<div>
-						<p>Device type: {device?.type}</p>
-						<p>Device class: {device?.class_device}</p>
-					</div>
+				<div className='device-edit-base-data table-container'>
+					<table>
+						<tbody>
+							<tr>
+								<td>Device type:</td>
+								<td>{device?.type}</td>
+							</tr>
+							<tr>
+								<td>Device class:</td>
+								<td>{device?.class_device}</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 				<div className="device-edit-body">
 				{
@@ -130,6 +163,14 @@ export const DeviceEditDialog = ({systemName}:DeviceEditDialogProps) => {
 								))
 							}
 						</ListContainer>
+						<div className='btn-container'>
+							{
+								(getOption().added.fields)?
+								<FilledButton onClick={showaddFieldDialog}>add field</FilledButton>:
+								null
+							}
+							<FilledButton style={{background: "var(--Error-color)", color: "var(--On-error-color)"}} onClick={deleteDeviceBtnClick}>delete device</FilledButton>
+						</div>
 					</>:
 					null
 				}

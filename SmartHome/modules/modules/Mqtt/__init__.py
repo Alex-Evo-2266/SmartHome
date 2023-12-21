@@ -1,4 +1,4 @@
-# from castom_moduls.Mqtt.devices.MQTTDevice import MqttDevice
+from modules.modules.Mqtt.devices.MQTTDevice import MqttDevice
 # from castom_moduls.Mqtt.services.MqttValue import Mqtt_MqttValue
 # from castom_moduls.Mqtt.services.MqttConnect import Mqtt_connect
 from modules.modules_src.modules import BaseModule

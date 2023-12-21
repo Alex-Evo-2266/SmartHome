@@ -27,6 +27,16 @@ export interface DeviceOptionChange{
     token: boolean
 }
 
+export interface DeviceTypeField{
+    name: string
+    value: string
+}
+
+export interface DeviceType{
+    name: string
+    fields: DeviceTypeField[]
+}
+
 export interface DeviceOption{
     class_name: string
     added: DeviceOptionAdded
@@ -34,7 +44,7 @@ export interface DeviceOption{
     change_url?: string
     class_img_url?: string
     change:DeviceOptionChange
-    types: string[]
+    types: DeviceType[]
 }
 
 

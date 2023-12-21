@@ -1,4 +1,5 @@
 import asyncio, logging
+import app.device.type_class.init_types
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles

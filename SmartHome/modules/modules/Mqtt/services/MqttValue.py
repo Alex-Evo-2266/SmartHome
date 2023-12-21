@@ -1,8 +1,8 @@
-from SmartHome.logic.device.devices_arrey import DevicesArrey
-from SmartHome.logic.deviceClass.BaseDeviceClass import BaseDevice
-from SmartHome.logic.deviceClass.Fields.TypeField import TypeField
-from SmartHome.logic.deviceFile.schema import Received_Data_Format
-from moduls_src.services import BaseService
+from app.device.devices_arrey import DevicesArrey
+from app.device.device_class.BaseDeviceClass import BaseDevice
+from app.device.enums import ReceivedDataFormat
+
+from modules.modules_src.services import BaseService
 
 from datetime import datetime
 import json
@@ -44,22 +44,22 @@ class Mqtt_MqttValue(BaseService):
             dev:BaseDevice = item.device
             flag = True
             for connect in Mqtt_MqttValue.typeConnects:
-                if dev.device_data.class_device == connect:
+                if dev.class_device == connect:
                     flag = False
                     break
             if(flag):
                 continue
-            if(dev.device_data.value_type==Received_Data_Format.JSON):
-                if(dev.device_data.address == address):
+            if(dev.type_command==ReceivedDataFormat.JSON):
+                if(dev.address == address):
                     data = json.loads(value)
                     for key in data:
                         for item2 in dev.values:
                             if(item2.address==key):
-                                Mqtt_MqttValue.deviceSetStatus(dev.device_data.system_name,item2.name,data[key])
+                                Mqtt_MqttValue.deviceSetStatus(dev.system_name,item2.name,data[key])
             else:
                 for item2 in dev.values:
-                    if dev.device_data.address + '/' + item2.address==address:
-                        return Mqtt_MqttValue.deviceSetStatus(dev.device_data.system_name,item2.name,value)
+                    if dev.address + '/' + item2.address==address:
+                        return Mqtt_MqttValue.deviceSetStatus(dev.system_name,item2.name,value)
 
 
     @staticmethod
