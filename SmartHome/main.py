@@ -42,7 +42,7 @@ from app.settings import MEDIA_ROOT, MEDIA_URL, DEBUG, ORIGINS, DEFAULT_SEND_SER
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
+# app = FastAPI()
 
 # logging.basicConfig(encoding='utf-8', level=logging.INFO)
 
