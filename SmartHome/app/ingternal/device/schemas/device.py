@@ -12,6 +12,7 @@ class AddDeviceSchema(BaseModel):
 	address: Optional[str]
 	token: Optional[str]
 	type_command: ReceivedDataFormat = ReceivedDataFormat.JSON
+	device_polling: bool
 	fields: List[AddDeviceFieldSchema]
 	
 	class Config:  

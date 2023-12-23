@@ -1,6 +1,7 @@
 
 
 from typing import Dict, Any
+from app.modules.modules_src.routers import Routers
 
 
 class Modules():
@@ -29,9 +30,14 @@ class ModuleMeta(type):
 		new_class = super(ModuleMeta, cls).__new__(cls, clsname, bases, dct)
 		if clsname != "BaseModule":
 			Modules.add(clsname, new_class)
+		if "routers" in dct:
+			routers = dct["routers"]
+			Routers.add(clsname, routers)
+		
 		return new_class
 
 class BaseModule(metaclass=ModuleMeta):
+
 	@staticmethod
 	def start():
 		pass
@@ -41,3 +47,4 @@ class BaseModule(metaclass=ModuleMeta):
 		pass
 
 	dependencies=[]
+	routers = []

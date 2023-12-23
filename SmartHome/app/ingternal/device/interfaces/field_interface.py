@@ -25,6 +25,9 @@ class IField(object):
 
 	def get_name(self) -> str:
 		return ""
+	
+	def get_address(self) -> str:
+		return ""
 
 	def set(self, status: Any, script=True):
 		'''

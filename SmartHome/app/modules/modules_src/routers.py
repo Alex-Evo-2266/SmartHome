@@ -10,3 +10,7 @@ class Routers():
 		if not name in cls.services:
 			return None
 		return cls.services[name]
+	
+	@classmethod
+	def all(cls):
+		return cls.services

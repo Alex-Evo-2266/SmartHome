@@ -53,7 +53,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			system_name: str,
 			class_device: str,
 			type: str,
-			fields: List[Device_field],
+			fields: List[Dict[Any, Any]],
 			address: Optional[str] = None,
 			token: Optional[str] = None,
 			type_command: ReceivedDataFormat = ReceivedDataFormat.JSON,
@@ -74,10 +74,13 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		self.device_polling = device_polling
 		self.values:List[BaseField] = []
 		for item in self.fields:
-			field_data = item.dict(exclude={"id", "device"})
-			field_data["enum_values"] = get_enum_values(item.enum_values)
+			field_data = item
+			field_data["enum_values"] = get_enum_values(item["enum_values"])
 			self.values.append(BaseField(**field_data, device_system_name=self.system_name))
-		self.device = None		
+		self.device = None	
+
+	async def final_formation_device(self):
+		pass
 
 	def get_value(self, name:str)->Dict[str, str] | None:
 		value: BaseField | None = look_for_param(self.values, name)
@@ -87,12 +90,21 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 
 	def get_field(self, name:str):
 		return look_for_param(self.values, name)
+	
+	def get_fields(self):
+		return self.values
 
 	def get_values(self)->List[Dict[str, str]]:
 		res:List[Dict[str, str]] = []
 		for item in self.values:
 			res.append(item.dict())
 		return res
+	
+	def get_type_command(self):
+		return self.type_command
+	
+	def get_address(self):
+		return self.address
 
 	@property
 	def is_conected(self):

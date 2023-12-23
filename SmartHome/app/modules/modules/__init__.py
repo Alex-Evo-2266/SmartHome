@@ -1,4 +1,4 @@
-import imp,os,logging
+import imp,os,logging,copy
 
 from app.modules.modules_src.modules import Modules, BaseModule
 # from .models_schema import TypeDevice, DeviceData, ModelAPIData, ModelData
@@ -70,18 +70,7 @@ def getModuls(dir=__name__, init = True):
 #     # list_files = subprocess.run(["poetry", "add", "yeelight"], stdout=subprocess.DEVNULL)
 #     # print(list_files)
 
-# def init_routers(dir=__name__):
-#     addlib()
-#     list_modules = getModuls(dir, False)
-#     list_routers = list()
-#     for module in list_modules:
-#         list_dirs = getModuls(dir+os.sep+module, False)
-#         if "routs" in list_dirs:
-#             rout_file = [_ for _ in os.listdir(dir+os.sep+module+os.sep+"routs") if _.endswith(r".py")]
-#             for rout in rout_file:
-#                 foo = imp.load_source('module', "castom_moduls"+os.sep+module+os.sep+"routs"+os.sep+rout)
-#                 list_routers.append(copy.copy(foo.router))
-#     return list_routers
+
 
 # async def getDevicesClass(type, systemName):
 #     global devices
@@ -99,27 +88,35 @@ def getModuls(dir=__name__, init = True):
 
 
 async def init_modules():
+    logger.debug("init_module")
     dir =__name__
-    dir = dir.split('.')
-    dir = os.sep.join(dir)
-    print(dir)
-    list_modules = getModuls(dir, False)
-    print(list_modules)
-    for module in list_modules:
+    dir = os.sep.join(dir.split('.'))
+    for module in getModuls(dir, False):
         foo = imp.load_source(module, "app" + os.sep + "modules" + os.sep + "modules" + os.sep + module + os.sep + "__init__.py")
     modules = Modules.all()
     for key in modules:
         module: BaseModule = modules[key]
-        print(module)
+        print(module, "started")
         module.start()
+
+def init_routers(dir=__name__):
+    logger.debug("init_router")
+    # addlib()
+    routers = {}
+    dir = os.sep.join(dir.split('.'))
+    for module in getModuls(dir, False):
+        foo = imp.load_source(module, "app" + os.sep + "modules" + os.sep + "modules" + os.sep + module + os.sep + "__init__.py")
+    modules = Modules.all()
+    for key in modules:
+        module: BaseModule = modules[key]
+        routers[key] = module.routers
+    return routers
 
 async def get_img_dir():
     dir =__name__
-    dir = dir.split('.')
-    dir = os.sep.join(dir)
-    list_modules=getModuls(dir, False)
+    dir = os.sep.join(dir.split('.'))
     img_paths = []
-    for module in list_modules:
+    for module in getModuls(dir, False):
         module_path = [dir, module]
         module_path = os.sep.join(module_path)
         if os.path.exists(module_path + os.sep + "img"):

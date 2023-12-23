@@ -16,5 +16,9 @@ class IValueDevice():
 	def get_field(self, name:str)->IField | None:
 		pass
 
+	def get_fields(self) -> List[IField]:
+		pass
+	
+
 	def get_value(self, name:str)->Dict[str, str] | None:
 		pass

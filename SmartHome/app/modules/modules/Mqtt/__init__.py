@@ -1,29 +1,34 @@
 from app.modules.modules.Mqtt.devices.MQTTDevice import MqttDevice
-# from castom_moduls.Mqtt.services.MqttValue import Mqtt_MqttValue
-# from castom_moduls.Mqtt.services.MqttConnect import Mqtt_connect
+from .services.MqttConnect import MqttConnect
+from .services.MqttDeviceControl import MqttDeviceControl
 from app.modules.modules_src.modules import BaseModule
-# from moduls_src.services import Services
+from .routs.router import router as mqtt_router
+from app.configuration.config import __module_config__
+from .settings import CONFIG_NAME, SERVICE_MQTT
+from app.modules.modules_src.services import Services
 # from castom_moduls.Mqtt.settings import CONFIG_NAME
 # from app.settings import configManager
 
 class MqttModule(BaseModule):
 
     dependencies = [
-    "paho-mqtt"
+        "paho-mqtt"
     ]
 
-    # manager:Mqtt_connect = Services.get("Mqtt_connect")
+    routers = [mqtt_router]
 
-    # @staticmethod
-    # def start():
-    #     configManager.addConfig(CONFIG_NAME,{
-    #         "host":'localhost',
-    #         "port": '1883',
-    #         "user":'admin',
-    #         "password":'admin'
-    #     }, MqttModule.manager.reconnect_async)
-    #     MqttModule.manager.connect()
+    manager:MqttConnect = Services.get(SERVICE_MQTT)
 
-    # @staticmethod
-    # def end(self):
-    #     self.manager.desconnect()
+    @classmethod
+    def start(cls):
+        __module_config__.register_config(CONFIG_NAME,{
+            "host":'localhost',
+            "port": '1883',
+            "user":'admin',
+            "password":'admin'
+        }, cls.manager.reconnect_async)
+        cls.manager.connect()
+
+    @classmethod
+    def end(cls):
+        cls.manager.desconnect()

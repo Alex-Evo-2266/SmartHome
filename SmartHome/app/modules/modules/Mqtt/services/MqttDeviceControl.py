@@ -1,8 +1,9 @@
-from app.device.devices_arrey import DevicesArrey
-from app.device.device_class.BaseDeviceClass import BaseDevice
-from app.device.enums import ReceivedDataFormat
+from app.ingternal.device.devices_arrey import DevicesArrey
+from app.ingternal.device.device_class.BaseDeviceClass import BaseDevice
+from app.ingternal.device.enums import ReceivedDataFormat
+from ..exceptions.mqtt import DeviceClassAlreadyBeenRegisteredException
 
-from modules.modules_src.services import BaseService
+from app.modules.modules_src.services import BaseService
 
 from datetime import datetime
 import json
@@ -10,60 +11,54 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# def devicestatus(id, type):
-#     dev = Device.objects.get(id=id)
-#     value = dev.valuedevice_set.all()
-#     for item in value:
-#         if item.name==type:
-#             return item.value
-#     return None
+class MqttDeviceControl(BaseService):
+    classes = []
 
-class Mqtt_MqttValue(BaseService):
-    typeConnects = []
-
-    @staticmethod
-    def addConnect(name:str):
-        for item in Mqtt_MqttValue.typeConnects:
+    @classmethod
+    def add_connect(cls, name:str):
+        for item in cls.classes:
             if item == name:
-                return False
-        Mqtt_MqttValue.typeConnects.append(name)
+                raise DeviceClassAlreadyBeenRegisteredException()
+        cls.classes.append(name)
         return True
 
-    @staticmethod
-    def removeConnect(name:str):
-        arr = Mqtt_MqttValue.typeConnects
+    @classmethod
+    def remove_connect(cls, name:str):
+        arr = cls.classes
         for item in arr:
             if item == name:
-                Mqtt_MqttValue.typeConnects.remove(name)
+                cls.classes.remove(name)
                 return
 
-    @staticmethod
-    def setValueAtToken(address,value):
+    @classmethod
+    def set_value_at_token(cls, address, value):
         devices = DevicesArrey.all()
         for item in devices:
             dev:BaseDevice = item.device
-            flag = True
-            for connect in Mqtt_MqttValue.typeConnects:
-                if dev.class_device == connect:
-                    flag = False
-                    break
-            if(flag):
+            if not (dev.class_device in cls.classes):
                 continue
+            # flag = True
+            # for _class in cls.classes:
+            #     if dev.class_device == _class:
+            #         flag = False
+            #         break
+            # if(flag):
+            #     continue
             if(dev.type_command==ReceivedDataFormat.JSON):
                 if(dev.address == address):
                     data = json.loads(value)
                     for key in data:
                         for item2 in dev.values:
                             if(item2.address==key):
-                                Mqtt_MqttValue.deviceSetStatus(dev.system_name,item2.name,data[key])
+                                cls.device_set_status(dev.system_name, item2.name, data[key])
             else:
                 for item2 in dev.values:
                     if dev.address + '/' + item2.address==address:
-                        return Mqtt_MqttValue.deviceSetStatus(dev.system_name,item2.name,value)
-
+                        return cls.device_set_status(dev.system_name, item2.name, value)
+                    
 
     @staticmethod
-    def deviceSetStatus(systemName, type,value,script=True):
+    def device_set_status(systemName, type, value, script=True):
         try:
             if(value==None or type=="background"):
                 return None
@@ -80,6 +75,7 @@ class Mqtt_MqttValue(BaseService):
                     #         value = "0"
                     #     else:
                     #         return None
+                    print(value)
                     item.set(value)
             return value
         except Exception as e:

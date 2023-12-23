@@ -1,8 +1,12 @@
 # from SmartHome.logic.server.modulesconfig import configManager
 from typing import List
-from app.device.enums import ReceivedDataFormat
-from app.websocket import WebSocketMenager
-from app.device.models import Device, Device_field
+from app.ingternal.device.enums import ReceivedDataFormat
+from app.ingternal.websoket.websocket import WebSocketMenager
+# from app.ingternal.device.models.device import Device, Device_field
+from app.ingternal.device.devices_arrey import DevicesArrey, DevicesArreyItem
+from app.ingternal.device.interfaces.device_interface import IDevice
+from app.ingternal.device.interfaces.field_interface import IField
+from ..settings import WEBSOCKET_TOPIC
 import ast
 import json
 import logging
@@ -15,31 +19,31 @@ def dict_to_list(data):
         arr.append(data[key])
     return arr
 
-class TopicHistory():
+class TopicMessagesList():
     mqttTopics = {}
 
-    @staticmethod
-    def clear():
-        TopicHistory.mqttTopics = {}
+    @classmethod
+    def clear(cls):
+        cls.mqttTopics = {}
 
-    @staticmethod
-    async def add(topic,message):
-        t = {
+    @classmethod
+    async def add(cls, topic, message):
+        msg = {
             "topic":topic,
             "message":message
         }
-        TopicHistory.mqttTopics[topic] = t
-        await WebSocketMenager.send_information("mqtt",dict_to_list(TopicHistory.mqttTopics))
-        return t
+        cls.mqttTopics[topic] = msg
+        await WebSocketMenager.send_information(WEBSOCKET_TOPIC, dict_to_list(cls.mqttTopics))
+        return msg
 
-    @staticmethod
-    def all():
-        return dict_to_list(TopicHistory.mqttTopics)
+    @classmethod
+    def all(cls):
+        return dict_to_list(cls.mqttTopics)
 
-    @staticmethod
-    def getTopicksAndLinc():
+    @classmethod
+    def get_topicks_and_linc(cls):
         try:
-            topics = dict_to_list(TopicHistory.mqttTopics)
+            topics = dict_to_list(cls.mqttTopics)
             newArr = list()
             for item in topics:
                 topic:str = item["topic"]
@@ -47,17 +51,18 @@ class TopicHistory():
                 first = topic.split('/')[0:-1]
                 first = "/".join(first)
                 lincs = list()
-                devices:List[Device] = Device.objects.all()
-                for device in devices:
-                    if device.type_command==ReceivedDataFormat.JSON:
-                        if(device.address==topic or (device.address==first and last == "set")):
+                devices = DevicesArrey.all()
+                for device_item  in devices:
+                    device:IDevice = device_item.device
+                    if device.get_type_command()==ReceivedDataFormat.JSON:
+                        if(device.get_address()==topic or (device.get_address()==first and last == "set")):
                             lincs.append({
                             "device": device.dict()
                             })
                     else:
-                        fields: List[Device_field] = Device_field.objects.all(device=device)
+                        fields = device.get_fields()
                         for devValue in fields:
-                            if ((device.address + "/" + devValue.address==topic) and last != "set"):
+                            if ((device.get_address() + "/" + devValue.get_address()==topic) and last != "set"):
                                 lincs.append({
                                 "device": device.dict(),
                                 "field": devValue.dict()

@@ -1,27 +1,28 @@
 class Services():
 	services = {}
 
-	@staticmethod
-	def add(name, data):
-		if name in Services.services:
+	@classmethod
+	def add(cls, name: str, data):
+		if name in cls.services:
 			return
 			# raise Exception("an element with the same name already exists")
-		Services.services[name] = data
+		cls.services[name] = data
 
-	@staticmethod
-	def get(name):
-		if not name in Services.services:
+	@classmethod
+	def get(cls, name: str):
+		if not name in cls.services:
 			return None
-		return Services.services[name]
+		return cls.services[name]
 	
-	@staticmethod
-	def all()->dict:
-		return Services.services
+	@classmethod
+	def all(cls)->dict:
+		return cls.services
 
 class ServiceMeta(type):
 	def __new__(cls, clsname, bases, dct):
 		new_class = super(ServiceMeta, cls).__new__(cls, clsname, bases, dct)
-		Services.add(clsname, new_class)
+		if clsname != "BaseService":
+			Services.add(clsname, new_class)
 		return new_class
 
 class BaseService(metaclass=ServiceMeta):

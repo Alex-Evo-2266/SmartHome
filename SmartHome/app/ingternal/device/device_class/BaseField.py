@@ -67,6 +67,9 @@ class BaseField(IField):
 
 	def get_unit(self):
 		return self.unit
+	
+	def get_address(self):
+		return self.address
 
 	def get_name(self):
 		return self.name

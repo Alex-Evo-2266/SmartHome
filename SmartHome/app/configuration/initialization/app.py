@@ -1,7 +1,7 @@
 import logging
 import os, filecmp, shutil
 from typing import List
-from app.configuration.settings import MEDIA_ROOT, BACKGROUND_DIR, MODULES_DIR
+from app.configuration.settings import MEDIA_ROOT, BACKGROUND_DIR, MODULES_DIR, SERVER_CONFIG
 from app.modules.modules import get_img_dir
 
 logger = logging.getLogger(__name__)
@@ -13,6 +13,7 @@ async def init_dir():
         os.mkdir(MODULES_DIR)
     if not os.path.exists(BACKGROUND_DIR):
         os.mkdir(BACKGROUND_DIR)
+    
 
     paths:List[str] = await get_img_dir()
     for path in paths:

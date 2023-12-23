@@ -1,5 +1,5 @@
 from typing import Dict
-import yaml, logging
+import yaml, logging, os
 from typing import Callable
 
 logger = logging.getLogger(__name__)
@@ -14,6 +14,7 @@ class ModuleConfig(object):
 	def __read_config(self):
 		try:
 			templates = None
+			self.__create_config()
 			with open(self.file) as f:
 				templates = yaml.safe_load(f)
 			if not templates:
@@ -29,6 +30,11 @@ class ModuleConfig(object):
 		self.config = templates
 		with open(self.file, 'w') as f:
 			yaml.dump(templates, f, default_flow_style=False)
+
+	def __create_config(self):
+		if not os.path.exists(self.file):
+			file = open(self.file, "w+")
+			file.close()
 
 	def register_config(self, name: str, data: Dict[str, str], callback: Callable = None):
 		templates = self.__read_config()

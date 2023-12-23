@@ -1,17 +1,18 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
-from SmartHome.authtorization.auth_depends import token_dep
+from app.ingternal.authtorization.depends.authtorization import token_dep
+from ..src.TopicMessagesList import TopicMessagesList
 
-from moduls_src.services import get
+from app.modules.modules_src.services import Services
+from ..settings import ROUTE_PREFIX
 
 router = APIRouter(
-    prefix="/mqtt",
-    tags=["mqtt"],
+    prefix="/" + ROUTE_PREFIX,
+    tags=[ROUTE_PREFIX],
     responses={404: {"description": "Not found"}},
 )
 
-from moduls_src.managers import add
 
 # def routerInit():
 #     add("mqttrouter",router)
@@ -19,12 +20,12 @@ from moduls_src.managers import add
 
 @router.get("/get")
 async def gete(auth_data: dict = Depends(token_dep)):
-    res = get("Mqtt_MqttConnect").getHistory().getTopicksAndLinc()
+    res = TopicMessagesList.get_topicks_and_linc()
     if(res == None):
         return JSONResponse(status_code=400, content={"message": "unknown error"})
     return res
 
 @router.get("/clear")
 async def geter(auth_data: dict = Depends(token_dep)):
-    get("Mqtt_MqttConnect").getHistory().clear()
+    TopicMessagesList.clear()
     return "ok"

@@ -1,5 +1,5 @@
 import logging
-from app.ingternal.device.models.device import Device, Device_field
+from app.ingternal.device.models.device import Device, Device_field, Value
 from app.ingternal.device.exceptions.device import DeviceNotFound
 from app.ingternal.device.device_class.BaseDeviceClass import BaseDevice
 from app.ingternal.device.devices_arrey import DevicesArrey, DevicesArreyItem
@@ -23,6 +23,18 @@ async def polling(element: DevicesArreyItem):
 		logger.warning(f'device not found. {e}')
 		DevicesArrey.delete(element.id)
 
+async def get_value_device(device: Device):
+	fields: List[Device_field] = await Device_field.objects.all(device=device)
+	fields_arr_data = []
+	for field in fields:
+		values: List[Value] = await Value.objects.all(field=field)
+		_field = field.dict(exclude={"id", "device"})
+		if (len(values) > 0):
+			_field["value"] = values[-1].value
+		else:
+			_field["value"] = ""
+		fields_arr_data.append(_field)
+	return fields_arr_data
 
 async def polling_and_init(device_data: Device):
 	try:
@@ -37,13 +49,14 @@ async def polling_and_init(device_data: Device):
 			return data
 		element = DevicesArrey.get(device_data.system_name)
 		if not element:
-			device_full_data = {**device_data.dict(), "fields": await Device_field.objects.all(device=device_data)}
+			device_full_data = {**device_data.dict(), "fields": await get_value_device(device_data)}
 			device:BaseDevice = DeviceClasses.get_device(device_data.class_device, data=device_full_data)
 			if not device:
 				data = await device_db_to_schema(device_data)
 				data.value = dict()
 				data.device_status = StatusDevice.NOT_SUPPORTED
 				return data
+			await device.final_formation_device()
 			if not device.is_conected:
 				data = await device_db_to_schema(device_data)
 				data.device_status = StatusDevice.OFFLINE
