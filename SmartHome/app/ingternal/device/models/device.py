@@ -17,6 +17,7 @@ class Device(ormar.Model):
 	token: Optional[str] = ormar.String(max_length=200, nullable=True)
 	type_command: ReceivedDataFormat = ormar.String(max_length=200, default=ReceivedDataFormat.JSON)
 	device_polling: bool = ormar.Boolean(default=True)
+	device_cyclic_polling: bool = ormar.Boolean(default=True)
 	device_status: Optional[StatusDevice] = StatusDevice.OFFLINE
 	value: Optional[Dict[str,str]] = dict()
 	

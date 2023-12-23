@@ -1,6 +1,6 @@
 import { DeviceData } from "../../../entites/Device"
 import { DeviceOption } from "../../../features/DeviceOption"
-import { FieldContainer, TextField } from "../../../shared/ui"
+import { FieldContainer, SelectField, TextField } from "../../../shared/ui"
 
 interface DeviceEditBaseDataProps{
 	device: DeviceData
@@ -14,6 +14,7 @@ export const DeviceEditBaseData = ({device, option, setDevice}:DeviceEditBaseDat
 	const changeSystemName = (value:string) => setDevice(prev=>(prev?{...prev, system_name: value}:prev))
 	const changeAddress = (value:string) => setDevice(prev=>(prev?{...prev, address: value}:prev))
 	const changeToken = (value:string) => setDevice(prev=>(prev?{...prev, token: value}:prev))
+	const changePolling = (value:boolean) => setDevice(prev=>(prev?{...prev, device_cyclic_polling: value}:prev))
 
 	return(
 		<>
@@ -27,6 +28,13 @@ export const DeviceEditBaseData = ({device, option, setDevice}:DeviceEditBaseDat
 			(option.change.address)?
 			<FieldContainer header="Address">
 				<TextField border value={device.address} onChange={(e)=>changeAddress(e.target.value)}/>
+			</FieldContainer>:
+			null
+		}
+		{
+			(option.change.polling)?
+			<FieldContainer header="Pulling">
+				<SelectField items={[{title: "flase", value: "false"}, {title: "true", value: "true"}]} border value={String(device.device_cyclic_polling)} name="virtual" onChange={(value)=>changePolling(value === "true")}/>
 			</FieldContainer>:
 			null
 		}

@@ -4,6 +4,7 @@ export interface DeviceOptionAdded{
     fields: boolean
     address: boolean
     token: boolean
+    polling: boolean
 }
 
 export interface DeviceOptionChangeField{
@@ -25,6 +26,7 @@ export interface DeviceOptionChange{
     fields: DeviceOptionChangeField
     address: boolean
     token: boolean
+    polling: boolean
 }
 
 export interface DeviceTypeField{

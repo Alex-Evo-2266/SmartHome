@@ -28,6 +28,7 @@ class MqttDevice(BaseDevice):
 
 	class Config(ConfigSchema):
 		class_img = "Mqtt/mqtt-ver.png"
+		change_polling = True
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(**kwargs)

@@ -53,6 +53,7 @@ export interface DeviceData{
     device_status: DeviceStatus | string
     fields: FieldDevice[]
     device_polling:boolean
+    device_cyclic_polling: boolean
     type_command: ValueType | string
     value: Dict<string>
 }
@@ -67,4 +68,5 @@ export interface DeviceAddData{
     fields: FieldDevice[]
     type_command: ValueType | string
     type: string
+    device_cyclic_polling: boolean
 }

@@ -1,12 +1,13 @@
 import { useState } from "react"
-import { FilledButton, TextField, Button } from "../../../shared/ui"
+import { FilledButton, TextField, Button, SelectField, FieldContainer } from "../../../shared/ui"
 import { DeviceOption } from "../../../features/DeviceOption"
 
 interface DeviceAddEnterAddressDialogProps{
 	option: DeviceOption
 	address: string
 	token: string
-	onNext: (adddess: string, token: string)=>void
+	polling: boolean
+	onNext: (adddess: string, token: string, polling: boolean)=>void
 	onPrev: ()=>void
 }
 
@@ -14,13 +15,14 @@ export const DeviceEnterAddressDialog = (prop:DeviceAddEnterAddressDialogProps) 
 
 	const [token, setToken] = useState<string>(prop.token ?? "")
 	const [adddess, setAddress] = useState<string>(prop.address ?? "")
+	const [pulling, setPulling] = useState<boolean>(prop.polling ?? false)
 
 	const next = () => {
 		if(prop.option.added.address && adddess == "")
 			return
 		if(prop.option.added.token && token == "")
 			return
-		prop.onNext(adddess, token)
+		prop.onNext(adddess, token, pulling)
 	}
 
 	return(
@@ -32,6 +34,13 @@ export const DeviceEnterAddressDialog = (prop:DeviceAddEnterAddressDialogProps) 
 			</div>:
 			null
 		}
+		{
+			(prop.option.added.polling)?
+			<FieldContainer header="Polling">
+				<SelectField items={[{title: "flase", value: "false"}, {title: "true", value: "true"}]} border value={String(pulling)} name="virtual" onChange={(value)=>setPulling((value === "true"))}/>
+			</FieldContainer>:
+			null
+		}  
 		{
 			(prop.option.added.token)?
 			<div className="device-add-container">

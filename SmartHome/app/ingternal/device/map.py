@@ -29,6 +29,7 @@ async def device_db_to_schema(device: Device)->DeviceSchema:
 		type_command=device.type_command,
 		device_polling=device.device_polling,
 		device_status=device.device_status,
+		device_cyclic_polling=device.device_cyclic_polling,
 		value=dict(),
 		fields=[device_field_db_to_schema(x) for x in fields]
 	)

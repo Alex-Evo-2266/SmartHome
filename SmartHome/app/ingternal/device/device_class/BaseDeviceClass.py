@@ -58,6 +58,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			token: Optional[str] = None,
 			type_command: ReceivedDataFormat = ReceivedDataFormat.JSON,
 			device_polling: bool = True,
+			device_cyclic_polling: bool = True,
 			device_status: Optional[StatusDevice] = StatusDevice.OFFLINE,
 			value: Optional[Dict[str,str]] = dict()
 			):
@@ -72,6 +73,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		self.token = token
 		self.type_command = type_command
 		self.device_polling = device_polling
+		self.device_cyclic_polling = device_cyclic_polling
 		self.values:List[BaseField] = []
 		for item in self.fields:
 			field_data = item
@@ -166,6 +168,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			"name":self.name,
 			"device_polling":self.device_polling,
 			"system_name":self.system_name,
+			"device_cyclic_polling":self.device_cyclic_polling,
 			"token":self.token,
 			"type":self.type,
 			"class_device":self.class_device,
@@ -190,6 +193,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			type=self.type,
 			address=self.address,
 			token=self.token,
+			device_cyclic_polling = self.device_cyclic_polling,
 			type_command=self.type_command,
 			device_polling=self.device_polling,
 		)

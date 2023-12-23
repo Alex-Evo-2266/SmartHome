@@ -68,7 +68,8 @@ async def polling_and_init(device_data: Device):
 			DevicesArrey.addDevice(device_data.system_name,device)
 		else:
 			device = element.device
-		device.updata()
+		if device.device_cyclic_polling:
+			device.updata()
 		data = device.get_data()
 		data.device_status = StatusDevice.ONLINE
 		return data

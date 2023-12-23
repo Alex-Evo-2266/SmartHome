@@ -31,7 +31,8 @@ const emptyDeviceData = {
 	token: "",
 	fields: [],
 	type_command: ValueType.JSON,
-	type: "light"
+	type: "light",
+	device_cyclic_polling: false
 }
 
 export const DeviceAddDialog = () => {
@@ -60,8 +61,8 @@ export const DeviceAddDialog = () => {
 		setPage(prev=>prev + 1)
 	}
 
-	const setAddress = (address: string, token: string) => {
-		setDeviceData(prev=>({...prev, address: address, token: token}))
+	const setAddress = (address: string, token: string, polling: boolean) => {
+		setDeviceData(prev=>({...prev, address: address, token: token, device_cyclic_polling: polling}))
 		setPage(prev=>prev + 1)
 	}
 
@@ -93,7 +94,7 @@ export const DeviceAddDialog = () => {
 				(pages[page] == Pages.TYPE_PAGE)?
 				<DeviceTypeDialog option={deviceOption} onNext={setType} onPrev={()=>setPage(prev=>prev - 1)}/>:
 				(pages[page] == Pages.ADDRESS_PAGE)?
-				<DeviceEnterAddressDialog option={deviceOption} token={deviceData.token ?? ""} address={deviceData.address ?? ""} onNext={setAddress} onPrev={()=>setPage(prev=>prev - 1)}/>:
+				<DeviceEnterAddressDialog option={deviceOption} token={deviceData.token ?? ""} polling={deviceData.device_cyclic_polling} address={deviceData.address ?? ""} onNext={setAddress} onPrev={()=>setPage(prev=>prev - 1)}/>:
 				(pages[page] == Pages.FIELDS_PAGE)?
 				<DeviceAddFieldDialog fields={deviceData.fields} option={deviceOption} onPrev={()=>setPage(prev=>prev - 1)} onNext={setFields}/>:
 				(pages[page] == Pages.NAME_PAGE)?

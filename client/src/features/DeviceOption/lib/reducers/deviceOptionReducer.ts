@@ -9,18 +9,18 @@ type DeviceOptionState = {
 	deviceOption: DeviceOption[]
 }
 
-interface UserSetAction{
+interface OptionSetAction{
     type: TypeAction.SET_DEVICE_OPTION
     payload: DeviceOptionState
 }
 
-type UserAuthAction = UserSetAction
+type OptionAction = OptionSetAction
 
 const initState:DeviceOptionState = {
 	deviceOption: []
 }
 
-export const deviceOptionReducer = (state:DeviceOptionState = initState, action:UserAuthAction) =>{
+export const deviceOptionReducer = (state:DeviceOptionState = initState, action:OptionAction) =>{
 	switch (action.type){
 		case TypeAction.SET_DEVICE_OPTION:
 			return ({...action.payload})
@@ -29,4 +29,4 @@ export const deviceOptionReducer = (state:DeviceOptionState = initState, action:
 	}
 }
 
-export const setDeviceOptions = (payload: DeviceOption[]):UserAuthAction => ({type: TypeAction.SET_DEVICE_OPTION, payload:{deviceOption: payload}})
+export const setDeviceOptions = (payload: DeviceOption[]):OptionAction => ({type: TypeAction.SET_DEVICE_OPTION, payload:{deviceOption: payload}})
