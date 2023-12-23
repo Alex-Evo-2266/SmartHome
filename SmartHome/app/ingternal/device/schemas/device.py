@@ -13,7 +13,6 @@ class AddDeviceSchema(BaseModel):
 	token: Optional[str]
 	device_cyclic_polling: bool
 	type_command: ReceivedDataFormat = ReceivedDataFormat.JSON
-	device_polling: bool
 	fields: List[AddDeviceFieldSchema]
 	
 	class Config:  

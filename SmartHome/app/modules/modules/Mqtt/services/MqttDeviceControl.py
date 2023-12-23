@@ -37,13 +37,6 @@ class MqttDeviceControl(BaseService):
             dev:BaseDevice = item.device
             if not (dev.class_device in cls.classes):
                 continue
-            # flag = True
-            # for _class in cls.classes:
-            #     if dev.class_device == _class:
-            #         flag = False
-            #         break
-            # if(flag):
-            #     continue
             if(dev.type_command==ReceivedDataFormat.JSON):
                 if(dev.address == address):
                     data = json.loads(value)
@@ -65,7 +58,6 @@ class MqttDeviceControl(BaseService):
             dev = DevicesArrey.get(systemName)
             dev:BaseDevice = dev.device
             values = dev.values
-            print("p0")
             for item in values:
                 if item.name==type:
                     # if(item.type==TypeField.BINARY):
@@ -75,7 +67,6 @@ class MqttDeviceControl(BaseService):
                     #         value = "0"
                     #     else:
                     #         return None
-                    print(value)
                     item.set(value)
             return value
         except Exception as e:

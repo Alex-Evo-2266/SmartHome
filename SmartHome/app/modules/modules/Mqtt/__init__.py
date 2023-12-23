@@ -21,6 +21,7 @@ class MqttModule(BaseModule):
 
     @classmethod
     def start(cls):
+
         __module_config__.register_config(CONFIG_NAME,{
             "host":'localhost',
             "port": '1883',

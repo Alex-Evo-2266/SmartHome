@@ -1,5 +1,5 @@
 from app.configuration.config import __module_config__
-from ..settings import CONFIG_NAME, SERVICE_MQTT_PARS
+from ..settings import CONFIG_NAME, SERVICE_MQTT_PARS, DEVIECE_CLASS
 
 from typing import Callable, Any
 from app.modules.modules_src.services import BaseService, Services
@@ -34,7 +34,7 @@ class MqttConnect(BaseService):
 
     @classmethod
     def connect(cls):
-        Services.get(SERVICE_MQTT_PARS).add_connect("MqttDevice")
+        Services.get(SERVICE_MQTT_PARS).add_connect(DEVIECE_CLASS)
         try:
             logger.debug("mqtt conecting...")
             conf = __module_config__.get_config(CONFIG_NAME)

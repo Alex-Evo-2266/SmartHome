@@ -70,15 +70,30 @@ class BaseField(IField):
 	
 	def get_address(self):
 		return self.address
+	
+	def is_virtual_field(self) -> bool:
+		return self.virtual_field
 
 	def get_name(self):
 		return self.name
 
 	def set(self, status, script=True):
+		if self.virtual_field:
+			return
 		self.__value = status
 		if(script):
 			pass
 			# run_by_trigger_scripts(self.device_system_name,self.name)
+		
+	def set_virtual_value(self, status, script=True):
+		'''
+		используется программой для виртуальных полей чтобы в них не записывались данные полученные от устройства.
+		'''
+		if not self.virtual_field:
+			return
+		self.__value = status
+		if(script):
+			pass
 
 	def dict(self)->Dict:
 		return {

@@ -21,7 +21,10 @@ async def set_value(system_name:str, field_name:str, value:str):
 		if not field:
 			logger.debug(f'field not found. systemName:{system_name},field_name:{field_name},value:{value}')
 			return None
-		device.set_value(field_name,value)
+		if field.is_virtual_field():
+			pass
+		else:
+			device.set_value(field_name,value)
 		return True
 	except Exception as ex:
 		logger.error(f'error set value. systemName:{system_name}, detail:{ex}')

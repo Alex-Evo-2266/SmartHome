@@ -28,6 +28,9 @@ class IField(object):
 	
 	def get_address(self) -> str:
 		return ""
+	
+	def is_virtual_field(self) -> bool:
+		pass
 
 	def set(self, status: Any, script=True):
 		'''

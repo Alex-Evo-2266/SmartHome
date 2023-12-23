@@ -1,5 +1,6 @@
 CONFIG_NAME="mqttBroker"
 
+DEVIECE_CLASS="MqttDevice"
 SERVICE_MQTT="MqttConnect"
 SERVICE_MQTT_PARS="MqttDeviceControl"
 
