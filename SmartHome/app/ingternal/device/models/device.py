@@ -37,7 +37,7 @@ class Device_field(ormar.Model):
 	read_only: bool = ormar.Boolean()
 	icon: str = ormar.String(max_length=200, default="room")
 	unit: Optional[str] = ormar.String(max_length=200, default="")
-	virtual_field: bool = ormar.Boolean(default=True)
+	virtual_field: bool = ormar.Boolean(default=False)
 	device: Optional[Union[Device, Dict]] = ormar.ForeignKey(Device, related_name="fields", ondelete=ReferentialAction.CASCADE)
 
 class Value(ormar.Model):
