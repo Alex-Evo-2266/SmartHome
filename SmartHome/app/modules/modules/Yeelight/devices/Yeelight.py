@@ -28,6 +28,7 @@ class YeelightDevice(BaseDevice):
 		class_img = "Yeelight/unnamed.jpg"
 		fields_addition: bool = False
 		init_field = True
+		change_polling = False
 		fields_change: ChangeField = ChangeField(
 			added=False,
 			deleted=False,
@@ -42,6 +43,7 @@ class YeelightDevice(BaseDevice):
 		)
 
 	def __init__(self, *args, **kwargs):
+		kwargs["device_cyclic_polling"] = True
 		super().__init__(**kwargs)
 		if not self.address:
 			return

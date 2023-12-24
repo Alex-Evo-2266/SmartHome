@@ -32,7 +32,7 @@ class BaseField(IField):
 		unit:str = "",
 		enum_values:List[str] = [],
 		value:Any = None,
-		virtual_field: bool = True
+		virtual_field: bool = False
 		# change:ChangeField = ChangeField()
 		):
 		'''initial field'''
