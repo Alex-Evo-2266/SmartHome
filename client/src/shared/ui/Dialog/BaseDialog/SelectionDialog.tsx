@@ -22,15 +22,16 @@ interface SelectionDialogProps<T>{
     header: string
     onHide?: ()=>void
     name?: string
+    noHide?: boolean
 }
 
-export function SelectionDialog<T>({onSuccess, items, header, onHide, name="dailog_name"}:SelectionDialogProps<T>) {
+export function SelectionDialog<T>({onSuccess, items, header, onHide, noHide, name="dailog_name"}:SelectionDialogProps<T>) {
 
     const [value, setValue] = useState<T | undefined>(undefined)
 
     const success = useCallback(() => {
         onSuccess && value && onSuccess(value)
-        onHide && onHide()
+        !noHide && onHide && onHide()
     },[value])
 
     const change = useCallback((data: T) => {

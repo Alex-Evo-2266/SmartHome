@@ -1,8 +1,8 @@
 import './DeviceEditDialog.scss'
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
 import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { BaseDialog, Button, Divider, FilledButton, FullScrinTemplateDialog, ListContainer, ListItem } from "../../../shared/ui"
+import { BaseDialog, Divider, FilledButton, FullScrinTemplateDialog, ListContainer, ListItem } from "../../../shared/ui"
 import { DeviceData, findDevice } from "../../../entites/Device"
 import { DeviceEditBaseData } from "./DeviceEditBaseData"
 import { DeviceEditField } from "./DeviceEditField"

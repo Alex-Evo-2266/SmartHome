@@ -19,9 +19,11 @@ interface ITextFieldProps{
     readOnly?: boolean
     type?:string
     transparent?: boolean
+    min?: number
+    max?: number
 }
 
-export const TextField = ({type = "text", transparent, readOnly, password, border, onClear, icon, onChange, name, value, placeholder, className, validEmptyValue, onFocus, onBlur, error}:ITextFieldProps) => {
+export const TextField = ({type = "text", transparent, readOnly, password, border, onClear, icon, onChange, name, value, placeholder, className, validEmptyValue, onFocus, onBlur, error, max, min}:ITextFieldProps) => {
 
     const inputElement = useRef<HTMLInputElement>(null)
     const [isError, setError] = useState<boolean>(false)
@@ -54,6 +56,8 @@ export const TextField = ({type = "text", transparent, readOnly, password, borde
             <div className="input-container" onClick={focus}>
                 <input
                 ref={inputElement}
+                max={max}
+                min={min}
                 readOnly={readOnly}
                 required 
                 type={password?"password":type} 

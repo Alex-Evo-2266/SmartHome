@@ -2,13 +2,14 @@ import ormar, datetime
 from ormar import ReferentialAction
 from app.pkg.ormar.dbormar import BaseMeta
 from typing import Optional, List, Dict, Union
-from app.ingternal.scripts.enums import TypeEntity, Condition, Sign
+from app.ingternal.scripts.enums import TypeEntity, Condition, Sign, TypeEntityCondition, TypeEntityAction
 
 class Trigger(ormar.Model):
 	class Meta(BaseMeta):
 		pass
 	
-	name: str = ormar.String(max_length=200, primary_key=True)
+	system_name: str = ormar.String(max_length=200, primary_key=True)
+	name: str = ormar.String(max_length=200)
 	condition: Condition = ormar.String(max_length=200, default=Condition.OR)
 	status: bool = ormar.Boolean(default=True)
 
@@ -27,7 +28,7 @@ class Trigger_condition(ormar.Model):
 		pass
 
 	id: int = ormar.Integer(primary_key=True, autoincrement=True)
-	type_entity: TypeEntity = ormar.String(max_length=200, default=TypeEntity.DEVICE)
+	type_entity: TypeEntityCondition = ormar.String(max_length=200, default=TypeEntityCondition.DEVICE)
 	entity: str = ormar.String(max_length=300)
 	sign: Sign = ormar.String(max_length=200, default=Sign.EQUALLY)
 	value: str = ormar.String(max_length=1000)
@@ -38,7 +39,19 @@ class Trigger_action(ormar.Model):
 		pass
 
 	id: int = ormar.Integer(primary_key=True, autoincrement=True)
-	type_entity: TypeEntity = ormar.String(max_length=200, default=TypeEntity.DEVICE)
+	type_entity: TypeEntityAction = ormar.String(max_length=200, default=TypeEntityAction.DEVICE)
 	entity: str = ormar.String(max_length=300)
 	value: str = ormar.String(max_length=1000)
 	trigger: Optional[Union[Trigger, Dict]] = ormar.ForeignKey(Trigger, related_name="actions", ondelete=ReferentialAction.CASCADE)
+
+
+
+class Trigger_action_differently(ormar.Model):
+	class Meta(BaseMeta):
+		pass
+
+	id: int = ormar.Integer(primary_key=True, autoincrement=True)
+	type_entity: TypeEntityAction = ormar.String(max_length=200, default=TypeEntityAction.DEVICE)
+	entity: str = ormar.String(max_length=300)
+	value: str = ormar.String(max_length=1000)
+	trigger: Optional[Union[Trigger, Dict]] = ormar.ForeignKey(Trigger, related_name="differently", ondelete=ReferentialAction.CASCADE)

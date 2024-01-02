@@ -17,6 +17,7 @@ export { DateField } from './DateField/DateField'
 // TimeField
 
 export { TimeField } from './TimePickers/TimeField'
+export { TimePicker } from './TimePickers/TimePickers'
 
 // Dialog
 export { BasicTemplateDialog } from './Dialog/TemplateDialog/BasicTemplateDialog'
@@ -75,3 +76,5 @@ export {FieldContainer} from './FieldContainer/FieldContainer'
 export {ScrollContainer} from './ScrollContainer/ScrollContainer'
 
 export {Chips} from './Chips/Chips'
+
+export {DayOfWeekField} from './DayOfWeek/DayOfWeek'

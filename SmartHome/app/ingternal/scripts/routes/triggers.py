@@ -31,12 +31,12 @@ async def add_trigger_url(data:AddTrigger, auth_data: TokenData = Depends(token_
 			return JSONResponse(status_code=400, content="trigger with that name already exists")
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.get("/triggers/{name}", response_model=TriggerSchema)
-async def get_trigger_url(name: str, auth_data: TokenData = Depends(token_dep)):
+@router.get("/triggers/{system_name}", response_model=TriggerSchema)
+async def get_trigger_url(system_name: str, auth_data: TokenData = Depends(token_dep)):
 	try:
 		if auth_data.user_level == UserLevel.NONE:
 			raise AccessRightsErrorException()
-		data = await get_trigger(name)
+		data = await get_trigger(system_name)
 		return data
 	except Exception as e:
 		logger.warning(str(e))
@@ -53,34 +53,34 @@ async def get_all_trigger_url(auth_data: TokenData = Depends(token_dep)):
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.delete("/triggers/{name}")
-async def delete_trigger_url(name: str, auth_data: TokenData = Depends(token_dep)):
+@router.delete("/triggers/{system_name}")
+async def delete_trigger_url(system_name: str, auth_data: TokenData = Depends(token_dep)):
 	try:
 		if auth_data.user_level != UserLevel.ADMIN:
 			raise AccessRightsErrorException()
-		await delete_trigger(name)
+		await delete_trigger(system_name)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.put("/triggers/{name}")
-async def edit_trigger_url(name: str, data:TriggerSchema, auth_data: TokenData = Depends(token_dep)):
+@router.put("/triggers/{system_name}")
+async def edit_trigger_url(system_name: str, data:TriggerSchema, auth_data: TokenData = Depends(token_dep)):
 	try:
 		if auth_data.user_level != UserLevel.ADMIN:
 			raise AccessRightsErrorException()
-		await update_trigger(name, data)
+		await update_trigger(system_name, data)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.patch("/triggers/{name}")
-async def edit_status_trigger_url(name: str, data:PatchStatusTrigger, auth_data: TokenData = Depends(token_dep)):
+@router.patch("/triggers/{system_name}")
+async def edit_status_trigger_url(system_name: str, data:PatchStatusTrigger, auth_data: TokenData = Depends(token_dep)):
 	try:
 		if auth_data.user_level != UserLevel.ADMIN:
 			raise AccessRightsErrorException()
-		await edit_status_trigger(name, data.status)
+		await edit_status_trigger(system_name, data.status)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))

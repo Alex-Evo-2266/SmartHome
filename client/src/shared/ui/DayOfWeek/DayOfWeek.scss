@@ -1,0 +1,45 @@
+.days-week-field-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 15px 10px 10px;
+    width: 100%;
+    flex-wrap: wrap;
+    & > label{
+        flex: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        height: 32px;
+        min-width: 40px;
+        border-radius: 10px;
+        overflow: hidden;
+        align-items: center;
+        span{
+            position: absolute;
+            text-align: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            line-height: 32px;
+            background-color: var(--Secondary-container-color);
+            color: var(--On-secondary-container-color);
+        }
+        input{
+            display: none;
+        }
+        input:checked + span{
+            background-color: var(--Primary-color);
+            color: var(--On-primary-color);
+        }
+    }
+}
+
+@media (min-width: 400px) {
+    .days-week-field-container{
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}

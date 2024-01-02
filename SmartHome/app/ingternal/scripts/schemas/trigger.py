@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 from typing import Optional, List, Dict
-from app.ingternal.scripts.enums import Condition, TypeEntity, Sign
+from app.ingternal.scripts.enums import Condition, TypeEntity, Sign, TypeEntityAction, TypeEntityCondition
 
 class TriggerCondition(BaseModel):
 
 	id: Optional[int] = None
-	type_entity: TypeEntity
+	type_entity: TypeEntityCondition
 	entity: str
 	sign: Sign = Sign.EQUALLY
 	value: str
@@ -16,7 +16,7 @@ class TriggerCondition(BaseModel):
 class TriggerAction(BaseModel):
 
 	id: Optional[int] = None
-	type_entity: TypeEntity
+	type_entity: TypeEntityAction
 	entity: str
 	value: str
 
@@ -34,10 +34,12 @@ class TriggerEntity(BaseModel):
 
 class TriggerSchema(BaseModel):
 	name: str
+	system_name: str
 	entities: List[TriggerEntity]
 	condition: Condition
 	conditions: List[TriggerCondition]
 	actions: List[TriggerAction]
+	differently: List[TriggerAction]
 	status: bool
 
 	class Config:
@@ -47,10 +49,12 @@ class TriggerSchema(BaseModel):
 
 class AddTrigger(BaseModel):
 	name: str
+	system_name: str
 	entities: List[TriggerEntity]
 	condition: Condition
 	conditions: List[TriggerCondition]
 	actions: List[TriggerAction]
+	differently: List[TriggerAction]
 
 	class Config:
 		use_enum_values = True

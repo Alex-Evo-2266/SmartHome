@@ -8,6 +8,7 @@ import { UserRole } from "../entites/User"
 import { Page403 } from "../pages/403Page"
 import { UsersPage } from "../pages/Users"
 import { DevicePage } from "../pages/Devices"
+import { ScriptsPage } from "../pages/Scripts"
 
 
 export const useRoutes = (isAuthenticated:boolean, role: UserRole)=>{
@@ -29,6 +30,7 @@ export const useRoutes = (isAuthenticated:boolean, role: UserRole)=>{
 						<Route path="settings" element={<SettingsPage/>}/>
 						<Route path="profile" element={<ProfilePage/>}/>
 						<Route path="users" element={<UsersPage/>}/>
+						<Route path="scripts" element={<ScriptsPage/>}/>
 						<Route path="/*" element={<Navigate replace to="/home" />} />
 					</Route>:
 					<>

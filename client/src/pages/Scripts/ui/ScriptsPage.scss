@@ -1,0 +1,28 @@
+.scripts-page-container{
+	display: grid;
+	padding: 15px;
+	grid-gap: 15px;
+	grid-template-columns: 1fr 1fr;
+	grid-auto-rows: auto;
+	.trigger{
+		grid-column-start: 1;
+		grid-column-end: 2;
+		grid-row-start: 1;
+	}
+}
+
+@media (max-width: 1000px) {
+	.scripts-page-container{
+		display: grid;
+		padding: 15px;
+		grid-gap: 15px;
+		grid-template-columns: 1fr;
+		grid-auto-rows: auto;
+		.trigger{
+			grid-column-start: 1;
+			grid-column-end: 2;
+			grid-row-start: 1;
+			grid-row-end: 2;
+		}
+	}
+}

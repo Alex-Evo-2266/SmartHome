@@ -67,6 +67,7 @@
         height: 284px;
         display: grid;
         grid-template-columns: repeat(7, 1fr);
+        justify-content: center;
         // grid-auto-rows: 40px;
         grid-auto-rows: 1fr;
         .day{

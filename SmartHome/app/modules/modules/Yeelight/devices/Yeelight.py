@@ -78,7 +78,7 @@ class YeelightDevice(BaseDevice):
 				self.values.append(BaseField(name="bg_saturation", device_system_name=self.system_name, read_only=False, high="100", low="0", type=TypeDeviceField.NUMBER, icon="", value=values["bg_sat"]))
 			if(not look_for_param(self.values, "temp") and "ct" in values):
 				self.values.append(BaseField(name="temp", device_system_name=self.system_name, read_only=False, high=self.minmaxValue["color_temp"]["max"], low=self.minmaxValue["color_temp"]["min"], type=TypeDeviceField.NUMBER, icon="", value=values["ct"]))
-			if(not look_for_param(self.values, "bg_temp") and "bg_ct" in values):
+			if(not look_for_param(self.values, "bg_temp") and values["bg_ct"] != None):
 				self.values.append(BaseField(name="bg_temp", device_system_name=self.system_name, read_only=False, high="6500", low="1700", type=TypeDeviceField.NUMBER, icon="", value=values["bg_ct"]))
 		except Exception as e:
 			logger.warning(f"yeelight initialize error. {e}")

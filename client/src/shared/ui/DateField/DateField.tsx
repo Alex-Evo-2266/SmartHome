@@ -4,6 +4,7 @@ import "./DateField.scss"
 import { СalendarPickers } from "./DatePickers"
 import { useDispatch } from "react-redux"
 import { hideDialog, showDialog } from "../../lib/reducers/dialogReducer"
+import { BasicTemplateDialog } from ".."
 
 interface ITimeFieldProps{
     onChange?:(value: string)=>void
@@ -30,10 +31,10 @@ export const DateField = ({border, onChange, name, value, className, validEmptyV
 
     const click = () => {
         dispatch(showDialog(
-        <div className={`select-date-dialog`}>
-            <div className="backplate"></div>
-            <СalendarPickers onChange={change} onHide={()=>dispatch(hideDialog())}/>
-        </div>))
+            <BasicTemplateDialog className="calendar-body-container" style={{maxWidth: "328px"}}>
+                <СalendarPickers onChange={change} onHide={()=>dispatch(hideDialog())}/>
+            </BasicTemplateDialog>
+            ))
     }
 
     const formatMonth = (month: number):string => {

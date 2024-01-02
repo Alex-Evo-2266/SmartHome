@@ -134,7 +134,7 @@ export const СalendarPickers = ({onChange, onHide}:IСalendarPickersProps) => {
     },[month, year, onChange, onHide, day])
 
 	return(
-		<div className="calendar-body-container">
+		<>
 			<div className="calendar-body-select-container">
                 <div className="month" ><span className={page===СalendarPage.MONTHS?"active":""} onClick={()=>setPage(СalendarPage.MONTHS)}>{month} <ChevronDown/></span></div>
                 <div className="years"><span className={page===СalendarPage.YEARS?"active":""} onClick={()=>setPage(СalendarPage.YEARS)}>{year} <ChevronDown/></span></div>
@@ -197,6 +197,6 @@ export const СalendarPickers = ({onChange, onHide}:IСalendarPickersProps) => {
 				<TextButton className="little m-0" onClick={onHide}>Cancel</TextButton>
 				<TextButton className="little m-0" onClick={selectDate}>OK</TextButton>
 			</div>
-		</div>
+		</>
 	)
 }
