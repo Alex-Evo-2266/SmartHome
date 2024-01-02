@@ -19,6 +19,10 @@ export const useGetTriggers = () => {
         await request(`/api/scripts/triggers/${system_name}`, TypeRequest.DELETE, null, {Authorization: "Bearer " + authData.token})
     },[request, authData.token])
 
+    const setStatusTriggers = useCallback(async(system_name: string, status: boolean)=>{
+        await request(`/api/scripts/triggers/${system_name}`, TypeRequest.PATCH, {status}, {Authorization: "Bearer " + authData.token})
+    },[request, authData.token])
+
     useEffect(()=>{
 		if (error)
 			showSnackbar(error, {}, 10000)
@@ -30,6 +34,7 @@ export const useGetTriggers = () => {
     return{
         getTriggers,
         loading,
-        deleteTriggers
+        deleteTriggers,
+        setStatusTriggers
     }
 }

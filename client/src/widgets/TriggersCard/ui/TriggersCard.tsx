@@ -1,32 +1,25 @@
 import { useCallback } from 'react'
-import { Card, ListContainer, ListItem } from '../../../shared/ui'
+import { Card, ListContainer } from '../../../shared/ui'
 import { TriggersButtons } from './TriggersButton'
 import './TriggersCard.scss'
 import { TriggerData } from '../../../entites/Trigger'
-import { Trash2 } from 'lucide-react'
+import { TriggersItem } from './TriggerItem'
 
 interface TriggersCardProps{
 	className?: string
     onAddTrigger:()=>void
     onEditTrigger:(data: TriggerData)=>void
     onDeleteTrigger:(system_name: string)=>void
+    onStatusTrigger:(system_name: string, status: boolean)=>void
     loading: boolean
     triggers: TriggerData[]
     update: ()=>void
 }
 
-export const TriggersCard = ({className, onAddTrigger, onEditTrigger, loading, triggers, onDeleteTrigger}:TriggersCardProps) => {
-
-    const editTrigger = useCallback((data: TriggerData)=>{
-        onEditTrigger(data)
-    },[])
+export const TriggersCard = ({className, onAddTrigger, onEditTrigger, loading, triggers, onDeleteTrigger, onStatusTrigger}:TriggersCardProps) => {
 
     const addTrigger = useCallback(()=>{
         onAddTrigger()
-    },[])
-
-    const deleteTrigger = useCallback((system_name: string)=>{
-        onDeleteTrigger(system_name)
     },[])
 
     return(
@@ -38,7 +31,7 @@ export const TriggersCard = ({className, onAddTrigger, onEditTrigger, loading, t
                 <ListContainer transparent>
                     {
                         triggers.map((item, index)=>(
-                            <ListItem key={index} header={item.name} text={`system name: ${item.system_name}. `} hovered control={<Trash2 onClick={()=>deleteTrigger(item.system_name)} color='var(--Error-color)'/>} onClick={()=>editTrigger(item)}/>
+                            <TriggersItem key={index} triggerData={item} onDeleteTrigger={onDeleteTrigger} onEditTrigger={onEditTrigger} onStatusTrigger={onStatusTrigger}/>
                         ))
                     }
                 </ListContainer>

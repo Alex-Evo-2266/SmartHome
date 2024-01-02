@@ -11,7 +11,7 @@ export const ScriptsPage = () => {
 
     const dispatch = useAppDispatch()
     const [triggers, setTriggers] = useState<TriggerData[]>([])
-    const {getTriggers, loading, deleteTriggers} = useGetTriggers()
+    const {getTriggers, loading, deleteTriggers, setStatusTriggers} = useGetTriggers()
 
     const getTriggersF = useCallback(async ()=>{
         const data:TriggerData[] = await getTriggers()
@@ -37,12 +37,18 @@ export const ScriptsPage = () => {
         },300)
 	}
 
+    const setStatusTrigger = async (system_name: string, status: boolean) => {
+		await setStatusTriggers(system_name, status)
+        setTimeout(()=>{
+            getTriggersF()
+        },300)
+	}
+
     return(
         <div className="scripts-page-container">
             <div className='trigger'>
-                <TriggersCard loading={loading} triggers={triggers} onAddTrigger={addTrigger} onEditTrigger={editTrigger} onDeleteTrigger={deleteTrigger} update={getTriggersF}/>
+                <TriggersCard loading={loading} triggers={triggers} onAddTrigger={addTrigger} onStatusTrigger={setStatusTrigger} onEditTrigger={editTrigger} onDeleteTrigger={deleteTrigger} update={getTriggersF}/>
             </div>
-            {/* <Profile className='profile-settings'/> */}
         </div>
     )
 }
