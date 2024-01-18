@@ -4,10 +4,11 @@ import { DeviceOption } from "../../../features/DeviceOption"
 import { SelectIconField } from "../../../features/IconSelect"
 import { splitValue } from "../../../shared/lib/helpers/stringSplitAndJoin"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
-import { hideFullScreenDialog, showFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { Divider, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
+import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
+import { BaseDialog, Divider, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
 import { MoreText } from "../../../shared/ui/MoreText/MoreText"
 import { DeviceEditAddField } from "./DeviceEditAddFieldDialog"
+import { EntitiesField } from "../../../features/EntityField/ui/EntityField"
 
 interface DeviceEditFieldProps{
 	field: FieldDevice
@@ -36,7 +37,24 @@ export const DeviceEditField = (prop:DeviceEditFieldProps) => {
 		setField(prev=>({...prev, icon: value}))
 	}
 
-
+	const changeType = useCallback((value: string) => {
+		let old = field.type
+		if (value === DeviceFieldType.BINARY || value === DeviceFieldType.ENUM || value === DeviceFieldType.NUMBER || value === DeviceFieldType.TEXT)
+		{
+			console.log(field.entity, field.entity !== "")
+			if(field.entity !== "")
+				dispatch(showDialog(<BaseDialog 
+					header="confirmation" 
+					text='if you change this field, the "entity" field will be cleared.' 
+					onHide={()=>dispatch(hideDialog())} 
+					onCancel={()=>setField(prev=>({...prev, type: old}))}
+					onSuccess={()=>{
+					setField(prev=>({...prev, type: value, entity: ""}))
+				}}/>))
+			else
+				setField(prev=>({...prev, type: value}))
+		}
+	},[field])
 
 	const save = () => {
 		prop.setField && prop.setField(field)
@@ -71,7 +89,7 @@ export const DeviceEditField = (prop:DeviceEditFieldProps) => {
 				{
 					(prop.option.change.fields.type)?
 					<FieldContainer header="Type">
-						<SelectField items={["text", "number", "enum", "binary"]} border value={field.type} name="type" onChange={(value)=>changeSelect(value, "type")}/>
+						<SelectField items={["text", "number", "enum", "binary"]} border value={field.type} name="type" onChange={changeType}/>
 					</FieldContainer>:
 					null
 				}
@@ -103,24 +121,41 @@ export const DeviceEditField = (prop:DeviceEditFieldProps) => {
 					</FieldContainer>:
 					null
 				}
+
 				{
-					(prop.option.change.fields.enum_values && field.type === DeviceFieldType.ENUM)?
-					<FieldContainer header="Enum values">
-						<MoreText border value={field.enum_values} onChange={(e)=>changeSelect(e, "enum_values")}/>
-					</FieldContainer>:
-					null
-				}
-				{
-					(prop.option.change.fields.value && field.type === DeviceFieldType.ENUM)?
-					<FieldContainer header="values">
-						<SelectField items={splitValue(field.enum_values)} border value={field.value} name="value" onChange={(value)=>changeSelect(value, "value")}/>
-					</FieldContainer>:
-					(prop.option.change.fields.value)?
-					<FieldContainer header="values">
-						<TextField border value={field.value} name="value" onChange={(e)=>changeValue(e)}/>
-					</FieldContainer>:
-					null
-				}
+						(prop.option.change.fields.enum_values && field.type === DeviceFieldType.ENUM)?
+						<>
+						<FieldContainer header="Enum values">
+							<MoreText border value={field.enum_values} onChange={(e)=>changeSelect(e, "enum_values")}/>
+						</FieldContainer>
+						</>:
+						null
+					}
+					{
+						(field.virtual_field)?
+						<FieldContainer header="entity">
+							<EntitiesField value={field.entity.split(",").map(item=>item.trim()).filter(item=>item!=="")} onChange={(data)=>changeSelect(data.join(", "), "entity")}/>
+						</FieldContainer>:
+						null
+					}
+					{
+						(prop.option.change.fields.value && field.virtual_field && !field.read_only)?
+						<FieldContainer header="value">
+							не реализованно
+						</FieldContainer>:
+						(prop.option.change.fields.value && field.type === DeviceFieldType.ENUM)?
+						<FieldContainer header="value">
+							<SelectField items={splitValue(field.enum_values)} border value={field.value} name="value" onChange={(value)=>changeSelect(value, "value")}/>
+						</FieldContainer>:
+						(prop.option.change.fields.value && field.type === DeviceFieldType.NUMBER)?
+						<FieldContainer header="value">
+							<TextField type="number" border value={field.value} name="value" onChange={(e)=>changeValue(e)}/>
+						</FieldContainer>:
+						(prop.option.change.fields.value)?
+						<FieldContainer header="value">
+							<TextField type="test" border value={field.value} name="value" onChange={(e)=>changeValue(e)}/>
+						</FieldContainer>:null
+					}
 				<Divider/>
 				</div>
 		</FullScrinTemplateDialog>

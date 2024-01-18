@@ -7,6 +7,10 @@ from app.ingternal.device.enums import TypeDeviceField
 from app.ingternal.exceptions.base import InvalidInputException
 from app.ingternal.device.interfaces.field_interface import IField
 from app.ingternal.device.schemas.device import FieldDeviceSchema, AddDeviceFieldSchema
+from app.ingternal.device.communication_fields.communications import CommunicationFields
+from app.ingternal.device.schemas.communication_fields import TypeRelatedFields
+
+from app.ingternal.device.set_value import set_value
 
 def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:
 	if(param in d):
@@ -32,7 +36,8 @@ class BaseField(IField):
 		unit:str = "",
 		enum_values:List[str] = [],
 		value:Any = None,
-		virtual_field: bool = False
+		virtual_field: bool = False,
+		entity: str = ""
 		# change:ChangeField = ChangeField()
 		):
 		'''initial field'''
@@ -47,6 +52,7 @@ class BaseField(IField):
 		self.unit = unit
 		self.enum_values = enum_values
 		self.virtual_field = virtual_field
+		self.entity = entity
 		# self.change = change
 		self.__value = value
 
@@ -68,19 +74,30 @@ class BaseField(IField):
 	def get_unit(self):
 		return self.unit
 	
+	def get_entity(self):
+		return self.entity
+	
 	def get_address(self):
 		return self.address
 	
 	def is_virtual_field(self) -> bool:
 		return self.virtual_field
+	
+	def is_read_only(self) -> bool:
+		return self.read_only
 
 	def get_name(self):
 		return self.name
 
 	def set(self, status, script=True):
-		if self.virtual_field:
-			return
 		self.__value = status
+		# feedback_fields_device = CommunicationFields.get_feedback_fields_device(self.device_system_name, self.name)
+		# print(feedback_fields_device, self.device_system_name, self.__value)
+		# if feedback_fields_device:
+		# 	for field in feedback_fields_device:
+		# 		if field.type == TypeRelatedFields.DEVICE:
+		# 			print(field.system_name, field.field, status)
+		# 			set_value(field.system_name, field.field, status, False)
 		if(script):
 			pass
 			# run_by_trigger_scripts(self.device_system_name,self.name)
@@ -108,6 +125,7 @@ class BaseField(IField):
 			"enum_values":", ".join(self.enum_values),
 			"virtual_field": self.virtual_field,
 			"value":self.__value,
+			"entity":self.entity
 		}
 	
 	def get_data(self)->FieldDeviceSchema:
@@ -122,7 +140,8 @@ class BaseField(IField):
 			unit=self.unit,
 			enum_values=", ".join(self.enum_values),
 			virtual_field=self.virtual_field,
-			value=self.__value
+			value=self.__value,
+			entity=self.entity
 		)
 	
 	def _get_initial_data(self)->AddDeviceFieldSchema:
@@ -137,6 +156,7 @@ class BaseField(IField):
 			icon=self.icon,
 			unit=self.unit,
 			virtual_field=self.virtual_field,
+			entity=self.entity
 		)
 
 	# def get_allowed_fields(self)->ChangeField:

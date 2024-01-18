@@ -4,9 +4,9 @@ import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } fr
 import { BaseActionCard, Chips, FilledButton, TimePicker } from '../../../shared/ui'
 import { useCallback, useState } from 'react'
 import { SelectionDialog } from '../../../shared/ui/Dialog/BaseDialog/SelectionDialog'
-import { TriggerEntitiesDeviceDialog } from './TriggerEntitiesDevice'
 import { TriggerEntitiesPeriodDialog } from './TriggerEntitiesPeriod'
 import { getFormattedTime } from '../../../shared/lib/helpers/timeFormat'
+import { useDeviceSelectionDevice } from '../../../entites/Device'
 
 interface MoreTextProps{
     value: TriggerEntityData[]
@@ -24,6 +24,7 @@ export const TriggerEntitiesField = ({value, onChange}:MoreTextProps) => {
 
     const [values, setValues] = useState<TriggerEntityData[]>(value)
     const dispatch = useAppDispatch()
+    const {selectionDeviceDialog} = useDeviceSelectionDevice()
 
     const setValueCascade = useCallback((type_entity: TypeEntity, data:string) => {
         let newValue = [...values, {
@@ -52,10 +53,9 @@ export const TriggerEntitiesField = ({value, onChange}:MoreTextProps) => {
                             dispatch(hideDialog())
                         }}/>))
                 else if(type_entity === TypeEntity.DEVICE)
-                    dispatch(showFullScreenDialog(<TriggerEntitiesDeviceDialog onChange={(data)=>{
-                        setValueCascade(type_entity, data)
-                        dispatch(hideFullScreenDialog())
-                    }}/>))
+                    selectionDeviceDialog((device, field)=>{
+                        setValueCascade(type_entity, `device.${device.system_name}.${field.name}`)
+                    })
                 else if(type_entity === TypeEntity.PERIOD)
                     dispatch(showFullScreenDialog(<TriggerEntitiesPeriodDialog onChange={(data)=>{
                         setValueCascade(type_entity, data)

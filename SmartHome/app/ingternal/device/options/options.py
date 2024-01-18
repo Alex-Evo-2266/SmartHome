@@ -18,6 +18,6 @@ def get_option():
 		types = _class.types
 		if (option.class_img):
 			class_img_url = MODULES_URL + option.class_img
-		arr.append(OptionsDevice(class_name=key, class_img_url = class_img_url, added=added, change=change, types=_class.types, added_url=option.added_url, change_url=option.change_url))
+		arr.append(OptionsDevice(virtual=option.virtual, class_name=key, class_img_url = class_img_url, added=added, change=change, types=_class.types, added_url=option.added_url, change_url=option.change_url))
 	return arr
 	

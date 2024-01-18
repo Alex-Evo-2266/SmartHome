@@ -99,7 +99,7 @@ async def set_device_state(system_name, field_name, value, auth_data: TokenData 
 	try:
 		if auth_data.user_level == UserLevel.NONE:
 			raise AccessRightsErrorException()
-		await set_value(system_name, field_name, value)
+		set_value(system_name, field_name, value)
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))

@@ -31,6 +31,7 @@ class ConfigSchema():
 	change_polling: bool = True
 	class_img: Optional[str] = None
 	init_field: bool = False
+	virtual: bool = False
 	
 class AdditionDevice(BaseModel):
 	fields:bool = True

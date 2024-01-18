@@ -4,10 +4,11 @@ import { DeviceOption } from "../../../features/DeviceOption"
 import { SelectIconField } from "../../../features/IconSelect"
 import { splitValue } from "../../../shared/lib/helpers/stringSplitAndJoin"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
-import { hideFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { Divider, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
+import { hideDialog, hideFullScreenDialog, showDialog } from "../../../shared/lib/reducers/dialogReducer"
+import { BaseDialog, Divider, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
 import { MoreText } from "../../../shared/ui/MoreText/MoreText"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
+import { EntitiesField } from "../../../features/EntityField/ui/EntityField"
 
 interface DeviceEditFieldProps{
 	field: FieldDevice
@@ -28,6 +29,25 @@ export const DeviceEditAddField = (prop:DeviceEditFieldProps) => {
 	const changeSelect = (value: string, name:string) => {
 		setField(prev=>({...prev, [name]: value}))
 	}
+
+	const changeType = useCallback((value: string) => {
+		let old = field.type
+		if (value === DeviceFieldType.BINARY || value === DeviceFieldType.ENUM || value === DeviceFieldType.NUMBER || value === DeviceFieldType.TEXT)
+		{
+			console.log(field.entity, field.entity !== "")
+			if(field.entity !== "")
+				dispatch(showDialog(<BaseDialog 
+					header="confirmation" 
+					text='if you change this field, the "entity" field will be cleared.' 
+					onHide={()=>dispatch(hideDialog())} 
+					onCancel={()=>setField(prev=>({...prev, type: old}))}
+					onSuccess={()=>{
+					setField(prev=>({...prev, type: value, entity: ""}))
+				}}/>))
+			else
+				setField(prev=>({...prev, type: value}))
+		}
+	},[field])
 
 	const changeBoolAtribut = (name:string, value: string) => {
 		setField(prev=>({...prev, [name]: (value==="true")}))
@@ -75,7 +95,7 @@ export const DeviceEditAddField = (prop:DeviceEditFieldProps) => {
 						</FieldContainer>:null
 					}
 					<FieldContainer header="Type">
-						<SelectField items={["text", "number", "enum", "binary"]} border value={field.type} name="type" onChange={(value)=>changeSelect(value, "type")}/>
+						<SelectField items={["text", "number", "enum", "binary"]} border value={field.type} name="type" onChange={changeType}/>
 					</FieldContainer>
 					{
 						(field.type === "number" || field.type === "binary")?
@@ -96,19 +116,31 @@ export const DeviceEditAddField = (prop:DeviceEditFieldProps) => {
 						<SelectField items={[{title: "read only", value: "false"}, {title: "control", value: "true"}]} border value={String(field.read_only)} name="Control" onChange={(value)=>changeBoolAtribut("read_only", value)}/>
 					</FieldContainer>
 					{
-						(field.virtual_field)?
-						<FieldContainer header="value">
-							не реализованно
-						</FieldContainer>:
 						(field.type === "enum")?
 						<>
 						<FieldContainer header="Enum values">
 							<MoreText border value={field.enum_values} onChange={(e)=>changeSelect(e, "enum_values")}/>
 						</FieldContainer>
+						</>:
+						null
+					}
+					{
+						(field.virtual_field)?
+						<FieldContainer header="entity">
+							<EntitiesField value={field.entity.split(",").map(item=>item.trim()).filter(item=>item!=="")} onChange={(data)=>changeSelect(data.join(", "), "entity")}/>
+						</FieldContainer>:
+						null
+					}
+					{
+						(field.virtual_field && !field.read_only)?
+						<FieldContainer header="value">
+							не реализованно
+						</FieldContainer>:
+						(field.type === "enum")?
 						<FieldContainer header="value">
 							<SelectField items={splitValue(field.enum_values)} border value={field.value} name="value" onChange={(value)=>changeSelect(value, "value")}/>
-						</FieldContainer>
-						</>:(field.type === "number")?
+						</FieldContainer>:
+						(field.type === "number")?
 						<FieldContainer header="value">
 							<TextField type="number" border value={field.value} name="value" onChange={(e)=>changeValue(e)}/>
 						</FieldContainer>:

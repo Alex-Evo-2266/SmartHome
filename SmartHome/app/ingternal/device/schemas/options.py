@@ -11,4 +11,5 @@ class OptionsDevice(BaseModel):
 	added_url: Optional[str] = None
 	change_url: Optional[str] = None
 	change: ChangeDevice
+	virtual: bool = False
 	types: List[TypeDevice] = []

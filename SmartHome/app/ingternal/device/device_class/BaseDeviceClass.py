@@ -8,8 +8,10 @@ from app.ingternal.device.schemas.device import DeviceSchema, FieldDeviceSchema
 from app.ingternal.device.interfaces.device_interface import IDevice
 
 from app.ingternal.device.exceptions.device import DeviceNotFound
+from app.ingternal.device.devices_arrey import DevicesArrey, DevicesArreyItem
+from app.ingternal.device.schemas.communication_fields import TypeRelatedFields
 from app.ingternal.exceptions.base import InvalidInputException
-import logging
+import logging, copy
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -118,9 +120,17 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	def get_device(self):
 		return self.device
 
-	def set_value(self, name:str, status:Any):
+	def set_value(self, name:str, status1:Any):
+		print(self.system_name)
+		status = copy.copy(status1)
 		value = look_for_param(self.values, name)
+		print("P0",value)
 		if(value):
+			if(value.get_type() == TypeDeviceField.BINARY):
+				if(status == "on"):
+					status = value.get_high()
+				if(status == "off"):
+					status = value.get_low()
 			if(value.get_type() == TypeDeviceField.NUMBER):
 				if(int(status) > int(value.get_high())):
 					status = value.get_high()
@@ -128,6 +138,19 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 					status = value.get_low()
 			value.set(status, False)
 		return status
+	
+	# def set_virtual_value(self, name:str, status:Any):
+	# 	print(self.system_name)
+	# 	value = look_for_param(self.values, name)
+	# 	print("P1",value)
+	# 	if(value):
+	# 		if(value.get_type() == TypeDeviceField.NUMBER):
+	# 			if(int(status) > int(value.get_high())):
+	# 				status = value.get_high()
+	# 			if(int(status) < int(value.get_low())):
+	# 				status = value.get_low()
+	# 		value.set_virtual_value(status, False)
+	# 	return status
 
 	async def save(self):
 		# device_obj = await Device.objects.get_or_none(system_name=self.system_name)
@@ -208,3 +231,44 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 
 	def updata(self):
 		pass
+
+	@staticmethod
+	def __get_value_device(system_name:str, field: str):
+		dev = DevicesArrey.get(system_name)
+		if not dev:
+			return None
+		dev:IDevice = dev.device
+		field_data = dev.get_field(field)
+		if field_data.get_type() == TypeDeviceField.BINARY and field_data.get() == field_data.get_high():
+			return "on"
+		if field_data.get_type() == TypeDeviceField.BINARY and field_data.get() == field_data.get_low():
+			return "off"
+		return field_data.get()
+
+	def updata_virtual_field(self):
+		for field in self.values:
+			if not field.is_virtual_field():
+				continue
+			entity_row = field.get_entity()
+			if not entity_row:
+				continue
+			entites = [s.strip() for s in entity_row.split(',')]
+			values = []
+			for entity in entites:
+				data = entity.split('.')
+				if len(data) == 3 and data[0] == TypeRelatedFields.DEVICE:
+					value = BaseDevice.__get_value_device(data[1], data[2])
+				if len(data) == 2:
+					value = BaseDevice.__get_value_device(data[1], data[2])
+				if value:
+					values.append(value)
+			if field.get_type() == TypeDeviceField.BINARY:
+				if "off" in values:
+					self.set_value(field.get_name(), "off")
+				else:
+					self.set_value(field.get_name(), "on")
+			elif field.get_type() == TypeDeviceField.BINARY:
+				self.set_value(field.get_name(), max(*[int(x) for x in values]))
+			else:
+				self.set_value(field.get_name(), values[0])
+

@@ -10,6 +10,7 @@ class AddDeviceFieldSchema(BaseModel):
 	high: Optional[str]
 	enum_values: Optional[str]
 	read_only: bool
+	entity: Optional[str]
 	icon: str = "room"
 	unit: Optional[str]
 	virtual_field: bool
@@ -25,6 +26,7 @@ class FieldDeviceSchema(BaseModel):
 	high: Optional[str]
 	enum_values: Optional[str]
 	read_only: bool
+	entity: Optional[str]
 	icon: str
 	unit: Optional[str] 
 	virtual_field: bool

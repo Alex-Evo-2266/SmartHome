@@ -48,13 +48,13 @@ export const SelectField = ({items, onChange, value, placeholder, className, bor
         setSelectTitle(getTitleByValue(items, data))
         onChange && onChange(data)
         dispatch(hideMenu())
-    },[items])
+    },[items, onChange])
 
     const selectMap = useCallback((item: IOption | string):IMenuItem => {
         if(typeof(item) === "string")
             return {title: item, onClick:()=>change(item)}
         return {title: item.title, onClick:()=>change(item.value)}
-    },[])
+    },[change])
 
     const show = useCallback((event: React.MouseEvent<HTMLDivElement>)=>{
         event.preventDefault()
@@ -62,7 +62,7 @@ export const SelectField = ({items, onChange, value, placeholder, className, bor
         let x = data?.left ?? event.pageX
         let y = (data?.top)?data.top + data.height : event.pageY
         dispatch(showBaseMenu(items.map(selectMap), x, y, {width: data?.width}))
-    },[items])
+    },[items, selectMap])
 
     return(
         <>

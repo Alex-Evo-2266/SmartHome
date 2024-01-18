@@ -13,9 +13,15 @@ class IField(object):
 
 	def get_high(self) -> str:
 		return ""
+	
+	def get_entity(self) -> str:
+		return ""
 
 	def get_low(self) -> str:
 		return ""
+	
+	def is_read_only(self) -> bool:
+		pass
 
 	def get_type(self) -> TypeDeviceField:
 		return TypeDeviceField.BASE

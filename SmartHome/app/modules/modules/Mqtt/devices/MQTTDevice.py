@@ -2,7 +2,7 @@ from typing import List
 from app.ingternal.device.enums import TypeDeviceField, ReceivedDataFormat
 from app.ingternal.device.device_class.BaseDeviceClass import BaseDevice
 from app.ingternal.device.device_class.BaseField import BaseField
-from app.ingternal.device.schemas.device_class import ConfigSchema
+from app.ingternal.device.schemas.device_class import ChangeField, ConfigSchema
 
 from app.modules.modules_src.services import Services
 import json
@@ -29,6 +29,9 @@ class MqttDevice(BaseDevice):
 	class Config(ConfigSchema):
 		class_img = "Mqtt/mqtt-ver.png"
 		change_polling = True
+		fields_change: ChangeField = ChangeField(
+			value = True
+		)
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(**kwargs)
@@ -36,6 +39,7 @@ class MqttDevice(BaseDevice):
 
 	def updata(self):
 		self.update_value()
+		super().updata()
 
 	def update_value(self, *args, **kwargs):
 		if self.type_command==ReceivedDataFormat.JSON:

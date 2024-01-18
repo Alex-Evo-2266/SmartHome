@@ -65,6 +65,7 @@ export const DeviceEditDialog = ({systemName}:DeviceEditDialogProps) => {
 				unit:"",
 				address:"",
 				value:"",
+				entity: "",
 				read_only: true,
 				enum_values: "",
 				icon: "",

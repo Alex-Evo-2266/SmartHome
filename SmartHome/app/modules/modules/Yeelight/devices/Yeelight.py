@@ -51,7 +51,6 @@ class YeelightDevice(BaseDevice):
 		try:
 			values = self.device.get_properties()
 			self.minmaxValue = self.device.get_model_specs()
-			print("p9", values, self.minmaxValue)
 			if(not look_for_param(self.values, "state") and "power" in values):
 				val = "0"
 				if(values["power"] == "on"):
@@ -93,7 +92,6 @@ class YeelightDevice(BaseDevice):
 
 	def update_value(self, *args, **kwargs):
 		values = self.device.get_properties()
-		print(values)
 		state = look_for_param(self.values, "state")
 		if(state and "power" in values):
 			val = "0"
@@ -135,7 +133,8 @@ class YeelightDevice(BaseDevice):
 			saveNewDate(bg_saturation,values["bg_sat"])
 
 	def updata(self):
-		return self.update_value()
+		self.update_value()
+		super().updata()
 
 	def get_value(self, name):
 		self.update_value()

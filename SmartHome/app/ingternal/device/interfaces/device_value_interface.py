@@ -13,6 +13,9 @@ class IValueDevice():
 	def set_value(self, name:str, status:Any):
 		pass
 
+	def set_virtual_value(self, name:str, status:Any):
+		pass
+
 	def get_field(self, name:str)->IField | None:
 		pass
 

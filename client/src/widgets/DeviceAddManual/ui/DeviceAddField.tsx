@@ -68,7 +68,8 @@ export const DeviceAddFieldDialog = (props:DeviceAddFieldDialogProps) => {
 			read_only: true,
 			enum_values: "",
 			icon: "",
-			virtual_field: false
+			entity: "",
+			virtual_field: props.option.virtual
 		}} option={props.option} setField={(field)=>{
 			setFields(prev=>{
 				if(!prev)

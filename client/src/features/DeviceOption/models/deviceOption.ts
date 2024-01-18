@@ -47,6 +47,7 @@ export interface DeviceOption{
     class_img_url?: string
     change:DeviceOptionChange
     types: DeviceType[]
+    virtual: boolean
 }
 
 

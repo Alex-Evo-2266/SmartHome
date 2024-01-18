@@ -7,6 +7,7 @@ interface BaseDialogProps{
     header?: string
     actionText?: string
     onSuccess?: ()=>void
+    onCancel?: ()=>void
     onHide?: ()=>void
 }
 
@@ -16,15 +17,20 @@ interface BaseDialogButtonProps{
     onHide?: ()=>void
 }
 
-export const BaseDialog = ({text, header, actionText, onSuccess, onHide}:BaseDialogProps) => {
+export const BaseDialog = ({text, header, actionText, onSuccess, onHide, onCancel}:BaseDialogProps) => {
 
     const Success = useCallback(() => {
         onSuccess && onSuccess()
         onHide && onHide()
     },[])
 
+    const hide = useCallback(()=>{
+        onCancel && onCancel()
+        onHide && onHide()
+    },[])
+
     return(
-        <BasicTemplateDialog header={header} action={<BaseDialogButton onHide={onHide} actionText={actionText} onSuccess={Success}/>}>
+        <BasicTemplateDialog header={header} action={<BaseDialogButton onHide={hide} actionText={actionText} onSuccess={Success}/>}>
             <p>{text}</p>
         </BasicTemplateDialog>
     )

@@ -65,11 +65,12 @@ async def polling_and_init(device_data: Device):
 			class_device = DeviceClasses.get(device_data.class_device)
 			if class_device and class_device.Config.init_field:
 				await edit_fields(device_data, [x._get_initial_data() for x in device.values], option=class_device.Config)
-			DevicesArrey.addDevice(device_data.system_name,device)
+			DevicesArrey.addDevice(device_data.system_name, device)
 		else:
 			device = element.device
 		if device.device_cyclic_polling:
 			device.updata()
+		device.updata_virtual_field()
 		data = device.get_data()
 		data.device_status = StatusDevice.ONLINE
 		return data

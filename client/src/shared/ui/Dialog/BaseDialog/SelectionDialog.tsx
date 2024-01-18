@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { BasicTemplateDialog, TextButton } from "../.."
 import { ListContainer } from "../../List/List"
 import { ListItem } from "../../List/ListItem"
@@ -25,18 +25,21 @@ interface SelectionDialogProps<T>{
     noHide?: boolean
 }
 
-export function SelectionDialog<T>({onSuccess, items, header, onHide, noHide, name="dailog_name"}:SelectionDialogProps<T>) {
+export function SelectionDialog<T>({onSuccess, items, header, onHide, noHide = false, name="dailog_name"}:SelectionDialogProps<T>) {
 
     const [value, setValue] = useState<T | undefined>(undefined)
 
     const success = useCallback(() => {
         onSuccess && value && onSuccess(value)
+        setValue(undefined)
         !noHide && onHide && onHide()
     },[value])
 
     const change = useCallback((data: T) => {
         setValue(data)
     },[])
+
+
     return(
         <BasicTemplateDialog header={header} action={<BaseDialogButton onHide={onHide} onSuccess={success} disabled={value === undefined}/>}>
             <Divider/>

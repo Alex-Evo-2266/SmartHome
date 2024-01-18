@@ -25,6 +25,7 @@ export interface FieldDevice{
     high: string
     icon: string
     low: string
+    entity: string
     name: string
     type: DeviceFieldType
     unit: string
