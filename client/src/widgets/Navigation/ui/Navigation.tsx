@@ -1,12 +1,15 @@
 import { ScreenSize, useScreenSize } from "../../../entites/ScreenSize"
+import { useAppSelector } from "../../../shared/lib/hooks/redux"
 import { NavigationBar } from "./NavigationBar/NavigationBar"
 import { NavigationDrawer } from "./NavigationDrawer/NavigationDrawer"
 import { NavigationRail } from "./NavigationRail/NavigationRail"
+import { SearchBar } from "./SearchBar/SearchBar"
 
 
 export const Navigation = () => {
 
 	const {screen} = useScreenSize()
+	const navigation = useAppSelector(state=>state.navigation)
 
 	if(screen === ScreenSize.MOBILE)
 		return(
@@ -21,6 +24,11 @@ export const Navigation = () => {
 		<>
 			<NavigationDrawer/>
 			<NavigationRail/>
+			{
+				(navigation.search)?
+				<SearchBar/>:
+				null
+			}
 		</>
 		)
 

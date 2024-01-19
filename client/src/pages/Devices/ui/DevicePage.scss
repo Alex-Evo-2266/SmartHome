@@ -1,6 +1,13 @@
 .device-page{
     padding: 5px;
+    margin: 66px 0 76px;
     .card-child-container{
         color: var(--On-surface-color);
+    }
+}
+
+@media (max-width: 720px) {
+    .device-page{
+        margin: 0 0 80px;
     }
 }

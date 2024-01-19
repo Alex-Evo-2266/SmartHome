@@ -1,0 +1,17 @@
+.navigation-search-bar-container{
+	position: fixed;
+	top: 0;
+	left: 80px;
+	z-index: 1000;
+	width: calc(100% - 80px);
+	overflow: hidden;
+	background-color: var(--Surface-container-low-color);
+	color: var(--On-surface-variant-color);
+	height: 66px;
+	transition: .3s;
+	box-shadow: var(--Shadow-base);
+    .search-container{
+        margin: 5px;
+        width: calc(100% - 10px);
+    }
+}

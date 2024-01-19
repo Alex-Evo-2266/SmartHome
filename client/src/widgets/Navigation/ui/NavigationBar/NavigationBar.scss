@@ -13,6 +13,14 @@
     .block-content{
         display: flex;
         justify-content: space-around;
+		.block-menu{
+			display: flex;
+			max-width: 100px;
+			.btn-block-menu{
+				margin-top: 5px;
+				height: 56px;
+			}
+		}
     }
 	.navigation-item{
 		height: 56px;

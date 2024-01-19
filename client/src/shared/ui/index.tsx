@@ -78,3 +78,5 @@ export {ScrollContainer} from './ScrollContainer/ScrollContainer'
 export {Chips} from './Chips/Chips'
 
 export {DayOfWeekField} from './DayOfWeek/DayOfWeek'
+
+export {Search} from './Search/Search'
