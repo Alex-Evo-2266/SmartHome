@@ -71,13 +71,16 @@ class ModuleConfig(object):
 		if not block:
 			block = dict()
 		for key in block:
-			if key not in data:
+			if not (key in data):
 				data[key] = block[key]
 		templates[name] = data
 		self.__write_config(templates)
 		if name in self.callbacks:
 			f = self.callbacks[name]
-			await f()
+			try:
+				await f()
+			except Exception as e:
+				logger.error(f"error start callback function: {name}")
 
 	def all(self)->Dict[str, Dict[str, str]]:
 		templates = self.__read_config()

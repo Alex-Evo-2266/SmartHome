@@ -7,6 +7,7 @@ from app.configuration.loop.loop import EventLoop
 from app.ingternal.device.save_device import save_device
 from app.ingternal.device.send_device import send_restart
 from app.ingternal.device.communication_fields.communications import CommunicationFields
+from app.configuration.config import __module_config__
 
 from app.modules.modules import init_modules
 
@@ -22,7 +23,7 @@ async def startup():
 	await init_dir()
 	EventLoop.register("saveDevice", save_device, DEFAULT_SAVE_INTERVAL)
 	init_conf()
-	await send_restart()
+	await send_restart(__module_config__)
 	await init_modules()
 	database_ = database
 	if not database_.is_connected:

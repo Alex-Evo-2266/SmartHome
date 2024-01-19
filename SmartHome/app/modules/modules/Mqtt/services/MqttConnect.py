@@ -34,7 +34,10 @@ class MqttConnect(BaseService):
 
     @classmethod
     def connect(cls):
-        Services.get(SERVICE_MQTT_PARS).add_connect(DEVIECE_CLASS)
+        try:
+            Services.get(SERVICE_MQTT_PARS).add_connect(DEVIECE_CLASS)
+        except Exception as e:
+            logger.error(f'error add connect device class in pars service {e}')
         try:
             logger.debug("mqtt conecting...")
             conf = __module_config__.get_config(CONFIG_NAME)

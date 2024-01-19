@@ -2,7 +2,7 @@
 from app.configuration.loop.loop import EventLoop
 from app.ingternal.device.CRUD import get_all_device
 from app.ingternal.websoket.websocket import WebSocketMenager
-from app.configuration.config import __module_config__
+from app.configuration.config.config import ModuleConfig
 
 async def send_device():
 	print("send")
@@ -16,7 +16,7 @@ async def send_device():
 	await WebSocketMenager.send_information("devices", devicesdict)
 
 
-async def send_restart():
+async def send_restart(__module_config__: ModuleConfig):
 	base = __module_config__.get_config("send_message")
 	if base and "frequency" in base:
 		EventLoop.register("devices", send_device, int(base['frequency']))
