@@ -3,7 +3,7 @@ import { IconOrString } from '../../../../entites/Icon'
 import { useAppDispatch, useAppSelector } from '../../../../shared/lib/hooks/redux'
 import { Divider } from '../../../../shared/ui'
 import { getOtherNavigationItem } from '../../../../features/Navigation'
-import { Home, LogOut, Plug, Settings } from 'lucide-react'
+import { Home, LogOut, MoreHorizontal, Plug, Settings } from 'lucide-react'
 import { NavigationDrawerItem } from './NavigationDrawerItem'
 import { hideNavigation } from '../../../../features/Navigation/lib/reducers/NavigationReducer'
 import { NavButton } from './NavButton'
@@ -21,6 +21,21 @@ export const NavigationDrawer = ({openAlways}:NavigationDrawerProps) => {
 	return(
 		<>
 		<div className={`navigation-drawer-container ${(navigation.visible || openAlways)?"show":"hide"}`}>
+			{
+				(navigation.btn)?
+				<>
+					<div className='navigation-block'>
+						<div className='block-header'></div>
+						<div className='block-content'>
+							<NavButton onClick={navigation.btn.onClick} title={navigation.btn.text} icon={navigation.btn.icon ?? <MoreHorizontal/>}/>
+						</div>
+					</div>
+					<div className='divider-container'>
+						<Divider/>
+					</div>
+				</>:
+				null
+			}
 			<div className='navigation-block'>
 				<div className='block-header'></div>
 				<div className='block-content'>
@@ -45,8 +60,13 @@ export const NavigationDrawer = ({openAlways}:NavigationDrawerProps) => {
 					))
 				}
 				<NavigationDrawerItem onClick={()=>dispatch(hideNavigation())} title='Settings' icon={<Settings/>} to='/settings'/>
-				<NavButton onClick={()=>dispatch(logout())} title='Logout' icon={<LogOut/>}/>
 				</div>
+			</div>
+			<div className='divider-container'>
+				<Divider/>
+			</div>
+			<div className='navigation-block'>
+				<NavButton onClick={()=>dispatch(logout())} title='Logout' icon={<LogOut/>}/>
 			</div>
 		</div>
 		{

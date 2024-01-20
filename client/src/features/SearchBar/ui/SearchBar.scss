@@ -3,7 +3,7 @@
 	display: flex;
 	top: 0;
 	z-index: 1000;
-	width: calc(100% - 80px);
+	width: 100%;
 	overflow: hidden;
 	background-color: var(--Surface-container-low-color);
 	color: var(--On-surface-variant-color);
@@ -16,6 +16,6 @@
         width: calc(100% - 10px);
     }
 	.btn-block-menu{
-		margin-top: 15px;
+		margin-top: 10px;
 	}
 }

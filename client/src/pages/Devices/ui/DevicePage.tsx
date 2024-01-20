@@ -1,15 +1,17 @@
 import './DevicePage.scss'
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
-import { FAB, FilterBtn, GridLayout, GridLayoutItem, IconButton } from "../../../shared/ui"
+import { FAB, GridLayout, GridLayoutItem } from "../../../shared/ui"
 import { DeviceCard } from "../../../widgets/DeviceCard"
-import { MoreVertical, PlusCircle } from 'lucide-react'
+import { Filter, PlusCircle } from 'lucide-react'
 import { showFullScreenDialog } from '../../../shared/lib/reducers/dialogReducer'
 import { DeviceEditDialog } from '../../../widgets/DeviceEdit'
 import { DeviceAddDialog } from '../../../widgets/DeviceAddManual'
 import { useCallback, useEffect, useState } from 'react'
 import { DeviceData } from '../../../entites/Device'
-import { setSearch } from '../../../features/Navigation/lib/reducers/NavigationReducer'
-import { showMenu } from '../../../shared/lib/reducers/menuReducer'
+import { ScreenSize, useScreenSize } from '../../../entites/ScreenSize'
+import { SearchBar } from '../../../features/SearchBar'
+import { UseFilter } from '../../../shared/lib/hooks/filterMenu.hook'
+import { setNavigationButton } from '../../../features/Navigation/lib/reducers/NavigationReducer'
 
 export const DevicePage = () => {
 
@@ -17,6 +19,13 @@ export const DevicePage = () => {
 	const [devicesData, setDevices] = useState<DeviceData[]>([])
 	const [devicesName, setDeviceName] = useState<string>('')
 	const dispatch = useAppDispatch()
+	const {screen} = useScreenSize()
+
+	const getDeviceTypes = useCallback(()=>{
+		return Array.from(new Set(devices.map(item=>item.class_device)))
+	},[devices])
+
+	const {togleMenu, setItems, filter} = UseFilter()
 
 	const editDevice = (systemName: string) => {
 		dispatch(showFullScreenDialog(<DeviceEditDialog systemName={systemName}/>))
@@ -26,30 +35,35 @@ export const DevicePage = () => {
 		dispatch(showFullScreenDialog(<DeviceAddDialog/>))
 	}
 
-	const search = useCallback((data:string)=>{
+	const search = useCallback((data:string, types: string[] = [])=>{
+		let arrayRow = devices.filter(item => types.length === 0 || types.includes(item.class_device))
 		if(data===""){
-			setDevices(devices)
+			setDevices(arrayRow)
 			return
 		}
-		let array = devices.filter(item => item&&item.name.toLowerCase().indexOf(data.toLowerCase())!==-1)
+		let array = arrayRow.filter(item => item.name.toLowerCase().indexOf(data.toLowerCase())!==-1)
 		setDevices(array)
 	},[devices])
 
 	useEffect(()=>{
-		search(devicesName)
-	},[search, devicesName])
+		search(devicesName, filter)
+	},[search, devicesName, filter])
 
 	useEffect(()=>{
-		dispatch(setSearch((data)=>setDeviceName(data)))
-	},[dispatch])
+		setItems(getDeviceTypes())
+	},[getDeviceTypes])
 
-	const getDeviceTypes = useCallback(()=>{
-		return Array.from(new Set(devices.map(item=>item.class_device)))
-	},[devices])
+	useEffect(()=>{
+		dispatch(setNavigationButton({icon: <Filter/>, onClick:togleMenu, text:"filter"}))
+		return ()=>{
+			dispatch(setNavigationButton(undefined))
+		}
+	},[dispatch, togleMenu])
 
 	return(
+		<>
+		<SearchBar search={data=>setDeviceName(data)}/>
 		<div className="device-page">
-			<FilterBtn style={{position: "fixed", right: "10px"}} items={getDeviceTypes()} onChange={(data)=>console.log(data)}/>
 			<GridLayout itemMinWith='250px' itemMaxWith='350px' gridColumnGap='10px'>
 			{
 				devicesData.map((item, index)=>(
@@ -59,7 +73,9 @@ export const DevicePage = () => {
 				))
 			}
 			</GridLayout>
-			<FAB icon={<PlusCircle/>} onClick={addDevice}>Add Device</FAB>
+			<FAB icon={<PlusCircle/>} onClick={addDevice}>{(screen !== ScreenSize.MOBILE)?"Add Device":null}</FAB>
 		</div>
+		</>
+		
 	)
 }

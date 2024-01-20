@@ -1,7 +1,7 @@
 
 interface NavButtonProps{
     icon: React.ReactNode
-    onClick?: ()=>void
+	onClick?: (event: React.MouseEvent<HTMLDivElement>)=>void
     title?: string
 }
 

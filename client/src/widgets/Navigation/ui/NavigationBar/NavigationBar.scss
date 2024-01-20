@@ -33,7 +33,7 @@
 		border-radius: 25px;
 		transition: .3s;
 		.navigation-item-icon{
-			width: 64px;
+			width: 44px;
 			height: 32px;
 			border-radius: 16px;
 			display: flex;
@@ -47,6 +47,14 @@
 		&.active .navigation-item-icon{
 			background-color: var(--Secondary-container-color);
 			color: var(--On-secondary-container-color);
+		}
+	}
+}
+
+@media (max-width: 720px) {
+    .navigation-bar-container{
+		.navigation-item{
+			padding: 0
 		}
 	}
 }
