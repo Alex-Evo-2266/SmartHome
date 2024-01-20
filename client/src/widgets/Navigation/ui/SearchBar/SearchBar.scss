@@ -1,7 +1,7 @@
 .navigation-search-bar-container{
 	position: fixed;
+	display: flex;
 	top: 0;
-	left: 80px;
 	z-index: 1000;
 	width: calc(100% - 80px);
 	overflow: hidden;
@@ -12,6 +12,10 @@
 	box-shadow: var(--Shadow-base);
     .search-container{
         margin: 5px;
+		margin-left: 15px;
         width: calc(100% - 10px);
     }
+	.btn-block-menu{
+		margin-top: 15px;
+	}
 }

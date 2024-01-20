@@ -1,14 +1,15 @@
 import './DevicePage.scss'
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
-import { FAB, GridLayout, GridLayoutItem } from "../../../shared/ui"
+import { FAB, FilterBtn, GridLayout, GridLayoutItem, IconButton } from "../../../shared/ui"
 import { DeviceCard } from "../../../widgets/DeviceCard"
-import { PlusCircle } from 'lucide-react'
+import { MoreVertical, PlusCircle } from 'lucide-react'
 import { showFullScreenDialog } from '../../../shared/lib/reducers/dialogReducer'
 import { DeviceEditDialog } from '../../../widgets/DeviceEdit'
 import { DeviceAddDialog } from '../../../widgets/DeviceAddManual'
 import { useCallback, useEffect, useState } from 'react'
 import { DeviceData } from '../../../entites/Device'
 import { setSearch } from '../../../features/Navigation/lib/reducers/NavigationReducer'
+import { showMenu } from '../../../shared/lib/reducers/menuReducer'
 
 export const DevicePage = () => {
 
@@ -42,8 +43,13 @@ export const DevicePage = () => {
 		dispatch(setSearch((data)=>setDeviceName(data)))
 	},[dispatch])
 
+	const getDeviceTypes = useCallback(()=>{
+		return Array.from(new Set(devices.map(item=>item.class_device)))
+	},[devices])
+
 	return(
 		<div className="device-page">
+			<FilterBtn style={{position: "fixed", right: "10px"}} items={getDeviceTypes()} onChange={(data)=>console.log(data)}/>
 			<GridLayout itemMinWith='250px' itemMaxWith='350px' gridColumnGap='10px'>
 			{
 				devicesData.map((item, index)=>(

@@ -8,6 +8,11 @@
     color: var(--On-surface-color);
     border-radius: 4px;
     font-size: 14px;
+    .none-status{
+        width: 24px;
+        height: 24px;
+        display: block;
+    }
     .menu-status-submenu{
         width: 10px;
         height: 10px;

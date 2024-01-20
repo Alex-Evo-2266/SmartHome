@@ -4,12 +4,14 @@ import "./IconButton.scss"
 interface IconButtonProps{
     icon: React.ReactNode
     className?: string
+    classNameContainer?: string
     onClick?: (event:React.MouseEvent<HTMLButtonElement>)=>void
     onContextMenu?: (event:React.MouseEvent<HTMLButtonElement>)=>void
     disabled?: boolean
+    style?: React.CSSProperties
   }
 
-export const IconButton = ({icon, className, onClick, onContextMenu, disabled}: IconButtonProps) => {
+export const IconButton = ({icon, className, onClick, onContextMenu, disabled, classNameContainer, style}: IconButtonProps) => {
 
     const click = (e:React.MouseEvent<HTMLButtonElement>) => {
         onClick && onClick(e)
@@ -27,8 +29,8 @@ export const IconButton = ({icon, className, onClick, onContextMenu, disabled}: 
     }
 
     return(
-        <button className={`iconbutton`} onClick={click} onContextMenu={onContextMenu} disabled={disabled}>
-            <div className={`${className} iconbutton-container`}>
+        <button style={style} className={`iconbutton ${className}`} onClick={click} onContextMenu={onContextMenu} disabled={disabled}>
+            <div className={`${classNameContainer} iconbutton-container`}>
                 {icon}
             </div>
         </button>

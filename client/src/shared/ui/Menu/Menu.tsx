@@ -25,7 +25,10 @@ export const Menu = () => {
 	const [cord, setCord] = useState<ICord>({left:"0px", top:"0px"})
 
 	const hide = () => {
-		dispatch(hideMenu())
+		if(menu.onHide)
+			menu.onHide()
+		else
+			dispatch(hideMenu())
 	}
 
 	const resize = useCallback(() => {

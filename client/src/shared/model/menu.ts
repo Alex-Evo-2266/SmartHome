@@ -21,4 +21,6 @@ export interface IBlock{
 export interface IMenuOption{
     width?: number
     autoHide?: boolean
+    onHide?: ()=>void
+    onClick?: ()=>void
 }

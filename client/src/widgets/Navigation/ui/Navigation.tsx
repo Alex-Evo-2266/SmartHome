@@ -35,6 +35,11 @@ export const Navigation = () => {
 	return(
 	<>
 		<NavigationDrawer openAlways/>
+		{
+			(navigation.search)?
+			<SearchBar left="350px"/>:
+			null
+		}
 	</>
 	)
 }

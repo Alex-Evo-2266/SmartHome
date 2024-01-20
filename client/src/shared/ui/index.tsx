@@ -80,3 +80,5 @@ export {Chips} from './Chips/Chips'
 export {DayOfWeekField} from './DayOfWeek/DayOfWeek'
 
 export {Search} from './Search/Search'
+
+export {FilterBtn} from './Filter/Filter'

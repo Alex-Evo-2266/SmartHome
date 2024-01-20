@@ -22,6 +22,7 @@ const MenuItem = ({item, isIcon, smallDisplay}:MenuItemProps) => {
             setVisible(prev=>!prev)
         else
             item.onClick && item.onClick()
+        menu.onClick && menu.onClick()
         if(menu.autoHide)
             dispath(hideMenu())
     },[menu, item.onClick])
@@ -45,7 +46,7 @@ const MenuItem = ({item, isIcon, smallDisplay}:MenuItemProps) => {
                         <span className={`menu-status-submenu ${visible?"active":""}`}></span>:
                         (item.activated)?
                         <Check/>:
-                        null
+                        <span className="none-status"/>
                     }
                 </div>
             </div>

@@ -5,7 +5,11 @@ import { IconButton, Search } from '../../../../shared/ui'
 import { useCallback } from 'react'
 import { showBaseMenu } from '../../../../shared/lib/reducers/menuReducer'
 
-export const SearchBar = () => {
+interface SearchBarProps{
+    left?: string
+}
+
+export const SearchBar = ({left = "70px"}:SearchBarProps) => {
 
 	const dispatch = useAppDispatch()
 	const navigayion = useAppSelector(state=>state.navigation)
@@ -13,7 +17,7 @@ export const SearchBar = () => {
 	const onMenu = useCallback((event:React.MouseEvent<HTMLElement>) => {
 		if (navigayion.menu)
 			dispatch(showBaseMenu(navigayion.menu, event.pageX, event.pageY, {autoHide: true}))
-	},[dispatch])
+	},[dispatch, navigayion.menu])
 
 	const onSearch = useCallback((data:string)=>{
 		if (navigayion.search)
@@ -21,7 +25,7 @@ export const SearchBar = () => {
 	},[navigayion.search])
 
 	return(
-		<div className={`navigation-search-bar-container`}>
+	<div className={`navigation-search-bar-container`} style={{left, width: `calc(100% - ${left})`}}>
 			{
 				(navigayion.search)?
 				<Search placeholder='device name' onSearch={onSearch}/>

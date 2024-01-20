@@ -1,5 +1,6 @@
 import { Check } from "lucide-react"
 import { IMenuSubItem } from "../../model/menu"
+import { useAppSelector } from "../../lib/hooks/redux"
 
 interface MenuItemProps{
     item: IMenuSubItem
@@ -8,8 +9,15 @@ interface MenuItemProps{
 
 const SubMenuItem = ({item, isIcon}:MenuItemProps) => {
 
+    const menu = useAppSelector(state=>state.menu)
+
+    const click = () => {
+        item.onClick && item.onClick()
+        menu.onClick && menu.onClick()
+    }
+
     return(
-        <div className="menu-sub-item" onClick={item.onClick}>
+        <div className="menu-sub-item" onClick={click}>
             {
                 (isIcon)?
                 <div className="menu-icon-container">
