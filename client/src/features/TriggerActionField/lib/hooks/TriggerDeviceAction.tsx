@@ -30,7 +30,7 @@ export const useTriggerActionDevice = () => {
     const selectState = useCallback((device: DeviceData, field: FieldDevice, callback: (data:TriggerActionData)=>void)=>{
         if(field.type === DeviceFieldType.BINARY)
         {
-            let items = [{title:"on", data: "on"}, {title:"off", data: "off"}]
+            let items = [{title:"on", data: "on"}, {title:"off", data: "off"}, {title:"toggle", data: "toggle"}]
             dispatch(showDialog(<SelectionDialog header="Value" items={items} onHide={()=>dispatch(hideDialog())} onSuccess={(data)=>{
                 getAction(device, field, data, callback)
             }}/>))
