@@ -26,12 +26,24 @@ async def get_all_device():
 		arr.append(device)
 	return arr
 	
-async def get_device(sysyem_name: str):
-	device = await Device.objects.get_or_none(sysyem_name=sysyem_name)
+async def get_device(system_name: str):
+	device = await Device.objects.get_or_none(system_name=system_name)
 	if device:
 		return await polling_and_init(device)
 	raise DeviceNotFound()
-	
+
+async def get_device_row(system_name: str)->Device:
+	device = await Device.objects.get_or_none(system_name=system_name)
+	if device:
+		return device
+	raise DeviceNotFound()
+
+async def get_field_row(system_name: str, field_name: str)->Device_field:
+	device = await get_device_row(system_name)
+	fields:Device_field = await Device_field.objects.get_or_none(device=device, name=field_name)
+	if fields:
+		return fields
+	raise DeviceNotFound()
 
 async def add_device(data: AddDeviceSchema):
 	await duble_field(data.fields, data.system_name)

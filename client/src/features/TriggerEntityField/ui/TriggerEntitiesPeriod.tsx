@@ -2,6 +2,7 @@ import { useCallback, useState } from "react"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
 import { hideFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
 import { DayOfWeekField, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
+import { getFormattedTime } from '../../../shared/lib/helpers/timeFormat'
 
 interface TriggerTimeProps{
 	onChange: (data: string)=>void 
@@ -26,8 +27,8 @@ export const TriggerEntitiesPeriodDialog = ({onChange}:TriggerTimeProps) => {
     const [month, setMonth] = useState<string>("January")
     const [dayWeek, setDayWeek] = useState<string[]>(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
     const [day, setDay] = useState<string>("1")
-    const [hour, setHour] = useState<string>("0")
-    const [minute, setMinute] = useState<string>("0")
+    const [hour, setHour] = useState<number>(0)
+    const [minute, setMinute] = useState<number>(0)
 
     const hide = () => {
 		dispatch(hideFullScreenDialog())
@@ -35,11 +36,11 @@ export const TriggerEntitiesPeriodDialog = ({onChange}:TriggerTimeProps) => {
 
     const save = useCallback(() => {
         if (period === "every_year")
-            onChange(`${period}.${month}.${day}.${hour}.${minute}`)
+            onChange(`${period}.${month}.${day}.${getFormattedTime(hour, minute)}`)
         if (period === "every_month")
-            onChange(`${period}.${day}.${hour}.${minute}`)
+            onChange(`${period}.${day}.${getFormattedTime(hour, minute)}`)
         if (period === "every_day")
-            onChange(`${period}[${dayWeek.join(',')}].${hour}.${minute}`)
+            onChange(`${period}[${dayWeek.join(',')}].${getFormattedTime(hour, minute)}`)
         if (period === "every_hour")
             onChange(`${period}.${minute}`)
 	},[period, month, day, hour, minute, dayWeek])
@@ -52,9 +53,9 @@ export const TriggerEntitiesPeriodDialog = ({onChange}:TriggerTimeProps) => {
         if(name === "day")
             setDay(String(value))
         if(name === "hour")
-            setHour(String(value))
+            setHour(value)
         if(name === "minute")
-            setMinute(String(value))
+            setMinute(value)
     }
 
     return(

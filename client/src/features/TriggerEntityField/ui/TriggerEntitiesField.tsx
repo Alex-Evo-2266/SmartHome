@@ -16,7 +16,6 @@ interface MoreTextProps{
 const dialogItems = [
     {title:"time", data: TypeEntity.TIME},
     {title:"device", data: TypeEntity.DEVICE},
-    {title:"period", data: TypeEntity.PERIOD},
     {title:"service", data: TypeEntity.SERVICE},
 ]
 
@@ -43,20 +42,11 @@ export const TriggerEntitiesField = ({value, onChange}:MoreTextProps) => {
             onHide={()=>dispatch(hideDialog())}
             onSuccess={(type_entity)=>{
                 dispatch(hideDialog())
-                if(type_entity === TypeEntity.TIME)
-                    dispatch(showDialog(<TimePicker 
-                        onHide={()=>dispatch(hideDialog())}
-                        hours={0}
-                        minutes={0}
-                        onChange={(hours, minutes)=>{
-                            setValueCascade(type_entity, getFormattedTime(hours, minutes))
-                            dispatch(hideDialog())
-                        }}/>))
-                else if(type_entity === TypeEntity.DEVICE)
+                if(type_entity === TypeEntity.DEVICE)
                     selectionDeviceDialog((device, field)=>{
                         setValueCascade(type_entity, `device.${device.system_name}.${field.name}`)
                     })
-                else if(type_entity === TypeEntity.PERIOD)
+                else if(type_entity === TypeEntity.TIME)
                     dispatch(showFullScreenDialog(<TriggerEntitiesPeriodDialog onChange={(data)=>{
                         setValueCascade(type_entity, data)
                         dispatch(hideFullScreenDialog())

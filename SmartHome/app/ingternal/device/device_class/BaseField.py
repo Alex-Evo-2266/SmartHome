@@ -12,6 +12,8 @@ from app.ingternal.device.schemas.communication_fields import TypeRelatedFields
 
 from app.ingternal.device.set_value import set_value
 
+from app.ingternal.scripts.running.run_trigger import trigger_device_run
+
 def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:
 	if(param in d):
 		return d[param]
@@ -99,7 +101,7 @@ class BaseField(IField):
 		# 			print(field.system_name, field.field, status)
 		# 			set_value(field.system_name, field.field, status, False)
 		if(script):
-			pass
+			trigger_device_run(self.device_system_name, self.name)
 			# run_by_trigger_scripts(self.device_system_name,self.name)
 		
 	def set_virtual_value(self, status, script=True):

@@ -2,8 +2,7 @@
 export enum TypeEntity{
     DEVICE = "device",
 	TIME = "time",
-	SERVICE = "service",
-	PERIOD = "period"
+	SERVICE = "service"
 }
 
 export enum TypeEntityCondition{

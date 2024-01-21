@@ -1,6 +1,7 @@
 from app.ingternal.scripts.models.triggers import Trigger, Trigger_action, Trigger_condition, Trigger_entity, Trigger_action_differently
 from app.ingternal.scripts.schemas.trigger import AddTrigger, TriggerSchema, TriggerAction, TriggerCondition, TriggerEntity
 from app.ingternal.scripts.exception.scripts import ScriptsNotFound
+from app.ingternal.scripts.trigger_array.trigger_array_init import init_trigger
 from typing import List
 
 async def create_trigger(data: AddTrigger):
@@ -53,7 +54,7 @@ async def delete_trigger(system_name: str):
 	await trigger.delete()
 
 async def update_trigger(system_name: str, data: TriggerSchema):
-	trigger = await Trigger.objects.get_or_none(system_name=system_name)
+	trigger:Trigger = await Trigger.objects.get_or_none(system_name=system_name)
 	if not trigger:
 		raise ScriptsNotFound()
 	await Trigger_action.objects.delete(trigger=trigger)
@@ -77,10 +78,12 @@ async def update_trigger(system_name: str, data: TriggerSchema):
 	trigger.condition = data.condition
 	trigger.status = data.status
 	await trigger.update(_columns=["name", "condition", "status", "system_name"])
+	await init_trigger(trigger)
 
 async def edit_status_trigger(system_name: str, status: bool):
-	trigger = await Trigger.objects.get_or_none(system_name=system_name)
+	trigger:Trigger = await Trigger.objects.get_or_none(system_name=system_name)
 	if not trigger:
 		raise ScriptsNotFound()
 	trigger.status = status
 	await trigger.update(_columns=["status"])
+	await init_trigger(trigger)
