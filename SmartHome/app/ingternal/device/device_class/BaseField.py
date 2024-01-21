@@ -102,7 +102,6 @@ class BaseField(IField):
 		# 			set_value(field.system_name, field.field, status, False)
 		if(script):
 			trigger_device_run(self.device_system_name, self.name)
-			# run_by_trigger_scripts(self.device_system_name,self.name)
 		
 	def set_virtual_value(self, status, script=True):
 		'''

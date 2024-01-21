@@ -52,11 +52,13 @@ class TriggerArray():
 
 	@classmethod
 	def get_device_trigger(cls, system_name:str, field: str):
+		triggers: List[TriggerArrayItem] = []
 		for key in cls.device:
 			for entity in cls.triggers[key].entities:
 				if (entity.type_entity == TypeEntity.DEVICE and entity.entity_system_name == system_name and entity.entity_field_name == field):
-					return cls.triggers[key]
-		return None
+					triggers.append(cls.triggers[key])
+					break
+		return triggers
 	
 	@classmethod
 	def get_time_trigger(cls):

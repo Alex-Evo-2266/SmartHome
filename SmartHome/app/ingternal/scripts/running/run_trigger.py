@@ -1,23 +1,14 @@
 from typing import List, Union
 from datetime import datetime
 from threading import Thread
-import threading, asyncio, time
-from app.ingternal.scripts.models.triggers import Trigger, Trigger_entity
+import asyncio, time
+from app.ingternal.scripts.trigger_array.trigger_array import TriggerArray
 from app.ingternal.scripts.enums import TypeEntityCondition, Sign, Condition, TypeEntityAction
 from app.ingternal.scripts.schemas.trigger_array import TriggerArrayItem, ArrayItemTriggerCondition, ArrayItemTriggerAction
 from app.ingternal.scripts.utils.trigger import get_index_weekday
 from app.ingternal.device.devices_arrey import DevicesArrey
 from app.ingternal.device.interfaces.device_interface import IDevice
 from app.ingternal.device.enums import TypeDeviceField
-
-async def trigger_device_run_async(system_name: str, field: str):
-	triggers:List[Trigger_entity] = await Trigger_entity.objects.all()
-	for trigger in triggers:
-		...
-
-def trigger_device_run(system_name: str, field: str):
-	loop = asyncio.get_running_loop()
-	loop.create_task(trigger_device_run_async(system_name, field))
 
 def condition_trigger(condition: ArrayItemTriggerCondition):
 	time = datetime.now().time()
@@ -69,7 +60,16 @@ async def trigger_action(action:ArrayItemTriggerAction):
 		if not device:
 			return
 		device:IDevice = device.device
-		device.set_value(action.entity_field_name, action.value)
+		field = device.get_field(action.entity_field_name)
+		if not field:
+			return
+		if field.get_type() == TypeDeviceField.BINARY and action.value == "toggle":
+			if field.get() == field.get_high():
+				device.set_value(action.entity_field_name, "off")
+			else:
+				device.set_value(action.entity_field_name, "on")
+		else:
+			device.set_value(action.entity_field_name, action.value)
 		# field = device.get_field(action.entity_field_name)
 		# if not field:
 		# 	return
@@ -102,3 +102,9 @@ def trigger_run(trigger: TriggerArrayItem):
 	thread = Thread(target=_trigger_run, args=(trigger,))
 	thread.daemon = True
 	thread.start()
+
+def trigger_device_run(system_name: str, field: str):
+	triggers = TriggerArray.get_device_trigger(system_name, field)
+	print(triggers)
+	for trigger in triggers:
+		trigger_run(trigger)
