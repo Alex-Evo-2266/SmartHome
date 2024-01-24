@@ -7,8 +7,8 @@ from app.configuration.loop.loop import EventLoop
 from app.ingternal.device.save_device import save_device
 from app.ingternal.device.send_device import send_restart
 from app.ingternal.device.communication_fields.communications import CommunicationFields
-from app.ingternal.scripts.trigger_array.trigger_array_init import init_triggers
-from app.ingternal.scripts.running.run_time_trigger import run_time_trigger
+from app.ingternal.automation.automation_array.automation_array_init import init_automations
+from app.ingternal.automation.running.run_time_automation import run_time_automation
 from app.configuration.config import __module_config__
 
 from app.modules.modules import init_modules
@@ -24,7 +24,7 @@ async def startup():
 	print("sdfg")
 	await init_dir()
 	EventLoop.register("saveDevice", save_device, DEFAULT_SAVE_INTERVAL)
-	EventLoop.register("time_script", run_time_trigger, 60)
+	EventLoop.register("time_script", run_time_automation, 60)
 	init_conf()
 	await send_restart(__module_config__)
 	await init_modules()
@@ -32,7 +32,7 @@ async def startup():
 	if not database_.is_connected:
 		await database_.connect()
 		
-	await init_triggers()
+	await init_automations()
 	loop = asyncio.get_running_loop()
 	loop.create_task(EventLoop.run())
 

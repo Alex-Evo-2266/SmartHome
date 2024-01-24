@@ -1,53 +1,53 @@
 import { useCallback, useEffect, useState } from 'react'
-import { TriggerData } from '../../../entites/Trigger'
+import { AutomationData } from '../../../entites/Automation'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { showFullScreenDialog } from '../../../shared/lib/reducers/dialogReducer'
-import { TriggerForm } from '../../../widgets/TriggerForm'
-import { TriggersCard } from '../../../widgets/TriggersCard'
+import { AutomationForm } from '../../../widgets/AutomationForm'
+import { AutomationsCard } from '../../../widgets/AutomationsCard'
 import './ScriptsPage.scss'
-import { useGetTriggers } from '../api/apiTriggers'
+import { useGetAutomations } from '../api/apiAutomations'
 
 export const ScriptsPage = () => {
 
     const dispatch = useAppDispatch()
-    const [triggers, setTriggers] = useState<TriggerData[]>([])
-    const {getTriggers, loading, deleteTriggers, setStatusTriggers} = useGetTriggers()
+    const [triggers, setTriggers] = useState<AutomationData[]>([])
+    const {getAutomations, loading, deleteAutomations, setStatusAutomations} = useGetAutomations()
 
-    const getTriggersF = useCallback(async ()=>{
-        const data:TriggerData[] = await getTriggers()
+    const getAutomationsF = useCallback(async ()=>{
+        const data:AutomationData[] = await getAutomations()
         setTriggers(data)
-    },[getTriggers])
+    },[getAutomations])
 
     useEffect(()=>{
-        getTriggersF()
-    },[getTriggersF])
+        getAutomationsF()
+    },[getAutomationsF])
 
-    const addTrigger = () => {
-		dispatch(showFullScreenDialog(<TriggerForm header='Add trigger' update={getTriggersF}/>))
+    const addAutomation = () => {
+		dispatch(showFullScreenDialog(<AutomationForm header='Add automation' update={getAutomationsF}/>))
 	}
 
-    const editTrigger = (data: TriggerData) => {
-		dispatch(showFullScreenDialog(<TriggerForm header='Edit trigger' editData={data} update={getTriggersF}/>))
+    const editAutomation = (data: AutomationData) => {
+		dispatch(showFullScreenDialog(<AutomationForm header='Edit automation' editData={data} update={getAutomationsF}/>))
 	}
 
-    const deleteTrigger = async (system_name: string) => {
-		await deleteTriggers(system_name)
+    const deleteAutomation = async (system_name: string) => {
+		await deleteAutomations(system_name)
         setTimeout(()=>{
-            getTriggersF()
+            getAutomationsF()
         },300)
 	}
 
-    const setStatusTrigger = async (system_name: string, status: boolean) => {
-		await setStatusTriggers(system_name, status)
+    const setStatusAutomation = async (system_name: string, status: boolean) => {
+		await setStatusAutomations(system_name, status)
         setTimeout(()=>{
-            getTriggersF()
+            getAutomationsF()
         },300)
 	}
 
     return(
         <div className="scripts-page-container">
             <div className='trigger'>
-                <TriggersCard loading={loading} triggers={triggers} onAddTrigger={addTrigger} onStatusTrigger={setStatusTrigger} onEditTrigger={editTrigger} onDeleteTrigger={deleteTrigger} update={getTriggersF}/>
+                <AutomationsCard loading={loading} automations={triggers} onAddAutomation={addAutomation} onStatusAutomation={setStatusAutomation} onEditAutomation={editAutomation} onDeleteAutomation={deleteAutomation} update={getAutomationsF}/>
             </div>
         </div>
     )

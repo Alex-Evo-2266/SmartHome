@@ -1,1 +1,0 @@
-export {TriggerForm} from './ui/TriggerForm'

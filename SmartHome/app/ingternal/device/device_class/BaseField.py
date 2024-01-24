@@ -1,4 +1,3 @@
-# from SmartHome.logic.script.run_script import run_by_trigger_scripts
 
 from enum import Enum
 from numbers import Number
@@ -12,7 +11,7 @@ from app.ingternal.device.schemas.communication_fields import TypeRelatedFields
 
 from app.ingternal.device.set_value import set_value
 
-from app.ingternal.scripts.running.run_trigger import trigger_device_run
+from app.ingternal.automation.running.run_automation import automation_device_run
 
 def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:
 	if(param in d):
@@ -101,7 +100,7 @@ class BaseField(IField):
 		# 			print(field.system_name, field.field, status)
 		# 			set_value(field.system_name, field.field, status, False)
 		if(script):
-			trigger_device_run(self.device_system_name, self.name)
+			automation_device_run(self.device_system_name, self.name)
 		
 	def set_virtual_value(self, status, script=True):
 		'''
