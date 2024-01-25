@@ -6,9 +6,10 @@ interface SearchProps{
     onSearch: (data: string)=>void
     onMenu?: ()=>void
     placeholder?: string
+    autoChenge?: boolean
 }
 
-export const Search = ({onMenu, onSearch, placeholder}:SearchProps) => {
+export const Search = ({onMenu, onSearch, placeholder, autoChenge}:SearchProps) => {
 
     const inputSearch = useRef<HTMLInputElement>(null)
     const [value, setvalue] = useState<string>("")
@@ -23,7 +24,6 @@ export const Search = ({onMenu, onSearch, placeholder}:SearchProps) => {
     }
 
     const clear = () => {
-        console.log("fdgh")
         if(inputSearch.current)
         {
             inputSearch.current.focus()
@@ -31,6 +31,8 @@ export const Search = ({onMenu, onSearch, placeholder}:SearchProps) => {
         }
         setvalue("")
         setFocus(true)
+        if (autoChenge)
+            onSearch("")
     }
 
     const onBlur = () => {
@@ -44,6 +46,8 @@ export const Search = ({onMenu, onSearch, placeholder}:SearchProps) => {
 
     const change = (event: React.ChangeEvent<HTMLInputElement>) => {
         setvalue(event.target.value)
+        if (autoChenge)
+            onSearch(event.target.value)
     }
 
     const enter = (event: React.KeyboardEvent<HTMLInputElement>) => {
