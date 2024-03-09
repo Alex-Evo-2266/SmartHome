@@ -1,0 +1,40 @@
+.script-item{
+    max-width: 300px;
+    height: 50px;
+    overflow: hidden;
+    background-color: var(--Surface-container-low-color);
+    border-radius: 8px;
+    position: absolute;
+    // transition: height .5s ;
+    &.active{
+        height: auto;
+    }
+    .script-item-min-info{
+        display: flex;
+        position: relative;
+        .script-item-icon{
+            margin: 10px;
+            height: 30px;
+            width: 30px;
+            border: 2px solid var(--Primary-color);
+            border-radius: 8px;
+            &>*{
+                width: 24px;
+                height: 24px;
+                color: var(--Primary-color);
+                margin-top: calc((100% - 24px)/2);
+                margin-left: calc((100% - 24px)/2);
+            }
+        }
+        .script-item-min-content{
+            margin: 10px 0;
+            h3{
+                font-size: 18px;
+            }
+            p{
+                font-size: 12px;
+                color: var(--On-surface-container-low-color);;
+            }
+        }
+    }
+}

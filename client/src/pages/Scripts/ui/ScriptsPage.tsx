@@ -6,12 +6,16 @@ import { AutomationForm } from '../../../widgets/AutomationForm'
 import { AutomationsCard } from '../../../widgets/AutomationsCard'
 import './ScriptsPage.scss'
 import { useGetAutomations } from '../api/apiAutomations'
+import { ScriptsCard } from '../../../widgets/ScriptsCard'
+import { useNavigate } from 'react-router-dom'
+import { FormatText } from '../../../shared/ui/FormatText/FormatText'
 
 export const ScriptsPage = () => {
 
     const dispatch = useAppDispatch()
     const [triggers, setTriggers] = useState<AutomationData[]>([])
     const {getAutomations, loading, deleteAutomations, setStatusAutomations} = useGetAutomations()
+    const navigate = useNavigate()
 
     const getAutomationsF = useCallback(async ()=>{
         const data:AutomationData[] = await getAutomations()
@@ -46,8 +50,27 @@ export const ScriptsPage = () => {
 
     return(
         <div className="scripts-page-container">
-            <div className='trigger'>
+            <div className='automations'>
                 <AutomationsCard loading={loading} automations={triggers} onAddAutomation={addAutomation} onStatusAutomation={setStatusAutomation} onEditAutomation={editAutomation} onDeleteAutomation={deleteAutomation} update={getAutomationsF}/>
+            </div>
+            <div className='scripts'>
+                <ScriptsCard loading={false} scripts={[]} onAddScripts={()=>navigate("/scripts/constructor")} onDeleteScripts={()=>{}} onEditScripts={()=>{}} onStatusScripts={()=>{}} update={()=>{}}/>
+            </div>
+            <div>
+                <FormatText border dict={[
+                    {
+                        data: "device",
+                        list: [{
+                            data: "lamp1",
+                            color: "orange"
+                        }],
+                        color: "red"
+                    },
+                    {
+                        data: "=",
+                        color: "aqua"
+                    }
+                ]}/>
             </div>
         </div>
     )

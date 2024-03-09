@@ -35,6 +35,8 @@ import GridLayout from "./GridLayout/GridLayout"
 export { GridLayoutItem } from "./GridLayout/GridLayout"
 export { GridLayout }
 
+export {BigContainer} from './BigContainer/BigContainer'
+
 // List
 
 export {ListContainer} from './List/List'

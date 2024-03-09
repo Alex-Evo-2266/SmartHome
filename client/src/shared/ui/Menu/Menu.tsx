@@ -92,7 +92,7 @@ export const Menu = () => {
 			))
 		}
 		</div>
-		<div style={{zIndex: 1600}} className="backplate" onClick={hide}></div>
+		<div style={{zIndex: 1600}} className="backplate" onClick={hide} onContextMenu={e=>{e.preventDefault()}}></div>
 		</>
 	)
 }

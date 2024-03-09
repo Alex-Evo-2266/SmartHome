@@ -1,0 +1,22 @@
+.condition-blocks{
+    display: flex;
+    .condition-blocks-coll{
+        flex: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        &>*{
+        }
+    }
+}
+.add-script-block{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: var(--Surface-container-low-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
