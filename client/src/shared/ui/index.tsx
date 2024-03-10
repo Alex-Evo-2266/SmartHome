@@ -47,6 +47,7 @@ export {ListItem} from './List/ListItem'
 export { RunningLine } from './RunningLine/RunningLine'
 export { TextField } from './TextField/TextField'
 export { SelectField } from './Select/Select'
+export { FormatText } from './FormatText/FormatText'
 
 // Switch
 

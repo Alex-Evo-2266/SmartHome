@@ -12,14 +12,26 @@ export interface ScriptBlock{
     branch2?: ScriptBlock[]
 }
 
-export interface ScriptConstructorBlock{
-    type: ScriptBlockType
+export interface ScriptConstructorBlockAction{
+    type: ScriptBlockType.ACTION | ScriptBlockType.CONDITION
+    command: string
+    branch1?: ScriptBlock[]
+    branch2?: ScriptBlock[]
+    x:number
+    y:number
+    index: number[]
+}
+
+export interface ScriptConstructorBlockDeco{
+    type: ScriptBlockType.ADD_BLOCK | ScriptBlockType.START
     command: string
     branch1?: ScriptBlock[]
     branch2?: ScriptBlock[]
     x:number
     y:number
 }
+
+export type ScriptConstructorBlock = ScriptConstructorBlockAction | ScriptConstructorBlockDeco
 
 export interface Script{
     blocks: ScriptBlock[]

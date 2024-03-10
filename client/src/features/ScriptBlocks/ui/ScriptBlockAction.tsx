@@ -6,11 +6,13 @@ interface ScriptBlockActionProps{
     data: ScriptBlock
     style?: React.CSSProperties
     className?: string
+    edit?: ()=>void
 }
 
-export const ScriptBlockAction = ({data, style, className}:ScriptBlockActionProps) => {
+export const ScriptBlockAction = ({data, style, className, edit}:ScriptBlockActionProps) => {
 
     return(
-        <ScriptItem type="action" title={data.command} icon={<ArrowRight/>} style={style} className={className}/>
+        <ScriptItem edit={edit} type="action" title={data.command} icon={<ArrowRight/>} style={style} className={className}>
+        </ScriptItem>
     )
 }

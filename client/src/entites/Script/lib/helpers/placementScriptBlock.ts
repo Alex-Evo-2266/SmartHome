@@ -45,7 +45,15 @@ export const getCordsBlock = (blocks:ScriptBlock[] | undefined, startX: number, 
     for(let i = 0; i < blocks.length; i++)
     {
         let item = blocks[i]
-        scriptBlocks.push({x: startX, y: startY + (index * (HEIGHT + MARGIN)), command: item.command, type: item.type, branch1: item.branch1, branch2: item.branch2})
+        scriptBlocks.push({
+            x: startX, 
+            y: startY + (index * (HEIGHT + MARGIN)), 
+            command: item.command, 
+            type: item.type, 
+            branch1: item.branch1, 
+            branch2: item.branch2,
+            index: [...indexes, i]
+        })
         connectLine(ctx, {x:startX + WIDTH / 2, y: startY + 20 + ((index - 1) * (HEIGHT + MARGIN))}, {x:startX + WIDTH / 2, y: startY + 20 + (index * (HEIGHT + MARGIN))})
         index += 1
         if(item.type === ScriptBlockType.CONDITION)

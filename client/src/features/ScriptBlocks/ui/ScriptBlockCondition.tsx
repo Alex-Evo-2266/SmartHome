@@ -7,13 +7,14 @@ interface ScriptBlockConditionProps{
     data: ScriptBlock
     style?: React.CSSProperties
     className?: string
+    edit?: ()=>void
 }
 
-export const ScriptBlockCondition = ({data, style, className}:ScriptBlockConditionProps) => {
+export const ScriptBlockCondition = ({data, style, className, edit}:ScriptBlockConditionProps) => {
 
     return(
         <>
-            <ScriptItem type="condition" title={data.command} icon={<GitFork style={{transform: "rotate(180deg)"}}/>} style={style} className={className}/>
+            <ScriptItem edit={edit} type="condition" title={data.command} icon={<GitFork style={{transform: "rotate(180deg)"}}/>} style={style} className={className}/>
             
         </>
     )

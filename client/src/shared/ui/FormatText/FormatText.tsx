@@ -25,6 +25,7 @@ interface IFormatTextProps{
 export const FormatText = ({transparent, readOnly, border, onClear, icon, onChange, name, value, placeholder, className, onFocus, onBlur, error, dict}:IFormatTextProps) => {
 
     const [text, setText] = useState<string>("")
+    const [focus, setFocus] = useState<boolean>(false)
     const textareaElement = useRef<HTMLTextAreaElement>(null)
     const panel = useRef<HTMLDivElement>(null)
 
@@ -46,10 +47,18 @@ export const FormatText = ({transparent, readOnly, border, onClear, icon, onChan
         setTimeout(resize, 0)
     },[])
 
-    const focus = () => {
+    const focusHandler = () => {
         if(!textareaElement.current)
             return
         textareaElement.current.focus()
+        setFocus(true)
+    }
+
+    const blurHandler = () => {
+        if(!textareaElement.current)
+            return
+        textareaElement.current.blur()
+        setFocus(false)
     }
 
     const splitCommands = (str:string) => str.split('\n').map(item=>splitCommand(item))
@@ -62,10 +71,10 @@ export const FormatText = ({transparent, readOnly, border, onClear, icon, onChan
         <div className={`text-format text-area ${border?"border":""} ${transparent?"transparent":""} ${className}`}>
             {
                 (icon)?
-                <div className="icon-container" onClick={focus}>{icon}</div>:
+                <div className="icon-container" onClick={focusHandler} onBlur={blurHandler}>{icon}</div>:
                 null
             }
-            <div className="textarea-container" onClick={focus}>
+            <div className="textarea-container" onClick={focusHandler} onBlur={blurHandler}>
                 <textarea
                 ref={textareaElement}
                 readOnly={readOnly}
@@ -77,14 +86,14 @@ export const FormatText = ({transparent, readOnly, border, onClear, icon, onChan
                 onChange={change}
                 onFocus={onFocus}
                 onBlur={onBlur}/>
-                <div className='panel' onFocus={focus} ref={panel}>
+                <div className='panel' onFocus={focusHandler} onBlur={blurHandler} ref={panel}>
                 {
                     splitCommands(text).map((item, index)=>(<div className='text-format-rows' key={index}>
                         {
                         item.map((item2, index2)=>(<div key={index2} className='text-format-el'>
                             <FormatTextWord key={index2} data={item2} dict={dict}/>
                             {
-                                (item.length-1 === index2 && splitCommands(text).length-1 === index)?
+                                (item.length-1 === index2 && splitCommands(text).length-1 === index && focus)?
                                 <span className='text-format-curs'>I</span>
                                 :null
                             }
