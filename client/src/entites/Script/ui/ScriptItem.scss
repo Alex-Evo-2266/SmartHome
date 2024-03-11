@@ -4,7 +4,6 @@
     overflow: hidden;
     background-color: var(--Surface-container-low-color);
     border-radius: 8px;
-    position: absolute;
     // transition: height .5s ;
     &.active{
         height: auto;

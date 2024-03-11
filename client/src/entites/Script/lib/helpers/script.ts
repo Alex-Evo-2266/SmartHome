@@ -1,23 +1,6 @@
 import { ScriptBlock, ScriptBlockType } from "../.."
 import { HEIGHT, WIDTH } from "../../models/const"
 
-// export const widthCalculate = (data: ScriptBlock[]) => {
-//     let level = 1
-//     let level1 = 1
-//     let level2 = 1
-//     for(let item of data){
-//         if(item.branch1)
-//             level1 += widthCalculate(item.branch1)
-//         if(item.branch2)
-//             level2 += widthCalculate(item.branch2)
-//         if(level < level1 || level < level2)
-//             level = (level1 > level2)?level1:level2
-//         level2 = 1
-//         level1 = 1
-//     }
-//     return level
-// }
-
 export const widthCalculate = (data: ScriptBlock[] | undefined) => {
     if(!data)
         return 0

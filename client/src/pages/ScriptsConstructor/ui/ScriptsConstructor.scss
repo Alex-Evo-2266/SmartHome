@@ -2,12 +2,10 @@
     position: relative;
     background-color: var(--Surface-dim-color);
     height: 100vh;
-    // overflow-x: scroll;
     #scripts-constructor-canvas{
         position: absolute;
         top: 0;
         left: 0;
-        // border: 3px solid black;
     }
     #scripts-constructor-container{
         position: absolute;
@@ -18,10 +16,12 @@
         align-items: center;
         flex-direction: column;
         .script-item{
+            // margin-bottom: 40px;
         }
     }
     .script-add-block{
         display: flex;
+        margin-bottom: 40px;
         justify-content: center;
         &>*{
             margin-left:8px;

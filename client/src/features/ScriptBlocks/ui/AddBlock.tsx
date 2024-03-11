@@ -1,10 +1,10 @@
 import { Plus } from "lucide-react"
 
 interface ScriptAddBlockProps{
-    index: number[]
+    index: number
     style?: React.CSSProperties
     className?: string
-    onClick: (index: number[])=>void
+    onClick: (index: number)=>void
 }
 
 export const ScriptAddBlock = ({index, style, className, onClick}:ScriptAddBlockProps) => {
