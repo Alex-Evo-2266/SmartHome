@@ -72,7 +72,7 @@ export const AutomationForm = ({header, editData, update}:AutomationFormProps) =
                 <TextField border value={automation.system_name} onChange={(e)=>setAutomation(prev=>({...prev, system_name: e.target.value}))}/>
             </FieldContainer>
             <Divider/>
-            <FieldContainer header="automation">
+            <FieldContainer header="triggers">
                 <AutomationEntitiesField onChange={(data)=>setAutomation(prev=>({...prev, triggers: data}))} value={automation.triggers}/>
             </FieldContainer>
             <Divider/>

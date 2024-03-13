@@ -1,7 +1,7 @@
 
 import { useState } from 'react'
 import './ScriptItem.scss'
-import { HEIGHT, MARGIN, WIDTH } from '../models/const'
+import { HEIGHT, WIDTH } from '../models/const'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { showBaseMenu } from '../../../shared/lib/reducers/menuReducer'
 import { IMenuItem } from '../../../shared/model/menu'
@@ -14,28 +14,19 @@ interface ScriptItemProps{
     style?: React.CSSProperties
     className?: string
     children?: React.ReactNode
-    edit?: ()=>void
     menuItem?: IMenuItem[]
 }
 
-export const ScriptItem = ({title, type, text, icon, style, className, children, edit, menuItem}:ScriptItemProps) => {
+export const ScriptItem = ({title, type, text, icon, style, className, children, menuItem}:ScriptItemProps) => {
 
     const [visible, setVisible] = useState<boolean>(false)
     const dispatch = useAppDispatch()
 
     const menu = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
-        if(edit || menuItem)
+        if(menuItem)
         {
-            let item = menuItem ?? []
-            if(edit)
-            {
-                item.push({
-                    title: "edit",
-                    onClick: edit
-                })
-            }
-            dispatch(showBaseMenu(item, e.clientX, e.clientY))
+            dispatch(showBaseMenu(menuItem, e.clientX, e.clientY))
         }
     }
 
