@@ -3,9 +3,9 @@ import { useAppDispatch } from "../../../shared/lib/hooks/redux"
 import { hideFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
 import { Divider, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
 import { Condition, AutomationData } from "../../../entites/Automation"
-import { AutomationEntitiesField } from "../../../features/AutomationEntityField"
-import { AutomationConditionField } from "../../../features/AutomationConditionField"
-import { AutomationActionField } from "../../../features/AutomationActionField/ui/AutomationActionField"
+import { AutomationEntitiesField } from "../../../features/Automation"
+import { AutomationConditionField } from "../../../features/Automation"
+import { AutomationActionField } from "../../../features/Automation"
 import { useAppAutomation } from "../api/apiAutomation"
 
 interface AutomationFormProps{

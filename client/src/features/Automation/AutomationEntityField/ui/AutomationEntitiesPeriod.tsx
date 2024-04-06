@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react"
-import { useAppDispatch } from "../../../shared/lib/hooks/redux"
-import { hideFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { DayOfWeekField, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
-import { getFormattedTime } from '../../../shared/lib/helpers/timeFormat'
+import { useAppDispatch } from "../../../../shared/lib/hooks/redux"
+import { hideFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
+import { DayOfWeekField, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../../shared/ui"
+import { getFormattedTime } from '../../../../shared/lib/helpers/timeFormat'
 
 interface AutomationTimeProps{
 	onChange: (data: string)=>void 

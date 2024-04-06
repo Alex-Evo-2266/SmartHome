@@ -12,6 +12,7 @@ interface IFormatTextProps{
 interface IWord{
     text: string
     color: string,
+    textColor: string,
     info?: string
 }
 
@@ -27,7 +28,7 @@ export const FormatTextWord = ({dict, data}:IFormatTextProps) => {
 
     const getColor = (data: string[]):IWord[] => {
         if (!dict)
-            return data.map(item=>({text:item, color:DEF_COLOR}))
+            return data.map(item=>({text:item, color:DEF_COLOR, textColor:DEF_COLOR}))
         let dictConf = dict
         let newArr:IWord[] = []
         for (let index = 0; index < data.length; index++) {
@@ -35,14 +36,14 @@ export const FormatTextWord = ({dict, data}:IFormatTextProps) => {
             for (const item of dictConf) {
                 if (item.data === data[index])
                 {
-                    newArr.push({text: data[index], color: item.color || DEF_COLOR, info: item.text})
+                    newArr.push({text: data[index], color: item.color || DEF_COLOR, info: item.text, textColor: item.textColor || DEF_COLOR})
                     dictConf = item.list || []
                     flag = false
                     break
                 }
             }
             if (flag){
-                newArr.push({text:data[index], color:DEF_COLOR})
+                newArr.push({text:data[index], color:DEF_COLOR, textColor: DEF_COLOR})
                 dictConf = []
             }
         }
@@ -64,7 +65,7 @@ export const FormatTextWord = ({dict, data}:IFormatTextProps) => {
             getColor(data).map((item, index)=>(
                 <Fragment key={index}>
                 {(index !== 0)?<span className='text-format-dot'>.</span>:null}
-                <span className='text-format-word' style={{backgroundColor:item.color}} onMouseOver={event=>showTextInfo(event, item.info)} onMouseOut={()=>setInfo(null)}>
+                <span className='text-format-word' style={{backgroundColor:item.color, color:item.textColor}} onMouseOver={event=>showTextInfo(event, item.info)} onMouseOut={()=>setInfo(null)}>
                     {item.text}
                 </span>
                 </Fragment>

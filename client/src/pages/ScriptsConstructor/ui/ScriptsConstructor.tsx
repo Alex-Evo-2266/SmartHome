@@ -1,11 +1,11 @@
 import './ScriptsConstructor.scss'
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { Script, ScriptBlockType, widthContainerCalculate } from '../../../entites/Script'
-import { ScriptBlockAction } from '../../../features/ScriptBlocks/ui/ScriptBlockAction'
-import { ScriptBlockCondition } from '../../../features/ScriptBlocks/ui/ScriptBlockCondition'
+import { ScriptBlockAction } from '../../../features/Automation/ScriptBlocks/ui/ScriptBlockAction'
+import { ScriptBlockCondition } from '../../../features/Automation/ScriptBlocks/ui/ScriptBlockCondition'
 import { WIDTH } from '../../../entites/Script/models/const'
 import { ScriptBlock } from '../../../entites/Script/models/script'
-import { ScriptAddBlock } from '../../../features/ScriptBlocks/ui/AddBlock'
+import { ScriptAddBlock } from '../../../features/Automation/ScriptBlocks/ui/AddBlock'
 import { BigContainer, FAB } from '../../../shared/ui'
 import { Home } from 'lucide-react'
 import { IPoint } from '../../../shared/model/point'
@@ -51,8 +51,8 @@ export const ScriptsConstructorPage = () => {
         setMove({x:widthContainerCalculate(script.blocks) / 2 - (WIDTH / 2), y:50})
     },[script])
 
-    const save = useCallback((trigger: AutomationEntityData[], name: string)=>{
-
+    const save = useCallback((trigger: AutomationEntityData[], name: string, systemName: string)=>{
+        
     },[])
 
     useEffect(()=>{

@@ -1,16 +1,18 @@
 import { GitFork } from "lucide-react"
-import { ScriptBlock, ScriptBlockType } from "../../../entites/Script"
-import { ScriptItem } from "../../../entites/Script/ui/ScriptItem"
+import { ScriptBlock, ScriptBlockType } from "../../../../entites/Script"
+import { ScriptItem } from "../../../../entites/Script/ui/ScriptItem"
 import './ScriptBlock.scss'
 import { ScriptAddBlock } from "./AddBlock"
-import { useAddBlock } from "../../../entites/Script/lib/hooks/addBlock.hook"
-import { useLinesСanvas } from "../../../entites/Script"
+import { useAddBlock } from "../../../../entites/Script/lib/hooks/addBlock.hook"
+import { useLinesСanvas } from "../../../../entites/Script"
 import { Fragment, useCallback, useEffect, useRef } from "react"
 import { ScriptBlockAction } from "./ScriptBlockAction"
-import { PointPoz } from "../../../entites/Script/lib/hooks/Lines"
-import { IMenuItem } from "../../../shared/model/menu"
-import { useAppDispatch } from "../../../shared/lib/hooks/redux"
-import { hideMenu } from "../../../shared/lib/reducers/menuReducer"
+import { PointPoz } from "../../../../entites/Script/lib/hooks/Lines"
+import { IMenuItem } from "../../../../shared/model/menu"
+import { useAppDispatch } from "../../../../shared/lib/hooks/redux"
+import { hideMenu } from "../../../../shared/lib/reducers/menuReducer"
+import { hideFullScreenDialog, showFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
+import { EditConditionBlockDialog } from "./EditConditionBlockDialog"
 
 interface ScriptBlockConditionProps{
     data: ScriptBlock
@@ -36,8 +38,11 @@ export const ScriptBlockCondition = ({data, style, className, edit, del}:ScriptB
     const dispatch = useAppDispatch()
 
     const editHandler = useCallback(() => {
-
-    },[])
+        dispatch(showFullScreenDialog(<EditConditionBlockDialog data={data.command} onSave={(command)=>{
+            edit({...data, command: command})
+            dispatch(hideFullScreenDialog())
+        }}/>))
+    },[dispatch, data, edit])
 
     const getMenu = useCallback(():IMenuItem[] => {
         let menu:IMenuItem[] = []
@@ -83,7 +88,7 @@ export const ScriptBlockCondition = ({data, style, className, edit, del}:ScriptB
 
     return(
         <>
-            <ScriptItem menuItem={getMenu()} type="condition" title={data.command} icon={<GitFork style={{transform: "rotate(180deg)"}}/>} style={style} className={className}/>
+            <ScriptItem menuItem={getMenu()} type="condition" title={"condition"} icon={<GitFork style={{transform: "rotate(180deg)"}}/>} style={style} className={className}/>
             <div className="script-constrictor-condition-container" data-type={"condition-container"}>
                 <div className="script-constrictor-condition-container-branch-container">
                     <div ref={container1} className="script-constrictor-condition-container-branch">

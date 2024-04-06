@@ -1,13 +1,13 @@
 import { useCallback } from "react"
-import { useAppDispatch, useAppSelector } from "../../../../shared/lib/hooks/redux"
-import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
-import { SelectionDialog } from "../../../../shared/ui/Dialog/BaseDialog/SelectionDialog"
-import { DeviceData } from "../../../../entites/Device"
-import { DeviceFieldType, FieldDevice } from "../../../../entites/Device/models/deviceData"
+import { useAppDispatch, useAppSelector } from "../../../../../shared/lib/hooks/redux"
+import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../../../shared/lib/reducers/dialogReducer"
+import { SelectionDialog } from "../../../../../shared/ui/Dialog/BaseDialog/SelectionDialog"
+import { DeviceData } from "../../../../../entites/Device"
+import { DeviceFieldType, FieldDevice } from "../../../../../entites/Device/models/deviceData"
 import { AutomationConditionNumber } from "../../ui/AutomationConditionNimber"
-import { Sign } from "../../../../entites/Automation"
-import { AutomationConditionData, TypeEntityCondition } from "../../../../entites/Automation/models/AutomationData"
-import { TextDialog } from "../../../../shared/ui/Dialog/BaseDialog/TextDialog"
+import { Sign } from "../../../../../entites/Automation"
+import { AutomationConditionData, TypeEntityCondition } from "../../../../../entites/Automation/models/AutomationData"
+import { TextDialog } from "../../../../../shared/ui/Dialog/BaseDialog/TextDialog"
 
 
 export const useAutomationConditionDevice = () => {

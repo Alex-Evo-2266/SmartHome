@@ -11,16 +11,22 @@ interface FieldProps{
 	systemName: string
 }
 
+const stringToNumber = (val: string):number => {
+	if (/^\d+$/.test(val))
+		return Number(val)
+	return 0
+}
+
 export const NumberField = ({field, value, systemName}:FieldProps)=>{
 	const [v, setV] = useState<number>(0)
 	const {setValueDevice} = useControlDeviceAPI()
 
 	useEffect(()=>{
-		setV(Number(value))
+		setV(stringToNumber(value))
 	},[value])
 
 	const change = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
-		setV(Number(e.target.value))
+		setV(stringToNumber(e.target.value))
 	},[systemName, field, setValueDevice])
 
 	const mouseUp = useCallback(() => {
@@ -33,7 +39,7 @@ export const NumberField = ({field, value, systemName}:FieldProps)=>{
 				{field.name}
 			</div>
 			<div className='device-field-control slider'>
-				<Slider value={Number(v)} onChange={change} onMouseUp={mouseUp} max={Number(field.high)} min={Number(field.low)}/>
+				<Slider value={Number(v)} onChange={change} onMouseUp={mouseUp} max={stringToNumber(field.high)} min={stringToNumber(field.low)}/>
 			</div>
 			<div className='device-field-value'>
 				{Number(v)}

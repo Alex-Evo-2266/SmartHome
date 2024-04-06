@@ -1,4 +1,4 @@
-import logging
+import logging, asyncio
 from app.ingternal.device.models.device import Device, Device_field, Value
 from app.ingternal.device.exceptions.device import DeviceNotFound
 from app.ingternal.device.device_class.BaseDeviceClass import BaseDevice
@@ -84,6 +84,10 @@ async def polling_and_init(device_data: Device):
 		data.value = dict()
 		return data
 		
+async def polling_all_and_init(devices_data: List[Device]):
+	tasks = [polling_and_init(device) for device in devices_data]
+	results = await asyncio.gather(*tasks)
+	return results
 
 async def device_polling_edit(system_name: str, poling: bool):
 	device: Device | None = await Device.objects.get_or_none(system_name=system_name)

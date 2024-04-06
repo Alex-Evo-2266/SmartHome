@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { FilledButton, TextField, Button } from "../../../shared/ui"
 import { DeviceOption } from "../../../features/DeviceOption"
 
@@ -15,17 +15,17 @@ export const DeviceEnterNameDialog = (prop:DeviceEnterNameDialogProps) => {
 	const [name, setName] = useState<string>(prop.name)
 	const [systemName, setSystemName] = useState<string>(prop.systemName)
 
-	const next = () => {
+	const next = useCallback(() => {
         if(name == "" || systemName == "")
 			return
 		prop.onNext(name, systemName)
-	}
+	},[name, systemName])
 
-    const changeName = (event:React.ChangeEvent<HTMLInputElement>) => {
+    const changeName = useCallback((event:React.ChangeEvent<HTMLInputElement>) => {
         if(!systemName || systemName == name)
             setSystemName(event.target.value)
         setName(event.target.value)
-    }
+    },[systemName, name])
 
 	return(
 		<>

@@ -2,16 +2,33 @@
     border-radius: 8px;
     padding: 10px;
     border: 1px dashed var(--Outline-color);
-    .script-name{
-        padding: 10px;
-        min-width: 250px;
-        background-color: var(--Surface-container-low-color);
-        border-radius: 8px;
-        margin: 10px 0;
+    .script-name-container{
+        padding: 0;
+        .script-name{
+            padding: 10px;
+            min-width: 250px;
+            min-height: 60px;
+            background-color: var(--Surface-container-low-color);
+            border-radius: 8px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
     }
     .script-trigger{
         padding: 10px;
         margin: 10px 0;
+    }
+    .script-trigger-container{
+        padding: 0;
+        .script-trigger{
+            padding: 10px;
+            min-width: 250px;
+            min-height: 60px;
+            background-color: var(--Surface-container-low-color);
+            border-radius: 8px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
     }
     .script-item.script-trigger, .script-save{
         height: auto;
