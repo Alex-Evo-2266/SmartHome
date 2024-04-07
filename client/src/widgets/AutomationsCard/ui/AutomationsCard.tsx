@@ -50,7 +50,7 @@ export const AutomationsCard = ({className, onAddAutomation, onEditAutomation, l
                 <ListContainer transparent>
                     {
                         filtredAutomation.map((item, index)=>(
-                            <AutomationsItem key={index} automationData={item} A onDeleteAutomation={onDeleteAutomation} onEditAutomation={onEditAutomation} onStatusAutomation={onStatusAutomation}/>
+                            <AutomationsItem key={index} automationData={item} onDeleteAutomation={onDeleteAutomation} onEditAutomation={onEditAutomation} onStatusAutomation={onStatusAutomation}/>
                         ))
                     }
                 </ListContainer>

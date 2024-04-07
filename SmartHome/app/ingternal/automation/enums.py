@@ -9,7 +9,7 @@ class TypeEntityTrigger(str, Enum):
 class TypeEntityAction(str, Enum):
 	DEVICE = "device"
 	SERVICE = "service"
-	SCRIPT = "script"
+	SCRIPTS = "scripts"
 	DELAY = "delay"
 
 class TypeValueAction(str, Enum):

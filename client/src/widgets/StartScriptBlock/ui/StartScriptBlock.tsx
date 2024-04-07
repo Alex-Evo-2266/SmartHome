@@ -15,9 +15,10 @@ interface ScriptBlockActionProps{
     menuItem?: IMenuItem[]
     name?: string
     system_name?: string
+    triggers?: AutomationEntityData[]
 }
 
-export const StartScriptBlock = ({save, menuItem, name, system_name}:ScriptBlockActionProps) => {
+export const StartScriptBlock = ({save, menuItem, name, system_name, triggers}:ScriptBlockActionProps) => {
 
     const [trigger, setTrigger] = useState<AutomationEntityData[]>([])
     const [scriptName, setScriptName] = useState<string>(name ?? "")
@@ -54,7 +55,8 @@ export const StartScriptBlock = ({save, menuItem, name, system_name}:ScriptBlock
     useEffect(()=>{
         name && setScriptName(name)
         system_name && setScriptSystemName(system_name)
-    },[name, system_name])
+        triggers && setTrigger(triggers)
+    },[name, system_name, triggers])
 
     return(
         <div className='start-script-block'>

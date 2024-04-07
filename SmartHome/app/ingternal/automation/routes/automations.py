@@ -2,7 +2,7 @@
 import logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
-from typing import Optional, List
+from typing import Optional, List, Union
 from app.ingternal.authtorization.depends.authtorization import token_dep
 from app.ingternal.authtorization.schemas.authtorization import TokenData, UserLevel
 from app.ingternal.authtorization.exceptions.user import AccessRightsErrorException
@@ -31,12 +31,12 @@ async def add_automation_url(data:AddAutomation, auth_data: TokenData = Depends(
 			return JSONResponse(status_code=400, content="automation with that name already exists")
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.get("/{system_name}", response_model=AutomationSchema)
-async def get_automation_url(system_name: str, auth_data: TokenData = Depends(token_dep)):
+@router.get("/{system_name}", response_model=Union[AutomationSchema, None])
+async def get_automation_url(system_name: str, get_or_none: bool = False, auth_data: TokenData = Depends(token_dep)):
 	try:
 		if auth_data.user_level == UserLevel.NONE:
 			raise AccessRightsErrorException()
-		data = await get_automation(system_name)
+		data = await get_automation(system_name, get_or_none)
 		return data
 	except Exception as e:
 		logger.warning(str(e))
@@ -65,11 +65,11 @@ async def delete_automation_url(system_name: str, auth_data: TokenData = Depends
 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.put("/{system_name}")
-async def edit_automation_url(system_name: str, data:AutomationSchema, auth_data: TokenData = Depends(token_dep)):
+async def edit_automation_url(system_name: str, data:AutomationSchema, updata_or_create:bool = False, auth_data: TokenData = Depends(token_dep)):
 	try:
 		if auth_data.user_level != UserLevel.ADMIN:
 			raise AccessRightsErrorException()
-		await update_automation(system_name, data)
+		await update_automation(system_name, data, updata_or_create)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))

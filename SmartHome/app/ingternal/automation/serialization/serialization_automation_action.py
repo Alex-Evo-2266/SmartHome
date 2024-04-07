@@ -35,7 +35,7 @@ def convert_automation_action_delay(entity:str, value: str):
 	
 def convert_automation_action_script(entity:str, value: str):
 	try:
-		if entity == TypeEntityAction.SCRIPT:
+		if entity == TypeEntityAction.SCRIPTS:
 			pass
 		return None
 	except Exception:
@@ -47,6 +47,6 @@ async def convert_automation_action(entity: Automation_action | Automation_actio
 		entity_conver = await convert_automation_action_device(entity.entity, entity.value)
 	elif entity.type_entity == TypeEntityAction.DELAY:
 		entity_conver = convert_automation_action_delay(entity.entity, entity.value)
-	elif entity.type_entity == TypeEntityAction.SCRIPT:
+	elif entity.type_entity == TypeEntityAction.SCRIPTS:
 		entity_conver = convert_automation_action_script(entity.entity, entity.value)
 	return entity_conver

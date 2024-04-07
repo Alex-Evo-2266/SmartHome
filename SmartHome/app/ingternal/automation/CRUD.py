@@ -10,7 +10,7 @@ async def create_automation(data: AddAutomation):
 		await Automation_action.objects.create(**(action.dict()), automation=automation)
 	for condition in data.conditions:
 		await Automation_condition.objects.create(**(condition.dict()), automation=automation)
-	for entity in data.entities:
+	for entity in data.triggers:
 		await Automation_trigger.objects.create(**(entity.dict()), automation=automation)
 	for entity in data.differently:
 		await Automation_action_else.objects.create(**(entity.dict()), automation=automation)
@@ -36,11 +36,13 @@ async def get_automation_data(automation: Automation)->AutomationSchema:
 	)
 	return automation_data
 
-async def get_automation(system_name: str):
+async def get_automation(system_name: str, get_or_none:bool = False):
 	automation: Automation = await Automation.objects.get_or_none(system_name=system_name)
 	if not automation:
+		if get_or_none:
+			return None
 		raise ScriptsNotFound()
-	return get_automation_data(automation)
+	return await get_automation_data(automation)
 
 async def get_automations()->List[AutomationSchema]:
 	automations: List[Automation] = await Automation.objects.all()
@@ -53,10 +55,13 @@ async def delete_automation(system_name: str):
 		raise ScriptsNotFound()
 	await automation.delete()
 
-async def update_automation(system_name: str, data: AutomationSchema):
+async def update_automation(system_name: str, data: AutomationSchema, updata_or_create: bool):
 	automation:Automation = await Automation.objects.get_or_none(system_name=system_name)
 	if not automation:
-		raise ScriptsNotFound()
+		if updata_or_create:
+			await create_automation(AddAutomation(**(data.dict())))
+		else:
+			raise ScriptsNotFound()
 	await Automation_action.objects.delete(automation=automation)
 	await Automation_action_else.objects.delete(automation=automation)
 	await Automation_condition.objects.delete(automation=automation)

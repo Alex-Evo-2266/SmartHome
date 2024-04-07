@@ -25,7 +25,7 @@ def convert_automation_entity_time(entity: str)->ArrayItemAutomationEntity | Non
         return ArrayItemAutomationEntity(type_entity=TypeEntityTrigger.TIME, period=Periods.EVERY_DAY, day=option, hour=time[0], minute=time[1])
     elif remove_options(data[0]) == TypeEntityInString.EVERY_HOUR and len(data) >= 2:
         return ArrayItemAutomationEntity(type_entity=TypeEntityTrigger.TIME, period=Periods.EVERY_HOUR, minute=data[1])
-    elif remove_options(data[0]) == TypeEntityInString.EVERY_MONTH and len(data) >= 3:
+    elif remove_options(data[0]) == TypeEntityInString.EVERY_MONTH and len(data) >= 4:
         time = get_time(data[2])
         if not time:
             return None

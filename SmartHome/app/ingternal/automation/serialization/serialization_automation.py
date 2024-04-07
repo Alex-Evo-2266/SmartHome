@@ -16,6 +16,7 @@ async def convert_automation(automation: Automation):
     conditions: List[ArrayItemAutomationCondition] = []
     actions: List[ArrayItemAutomationAction] = []
     differently_list: List[ArrayItemAutomationAction] = []
+    print("pafsedrtfj")
     for automation_entity in trigger_entitys:
         data = convert_automation_entity(automation_entity)
         if not data:

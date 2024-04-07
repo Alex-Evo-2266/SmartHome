@@ -12,22 +12,28 @@ import { IPoint } from '../../../shared/model/point'
 import { useAddBlock } from '../../../entites/Script/lib/hooks/addBlock.hook'
 import { useLinesСanvas } from '../../../entites/Script'
 import { StartScriptBlock } from '../../../widgets/StartScriptBlock/ui/StartScriptBlock'
-import { AutomationEntityData } from '../../../entites/Automation'
+import { AutomationData, AutomationEntityData, Condition } from '../../../entites/Automation'
 import { useAPIScript } from '../api/APIScript'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppAutomation } from '../../../widgets/AutomationForm'
+import { useGetAutomations } from '../api/apiAutomations'
+import { TypeEntityAction } from '../../../entites/Automation/models/AutomationData'
+
+const POSTFIX = "automation"
 
 export const ScriptsConstructorPage = () => {
 
     let params = useParams();
     const navigate = useNavigate()
     const {addBlock} = useAddBlock()
-    // const {addAutomation, editAutomation} = useAppAutomation()
-    const {addScript, getScript, editScript} = useAPIScript()
+    const {addAutomation} = useAppAutomation()
+    const APIScript = useAPIScript()
+    const APIAutomation = useGetAutomations()
     const canvas = useRef<HTMLCanvasElement>(null)
     const {Canvas, update} = useLinesСanvas({})
     const container = useRef<HTMLDivElement>(null)
     const [move, setMove] = useState<IPoint>({x:0, y:0})
+    const [triggers, setTrigger] = useState<AutomationEntityData[]>([])
     const [script, setScript] = useState<Script>({
         blocks:[],
         system_name:"",
@@ -35,15 +41,23 @@ export const ScriptsConstructorPage = () => {
     })
 
     const getScriptF = useCallback(async ()=>{
-        console.log(params)
         const system_name = params["system_name"]
         if (system_name)
         {
-            const data = await getScript(system_name)
+            const data = await APIScript.getScript(system_name)
             console.log(data)
             setScript(data)
         }
-    },[getScript, params])
+    },[APIScript.getScript, params])
+
+    const getTriggerF = useCallback(async ()=>{
+        const system_name = params["system_name"]
+        if (system_name)
+        {
+            const data:AutomationData | null = await APIAutomation.getAutomation(`${system_name}.${POSTFIX}`)
+            setTrigger(data?.triggers ?? [])
+        }
+    },[APIAutomation.getAutomation, params])
 
     const addBlockHandler = useCallback((index:number) => {
         addBlock(index, script.blocks, newBlocks=>{
@@ -69,15 +83,20 @@ export const ScriptsConstructorPage = () => {
         setMove({x:widthContainerCalculate(script.blocks) / 2 - (WIDTH / 2), y:50})
     },[script])
 
-    const save = useCallback(async (trigger: AutomationEntityData[], name: string, systemName: string)=>{
+    const save = useCallback(async (triggers: AutomationEntityData[], name: string, systemName: string)=>{
+        const data:AutomationData = {name:`${systemName}.${POSTFIX}`, system_name:`${systemName}.${POSTFIX}`, triggers:triggers, condition:Condition.AND, conditions:[], actions:[{type_entity:TypeEntityAction.SCRIPTS, entity:"script", value:systemName}], differently:[], status:true}
         if(params["system_name"])
-        {
-            await editScript({blocks: script.blocks, name, system_name: systemName}, params["system_name"])
-        }
+            await APIScript.editScript({blocks: script.blocks, name, system_name: systemName}, params["system_name"])
         else
-            await addScript({blocks: script.blocks, name, system_name: systemName})
+            await APIScript.addScript({blocks: script.blocks, name, system_name: systemName})
+        if(triggers.length > 0 && params["system_name"])
+            await APIAutomation.editOrCreateAutomation(data, `${params["system_name"]}.${POSTFIX}`)
+        else if(triggers.length > 0)
+            await addAutomation(data)
+        else if(triggers.length == 0)
+            await APIAutomation.deleteAutomation(`${params["system_name"]}.${POSTFIX}`)
         navigate(`/scripts`)
-    },[addScript, script])
+    },[APIScript.addScript, APIScript.editScript, APIAutomation.editOrCreateAutomation, APIAutomation.deleteAutomation, script])
 
     useEffect(()=>{
         if(container.current)
@@ -88,11 +107,18 @@ export const ScriptsConstructorPage = () => {
         getScriptF()
     },[getScriptF])
 
+    useEffect(()=>{
+        getTriggerF()
+    },[getTriggerF])
+
+    if (APIAutomation.loading || APIScript.loading)
+        return(<div></div>)
+
     return(
         <BigContainer id="scripts-constructor-page" pozMove={move}>
             <Canvas/>
             <div ref={container} id='scripts-constructor-container'>
-                <StartScriptBlock save={save} name={script.name} system_name={script.system_name}/>
+                <StartScriptBlock save={save} name={script.name} system_name={script.system_name} triggers={triggers}/>
                 <ScriptAddBlock onClick={addBlockHandler} index={0} />
             {
                 script.blocks.map((item, index)=>{

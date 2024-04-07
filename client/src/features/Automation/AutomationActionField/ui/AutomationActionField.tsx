@@ -23,7 +23,6 @@ export const AutomationActionField = ({value, onChange}:MoreTextProps) => {
         onChange && onChange(newValue)
     },[values])
 
-
     const deleteValue = useCallback((id: number) => {
         const data = values.filter((_, index)=>index !== id)
         onChange && onChange(data)

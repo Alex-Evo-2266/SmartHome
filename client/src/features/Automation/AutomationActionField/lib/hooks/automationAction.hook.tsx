@@ -5,6 +5,7 @@ import { hideDialog, showDialog } from "../../../../../shared/lib/reducers/dialo
 import { TypeEntityAction } from "../../../../../entites/Automation/models/AutomationData"
 import { useAutomationActionDevice } from "./automationDeviceAction.hook"
 import { TextDialog } from "../../../../../shared/ui/Dialog/BaseDialog/TextDialog"
+import { useAutomationActionScript } from "./automationScriptAction"
 
 const dialogItems = [
     {title:"script", data: TypeEntityAction.SCRIPTS},
@@ -17,6 +18,7 @@ export const useAutomationAction = () => {
 
     const dispatch = useAppDispatch()
     const {automationActionDeviceDialog} = useAutomationActionDevice()
+    const {automationActionScriptDialog} = useAutomationActionScript()
 
     const addValue = useCallback((setValueCascade:(type_entity: TypeEntityAction, entity:string, value:string)=>void) => {
         dispatch(showDialog(<SelectionDialog
@@ -37,9 +39,13 @@ export const useAutomationAction = () => {
                             dispatch(hideDialog())
                         }}/>))
                 if(type_entity === TypeEntityAction.DEVICE)
-                automationActionDeviceDialog((data)=>{
+                    automationActionDeviceDialog((data)=>{
                         setValueCascade(data.type_entity, data.entity, data.value)
                     })
+                if(type_entity === TypeEntityAction.SCRIPTS)
+                    automationActionScriptDialog((data)=>{
+                        setValueCascade(TypeEntityAction.SCRIPTS, "script", data.system_name)
+                })
             }}
         />))
     },[automationActionDeviceDialog])

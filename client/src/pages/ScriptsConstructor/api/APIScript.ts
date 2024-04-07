@@ -7,7 +7,7 @@ import { Script } from "../../../entites/Script"
 
 export const useAPIScript = () => {
 
-    const {request, error, clearError} = useHttp()
+    const {request, error, clearError, loading} = useHttp()
 	const {showSnackbar} = useSnackbar()
     const authData = useAppSelector(state=>state.auth)
 
@@ -40,5 +40,5 @@ export const useAPIScript = () => {
 		}
 	},[error, clearError, showSnackbar])
 
-    return {addScript, getScript, editScript}
+    return {addScript, getScript, editScript, loading}
 }
