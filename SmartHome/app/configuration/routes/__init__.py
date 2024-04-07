@@ -5,6 +5,7 @@ from app.ingternal.menu.routes import menu
 from app.ingternal.server_data.routes import server_data
 from app.ingternal.modules.routes import modules
 from app.ingternal.automation.routes import automations
+from app.ingternal.scripts.routes import scripts
 
 __routes__ = Routes(routers=(
     authtorization.router, 
@@ -14,6 +15,7 @@ __routes__ = Routes(routers=(
     menu.router,
     server_data.router,
     modules.router_moduls,
-    automations.router
+    automations.router,
+    scripts.router
     ))
 

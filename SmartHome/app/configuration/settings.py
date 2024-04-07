@@ -33,8 +33,8 @@ SECRET_REFRESH_JWT_KEY = "dxkhbgefrthjyuvligukytrtyug5hth56"
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SERVER_CONFIG = os.path.join(BASE_DIR, "files","server-config.yml")
+SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
 # DEVICETYPES = os.path.join(BASE_DIR, "files","devTypes.yml")
-# SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
 # STYLES_DIR = os.path.join(BASE_DIR, "files","styles")
 # PAGES_DIR =  os.path.join(BASE_DIR, "files","pages")
 # DEVICES = os.path.join(BASE_DIR, "files","devices.yml")

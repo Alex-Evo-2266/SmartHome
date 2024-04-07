@@ -2,21 +2,20 @@ import { useCallback } from 'react'
 import { Card, ListContainer } from '../../../shared/ui'
 import { ScriptButtons } from './ScriptButton'
 import './ScriptCard.scss'
-import { AutomationData } from '../../../entites/Automation'
 import { ScriptsItem } from './ScriptItem'
+import { Script } from '../../../entites/Script'
 
 interface ScriptsCardProps{
 	className?: string
     onAddScripts:()=>void
-    onEditScripts:(data: AutomationData)=>void
+    onEditScripts:(data: Script)=>void
     onDeleteScripts:(system_name: string)=>void
-    onStatusScripts:(system_name: string, status: boolean)=>void
     loading: boolean
-    scripts: AutomationData[]
+    scripts: Script[]
     update: ()=>void
 }
 
-export const ScriptsCard = ({className, onAddScripts, onEditScripts, loading, scripts, onDeleteScripts, onStatusScripts}:ScriptsCardProps) => {
+export const ScriptsCard = ({className, onAddScripts, onEditScripts, loading, scripts, onDeleteScripts}:ScriptsCardProps) => {
 
     const addScript = useCallback(()=>{
         onAddScripts()
@@ -31,7 +30,7 @@ export const ScriptsCard = ({className, onAddScripts, onEditScripts, loading, sc
                 <ListContainer transparent>
                     {
                         scripts.map((item, index)=>(
-                            <ScriptsItem key={index} scriptsData={item} onDeleteScript={onDeleteScripts} onEditScript={onEditScripts} onStatusScript={onStatusScripts}/>
+                            <ScriptsItem key={index} scriptsData={item} onDeleteScript={onDeleteScripts} onEditScript={onEditScripts}/>
                         ))
                     }
                 </ListContainer>

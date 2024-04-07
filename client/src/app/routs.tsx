@@ -33,6 +33,7 @@ export const useRoutes = (isAuthenticated:boolean, role: UserRole)=>{
 						<Route path="users" element={<UsersPage/>}/>
 						<Route path="scripts" element={<ScriptsPage/>}/>
 						<Route path="scripts/constructor" element={<ScriptsConstructorPage/>}/>
+						<Route path="scripts/constructor/:system_name" element={<ScriptsConstructorPage/>}/>
 						<Route path="/*" element={<Navigate replace to="/home" />} />
 					</Route>:
 					<>

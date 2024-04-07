@@ -2,7 +2,7 @@ import './StartScriptBlock.scss'
 import { IMenuItem } from "../../../shared/model/menu"
 import { Button, ListContainer, ListItem } from '../../../shared/ui'
 import { AutomationEntitiesField, useAutomationTrigger } from '../../../features/Automation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AutomationEntityData, TypeEntity } from '../../../entites/Automation'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { showBaseMenu } from '../../../shared/lib/reducers/menuReducer'
@@ -13,13 +13,15 @@ import { ChevronRight } from 'lucide-react'
 interface ScriptBlockActionProps{
     save: (triggers: AutomationEntityData[], scriptName:string, scriptSystemName:string)=>void
     menuItem?: IMenuItem[]
+    name?: string
+    system_name?: string
 }
 
-export const StartScriptBlock = ({save, menuItem}:ScriptBlockActionProps) => {
+export const StartScriptBlock = ({save, menuItem, name, system_name}:ScriptBlockActionProps) => {
 
     const [trigger, setTrigger] = useState<AutomationEntityData[]>([])
-    const [scriptName, setScriptName] = useState<string>("")
-    const [scriptSystemName, setScriptSystemName] = useState<string>("")
+    const [scriptName, setScriptName] = useState<string>(name ?? "")
+    const [scriptSystemName, setScriptSystemName] = useState<string>(system_name ?? "")
     const dispatch = useAppDispatch()
     const {addValue} = useAutomationTrigger()
 
@@ -48,6 +50,11 @@ export const StartScriptBlock = ({save, menuItem}:ScriptBlockActionProps) => {
             setTrigger(newValue)
         })
     },[addValue, trigger])
+
+    useEffect(()=>{
+        name && setScriptName(name)
+        system_name && setScriptSystemName(system_name)
+    },[name, system_name])
 
     return(
         <div className='start-script-block'>

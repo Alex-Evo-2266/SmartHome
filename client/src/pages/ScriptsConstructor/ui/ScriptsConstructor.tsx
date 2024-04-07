@@ -13,10 +13,17 @@ import { useAddBlock } from '../../../entites/Script/lib/hooks/addBlock.hook'
 import { useLinesСanvas } from '../../../entites/Script'
 import { StartScriptBlock } from '../../../widgets/StartScriptBlock/ui/StartScriptBlock'
 import { AutomationEntityData } from '../../../entites/Automation'
+import { useAPIScript } from '../api/APIScript'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useAppAutomation } from '../../../widgets/AutomationForm'
 
 export const ScriptsConstructorPage = () => {
 
+    let params = useParams();
+    const navigate = useNavigate()
     const {addBlock} = useAddBlock()
+    // const {addAutomation, editAutomation} = useAppAutomation()
+    const {addScript, getScript, editScript} = useAPIScript()
     const canvas = useRef<HTMLCanvasElement>(null)
     const {Canvas, update} = useLinesСanvas({})
     const container = useRef<HTMLDivElement>(null)
@@ -26,6 +33,17 @@ export const ScriptsConstructorPage = () => {
         system_name:"",
         name:""
     })
+
+    const getScriptF = useCallback(async ()=>{
+        console.log(params)
+        const system_name = params["system_name"]
+        if (system_name)
+        {
+            const data = await getScript(system_name)
+            console.log(data)
+            setScript(data)
+        }
+    },[getScript, params])
 
     const addBlockHandler = useCallback((index:number) => {
         addBlock(index, script.blocks, newBlocks=>{
@@ -51,9 +69,15 @@ export const ScriptsConstructorPage = () => {
         setMove({x:widthContainerCalculate(script.blocks) / 2 - (WIDTH / 2), y:50})
     },[script])
 
-    const save = useCallback((trigger: AutomationEntityData[], name: string, systemName: string)=>{
-        
-    },[])
+    const save = useCallback(async (trigger: AutomationEntityData[], name: string, systemName: string)=>{
+        if(params["system_name"])
+        {
+            await editScript({blocks: script.blocks, name, system_name: systemName}, params["system_name"])
+        }
+        else
+            await addScript({blocks: script.blocks, name, system_name: systemName})
+        navigate(`/scripts`)
+    },[addScript, script])
 
     useEffect(()=>{
         if(container.current)
@@ -61,14 +85,14 @@ export const ScriptsConstructorPage = () => {
     },[container.current, canvas.current, script])
 
     useEffect(()=>{
-        console.log(script)
-    },[script])
+        getScriptF()
+    },[getScriptF])
 
     return(
         <BigContainer id="scripts-constructor-page" pozMove={move}>
             <Canvas/>
             <div ref={container} id='scripts-constructor-container'>
-                <StartScriptBlock save={save}/>
+                <StartScriptBlock save={save} name={script.name} system_name={script.system_name}/>
                 <ScriptAddBlock onClick={addBlockHandler} index={0} />
             {
                 script.blocks.map((item, index)=>{

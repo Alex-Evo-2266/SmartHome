@@ -9,22 +9,35 @@ import { useGetAutomations } from '../api/apiAutomations'
 import { ScriptsCard } from '../../../widgets/ScriptsCard'
 import { useNavigate } from 'react-router-dom'
 import { FormatText } from '../../../shared/ui/FormatText/FormatText'
+import { Script } from '../../../entites/Script'
+import { useGetScripts } from '../api/apiScripts'
 
 export const ScriptsPage = () => {
 
     const dispatch = useAppDispatch()
     const [triggers, setTriggers] = useState<AutomationData[]>([])
-    const {getAutomations, loading, deleteAutomations, setStatusAutomations} = useGetAutomations()
+    const [Scripts, setScripts] = useState<Script[]>([])
+    const APIAutomations = useGetAutomations()
+    const APIScripts = useGetScripts()
     const navigate = useNavigate()
 
     const getAutomationsF = useCallback(async ()=>{
-        const data:AutomationData[] = await getAutomations()
+        const data:AutomationData[] = await APIAutomations.getAutomations()
         setTriggers(data)
-    },[getAutomations])
+    },[APIAutomations.getAutomations])
+
+    const getScriptsF = useCallback(async ()=>{
+        const data:Script[] = await APIScripts.getScripts()
+        setScripts(data)
+    },[APIScripts.getScripts])
 
     useEffect(()=>{
         getAutomationsF()
     },[getAutomationsF])
+
+    useEffect(()=>{
+        getScriptsF()
+    },[getScriptsF])
 
     const addAutomation = () => {
 		dispatch(showFullScreenDialog(<AutomationForm header='Add automation' update={getAutomationsF}/>))
@@ -34,43 +47,41 @@ export const ScriptsPage = () => {
 		dispatch(showFullScreenDialog(<AutomationForm header='Edit automation' editData={data} update={getAutomationsF}/>))
 	}
 
-    const deleteAutomation = async (system_name: string) => {
-		await deleteAutomations(system_name)
-        setTimeout(()=>{
-            getAutomationsF()
-        },300)
+    const deleteAutomation = useCallback(async (system_name: string) => {
+		await APIAutomations.deleteAutomations(system_name)
+        getAutomationsF()
+        // setTimeout(()=>{
+        //     getAutomationsF()
+        // },300)
+	},[getAutomationsF, APIAutomations.deleteAutomations])
+
+    const setStatusAutomation = useCallback(async (system_name: string, status: boolean) => {
+		await APIAutomations.setStatusAutomations(system_name, status)
+        getAutomationsF()
+        // setTimeout(()=>{
+        //     getAutomationsF()
+        // },300)
+	},[getAutomationsF, APIAutomations.setStatusAutomations])
+
+    const editScript = (data: Script) => {
+		navigate(`/scripts/constructor/${data.system_name}`)
 	}
 
-    const setStatusAutomation = async (system_name: string, status: boolean) => {
-		await setStatusAutomations(system_name, status)
-        setTimeout(()=>{
-            getAutomationsF()
-        },300)
-	}
+    const deleteScript = useCallback(async (system_name: string) => {
+		await APIScripts.deleteScripts(system_name)
+        getScriptsF()
+        // setTimeout(()=>{
+        //     getScriptsF()
+        // },300)
+	},[getScriptsF, APIScripts.deleteScripts])
 
     return(
         <div className="scripts-page-container">
             <div className='automations'>
-                <AutomationsCard loading={loading} automations={triggers} onAddAutomation={addAutomation} onStatusAutomation={setStatusAutomation} onEditAutomation={editAutomation} onDeleteAutomation={deleteAutomation} update={getAutomationsF}/>
+                <AutomationsCard loading={APIAutomations.loading} automations={triggers} onAddAutomation={addAutomation} onStatusAutomation={setStatusAutomation} onEditAutomation={editAutomation} onDeleteAutomation={deleteAutomation} update={getAutomationsF}/>
             </div>
             <div className='scripts'>
-                <ScriptsCard loading={false} scripts={[]} onAddScripts={()=>navigate("/scripts/constructor")} onDeleteScripts={()=>{}} onEditScripts={()=>{}} onStatusScripts={()=>{}} update={()=>{}}/>
-            </div>
-            <div>
-                <FormatText border dict={[
-                    {
-                        data: "device",
-                        list: [{
-                            data: "lamp1",
-                            color: "orange"
-                        }],
-                        color: "red"
-                    },
-                    {
-                        data: "=",
-                        color: "aqua"
-                    }
-                ]}/>
+                <ScriptsCard loading={APIScripts.loading} scripts={Scripts} onAddScripts={()=>navigate("/scripts/constructor")} onDeleteScripts={deleteScript} onEditScripts={editScript} update={getScriptsF}/>
             </div>
         </div>
     )
