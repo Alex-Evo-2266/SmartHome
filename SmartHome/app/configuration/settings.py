@@ -32,6 +32,8 @@ SECRET_REFRESH_JWT_KEY = "dxkhbgefrthjyuvligukytrtyug5hth56"
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+SCRIPT_AUTOMATION_PREFEX = "automation"
+
 SERVER_CONFIG = os.path.join(BASE_DIR, "files","server-config.yml")
 SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
 # DEVICETYPES = os.path.join(BASE_DIR, "files","devTypes.yml")
