@@ -6,7 +6,7 @@ from app.ingternal.automation.automation_array.automation_array import Automatio
 from app.ingternal.automation.enums import TypeEntityCondition, Sign, Condition, TypeEntityAction, TypeValueAction
 from app.ingternal.automation.schemas.automation_array import AutomationArrayItem, ArrayItemAutomationCondition, ArrayItemAutomationAction
 from app.ingternal.automation.utils.automation import get_index_weekday
-from SmartHome.app.ingternal.device.device_data.devices_arrey import DevicesArrey
+from app.ingternal.device.device_data.devices_arrey import DevicesArrey
 from app.ingternal.device.interfaces.device_interface import IDevice
 from app.ingternal.device.enums import TypeDeviceField
 from app.ingternal.scripts.runing.run import run_script

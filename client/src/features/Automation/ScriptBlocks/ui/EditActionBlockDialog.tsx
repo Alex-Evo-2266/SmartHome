@@ -6,6 +6,7 @@ import { TypeEntityAction } from "../../../../entites/Automation/models/Automati
 import { FilledButton, FormatText, FullScrinTemplateDialog } from "../../../../shared/ui"
 import { hideFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
 import { useAutomationAction } from "../.."
+import { TextArea } from "../../../../shared/ui/TextField/TextArea"
 
 interface EditActionBlockDialogProp{
     onSave: (data: string)=>void
@@ -38,7 +39,8 @@ export const EditActionBlockDialog = ({onSave, data}:EditActionBlockDialogProp) 
     }
 
     useEffect(()=>{
-        setValue(data)
+        if (data)
+            setValue(data)
     },[data])
 
     return(
@@ -47,7 +49,7 @@ export const EditActionBlockDialog = ({onSave, data}:EditActionBlockDialogProp) 
                 <FilledButton onClick={()=>addValue(controlSetValue)}>+</FilledButton>
             </div>
             <div>
-                <FormatText border dict={getComands()} onChange={(e)=>setValue(e.target.value)} value={value}/>
+            <TextArea border onChange={(e)=>{setValue(e.target.value)}} value={value}/>
             </div>
         </FullScrinTemplateDialog>
     )

@@ -6,6 +6,7 @@ from app.ingternal.automation.enums import TypeEntityTrigger
 
 
 async def init_automation(automation: Automation):
+    print("p500", automation)
     data = await convert_automation(automation)
     if not data:
         return

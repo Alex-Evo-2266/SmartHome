@@ -8,6 +8,7 @@ from app.ingternal.device.interfaces.field_interface import IField
 from app.ingternal.device.schemas.device import FieldDeviceSchema, AddDeviceFieldSchema
 from app.ingternal.device.communication_fields.communications import CommunicationFields
 from app.ingternal.device.schemas.communication_fields import TypeRelatedFields
+from app.ingternal.device.device_data.device_data_array import DevicesDataArrey
 
 from app.ingternal.device.set_value import set_value
 
@@ -92,6 +93,7 @@ class BaseField(IField):
 
 	def set(self, status, script=True):
 		self.__value = status
+		DevicesDataArrey.updata_value(self.device_system_name, self.name, status)
 		# feedback_fields_device = CommunicationFields.get_feedback_fields_device(self.device_system_name, self.name)
 		# print(feedback_fields_device, self.device_system_name, self.__value)
 		# if feedback_fields_device:

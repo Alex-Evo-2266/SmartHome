@@ -13,7 +13,7 @@ from app.ingternal.authtorization.exceptions.user import AccessRightsErrorExcept
 from app.ingternal.device.options.options import get_option, OptionsDevice
 from app.ingternal.device.set_value import set_value
 from app.ingternal.device.schemas.device import ConsctionStatusForm
-from SmartHome.app.ingternal.device.device_data.polling import device_polling_edit
+from app.ingternal.device.device_data.polling import device_polling_edit
 
 
 router = APIRouter(

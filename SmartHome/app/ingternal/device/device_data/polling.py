@@ -2,7 +2,7 @@ import logging, asyncio
 from app.ingternal.device.models.device import Device, Device_field, Value
 from app.ingternal.device.exceptions.device import DeviceNotFound
 from app.ingternal.device.device_class.BaseDeviceClass import BaseDevice
-from SmartHome.app.ingternal.device.device_data.devices_arrey import DevicesArrey, DevicesArreyItem
+from app.ingternal.device.device_data.devices_arrey import DevicesArrey, DevicesArreyItem
 from app.ingternal.device.device_class.DeviceClasses import DeviceClasses
 from app.ingternal.device.enums import StatusDevice
 from app.ingternal.device.map import device_db_to_schema

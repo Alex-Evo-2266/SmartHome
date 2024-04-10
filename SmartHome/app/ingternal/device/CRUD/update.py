@@ -2,7 +2,7 @@ from app.ingternal.device.schemas.device import EditDeviceSchema
 from app.ingternal.device.models.device import Device
 from app.ingternal.device.edit_field import edit_fields
 from app.ingternal.device.exceptions.device import DeviceNotFound
-from SmartHome.app.ingternal.device.device_data.devices_arrey import DevicesArrey
+from app.ingternal.device.device_data.devices_arrey import DevicesArrey
 from app.ingternal.device.CRUD.utils import duble_field
 
 async def edit_device(system_name: str, data: EditDeviceSchema):

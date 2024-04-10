@@ -1,4 +1,4 @@
-from SmartHome.app.ingternal.device.device_data.devices_arrey import DevicesArrey
+from app.ingternal.device.device_data.devices_arrey import DevicesArrey
 from app.ingternal.device.device_class.BaseDeviceClass import BaseDevice
 from app.ingternal.device.enums import ReceivedDataFormat
 from ..exceptions.mqtt import DeviceClassAlreadyBeenRegisteredException
@@ -67,6 +67,7 @@ class MqttDeviceControl(BaseService):
                     #         value = "0"
                     #     else:
                     #         return None
+                    print("p400")
                     item.set(value)
             return value
         except Exception as e:

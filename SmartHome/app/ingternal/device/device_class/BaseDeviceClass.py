@@ -8,7 +8,7 @@ from app.ingternal.device.schemas.device import DeviceSchema, FieldDeviceSchema
 from app.ingternal.device.interfaces.device_interface import IDevice
 
 from app.ingternal.device.exceptions.device import DeviceNotFound
-from SmartHome.app.ingternal.device.device_data.devices_arrey import DevicesArrey, DevicesArreyItem
+from app.ingternal.device.device_data.devices_arrey import DevicesArrey, DevicesArreyItem
 from app.ingternal.device.schemas.communication_fields import TypeRelatedFields
 from app.ingternal.exceptions.base import InvalidInputException
 import logging, copy

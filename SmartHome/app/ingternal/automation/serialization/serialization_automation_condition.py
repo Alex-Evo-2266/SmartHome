@@ -3,7 +3,7 @@ from app.ingternal.automation.schemas.automation_array_condition import ArrayIte
 from app.ingternal.automation.enums import Sign, TypeEntityCondition
 from app.ingternal.automation.models.automation import Automation_condition
 from app.ingternal.automation.utils.automation import remove_options, get_type_condition, is_time, get_time, automation_entity_time_day_of_week, get_month
-from app.ingternal.device.CRUD import get_field_row
+from app.ingternal.device.CRUD.read import get_field_row
 from app.ingternal.device.enums import TypeDeviceField
 import logging
 

@@ -3,7 +3,7 @@ from app.ingternal.automation.schemas.automation_array_action import ArrayItemAu
 from app.ingternal.automation.enums import Sign, TypeEntityAction
 from app.ingternal.automation.models.automation import Automation_action, Automation_action_else
 from app.ingternal.automation.utils.automation import remove_options, get_type_action, is_time, get_time, automation_entity_time_day_of_week, get_month
-from app.ingternal.device.CRUD import get_field_row
+from app.ingternal.device.CRUD.read import get_field_row
 from app.ingternal.device.enums import TypeDeviceField
 import logging
 
@@ -34,9 +34,12 @@ def convert_automation_action_delay(entity:str, value: str):
 		return None
 	
 def convert_automation_action_script(entity:str, value: str):
+	print("p600", TypeEntityAction.SCRIPTS.value, TypeEntityAction.SCRIPTS.name, entity)
 	try:
 		if entity == TypeEntityAction.SCRIPTS:
-			pass
+			return ArrayItemAutomationAction(type_entity=TypeEntityAction.SCRIPTS, value=value)
+		if entity == "script": # надеюсь это тут временно
+			return ArrayItemAutomationAction(type_entity=TypeEntityAction.SCRIPTS, value=value) 
 		return None
 	except Exception:
 		return None

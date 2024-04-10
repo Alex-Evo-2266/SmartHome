@@ -1,7 +1,7 @@
 from app.configuration.config.config import ModuleConfig
 from app.configuration.settings import SERVER_CONFIG
 
-from app.ingternal.device.send_device import send_restart
+from app.ingternal.device.device_data.send_device import send_restart
 
 __module_config__ = ModuleConfig(SERVER_CONFIG)
 

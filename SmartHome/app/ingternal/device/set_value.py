@@ -1,7 +1,7 @@
 
 import logging
 
-from SmartHome.app.ingternal.device.device_data.devices_arrey import DevicesArrey
+from app.ingternal.device.device_data.devices_arrey import DevicesArrey
 from app.ingternal.device.interfaces.device_value_interface import IValueDevice
 from app.ingternal.device.communication_fields.communications import CommunicationFields
 from app.ingternal.device.schemas.communication_fields import TypeRelatedFields

@@ -1,19 +1,19 @@
 from typing import List
 from app.ingternal.device.models.device import Device, Device_field
 from app.ingternal.device.schemas.device import DeviceSchema
-from SmartHome.app.ingternal.device.device_data.polling import polling_and_init, polling_all_and_init
+from app.ingternal.device.device_data.device_data_array import DevicesDataArrey
 from app.ingternal.device.exceptions.device import DeviceNotFound
 
 async def get_all_device():
-	devices: List[Device] = await Device.objects.all()
-	arr:List[DeviceSchema] = []
-	arr = await polling_all_and_init(devices)
+	# devices: List[Device] = await Device.objects.all()
+	# arr:List[DeviceSchema] = []
+	arr = DevicesDataArrey.get_all_device()
 	return arr
 	
 async def get_device(system_name: str):
-	device = await Device.objects.get_or_none(system_name=system_name)
-	if device:
-		return await polling_and_init(device)
+	device_data = DevicesDataArrey.get(system_name)
+	if device_data:
+		return device_data.device
 	raise DeviceNotFound()
 
 async def get_device_row(system_name: str)->Device:
