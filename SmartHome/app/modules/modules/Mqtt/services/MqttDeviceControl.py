@@ -1,4 +1,4 @@
-from app.ingternal.device.devices_arrey import DevicesArrey
+from SmartHome.app.ingternal.device.device_data.devices_arrey import DevicesArrey
 from app.ingternal.device.device_class.BaseDeviceClass import BaseDevice
 from app.ingternal.device.enums import ReceivedDataFormat
 from ..exceptions.mqtt import DeviceClassAlreadyBeenRegisteredException

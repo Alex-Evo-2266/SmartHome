@@ -13,8 +13,6 @@ export const NavigationRail = () => {
     const navigation = useAppSelector(state=>state.navigation)
     const dispatch = useAppDispatch()
 
-    console.log(navigation)
-
     return(
         <div className={`navigation-rail-container`}>
             <div className='navigation-block'>

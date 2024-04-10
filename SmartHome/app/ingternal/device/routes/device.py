@@ -5,12 +5,15 @@ from typing import Optional, List
 from app.ingternal.authtorization.depends.authtorization import token_dep
 from app.ingternal.authtorization.schemas.authtorization import TokenData, UserLevel
 from app.ingternal.device.schemas.device import AddDeviceSchema, EditDeviceSchema, DeviceSchema
-from app.ingternal.device.CRUD import add_device, edit_device, delete_device, get_device, get_all_device
+from app.ingternal.device.CRUD.create import add_device
+from app.ingternal.device.CRUD.delete import delete_device
+from app.ingternal.device.CRUD.update import edit_device
+from app.ingternal.device.CRUD.read import get_device, get_all_device
 from app.ingternal.authtorization.exceptions.user import AccessRightsErrorException
 from app.ingternal.device.options.options import get_option, OptionsDevice
 from app.ingternal.device.set_value import set_value
 from app.ingternal.device.schemas.device import ConsctionStatusForm
-from app.ingternal.device.polling import device_polling_edit
+from SmartHome.app.ingternal.device.device_data.polling import device_polling_edit
 
 
 router = APIRouter(

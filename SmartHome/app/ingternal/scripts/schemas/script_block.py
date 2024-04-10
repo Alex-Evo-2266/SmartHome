@@ -6,9 +6,6 @@ class ScriptBlockType(str, Enum):
 	ACTION = "action"
 	CONDITION = "condition"
 
-# class ScriptBlock(BaseModel):
-# 	pass
-
 class ScriptBlock(BaseModel):
 	type: ScriptBlockType
 	command: str

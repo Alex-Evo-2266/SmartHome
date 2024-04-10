@@ -1,7 +1,7 @@
 
 from typing import List
 from app.ingternal.commands.schemas.commands import CommandSchema
-from app.ingternal.commands.device_command.device_command import device_command, set_device_value
+from app.ingternal.commands.commands.device_command import device_command, set_device_value
 from app.ingternal.commands.pars.utils import equally, subtraction, summ, multiplication, division, more, more_or_equally, less, less_or_equally, TRUE_VALUE, FALSE_VALUE
 
 import logging

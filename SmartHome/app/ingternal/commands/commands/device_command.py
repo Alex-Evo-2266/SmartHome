@@ -1,5 +1,5 @@
 from typing import List
-from app.ingternal.device.CRUD import get_device
+from app.ingternal.device.CRUD.read import get_device
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.set_value import set_value
 from app.ingternal.commands.exception.incorrect_command import IncorrectCommand

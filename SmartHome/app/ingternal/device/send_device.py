@@ -1,6 +1,6 @@
 
 from app.configuration.loop.loop import EventLoop
-from app.ingternal.device.CRUD import get_all_device
+from app.ingternal.device.CRUD.read import get_all_device
 from app.ingternal.websoket.websocket import WebSocketMenager
 from app.configuration.config.config import ModuleConfig
 

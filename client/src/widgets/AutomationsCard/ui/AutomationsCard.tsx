@@ -26,6 +26,8 @@ export const AutomationsCard = ({className, onAddAutomation, onEditAutomation, l
     },[])
 
     const filterdAutomation = useCallback((data:string)=>{
+        if (!automations)
+            automations = []
 		if(data===""){
 			setAutomation(automations)
 			return

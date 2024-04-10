@@ -3,7 +3,7 @@ from typing import List
 from app.ingternal.device.enums import ReceivedDataFormat
 from app.ingternal.websoket.websocket import WebSocketMenager
 # from app.ingternal.device.models.device import Device, Device_field
-from app.ingternal.device.devices_arrey import DevicesArrey, DevicesArreyItem
+from SmartHome.app.ingternal.device.device_data.devices_arrey import DevicesArrey, DevicesArreyItem
 from app.ingternal.device.interfaces.device_interface import IDevice
 from app.ingternal.device.interfaces.field_interface import IField
 from ..settings import WEBSOCKET_TOPIC

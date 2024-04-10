@@ -2,8 +2,6 @@ from app.ingternal.scripts.CRUD.read import get_scripts
 from app.configuration.settings import SCRIPTS_DIR
 from typing import List
 from app.ingternal.scripts.schemas.script_block import ScriptBlock, ScriptBlockType
-from app.ingternal.scripts.schemas.schema_runing import ScriptConditionBlock, ConditionType
-from app.ingternal.scripts.serialization.serialization_command import serialization_condition_command
 from app.ingternal.commands.pars.pars import pars
 from app.ingternal.commands.pars.utils import TRUE_VALUE
 
@@ -34,39 +32,3 @@ async def run_condition(block:ScriptBlock):
 async def run_action(block:ScriptBlock):
 	data = await pars(block.command)
 	print(data)
-
-# def bracket(string: str):
-#     data:List[List[str]] = []
-#     buf:str = ""
-#     flag = 0
-#     for char in string:
-#         print(char)
-#         if(char == '(' and flag):
-#             flag += 1
-#             buf += char
-#         elif(char == '(' and not flag):
-#             data.append(buf.split("||"))
-#             buf = ""
-#             flag += 1
-#         elif(char == ')'):
-#             flag -= 1
-#             if flag:
-#                buf += char
-#             else:
-#                 data.append([buf])
-#                 buf=""
-#         else:
-#             buf += char
-#     data.append(buf.split("||"))
-#     new_data = ScriptConditionBlock(type=ConditionType.OR, commands=[x for x in [x.strip() for x in sum(data, [])] if len(x)])
-
-#     return new_data
-
-
-# def bracket(string: str):
-#     data:List[List[str]] = []
-#     buf:str = ""
-#     flag = 0
-#     for idx, char in enumerate(string):
-		
-#     return data
