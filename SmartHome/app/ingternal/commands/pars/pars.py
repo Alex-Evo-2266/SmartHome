@@ -79,10 +79,8 @@ def and_or_or(data1, data2, flag):
         return bool(data1) and bool(data2)
     elif flag == "||":
         return bool(data1) or bool(data2)
-
-async def pars(commands: str):
-    print("command pars func", commands)
-    commands = commands.replace("\xa0", " ")
+    
+async def command_pars_1(commands: str):
     commands_arr = [x.strip() for x in split_command(commands, " ")]
     command:CommandSchema | None = None
     flag = [None, None]
@@ -121,5 +119,16 @@ async def pars(commands: str):
         res[0] = res[1]
     print(res, flag)
     return str(res[0])
+
+async def pars(commands: str):
+    print("command pars func", commands)
+    commands = commands.replace("\xa0", " ")
+    commands = commands.replace("\n", " ")
+    commands_arr = [x.strip() for x in split_command(commands, ";")]
+    res = None
+    for command in commands_arr:
+        res = await command_pars_1(command)
+    return res
+    
 
 
