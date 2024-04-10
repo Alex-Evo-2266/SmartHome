@@ -129,8 +129,14 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			if(value.get_type() == TypeDeviceField.BINARY):
 				if(status == "on"):
 					status = value.get_high()
-				if(status == "off"):
+				elif(status == "off"):
 					status = value.get_low()
+				elif(status == "toggle"):
+					print(value, value.get())
+					if(value.get() == value.get_low()):
+						status = value.get_high()
+					else:
+						status = value.get_low()
 			if(value.get_type() == TypeDeviceField.NUMBER):
 				if(int(status) > int(value.get_high())):
 					status = value.get_high()

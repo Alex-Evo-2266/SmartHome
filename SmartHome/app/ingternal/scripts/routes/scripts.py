@@ -10,6 +10,7 @@ from app.ingternal.scripts.CRUD.create import create_script
 from app.ingternal.scripts.CRUD.read import get_scripts, get_all_scripts
 from app.ingternal.scripts.CRUD.update import updata_script
 from app.ingternal.scripts.CRUD.delete import delete_script
+from app.ingternal.scripts.runing.run import run_script
 from app.ingternal.scripts.schemas.script_block import Script
 from app.configuration.settings import SCRIPTS_DIR
 
@@ -23,6 +24,16 @@ router = APIRouter(
 )
 
 logger = logging.getLogger(__name__)
+
+@router.get("/{system_name}/start")
+async def get_script_url(system_name: str, auth_data: TokenData = Depends(token_dep)):
+	try:
+		if auth_data.user_level == UserLevel.NONE:
+			raise AccessRightsErrorException()
+		await run_script(system_name)
+	except Exception as e:
+		logger.warning(str(e))
+		return JSONResponse(status_code=400, content=str(e))
 
 @router.post("")
 async def add_script_url(data:Script, auth_data: TokenData = Depends(token_dep)):

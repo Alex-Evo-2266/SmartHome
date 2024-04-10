@@ -5,7 +5,7 @@ import { FormatTextWord } from './FormatTextWord'
 import { IDictFormatTextInfo } from '../../model/FormatText'
 
 interface IFormatTextProps{
-    onChange?:(event: React.ChangeEvent<HTMLTextAreaElement>)=>void
+    onChange?:(event:  FormEvent<HTMLDivElement>)=>void
     name?: string
     value?: number | string
     placeholder?: string
@@ -105,9 +105,9 @@ export const FormatText = ({transparent, readOnly, border, onClear, icon, onChan
 
     const splitCommandFragment = (str:string) => str.split('.')
 
-    useEffect(()=>{
-        console.log(splitCommands(text))
-    },[text])
+    // useEffect(()=>{
+    //     console.log(splitCommands(text))
+    // },[text])
 
     // <textarea
     // ref={textareaElement}
@@ -156,6 +156,8 @@ export const FormatText = ({transparent, readOnly, border, onClear, icon, onChan
     // },[textBox.current])
 
     const i = (e: FormEvent<HTMLDivElement>) => {
+        console.log(e.target.innerText)
+        onChange && onChange(e)
         // let range = new Range()
         // range.setEnd(e.target as Node, 4)
         // range.setStart(e.target as Node, 4)
@@ -189,13 +191,13 @@ export const FormatText = ({transparent, readOnly, border, onClear, icon, onChan
     useEffect(()=>{
         if (!textBox.current)
             return
-            textBox.current.onselect = el => console.log(el)
-            textBox.current.onselectionchange = el => console.log(el)
-            textBox.current.onselectstart = el => console.log(el)
+            // textBox.current.onselect = el => console.log(el)
+            // textBox.current.onselectionchange = el => console.log(el)
+            // textBox.current.onselectstart = el => console.log(el)
     },[textBox.current])
 
     const foc = (e:React.FocusEvent<HTMLDivElement>) => {
-        console.log("p9")
+        // console.log("p9")
         e.selectionStart = 0
         e.selectionEnd = 0
         if (!textBox.current)
@@ -227,9 +229,10 @@ export const FormatText = ({transparent, readOnly, border, onClear, icon, onChan
                     className='panel' 
                     onFocus={focusHandler} 
                     onBlur={blurHandler} 
-                    onSelect={el=>console.log("p0",el)}
-                    onStalledCapture={el=>console.log("p1",el)}
-                    onSelectCapture={el=>console.log("p2",el)}
+                    onChange={(e:React.ChangeEvent<HTMLDivElement>)=>change(e)}
+                    // onSelect={el=>console.log("p0",el)}
+                    // onStalledCapture={el=>console.log("p1",el)}
+                    // onSelectCapture={el=>console.log("p2",el)}
                     />
             </div>
             {

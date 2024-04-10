@@ -7,6 +7,7 @@ import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { showBaseMenu } from '../../../shared/lib/reducers/menuReducer'
 import { hideDialog, showDialog } from '../../../shared/lib/reducers/dialogReducer'
 import { Script } from '../../../entites/Script'
+import { UseStartScript } from '../api/APIStartScript'
 
 interface ScriptsItemProps{
 	scriptsData: Script
@@ -17,6 +18,7 @@ interface ScriptsItemProps{
 export const ScriptsItem = ({scriptsData, onEditScript, onDeleteScript}:ScriptsItemProps) => {
 
     const dispatch = useAppDispatch()
+    const {startScript} = UseStartScript()
 
     const deleteScript = useCallback(()=>{
         dispatch(showDialog(<BaseDialog header='delete script' text='are you sure you want to delete the script.' onHide={()=>dispatch(hideDialog())} onSuccess={()=>{
@@ -28,6 +30,9 @@ export const ScriptsItem = ({scriptsData, onEditScript, onDeleteScript}:ScriptsI
 		let arr:IMenuItem[] = [{
 			title: "delete",
 			onClick: deleteScript
+		},{
+			title: "start",
+			onClick: ()=>startScript(scriptsData.system_name)
 		}]
 		return arr
 	},[scriptsData, deleteScript])

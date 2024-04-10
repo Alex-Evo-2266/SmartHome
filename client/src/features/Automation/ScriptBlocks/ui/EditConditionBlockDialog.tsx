@@ -42,13 +42,17 @@ export const EditConditionBlockDialog = ({onSave, data}:EditConditionBlockDialog
         setValue(data)
     },[data])
 
+    useEffect(()=>{
+        console.log(value)
+    },[value])
+
     return(
         <FullScrinTemplateDialog header="edit condition block" onHide={()=>dispatch(hideFullScreenDialog())} onSave={save}>
             <div className="condition-block control">
                 <FilledButton onClick={()=>addValue(controlSetValue)}>+</FilledButton>
             </div>
             <div>
-                <FormatText border dict={getComands()} onChange={(e)=>setValue(e.target.value)} value={value}/>
+                <FormatText border dict={getComands()} onChange={(e)=>{setValue(e.target.innerText)}} value={value}/>
             </div>
         </FullScrinTemplateDialog>
     )
