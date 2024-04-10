@@ -6,6 +6,7 @@ import { IDictFormatTextInfo } from "../../../../shared/model/FormatText"
 import { Sign, TypeEntityCondition } from "../../../../entites/Automation/models/AutomationData"
 import { FilledButton, FormatText, FullScrinTemplateDialog } from "../../../../shared/ui"
 import { hideFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
+import { TextArea } from "../../../../shared/ui/TextField/TextArea"
 
 interface EditConditionBlockDialogProp{
     onSave: (data: string)=>void
@@ -52,7 +53,7 @@ export const EditConditionBlockDialog = ({onSave, data}:EditConditionBlockDialog
                 <FilledButton onClick={()=>addValue(controlSetValue)}>+</FilledButton>
             </div>
             <div>
-                <FormatText border dict={getComands()} onChange={(e)=>{setValue(e.target.innerText)}} value={value}/>
+                <TextArea border onChange={(e)=>{setValue(e.target.value)}} value={value}/>
             </div>
         </FullScrinTemplateDialog>
     )

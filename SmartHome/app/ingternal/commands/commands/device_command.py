@@ -1,8 +1,8 @@
 from typing import List
 from app.ingternal.device.CRUD import get_device
-from app.ingternal.device.exceptions.device import DeviceNotFound, DuplicateFieldsException
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.set_value import set_value
+from app.ingternal.commands.exception.incorrect_command import IncorrectCommand
 import logging
 
 DEVICE_ROOT_COMMANDS = []
@@ -19,7 +19,6 @@ def get_name_method(method: str)->str:
 	return method[0:index]
 
 async def device_command(command: List[str]):
-	print("p9",command)
 	if(command[0].find("(") and get_name_method(command[0]) in DEVICE_ROOT_COMMANDS):
 		return None
 	device:DeviceSchema = await get_device(command[0])
@@ -29,6 +28,8 @@ async def device_command(command: List[str]):
 		return device.value[command[1]]
 	
 async def set_device_value(command: List[str], value:str):
-	print(command)
 	if(len(command) == 2):
 		set_value(command[0], command[1], value)
+		return 1
+	else:
+		raise IncorrectCommand()
