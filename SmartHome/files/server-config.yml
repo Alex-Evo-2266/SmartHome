@@ -5,8 +5,10 @@ auth_service:
 email:
   login: ''
   password: ''
+mqttBroker:
+  host: localhost
+  password: root
+  port: '1883'
+  user: root
 send_message:
   frequency: '3'
-weather:
-  APPID: ''
-  city: ''

@@ -34,9 +34,9 @@ def set_value(system_name:str, field_name:str, value:str, communication_fields_s
 				for communication_field in list_communication_fields:
 					if communication_field.type == TypeRelatedFields.DEVICE:
 						if field.get_type() == TypeDeviceField.BINARY and field.get() == field.get_high():
-							set_value(communication_field.system_name, communication_field.field, "on")
+							set_value(communication_field.system_name, communication_field.field, "1")
 						elif field.get_type() == TypeDeviceField.BINARY and field.get() == field.get_low():
-							set_value(communication_field.system_name, communication_field.field, "off")
+							set_value(communication_field.system_name, communication_field.field, "0")
 						else:
 							set_value(communication_field.system_name, communication_field.field, value)
 		return True

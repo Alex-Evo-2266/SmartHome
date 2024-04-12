@@ -144,24 +144,8 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 					status = value.get_low()
 			value.set(status, False)
 		return status
-	
-	# def set_virtual_value(self, name:str, status:Any):
-	# 	print(self.system_name)
-	# 	value = look_for_param(self.values, name)
-	# 	print("P1",value)
-	# 	if(value):
-	# 		if(value.get_type() == TypeDeviceField.NUMBER):
-	# 			if(int(status) > int(value.get_high())):
-	# 				status = value.get_high()
-	# 			if(int(status) < int(value.get_low())):
-	# 				status = value.get_low()
-	# 		value.set_virtual_value(status, False)
-	# 	return status
 
 	async def save(self):
-		# device_obj = await Device.objects.get_or_none(system_name=self.system_name)
-		# if not device_obj:
-		# 	raise DeviceNotFound()
 		dev_fields:List[Device_field] = await Device_field.objects.all(device__system_name=self.system_name)
 		for item in self.values:
 			field = look_for_param(dev_fields, item.get_name())
@@ -173,21 +157,6 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 
 	async def save_and_addrecord(self):
 		await self.save()
-		# if not self.device_data:
-		# 	raise DeviceNotFound()
-		# for item in self.values:
-		# 	value = look_for_param(self.device_data.fields, item.get_name())
-		# 	if not value:
-		# 		continue
-		# 	if value:
-		# 		value.value = item.get()
-		# 	if not value.unit:
-		# 		value.unit = ""
-		# 	if not value.value:
-		# 		value.value = "0"
-		# 	await DeviceHistory.objects.create(deviceName=self.device_data.system_name, field=item.get_name(), type=item.get_type(), value=value.value, unit=value.unit, datatime=datetime.now().timestamp())
-		# self.device_data.save()
-		# logger.info(f'save history {self.device_data.name}')
 
 	def dict(self)->Dict[str, str]:
 		if not self.device_data:
@@ -236,6 +205,10 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		return res
 
 	def updata(self):
+		'''
+		вызывается для опроса устройства. 
+		если устройство само передает данные через брокер сообщений то реализация этого метода не трнбуется 
+		'''
 		pass
 
 	@staticmethod
@@ -273,8 +246,18 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 					self.set_value(field.get_name(), "off")
 				else:
 					self.set_value(field.get_name(), "on")
-			elif field.get_type() == TypeDeviceField.BINARY:
-				self.set_value(field.get_name(), max(*[int(x) for x in values]))
+			elif field.get_type() == TypeDeviceField.NUMBER:
+				for index, val in enumerate(values):
+					if val == "off":
+						values[index] = "0"
+					if val == "on":
+						values[index] = "1"
+				if len(values) == 0:
+					return
+				elif len(values) == 1:
+					self.set_value(field.get_name(), int(values[0]))
+				else:
+					self.set_value(field.get_name(), max(*[int(x) for x in values]))
 			else:
 				self.set_value(field.get_name(), values[0])
 

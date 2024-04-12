@@ -49,18 +49,18 @@ export const ScriptsPage = () => {
 
     const deleteAutomation = useCallback(async (system_name: string) => {
 		await APIAutomations.deleteAutomations(system_name)
-        getAutomationsF()
-        // setTimeout(()=>{
-        //     getAutomationsF()
-        // },300)
+        // getAutomationsF()
+        setTimeout(()=>{
+            getAutomationsF()
+        },300)
 	},[getAutomationsF, APIAutomations.deleteAutomations])
 
     const setStatusAutomation = useCallback(async (system_name: string, status: boolean) => {
 		await APIAutomations.setStatusAutomations(system_name, status)
-        getAutomationsF()
-        // setTimeout(()=>{
-        //     getAutomationsF()
-        // },300)
+        // getAutomationsF()
+        setTimeout(()=>{
+            getAutomationsF()
+        },300)
 	},[getAutomationsF, APIAutomations.setStatusAutomations])
 
     const editScript = (data: Script) => {
@@ -69,10 +69,10 @@ export const ScriptsPage = () => {
 
     const deleteScript = useCallback(async (system_name: string) => {
 		await APIScripts.deleteScripts(system_name)
-        getScriptsF()
-        // setTimeout(()=>{
-        //     getScriptsF()
-        // },300)
+        // getScriptsF()
+        setTimeout(()=>{
+            getScriptsF()
+        },300)
 	},[getScriptsF, APIScripts.deleteScripts])
 
     return(

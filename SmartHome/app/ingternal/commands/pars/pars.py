@@ -2,7 +2,8 @@
 from typing import List
 from app.ingternal.commands.schemas.commands import CommandSchema
 from app.ingternal.commands.commands.device_command import device_command, set_device_value
-from app.ingternal.commands.pars.utils import equally, subtraction, summ, multiplication, division, more, more_or_equally, less, less_or_equally, TRUE_VALUE, FALSE_VALUE
+from app.ingternal.commands.pars.utils import equally, subtraction, summ, multiplication, division, more, more_or_equally, less, less_or_equally, TRUE_VALUE, FALSE_VALUE, more_or_equally_time, less_or_equally_time, less_time, more_time
+from app.ingternal.commands.commands.timedate_comand import get_now_time
 
 import logging
 
@@ -33,6 +34,20 @@ async def command_data(command_element:List[str] | None):
         return await device_command(command_element[1:])
     if (len(command_element) == 1):
         return command_element[0]
+    
+async def command_time_pars(command_element:CommandSchema | None):
+    if command_element == None or len(command_element.arg) < 2:
+        return None
+    if command_element.arg[0] == "==":
+        return equally(get_now_time(), await command_pars(CommandSchema(command=command_element.arg[1], arg=command_element.arg[2:])))
+    if command_element.arg[0] == ">":
+        return more_time(get_now_time(), await command_pars(CommandSchema(command=command_element.arg[1], arg=command_element.arg[2:])))
+    if command_element.arg[0] == "<":
+        return less_time(get_now_time(), await command_pars(CommandSchema(command=command_element.arg[1], arg=command_element.arg[2:])))
+    if command_element.arg[0] == ">=":
+        return more_or_equally_time(get_now_time(), await command_pars(CommandSchema(command=command_element.arg[1], arg=command_element.arg[2:])))
+    if command_element.arg[0] == "<=":
+        return less_or_equally_time(get_now_time(), await command_pars(CommandSchema(command=command_element.arg[1], arg=command_element.arg[2:])))
 
 async def command_pars(command:CommandSchema | None):
     print(command)
@@ -44,6 +59,8 @@ async def command_pars(command:CommandSchema | None):
         return await command_data(command_element)
     if (len(command_element) >= 2 and command_element[0] == "device" and len(command.arg) == 2 and command.arg[0] == "="):
         return await set_device_value(command_element[1:], await command_pars(CommandSchema(command=command.arg[1], arg=command.arg[2:])))
+    if (command_element[0] == "time"):
+        return await command_time_pars(command)
     if command.arg[0] == "==":
         return equally(await command_data(command_element), await command_pars(CommandSchema(command=command.arg[1], arg=command.arg[2:])))
     if command.arg[0] == ">":
@@ -73,8 +90,6 @@ def and_or_or(data1, data2, flag):
         data2 = True
     elif data2 in FALSE_VALUE:
         data2 = False
-    print("df2 ", type(data1), type(data2), flag)
-    print("df3 ", bool(data1) and bool(data2), bool(data1) or bool(data2))
     if flag == "&&":
         return bool(data1) and bool(data2)
     elif flag == "||":
@@ -86,10 +101,8 @@ async def command_pars_1(commands: str):
     flag = [None, None]
     res = [None, None]
     for item in commands_arr:
-        print("item ", item, item[-1], item.strip("()"))
         if (item[0] == "(" and item[-1] == ")"):
             item = await pars(item.strip("()"))
-            print("p90", item)
         if item == "&&" or item == "||":
             res[1] = await command_pars(command)
             command = None
@@ -98,7 +111,6 @@ async def command_pars_1(commands: str):
             command = CommandSchema(command=item)
         else:
             command.arg.append(item)
-        print(flag, res)
         if flag[0] != None and res[0] != None and res[1] != None:
             res[0] = and_or_or(res[0], res[1], flag[0])
             res[1] = None
@@ -109,7 +121,6 @@ async def command_pars_1(commands: str):
         if res[0] == None:
             res[0] = res[1]
             res[1] = None
-        print(flag, res)
     res[1] = await command_pars(command)
     if flag[0] != None and res[0] != None and res[1] != None:
         res[0] = and_or_or(res[0], res[1], flag[0])
@@ -117,7 +128,6 @@ async def command_pars_1(commands: str):
         flag[0] = None
     else:
         res[0] = res[1]
-    print(res, flag)
     return str(res[0])
 
 async def pars(commands: str):

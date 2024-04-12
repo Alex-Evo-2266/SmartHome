@@ -3,7 +3,7 @@ from app.ingternal.device.CRUD.read import get_device
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.set_value import set_value
 from app.ingternal.commands.exception.incorrect_command import IncorrectCommand
-from app.ingternal.device.enums import TypeDeviceField
+from app.ingternal.device.enums import TypeDeviceField, StatusDevice
 import logging
 
 DEVICE_ROOT_COMMANDS = []
@@ -28,14 +28,17 @@ def get_name_method(method: str)->str:
 	return method[0:index]
 
 def get_device_field_data(device: DeviceSchema, name_field: str):
+	if device.device_status == StatusDevice.OFFLINE or device.device_status == StatusDevice.NOT_SUPPORTED or device.device_status == StatusDevice.UNLINK:
+		return "0"
 	field = look_for_param(device.fields, name_field)
 	if field:
 		if field.type == TypeDeviceField.BINARY:
 			if device.value[name_field] == field.low:
-				return "off"
+				return "0"
 			elif device.value[name_field] == field.high:
-				return "on"
+				return "1"
 		return device.value[name_field]
+	return "0"
 
 async def device_command(command: List[str]):
 	if(command[0].find("(") and get_name_method(command[0]) in DEVICE_ROOT_COMMANDS):
