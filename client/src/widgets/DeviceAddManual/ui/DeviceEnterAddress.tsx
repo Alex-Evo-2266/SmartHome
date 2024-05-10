@@ -1,6 +1,7 @@
 import { useState } from "react"
-import { FilledButton, TextField, Button, SelectField, FieldContainer } from "../../../shared/ui"
+import { FilledButton, TextField, Button, FieldContainer } from "alex-evo-sh-ui-kit"
 import { DeviceOption } from "../../../features/DeviceOption"
+import { SelectField } from "../../../shared/ui"
 
 interface DeviceAddEnterAddressDialogProps{
 	option: DeviceOption

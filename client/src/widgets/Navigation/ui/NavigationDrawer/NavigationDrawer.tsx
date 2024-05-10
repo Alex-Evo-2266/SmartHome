@@ -1,7 +1,7 @@
 import './NavigationDrawer.scss'
 import { IconOrString } from '../../../../entites/Icon'
 import { useAppDispatch, useAppSelector } from '../../../../shared/lib/hooks/redux'
-import { Divider } from '../../../../shared/ui'
+import { Divider } from "alex-evo-sh-ui-kit"
 import { getOtherNavigationItem } from '../../../../features/Navigation'
 import { Home, LogOut, MoreHorizontal, Plug, Settings } from 'lucide-react'
 import { NavigationDrawerItem } from './NavigationDrawerItem'

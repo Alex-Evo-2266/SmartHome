@@ -6,7 +6,7 @@ import { IconOrString } from '../../../../entites/Icon'
 import { NavButton } from './NavButton'
 import { toggleNavigation } from '../../../../features/Navigation/lib/reducers/NavigationReducer'
 import { logout } from '../../../../entites/User'
-import { Divider } from '../../../../shared/ui'
+import { Divider } from "alex-evo-sh-ui-kit"
 
 export const NavigationRail = () => {
 

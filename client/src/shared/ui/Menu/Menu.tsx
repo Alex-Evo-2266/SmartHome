@@ -1,35 +1,24 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../lib/hooks/redux"
 import { hideMenu } from "../../lib/reducers/menuReducer"
-import { Divider } from "../Divider/Divider"
-import "./Menu.scss"
-import { MenuBlock } from "./MenuBlock"
-import { getModalWindowCord } from "../../lib/helpers/getModalCord"
 import { hideBottomSheets, showBottomSheets } from "../../lib/reducers/bottomSheetsReducer"
-import { SmallWindowMenu } from "./SmallWindowMenu"
 
-const MENU_MARGIN_BOTTOM = 100
+import {Menu as BaseMenu, SmallWindowMenu} from 'alex-evo-sh-ui-kit'
 
-interface ICord{
-	left: string
-	top: string
-}
 
 export const Menu = () => {
 
 	const menu = useAppSelector(state=>state.menu)
 	const dispatch = useAppDispatch()
 
-	const container = useRef<HTMLDivElement>(null)
 	const [smallDisplay, setSmallDisplay] = useState<boolean>(false)
-	const [cord, setCord] = useState<ICord>({left:"0px", top:"0px"})
 
-	const hide = () => {
+	const hide = useCallback(() => {
 		if(menu.onHide)
 			menu.onHide()
 		else
 			dispatch(hideMenu())
-	}
+	},[menu.onHide])
 
 	const resize = useCallback(() => {
 		if(!menu.visible)
@@ -37,7 +26,15 @@ export const Menu = () => {
         if(window.innerWidth < 720)
 		{
 			setSmallDisplay(true)
-			dispatch(showBottomSheets(<SmallWindowMenu/>, hide))
+			dispatch(showBottomSheets(
+			<SmallWindowMenu 
+			visible={menu.visible} 
+			blocks={menu.blocks} 
+			width={menu.width} 
+			autoHide={menu.autoHide} 
+			onClick={menu.onClick} 
+			onHide={menu.onHide}
+			/>, hide))
 		}
         else
 		{
@@ -62,38 +59,17 @@ export const Menu = () => {
 		}
 	},[resize])
 
-	useEffect(()=>{
-		let data = getModalWindowCord(menu.x, menu.y, container.current, {marginBottom: MENU_MARGIN_BOTTOM})
-		setCord({
-			left: data.x + "px", 
-			top: data.y + "px",
-		})
-	},[menu.x, menu.y])
-
-	if(!menu.visible)
-		return null
-
 	if(smallDisplay)
 		return null
 
-	return(
-		<>
-		<div ref={container} className="menu-container" style={{...cord, opacity:(cord.top !== "0px")?"100%":"0%", width:menu.width, maxWidth:(menu.width)?"100%":undefined}}>
-		{
-			menu.blocks.map((item, index)=>(
-				<React.Fragment key={index}>
-				{
-					(index !== 0)?
-					<Divider/>:
-					null
-				}
-				<MenuBlock block={item} smallDisplay={false}/>
-				</React.Fragment>
-			))
-		}
-		</div>
-		<div style={{zIndex: 1600}} className="backplate" onClick={hide} onContextMenu={e=>{e.preventDefault()}}></div>
-		</>
-	)
+	return(<BaseMenu visible={menu.visible} 
+		blocks={menu.blocks} 
+		width={menu.width} 
+		autoHide={menu.autoHide} 
+		onClick={menu.onClick} 
+		onHide={menu.onHide} 
+		x={menu.x} 
+		y={menu.y} 
+		/>)
 }
 

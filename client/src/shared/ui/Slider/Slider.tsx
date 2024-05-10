@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import "./Slider.scss"
-import { getContainerData } from "../../lib/helpers/getModalCord"
+import { getContainerData } from "alex-evo-sh-ui-kit"
 import { map } from "../../lib/helpers/map"
 
 const DEFAULT_MIN = 0

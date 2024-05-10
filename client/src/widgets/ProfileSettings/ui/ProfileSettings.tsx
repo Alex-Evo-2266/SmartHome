@@ -1,6 +1,6 @@
 import './ProfileSettings.scss'
 import { useAppSelector } from "../../../shared/lib/hooks/redux"
-import { Card, TextField } from "../../../shared/ui"
+import { Card, TextField } from "alex-evo-sh-ui-kit"
 import { AuthType, UpdateUserData } from "../../../entites/User/model/user"
 import userDefault from '../../../shared/img/userNuN.png'
 import { ProfileSettingsButtons } from './ProfileSettingsButton'

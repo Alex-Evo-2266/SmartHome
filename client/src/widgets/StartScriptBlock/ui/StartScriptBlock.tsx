@@ -1,6 +1,6 @@
 import './StartScriptBlock.scss'
-import { IMenuItem } from "../../../shared/model/menu"
-import { Button, ListContainer, ListItem } from '../../../shared/ui'
+import { IMenuItem } from "alex-evo-sh-ui-kit"
+import { Button, ListContainer, ListItem } from "alex-evo-sh-ui-kit"
 import { AutomationEntitiesField, useAutomationTrigger } from '../../../features/Automation'
 import { useCallback, useEffect, useState } from 'react'
 import { AutomationEntityData, TypeEntity } from '../../../entites/Automation'

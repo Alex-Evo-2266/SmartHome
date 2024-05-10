@@ -1,7 +1,8 @@
 import { useCallback, useState } from "react"
 import { useAppDispatch } from "../../../../shared/lib/hooks/redux"
 import { hideFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
-import { DayOfWeekField, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../../shared/ui"
+import { DayOfWeekField, FieldContainer, FullScrinTemplateDialog, TextField } from 'alex-evo-sh-ui-kit'
+import { SelectField } from "../../../../shared/ui"
 import { getFormattedTime } from '../../../../shared/lib/helpers/timeFormat'
 
 interface AutomationTimeProps{

@@ -1,11 +1,11 @@
 import './DeviceCard.scss'
 import { DeviceData } from "../../../entites/Device"
-import { Card, IconButton } from "../../../shared/ui"
+import { Card, IconButton } from "alex-evo-sh-ui-kit"
 import { DefaultFieldControl, DeviceField } from '../../../features/DeviceControl'
 import { MoreVertical } from 'lucide-react'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { showBaseMenu } from '../../../shared/lib/reducers/menuReducer'
-import { IMenuItem } from '../../../shared/model/menu'
+import { IMenuItem } from "alex-evo-sh-ui-kit"
 import { useCallback } from 'react'
 import { useLincDeviceAPI } from '../api/lincAPI'
 

@@ -1,5 +1,5 @@
 import { Filter } from "lucide-react"
-import { IconButton } from ".."
+import { IconButton } from "alex-evo-sh-ui-kit"
 import { UseFilter } from "../../lib/hooks/filterMenu.hook"
 import { useEffect } from "react"
 

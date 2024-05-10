@@ -6,7 +6,7 @@ import { DeviceAddData, FieldDevice, ValueType } from '../../../entites/Device/m
 import { DeviceEnterAddressDialog } from './DeviceEnterAddress'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { hideFullScreenDialog } from '../../../shared/lib/reducers/dialogReducer'
-import { FullScrinTemplateDialog } from '../../../shared/ui'
+import { FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
 import { DeviceEnterNameDialog } from './DeviceName'
 import { DeviceFinishDialog } from './DeviceFinishConfig'
 import { DeviceTypeDialog } from './DeviceType'

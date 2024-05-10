@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
-import { BaseDialog, IconButton, ListItem } from '../../../shared/ui'
+import { BaseDialog, IconButton, ListItem } from "alex-evo-sh-ui-kit"
 import './ScriptCard.scss'
 import { MoreVertical } from 'lucide-react'
-import { IMenuItem } from '../../../shared/model/menu'
+import { IMenuItem } from "alex-evo-sh-ui-kit"
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { showBaseMenu } from '../../../shared/lib/reducers/menuReducer'
 import { hideDialog, showDialog } from '../../../shared/lib/reducers/dialogReducer'

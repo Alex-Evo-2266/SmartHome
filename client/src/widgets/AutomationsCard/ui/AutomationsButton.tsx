@@ -1,4 +1,4 @@
-import { FilledTotalButton } from "../../../shared/ui"
+import { FilledTotalButton } from "alex-evo-sh-ui-kit"
 
 interface AutomationButtonsProps{
     onAddAutomation:()=>void

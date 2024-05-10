@@ -1,10 +1,9 @@
 import { CalendarDays } from "lucide-react"
 import { useCallback, useState } from "react"
 import "./DateField.scss"
-import { СalendarPickers } from "./DatePickers"
 import { useDispatch } from "react-redux"
 import { hideDialog, showDialog } from "../../lib/reducers/dialogReducer"
-import { BasicTemplateDialog } from ".."
+import {СalendarPickers} from 'alex-evo-sh-ui-kit'
 
 interface ITimeFieldProps{
     onChange?:(value: string)=>void
@@ -30,11 +29,7 @@ export const DateField = ({border, onChange, name, value, className, validEmptyV
     },[dateValue])
 
     const click = () => {
-        dispatch(showDialog(
-            <BasicTemplateDialog className="calendar-body-container" style={{maxWidth: "328px"}}>
-                <СalendarPickers onChange={change} onHide={()=>dispatch(hideDialog())}/>
-            </BasicTemplateDialog>
-            ))
+        dispatch(showDialog(<СalendarPickers onChange={change} onHide={()=>dispatch(hideDialog())}/>))
     }
 
     const formatMonth = (month: number):string => {

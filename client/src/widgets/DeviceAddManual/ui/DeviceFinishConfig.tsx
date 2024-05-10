@@ -1,4 +1,4 @@
-import { FilledButton, Button } from "../../../shared/ui"
+import { FilledButton, Button } from "alex-evo-sh-ui-kit"
 import { DeviceOption } from "../../../features/DeviceOption"
 import { DeviceAddData } from "../../../entites/Device/models/deviceData"
 import { UseCreateDevice } from "../api/createDeviceAPI"

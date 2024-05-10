@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 import { useAppDispatch } from "../../../../../shared/lib/hooks/redux"
 import { useAutomationConditionDevice } from "./automationDeviceCondition.hook"
-import { SelectionDialog } from "../../../../../shared/ui/Dialog/BaseDialog/SelectionDialog"
+import { SelectionDialog } from 'alex-evo-sh-ui-kit'
 import { hideDialog, showDialog } from "../../../../../shared/lib/reducers/dialogReducer"
 import { Sign, TypeEntityCondition } from "../../../../../entites/Automation/models/AutomationData"
-import { TimePicker } from "../../../../../shared/ui"
+import { TimePicker } from 'alex-evo-sh-ui-kit'
 import { getFormattedTime } from "../../../../../shared/lib/helpers/timeFormat"
 
 const dialogItems = [

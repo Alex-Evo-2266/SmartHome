@@ -1,4 +1,4 @@
-import { TextField } from "../../../shared/ui"
+import { TextField } from "alex-evo-sh-ui-kit"
 
 export const HomePage = () => {
 

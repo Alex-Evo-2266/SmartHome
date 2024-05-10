@@ -1,7 +1,6 @@
-import { getContainerData } from "../../lib/helpers/getModalCord"
+import { getContainerData, IMenuItem } from "alex-evo-sh-ui-kit"
 import { useAppDispatch } from "../../lib/hooks/redux"
 import { hideMenu, showBaseMenu } from "../../lib/reducers/menuReducer"
-import { IMenuItem } from "../../model/menu"
 import "./Select.scss"
 import { useCallback, useEffect, useState } from "react"
 

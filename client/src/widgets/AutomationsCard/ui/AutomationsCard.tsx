@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Card, ListContainer, Search } from '../../../shared/ui'
+import { Card, ListContainer, Search } from "alex-evo-sh-ui-kit"
 import { AutomationButtons } from './AutomationsButton'
 import './AutomationsCard.scss'
 import { AutomationData } from '../../../entites/Automation'

@@ -3,7 +3,7 @@
 import {useCallback,useEffect, useState} from 'react'
 import { useControlDeviceAPI } from '../api/setDeviceValue'
 import { FieldDevice } from '../../../entites/Device'
-import { Button, IconButton, TextField } from '../../../shared/ui'
+import { Button, IconButton, TextField } from "alex-evo-sh-ui-kit"
 import { Send } from 'lucide-react'
 
 interface FieldProps{

@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 import { useAppDispatch } from "../../../../../shared/lib/hooks/redux"
-import { SelectionDialog } from "../../../../../shared/ui/Dialog/BaseDialog/SelectionDialog"
+import { SelectionDialog } from 'alex-evo-sh-ui-kit'
 import { hideDialog, showDialog } from "../../../../../shared/lib/reducers/dialogReducer"
 import { TypeEntityAction } from "../../../../../entites/Automation/models/AutomationData"
 import { useAutomationActionDevice } from "./automationDeviceAction.hook"
-import { TextDialog } from "../../../../../shared/ui/Dialog/BaseDialog/TextDialog"
+import { TextDialog } from 'alex-evo-sh-ui-kit'
 import { useAutomationActionScript } from "./automationScriptAction"
 
 const dialogItems = [

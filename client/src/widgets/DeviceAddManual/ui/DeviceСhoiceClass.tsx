@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useAppSelector } from "../../../shared/lib/hooks/redux"
-import { Card, ListContainer, ListItem } from "../../../shared/ui"
+import { Card, ListContainer, ListItem } from "alex-evo-sh-ui-kit"
 import { DeviceOption } from "../../../features/DeviceOption"
 
 interface DeviceAddChoiceSlassDialogProps{

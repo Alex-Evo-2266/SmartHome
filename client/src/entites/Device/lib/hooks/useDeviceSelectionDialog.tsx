@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../shared/lib/hooks/redux"
 import { hideDialog, showDialog } from "../../../../shared/lib/reducers/dialogReducer"
-import { SelectionDialog } from "../../../../shared/ui/Dialog/BaseDialog/SelectionDialog"
+import { SelectionDialog } from "alex-evo-sh-ui-kit"
 import { DeviceData, FieldDevice } from "../.."
 import { DeviceFieldType } from "../../models/deviceData"
 

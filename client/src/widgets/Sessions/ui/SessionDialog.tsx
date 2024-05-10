@@ -3,11 +3,10 @@ import { useDispatch } from 'react-redux'
 import { useSessionsAPI } from '../api/sessionsApi'
 import { ISession } from '../models/session'
 import { mapResponseSessionToSession } from '../lib/helpers/mapSessionData'
-import { BaseActionCard, BasicTemplateDialog, Button, IconButton } from '../../../shared/ui'
-import './SessionDialog.scss'
-import { ListContainer } from '../../../shared/ui/List/List'
-import { ListItem } from '../../../shared/ui/List/ListItem'
+import { BaseActionCard, BasicTemplateDialog, Button, ListContainer, ListItem } from 'alex-evo-sh-ui-kit'
+import { IconButton } from 'alex-evo-sh-ui-kit'
 import { Trash } from 'lucide-react'
+import './SessionDialog.scss'
 
 interface SessionListDialogProps{
     onHide?: ()=> void
@@ -39,10 +38,10 @@ export const SessionListDialog = ({onHide}:SessionListDialogProps) => {
     const getText = (data:ISession) => {
         return `auth_type:${data?.auth_type}; expires_at:${data?.expires_at.toDateString()}`
     }
-
+    
   return(
 	<BasicTemplateDialog onHide={onHide} action={<BaseActionCard><Button onClick={onHide}>ok</Button></BaseActionCard>}>
-	<div className="session-dialog">
+	  <div className="session-dialog">
         <ListContainer transparent>
         {sessions?.map((item, index)=>{
           return(
@@ -57,7 +56,7 @@ export const SessionListDialog = ({onHide}:SessionListDialogProps) => {
           )
         })}
         </ListContainer>
-     </div>
+    </div>
 	</BasicTemplateDialog>
   )
 }

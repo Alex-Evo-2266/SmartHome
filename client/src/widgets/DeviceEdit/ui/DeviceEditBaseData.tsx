@@ -1,6 +1,7 @@
 import { DeviceData } from "../../../entites/Device"
 import { DeviceOption } from "../../../features/DeviceOption"
-import { FieldContainer, SelectField, TextField } from "../../../shared/ui"
+import { FieldContainer, TextField } from "alex-evo-sh-ui-kit"
+import { SelectField } from "../../../shared/ui"
 
 interface DeviceEditBaseDataProps{
 	device: DeviceData

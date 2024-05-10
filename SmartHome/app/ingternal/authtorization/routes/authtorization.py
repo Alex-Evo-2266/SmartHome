@@ -15,7 +15,7 @@ from app.ingternal.authtorization.schemas.authtorization import BaseErrorRespons
 from app.configuration.settings import AUTH_SERVICE_URL
 from app.configuration.config import __module_config__
 
-from ..schemas.authtorization import AuthService, AuthType, Login, ResponseLogin, ServiceLogin, Tokens
+from ..schemas.authtorization import AuthService, AuthType, Login, ResponseLogin, ServiceLogin
 
 logger = logging.getLogger(__name__)
 

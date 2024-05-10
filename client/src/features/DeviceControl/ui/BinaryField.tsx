@@ -4,7 +4,7 @@
 import React,{useCallback,useEffect, useState} from 'react'
 import { useControlDeviceAPI } from '../api/setDeviceValue'
 import { FieldDevice } from '../../../entites/Device'
-import { Switch } from '../../../shared/ui'
+import { Switch } from "alex-evo-sh-ui-kit"
 
 interface FieldProps{
 	field: FieldDevice

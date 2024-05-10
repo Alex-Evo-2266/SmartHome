@@ -3,7 +3,7 @@ import { useCallback, useState } from "react"
 import "./TimeField.scss"
 import { useAppDispatch } from "../../lib/hooks/redux"
 import { hideDialog, showDialog } from "../../lib/reducers/dialogReducer"
-import { TimePicker } from "./TimePickers"
+import { TimePicker } from "alex-evo-sh-ui-kit"
 
 interface ITimeFieldProps{
     onChange?:(value: string)=>void

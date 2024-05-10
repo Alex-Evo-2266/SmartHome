@@ -1,4 +1,4 @@
-import { FilledButton } from "../../../shared/ui"
+import { FilledButton } from "alex-evo-sh-ui-kit"
 
 interface ProfileSettingsButtonsProps{
     onSave:()=>void

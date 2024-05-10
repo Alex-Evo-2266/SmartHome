@@ -1,5 +1,5 @@
 import { UserData, UserRole } from '../../../entites/User'
-import { BaseActionCard, Button, Card } from '../../../shared/ui'
+import { BaseActionCard, Button, Card } from "alex-evo-sh-ui-kit"
 import userDefault from '../../../shared/img/userNuN.png'
 import './UserCard.scss'
 import { useAppDispatch, useAppSelector } from '../../../shared/lib/hooks/redux'

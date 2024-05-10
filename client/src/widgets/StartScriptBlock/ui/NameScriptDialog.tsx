@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { Divider, FilledButton, FullScrinTemplateDialog, TextField } from "../../../shared/ui"
+import { Divider, FilledButton, FullScrinTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
 import './NameScriptDialog.scss'
  
 interface ScriptNameDialogProps{

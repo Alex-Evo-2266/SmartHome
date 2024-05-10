@@ -4,7 +4,7 @@ import './ScriptItem.scss'
 import { HEIGHT, WIDTH } from '../models/const'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'
 import { showBaseMenu } from '../../../shared/lib/reducers/menuReducer'
-import { IMenuItem } from '../../../shared/model/menu'
+import { IMenuItem } from 'alex-evo-sh-ui-kit'
 
 interface ScriptItemProps{
     text?: string

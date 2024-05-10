@@ -14,16 +14,16 @@ interface PayloadBottomSheets{
     onHide?: ()=>void
 }
 
-interface BottomSheetsShowAction{
+export interface BottomSheetsShowAction{
     type: BottomSheetsActionType.SHOW_BOTTOM_SHEETS
     payload: PayloadBottomSheets
 }
 
-interface BottomSheetsHideAction{
+export interface BottomSheetsHideAction{
     type: BottomSheetsActionType.HIDE_BOTTOM_SHEETS
 }
 
-type BottomSheetsAction = BottomSheetsShowAction | BottomSheetsHideAction
+export type BottomSheetsAction = BottomSheetsShowAction | BottomSheetsHideAction
 
 const initState: IBottomSheetsState = {
     children: [],

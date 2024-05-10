@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
 import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { BaseDialog, Button, Divider, FilledButton, FullScrinTemplateDialog, ListContainer, ListItem } from "../../../shared/ui"
+import { BaseDialog, Button, Divider, FilledButton, FullScrinTemplateDialog, ListContainer, ListItem } from "alex-evo-sh-ui-kit"
 import { Trash2 } from 'lucide-react'
 import { DeviceFieldType, FieldDevice } from '../../../entites/Device/models/deviceData'
 import { DeviceOption } from '../../../features/DeviceOption'

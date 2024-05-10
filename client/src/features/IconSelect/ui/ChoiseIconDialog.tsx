@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
 import { hideFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { FullScrinTemplateDialog } from "../../../shared/ui"
+import { FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
 import { IItem } from "../models/item"
 
 export interface ISelectIconDialogProps{

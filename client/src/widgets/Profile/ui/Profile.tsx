@@ -1,7 +1,7 @@
 import './Profile.scss'
 import { NavLink } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
-import { BaseActionCard, Card } from "../../../shared/ui"
+import { BaseActionCard, Card } from "alex-evo-sh-ui-kit"
 import { AuthType, UserData } from "../../../entites/User/model/user"
 import userDefault from '../../../shared/img/userNuN.png'
 import { useCallback } from 'react'

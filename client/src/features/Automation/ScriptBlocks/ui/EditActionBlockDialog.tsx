@@ -3,10 +3,9 @@ import { logic, mathFunction, signCondition, signMath } from "../models/reserved
 import { IDictFormatTextInfo } from "../../../../shared/model/FormatText"
 import { useAppDispatch, useAppSelector } from "../../../../shared/lib/hooks/redux"
 import { TypeEntityAction } from "../../../../entites/Automation/models/AutomationData"
-import { FilledButton, FormatText, FullScrinTemplateDialog } from "../../../../shared/ui"
+import { FilledButton, TextArea, FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
 import { hideFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
 import { useAutomationAction } from "../.."
-import { TextArea } from "../../../../shared/ui/TextField/TextArea"
 
 interface EditActionBlockDialogProp{
     onSave: (data: string)=>void

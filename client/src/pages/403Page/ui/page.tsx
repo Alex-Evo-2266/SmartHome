@@ -1,6 +1,6 @@
 import { logout } from "../../../entites/User"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
-import { Card, FilledButton } from "../../../shared/ui"
+import { Card, FilledButton } from "alex-evo-sh-ui-kit"
 import './page.scss'
 
 export const Page403 = () => {

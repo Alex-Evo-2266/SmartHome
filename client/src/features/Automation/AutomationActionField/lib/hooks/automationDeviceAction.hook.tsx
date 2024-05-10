@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../../shared/lib/hooks/redux"
 import { hideDialog, showDialog } from "../../../../../shared/lib/reducers/dialogReducer"
-import { SelectionDialog } from "../../../../../shared/ui/Dialog/BaseDialog/SelectionDialog"
+import { SelectionDialog } from 'alex-evo-sh-ui-kit'
 import { DeviceData, useDeviceSelectionDevice } from "../../../../../entites/Device"
 import { DeviceFieldType, FieldDevice } from "../../../../../entites/Device/models/deviceData"
-import { TextDialog } from "../../../../../shared/ui/Dialog/BaseDialog/TextDialog"
+import { TextDialog } from 'alex-evo-sh-ui-kit'
 import { AutomationActionData } from "../../../../../entites/Automation"
 import { TypeEntityAction } from "../../../../../entites/Automation/models/AutomationData"
 

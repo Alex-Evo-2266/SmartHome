@@ -1,7 +1,7 @@
 import './authForm.scss'
 import { useCallback, useState } from 'react'
 import { AuthServiceBtn } from '../../../features/AuthServiceBtn'
-import { Button, Divider, TextField } from '../../../shared/ui'
+import { Button, Divider, TextField } from "alex-evo-sh-ui-kit"
 import { ILoginForm } from '../models/LoginForm'
 import { useUserLogin } from '../api/login'
 import { useAppDispatch } from '../../../shared/lib/hooks/redux'

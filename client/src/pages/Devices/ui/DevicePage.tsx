@@ -1,6 +1,6 @@
 import './DevicePage.scss'
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
-import { FAB, GridLayout, GridLayoutItem } from "../../../shared/ui"
+import { FAB, GridLayout, GridLayoutItem } from "alex-evo-sh-ui-kit"
 import { DeviceCard } from "../../../widgets/DeviceCard"
 import { Filter, PlusCircle } from 'lucide-react'
 import { showFullScreenDialog } from '../../../shared/lib/reducers/dialogReducer'

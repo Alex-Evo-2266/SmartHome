@@ -2,9 +2,10 @@ import { useCallback, useState } from "react"
 import { UserData, UserRole, getRole } from "../../../entites/User"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
 import { hideDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { BaseActionCard, BasicTemplateDialog, Button, SelectField } from "../../../shared/ui"
+import { BaseActionCard, BasicTemplateDialog, Button } from "alex-evo-sh-ui-kit"
 import { INewRole } from "../models/updateRole"
 import { useUpdateRole } from "../api/setRole"
+import { SelectField } from "../../../shared/ui"
 
 interface EditRoleUserDialogProps{
     user: UserData,

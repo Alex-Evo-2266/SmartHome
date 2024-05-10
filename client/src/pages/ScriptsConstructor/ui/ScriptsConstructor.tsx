@@ -6,7 +6,7 @@ import { ScriptBlockCondition } from '../../../features/Automation/ScriptBlocks/
 import { WIDTH } from '../../../entites/Script/models/const'
 import { ScriptBlock } from '../../../entites/Script/models/script'
 import { ScriptAddBlock } from '../../../features/Automation/ScriptBlocks/ui/AddBlock'
-import { BigContainer, FAB } from '../../../shared/ui'
+import { BigContainer, FAB } from "alex-evo-sh-ui-kit"
 import { Home } from 'lucide-react'
 import { IPoint } from '../../../shared/model/point'
 import { useAddBlock } from '../../../entites/Script/lib/hooks/addBlock.hook'

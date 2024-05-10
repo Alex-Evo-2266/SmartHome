@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import {AuthBtn, IAuthBtn} from "./AuthServiceBtn"
 import { login } from '../../../entites/User'
 import { getClientId } from '../api/getClientId'

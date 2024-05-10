@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { GridLayout, GridLayoutItem } from '../../../shared/ui'
+import { GridLayout, GridLayoutItem } from "alex-evo-sh-ui-kit"
 import './usersPage.scss'
 import { UserData, useUserAllAPI } from '../../../entites/User'
 import { UserCard } from '../../../widgets/UserCard'

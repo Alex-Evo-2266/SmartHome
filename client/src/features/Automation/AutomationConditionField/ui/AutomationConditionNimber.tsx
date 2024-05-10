@@ -3,7 +3,8 @@ import { Sign } from "../../../../entites/Automation"
 import { FieldDevice } from "../../../../entites/Device"
 import { useAppDispatch } from "../../../../shared/lib/hooks/redux"
 import { hideFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
-import { FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../../shared/ui"
+import { FieldContainer, FullScrinTemplateDialog, TextField } from 'alex-evo-sh-ui-kit'
+import { SelectField } from "../../../../shared/ui"
 
 interface AutomationConditionNumberProps{
 	onChange: (sign: Sign, value: string)=>void

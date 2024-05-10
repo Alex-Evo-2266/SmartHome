@@ -1,5 +1,5 @@
 import { AutomationEntityData, TypeEntity } from '../../../../entites/Automation/models/AutomationData'
-import { BaseActionCard, Chips, FilledButton } from '../../../../shared/ui'
+import { BaseActionCard, Chips, FilledButton } from 'alex-evo-sh-ui-kit'
 import { useCallback, useState } from 'react'
 import { useAutomationTrigger } from '../lib/hooks/automationCondition.hook'
 

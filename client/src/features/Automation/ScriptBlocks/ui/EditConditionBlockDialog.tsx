@@ -4,9 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../../../shared/lib/hooks/red
 import { useAutomationCondition } from "../.."
 import { IDictFormatTextInfo } from "../../../../shared/model/FormatText"
 import { Sign, TypeEntityCondition } from "../../../../entites/Automation/models/AutomationData"
-import { FilledButton, FormatText, FullScrinTemplateDialog } from "../../../../shared/ui"
+import { FilledButton, TextArea, FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
 import { hideFullScreenDialog } from "../../../../shared/lib/reducers/dialogReducer"
-import { TextArea } from "../../../../shared/ui/TextField/TextArea"
 
 interface EditConditionBlockDialogProp{
     onSave: (data: string)=>void

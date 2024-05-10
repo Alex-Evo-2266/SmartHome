@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useAppDispatch } from "../../../../../shared/lib/hooks/redux"
-import { SelectionDialog } from "../../../../../shared/ui/Dialog/BaseDialog/SelectionDialog"
+import { SelectionDialog } from 'alex-evo-sh-ui-kit'
 import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../../../shared/lib/reducers/dialogReducer"
 import { TypeEntity } from "../../../../../entites/Automation/models/AutomationData"
 import { useDeviceSelectionDevice } from "../../../../../entites/Device"

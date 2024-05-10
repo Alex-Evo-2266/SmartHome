@@ -1,12 +1,13 @@
 import { useCallback, useState } from "react"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
 import { hideFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { Divider, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
+import { Divider, FieldContainer, FullScrinTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
 import { Condition, AutomationData } from "../../../entites/Automation"
 import { AutomationEntitiesField } from "../../../features/Automation"
 import { AutomationConditionField } from "../../../features/Automation"
 import { AutomationActionField } from "../../../features/Automation"
 import { useAppAutomation } from "../api/apiAutomation"
+import { SelectField } from "../../../shared/ui"
 
 interface AutomationFormProps{
 	header?: string

@@ -1,4 +1,4 @@
-import { FullScrinTemplateDialog } from '../../../shared/ui'
+import { FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
 import './EditScriptBlockDialog.scss'
 
 interface EditScriptActionBlockDialogProps{

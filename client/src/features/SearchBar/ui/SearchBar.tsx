@@ -1,6 +1,6 @@
 import './SearchBar.scss'
 import { MoreVertical } from 'lucide-react'
-import { IconButton, Search } from '../../../shared/ui'
+import { IconButton, Search } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useState } from 'react'
 import { ScreenSize, useScreenSize } from '../../../entites/ScreenSize'
 

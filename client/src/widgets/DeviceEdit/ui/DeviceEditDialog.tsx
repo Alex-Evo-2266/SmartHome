@@ -2,7 +2,7 @@ import './DeviceEditDialog.scss'
 import { useCallback, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../../shared/lib/hooks/redux"
 import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { BaseDialog, Divider, FilledButton, FullScrinTemplateDialog, ListContainer, ListItem } from "../../../shared/ui"
+import { BaseDialog, Divider, FilledButton, FullScrinTemplateDialog, ListContainer, ListItem } from "alex-evo-sh-ui-kit"
 import { DeviceData, findDevice } from "../../../entites/Device"
 import { DeviceEditBaseData } from "./DeviceEditBaseData"
 import { DeviceEditField } from "./DeviceEditField"

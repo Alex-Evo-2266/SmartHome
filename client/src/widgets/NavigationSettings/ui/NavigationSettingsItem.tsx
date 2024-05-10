@@ -1,5 +1,5 @@
 import { Check, Plus } from "lucide-react"
-import { IconButton } from "../../../shared/ui"
+import { IconButton } from "alex-evo-sh-ui-kit"
 import { SettingsNavigationItem } from "../models/settingsNavItem"
 import { useCallback } from "react"
 import { findItem } from "../lib/helpers/findItem"

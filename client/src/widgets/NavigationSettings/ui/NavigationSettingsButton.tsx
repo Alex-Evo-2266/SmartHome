@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { FilledButton } from "../../../shared/ui"
+import { FilledButton } from "alex-evo-sh-ui-kit"
 import { useAppSelector } from "../../../shared/lib/hooks/redux"
 import { useSaveNavigationItems } from "../api/saveNavigationItems"
 

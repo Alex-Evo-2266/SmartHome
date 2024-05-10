@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { FilledButton, TextField, Button } from "../../../shared/ui"
+import { FilledButton, TextField, Button } from "alex-evo-sh-ui-kit"
 import { DeviceOption } from "../../../features/DeviceOption"
 
 interface DeviceEnterNameDialogProps{

@@ -1,7 +1,8 @@
 import './NavigationSettingsTable.scss'
+import './Table.scss'
 import { useCallback } from 'react'
 import { useAppSelector } from '../../../shared/lib/hooks/redux'
-import { Card } from '../../../shared/ui'
+import { Card } from "alex-evo-sh-ui-kit"
 import { SettingsNavigationItem } from '../models/settingsNavItem'
 import { NavigationSettingsItem } from './NavigationSettingsItem'
 import { NavigationSettingsButtons } from './NavigationSettingsButton'
@@ -15,6 +16,8 @@ interface SettingsNavigationTableProps{
 export const SettingsNavigationTable = ({className}:SettingsNavigationTableProps) => {
 
 	const navigation = useAppSelector(state=>state.navigation)
+
+	console.log(navigation)
 
 	const getData = useCallback(() => {
 		return navigation.items.map((item):SettingsNavigationItem=>({

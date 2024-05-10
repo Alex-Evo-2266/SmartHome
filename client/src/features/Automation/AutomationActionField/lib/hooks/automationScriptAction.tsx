@@ -6,7 +6,7 @@ import { TypeRequest } from "../../../../../shared/api/type"
 import { Script } from "../../../../../entites/Script"
 import { LoginData, login, logout } from "../../../../../entites/User"
 import { hideDialog, showDialog } from "../../../../../shared/lib/reducers/dialogReducer"
-import { SelectionDialog } from "../../../../../shared/ui/Dialog/BaseDialog/SelectionDialog"
+import { SelectionDialog } from 'alex-evo-sh-ui-kit'
 
 
 export const useAutomationActionScript = () => {

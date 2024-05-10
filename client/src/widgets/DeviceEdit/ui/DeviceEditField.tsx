@@ -5,10 +5,11 @@ import { SelectIconField } from "../../../features/IconSelect"
 import { splitValue } from "../../../shared/lib/helpers/stringSplitAndJoin"
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
 import { hideDialog, hideFullScreenDialog, showDialog, showFullScreenDialog } from "../../../shared/lib/reducers/dialogReducer"
-import { BaseDialog, Divider, FieldContainer, FullScrinTemplateDialog, SelectField, TextField } from "../../../shared/ui"
-import { MoreText } from "../../../shared/ui/MoreText/MoreText"
+import { BaseDialog, Divider, FieldContainer, FullScrinTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
+import { MoreText } from "alex-evo-sh-ui-kit"
 import { DeviceEditAddField } from "./DeviceEditAddFieldDialog"
 import { EntitiesField } from "../../../features/EntityField/ui/EntityField"
+import { SelectField } from "../../../shared/ui"
 
 interface DeviceEditFieldProps{
 	field: FieldDevice

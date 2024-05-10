@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useServerSettingsApi } from '../api/settings'
 import './ServerSettings.scss'
-import { Card, Divider, TextField } from '../../../shared/ui'
+import { Card, Divider, TextField } from "alex-evo-sh-ui-kit"
 import { ConfigData } from '../models/serverConfig'
 import { mapServerSettingsToDict, mapServerSettingsToList } from '../lib/helpers/mapServerSetting'
 import { ServerSettingsButtons } from './ServerSettingsButton'
