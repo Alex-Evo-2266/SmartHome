@@ -1,4 +1,5 @@
 import { NavItem } from "../.."
+import { NavigationButton } from "../../models/navigationItem"
 
 enum NavigationActionType{
     SHOW_NAVIGATION = "SHOW_NAVIGATION",
@@ -12,12 +13,6 @@ interface PayloadNavigation{
     items?: NavItem[]
     favouritesItems?: NavItem[] 
 }
-
-type NavigationButton = {
-    onClick: (event: React.MouseEvent<HTMLElement>)=>void
-    icon?: React.ReactNode
-    text?: string
-} | undefined
 
 interface INavigationState{
     visible: boolean

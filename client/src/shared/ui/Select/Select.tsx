@@ -60,7 +60,7 @@ export const SelectField = ({items, onChange, value, placeholder, className, bor
         let data = getContainerData(event.currentTarget)
         let x = data?.left ?? event.pageX
         let y = (data?.top)?data.top + data.height : event.pageY
-        dispatch(showBaseMenu(items.map(selectMap), x, y, {width: data?.width}))
+        dispatch(showBaseMenu(items.map(selectMap), x, y, {width: data?.width, onHide:()=>dispatch(hideMenu())}))
     },[items, selectMap])
 
     return(

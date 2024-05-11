@@ -3,7 +3,7 @@
 import React,{useCallback,useEffect, useState} from 'react'
 import { useControlDeviceAPI } from '../api/setDeviceValue'
 import { FieldDevice } from '../../../entites/Device'
-import { Slider } from '../../../shared/ui/Slider/Slider'
+import { Slider } from 'alex-evo-sh-ui-kit'
 
 interface FieldProps{
 	field: FieldDevice

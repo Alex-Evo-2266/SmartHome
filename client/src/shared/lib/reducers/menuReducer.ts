@@ -1,4 +1,6 @@
-import { IBlock, IMenuItem, IMenuOption } from "../../model/menu"
+import { IMenuItem } from "alex-evo-sh-ui-kit"
+import { IMenuOption } from "alex-evo-sh-ui-kit"
+import { IBlock } from "alex-evo-sh-ui-kit"
 
 export enum MenuActionType{
     SHOW_MENU = "SHOW_MENU",

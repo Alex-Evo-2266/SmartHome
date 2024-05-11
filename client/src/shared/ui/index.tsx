@@ -1,7 +1,5 @@
 import "./index.scss"
 
-export { SigmentedButton } from './SigmentedButton/SigmentedButton'
-
 export { DateField } from './DateField/DateField'
 
 export { TimeField } from './TimePickers/TimeField'
