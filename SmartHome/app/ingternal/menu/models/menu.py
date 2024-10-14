@@ -1,11 +1,10 @@
 import ormar
-from app.pkg.ormar.dbormar import BaseMeta
+from app.pkg.ormar.dbormar import base_ormar_config
 from typing import Optional
 from app.ingternal.authtorization.models.user import User
 
 class MenuElement(ormar.Model):
-    class Meta(BaseMeta):
-        pass
+    ormar_config = base_ormar_config.copy()
 
     id: int = ormar.Integer(primary_key=True)
     title:str = ormar.String(max_length=200)

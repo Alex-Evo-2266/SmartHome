@@ -1,4 +1,4 @@
-import imp,os,logging,copy
+import importlib,os,logging,copy
 
 from app.modules.modules_src.modules import Modules, BaseModule
 # from .models_schema import TypeDevice, DeviceData, ModelAPIData, ModelData
@@ -85,14 +85,14 @@ def getModuls(dir=__name__, init = True):
 #     global devices
 #     print(devices)
 #     return devices
-
+sep = '.'
 
 async def init_modules():
     logger.debug("init_module")
     dir =__name__
     dir = os.sep.join(dir.split('.'))
     for module in getModuls(dir, False):
-        foo = imp.load_source(module, "app" + os.sep + "modules" + os.sep + "modules" + os.sep + module + os.sep + "__init__.py")
+        foo = importlib.import_module("app" + sep + "modules" + sep + "modules" + sep + module + sep + "__init__")
     modules = Modules.all()
     for key in modules:
         module: BaseModule = modules[key]
@@ -105,7 +105,7 @@ def init_routers(dir=__name__):
     routers = {}
     dir = os.sep.join(dir.split('.'))
     for module in getModuls(dir, False):
-        foo = imp.load_source(module, "app" + os.sep + "modules" + os.sep + "modules" + os.sep + module + os.sep + "__init__.py")
+        foo = importlib.import_module("app" + sep + "modules" + sep + "modules" + sep + module + sep + "__init__")
     modules = Modules.all()
     for key in modules:
         module: BaseModule = modules[key]

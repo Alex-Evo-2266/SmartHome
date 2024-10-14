@@ -1,12 +1,13 @@
 from enum import Enum
 import ormar, datetime
 from app.ingternal.authtorization.schemas.authtorization import AuthType, UserLevel
-from app.pkg.ormar.dbormar import BaseMeta
+from app.pkg.ormar.dbormar import metadata, database, base_ormar_config
 from typing import Optional, List
 
 class User(ormar.Model):
-	class Meta(BaseMeta):
+	ormar_config = base_ormar_config.copy(
 		constraints = [ormar.UniqueColumns("name")]
+	)
 
 	id: int = ormar.Integer(primary_key=True)
 	name: str = ormar.String(max_length=100, nullable=False)
@@ -19,8 +20,9 @@ class User(ormar.Model):
 
 
 class Session(ormar.Model):
-	class Meta(BaseMeta):
+	ormar_config = base_ormar_config.copy(
 		constraints = [ormar.UniqueColumns("access", "refresh")]
+	)
 
 	id: int = ormar.Integer(primary_key=True)
 	user: Optional[User] = ormar.ForeignKey(User)

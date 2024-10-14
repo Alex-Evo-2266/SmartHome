@@ -68,6 +68,19 @@ services:
       - 1883:1883
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
+  sh_auth_db:
+    image: mariadb
+    # image: 459below/mariadb-armv7:latest
+    restart: always
+    ports:
+      - 3308:3306
+    volumes:
+      - bd_auth_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_AUTH_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_AUTH_DATABASE}
+      MYSQL_USER: ${MYSQL_AUTH_USER}
+      MYSQL_PASSWORD: ${MYSQL_AUTH_PASSWORD}
   # zigbee2mqtt:
   #   container_name: zigbee2mqtt
   #   image: koenkk/zigbee2mqtt:latest
@@ -81,5 +94,6 @@ services:
   #     - mosquitto
 volumes:
   bd_data:
+  bd_auth_data:
   media_voluem:
   client_voluem:

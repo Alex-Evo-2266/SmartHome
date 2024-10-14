@@ -39,9 +39,9 @@ async def get_menu(auth_data: TokenData = Depends(token_dep_all_user)):
 	except Exception as e:
 		logger.error(e)
 		return JSONResponse(status_code=400, content=str(e))
-
+	
 @router.put("")
-async def put_menu(auth_data: TokenData = Depends(token_dep), data: List[MenuElementsSchema] = [MenuElementsSchema(title="", iconClass="",url="", icon="")]):
+async def put_menu(auth_data: TokenData = Depends(token_dep), data: List[MenuElementsSchema] = []):
 	try:
 		await set_menu(data, auth_data.user_id)
 		return "ok"

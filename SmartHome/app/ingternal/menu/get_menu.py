@@ -17,6 +17,7 @@ async def get_menu_list()->List[MenuElementsSchema]:
 	for item in menu_list:
 		if (not "title" in item) or (not "url" in item) or (not "iconClass" in item):
 			raise InvalidFileStructure("invalid menu file structure")
+		print(item["title"], item["url"], item["iconClass"], item["icon"])
 		arr.append(MenuElementsSchema(
 			title=item["title"],
 			url=item["url"],

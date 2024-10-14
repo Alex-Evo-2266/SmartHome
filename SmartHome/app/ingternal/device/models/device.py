@@ -1,13 +1,12 @@
 import ormar, datetime
 from ormar import ReferentialAction
-from app.pkg.ormar.dbormar import BaseMeta
+from app.pkg.ormar.dbormar import base_ormar_config
 from typing import Optional, List, Dict, Union
 from app.ingternal.device.enums import ReceivedDataFormat, StatusDevice, TypeDeviceField
 
 
 class Device(ormar.Model):
-	class Meta(BaseMeta):
-		pass
+	ormar_config = base_ormar_config.copy()
 
 	name: str = ormar.String(max_length=200)
 	system_name: str = ormar.String(max_length=200, primary_key=True)
@@ -21,11 +20,8 @@ class Device(ormar.Model):
 	device_status: Optional[StatusDevice] = StatusDevice.OFFLINE
 	value: Optional[Dict[str,str]] = dict()
 	
-	# type_field: Dict[str,str] = {}
-	
 class Device_field(ormar.Model):
-	class Meta(BaseMeta):
-		pass
+	ormar_config = base_ormar_config.copy()
 
 	id: int = ormar.Integer(primary_key=True, autoincrement=True)
 	name: str = ormar.String(max_length=200)
@@ -42,8 +38,7 @@ class Device_field(ormar.Model):
 	device: Optional[Union[Device, Dict]] = ormar.ForeignKey(Device, related_name="fields", ondelete=ReferentialAction.CASCADE)
 
 class Value(ormar.Model):
-	class Meta(BaseMeta):
-		pass
+	ormar_config = base_ormar_config.copy()
 
 	id: int = ormar.Integer(primary_key=True, autoincrement=True)
 	datatime: str = ormar.String(max_length=20)
@@ -53,8 +48,7 @@ class Value(ormar.Model):
 
 
 class DeviceHistory(ormar.Model):
-	class Meta(BaseMeta):
-		pass
+	ormar_config = base_ormar_config.copy()
 
 	id: int = ormar.Integer(primary_key=True)
 	deviceName: str = ormar.String(max_length=200)
