@@ -19,3 +19,7 @@ class RoleResponseSchema(BaseModel):
     id: int
     role_name: str
     privileges: List[PrivilegeSchema]
+
+class EditPrivilegeRoleForm(BaseModel):
+    role_name: str
+    privileges: List[PrivilegeForm]

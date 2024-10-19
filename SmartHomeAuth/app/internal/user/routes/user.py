@@ -77,7 +77,7 @@ async def delete(id: int, session:SessionDepData = Depends(user_preveleg_dep(BAS
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
-@router.patch("/level")
+@router.patch("/role")
 async def level(data: UserEditLevelSchema, session:SessionDepData = Depends(user_preveleg_dep(BASE_ROLE.ADMIN))):
 	try:
 		user = await get_user(data.id)

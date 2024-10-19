@@ -24,3 +24,10 @@ async def get_privilege_by_id(id: str)->Privilege | None:
 	except Exception as e:
 		logger.error(f"error get roles: {e}")
 		raise
+	
+async def get_privilege_by_privilege(privilege: str)->Privilege | None:
+	try:
+		return await Privilege.objects.get_or_none(privilege=privilege)
+	except Exception as e:
+		logger.error(f"error get roles: {e}")
+		raise
