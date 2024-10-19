@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List
 
 class RoleForm(BaseModel):
     role_name: str
@@ -7,3 +7,15 @@ class RoleForm(BaseModel):
 class RoleSchema(BaseModel):
     id: int
     role_name: str
+
+class PrivilegeForm(BaseModel):
+    privilege: str
+
+class PrivilegeSchema(BaseModel):
+    id: int
+    privilege: str
+
+class RoleResponseSchema(BaseModel):
+    id: int
+    role_name: str
+    privileges: List[PrivilegeSchema]

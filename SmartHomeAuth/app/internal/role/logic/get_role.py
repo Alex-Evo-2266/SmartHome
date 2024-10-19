@@ -1,4 +1,5 @@
 import logging
+from typing import List
 from app.internal.role.models.role import Role
 
 logger = logging.getLogger(__name__)
@@ -17,3 +18,9 @@ async def get_role_by_id(id: str)->Role | None:
 		logger.error(f"error get role: {e}")
 		raise
 	
+async def get_role_all()->List[Role]:
+	try:
+		return await Role.objects.all()
+	except Exception as e:
+		logger.error(f"error get roles: {e}")
+		raise

@@ -92,12 +92,3 @@ async def edit_password(data: UserEditPasswordSchema, session:SessionDepData = D
 		await edit_user_password(session.user, data)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
-
-# @router.get("/sessions", response_model=List[SessionSchema])
-# async def get_sessions_user(auth_data: TokenData = Depends(token_dep)):
-# 	pass
-
-
-# @router.delete("/sessions/{id}")
-# async def get_session_user(id:int, auth_data: TokenData = Depends(token_dep)):
-# 	pass

@@ -4,7 +4,7 @@ from app.internal.role.models.role import Role
 from app.internal.auth.models.auth import Session
 
 class AuthHeaders(BaseModel):
-    Authorization: str
+    X_auth_token: str
 
 class TokenData(BaseModel):
     user_id: str

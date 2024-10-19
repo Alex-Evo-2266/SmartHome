@@ -14,6 +14,7 @@ from app.internal.user.models.user import User
 from app.internal.auth.logic.login import login_data_check
 from app.internal.auth.logic.create_session import create_session
 from app.internal.auth.logic.get_session import get_token
+from app.internal.auth.logic.delete_session import delete_session
 from app.internal.auth.logic.refresh import refresh_token
 from app.internal.auth.models.auth import Session
 from app.internal.auth.schemas.auth import Login
@@ -36,10 +37,10 @@ async def login(response:Response = Response("ok", 200), data: Login = Login(nam
 		tokens = await get_token(session)
 		await user.role.load()
 		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
-		response.headers["X-token"]=tokens.access
-		response.headers["X-token-expires-at"]=str(tokens.expires_at.timestamp())
-		response.headers["X-user-role"]=user.role.role_name
-		response.headers["X-user-id"]=user.id
+		response.headers["X-Auth-Token"]=tokens.access
+		response.headers["X-Token-Expires-At"]=str(tokens.expires_at.timestamp())
+		response.headers["X-User-Role"]=user.role.role_name
+		response.headers["X-User-Id"]=user.id
 		return "ok"
 	except InvalidInputException as e:
 		return JSONResponse(status_code=403, content={"message": str(e)})
@@ -60,10 +61,10 @@ async def refrash(response:Response = Response("ok", 200), smart_home: Optional[
 		await session.user.load()
 		await session.user.role.load()
 		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
-		response.headers["X-token"]=tokens.access
-		response.headers["X-token-expires-at"]=str(tokens.expires_at.timestamp())
-		response.headers["X-user-role"]=session.user.role.role_name
-		response.headers["X-user-id"]=session.user.id
+		response.headers["X-Auth-Token"]=tokens.access
+		response.headers["X-Token-Expires-At"]=str(tokens.expires_at.timestamp())
+		response.headers["X-User-Role"]=session.user.role.role_name
+		response.headers["X-User-Id"]=session.user.id
 		return "ok"
 	except InvalidInputException as e:
 		return JSONResponse(status_code=403, content={"message": str(e)})
@@ -73,6 +74,20 @@ async def refrash(response:Response = Response("ok", 200), smart_home: Optional[
 	
 @router.get("/check")
 async def chack_user(response:Response = Response("ok", 200), session:SessionDepData = Depends(session_dep)):
-	response.headers["X-status-auth"] = "ok"
-	response.headers["X-user-role"] = session.role.role_name
+	response.headers["X-Status-Auth"] = "ok"
+	response.headers["X-User-Role"] = session.role.role_name
 	return "ok"
+
+@router.get("/logout")
+async def logout(response:Response = Response("ok", 200), userData:SessionDepData = Depends(session_dep)):
+	try:
+		response.set_cookie(key="smart_home", value="", httponly=True)
+		response.headers["X-Auth-Token"]=""
+		response.headers["X-Token-Expires-At"]=""
+		await delete_session(userData.session.id)
+		return "ok"
+	except InvalidInputException as e:
+		return JSONResponse(status_code=403, content={"message": str(e)})
+	except Exception as e:
+		logger.error(str(e))
+		return JSONResponse(status_code=400, content={"message": str(e)})

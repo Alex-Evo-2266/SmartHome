@@ -31,9 +31,9 @@ class RoleNotAssignedException(Exception):
 		else:
 			return "RoleNotAssignedException"
 
-async def auth(Authorization)->TokenData:
-	print(Authorization)
-	head = Authorization
+async def auth(X_auth_token)->TokenData:
+	print(X_auth_token)
+	head = X_auth_token
 	jwtdata = head.split(" ")[1]
 	print(jwtdata)
 	data = jwt.decode(jwtdata,settings.SECRET_JWT_KEY,algorithms=[settings.ALGORITHM])
@@ -50,11 +50,11 @@ async def auth(Authorization)->TokenData:
 
 async def token_dep(headers: Annotated[AuthHeaders, Header()]):
 	print(headers)
-	headers.Authorization
-	if not headers.Authorization:
+	headers.X_auth_token
+	if not headers.X_auth_token:
 		raise HTTPException(status_code=403, detail="token not found")
 	try:
-		auth_data = await auth(headers.Authorization)
+		auth_data = await auth(headers.X_auth_token)
 		user = await get_user(auth_data.user_id)
 		print("role user", user.role)
 		if user.role:
@@ -69,11 +69,11 @@ async def token_dep(headers: Annotated[AuthHeaders, Header()]):
 		raise HTTPException(status_code=403, detail="invalid jwt")
 	
 async def user_dep(headers: Annotated[AuthHeaders, Header()])->UserDepData:
-	headers.Authorization
-	if not headers.Authorization:
+	headers.X_auth_token
+	if not headers.X_auth_token:
 		raise HTTPException(status_code=403, detail="token not found")
 	try:
-		auth_data = await auth(headers.Authorization)
+		auth_data = await auth(headers.X_auth_token)
 		user = await get_user(auth_data.user_id)
 		role = await get_role(auth_data.user_role)
 		print("role user", user, role)
@@ -91,10 +91,10 @@ async def user_dep(headers: Annotated[AuthHeaders, Header()])->UserDepData:
 
 async def session_dep(headers: Annotated[AuthHeaders, Header()])->SessionDepData:
 	try:
-		if not headers.Authorization:
+		if not headers.X_auth_token:
 			raise HTTPException(status_code=403, detail="invalid jwt")
-		jwtdata = headers.Authorization.split(" ")[1]
-		auth_data = await auth(headers.Authorization)
+		jwtdata = headers.X_auth_token.split(" ")[1]
+		auth_data = await auth(headers.X_auth_token)
 		user = await get_user(auth_data.user_id)
 		role = await get_role(auth_data.user_role)
 		if not user or not role:
@@ -119,10 +119,10 @@ def check_privilege(role: Role, privilege:str):
 def user_preveleg_dep(privilege: str | settings.BASE_ROLE):
 	async def _user_role_dep(headers: Annotated[AuthHeaders, Header()]):
 		try:
-			if not headers.Authorization:
+			if not headers.X_auth_token:
 				raise HTTPException(status_code=403, detail="invalid jwt")
-			jwtdata = headers.Authorization.split(" ")[1]
-			auth_data = await auth(headers.Authorization)
+			jwtdata = headers.X_auth_token.split(" ")[1]
+			auth_data = await auth(headers.X_auth_token)
 			user = await get_user(auth_data.user_id)
 			role = await get_role(auth_data.user_role)
 			if not user or not role:
