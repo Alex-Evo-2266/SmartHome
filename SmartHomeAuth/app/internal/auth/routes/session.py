@@ -1,34 +1,27 @@
-from asyncio.log import logger
-import json, logging
+import logging
 
 from app.configuration.settings import ROUTE_PREFIX
 
-from fastapi import APIRouter, Response, Cookie
-from fastapi.responses import JSONResponse
-from typing import Optional, List
+from fastapi import APIRouter, Depends
 
-from app.internal.exceptions.base import InvalidInputException
-
-from app.internal.user.models.user import User
-
-from app.internal.auth.logic.login import login_data_check
-from app.internal.auth.logic.session import create_session, get_token
-from app.internal.auth.logic.refresh import refresh_token
-from app.internal.auth.models.auth import Session
-from app.internal.auth.schemas.auth import Login, ResponseLogin
+from app.internal.auth.depends.auth import session_dep
+from app.internal.auth.schemas.depends import SessionDepData
+from app.internal.auth.schemas.auth import SessionSchema
+from app.internal.auth.logic.get_session import get_session_user
+from app.internal.auth.logic.delete_session import delete_session_user
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
 	prefix=f"{ROUTE_PREFIX}/session",
-	tags=["user"],
+	tags=["session"],
 	responses={404: {"description": "Not found"}},
 )
 
-@router.delete("", response_model=ResponseLogin)
-async def session_delete(response:Response = Response("ok", 200), data: Login = Login(name="", password="")):
-    pass
+@router.get("", response_model=SessionSchema)
+async def get_session(userData:SessionDepData = Depends(session_dep)):
+    await get_session_user(userData.user)
 
-@router.get("", response_model=ResponseLogin)
-async def session_delete(response:Response = Response("ok", 200), data: Login = Login(name="", password="")):
-    pass
+@router.delete("/{id}")
+async def session_delete(id:str, userData:SessionDepData = Depends(session_dep)):
+    await delete_session_user(id, userData.user)

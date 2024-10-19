@@ -2,9 +2,8 @@ import bcrypt, logging
 
 from app.internal.user.models.user import User
 
-from app.internal.auth.schemas.auth import Login, Tokens
+from app.internal.auth.schemas.auth import Login
 from app.internal.auth.exceptions.login import InvalidInputException
-from app.internal.auth.logic.session import create_session, get_token
 
 logger = logging.getLogger(__name__)
 

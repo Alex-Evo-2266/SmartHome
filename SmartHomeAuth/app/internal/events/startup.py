@@ -1,6 +1,6 @@
 import logging
-# from app.ingternal.authtorization.initialization.init_admin import init_admin
-# from app.configuration.config import __module_config__
+from app.configuration.initialization.role import initRole
+from app.configuration.initialization.user import initUser
 
 from app.pkg.ormar.dbormar import database
 
@@ -12,6 +12,7 @@ async def startup():
 	if not database_.is_connected:
 		await database_.connect()
 
-	# await init_admin()
+	await initRole()
+	await initUser()
 
 	logger.info("starting")

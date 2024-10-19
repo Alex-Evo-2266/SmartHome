@@ -1,6 +1,7 @@
 from pathlib import Path
 import datetime
-import os, sys
+import os
+from enum import Enum
 
 
 try:
@@ -46,3 +47,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
 # MODULES_DIR = os.path.join(MEDIA_ROOT, 'modules')
 
+ADMIN_BASE_LOGIN = "admin"
+ADMIN_BASE_PASSWORD = "admin"
+
+class BASE_ROLE(str, Enum):
+	ADMIN = "admin"
+	BASE = "base"
