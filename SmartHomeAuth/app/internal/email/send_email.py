@@ -1,4 +1,4 @@
 
 
-async def send_email():
-    pass
+async def send_email(*arg, **keys):
+    print(arg, keys)
