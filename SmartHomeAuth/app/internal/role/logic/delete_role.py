@@ -1,6 +1,5 @@
 import logging
 from app.internal.role.logic.get_role import get_role_by_id
-from app.internal.role.models.role import Role
 
 logger = logging.getLogger(__name__)
 

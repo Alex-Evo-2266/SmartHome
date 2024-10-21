@@ -1,7 +1,7 @@
 
 from app.internal.role.models.role import Role
 from app.internal.role.schemas.role import RoleResponseSchema
-from app.internal.role.maps.map_privilege import map_privilege
+from app.internal.role.serialization.map_privilege import map_privilege
 from app.internal.role.logic.get_privilege import get_privilege
 
 async def map_role(role:Role):

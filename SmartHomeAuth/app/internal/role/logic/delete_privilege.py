@@ -1,4 +1,3 @@
-from app.internal.role.models.role import Privilege
 import logging
 from app.internal.role.logic.get_privilege import get_privilege, get_privilege_by_id
 

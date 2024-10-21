@@ -1,7 +1,5 @@
 import logging
 
-from app.internal.role.models.role import Role
-from app.internal.user.models.user import User
 from app.internal.role.schemas.role import EditPrivilegeRoleForm
 from app.internal.role.logic.get_role import get_role
 from app.internal.role.logic.get_privilege import get_privilege_by_privilege

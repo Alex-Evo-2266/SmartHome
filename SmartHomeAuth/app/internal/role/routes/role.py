@@ -13,7 +13,7 @@ from app.internal.role.logic.get_role import get_role_all
 from app.internal.role.logic.delete_role import delete_role_by_id
 from app.internal.role.logic.edit_role_privilege import edit_privilege_role
 from app.internal.role.schemas.role import RoleForm, RoleResponseSchema, EditPrivilegeRoleForm
-from app.internal.role.maps.map_role import map_role
+from app.internal.role.serialization.map_role import map_role
 
 from app.configuration.settings import BASE_ROLE
 
