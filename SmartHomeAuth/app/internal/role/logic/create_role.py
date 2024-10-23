@@ -17,9 +17,7 @@ async def add_role(data: RoleForm):
 	try:
 		uuid = await get_uuid_user()
 		logger.debug(f"add role input data: {data.dict()}")
-		cond = await Role.objects.create(id=uuid, role_name=data.role_name)
-		if(cond):
-			raise RoleAlreadyExistsException('such role already exists')
+		await Role.objects.create(id=uuid, role_name=data.role_name)
 	except Exception as e:
 		logger.error(f"error add role: {e}")
 		raise

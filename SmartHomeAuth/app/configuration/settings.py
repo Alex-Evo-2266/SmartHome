@@ -4,10 +4,11 @@ import os
 from enum import Enum
 
 
-try:
-    from app.configuration.settings_local import *
-except Exception as e:
-    from app.configuration.settings_prod import *
+# try:
+#     from app.configuration.settings_local import *
+# except Exception as e:
+#     from app.configuration.settings_prod import *
+from app.configuration.settings_prod import *
 
 
 DB_URL = "".join(["mysql+pymysql://",

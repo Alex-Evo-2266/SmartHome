@@ -17,9 +17,7 @@ async def add_privilege(data: PrivilegeForm):
 	try:
 		uuid = await get_uuid_user()
 		logger.debug(f"add role input data: {data.dict()}")
-		cond = await Privilege.objects.create(id=uuid, privilege=data.privilege)
-		if(cond):
-			raise RoleAlreadyExistsException('such role already exists')
+		await Privilege.objects.create(id=uuid, privilege=data.privilege)
 	except Exception as e:
 		logger.error(f"error add role: {e}")
 		raise

@@ -8,7 +8,7 @@ async def delete_privilege(privilege: str):
 		privilege = await get_privilege(privilege)
 		await privilege.delete()
 	except Exception as e:
-		logger.error(f"error get roles: {e}")
+		logger.error(f"error delete privilege: {e}")
 		raise
 	
 async def delete_privilege_by_id(id: str):
@@ -16,5 +16,5 @@ async def delete_privilege_by_id(id: str):
 		privilege = await get_privilege_by_id(id)
 		await privilege.delete()
 	except Exception as e:
-		logger.error(f"error get roles: {e}")
+		logger.error(f"error delete privilege: {e}")
 		raise

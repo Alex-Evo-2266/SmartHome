@@ -1,5 +1,6 @@
 import datetime
 from pydantic import BaseModel
+from typing import Optional
 
 class Login(BaseModel):
 	name: str
@@ -15,3 +16,6 @@ class SessionSchema(BaseModel):
 	service: str
 	expires_at: datetime.datetime
 	host: str
+
+class LoginHeaders(BaseModel):
+    Host: Optional[str] = None

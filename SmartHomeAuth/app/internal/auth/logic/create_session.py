@@ -16,7 +16,7 @@ async def get_uuid_user():
 
 
 
-async def create_session(user: User)->Session:
+async def create_session(user: User, host: str | None)->Session:
 	uuid = await get_uuid_user()
 	if not user:
 		raise UserNotFoundException()
@@ -33,5 +33,6 @@ async def create_session(user: User)->Session:
 		refresh=tokens.refresh, 
 		user=user, 
 		expires_at=tokens.expires_at,
+		host=host
 		)
 	return session

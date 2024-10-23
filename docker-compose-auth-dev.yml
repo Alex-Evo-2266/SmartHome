@@ -1,19 +1,6 @@
 version: "3.3"
 
 services:
-  sh_db:
-    image: mariadb
-    # image: 459below/mariadb-armv7:latest
-    restart: always
-    ports:
-      - 3307:3306
-    volumes:
-      - bd_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
   sh_auth_db:
     image: mariadb
     # image: 459below/mariadb-armv7:latest
@@ -27,14 +14,6 @@ services:
       MYSQL_DATABASE: ${MYSQL_AUTH_DATABASE}
       MYSQL_USER: ${MYSQL_AUTH_USER}
       MYSQL_PASSWORD: ${MYSQL_AUTH_PASSWORD}
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-      args:
-        REACT_APP_WS_HOST: ${HOST}
-    volumes:
-      - client_voluem:/client/build
   auth_service:
     build: ./SmartHomeAuth
     restart: always
@@ -51,55 +30,31 @@ services:
     expose:
       - 8004
     volumes:
+      - ./SmartHomeAuth:/home/auth_service/web
       - media_voluem:/home/auth_service/web/media
     depends_on:
       - sh_auth_db
-  smart_home:
-    build: ./SmartHome
+  email_service:
+    build: ./EmailService
     restart: always
-    command: bash -c "alembic upgrade head &&
-              uvicorn main:app --reload --port=8000 --host='0.0.0.0'"
-    environment:
-      SMARTHOME_BD_HOST: ${SMARTHOME_BD_HOST}
-      SMARTHOME_BD_PORT: ${SMARTHOME_BD_PORT}
-      SMARTHOME_BD_NAME: ${MYSQL_DATABASE}
-      SMARTHOME_BD_USER: ${MYSQL_USER}
-      SMARTHOME_BD_PASSWORD: ${MYSQL_PASSWORD}
+    command: bash -c "uvicorn app:create_app --reload --port=8005 --host='0.0.0.0'"
+    ports:
+      - 5605:8005
     expose:
-      - 8000
+      - 8005
     volumes:
-      - media_voluem:/home/smart_home/web/media
-      - ./SmartHome/castom_moduls:/home/smart_home/web/castom_moduls
-      - ./SmartHome/files:/home/smart_home/web/files
-    depends_on:
-      - sh_db
+      - ./EmailService:/home/email_service/web
+      - media_voluem:/home/email_service/web/media
   nginx:
-    build: ./nginx
+    build: ./testNginx
     ports:
       - 1337:80
     depends_on:
-      - smart_home
-      - client
+      - auth_service
+      - email_service
     volumes:
       - media_voluem:/home/smart_home/web/media
       - client_voluem:/client/build
-  mosquitto:
-    container_name: mosquitto
-    build:
-      context: ./mosquitto
-      dockerfile: Dockerfile
-      args:
-        MOSQUITTO_USER: ${MOSQUITTO_USER}
-        MOSQUITTO_PASSWD: ${MOSQUITTO_PASSWD}
-    restart: always
-    volumes:
-      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - ./mosquitto/data:/mosquitto/data
-      - ./mosquitto/log:/mosquitto/log
-    ports:
-      - 1883:1883
-    environment:
-      MQTT_BROKER_URL: mqtt://mosquitto
   phpmyadmin:
     image: phpmyadmin
     restart: always
@@ -108,7 +63,6 @@ services:
     environment:
       - PMA_ARBITRARY=1
 volumes:
-  bd_data:
   media_voluem:
   client_voluem:
   bd_auth_data:

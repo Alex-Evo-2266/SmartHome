@@ -1,18 +1,17 @@
 import jwt, logging
 from jwt import ExpiredSignatureError
 from datetime import datetime
-from typing import Annotated
-from fastapi import Header, HTTPException
-from fastapi.responses import JSONResponse
+from typing import Annotated, Optional
+from fastapi import Header, HTTPException, Cookie, Response
 
 from app.configuration import settings
 from app.internal.exceptions.base import InvalidInputException
 
 from app.internal.user.logic.get_user import get_user
-from app.internal.role.logic.get_role import get_role
+from app.internal.auth.logic.refresh import refresh_token
 from app.internal.role.models.role import Role
 
-from app.internal.auth.schemas.depends import AuthHeaders, TokenData, UserDepData, SessionDepData
+from app.internal.auth.schemas.depends import AuthHeaders, UserDepData, SessionDepData
 from app.internal.auth.models.auth import Session
 
 logger = logging.getLogger(__name__)
@@ -30,12 +29,13 @@ class RoleNotAssignedException(Exception):
 			return f"RoleNotAssignedException, {self.message}"
 		else:
 			return "RoleNotAssignedException"
+		
+def getJWT(token: str):
+	token_d = token.split(" ")
+	if len(token_d) == 2 and token_d[0] == 'Bearer':
+		return token_d[1]
 
-async def auth(X_auth_token)->TokenData:
-	print(X_auth_token)
-	head = X_auth_token
-	jwtdata = head.split(" ")[1]
-	print(jwtdata)
+async def auth(jwtdata:str)->UserDepData:
 	data = jwt.decode(jwtdata,settings.SECRET_JWT_KEY,algorithms=[settings.ALGORITHM])
 	if not('exp' in data and 'user_id' in data and data['sub'] == "access"):
 		logger.worning(f"no data in jwt")
@@ -46,66 +46,24 @@ async def auth(X_auth_token)->TokenData:
 	user = await get_user(data['user_id'])
 	logger.info(f"the user is logged in. id:{data['user_id']}")
 	await user.role.load()
-	return TokenData(user_id = data['user_id'], user_role = user.role)
-
-async def token_dep(headers: Annotated[AuthHeaders, Header()]):
-	print(headers)
-	headers.X_auth_token
-	if not headers.X_auth_token:
-		raise HTTPException(status_code=403, detail="token not found")
-	try:
-		auth_data = await auth(headers.X_auth_token)
-		user = await get_user(auth_data.user_id)
-		print("role user", user.role)
-		if user.role:
-			raise HTTPException(status_code=403, detail="user is not assigned a role")
-		return auth_data
-	except HTTPException as e:
-		raise
-	except ExpiredSignatureError as e:
-		raise HTTPException(status_code=401, detail="outdated jwt")
-	except Exception as e:
-		logger.warning(f"token_dep error {e}")
-		raise HTTPException(status_code=403, detail="invalid jwt")
-	
-async def user_dep(headers: Annotated[AuthHeaders, Header()])->UserDepData:
-	headers.X_auth_token
-	if not headers.X_auth_token:
-		raise HTTPException(status_code=403, detail="token not found")
-	try:
-		auth_data = await auth(headers.X_auth_token)
-		user = await get_user(auth_data.user_id)
-		role = await get_role(auth_data.user_role)
-		print("role user", user, role)
-		if not user or not role:
-			logger.error(f"user not found")
-			raise HTTPException(status_code=403, detail="user not found")
-		return UserDepData(user=user, role=role)
-	except HTTPException as e:
-		raise
-	except ExpiredSignatureError as e:
-		raise HTTPException(status_code=401, detail="outdated jwt")
-	except Exception as e:
-		logger.warning(f"token_dep error {e}")
-		raise HTTPException(status_code=403, detail="invalid jwt")
+	return UserDepData(user=user, role=user.role)
 
 async def session_dep(headers: Annotated[AuthHeaders, Header()])->SessionDepData:
 	try:
-		if not headers.X_auth_token:
+		jwtdata = getJWT(headers.Authorization)
+		if not jwtdata:
 			raise HTTPException(status_code=403, detail="invalid jwt")
-		jwtdata = headers.X_auth_token.split(" ")[1]
-		auth_data = await auth(headers.X_auth_token)
-		user = await get_user(auth_data.user_id)
-		role = await get_role(auth_data.user_role)
-		if not user or not role:
+		auth_data = await auth(jwtdata)
+		if not auth_data.user or not auth_data.role:
 			logger.error(f"user or role not found")
 			raise HTTPException(status_code=403, detail="user or role not found")
-		u_session = await Session.objects.get_or_none(access=jwtdata, user=user)
+		u_session = await Session.objects.get_or_none(access=jwtdata, user=auth_data.user)
 		if not u_session:
 			logger.error(f"session not found")
 			raise HTTPException(status_code=403, detail="session not found")
-		return SessionDepData(user=user, role=role, session=u_session)
+		return SessionDepData(user=auth_data.user, role=auth_data.role, session=u_session)
 	except HTTPException as e:
+		print("ty", e)
 		raise
 	except ExpiredSignatureError as e:
 		raise HTTPException(status_code=401, detail="outdated jwt")
@@ -119,24 +77,22 @@ def check_privilege(role: Role, privilege:str):
 def user_preveleg_dep(privilege: str | settings.BASE_ROLE):
 	async def _user_role_dep(headers: Annotated[AuthHeaders, Header()]):
 		try:
-			if not headers.X_auth_token:
+			jwtdata = getJWT(headers.Authorization)
+			if not jwtdata:
 				raise HTTPException(status_code=403, detail="invalid jwt")
-			jwtdata = headers.X_auth_token.split(" ")[1]
-			auth_data = await auth(headers.X_auth_token)
-			user = await get_user(auth_data.user_id)
-			role = await get_role(auth_data.user_role)
-			if not user or not role:
+			auth_data = await auth(jwtdata)
+			if not auth_data.user or not auth_data.role:
 				logger.error(f"user or role not found")
 				raise HTTPException(status_code=403, detail="user or role not found")
-			if(privilege == settings.BASE_ROLE.ADMIN and role.role_name != settings.BASE_ROLE.ADMIN):
+			if(privilege == settings.BASE_ROLE.ADMIN and auth_data.role.role_name != settings.BASE_ROLE.ADMIN):
 				return HTTPException(status_code=403, detail="not enough rights for the operation.")
-			elif(not check_privilege(role, privilege)):
+			elif(not check_privilege(auth_data.role, privilege)):
 				return HTTPException(status_code=403, detail="not enough rights for the operation.")
-			u_session = await Session.objects.get_or_none(access=jwtdata, user=user)
+			u_session = await Session.objects.get_or_none(access=jwtdata, user=auth_data.user)
 			if not u_session:
 				logger.error(f"session not found")
 				raise HTTPException(status_code=403, detail="session not found")
-			return SessionDepData(user=user, role=role, session=u_session)
+			return SessionDepData(user=auth_data.user, role=auth_data.role, session=u_session)
 		except HTTPException as e:
 			raise
 		except ExpiredSignatureError as e:

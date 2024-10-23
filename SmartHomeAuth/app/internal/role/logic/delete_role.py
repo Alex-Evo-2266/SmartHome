@@ -8,5 +8,5 @@ async def delete_role_by_id(id: str):
 		role = await get_role_by_id(id)
 		await role.delete()
 	except Exception as e:
-		logger.error(f"error get roles: {e}")
+		logger.error(f"error delete roles: {e}")
 		raise

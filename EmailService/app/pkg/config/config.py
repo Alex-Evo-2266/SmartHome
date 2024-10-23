@@ -23,8 +23,7 @@ def filter_delete(key:str):
 	return _filter_delete
 
 def delete_value(item: ConfigItem):
-	item.value = ''
-	return item
+	return ConfigItem(key=item.key, tag=item.tag, type=item.type, value=str(len(item.value)))
 
 class Config():
 
@@ -73,7 +72,13 @@ class Config():
 		self.callback.pop(key, None)
 
 	def get_all_data(self):
-		return [delete_value(item) if item.type == ConfigItemType.PASSWORD else item for item in self.config]
+		data = []
+		for item in self.config:
+			if item.type == ConfigItemType.PASSWORD:
+				data.append(delete_value(item))
+			else:
+				data.append(ConfigItem(**(item.dict())))
+		return data
 	
 	def get_all_raw(self):
 		return self.config
