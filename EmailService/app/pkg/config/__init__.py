@@ -1,4 +1,3 @@
-from .config import Config, ConfigItem, ConfigItemType
-
-def itemConfig(tag: str, key: str, value: str = '', type: ConfigItemType = ConfigItemType.TEXT):
-    return ConfigItem(key=key, value=value, tag=tag, type=type)
+from .src.get_config import get_router
+from .src.config import itemConfig, Config
+from .src.schemas import ConfigRouterOption, ConfigItem, ConfigItemType

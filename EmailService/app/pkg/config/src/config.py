@@ -1,21 +1,6 @@
-from pydantic import BaseModel
-from enum import Enum
 from typing import Callable, List, Dict
-from .utils.file import writeYMLFile, readYMLFile, create_file
-
-class ConfigItemType(str, Enum):
-	NUMBER = "number"
-	TEXT = "text"
-	PASSWORD = "password"
-
-class ConfigItem(BaseModel):
-	class Config:  
-		use_enum_values = True
-
-	key: str
-	value: str
-	type: ConfigItemType
-	tag: str = 'base'
+from .file import writeYMLFile, readYMLFile, create_file
+from .schemas import ConfigItem, ConfigItemType
 
 def filter_delete(key:str):
 	def _filter_delete(data:ConfigItem):
@@ -24,6 +9,9 @@ def filter_delete(key:str):
 
 def delete_value(item: ConfigItem):
 	return ConfigItem(key=item.key, tag=item.tag, type=item.type, value=str(len(item.value)))
+
+def itemConfig(tag: str, key: str, value: str = '', type: ConfigItemType = ConfigItemType.TEXT):
+    return ConfigItem(key=key, value=value, tag=tag, type=type)
 
 class Config():
 

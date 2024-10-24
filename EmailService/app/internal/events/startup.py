@@ -1,6 +1,5 @@
 import logging
-from app.pkg.config import itemConfig, ConfigItemType
-from app.configuration.settings import __config__
+from app.pkg import itemConfig, ConfigItemType, __config__
 
 logger = logging.getLogger(__name__)
 

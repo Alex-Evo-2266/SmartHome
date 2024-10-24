@@ -1,9 +1,6 @@
 from pathlib import Path
 import datetime
 import os
-from enum import Enum
-from app.pkg.config import Config
-
 
 try:
     from app.configuration.settings_local import *
@@ -25,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SCRIPT_AUTOMATION_PREFEX = "automation"
 
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
-
+CONFIG_FILE_NAME = 'service_config'
 ROUTE_PREFIX = "/api-email"
 CONFIG_TAG = "emain-config"
 
@@ -40,5 +37,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
 # MODULES_DIR = os.path.join(MEDIA_ROOT, 'modules')
-
-__config__ = Config(CONFIG_DIR)
