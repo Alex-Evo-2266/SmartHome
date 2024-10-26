@@ -1,6 +1,19 @@
 version: "3.3"
 
 services:
+  sh_db:
+    image: mariadb
+    # image: 459below/mariadb-armv7:latest
+    restart: always
+    ports:
+      - 3307:3306
+    volumes:
+      - bd_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
   sh_auth_db:
     image: mariadb
     # image: 459below/mariadb-armv7:latest
@@ -91,3 +104,4 @@ volumes:
   media_voluem:
   client_voluem:
   bd_auth_data:
+  bd_data:

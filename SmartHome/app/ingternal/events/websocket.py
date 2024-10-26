@@ -1,5 +1,5 @@
 from fastapi import WebSocket, WebSocketDisconnect
-from app.ingternal.websoket.websocket import WebSocketMenager
+from app.pkg.websoket.websocket import WebSocketMenager
 
 async def websocket_endpoint(websocket: WebSocket):
 	await WebSocketMenager.connect(websocket)

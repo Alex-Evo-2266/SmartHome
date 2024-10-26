@@ -12,7 +12,7 @@ from app.ingternal.device.device_data.device_data_array import DevicesDataArrey
 
 from app.ingternal.device.set_value import set_value
 
-from app.ingternal.automation.running.run_automation import automation_device_run
+# from app.ingternal.automation.running.run_automation import automation_device_run
 
 def getParams(d:Dict[str, Any], param:str, default:Any|None=None)->Any:
 	if(param in d):
@@ -40,7 +40,6 @@ class BaseField(IField):
 		value:Any = None,
 		virtual_field: bool = False,
 		entity: str = ""
-		# change:ChangeField = ChangeField()
 		):
 		'''initial field'''
 		self.name = name
@@ -55,7 +54,6 @@ class BaseField(IField):
 		self.enum_values = enum_values
 		self.virtual_field = virtual_field
 		self.entity = entity
-		# self.change = change
 		self.__value = value
 
 	def __str__(self):
@@ -94,15 +92,10 @@ class BaseField(IField):
 	def set(self, status, script=True):
 		self.__value = status
 		DevicesDataArrey.updata_value(self.device_system_name, self.name, status)
-		# feedback_fields_device = CommunicationFields.get_feedback_fields_device(self.device_system_name, self.name)
-		# print(feedback_fields_device, self.device_system_name, self.__value)
-		# if feedback_fields_device:
-		# 	for field in feedback_fields_device:
-		# 		if field.type == TypeRelatedFields.DEVICE:
-		# 			print(field.system_name, field.field, status)
-		# 			set_value(field.system_name, field.field, status, False)
+
 		if(script):
-			automation_device_run(self.device_system_name, self.name)
+			pass
+			# automation_device_run(self.device_system_name, self.name)
 		
 	def set_virtual_value(self, status, script=True):
 		'''

@@ -1,6 +1,6 @@
 from app.ingternal.device.device_data.devices_arrey import DevicesArrey
 # from SmartHome.logic.deviceClass.interfaces.device_save_interface import ISaveDevice
-from app.ingternal.websoket.websocket import WebSocketMenager
+from app.pkg.websoket.websocket import WebSocketMenager
 
 async def save_device():
     devices = DevicesArrey.all()

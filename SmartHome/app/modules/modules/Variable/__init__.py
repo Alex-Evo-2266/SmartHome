@@ -1,1 +1,0 @@
-from app.modules.modules.Variable.devices.Variable import Variable

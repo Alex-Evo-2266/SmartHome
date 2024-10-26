@@ -48,6 +48,15 @@ MENU_LIST = os.path.join(BASE_DIR, "files", "menu.yml")
 TIME_UPPDATA = 6
 LENGTHPASS = 10
 
+# config
+CONFIG_DIR = os.path.join(BASE_DIR, "config")
+CONFIG_FILE_NAME = 'service_config'
+ROUTE_PREFIX = "/api-device"
+CONFIG_TAG = "device-config"
+
+# config keys
+FREQUENCY = 'frequency'
+
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 
 DEFAULT_SEND_INTERVAL = 6

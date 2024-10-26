@@ -11,7 +11,7 @@ class AddDeviceSchema(BaseModel):
 	type: str
 	address: Optional[str]
 	token: Optional[str]
-	device_cyclic_polling: bool
+	device_enable: bool
 	type_command: ReceivedDataFormat = ReceivedDataFormat.JSON
 	fields: List[AddDeviceFieldSchema]
 	
@@ -30,7 +30,7 @@ class DeviceSchema(BaseModel):
 	token: Optional[str]
 	type_command: ReceivedDataFormat
 	device_polling: bool
-	device_cyclic_polling: bool
+	device_enable: bool
 	device_status: Optional[StatusDevice] = StatusDevice.OFFLINE
 	value: Optional[Dict[str,str]] = dict()
 	fields: List[FieldDeviceSchema] = []

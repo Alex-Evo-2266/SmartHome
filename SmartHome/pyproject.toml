@@ -6,19 +6,12 @@ authors = ["Alex-Evo-2266 <ghbdtn2266@mail.ru>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-bcrypt = "^4.0.1"
-requests = "^2.31.0"
-pyjwt = "^2.8.0"
-pyyaml = "^6.0.1"
-python-multipart = "^0.0.6"
-paho-mqtt = "^1.6.1"
-yeelight = "^0.7.13"
-uvicorn = "^0.31.1"
-fastapi = "^0.115.0"
-alembic = "^1.13.3"
-aiomysql = "^0.2.0"
+python = "^3.12"
+fastapi = "^0.115.3"
+uvicorn = "^0.32.0"
 ormar = {extras = ["mysql"], version = "^0.20.1"}
+alembic = "^1.13.3"
+pyyaml = "^6.0.2"
 
 
 [build-system]
