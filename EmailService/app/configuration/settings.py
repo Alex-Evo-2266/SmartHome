@@ -2,10 +2,11 @@ from pathlib import Path
 import datetime
 import os
 
-try:
-    from app.configuration.settings_local import *
-except Exception as e:
-    from app.configuration.settings_prod import *
+# try:
+#     from app.configuration.settings_local import *
+# except Exception as e:
+#     from app.configuration.settings_prod import *
+from app.configuration.settings_prod import *
 
 
 ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
@@ -37,3 +38,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
 # MODULES_DIR = os.path.join(MEDIA_ROOT, 'modules')
+

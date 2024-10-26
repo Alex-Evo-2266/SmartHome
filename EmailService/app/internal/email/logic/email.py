@@ -1,11 +1,12 @@
 import smtplib
 import logging
+from pydantic import BaseModel
 
 from app.pkg import __config__
 
 logger = logging.getLogger(__name__)
 
-async def send_email(subject, to_email, message):
+def send_email(subject, to_email, message):
     """
     Send an email
     """
@@ -28,5 +29,17 @@ async def send_email(subject, to_email, message):
         server.login(from_email,password)
         server.sendmail(from_email,to_email, BODY)
         server.quit()
+        logger.info("send email")
+        print("send email")
     except Exception as e:
         logger.warning(f"error send email. detail: {e}")
+
+
+class EmailSendSchema(BaseModel):
+    to_email: str
+    message: str
+    title: str
+
+def send_email_callback(method, properties, body):
+    message_data = EmailSendSchema(**body)
+    send_email(message_data.title, message_data.to_email, message_data.message)

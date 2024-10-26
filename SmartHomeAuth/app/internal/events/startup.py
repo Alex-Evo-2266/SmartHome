@@ -1,6 +1,7 @@
-import logging
+import logging, time
 from app.configuration.initialization.role import initRole
 from app.configuration.initialization.user import initUser
+from app.pkg.email import send_email, EmailSendSchema, email_connect
 
 from app.pkg.ormar.dbormar import database
 
@@ -14,5 +15,15 @@ async def startup():
 
 	await initRole()
 	await initUser()
+
+	email_connect()
+
+	# time.sleep(0.1)
+	# send_email(EmailSendSchema(
+	# 	to_email='ghbdtn2244@mail.ru',
+	# 	title="Account smart home",
+	# 	message="sdfh tdht rhrdx hxdh dh srd xdh"
+	# ))
+
 
 	logger.info("starting")

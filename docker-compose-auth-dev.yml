@@ -25,6 +25,10 @@ services:
       SMARTHOME_AUTH_BD_NAME: ${MYSQL_AUTH_DATABASE}
       SMARTHOME_AUTH_BD_USER: ${MYSQL_AUTH_USER}
       SMARTHOME_AUTH_BD_PASSWORD: ${MYSQL_AUTH_PASSWORD}
+      EMAIL_TOPIK: ${EMAIL_TOPIK}
+      EMAIL_QUEUE: ${EMAIL_QUEUE}
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
     ports:
       - 5600:8004
     expose:
@@ -33,15 +37,26 @@ services:
       - ./SmartHomeAuth:/home/auth_service/web
       - media_voluem:/home/auth_service/web/media
     depends_on:
-      - sh_auth_db
+      rabbitmq:
+        condition: service_healthy
+      sh_auth_db:
+        condition: service_started
   email_service:
     build: ./EmailService
     restart: always
     command: bash -c "uvicorn app:create_app --reload --port=8005 --host='0.0.0.0'"
     ports:
-      - 5605:8005
+      - 1234:8005
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     expose:
       - 8005
+    environment:
+      EMAIL_TOPIK: ${EMAIL_TOPIK}
+      EMAIL_QUEUE: ${EMAIL_QUEUE}
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
     volumes:
       - ./EmailService:/home/email_service/web
       - media_voluem:/home/email_service/web/media
@@ -55,6 +70,16 @@ services:
     volumes:
       - media_voluem:/home/smart_home/web/media
       - client_voluem:/client/build
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    ports:
+      - ${RABITMQ_PORT}:15672
   phpmyadmin:
     image: phpmyadmin
     restart: always

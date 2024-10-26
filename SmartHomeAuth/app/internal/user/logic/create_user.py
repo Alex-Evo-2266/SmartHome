@@ -11,7 +11,7 @@ from app.internal.user.logic.get_user import get_user
 
 from app.internal.role.logic.get_role import get_role
 
-from app.internal.email.send_email import send_email
+from app.pkg.email import send_email, EmailSendSchema
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,11 @@ async def add_user(data: UserForm):
 		newUser = await User.objects.create(id=uuid, name=data.name, email=data.email, password=hashedPass, role=role)
 		message = "login = " + data.name + "\npassword = " + data.password
 		logger.debug(f"login input data: {data.dict()}")
-		await send_email("Account smart home",data.email,message)
+		send_email(EmailSendSchema(
+			to_email=data.email,
+			title="Account smart home",
+			message=message
+			))
 		return newUser
 	except Exception as e:
 		logger.error(f"error add user: {e}")

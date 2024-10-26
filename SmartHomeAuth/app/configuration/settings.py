@@ -11,11 +11,13 @@ from enum import Enum
 from app.configuration.settings_prod import *
 
 
-DB_URL = "".join(["mysql+pymysql://",
+DB_URL = "".join([
+	"mysql+pymysql://",
     MYSQL_USER,":",
     MYSQL_PASSWORD,"@",
     MYSQL_HOST,":",MYSQL_PORT,"/",
-    MYSQL_DATABASE])
+    MYSQL_DATABASE
+	])
 print("bd: ",DB_URL)
 
 
