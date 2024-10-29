@@ -12,10 +12,11 @@ from app.ingternal.device.options.options import get_option, OptionsDevice
 from app.ingternal.device.set_value import set_value
 from app.ingternal.device.schemas.device import ConsctionStatusForm
 from app.ingternal.device.device_data.polling import device_polling_edit
+from app.configuration.settings import ROUTE_PREFIX
 
 
 router = APIRouter(
-	prefix="/api/devices",
+	prefix=f"{ROUTE_PREFIX}/devices",
 	tags=["device"],
 	responses={404: {"description": "Not found"}},
 )

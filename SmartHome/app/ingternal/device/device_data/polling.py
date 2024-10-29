@@ -36,6 +36,12 @@ async def get_value_device(device: Device):
 		fields_arr_data.append(_field)
 	return fields_arr_data
 
+async def get_device_data(device_data: Device, status:StatusDevice):
+	data = await device_db_to_schema(device_data)
+	data.value = dict()
+	data.device_status = status
+	return data
+
 async def polling_and_init(device_data: Device):
 	try:
 		logger.debug("get_device function")
@@ -43,25 +49,16 @@ async def polling_and_init(device_data: Device):
 		if not device_data:
 			raise DeviceNotFound()
 		if device_data.device_polling == False:
-			data = await device_db_to_schema(device_data)
-			data.value = dict()
-			data.device_status = StatusDevice.UNLINK
-			return data
+			return get_device_data(device_data, StatusDevice.UNLINK)
 		element = DevicesArrey.get(device_data.system_name)
 		if not element:
 			device_full_data = {**device_data.dict(), "fields": await get_value_device(device_data)}
 			device:BaseDevice = DeviceClasses.get_device(device_data.class_device, data=device_full_data)
 			if not device:
-				data = await device_db_to_schema(device_data)
-				data.value = dict()
-				data.device_status = StatusDevice.NOT_SUPPORTED
-				return data
+				return get_device_data(device_data, StatusDevice.NOT_SUPPORTED)
 			await device.final_formation_device()
 			if not device.is_conected:
-				data = await device_db_to_schema(device_data)
-				data.device_status = StatusDevice.OFFLINE
-				data.value = dict()
-				return data
+				return get_device_data(device_data, StatusDevice.OFFLINE)
 			class_device = DeviceClasses.get(device_data.class_device)
 			if class_device and class_device.Config.init_field:
 				await edit_fields(device_data, [x._get_initial_data() for x in device.values], option=class_device.Config)

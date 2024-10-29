@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pagesservices"
+version = "0.1.0"
+description = ""
+authors = ["Alex-Evo-2266 <ghbdtn2266@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.3"
+pyyaml = "^6.0.2"
+uvicorn = "^0.32.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
