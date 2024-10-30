@@ -155,7 +155,7 @@ class Component(Card, Text, Button, Columns, IList, IFlexContainer, IGridLayout,
 	action: Optional[Action] = None
 	name: str = ""
 	option: Optional[IOption] = None
-	value: Union[str, int, bool, List['Component'], 'Component', List[ColumnElement]]
+	value: Optional[Union[str, int, bool, List['Component'], 'Component', List[ColumnElement]]] = None
 	min: Optional[int] = None
 	max: Optional[int] = None
 	step: Optional[int] = None
@@ -167,6 +167,11 @@ class Component(Card, Text, Button, Columns, IList, IFlexContainer, IGridLayout,
 	img: Optional[str] = None
 
 class Page(BaseModel):
-	page: List[Component]
+	page: Component
 	url: str
+	name: str
+
+class Dialog(BaseModel):
+	components: Component
+	title: str
 	name: str

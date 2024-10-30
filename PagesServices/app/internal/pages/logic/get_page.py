@@ -1,5 +1,6 @@
-import os, json
+import os
 from app.configuration.settings import BASE_DIR
+from .utils import json_read
 
 def get_pages_path(__name__)->dict[str, str]:
     module_page_dir = os.path.join(BASE_DIR, *__name__.split('.'), 'pages')
@@ -12,11 +13,9 @@ def get_pages_path(__name__)->dict[str, str]:
             pages_path[split_name[0]] = os.path.join(module_page_dir, name)
     return pages_path
 
-def js_r(filename: str):
-    with open(filename) as f_in:
-        return json.load(f_in)
+
 
 def get_page_data(path:str):
-    page = js_r(path)
+    page = json_read(path)
     print(page)
     return page

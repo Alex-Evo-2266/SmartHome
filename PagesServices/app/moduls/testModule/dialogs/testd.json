@@ -1,0 +1,1 @@
+{"name":"testd","title":"test dialog","components":{"type":"LIST","name":"button","value":[{"type":"BUTTON","label":"btn test","name":"button","action":{"action_type":"NONE"},"option":{}},{"type":"LIST","name":"button","value":[],"src":"SERVER_GENERATE","option":{},"src_key":"fdcf4ba2-da1f-4c2d-8e73-d7c7e979e8b9"}],"src":"MANUAL"}}

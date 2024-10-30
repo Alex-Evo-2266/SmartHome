@@ -23,6 +23,3 @@ def mapComponent(data, formaters:dict):
         f = formaters[data['src_key']]
         data['value'] = f()
     return Component(**data)
-
-def getPage():
-    page = mapComponent(data, {})
