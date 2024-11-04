@@ -42,3 +42,10 @@ class ModulesArray():
     @classmethod
     def get(cls, name_module: str):
         return cls.madules[name_module]
+    
+    @classmethod
+    def routers(cls):
+        routers = []
+        for name in cls.madules:
+            routers.append(cls.madules[name].router)
+        return routers
