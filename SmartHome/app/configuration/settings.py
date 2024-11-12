@@ -19,17 +19,6 @@ print("bd: ",DB_URL)
 
 ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 
-
-AUTH_SERVICE_URL="http://localhost:1337/token"
-AUTH_SERVICE_GET_TOKENS_PATH="/api/auth/token"
-
-
-ALGORITHM = 'HS256'
-ACCESS_TOKEN_EXPIRE_MINUTES = 15
-REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 2
-SECRET_JWT_KEY = "dxkhbg5hth56"
-SECRET_REFRESH_JWT_KEY = "dxkhbgefrthjyuvligukytrtyug5hth56"
-
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SCRIPT_AUTOMATION_PREFEX = "automation"
@@ -42,8 +31,6 @@ SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
 # DEVICES = os.path.join(BASE_DIR, "files","devices.yml")
 # GROUPS = os.path.join(BASE_DIR, "files","groups.yml")
 # ROOMS = os.path.join(BASE_DIR, "files","rooms.yml")
-
-MENU_LIST = os.path.join(BASE_DIR, "files", "menu.yml")
 
 TIME_UPPDATA = 6
 LENGTHPASS = 10

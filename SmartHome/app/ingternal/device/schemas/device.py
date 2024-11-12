@@ -1,39 +1,46 @@
 from enum import Enum
 from pydantic import BaseModel
 from typing import Optional, List, Dict
-from app.ingternal.device.enums import ReceivedDataFormat, StatusDevice
-from app.ingternal.device.schemas.field import AddDeviceFieldSchema, FieldDeviceSchema
+from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, StatusDevice, DeviceGetData, DeviceStatusField
 
-class AddDeviceSchema(BaseModel):
+class DeviceSerializeFieldSchema(BaseModel):
+	id: str
+	name: str
+	address: Optional[str] = None
+	type: TypeDeviceField
+	low: Optional[str] = None
+	high: Optional[str] = None
+	enum_values: Optional[str] = None
+	read_only: bool
+	icon: str
+	unit: Optional[str] = None
+	entity: Optional[str] = None
+	entity_list_id: Optional[List[str]] = None
+	virtual_field: bool
+	device: Optional['DeviceSerializeSchema'] = None
+	value: Optional[str] = None
+
+class StatusForm(BaseModel):
+	status: bool
+
+class DeviceSerializeSchema(BaseModel):
 	name: str
 	system_name: str
 	class_device: str
 	type: str
-	address: Optional[str]
-	token: Optional[str]
-	device_enable: bool
-	type_command: ReceivedDataFormat = ReceivedDataFormat.JSON
-	fields: List[AddDeviceFieldSchema]
-	
-	class Config:  
-		use_enum_values = True
-
-class EditDeviceSchema(AddDeviceSchema):
-	pass
-		
-class DeviceSchema(BaseModel):
-	name: str
-	system_name: str
-	class_device: str
-	type: str 
-	address: Optional[str]
-	token: Optional[str]
+	address: Optional[str] = None
+	token: Optional[str] = None
 	type_command: ReceivedDataFormat
-	device_polling: bool
-	device_enable: bool
-	device_status: Optional[StatusDevice] = StatusDevice.OFFLINE
-	value: Optional[Dict[str,str]] = dict()
-	fields: List[FieldDeviceSchema] = []
+	type_get_data: DeviceGetData
+	status: StatusDevice = StatusDevice.UNKNOWN
+	fields: Optional[List[DeviceSerializeFieldSchema]] = None
 
-class ConsctionStatusForm(BaseModel):
-	status: bool
+class DeviceSchema(DeviceSerializeSchema):
+	value: Optional[Dict[str,str]] = dict()
+
+class ValueSerializeSchema(BaseModel):
+	id: str
+	datatime: str
+	value: str
+	field: Optional[DeviceSerializeFieldSchema]
+
