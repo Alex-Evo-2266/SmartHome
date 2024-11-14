@@ -2,6 +2,7 @@ from app.ingternal.device.interface.field_class import IField
 from app.ingternal.device.schemas.device import DeviceSerializeFieldSchema
 from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema
 from app.ingternal.device.schemas.enums import TypeDeviceField
+from app.ingternal.device.arrays.DeviceDataArray import DevicesDataArrey
 
 class FieldBase(IField):
 	def __init__(self, field: DeviceSerializeFieldSchema, device_system_name: str):
@@ -71,7 +72,7 @@ class FieldBase(IField):
 		return self.data
 
 	def dict(self):
-		return self.data.dict()
+		return self.data.model_dump()
 	
 	@staticmethod
 	def getInt(data:str | None):
@@ -116,8 +117,19 @@ class FieldBase(IField):
 		else:
 			self.data.value = status
 
+		
+
+
 
 		if not self.data.virtual_field:
 			pass
 		if script:
 			pass
+
+		# if not save_all:
+		# 	data = DevicesDataArrey.get(self.device_system_name)
+		# 	if data and self.data.name in data.device.value and data.device.value[self.data.name] == self.data.value:
+		# 		return
+		# DevicesDataArrey.
+		
+

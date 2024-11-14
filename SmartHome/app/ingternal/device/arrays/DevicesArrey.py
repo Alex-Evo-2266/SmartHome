@@ -14,7 +14,7 @@ class DevicesArrey():
     devices:List[DevicesArreyItem] = []
 
     @classmethod
-    def addDevice(cls, id:str, device):
+    def add_device(cls, id:str, device):
         for item in cls.devices:
             if(item.id==id):
                 return None

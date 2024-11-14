@@ -33,8 +33,8 @@ def map_status(status:DeviceStatusField)->StatusDevice:
 		return StatusDevice.UNLINK
 	return StatusDevice.ONLINE
 
-async def get_default_data(device: DeviceSerializeSchema, status: StatusDevice = StatusDevice.ONLINE):
-	data = DeviceSchema(**(device.dict()))
+def get_default_data(device: DeviceSerializeSchema, status: StatusDevice = StatusDevice.ONLINE):
+	data = DeviceSchema(**(device.model_dump()))
 	data.value = dict()
 	data.status = status
 	return data

@@ -1,8 +1,8 @@
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel
 
 class ChangeField(BaseModel):
-	added:bool = True
+	creation:bool = True
 	deleted:bool = True
 	name:bool = True
 	address:bool = True
@@ -15,26 +15,17 @@ class ChangeField(BaseModel):
 	enum_values:bool = True
 	value:bool = False
 
-class ChangeDevice(BaseModel):
-	fields:ChangeField = ChangeField()
-	address:bool = True
-	token:bool = False
-	polling:bool = True
-
-class ConfigSchema():
+class ConfigSchema(BaseModel):
 	address: bool = True
 	token: bool = False
-	fields_addition: bool = True
+	type_get_data: bool = True
+	fields_creation: bool = True
 	fields_change: ChangeField = ChangeField()
-	added_url: Optional[str] = None
+	creation_url: Optional[str] = None
 	change_url: Optional[str] = None
-	change_polling: bool = True
 	class_img: Optional[str] = None
 	init_field: bool = False
 	virtual: bool = False
-	
-class AdditionDevice(BaseModel):
-	fields:bool = True
-	address:bool = True
-	token:bool = False
-	polling:bool = True
+
+class DeviceClassConfigSchema(ConfigSchema):
+	class_name: str

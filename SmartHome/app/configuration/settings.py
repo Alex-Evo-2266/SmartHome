@@ -43,6 +43,14 @@ CONFIG_TAG = "device-config"
 
 # config keys
 FREQUENCY = 'frequency'
+SEND_DEVICE_CONF = 'send-device-data'
+
+# loop key
+LOOP_DEVICE_POLLING = 'device-polling'
+LOOP_SEND_DEVICE = 'send-device-data'
+
+#websocket key
+TYPE_SEND_DEVICE = "device-send"
 
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 

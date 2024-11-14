@@ -20,6 +20,9 @@ class DeviceSerializeFieldSchema(BaseModel):
 	device: Optional['DeviceSerializeSchema'] = None
 	value: Optional[str] = None
 
+	class Config:  
+		use_enum_values = True
+
 class StatusForm(BaseModel):
 	status: bool
 
@@ -35,6 +38,9 @@ class DeviceSerializeSchema(BaseModel):
 	status: StatusDevice = StatusDevice.UNKNOWN
 	fields: Optional[List[DeviceSerializeFieldSchema]] = None
 
+	class Config:  
+		use_enum_values = True
+
 class DeviceSchema(DeviceSerializeSchema):
 	value: Optional[Dict[str,str]] = dict()
 
@@ -43,4 +49,7 @@ class ValueSerializeSchema(BaseModel):
 	datatime: str
 	value: str
 	field: Optional[DeviceSerializeFieldSchema]
+
+	class Config:  
+		use_enum_values = True
 

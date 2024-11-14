@@ -1,7 +1,18 @@
-from app.ingternal.device.schemas.device import DeviceSchema
+from app.ingternal.device.schemas.device import DeviceSchema, DeviceSerializeSchema
+from app.ingternal.device.schemas.config import ConfigSchema
 from app.ingternal.device.interface.field_class import IField
+from app.ingternal.device.schemas.enums import ReceivedDataFormat, DeviceGetData
 
 class IDevice():
+
+	device_config = ConfigSchema()
+
+	async def async_init(self):
+		'''
+			вызывается после интциализации,
+			если нужно подгружить при инициализации что то асинхронно
+		'''
+		pass
 
 	def get_value(self, field_id: str)->str:
 		pass
@@ -18,7 +29,10 @@ class IDevice():
 	def get_address(self)->str | None:
 		pass
 
-	def get_type_command(self)->any:
+	def get_type_command(self)->ReceivedDataFormat:
+		pass
+
+	def get_type_get_data(self)->DeviceGetData:
 		pass
 
 	def get_device(self)->any:
@@ -37,11 +51,19 @@ class IDevice():
 	def save(self):
 		pass
 
+
 	def load(self):
+		pass
+
+	async def load_async(self):
 		pass
 
 	def dict(self):
 		pass
 
-	def get_data(self)->DeviceSchema:
+
+	def get_data(self)->DeviceSerializeSchema:
+		pass
+
+	def get_schema(self)->DeviceSchema:
 		pass

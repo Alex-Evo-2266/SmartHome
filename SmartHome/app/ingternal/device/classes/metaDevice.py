@@ -39,3 +39,8 @@ class DeviceMeta(type):
 		if use:
 			DeviceClasses.add(clsname, new_class)
 		return new_class
+	
+# class DeviceMeta(type):
+# 	def __new__(cls, clsname, bases, dct, config = None, use=True):
+# 		new_class = super(DeviceMeta, cls).__new__(cls, clsname, bases, dct)
+# 		return new_class

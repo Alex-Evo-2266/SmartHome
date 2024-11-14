@@ -3,15 +3,17 @@ import logging
 from typing import Any, Dict
 
 from app.ingternal.device.exceptions.device import ClassAlreadyExistsException, DeviceNotFound
+from app.ingternal.device.interface.device_class import IDevice
+from app.ingternal.device.schemas.device import DeviceSerializeSchema
 
 logger = logging.getLogger(__name__)
 
 
 class DeviceClasses(object):
-	_classes:Dict[str, Any] = dict()
+	_classes:Dict[str, type[IDevice]] = dict()
 
 	@classmethod
-	def add(cls, class_name:str, new_class:Any)->None:
+	def add(cls, class_name:str, new_class:type[IDevice])->None:
 		if class_name in cls._classes:
 			raise ClassAlreadyExistsException()
 		logger.info("added device class",class_name)
@@ -22,7 +24,7 @@ class DeviceClasses(object):
 		cls._classes = dict()
 
 	@classmethod
-	def get(cls, class_name:str)->Any|None:
+	def get(cls, class_name:str)->type[IDevice]|None:
 		if not class_name in cls._classes:
 			raise DeviceNotFound("Class not fount")
 		if class_name in cls._classes:
@@ -30,11 +32,11 @@ class DeviceClasses(object):
 		return None
 
 	@classmethod
-	def all(cls)->Dict[str, Any]:
+	def all(cls):
 		return cls._classes
 
 	@classmethod
-	def get_device(cls, class_name:str, data:Dict[str, Any]):
+	def get_device(cls, class_name:str, data:DeviceSerializeSchema) -> IDevice:
 		if not class_name in cls._classes:
 			raise DeviceNotFound("Class not fount")
 		deviceClass = cls._classes[class_name]

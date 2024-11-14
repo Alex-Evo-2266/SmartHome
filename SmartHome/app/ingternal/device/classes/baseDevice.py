@@ -1,10 +1,14 @@
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSchema, DeviceSerializeFieldSchema
+from app.ingternal.device.schemas.config import ConfigSchema
+from app.ingternal.device.schemas.enums import ReceivedDataFormat, DeviceGetData
 from app.ingternal.device.classes.baseField import FieldBase
 from app.ingternal.device.classes.metaDevice import DeviceMeta
 from app.ingternal.device.interface.field_class import IField
 
 class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
+
+	device_config = ConfigSchema()
 	
 	def __init__(self, device: DeviceSerializeSchema):
 		self.data = device
@@ -39,8 +43,11 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	def get_address(self)->str | None:
 		return self.data.address
 
-	def get_type_command(self)->any:
+	def get_type_command(self)->ReceivedDataFormat:
 		return self.data.type_command
+	
+	def get_type_get_data(self)->DeviceGetData:
+		return self.data.type_get_data
 
 	def get_device(self)->any:
 		return self.device
@@ -64,6 +71,9 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	def load(self):
 		pass
 
+	async def load_async(self):
+		pass
+
 	def dict(self):
 		data = self.get_schema()
 		dict_data = dict(data)
@@ -79,7 +89,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		return self.data
 
 	def get_schema(self)->DeviceSchema:
-		res = DeviceSchema(**(self.data.dict()))
+		res = DeviceSchema(**(self.data.model_dump()))
 		values:list[DeviceSerializeFieldSchema] = []
 		vals: dict[str, str] = dict()
 		for item in self.fields:

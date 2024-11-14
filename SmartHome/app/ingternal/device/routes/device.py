@@ -1,119 +1,94 @@
 import logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
-from typing import Optional, List
-from app.ingternal.authtorization.depends.authtorization import token_dep
-from app.ingternal.authtorization.schemas.authtorization import TokenData, UserLevel
-from app.ingternal.device.schemas.device import AddDeviceSchema, EditDeviceSchema, DeviceSchema
-from app.ingternal.device.CRUD.create import add_device
-from app.ingternal.device.CRUD.delete import delete_device
-from app.ingternal.device.CRUD.update import edit_device
-from app.ingternal.device.CRUD.read import get_device, get_all_device
-from app.ingternal.authtorization.exceptions.user import AccessRightsErrorException
-from app.ingternal.device.options.options import get_option, OptionsDevice
-from app.ingternal.device.set_value import set_value
-from app.ingternal.device.schemas.device import ConsctionStatusForm
-from app.ingternal.device.device_data.polling import device_polling_edit
+from typing import Optional, List, Union
+from app.ingternal.device.schemas.device import DeviceSchema, StatusForm, DeviceSerializeSchema
+from app.ingternal.device.schemas.add_device import AddDeviceSchema
+from app.ingternal.device.schemas.edit_device import EditDeviceSchema
+from app.ingternal.device.schemas.config import DeviceClassConfigSchema
 
+from app.ingternal.device.serialize_model.read import get_serialize_device, get_device
+from app.ingternal.device.helpers.get_option_device import get_config_devices
 
 router = APIRouter(
-	prefix="/api/devices",
+	prefix="/api-devices/devices",
 	tags=["device"],
 	responses={404: {"description": "Not found"}},
 )
 
 logger = logging.getLogger(__name__)
 
-# @router.post("")
-# async def add_device_url(data:AddDeviceSchema, auth_data: TokenData = Depends(token_dep)):
-
 @router.post("")
-async def add_device_url(data:AddDeviceSchema, auth_data: TokenData = Depends(token_dep)):
+async def add_device_url(data:AddDeviceSchema):
 	try:
-		if auth_data.user_level != UserLevel.ADMIN:
-			raise AccessRightsErrorException()
-		await add_device(data)
+		
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))
-		if str(e) == f"(1062, \"Duplicate entry '{data.system_name}' for key 'PRIMARY'\")":
-			return JSONResponse(status_code=400, content="device with that name already exists")
 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.put("/{system_name}")
-async def edit_dev(system_name:str, data:EditDeviceSchema, auth_data: TokenData = Depends(token_dep)):
+async def edit_dev(system_name:str, data:EditDeviceSchema):
 	try:
-		if auth_data.user_level != UserLevel.ADMIN:
-			raise AccessRightsErrorException()
-		await edit_device(system_name, data)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.delete("/{system_name}")
-async def delete_dev(system_name:str, auth_data: TokenData = Depends(token_dep)):
+async def delete_dev(system_name:str):
 	try:
-		if auth_data.user_level != UserLevel.ADMIN:
-			raise AccessRightsErrorException()
-		await delete_device(system_name)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.get("/options", response_model=List[OptionsDevice])
-async def get_options_dev(auth_data: TokenData = Depends(token_dep)):
+@router.get("/options", response_model=List[DeviceClassConfigSchema])
+async def get_options_dev():
 	try:
-		if auth_data.user_level != UserLevel.ADMIN:
-			raise AccessRightsErrorException()
-		data = get_option()
-		print(data)
-		return data
+		options = get_config_devices()
+		return options
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.get("/{system_name}", response_model=DeviceSchema)
-async def get_dev(system_name:str, auth_data: TokenData = Depends(token_dep)):
+@router.get("/{system_name}", response_model=DeviceSerializeSchema)
+async def get_dev(system_name:str):
 	try:
-		if auth_data.user_level == UserLevel.NONE:
-			raise AccessRightsErrorException()
-		data = get_device(system_name)
-		return data
+		return await get_device(system_name)
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
-	
+
+@router.get("/{system_name}/row", response_model=DeviceSerializeSchema)
+async def get_dev(system_name:str):
+	try:
+		return await get_serialize_device(system_name)
+	except Exception as e:
+		logger.warning(str(e))
+		return JSONResponse(status_code=400, content=str(e))
+		
 @router.get("", response_model=List[DeviceSchema])
-async def get_all_dev(auth_data: TokenData = Depends(token_dep)):
+async def get_all_dev():
 	try:
-		if auth_data.user_level == UserLevel.NONE:
-			raise AccessRightsErrorException()
-		data = await get_all_device()
-		return data
+		pass
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 	
 
 @router.get("/{system_name}/value/{field_name}/set/{value}")
-async def set_device_state(system_name, field_name, value, auth_data: TokenData = Depends(token_dep)):
+async def set_device_state(system_name, field_name, value):
 	try:
-		if auth_data.user_level == UserLevel.NONE:
-			raise AccessRightsErrorException()
-		set_value(system_name, field_name, value)
+		pass
 	except Exception as e:
 		logger.warning(str(e))
 		return JSONResponse(status_code=400, content=str(e))
 
 	
-@router.post("/{system_name}/polling")
-async def set_connection_status(system_name, data:ConsctionStatusForm, auth_data: dict = Depends(token_dep)):
+@router.patch("/{system_name}/polling")
+async def set_connection_status(system_name, data:StatusForm):
 	try:
-		if auth_data.user_level != UserLevel.ADMIN:
-			raise AccessRightsErrorException()
-		await device_polling_edit(system_name, data.status)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))
