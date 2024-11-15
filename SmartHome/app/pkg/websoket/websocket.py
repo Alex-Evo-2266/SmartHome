@@ -11,6 +11,7 @@ class WebSocketMenager:
 	@classmethod
 	async def connect(cls, websocket: WebSocket):
 		await websocket.accept()
+		
 		cls.active_connections.append(websocket)
 
 	@classmethod
@@ -29,6 +30,13 @@ class WebSocketMenager:
 	async def broadcast(cls, message: str):
 		for connection in cls.active_connections:
 			await connection.send_text(message)
+
+	@classmethod
+	async def test(cls):
+		'''хочу проверить потом '''
+		for connection in cls.active_connections:
+			print(connection.client_state)
+			print(connection.application_state)
 
 	@classmethod
 	async def send_information(cls, type: str, data):
