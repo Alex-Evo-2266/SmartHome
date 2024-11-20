@@ -4,8 +4,8 @@ import os, sys
 
 
 try:
-    from app.configuration.settings_local import *
-    # raise Exception()
+    # from app.configuration.settings_local import *
+    raise Exception()
 except Exception as e:
     from app.configuration.settings_prod import *
 

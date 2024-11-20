@@ -1,3 +1,9 @@
 body{
   margin: 0;
 }
+
+.base-fab{
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+}

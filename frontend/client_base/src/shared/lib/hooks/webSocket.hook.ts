@@ -9,10 +9,6 @@ export const useSocket = () =>{
     try{
       let path = `ws://${import.meta.env.VITE_HOST}/ws/base`
       console.log(path)
-      // if (process.env.REACT_APP_WS_HOST)
-      //   path = `ws://${process.env.REACT_APP_WS_HOST}/ws/base`
-      // else
-      //   path = `ws://localhost:5000/ws/base`
       socket.current = new WebSocket(path)
     }catch(e){
       console.error(e)
@@ -27,10 +23,8 @@ export const useSocket = () =>{
 
   const listenSocket = useCallback(()=>{
     connectSocket()
-    console.log('p0')
     if(!socket.current) 
       return;
-    console.log('p1')
     socket.current.onopen = ()=>
     {
       console.log("socket connect socket");
