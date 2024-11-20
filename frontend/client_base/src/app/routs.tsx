@@ -1,5 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { AuthPage } from "../pages/Auth/AuthPage"
+import { RootPage } from "../pages/Root"
+import { HomePage } from "../pages/Home"
+import { DevicePage } from "../pages/Device"
 
 
 
@@ -9,9 +12,12 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 		<Routes>
 			{
 				isAuthenticated?
-				<>
-				</>:
-				<>
+				<Route path="/" element={<RootPage/>}>
+					<Route path="home" element={<HomePage/>}/>
+					<Route path="device" element={<DevicePage/>}/>
+					<Route path="/*" element={<Navigate replace to="/home" />} />
+				</Route>
+				:<>
 					<Route path="auth" element={<AuthPage/>}/>
 					<Route path="/*" element={<Navigate replace to="/auth" />} />
 				</>

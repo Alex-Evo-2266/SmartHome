@@ -12,6 +12,7 @@ uvicorn = "^0.32.0"
 ormar = {extras = ["mysql"], version = "^0.20.1"}
 alembic = "^1.13.3"
 pyyaml = "^6.0.2"
+websockets = "^14.1"
 
 
 [build-system]

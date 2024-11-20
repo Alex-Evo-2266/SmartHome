@@ -5,6 +5,7 @@ import os, sys
 
 try:
     from app.configuration.settings_local import *
+    # raise Exception()
 except Exception as e:
     from app.configuration.settings_prod import *
 
@@ -38,7 +39,7 @@ LENGTHPASS = 10
 # config
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
 CONFIG_FILE_NAME = 'service_config'
-ROUTE_PREFIX = "/api-device"
+ROUTE_PREFIX = "/api-devices"
 CONFIG_TAG = "device-config"
 
 # config keys

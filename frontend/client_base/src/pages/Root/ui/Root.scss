@@ -1,0 +1,11 @@
+.root-container{
+    margin-inline-start: 85px;
+    margin-inline-end: 5px;
+    margin-block: 5px;
+    &.big{
+        margin-inline-start: 320px;
+    }
+    &.mobile{
+        margin-inline-start: 0;
+    }
+}

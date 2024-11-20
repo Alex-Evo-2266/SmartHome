@@ -1,13 +1,13 @@
 import { Button, Panel, TextField, Typography } from "alex-evo-sh-ui-kit"
 import { useCallback, useState } from "react"
-import { loginData } from "../lib/models/login"
 import { useUserLogin } from "../api/login"
+import { LoginRequestData } from "../../../shared/lib/model/authData"
 
 export const Auth = () => {
 
     const {userLogin} = useUserLogin()
 
-    const [login, setLogin] = useState<loginData>({
+    const [login, setLogin] = useState<LoginRequestData>({
         name: "",
         password: ""
     })

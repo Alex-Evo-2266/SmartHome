@@ -48,19 +48,3 @@ async def startup():
 	loop.start()
 	  
 	logger.info("starting")
-
-	# await add_device(AddDeviceSchema(
-	# 	name='test1',
-	# 	system_name='test1',
-	# 	class_device='test_class',
-	# 	type="test_type",
-	# 	address='1234',
-	# 	device_enable=True,
-	# 	fields=[AddDeviceFieldSchema(
-	# 		name='test_field',
-	# 		address='123456789',
-	# 		type=TypeDeviceField.NUMBER,
-	# 		read_only=False,
-	# 		virtual_field=True
-	# 	)]
-	# ))

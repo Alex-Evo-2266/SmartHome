@@ -73,6 +73,30 @@ services:
     volumes:
       - ./EmailService:/home/email_service/web
       - media_voluem:/home/email_service/web/media
+  device_service:
+    build: ./SmartHome
+    restart: always
+    command: bash -c "uvicorn app:create_app --reload --port=8006 --host='0.0.0.0'"
+    ports:
+      - 1235:8006
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    expose:
+      - 8006
+    environment:
+      EMAIL_TOPIK: ${EMAIL_TOPIK}
+      EMAIL_QUEUE: ${EMAIL_QUEUE}
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
+      SMARTHOME_BD_HOST: ${SMARTHOME_BD_HOST}
+      SMARTHOME_BD_PORT: ${SMARTHOME_BD_PORT}
+      SMARTHOME_BD_NAME: ${MYSQL_DATABASE}
+      SMARTHOME_BD_USER: ${MYSQL_USER}
+      SMARTHOME_BD_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./SmartHome:/home/device_service/web
+      - media2_voluem:/home/device_service/web/media
   nginx:
     build: ./testNginx
     ports:
@@ -80,6 +104,7 @@ services:
     depends_on:
       - auth_service
       - email_service
+      - device_service
     volumes:
       - media_voluem:/home/smart_home/web/media
       - client_voluem:/client/build
@@ -102,6 +127,7 @@ services:
       - PMA_ARBITRARY=1
 volumes:
   media_voluem:
+  media2_voluem:
   client_voluem:
   bd_auth_data:
   bd_data:

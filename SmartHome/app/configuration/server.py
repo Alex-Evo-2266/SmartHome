@@ -4,11 +4,35 @@ from app.ingternal.events.websocket import websocket_endpoint
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.openapi.utils import get_openapi
 from app.configuration.routes import __routes__
 from app.pkg.ormar.dbormar import database
 from app.configuration.settings import MEDIA_ROOT, DEBUG, ORIGINS
 
-
+def custom_openapi(app:FastAPI):
+	def _custom_openapi():
+		if app.openapi_schema:
+			return app.openapi_schema
+		openapi_schema = get_openapi(
+			title="WebSocket API",
+			version="1.0.0",
+			description="This is a simple WebSocket API",
+			routes=app.routes,
+		)
+		openapi_schema["paths"]["/ws/base"] = {
+			"get": {
+				"summary": "WebSocket connection",
+				"description": "Connect to the WebSocket server. Send a message and receive a response.",
+				"responses": {
+					"101": {
+						"description": "Switching Protocols - The client is switching protocols as requested by the server.",
+					}
+				}
+			}
+		}
+		app.openapi_schema = openapi_schema
+		return app.openapi_schema
+	return _custom_openapi
 
 class Server:
 	
@@ -17,6 +41,8 @@ class Server:
 	def __init__(self, app: FastAPI):
 		
 		self.__app = app
+
+		app.openapi = custom_openapi(app)
 
 		if DEBUG:
 			app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
