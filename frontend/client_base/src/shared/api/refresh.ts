@@ -10,12 +10,12 @@ export const refresh = async(onError?:()=>void, onSuccess?:(data:RefrashData)=>v
 	const date = response.headers.get('X-Token-Expires-At')
 	const role = response.headers.get('X-User-Role')
 	const data = await response.json()
+	if (!response.ok) {
+		onError && onError()
+		throw new Error(data.message||'что-то пошло не так')
+	}
 	if(!token || !id || !date || !role){
 		throw Error("error auth data")
-	}
-	if (!response.ok) {
-		onError && await onError()
-		throw new Error(data.message||'что-то пошло не так')
 	}
 	onSuccess && await onSuccess({token, id, expires_at:date, role})
 	return token

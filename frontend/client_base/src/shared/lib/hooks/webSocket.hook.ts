@@ -32,7 +32,7 @@ export const useSocket = () =>{
       if(!socket.current) return;
       socket.current.onmessage = function(e) {
         const data: ISocketData = JSON.parse(e.data);
-        console.log(data);
+        // console.log(data);
       }
       socket.current.onerror = closeSocket
       socket.current.onclose = () => {

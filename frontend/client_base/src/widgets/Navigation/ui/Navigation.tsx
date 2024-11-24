@@ -1,6 +1,5 @@
 
-import {NavigationBar, NavigationDrawer, NavigationRail, NavigationButton as NB, ScreenSize, useScreenSize} from 'alex-evo-sh-ui-kit'
-import { Home, Menu, Plug } from "lucide-react"
+import {Home, MenuIcon, NavigationBar, NavigationDrawer, NavigationRail, NavigationButton as NB, Plug, ScreenSize, useScreenSize} from 'alex-evo-sh-ui-kit'
 import { useState } from "react"
 
 export const Navigation = () => {
@@ -13,7 +12,7 @@ export const Navigation = () => {
 		text: "menu",
 		type: "button",
 		onClick: ()=>setVisible(prev=>!prev),
-		icon: <Menu/>
+		icon: <MenuIcon/>
 	},
 	{
 		text: "home",
