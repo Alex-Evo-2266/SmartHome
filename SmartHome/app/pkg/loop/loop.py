@@ -1,71 +1,70 @@
 from datetime import datetime, timedelta
-from threading import Thread
 from pydantic import BaseModel
 import asyncio
 import logging
-from typing import Any, Callable, List
+from typing import Any, Callable, List, Dict
 
 logger = logging.getLogger(__name__)
 
 class EventLoopItem(BaseModel):
-	name: str
-	interval: int
-	function: Callable[[Any],Any]
-	time_run: datetime
+    name: str
+    interval: int
+    function: Callable[[], Any]
+    next_run: datetime
 
-class EventLoop(Thread):
+class EventLoop:
+    def __init__(self):
+        self.functions: Dict[str, EventLoopItem] = {}
+        self.running = False
 
-	def __init__(self):
-		super(EventLoop, self).__init__()
-		self.functions:List[EventLoopItem] = []
-		self.running = False
+    def register(self, key: str, function: Callable[[], Any], interval: int = 0):
+        """
+        Регистрирует функцию для выполнения.
+        :param key: Уникальный идентификатор функции
+        :param function: Функция для выполнения
+        :param interval: Интервал выполнения в секундах (0 - однократный запуск)
+        """
+        self.functions[key] = EventLoopItem(
+            name=key,
+            function=function,
+            interval=interval,
+            next_run=datetime.now()
+        )
 
-	def register(self, key: str, function, interval: int = 0):
-		'''
-		key: уникальное значение по которому можно определить функцию.
-		при добавлении нескольких функций с одинаковым ключем применится только последняя.
-		function: функция
-		interval: интервал срабатывания. при interval == 0 выполнится только 1 раз
-		'''
-		for item in self.functions:
-			if(item.name == key):
-				item.interval = interval
-				item.function = function
-				return None
-		self.functions.append(EventLoopItem(
-			function=function,
-			name=key,
-			interval=interval,
-			time_run=datetime.now()
-		))
+    def unregister(self, key: str):
+        """Удаляет зарегистрированную функцию по ключу."""
+        self.functions.pop(key, None)
 
-	def unregister(self, key: str):
-		for item in self.functions:
-			if(item.name == key):
-				del item
+    def clear(self):
+        """Очищает все зарегистрированные функции."""
+        self.functions.clear()
 
-	def clear(self):
-		self.functions = []
+    async def _run_task(self, item: EventLoopItem):
+        try:
+            await item.function()
+        except Exception as e:
+            logger.error(f"Ошибка выполнения функции {item.name}: {e}")
 
-	def stop(self):
-		self.running = False
+    async def run(self):
+        """Запускает главный цикл выполнения событий."""
+        self.running = True
+        while self.running:
+            now = datetime.now()
+            tasks = []
+            
+            for key, item in list(self.functions.items()):
+                if now >= item.next_run:
+                    tasks.append(self._run_task(item))
+                    if item.interval > 0:
+                        item.next_run = now + timedelta(seconds=item.interval)
+                    else:
+                        del self.functions[key]
+            
+            if tasks:
+                await asyncio.gather(*tasks)
+            
+            await asyncio.sleep(1)
 
-	def run(self):
-		self.running = True
-		asyncio.run(self.run_async())
-
-	async def run_async(self):
-		for item in self.functions:
-			f = item.function
-			await f()
-		while self.running:
-			for item in self.functions:
-				if(item.interval > 0 and datetime.now() > (timedelta(seconds=item.interval) + item.time_run)):
-					try:
-						item.time_run = datetime.now()
-						f = item.function
-						await f()
-					except Exception as e:
-						logger.error(f"error call function {item.name}. detail:{e}")
-
-			await asyncio.sleep(1)
+    def stop(self):
+        """Останавливает выполнение событий."""
+        self.running = False

@@ -10,10 +10,10 @@ ENV POETRY_CACHE_DIR='/var/cache/pypoetry'
 RUN apt-get update
 RUN apt-get upgrade -y
 
-RUN mkdir -p /home/email_service
+RUN mkdir -p /home/device_service
 
-ENV HOME=/home/email_service
-ENV APP_HOME=/home/email_service/web
+ENV HOME=/home/device_service
+ENV APP_HOME=/home/device_service/web
 ENV APP_MEDIA=$APP_HOME/media
 
 RUN mkdir $APP_HOME
@@ -34,6 +34,6 @@ WORKDIR $APP_HOME
 # RUN mkdir media
 RUN chmod 777 media/
 
-RUN groupadd email_service
-RUN useradd -m -g email_service email_service -p PASSWORD
-RUN usermod -aG email_service email_service
+RUN groupadd device_service
+RUN useradd -m -g device_service device_service -p PASSWORD
+RUN usermod -aG device_service device_service

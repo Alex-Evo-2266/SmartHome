@@ -11,6 +11,19 @@ class DeviceNotFound(Exception):
 		else:
 			return "DeviceNotFound"
 		
+class DevicesStructureNotFound(Exception):
+	def __init__(self, *args: object) -> None:
+		if args:
+			self.message = args[0]
+		else:
+			self.message = "Device structure not found."
+	
+	def __str__(self) -> str:
+		if self.message:
+			return f"DevicesStructureNotFound, {self.message}"
+		else:
+			return "DevicesStructureNotFound"
+		
 
 class ClassAlreadyExistsException(Exception):
 	def __init__(self, *args: object) -> None:

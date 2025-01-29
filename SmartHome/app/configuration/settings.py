@@ -53,6 +53,9 @@ LOOP_SEND_DEVICE = 'send-device-data'
 #websocket key
 TYPE_SEND_DEVICE = "device-send"
 
+#poll keys
+DEVICE_DATA_POLL = "poll-device-data"
+
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 
 DEFAULT_SEND_INTERVAL = 6

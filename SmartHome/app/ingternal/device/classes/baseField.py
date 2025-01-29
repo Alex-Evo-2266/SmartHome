@@ -2,7 +2,7 @@ from app.ingternal.device.interface.field_class import IField
 from app.ingternal.device.schemas.device import DeviceSerializeFieldSchema
 from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema
 from app.ingternal.device.schemas.enums import TypeDeviceField
-from app.ingternal.device.arrays.DeviceDataArray import DevicesDataArrey
+# from app.ingternal.modules.arrays.serviceDataPoll import DevicesDataArrey
 
 class FieldBase(IField):
 	def __init__(self, field: DeviceSerializeFieldSchema, device_system_name: str):

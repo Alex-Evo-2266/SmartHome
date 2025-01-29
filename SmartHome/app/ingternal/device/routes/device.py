@@ -9,6 +9,8 @@ from app.ingternal.device.schemas.config import DeviceClassConfigSchema
 
 from app.ingternal.device.serialize_model.read import get_serialize_device, get_device
 from app.ingternal.device.helpers.get_option_device import get_config_devices
+from app.ingternal.device.serialize_model.create import add_device
+from app.ingternal.device.serialize_model.delete import delete_device
 
 router = APIRouter(
 	prefix="/api-devices/devices",
@@ -21,7 +23,7 @@ logger = logging.getLogger(__name__)
 @router.post("")
 async def add_device_url(data:AddDeviceSchema):
 	try:
-		
+		await add_device(data)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))
@@ -38,6 +40,7 @@ async def edit_dev(system_name:str, data:EditDeviceSchema):
 @router.delete("/{system_name}")
 async def delete_dev(system_name:str):
 	try:
+		await delete_device(system_name)
 		return "ok"
 	except Exception as e:
 		logger.warning(str(e))

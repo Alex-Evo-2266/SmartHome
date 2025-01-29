@@ -1,15 +1,19 @@
 import logging
-from app.ingternal.device.arrays.DeviceDataArray import DevicesDataArrey
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
+from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
 from app.configuration.loop.loop import loop
 from app.pkg.websoket.websocket import WebSocketMenager
 from app.pkg import __config__
-from app.configuration.settings import TYPE_SEND_DEVICE, SEND_DEVICE_CONF, LOOP_SEND_DEVICE
+from app.configuration.settings import TYPE_SEND_DEVICE, SEND_DEVICE_CONF, LOOP_SEND_DEVICE, DEVICE_DATA_POLL
 
 logger = logging.getLogger(__name__)
 
 async def send_device_data():
-	data = DevicesDataArrey.all()
-	schemas = [x.device for x in data]
+	devices:DeviceRegistry | None = servicesDataPoll.get(DEVICE_DATA_POLL)
+	if not devices:
+		logger.warning("not devices structure")
+		return
+	schemas = devices.get_all_devices()
 	await WebSocketMenager.send_information(TYPE_SEND_DEVICE, schemas)
 	print('device send')
 

@@ -2,10 +2,28 @@ from app.ingternal.device.models.device import Device, DeviceField
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSerializeFieldSchema
 from app.ingternal.device.serialize_model.utils import map_status
 from typing import List
+import logging
 
-async def serialize_device(device: Device | None, fields_include: bool = False)->DeviceSerializeSchema | None:
-    if(not device):
+# Set up logger for the module
+logger = logging.getLogger(__name__)
+
+async def serialize_device(device: Device | None, fields_include: bool = False) -> DeviceSerializeSchema | None:
+    """
+    Serialize a single device into DeviceSerializeSchema.
+    Сериализует одно устройство в DeviceSerializeSchema.
+
+    Args:
+        device: The device to serialize.
+        fields_include: Whether to include fields in the serialization (default is False).
+
+    Returns:
+        DeviceSerializeSchema or None: Serialized device data if device exists, else None.
+    """
+    if not device:
+        logger.warning("Device is None, skipping serialization.")  # Log if device is None
         return None
+    
+    logger.debug(f"Serializing device: {device.system_name}...")  # Log the device being serialized
     data = DeviceSerializeSchema(
         name=device.name,
         system_name=device.system_name,
@@ -17,15 +35,44 @@ async def serialize_device(device: Device | None, fields_include: bool = False)-
         type_get_data=device.type_get_data,
         status=map_status(device.status)
     )
+    
     if fields_include:
+        logger.debug(f"Fields included in the serialization for device: {device.system_name}.")  # Log if fields are included
         data.fields = [await serialize_device_field(x) for x in await device.fields.all()]
+    
+    logger.debug(f"Device {device.system_name} serialized successfully.")  # Log success
     return data
 
 async def serialize_device_all(fields_include: bool = False):
+    """
+    Serialize all devices into a list of DeviceSerializeSchema.
+    Сериализует все устройства в список DeviceSerializeSchema.
+
+    Args:
+        fields_include: Whether to include fields in the serialization (default is False).
+
+    Returns:
+        List: List of serialized devices.
+    """
+    logger.debug("Fetching all devices from the database for serialization...")  # Log the start of fetching devices
     data = await Device.objects.all()
-    return [await serialize_device(x, fields_include) for x in data]
+    serialized_devices = [await serialize_device(x, fields_include) for x in data]
+    logger.debug(f"Serialized {len(serialized_devices)} devices.")  # Log how many devices were serialized
+    return serialized_devices
 
 async def serialize_device_field(field: DeviceField, device_include: bool = False):
+    """
+    Serialize a single device field into DeviceSerializeFieldSchema.
+    Сериализует одно поле устройства в DeviceSerializeFieldSchema.
+
+    Args:
+        field: The device field to serialize.
+        device_include: Whether to include the device in the field serialization (default is False).
+
+    Returns:
+        DeviceSerializeFieldSchema: Serialized device field data.
+    """
+    logger.debug(f"Serializing field: {field.name}...")  # Log the field being serialized
     data = DeviceSerializeFieldSchema(
         id=field.id,
         name=field.name,
@@ -40,9 +87,15 @@ async def serialize_device_field(field: DeviceField, device_include: bool = Fals
         entity=field.entity,
         virtual_field=field.virtual_field
     )
+    
     if device_include:
+        logger.debug(f"Including device data in the field serialization for field: {field.name}.")  # Log device inclusion
         await field.device.load()
-        data.device = serialize_device(field.device)
-    fields:List[DeviceField] = await DeviceField.objects.all(entity=field.id)
+        data.device = await serialize_device(field.device)
+    
+    logger.debug(f"Fetching entity list for field: {field.name}...")  # Log entity list fetching
+    fields: List[DeviceField] = await DeviceField.objects.all(entity=field.id)
     data.entity_list_id = [x.id for x in fields]
+    
+    logger.debug(f"Field {field.name} serialized successfully.")  # Log success
     return data
