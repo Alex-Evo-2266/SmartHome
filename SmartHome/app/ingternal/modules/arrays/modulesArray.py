@@ -107,20 +107,20 @@ class ModulesArray:
         cls.modules[name] = module
 
     @classmethod
-    def start(cls) -> None:
+    async def start(cls) -> None:
         """Запускает все зарегистрированные модули."""
         for name, module in cls.modules.items():
             if hasattr(module, 'start'):
                 logger.info(f"Запуск модуля {name}")
-                module.start()
+                await module.start()
 
     @classmethod
-    def stop(cls) -> None:
+    async def stop(cls) -> None:
         """Останавливает все зарегистрированные модули."""
         for name, module in cls.modules.items():
             if hasattr(module, 'stop'):
                 logger.info(f"Остановка модуля {name}")
-                module.stop()
+                await module.stop()
 
     @classmethod
     def for_each(cls, callback: Callable) -> None:

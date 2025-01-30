@@ -38,7 +38,7 @@ async def startup():
     )
 
     # Initialize the module
-    getModule()
+    await getModule()
 
     # Print all device classes and services
     print(DeviceClasses.all())

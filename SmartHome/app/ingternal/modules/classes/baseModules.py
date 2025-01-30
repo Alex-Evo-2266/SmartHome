@@ -11,9 +11,9 @@ class BaseModule(metaclass=ModulesMeta, scan_module=False):
     formaters = []
 
     @classmethod
-    def start(cls):
+    async def start(cls):
         pass
 
     @classmethod
-    def stop(cls):
+    async def stop(cls):
         pass

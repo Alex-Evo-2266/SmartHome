@@ -8,7 +8,7 @@ class ServiceMeta(type):
         new_class = super().__new__(cls, clsname, bases, dct)
         if use:
             try:
-                servicesDataPoll.set(f"service_{clsname}", new_class)
+                servicesDataPoll.set(clsname, new_class)
                 logger.info(f"Сервис {clsname} зарегистрирован в servicesDataPoll")
             except Exception as e:
                 logger.error(f"Ошибка регистрации {clsname}: {e}")

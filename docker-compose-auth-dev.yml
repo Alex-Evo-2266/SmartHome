@@ -125,6 +125,23 @@ services:
       - 8088:80
     environment:
       - PMA_ARBITRARY=1
+  mosquitto:
+    container_name: mosquitto
+    build:
+      context: ./mosquitto
+      dockerfile: Dockerfile
+      args:
+        MOSQUITTO_USER: ${MOSQUITTO_USER}
+        MOSQUITTO_PASSWD: ${MOSQUITTO_PASSWD}
+    restart: always
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - 1884:1883
+    environment:
+      MQTT_BROKER_URL: mqtt://mosquitto
 volumes:
   media_voluem:
   media2_voluem:
