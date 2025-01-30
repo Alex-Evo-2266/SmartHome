@@ -3,7 +3,7 @@ from app.configuration.settings import FREQUENCY, LOOP_DEVICE_POLLING
 from app.configuration.loop.loop import loop
 from app.pkg import __config__
 from app.ingternal.device.saveDataInPoll import update_device_in_poll
-from app.ingternal.device.arrays.DevicesArrey import DevicesArrey
+from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.device.arrays.DeviceClasses import DeviceClasses
 from app.ingternal.device.schemas.enums import StatusDevice, DeviceGetData
 from app.ingternal.device.schemas.device import DeviceSerializeSchema
@@ -37,8 +37,8 @@ class LoadingDevice():
 
 async def init_device(device_data: DeviceSerializeSchema):
     """
-    Инициализация устройства и добавление его в DevicesArrey, если успешно.
-    / Initialize a device and add it to the DevicesArrey if successful.
+    Инициализация устройства и добавление его в DevicesArray, если успешно.
+    / Initialize a device and add it to the DevicesArray if successful.
     
     Инициализация устройства, проверка его подключения и обновление полей, если необходимо.
     Если устройство не поддерживается или оффлайн, возвращается соответствующий статус.
@@ -63,8 +63,8 @@ async def init_device(device_data: DeviceSerializeSchema):
     if device_class.device_config.init_field:
         await edit_fields(device_data, [x._get_initial_data() for x in device.get_fields()], option=device_class.device_config)
 
-    # Добавление устройства в DevicesArrey / Add device to DevicesArrey
-    DevicesArrey.add_device(device_data.system_name, device)
+    # Добавление устройства в DevicesArray / Add device to DevicesArray
+    DevicesArray.add_device(device_data.system_name, device)
     return device
 
 async def polling(device_data: DeviceSerializeSchema):
@@ -93,7 +93,7 @@ async def polling(device_data: DeviceSerializeSchema):
             return 
 
         # Обработка подключения устройства / Handle device connection
-        connection_device_item = DevicesArrey.get(device_data.system_name)
+        connection_device_item = DevicesArray.get(device_data.system_name)
         if not connection_device_item:
             device = await init_device(device_data)
             if device == StatusDevice.NOT_SUPPORTED or device == StatusDevice.OFFLINE:
@@ -118,11 +118,11 @@ async def polling(device_data: DeviceSerializeSchema):
         LoadingDevice.remove(device_data.system_name)
     except Exception as e:
         logger.error(f"Error polling device {device_data.system_name}: {e}")
-        element = DevicesArrey.get(device_data.system_name)
+        element = DevicesArray.get(device_data.system_name)
         LoadingDevice.remove(device_data.system_name)
 
         if element:
-            DevicesArrey.delete(device_data.system_name)
+            DevicesArray.delete(device_data.system_name)
         
         update_device_in_poll(get_default_data(device_data, StatusDevice.OFFLINE))
 

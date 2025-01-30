@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Any
 from app.ingternal.modules.arrays.serviceDataPoll import ObservableDict
 
 logger = logging.getLogger(__name__)
@@ -10,6 +10,6 @@ class DeviceRegistry(ObservableDict):
         super().__init__()
         logger.info("DeviceRegistry инициализирован")
 
-    def get_all_devices(self) -> List[dict]:
+    def get_all_devices(self) -> List[Any]:
         """Возвращает список всех устройств."""
         return list(self._data.values())

@@ -3,7 +3,7 @@ from app.ingternal.device.classes.baseDevice import BaseDevice
 class MQTTDevice(BaseDevice):
 	
 	def __init__(self, *args, **kwargs):
-		super().__init__(**kwargs)
+		super().__init__(*args, **kwargs)
 	
 	def load(self):
 		super().load()

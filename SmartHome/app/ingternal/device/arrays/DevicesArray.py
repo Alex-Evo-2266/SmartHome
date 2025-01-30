@@ -6,19 +6,19 @@ from typing import Any, List
 logger = logging.getLogger(__name__)
 
 
-class DevicesArreyItem(BaseModel):
+class DevicesArrayItem(BaseModel):
 	id:str
 	device: Any
 
-class DevicesArrey():
-    devices:List[DevicesArreyItem] = []
+class DevicesArray():
+    devices:List[DevicesArrayItem] = []
 
     @classmethod
     def add_device(cls, id:str, device):
         for item in cls.devices:
             if(item.id==id):
                 return None
-        cls.devices.append(DevicesArreyItem(id=id, device=device))
+        cls.devices.append(DevicesArrayItem(id=id, device=device))
         return cls.devices
 
     @classmethod
@@ -39,7 +39,7 @@ class DevicesArrey():
             return None
 
     @classmethod
-    def get(cls, id:str)->DevicesArreyItem|None:
+    def get(cls, id:str)->DevicesArrayItem|None:
         for item in cls.devices:
             if(item.id==id):
                 return item
