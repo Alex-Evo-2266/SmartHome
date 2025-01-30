@@ -12,4 +12,4 @@ class DeviceRegistry(ObservableDict):
 
     def get_all_devices(self) -> List[Any]:
         """Возвращает список всех устройств."""
-        return list(self._data.values())
+        return self.get_all_data()

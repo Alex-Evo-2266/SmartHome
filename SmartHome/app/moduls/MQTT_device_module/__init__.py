@@ -1,7 +1,7 @@
 from app.ingternal.modules.classes.baseModules import BaseModule
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
 from .services.MqttService import MqttService
-from .settings import MQTT_SERVICE_PATH, MQTT_PASSWORD, MQTT_BROKER_IP, MQTT_PORT, MQTT_USERNAME
+from .settings import MQTT_SERVICE_PATH, MQTT_PASSWORD, MQTT_BROKER_IP, MQTT_PORT, MQTT_USERNAME, MQTT_MESSAGES
 from app.pkg import itemConfig, ConfigItemType, __config__
 
 from typing import Optional
@@ -13,6 +13,7 @@ class Module(BaseModule, required_libraries = ["paho-mqtt"]):
         await super().start()
 
         mqtt_service: Optional[MqttService] = servicesDataPoll.get(MQTT_SERVICE_PATH)
+        servicesDataPoll.set(MQTT_MESSAGES, {})
 
         print(mqtt_service)
 

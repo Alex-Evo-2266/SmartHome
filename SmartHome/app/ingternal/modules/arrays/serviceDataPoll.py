@@ -78,7 +78,7 @@
 # 				return item
 # 		return None
 
-from typing import Callable, Dict
+from typing import Callable, Dict, List, Any
 import time
 import logging
 
@@ -104,6 +104,13 @@ class ObservableDict:
         value = self._data.get(key, default)
         logger.info(f"Получено: {key} = {value}")
         return value
+    
+    def get_all(self):
+        return self._data
+    
+    def get_all_data(self) -> List[Any]:
+        """Возвращает список."""
+        return list(self._data.values())
 
     def get_last_modified(self, key):
         timestamp = self._timestamps.get(key, None)
