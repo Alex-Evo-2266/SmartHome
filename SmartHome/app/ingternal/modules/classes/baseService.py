@@ -18,5 +18,5 @@ class BaseService(IBaseService, metaclass=ServiceMeta, use=False):
         pass
 
     @classmethod
-    def run_command(cls, command, **keys):
+    def run_command(cls, *arg, **keys):
         pass

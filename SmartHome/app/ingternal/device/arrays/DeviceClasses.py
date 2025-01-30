@@ -16,7 +16,7 @@ class DeviceClasses(object):
 	def add(cls, class_name:str, new_class:type[IDevice])->None:
 		if class_name in cls._classes:
 			raise ClassAlreadyExistsException()
-		logger.info("added device class",class_name)
+		logger.info(f"added device class {class_name}")
 		cls._classes[class_name] = new_class
 
 	@classmethod

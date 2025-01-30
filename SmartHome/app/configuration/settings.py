@@ -24,8 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SCRIPT_AUTOMATION_PREFEX = "automation"
 
-SERVER_CONFIG = os.path.join(BASE_DIR, "files","server-config.yml")
-SCRIPTS_DIR = os.path.join(BASE_DIR, "files","scripts")
+MODULS_DIR = os.path.join(BASE_DIR, "app","moduls")
 # DEVICETYPES = os.path.join(BASE_DIR, "files","devTypes.yml")
 # STYLES_DIR = os.path.join(BASE_DIR, "files","styles")
 # PAGES_DIR =  os.path.join(BASE_DIR, "files","pages")

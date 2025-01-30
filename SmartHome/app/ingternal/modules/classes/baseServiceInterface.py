@@ -16,5 +16,5 @@ class IBaseService():
         pass
 
     @classmethod
-    def run_command(cls, command, **keys):
+    def run_command(cls, *arg, **keys):
         pass

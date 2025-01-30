@@ -13,7 +13,6 @@ from app.ingternal.device.polling import restart_polling
 from app.ingternal.device.send import restart_send_device_data
 from app.moduls import getModule
 from app.ingternal.device.arrays.DeviceClasses import DeviceClasses
-from app.ingternal.modules.arrays.serviceArray import ServiceArray
 from app.ingternal.device.models.device import Device
 
 # Logger setup
@@ -43,10 +42,6 @@ async def startup():
 
     # Print all device classes and services
     print(DeviceClasses.all())
-    print(ServiceArray.services)
-
-    # Start the service
-    await ServiceArray.start()
 
     logger.info("generating config")
 

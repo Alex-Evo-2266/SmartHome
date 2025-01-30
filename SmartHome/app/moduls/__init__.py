@@ -4,6 +4,9 @@ def f(data):
     print(data)
 
 def getModule():
-    ModulesArray.initModules(__name__)
+    ModulesArray.install_dependencies(__name__)
+    ModulesArray.init_modules(__name__)
     ModulesArray.start()
-    ModulesArray.forEtch(f)
+    ModulesArray.for_each(f)
+
+

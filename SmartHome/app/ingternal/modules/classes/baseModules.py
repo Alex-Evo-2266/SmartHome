@@ -1,6 +1,11 @@
+import importlib
+import subprocess
+import sys
+import logging
+
 from .metaModules import ModulesMeta
 
-sep = '.'
+logger = logging.getLogger(__name__)
 
 class BaseModule(metaclass=ModulesMeta, scan_module=False):
     formaters = []

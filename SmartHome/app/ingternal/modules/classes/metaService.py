@@ -1,14 +1,15 @@
 import logging
-from ..utils.get_device_classes import init_device_calsses
-from ..utils.get_services import get_services
-from app.ingternal.modules.arrays.serviceArray import ServiceArray
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
 
 logger = logging.getLogger(__name__)
 
 class ServiceMeta(type):
-	def __new__(cls, clsname, bases, dct, use=True):
-
-		new_class = super(ServiceMeta, cls).__new__(cls, clsname, bases, dct)
-		if use:
-			ServiceArray.register(clsname, new_class)
-		return new_class
+    def __new__(cls, clsname, bases, dct, use=True):
+        new_class = super().__new__(cls, clsname, bases, dct)
+        if use:
+            try:
+                servicesDataPoll.set(f"service_{clsname}", new_class)
+                logger.info(f"Сервис {clsname} зарегистрирован в servicesDataPoll")
+            except Exception as e:
+                logger.error(f"Ошибка регистрации {clsname}: {e}")
+        return new_class
