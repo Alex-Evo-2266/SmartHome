@@ -1,36 +1,12 @@
 import paho.mqtt.client as mqtt
-import logging
+import logging, asyncio
 from app.ingternal.modules.classes.baseService import BaseService
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
+from ..utils import update_topic_in_dict
 from app.pkg import __config__
 from ..settings import MQTT_PASSWORD, MQTT_BROKER_IP, MQTT_PORT, MQTT_USERNAME, MQTT_MESSAGES
 
 logger = logging.getLogger(__name__)
-
-def update_topic_in_dict(topic: str, data: str, current_dict: dict = None) -> dict:
-    # Разбиваем строку на части по символу '/'
-    parts = topic.split('/')
-    
-    # Если current_dict не передан, создаем пустой словарь
-    if current_dict is None:
-        current_dict = {}
-    
-    # Начинаем с первого элемента из parts
-    part = parts[0]
-    
-    # Если это последний элемент, обновляем _value
-    if len(parts) == 1:
-        current_dict[part] = {"_value": data}
-    else:
-        # Если элемента нет в словаре, создаем его с _value
-        if part not in current_dict:
-            current_dict[part] = {"_value": ""}
-        
-        # Рекурсивно продолжаем работать с оставшимися частями
-        current_dict[part] = update_topic_in_dict('/'.join(parts[1:]), data, current_dict[part])
-    
-    # Возвращаем обновленный словарь
-    return current_dict
 
 class MqttService(BaseService):
     client = None
@@ -92,7 +68,7 @@ class MqttService(BaseService):
         logger.info(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
         topics = servicesDataPoll.get(MQTT_MESSAGES)
         new_topics = update_topic_in_dict(msg.topic, msg.payload.decode(), topics)
-        servicesDataPoll.set(MQTT_MESSAGES, new_topics)
+        asyncio.run(servicesDataPoll.set_async(MQTT_MESSAGES, new_topics))
         print(new_topics)
 
     @classmethod

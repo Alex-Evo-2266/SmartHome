@@ -1,8 +1,9 @@
 from app.ingternal.modules.classes.baseModules import BaseModule
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
 from .services.MqttService import MqttService
-from .settings import MQTT_SERVICE_PATH, MQTT_PASSWORD, MQTT_BROKER_IP, MQTT_PORT, MQTT_USERNAME, MQTT_MESSAGES
+from .settings import MQTT_SERVICE_PATH, MQTT_PASSWORD, MQTT_BROKER_IP, MQTT_PORT, MQTT_USERNAME, MQTT_MESSAGES, MQTT_DEVICE_UPDATE_DATA
 from app.pkg import itemConfig, ConfigItemType, __config__
+from .device_field_set import device_set_value
 
 from typing import Optional
 
@@ -38,3 +39,6 @@ class Module(BaseModule, required_libraries = ["paho-mqtt"]):
         )
 
         await mqtt_service.start()
+
+        servicesDataPoll.subscribe(MQTT_MESSAGES, MQTT_DEVICE_UPDATE_DATA, device_set_value)
+

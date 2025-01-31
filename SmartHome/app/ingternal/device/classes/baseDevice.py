@@ -51,6 +51,9 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 
 	def get_device(self)->any:
 		return self.device
+	
+	def get_class(self)->any:
+		return self.data.class_device
 
 	@property
 	def is_conected(self):

@@ -38,6 +38,9 @@ class IDevice():
 	def get_device(self)->any:
 		pass
 
+	def get_class(self)->str:
+		pass
+
 	@property
 	def is_conected(self):
 		'''
