@@ -44,10 +44,12 @@ CONFIG_TAG = "device-config"
 # config keys
 FREQUENCY = 'frequency'
 SEND_DEVICE_CONF = 'send-device-data'
+SAVE_DEVICE_CONF = 'save-device-data'
 
 # loop key
 LOOP_DEVICE_POLLING = 'device-polling'
 LOOP_SEND_DEVICE = 'send-device-data'
+LOOP_SAVE_DEVICE = 'save-device-data'
 
 #websocket key
 TYPE_SEND_DEVICE = "device-send"

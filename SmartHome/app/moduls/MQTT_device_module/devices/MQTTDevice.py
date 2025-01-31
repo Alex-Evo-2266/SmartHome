@@ -13,20 +13,6 @@ logging.basicConfig(level=logging.INFO)
 
 class MQTTDevice(BaseDevice):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        logger.info("MQTTDevice initialized")
-
-    def load(self):
-        """ Загружает устройство (синхронно). """
-        super().load()
-        logger.info("MQTTDevice loaded")
-
-    async def load_async(self):
-        """ Загружает устройство (асинхронно). """
-        await super().load_async()
-        logger.info("MQTTDevice loaded asynchronously")
-
     def set_value(self, field_id: str, value: str):
         """
         Устанавливает значение для указанного поля и отправляет команду через MQTT.

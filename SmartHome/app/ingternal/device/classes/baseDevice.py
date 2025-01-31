@@ -68,7 +68,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			return
 		field.set(value)
 
-	def save(self):
+	async def save(self):
 		pass
 
 	def load(self):

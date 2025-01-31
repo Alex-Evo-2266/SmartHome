@@ -77,7 +77,7 @@ class FieldBase(IField):
 	@staticmethod
 	def getInt(data:str | None):
 		try:
-			if not data:
+			if data is None:
 				return None
 			return int(data)
 		except ValueError:
@@ -85,21 +85,19 @@ class FieldBase(IField):
 
 	def set(self, status: str, script=True):
 		if self.data.type == TypeDeviceField.BINARY:
-			if self.data.high:
-				if self.data.high == status:
-					self.data.value = '1'
-			elif self.data.low:
-				if self.data.low == status:
-					self.data.value == '0'
-			elif status == '1':
+			if (not self.data.high is None) and str(self.data.high) == str(status):
 				self.data.value = '1'
-			elif status == '0':
-				self.data.value == '0'
+			elif (not self.data.low is None) and str(self.data.low) == str(status):
+				self.data.value = '0'
+			elif (self.data.low is None) and (self.data.high is None) and str(status) == '1':
+				self.data.value = '1'
+			elif (self.data.low is None) and (self.data.high is None) and str(status) == '0':
+				self.data.value = '0'
 		elif self.data.type == TypeDeviceField.NUMBER:
 			high = FieldBase.getInt(self.data.high)
 			low = FieldBase.getInt(self.data.low)
 			status_int = FieldBase.getInt(status)
-			if not status_int:
+			if status_int is None:
 				return
 			if high:
 				if high < status_int:
@@ -110,7 +108,7 @@ class FieldBase(IField):
 			self.data.value = str(status_int)
 		elif self.data.type == TypeDeviceField.ENUM:
 			enums = self.get_enum()
-			if not enums:
+			if enums is None:
 				return
 			if status in enums:
 				self.data.value = status

@@ -51,7 +51,7 @@ class IDevice():
 	def set_value(self, field_id: str, value: str):
 		pass
 
-	def save(self):
+	async def save(self):
 		pass
 
 

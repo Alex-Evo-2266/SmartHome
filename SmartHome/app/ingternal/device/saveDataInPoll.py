@@ -1,5 +1,5 @@
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
-from app.ingternal.device.schemas.device import DeviceSchema, DeviceSerializeSchema
+from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
 from app.configuration.settings import DEVICE_DATA_POLL
 import logging

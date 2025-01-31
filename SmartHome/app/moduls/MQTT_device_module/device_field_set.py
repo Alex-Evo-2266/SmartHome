@@ -47,7 +47,7 @@ async def device_set_value(key, value):
 
             # Получаем данные из токена
             data = get_value_from_token(address_device, value)
-            if not data:
+            if data is None:
                 logger.warning(f"No data extracted for device {address_device}, skipping...")
                 continue
 
@@ -60,10 +60,11 @@ async def device_set_value(key, value):
             for field in fields:
                 field_address = field.get_address()
                 if field_address in json_data:
-                    new_data = json_data.get(field_address, "")
+                    new_data = json_data.get(field_address, None)
+                    if new_data is None:
+                        continue
                     logger.info(f"Setting field {field_address} for device {address_device} to {new_data}")
-                    field.set(json.dumps(new_data))
-
+                    field.set(str(new_data))
         elif type_message == ReceivedDataFormat.STRING:
             logger.info(f"Processing STRING message for device {address_device}")
 
@@ -72,7 +73,7 @@ async def device_set_value(key, value):
                 full_address = f"{address_device}/{field_address}"
 
                 data = get_value_from_token(full_address, value)
-                if not data:
+                if data is None:
                     logger.warning(f"No data found for field {field_address} in device {address_device}, skipping...")
                     continue
 
