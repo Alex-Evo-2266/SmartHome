@@ -11,7 +11,7 @@ from app.pkg.ormar.dbormar import database
 from app.configuration.settings import FREQUENCY, SEND_DEVICE_CONF, DEVICE_DATA_POLL, LOOP_SAVE_DEVICE, SAVE_DEVICE_CONF
 from app.ingternal.device.polling import restart_polling
 from app.ingternal.device.send import restart_send_device_data
-from app.ingternal.device.save import save_device
+from app.ingternal.device.save import save_devices
 from app.moduls import getModule
 from app.ingternal.device.arrays.DeviceClasses import DeviceClasses
 from app.ingternal.device.models.device import Device
@@ -84,7 +84,7 @@ async def startup():
     if(save_device_conf.value == ''):
         save_device_conf.value = '6'
     if save_device_conf:
-        loop.register(LOOP_SAVE_DEVICE, save_device, int(save_device_conf.value))
+        loop.register(LOOP_SAVE_DEVICE, save_devices, int(save_device_conf.value))
         logger.info(f"Device saving loop registered with frequency: {save_device_conf.value}")
     else:
         logger.warning("SAVE_DEVICE_CONF not found in config, skipping device save loop registration.")

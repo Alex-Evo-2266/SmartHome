@@ -9,7 +9,6 @@ from app.ingternal.device.exceptions.device import DeviceNotFound
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 async def save_value(data: DeviceSchema):
     """
@@ -25,7 +24,7 @@ async def save_value(data: DeviceSchema):
         raise DeviceNotFound()
 
     # Получаем все поля устройства
-    fields: List[DeviceField] = await DeviceField.objects.all(device=device)
+    fields: List[DeviceField] = await DeviceField.objects.filter(device=device).all()
     if not fields:
         logger.warning(f"Device '{data.system_name}' has no fields.")
         return
@@ -47,7 +46,12 @@ async def save_value(data: DeviceSchema):
 
     # Создаём записи одним запросом, если есть данные
     if values_to_create:
-        await Value.objects.bulk_create(values_to_create)
-        logger.info(f"Successfully saved {len(values_to_create)} values for device '{data.system_name}'.")
+        try:
+            await Value.objects.bulk_create(values_to_create)
+            logger.info(f"Successfully saved {len(values_to_create)} values for device '{data.system_name}'.")
+        except Exception as e:
+            logger.error(f"Bulk insert failed, saving individually: {e}")
+            for val in values_to_create:
+                await val.save()
     else:
         logger.info(f"No valid values to save for device '{data.system_name}'.")

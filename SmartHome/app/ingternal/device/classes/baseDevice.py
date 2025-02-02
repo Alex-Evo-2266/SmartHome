@@ -1,10 +1,15 @@
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSchema, DeviceSerializeFieldSchema
+
+from app.ingternal.device.schemas.edit_device import EditDeviceSchema
+from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema, AddDeviceSchema
+
 from app.ingternal.device.schemas.config import ConfigSchema
 from app.ingternal.device.schemas.enums import ReceivedDataFormat, DeviceGetData
 from app.ingternal.device.classes.baseField import FieldBase
 from app.ingternal.device.classes.metaDevice import DeviceMeta
 from app.ingternal.device.interface.field_class import IField
+from app.ingternal.device.serialize_model.update import edit_fields
 
 class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 
@@ -69,7 +74,8 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		field.set(value)
 
 	async def save(self):
-		pass
+		initial_fields = [field._get_initial_data() for field in self.fields]
+		await edit_fields(self.data.system_name, initial_fields)
 
 	def load(self):
 		pass
