@@ -1,7 +1,12 @@
 import {useCallback, useRef} from 'react'
 import {ISocketData} from '../model/webSocket';
 
-export const useSocket = () =>{
+export interface MessageCallback {
+  messageType: string; // Тип сообщения
+  callback: (data: any) => void; // Функция callback, которая принимает любые данные
+}
+
+export const useSocket = (callbacks: MessageCallback[] = []) =>{
   const socket = useRef<WebSocket | null>(null);
   const timerId = useRef<number | undefined>(undefined);
 
@@ -32,7 +37,12 @@ export const useSocket = () =>{
       if(!socket.current) return;
       socket.current.onmessage = function(e) {
         const data: ISocketData = JSON.parse(e.data);
-        // console.log(data);
+        for(let collback of callbacks){
+          if(collback.messageType === data.type)
+          {
+            collback.callback(data.data)
+          }
+        }
       }
       socket.current.onerror = closeSocket
       socket.current.onclose = () => {

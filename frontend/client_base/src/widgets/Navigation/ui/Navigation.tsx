@@ -1,5 +1,6 @@
 
 import {Home, MenuIcon, NavigationBar, NavigationDrawer, NavigationRail, NavigationButton as NB, Plug, ScreenSize, useScreenSize} from 'alex-evo-sh-ui-kit'
+import {useHttp} from "../../../shared/lib/hooks/http.hook"
 import { useState } from "react"
 
 export const Navigation = () => {
@@ -7,6 +8,8 @@ export const Navigation = () => {
 	const {screen} = useScreenSize()
 
 	const [visible, setVisible] = useState<boolean>(false)
+
+	const {logout} = useHttp()
 
 	const BarBtn:NB[] = [{
 		text: "menu",
@@ -34,6 +37,14 @@ export const Navigation = () => {
 		type:"link",
 		to: "/device",
 		icon: <Plug/>
+	},
+	{
+		text: "logout",
+		type: "button",
+		icon: <span>T</span>,
+		onClick() {
+			logout()
+		},
 	}
 	]
 

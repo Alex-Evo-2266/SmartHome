@@ -96,7 +96,7 @@ services:
       SMARTHOME_BD_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ./SmartHome:/home/device_service/web
-      - media2_voluem:/home/device_service/web/media
+      - media_device_voluem:/home/device_service/web/media
   nginx:
     build: ./testNginx
     ports:
@@ -105,8 +105,10 @@ services:
       - auth_service
       - email_service
       - device_service
+      # - client
     volumes:
-      - media_voluem:/home/smart_home/web/media
+      - media_voluem:/home/smart_home/web/media/auth
+      - media_device_voluem:/home/smart_home/web/media/device
       - client_voluem:/client/build
   rabbitmq:
     image: rabbitmq:3-management
@@ -142,9 +144,17 @@ services:
       - 1884:1883
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
+  # client:
+  #   build:
+  #     context: ./frontend/client_base
+  #     dockerfile: Dockerfile
+  #     args:
+  #       REACT_APP_WS_HOST: ${HOST}
+  #   volumes:
+  #     - client_voluem:/client/build
 volumes:
   media_voluem:
-  media2_voluem:
+  media_device_voluem:
   client_voluem:
   bd_auth_data:
   bd_data:

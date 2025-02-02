@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 # Отправка данных о устройствах
 async def send_device_data():
+    print("p0")
     logger.info("Attempting to send device data...")
     devices: Optional[DeviceRegistry] = servicesDataPoll.get(DEVICE_DATA_POLL)
     
@@ -22,7 +23,7 @@ async def send_device_data():
     schemas = devices.get_all_devices()
     
     try:
-        await WebSocketMenager.send_information(TYPE_SEND_DEVICE, schemas)
+        await WebSocketMenager.send_information(TYPE_SEND_DEVICE, [device.dict() for device in schemas])
         logger.info("Device data successfully sent.")
     except Exception as e:
         logger.error(f"Error sending device data: {str(e)}")

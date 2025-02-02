@@ -12,18 +12,19 @@ type addDeviceDialogProps = {
 
 export const AddDeviceDialog:React.FC<addDeviceDialogProps> = ({onHide}) => {
 
-    const [option, setOption] = useState<DeviceClassOptions | undefined>(undefined)
+    const [option, setOption] = useState<DeviceClassOptions | null>(null)
     const {createDevice} = useCreateDevice()
 
+    const className = option?.class_name
     const save = useCallback((data: AddDeviceData) => {
-        if(option?.class_name){
-            createDevice({...data, class_device: option?.class_name, type: ''})
+        if(className){
+            createDevice({...data, class_device: className, type: ''})
             onHide()
         }
 
     },[createDevice, option])
 
-    if(option === undefined)
+    if(option === null)
         return(
             <SelectDeviceDialog onHide={onHide} onChange={setOption}/>
         )

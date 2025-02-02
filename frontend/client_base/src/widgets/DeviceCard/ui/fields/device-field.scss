@@ -1,0 +1,26 @@
+.device-field-container {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: var(--Surface-container-low-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .device-field-label {
+    color: var(--On-surface-color);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .device-field-value {
+    font-size: 12px;
+    color: var(--On-surface-color);
+  }
+  .device-field-input-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }

@@ -7,3 +7,5 @@ export {SelectField} from './ui/Select'
 export {Snackbar} from './ui/Snackbar'
 export {TimeField} from './ui/TimeField'
 import './ui/index.scss'
+
+export {useDebounce} from './lib/hooks/debounce.hook'

@@ -1,53 +1,66 @@
-import json, logging
-
+import json
+import logging
 from typing import List
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import WebSocket
 
 logger = logging.getLogger(__name__)
 
 class WebSocketMenager:
-	active_connections: List[WebSocket] = []
-	
-	@classmethod
-	async def connect(cls, websocket: WebSocket):
-		await websocket.accept()
-		
-		cls.active_connections.append(websocket)
+    active_connections: List[WebSocket] = []
 
-	@classmethod
-	def disconnect(cls, websocket: WebSocket):
-		cls.active_connections.remove(websocket)
+    @classmethod
+    async def connect(cls, websocket: WebSocket):
+        """Подключение клиента"""
+        await websocket.accept()
+        cls.active_connections.append(websocket)
+        logger.info(f"Client {websocket.client} connected")
 
-	@classmethod
-	async def send_personal_message(cls, message: str, websocket: WebSocket):
-		try:
-			await websocket.send_text(message)
-		except Exception as e:
-			logger.warning("send_personal_message: client not found")
-			cls.disconnect(websocket)
+    @classmethod
+    def disconnect(cls, websocket: WebSocket):
+        """Отключение клиента с проверкой"""
+        if websocket in cls.active_connections:
+            cls.active_connections.remove(websocket)
+            logger.info(f"Client {websocket.client} disconnected")
+        else:
+            logger.warning("Attempted to remove WebSocket that is not in active connections")
 
-	@classmethod
-	async def broadcast(cls, message: str):
-		for connection in cls.active_connections:
-			await connection.send_text(message)
+    @classmethod
+    async def send_personal_message(cls, message: str, websocket: WebSocket):
+        """Отправка личного сообщения клиенту"""
+        try:
+            await websocket.send_text(message)
+        except Exception:
+            logger.warning(f"send_personal_message: Client {websocket.client} not found")
+            cls.disconnect(websocket)
 
-	@classmethod
-	async def test(cls):
-		'''хочу проверить потом '''
-		for connection in cls.active_connections:
-			print(connection.client_state)
-			print(connection.application_state)
+    @classmethod
+    async def broadcast(cls, message: str):
+        """Отправка сообщения всем подключенным клиентам"""
+        disconnected_clients = []
+        for connection in cls.active_connections:
+            try:
+                await connection.send_text(message)
+            except Exception:
+                logger.warning(f"broadcast: Client {connection.client} not found")
+                disconnected_clients.append(connection)
 
-	@classmethod
-	async def send_information(cls, type: str, data):
-		for connection in cls.active_connections:
-			try:
-				await connection.send_text(
-					json.dumps({
-						'type':type,
-						'data':data
-						})
-				)
-			except Exception as e:
-				logger.warning("\x1b[33;20m" + "send_information: client not found")
-				cls.disconnect(connection)
+        # Удаляем всех клиентов, которые были отключены
+        for client in disconnected_clients:
+            cls.disconnect(client)
+
+    @classmethod
+    async def send_information(cls, type: str, data):
+        """Отправка информации всем клиентам"""
+        disconnected_clients = []
+        print("p1", cls.active_connections)
+        for connection in cls.active_connections:
+            await connection.send_text(json.dumps({'type': type, 'data': data}))
+            # try:
+            #     await connection.send_text(json.dumps({'type': type, 'data': data}))
+            # except Exception:
+            #     logger.warning(f"send_information: Client {connection.client} not found")
+            #     disconnected_clients.append(connection)
+
+        # Удаляем всех клиентов, которые были отключены
+        for client in disconnected_clients:
+            cls.disconnect(client)

@@ -43,9 +43,11 @@ export const useHttp = () => {
 			else if(e instanceof Error)
 				setError(e.message)
 		}
-	},[dispatch]);
+	},[dispatch, token]);
 
 	const clearError = useCallback(() => {setError(null)},[]);
 
-	return {loading, request, error, clearError}
+	const userLogout = useCallback(()=>dispatch(logout()),[dispatch])
+
+	return {loading, request, error, clearError, logout:userLogout}
 }
