@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.utils import get_openapi
 from app.configuration.routes import __routes__
 from app.pkg.ormar.dbormar import database
-from app.configuration.settings import MEDIA_ROOT, DEBUG, ORIGINS
+from app.configuration.settings import MEDIA_DIR, DEBUG, ORIGINS
 
 def custom_openapi(app:FastAPI):
 	def _custom_openapi():
@@ -45,7 +45,7 @@ class Server:
 		app.openapi = custom_openapi(app)
 
 		if DEBUG:
-			app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
+			app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")
 		else:
 			app.add_middleware(
 				CORSMiddleware,

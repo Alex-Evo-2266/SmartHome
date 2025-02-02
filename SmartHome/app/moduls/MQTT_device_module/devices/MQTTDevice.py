@@ -6,12 +6,16 @@ from ..services.MqttService import MqttService
 from ..settings import MQTT_SERVICE_PATH
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
 from app.ingternal.device.schemas.enums import ReceivedDataFormat
+from app.ingternal.device.schemas.config import ConfigSchema
+
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 class MQTTDevice(BaseDevice):
+
+    device_config = ConfigSchema(class_img="MQTT_device_module/logo.png")
 
     def set_value(self, field_id: str, value: str):
         """

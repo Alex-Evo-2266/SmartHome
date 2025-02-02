@@ -65,7 +65,7 @@ DEFAULT_SAVE_INTERVAL = 10
 
 MEDIA_URL = '/media/'
 MODULES_URL = '/media/modules/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
-MODULES_DIR = os.path.join(MEDIA_ROOT, 'modules')
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+BACKGROUND_DIR = os.path.join(MEDIA_DIR, 'backgrounds')
+MODULES_DIR = os.path.join(MEDIA_DIR, 'modules')
 

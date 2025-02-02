@@ -15,6 +15,7 @@ from app.ingternal.device.save import save_devices
 from app.moduls import getModule
 from app.ingternal.device.arrays.DeviceClasses import DeviceClasses
 from app.ingternal.device.models.device import Device
+from .utils.create_dirs import create_directorys
 
 # Logger setup
 logger = logging.getLogger(__name__)
@@ -25,6 +26,9 @@ async def startup():
     Инициализация сервиса устройств.
     """
     logger.info("Starting device service...")
+
+    logger.info("Starting create dirs...")
+    create_directorys()
 
     # Инициализация DeviceRegistry
     servicesDataPoll.set(DEVICE_DATA_POLL, DeviceRegistry())

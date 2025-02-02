@@ -1,9 +1,5 @@
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSchema, DeviceSerializeFieldSchema
-
-from app.ingternal.device.schemas.edit_device import EditDeviceSchema
-from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema, AddDeviceSchema
-
 from app.ingternal.device.schemas.config import ConfigSchema
 from app.ingternal.device.schemas.enums import ReceivedDataFormat, DeviceGetData
 from app.ingternal.device.classes.baseField import FieldBase

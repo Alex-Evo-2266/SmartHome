@@ -7,7 +7,7 @@ from .device_field_set import device_set_value
 
 from typing import Optional
 
-class Module(BaseModule, required_libraries = ["paho-mqtt"]):
+class Module(BaseModule):
     
     @classmethod
     async def start(cls):
