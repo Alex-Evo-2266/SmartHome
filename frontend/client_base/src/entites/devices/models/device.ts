@@ -48,12 +48,12 @@ export enum StatusDevice {
     system_name: string;
     class_device: string;
     type: string;
-    address?: string | null;
-    token?: string | null;
+    address?: string;
+    token?: string;
     type_command: ReceivedDataFormat;
     type_get_data: DeviceGetData;
     status: StatusDevice;
-    fields?: DeviceSerializeFieldSchema[] | null;
+    fields?: DeviceSerializeFieldSchema[];
   }
   
   export interface DeviceSchema extends DeviceSerializeSchema {

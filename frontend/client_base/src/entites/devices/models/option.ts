@@ -1,4 +1,5 @@
 
+
 export type ChangeField = {
     creation:boolean
     deleted: boolean
@@ -12,6 +13,9 @@ export type ChangeField = {
 	unit:boolean
 	enum_values:boolean
 	value:boolean
+    type_visible: boolean
+    virtual_field: boolean
+    read_only: boolean
 }
 
 export type OptionSchema = {

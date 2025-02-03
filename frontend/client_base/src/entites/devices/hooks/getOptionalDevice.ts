@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react"
 import { TypeRequest } from "../../../shared/api/type"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
-import { DeviceClassOptions } from "../models/options"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
+import { DeviceClassOptions } from "../models/option"
 
 
 export const useGetOptionDevice = () => {

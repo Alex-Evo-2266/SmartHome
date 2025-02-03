@@ -1,9 +1,9 @@
 import { ContentBox, Form, FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
-import { DeviceClassOptions } from "../models/options"
 import { useCallback, useEffect, useState } from "react"
 import { AddDeviceData } from "../models/deviceData"
 import { MODAL_ROOT_ID } from "../../../const"
 import { FieldList } from "./fieldList"
+import { DeviceClassOptions } from "../../../entites/devices"
 
 interface DeviceDataProps{
     option: DeviceClassOptions

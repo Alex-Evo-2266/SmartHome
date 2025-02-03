@@ -19,9 +19,10 @@ async def edit_device(system_name: str, data: EditDeviceSchema):
 	
 	await duble_field(data.fields, data.system_name)
 	await ef(device, data.fields)
-
+	data_obj = data.dict()
+	del data_obj['fields']
 	# Обновление устройства
-	device.update_from_dict(data.dict())
+	device.update_from_dict(data_obj)
 	await device.save()
 	
 	 # Удаление из кэша

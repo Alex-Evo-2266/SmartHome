@@ -1,8 +1,8 @@
 import { Form, FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useState } from "react"
-import { FieldData } from "../models/deviceData"
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions, TypeDeviceField } from "../../../entites/devices"
+import { FieldData } from "../models/editDeviceSchema"
 
 const BINARY_HIGH = '1'
 const BINARY_LOW = '0'
@@ -57,7 +57,7 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
         {
             errors.name = 'заполните имя'
         }
-        if(option.fields_change.address && field.address.length === 0)
+        if(option.fields_change.address && field.address.length === 0 && !field.virtual_field)
         {
             errors.address = 'заполните адрес'
         }
@@ -68,7 +68,6 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
     const save = useCallback(()=>{
         const errors = validField(value)
         setErrors(errors)
-        console.error(errors)
         if(Object.keys(errors).length === 0)
         {
             onSave && onSave(value)
@@ -80,7 +79,7 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
             <div style={{marginInline: '16px'}}>
                 <Form value={value} changeValue={change} errors={errors}>
                     {option.fields_change.name && <Form.TextInput border name="name" placeholder="name"/>}
-                    {option.fields_change.address && <Form.TextInput border name="address" placeholder="address"/>}
+                    {option.fields_change.address && !value.virtual_field && <Form.TextInput border name="address" placeholder="address"/>}
                     {option.fields_change.type && <Form.SelectInput container_id={MODAL_ROOT_ID} border name="type" items={getOption()} placeholder="type"/>}
                     {
                     (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?

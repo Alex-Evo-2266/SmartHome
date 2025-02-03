@@ -25,7 +25,6 @@ class MQTTDevice(BaseDevice):
         :param value: Значение для установки
         """
         super().set_value(field_id, value)
-
         # Получаем MQTT сервис
         mqtt_service: Optional[MqttService] = servicesDataPoll.get(MQTT_SERVICE_PATH)
         if mqtt_service is None:
@@ -37,17 +36,21 @@ class MQTTDevice(BaseDevice):
         if field is None:
             logger.error(f"Field with ID {field_id} not found")
             return
+    
+        if field.is_virtual_field():
+            logger.debug("this field virtual")
+            return
         
         address = self.data.address
         field_address = field.get_address()
 
         if self.data.type_command == ReceivedDataFormat.JSON:
             # Формируем JSON-сообщение
-            message = {f"{field_address}/set": value}
+            message = {f"{field_address}": value}
             json_message = json.dumps(message)
             
             logger.info(f"Sending JSON command to {address}: {json_message}")
-            mqtt_service.run_command(address, json_message)
+            mqtt_service.run_command(f"{address}/set", json_message)
 
         elif self.data.type_command == ReceivedDataFormat.STRING:
             # Формируем строковую команду

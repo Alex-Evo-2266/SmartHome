@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react"
 import { SelectDeviceDialog } from "./selectDeviceClass"
-import { DeviceClassOptions } from "../models/options"
 import { DeviceData } from "./deviceData"
 import './addDeviceDialog.scss'
 import { AddDeviceData } from "../models/deviceData"
 import { useCreateDevice } from "../api/createDevice"
+import { DeviceClassOptions } from "../../../entites/devices"
 
 type addDeviceDialogProps = {
     onHide: ()=>void
@@ -21,8 +21,7 @@ export const AddDeviceDialog:React.FC<addDeviceDialogProps> = ({onHide}) => {
             createDevice({...data, class_device: className, type: ''})
             onHide()
         }
-
-    },[createDevice, option])
+    },[createDevice, className])
 
     if(option === null)
         return(

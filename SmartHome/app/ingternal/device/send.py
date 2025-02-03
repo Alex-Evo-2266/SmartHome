@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 # Отправка данных о устройствах
 async def send_device_data():
-    print("p0")
     logger.info("Attempting to send device data...")
     devices: Optional[DeviceRegistry] = servicesDataPoll.get(DEVICE_DATA_POLL)
     

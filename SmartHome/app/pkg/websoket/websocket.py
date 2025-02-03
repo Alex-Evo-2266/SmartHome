@@ -52,7 +52,6 @@ class WebSocketMenager:
     async def send_information(cls, type: str, data):
         """Отправка информации всем клиентам"""
         disconnected_clients = []
-        print("p1", cls.active_connections)
         for connection in cls.active_connections:
             await connection.send_text(json.dumps({'type': type, 'data': data}))
             # try:

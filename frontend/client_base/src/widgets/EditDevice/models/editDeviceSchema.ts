@@ -1,5 +1,6 @@
 import { TypeDeviceField } from "../../../entites/devices"
 
+
 export type FieldData = {
     name: string
     address: string
@@ -9,9 +10,11 @@ export type FieldData = {
     read_only: boolean,
     unit: string,
     virtual_field: boolean
+    enum_values?: string
+    icon?: string
 }
 
-export type AddDeviceData = {
+export type EditDeviceData = {
     name: string
     system_name: string
     address?: string
@@ -21,7 +24,7 @@ export type AddDeviceData = {
     fields: FieldData[]
 }
 
-export type CreateDeviceData = {
+export type EditDeviceDataSendSchema = {
     name: string
     system_name: string
     address?: string

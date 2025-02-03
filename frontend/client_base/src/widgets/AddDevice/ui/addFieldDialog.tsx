@@ -1,7 +1,8 @@
 import { Form, FullScrinTemplateDialog, SigmentedButton } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useState } from "react"
-import { FieldData, TypeField } from "../models/deviceData"
+import { FieldData } from "../models/deviceData"
 import { MODAL_ROOT_ID } from "../../../const"
+import { TypeDeviceField } from "../../../entites/devices"
 
 const BINARY_HIGH = '1'
 const BINARY_LOW = '0'
@@ -18,7 +19,7 @@ function getInitData():FieldData{
     return {
         name: '',
         address: '',
-        type: TypeField.BINARY,
+        type: TypeDeviceField.BINARY,
         low: BINARY_LOW,
         high: BINARY_HIGH,
         read_only: false,
@@ -28,7 +29,7 @@ function getInitData():FieldData{
 }
 
 function getOption() {
-    const types = Object.values(TypeField)
+    const types = Object.values(TypeDeviceField)
     return types
 }
 
@@ -38,11 +39,11 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
     const [errors, setErrors] = useState<{[key:string]:string}>({})
 
     const change = (name: string, data: any) => {
-        if(name === 'type' && data === TypeField.BINARY)
+        if(name === 'type' && data === TypeDeviceField.BINARY)
         {
             return setValue(prev=>({...prev, type: data, low: BINARY_LOW, high: BINARY_HIGH}))
         }
-        if(name === 'type' && data === TypeField.NUMBER)
+        if(name === 'type' && data === TypeDeviceField.NUMBER)
         {
             return setValue(prev=>({...prev, type: data, low: NUMBER_LOW, high: NUMBER_HIGH}))
         }
@@ -81,8 +82,10 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
     }
 
     const save = useCallback(()=>{
+        console.log("d")
         const errors = validField(value)
         setErrors(errors)
+        console.log(errors)
         if(Object.keys(errors).length === 0)
         {
             onSave && onSave(value)
@@ -97,7 +100,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
                     <Form.TextInput border name="address" placeholder="address"/>
                     <Form.SelectInput container_id={MODAL_ROOT_ID} border name="type" items={getOption()} placeholder="type"/>
                     {
-                    (value.type === TypeField.BINARY || value.type === TypeField.NUMBER)?
+                    (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?
                     <>
                         <Form.TextInput border name="low" placeholder="low"/>
                         <Form.TextInput border name="high" placeholder="high"/>

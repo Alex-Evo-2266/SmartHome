@@ -1,10 +1,10 @@
 import { Button, ContentBox, Divider, IconButton, ListContainer, ListItem, Trash } from "alex-evo-sh-ui-kit"
 import { useCallback, useState } from "react"
-import { FieldData } from "../models/deviceData"
 import { DialogPortal } from "../../../shared"
-import { AddField } from "./addFieldDialog"
-import { EditField } from "./editField"
 import { DeviceClassOptions } from "../../../entites/devices"
+import { FieldData } from "../models/editDeviceSchema"
+import { EditField } from "./editField"
+import { AddField } from "./addFieldDialog"
 
 interface DeviceDataProps{
     option: DeviceClassOptions
@@ -41,6 +41,10 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
         return data? {data, index}: null
     },[fields])
 
+    const editClick = useCallback((index: number) => {
+        setEditFieldVisible(getField(index))
+    },[getField])
+
     return(
         <>
         {
@@ -54,7 +58,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
                         fields.map((item, index)=>(
                             <ListItem 
                             key={index} 
-                            onClick={()=>setEditFieldVisible(getField(index))}
+                            onClick={()=>editClick(index)}
                             hovered
                             header={item.name}
                             text={`address: ${item.address}`}
@@ -71,7 +75,10 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
                     }
                 </ListContainer>
                 <Divider/>
-                <Button onClick={()=>setAddFieldVisible(true)} styleType='filledTotal'>+</Button>
+                {
+                    option.fields_creation &&
+                    <Button onClick={()=>setAddFieldVisible(true)} styleType='filledTotal'>+</Button>
+                }
             </ContentBox>
         </div>
         }

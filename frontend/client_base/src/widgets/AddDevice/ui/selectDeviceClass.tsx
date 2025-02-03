@@ -1,6 +1,5 @@
 import { FullScrinTemplateDialog, ListContainer, ListItem } from "alex-evo-sh-ui-kit"
-import { useGetOptionDevice } from "../api/getOptionalDevice"
-import { DeviceClassOptions } from "../models/options"
+import { DeviceClassOptions, useGetOptionDevice } from "../../../entites/devices"
 
 type addDeviceDialogProps = {
     onHide: ()=>void

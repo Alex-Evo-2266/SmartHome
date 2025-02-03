@@ -5,6 +5,7 @@ from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema
 from app.ingternal.device.exceptions.device import DeviceNotFound
 from app.ingternal.device.utils.get_dict_from_list import get_dict_from_list
 from app.ingternal.device.schemas.config import ConfigSchema
+from app.ingternal.device.serialize_model.utils import create_field_id
 
 async def update_field(field:DeviceField, new_field: Dict[str, str], option:None | ConfigSchema = None):
 	if not option:
@@ -38,10 +39,14 @@ async def edit_fields(device: Device, new_fields: List[AddDeviceFieldSchema], op
 	for field in fields:
 		new_field = get_dict_from_list([x.dict() for x in new_fields], "name", field.name)
 		if new_field:
+
 			await update_field(field, new_field, option)
 			editable_field.append(field.name)
+
 		else:
 			await field.delete()
 	for new_field_data in new_fields:
 		if not new_field_data.name in editable_field:
-			new_field = await DeviceField.objects.create(**(new_field_data.dict()), device=device)
+			id = await create_field_id()
+			new_field = await DeviceField.objects.create(**(new_field_data.dict()), device=device, id=id)
+			

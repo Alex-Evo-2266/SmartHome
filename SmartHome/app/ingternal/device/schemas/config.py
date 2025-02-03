@@ -14,6 +14,8 @@ class ChangeField(BaseModel):
 	unit:bool = True
 	enum_values:bool = True
 	value:bool = False
+	virtual_field:bool = True
+	read_only:bool = True
 
 class ConfigSchema(BaseModel):
 	address: bool = True
