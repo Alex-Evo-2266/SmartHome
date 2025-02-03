@@ -4,6 +4,7 @@ import { RootPage } from "../pages/Root"
 import { HomePage } from "../pages/Home"
 import { DevicePage } from "../pages/Device"
 import TestPage from '../pages/Test/test'
+import { SettingsPage } from "../pages/Settings"
 
 
 
@@ -17,6 +18,7 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 					<Route path="home" element={<HomePage/>}/>
 					<Route path="device" element={<DevicePage/>}/>
 					<Route path="test" element={<TestPage/>}/>
+					<Route path="settings" element={<SettingsPage/>}/>
 					<Route path="/*" element={<Navigate replace to="/home" />} />
 				</Route>
 				:<>

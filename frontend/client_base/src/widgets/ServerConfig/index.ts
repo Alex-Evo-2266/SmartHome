@@ -1,0 +1,1 @@
+export {SettingsEditor} from "./ui/configCard"

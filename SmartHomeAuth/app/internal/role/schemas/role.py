@@ -12,7 +12,7 @@ class PrivilegeForm(BaseModel):
     privilege: str
 
 class PrivilegeSchema(BaseModel):
-    id: int
+    id: str
     privilege: str
 
 class RoleResponseSchema(BaseModel):

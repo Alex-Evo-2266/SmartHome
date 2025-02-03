@@ -34,7 +34,9 @@ async def add(data: PrivilegeForm, user_data:SessionDepData = Depends(user_preve
 @router.get("", response_model=List[PrivilegeSchema])
 async def get(user_data:SessionDepData = Depends(user_preveleg_dep(BASE_ROLE.ADMIN))):
 	try:
+		print("p89")
 		privileges = await get_privilege_all()
+		print("p89")
 		return [PrivilegeSchema(id=x.id, privilege=x.privilege) for x in privileges]
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
