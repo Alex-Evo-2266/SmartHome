@@ -73,7 +73,7 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
     useEffect(()=>{
         console.log(value)
     },[value])
-
+console.log(option)
 
     const save = useCallback(async()=>{
         const errors = validDevice(value, option)

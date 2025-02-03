@@ -3,6 +3,7 @@
 export type ChangeField = {
     creation:boolean
     deleted: boolean
+	edit:boolean
     name: boolean
     address:boolean
 	control:boolean

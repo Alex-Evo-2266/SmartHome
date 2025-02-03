@@ -5,7 +5,7 @@ from app.ingternal.device.schemas.enums import ReceivedDataFormat, DeviceGetData
 from app.ingternal.device.classes.baseField import FieldBase
 from app.ingternal.device.classes.metaDevice import DeviceMeta
 from app.ingternal.device.interface.field_class import IField
-from app.ingternal.device.serialize_model.update import edit_fields
+from app.ingternal.device.serialize_model.update import edit_fields, update_device_from_object
 
 class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 
@@ -81,6 +81,15 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	async def save(self):
 		initial_fields = [field._get_initial_data() for field in self.fields]
 		await edit_fields(self.data.system_name, initial_fields)
+		await update_device_from_object(
+			self.data.system_name,
+			self.data.status,
+			self.data.type_command,
+			self.data.type_get_data,
+			self.data.token,
+			self.data.address
+			)
+
 
 	def load(self):
 		pass

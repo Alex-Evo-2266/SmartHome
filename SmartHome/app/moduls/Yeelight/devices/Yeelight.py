@@ -3,7 +3,7 @@ from app.ingternal.device.schemas.config import ChangeField, ConfigSchema
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceInitFieldSchema
 from app.ingternal.device.classes.baseDevice import BaseDevice
 from app.ingternal.device.classes.baseField import FieldBase
-from app.ingternal.device.schemas.enums import TypeDeviceField
+from app.ingternal.device.schemas.enums import TypeDeviceField, DeviceGetData
 from app.ingternal.device.interface.field_class import IField
 import logging
 
@@ -22,11 +22,14 @@ class YeelightDevice(BaseDevice):
 		init_field=True,
 		virtual=False,
 		token=False,
+		type_get_data=False,
 		fields_change=ChangeField(
-			added=False,
+			creation=False,
 			deleted=False,
 			address=False,
 			control=False,
+			read_only=False,
+			virtual_field=False,
 			high=False,
 			low=False,
 			type=False,
@@ -45,6 +48,7 @@ class YeelightDevice(BaseDevice):
 			logger.warning("Device address is missing.")
 			return
 		self.device = Bulb(self.data.address)
+		self.data.type_get_data = DeviceGetData.PULL
 
 	async def async_init(self):
 

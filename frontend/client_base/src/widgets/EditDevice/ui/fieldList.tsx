@@ -48,7 +48,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
     return(
         <>
         {
-        option.fields_creation && 
+        option.fields_change.edit && 
         <div>
             <ContentBox label="field" hiding border>
                 <Divider/>
@@ -76,7 +76,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
                 </ListContainer>
                 <Divider/>
                 {
-                    option.fields_creation &&
+                    option.fields_change.creation &&
                     <Button onClick={()=>setAddFieldVisible(true)} styleType='filledTotal'>+</Button>
                 }
             </ContentBox>

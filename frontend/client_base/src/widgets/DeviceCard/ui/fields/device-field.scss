@@ -7,6 +7,9 @@
     border-radius: 12px;
     background-color: var(--Surface-container-low-color);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    &.device-text-container{
+      padding: 5px 10px;
+    }
   }
   
   .device-field-label {

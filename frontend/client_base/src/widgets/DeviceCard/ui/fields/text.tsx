@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
-import { TextField, Typography } from "alex-evo-sh-ui-kit";
+import { Button, TextField, Typography } from "alex-evo-sh-ui-kit";
 import "./device-field.scss"
 import { useSendValue } from "../../api/sendValue";
 
@@ -16,17 +16,19 @@ export const DeviceTextField: React.FC<{ field: DeviceSerializeFieldSchema; devi
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     setValue(newValue);
-    sendValue(deviceName, field.id, String(newValue))
-  };
+  }
+
+  const send = useCallback(()=>{
+    sendValue(deviceName, field.id, String(value))
+  },[value, deviceName, field])
 
   return (
-    <div className="device-field-container">
-      <label className="device-field-label">{field.name}</label>
+    <div className="device-field-container device-text-container">
       <div className="device-field-input-container">
         <div className="device-field-input">
-            <TextField value={value ?? ""} onChange={handleChange}/>
+            <TextField placeholder={field.name} value={value ?? ""} onChange={handleChange}/>
         </div>
-        <Typography type="body" className="device-field-value">{value} {field.unit && <span className="device-field-unit">{field.unit}</span>}</Typography>
+        <Button onClick={send}>send</Button>
       </div>
     </div>
   );
