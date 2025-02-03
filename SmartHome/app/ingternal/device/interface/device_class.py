@@ -1,4 +1,4 @@
-from app.ingternal.device.schemas.device import DeviceSchema, DeviceSerializeSchema
+from app.ingternal.device.schemas.device import DeviceSchema, DeviceSerializeSchema, DeviceInitFieldSchema
 from app.ingternal.device.schemas.config import ConfigSchema
 from app.ingternal.device.interface.field_class import IField
 from app.ingternal.device.schemas.enums import ReceivedDataFormat, DeviceGetData
@@ -17,10 +17,16 @@ class IDevice():
 	def get_value(self, field_id: str)->str:
 		pass
 
+	def __add_field(self, item:DeviceInitFieldSchema):
+		pass
+
 	def get_values(self)->dict[str, str]:
 		pass
 
 	def get_field(self, field_id: str)->IField | None:
+		pass
+
+	def get_field_by_name(self, field_name: str)->IField | None:
 		pass
 
 	def get_fields(self)->list[IField]:

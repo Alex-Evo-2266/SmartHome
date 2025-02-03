@@ -102,7 +102,8 @@ async def get_all_dev():
 @router.get("/{system_name}/value/{field_id}/set/{value}")
 async def set_device_state(system_name: str, field_id: str, value: Union[str, int]):
     try:
-        await set_status(system_name, field_id, value)
+        logger.info(f"togle {system_name}, {field_id}, {value}")
+        await set_status(system_name, field_id, str(value))
         return JSONResponse(status_code=200, content={"message": "Device state updated"})
     except Exception as e:
         logger.warning(str(e))

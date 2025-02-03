@@ -1,5 +1,5 @@
 from app.ingternal.device.interface.device_class import IDevice
-from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSchema, DeviceSerializeFieldSchema
+from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSchema, DeviceSerializeFieldSchema, DeviceInitFieldSchema
 from app.ingternal.device.schemas.config import ConfigSchema
 from app.ingternal.device.schemas.enums import ReceivedDataFormat, DeviceGetData
 from app.ingternal.device.classes.baseField import FieldBase
@@ -18,6 +18,9 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			for item in device.fields:
 				self.fields.append(FieldBase(item, device.system_name))
 		self.device = None	
+
+	def _add_field(self, item:DeviceInitFieldSchema):
+		self.fields.append(FieldBase(DeviceSerializeFieldSchema(**(item.dict()), id=""), self.data.system_name))
 	
 	def get_value(self, field_id: str)->str | None:
 		field = self.get_field(field_id)
@@ -35,6 +38,12 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	def get_field(self, field_id: str)->IField | None:
 		for field in self.fields:
 			if field.get_data().id == field_id:
+				return field
+		return None
+	
+	def get_field_by_name(self, field_name: str)->IField | None:
+		for field in self.fields:
+			if field.get_data().name == field_name:
 				return field
 		return None
 

@@ -3,8 +3,7 @@ from pydantic import BaseModel
 from typing import Optional, List, Dict
 from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, StatusDevice, DeviceGetData, DeviceStatusField
 
-class DeviceSerializeFieldSchema(BaseModel):
-	id: str
+class DeviceInitFieldSchema(BaseModel):
 	name: str
 	address: Optional[str] = None
 	type: TypeDeviceField
@@ -19,6 +18,12 @@ class DeviceSerializeFieldSchema(BaseModel):
 	virtual_field: bool
 	device: Optional['DeviceSerializeSchema'] = None
 	value: Optional[str] = None
+
+	class Config:  
+		use_enum_values = True
+
+class DeviceSerializeFieldSchema(DeviceInitFieldSchema):
+	id: str
 
 	class Config:  
 		use_enum_values = True

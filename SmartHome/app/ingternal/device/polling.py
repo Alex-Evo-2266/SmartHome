@@ -9,8 +9,8 @@ from app.ingternal.device.schemas.enums import StatusDevice, DeviceGetData
 from app.ingternal.device.schemas.device import DeviceSerializeSchema
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.serialize_model.utils import get_default_data
-from app.ingternal.device.serialize_model.edit_field import edit_fields
-from app.ingternal.device.serialize_model.read import get_all_row_device
+from app.ingternal.device.serialize_model.update import edit_fields
+from app.ingternal.device.serialize_model.read import get_all_row_device, get_serialize_device
 
 # Настройка логирования / Logging setup
 logger = logging.getLogger(__name__)
@@ -53,7 +53,10 @@ async def init_device(device_data: DeviceSerializeSchema):
     # Инициализация устройства / Device initialization
     device = device_class(device_data)
     await device.async_init()
-
+    await device.save()
+    del device
+    new_device_data = await get_serialize_device(device_data.system_name)
+    device = device_class(new_device_data)
     # Проверка подключения устройства / Check if device is connected
     if not device.is_conected:
         logger.warning(f"Device {device_data.system_name} is offline.")  # Логирование оффлайн устройства
@@ -61,7 +64,7 @@ async def init_device(device_data: DeviceSerializeSchema):
 
     # Обновление полей, если необходимо / Update fields if necessary
     if device_class.device_config.init_field:
-        await edit_fields(device_data, [x._get_initial_data() for x in device.get_fields()], option=device_class.device_config)
+        await edit_fields(device_data.system_name, [x._get_initial_data() for x in device.get_fields()])
 
     # Добавление устройства в DevicesArray / Add device to DevicesArray
     DevicesArray.add_device(device_data.system_name, device)
@@ -78,7 +81,7 @@ async def polling(device_data: DeviceSerializeSchema):
     It also manages loading states and updates the device status accordingly.
     """
     try:
-        logger.debug(f"Starting polling for device: {device_data.system_name}")
+        logger.info(f"Starting polling for device: {device_data.system_name}")
 
         if LoadingDevice.has(device_data.system_name):
             logger.info(f"Device {device_data.system_name} is already being polled.")
@@ -94,6 +97,7 @@ async def polling(device_data: DeviceSerializeSchema):
 
         # Обработка подключения устройства / Handle device connection
         connection_device_item = DevicesArray.get(device_data.system_name)
+        logger.info(f"connect item: {connection_device_item}")
         if not connection_device_item:
             device = await init_device(device_data)
             if device == StatusDevice.NOT_SUPPORTED or device == StatusDevice.OFFLINE:
@@ -112,7 +116,7 @@ async def polling(device_data: DeviceSerializeSchema):
         # Обновление статуса устройства и данных / Update device status and data
         data = connection_device.get_schema()
         data.status = StatusDevice.ONLINE
-        logger.debug(f"Device {device_data.system_name} data: {data}")
+        logger.info(f"Device {device_data.system_name} data: {data}")
         update_device_in_poll(data)
 
         LoadingDevice.remove(device_data.system_name)

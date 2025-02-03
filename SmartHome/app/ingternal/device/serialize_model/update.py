@@ -35,8 +35,8 @@ async def edit_fields(system_name: str, data: List[AddDeviceFieldSchema]):
 	if not device:
 		raise DeviceNotFound()
 	
-	await duble_field(data.fields, data.system_name)
-	await ef(device, data.fields)
+	await duble_field(data, system_name)
+	await ef(device, data)
 
 	 # Удаление из кэша
 	DevicesArray.delete(system_name)

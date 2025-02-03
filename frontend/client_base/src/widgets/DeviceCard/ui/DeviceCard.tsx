@@ -1,11 +1,14 @@
-import { Card, MoreVertical, Pen } from "alex-evo-sh-ui-kit"
+import { Card, MoreVertical, Pen, Trash } from "alex-evo-sh-ui-kit"
 import { DeviceSchema } from "../../../entites/devices"
 import { DeviceField } from "./fields"
 import "./DeviceCard.scss"
 import { useCallback } from "react"
 import { IconButtonMenu } from "../../../shared"
+import { useDeleteDevice } from "../api/deleteDevice"
 
 export const DeviceCard: React.FC<{ device: DeviceSchema, onEdit: ()=>void }> = ({ device, onEdit }) => {
+
+    const {deleteDevice} = useDeleteDevice()
 
     const getMenu = useCallback(() => {
         return [{items:[
@@ -14,6 +17,11 @@ export const DeviceCard: React.FC<{ device: DeviceSchema, onEdit: ()=>void }> = 
                 icon: <Pen/>,
                 onClick: ()=>onEdit()
             },
+            {
+                title: "delete",
+                icon: <Trash primaryColor="#f00"/>,
+                onClick: ()=>deleteDevice(device.system_name)
+            }
             ]}]
     },[onEdit, device])
 

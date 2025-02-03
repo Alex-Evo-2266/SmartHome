@@ -70,6 +70,7 @@ class ModulesArray:
             try:
 
                 # Импортируем модуль
+                logger.info(f"Попытка импорта модуля {module_name}: {name}.{module_name}")
                 module = importlib.import_module(f"{name}.{module_name}")
                 
                 # Проверяем наличие атрибута 'Module'
