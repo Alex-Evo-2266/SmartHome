@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
-import { Button, TextField, Typography } from "alex-evo-sh-ui-kit";
-import "./device-field.scss"
+import { Button, TextField } from "alex-evo-sh-ui-kit";
 import { useSendValue } from "../../api/sendValue";
 
 export const DeviceTextField: React.FC<{ field: DeviceSerializeFieldSchema; deviceName: string }> = ({ field, deviceName }) => {

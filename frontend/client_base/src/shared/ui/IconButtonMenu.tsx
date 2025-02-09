@@ -9,6 +9,7 @@ export interface IconButtonProps{
     style?: React.CSSProperties
     transparent?: boolean
     blocks: IBlock[]
+    autoHide?: boolean
   }
 
 export const IconButtonMenu = (props:IconButtonProps) => {

@@ -84,7 +84,7 @@ async def polling(device_data: DeviceSerializeSchema):
         logger.info(f"Starting polling for device: {device_data.system_name}")
 
         if LoadingDevice.has(device_data.system_name):
-            logger.info(f"Device {device_data.system_name} is already being polled.")
+            logger.info(f"p8 Device {device_data.system_name} is already being polled.")
             return  # Пропускаем устройство, если оно уже в состоянии загрузки / Skip if already in loading state
 
         LoadingDevice.add(device_data.system_name)
@@ -110,8 +110,11 @@ async def polling(device_data: DeviceSerializeSchema):
 
         # Обработка данных для устройств с методом PULL / Handle data retrieval for devices with PULL method
         if connection_device.get_type_get_data() == DeviceGetData.PULL:
+            logger.info(f"start load {device_data.system_name} data: {connection_device}")
             connection_device.load()
             await connection_device.load_async()
+            logger.info(f"end load {device_data.system_name} data: {connection_device}")
+        
 
         # Обновление статуса устройства и данных / Update device status and data
         data = connection_device.get_schema()
@@ -136,8 +139,11 @@ async def polling_all():
     devices_data = await get_all_row_device()
     logger.info(f"Found {len(devices_data)} devices to poll.")
     
-    tasks = [polling(device) for device in devices_data]
-    await asyncio.gather(*tasks)
+    # tasks = [polling(device) for device in devices_data]
+    # await asyncio.gather(*tasks)
+
+    [asyncio.create_task(polling(device)) for device in devices_data]
+    
 
     logger.info('Polling for all devices completed.')
 

@@ -1,5 +1,5 @@
 
-import {Home, MenuIcon, NavigationBar, NavigationDrawer, NavigationRail, NavigationButton as NB, Pen, Plug, ScreenSize, useScreenSize} from 'alex-evo-sh-ui-kit'
+import {GearIcon, Home, LogoutIcon, MenuIcon, NavigationBar, NavigationDrawer, NavigationRail, NavigationButton as NB, Plug, ScreenSize, useScreenSize} from 'alex-evo-sh-ui-kit'
 import {useHttp} from "../../../shared/lib/hooks/http.hook"
 import { useState } from "react"
 
@@ -42,12 +42,12 @@ export const Navigation = () => {
 		text: "settings",
 		type: "link",
 		to: "/settings",
-		icon: <Pen/>
+		icon: <GearIcon/>
 	},
 	{
 		text: "logout",
 		type: "button",
-		icon: <span>T</span>,
+		icon: <LogoutIcon/>,
 		onClick() {
 			logout()
 		},

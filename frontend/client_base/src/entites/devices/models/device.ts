@@ -39,7 +39,6 @@ export enum StatusDevice {
     entity?: string | null;
     entity_list_id?: string[] | null;
     virtual_field: boolean;
-    device?: DeviceSerializeSchema | null;
     value?: string | null;
   }
   
