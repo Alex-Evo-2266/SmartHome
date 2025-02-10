@@ -72,11 +72,11 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		'''
 		return True
 
-	def set_value(self, field_id: str, value: str):
+	def set_value(self, field_id: str, value: str, sctrpt:bool = False):
 		field = self.get_field(field_id)
 		if not field:
 			return
-		field.set(value)
+		field.set(value, sctrpt)
 
 	async def save(self):
 		initial_fields = [field._get_initial_data() for field in self.fields]

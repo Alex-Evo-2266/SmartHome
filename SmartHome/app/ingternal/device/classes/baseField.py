@@ -2,7 +2,9 @@ from app.ingternal.device.interface.field_class import IField
 from app.ingternal.device.schemas.device import DeviceSerializeFieldSchema
 from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema
 from app.ingternal.device.schemas.enums import TypeDeviceField
-# from app.ingternal.modules.arrays.serviceDataPoll import DevicesDataArrey
+from app.ingternal.automation.run.register import automation_manager
+
+import asyncio
 
 class FieldBase(IField):
 	def __init__(self, field: DeviceSerializeFieldSchema, device_system_name: str):
@@ -122,7 +124,12 @@ class FieldBase(IField):
 		if not self.data.virtual_field:
 			pass
 		if script:
-			pass
+			try:
+				asyncloop = asyncio.get_running_loop()
+				asyncloop.create_task(automation_manager.run_device_triggered_automations(self.device_system_name, self.get_name()))
+			except RuntimeError as e:
+				pass
+			
 
 		# if not save_all:
 		# 	data = DevicesDataArrey.get(self.device_system_name)

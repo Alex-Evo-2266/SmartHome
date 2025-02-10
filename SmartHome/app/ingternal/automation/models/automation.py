@@ -10,7 +10,8 @@ class Automation(ormar.Model):
 	ormar_config = base_ormar_config.copy()
 
 	name:str = ormar.String(primary_key=True, max_length=200)
-	condition_type: ConditionType = ormar.String(max_length=10, default=ConditionType.AND)
+	condition_type: ConditionType = ormar.Enum(enum_class=ConditionType, default=ConditionType.AND)
+	is_enabled: bool = ormar.Boolean(default=True)
 
 class TargetItem(ormar.Model):
 	ormar_config = base_ormar_config.copy()

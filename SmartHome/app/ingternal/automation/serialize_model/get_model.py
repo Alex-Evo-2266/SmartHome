@@ -17,7 +17,7 @@ async def get_automation(name:str):
     return await serialize_automation(automation)
 
 async def serialize_automation(automation:Automation):
-    automation_schema = AutomationSchema(name=automation.name, condition_type=automation.condition_type, trigger=[], condition=[], then=[], else_branch=[])
+    automation_schema = AutomationSchema(name=automation.name, condition_type=automation.condition_type, is_enabled=automation.is_enabled, trigger=[], condition=[], then=[], else_branch=[])
     triggers = [serialize_target(trigger) for trigger in await automation.targets.all()]
     conditions = [serialize_condition(condition) for condition in await automation.conditions.all()]
     automation_schema.trigger = triggers
@@ -26,9 +26,6 @@ async def serialize_automation(automation:Automation):
     automation_schema.else_branch = serialize_action(await automation.else_branch.all())
 
     return automation_schema
-
-
-
 
 def serialize_target(target: TargetItem):
     return TriggerItemSchema(
@@ -57,3 +54,10 @@ def serialize_action(actions: List[ActionItem] | List[ActionElseItem]):
         data=action.data, 
         type_set=action.type_set
     ) for action in actions]
+
+async def get_trigger(trigger: TriggerItemSchema): 
+    if trigger.service == "device":
+        pass
+    if trigger.service == "time":
+        triggers = await TargetItem.objects.filter(service=trigger.service).all()
+        print(triggers)

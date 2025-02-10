@@ -3,11 +3,11 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List, Union
 
-from app.ingternal.automation.schemas.automation import AutomationSchema
+from app.ingternal.automation.schemas.automation import AutomationSchema, EnableSchema
 from app.ingternal.automation.serialize_model.add_automation import add_automation
 from app.ingternal.automation.serialize_model.get_model import get_automation, get_all_automation
 from app.ingternal.automation.serialize_model.delete import delete_automation
-from app.ingternal.automation.serialize_model.update import update_automation
+from app.ingternal.automation.serialize_model.update import update_automation, update_status
 
 router = APIRouter(
     prefix="/api-devices/automation",
@@ -57,6 +57,15 @@ async def delete_automation_api(name:str):
 async def delete_automation_api(name:str, data: AutomationSchema):
     try:
         await update_automation(name, data)
+        return JSONResponse(status_code=200, content={"message": "ok"})
+    except Exception as e:
+        logger.warning(str(e))
+        return JSONResponse(status_code=400, content={"error": str(e)})
+
+@router.patch("/{name}/enable")
+async def delete_automation_api(name:str, data: EnableSchema):
+    try:
+        await update_status(name, data.is_enabled)
         return JSONResponse(status_code=200, content={"message": "ok"})
     except Exception as e:
         logger.warning(str(e))

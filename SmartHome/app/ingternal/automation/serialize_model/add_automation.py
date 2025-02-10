@@ -2,7 +2,7 @@ from app.ingternal.automation.schemas.automation import AutomationSchema
 from app.ingternal.automation.models.automation import Automation, TargetItem, ConditionItem, ActionItem, ActionElseItem
 
 async def add_automation(data:AutomationSchema):
-    automation = await Automation.objects.create(name=data.name, condition_type=data.condition_type)
+    automation = await Automation.objects.create(name=data.name, condition_type=data.condition_type, is_enabled=data.is_enabled)
 
     
 

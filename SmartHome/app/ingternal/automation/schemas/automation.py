@@ -37,9 +37,13 @@ class AutomationSchema(BaseModel):
 	condition_type: ConditionType
 	then: List[ActionItemSchema]
 	else_branch: List[ActionItemSchema]
+	is_enabled: bool = True
 	
 
 	class Config:  
 		use_enum_values = True
 
 
+class EnableSchema(BaseModel):
+	is_enabled: bool = True
+	

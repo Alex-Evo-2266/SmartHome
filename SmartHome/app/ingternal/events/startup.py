@@ -16,6 +16,8 @@ from app.moduls import getModule
 from app.ingternal.device.arrays.DeviceClasses import DeviceClasses
 from app.ingternal.device.models.device import Device
 from .utils.create_dirs import create_directorys
+from app.ingternal.automation.run.run_automation import restart_automation
+from app.ingternal.automation.run.register import register_automation
 
 # Logger setup
 logger = logging.getLogger(__name__)
@@ -74,6 +76,10 @@ async def startup():
     logger.info(f"Loaded device classes: {device_classes}")
 
     logger.info("Generating config...")
+
+    await register_automation()
+
+    await restart_automation()
 
     # Загрузка конфигурации
     try:

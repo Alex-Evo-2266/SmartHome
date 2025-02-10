@@ -1,24 +1,20 @@
-from app.ingternal.automation.schemas.automation import AutomationSchema, ActionItemSchema, TriggerItemSchema, ConditionItemSchema
+from app.ingternal.automation.schemas.automation import AutomationSchema
 from app.ingternal.automation.models.automation import Automation, TargetItem, ConditionItem, ActionItem, ActionElseItem
 from app.ingternal.automation.exceptions.automation import AutomationNotFound
-from typing import List
-from operator import attrgetter
+
+from app.ingternal.automation.serialize_model.get_model import serialize_automation
+
+from app.ingternal.automation.run.register import automation_manager
 
 async def update_automation(name:str, data:AutomationSchema):
 	automation = await Automation.objects.get_or_none(name=name)
 	if not automation:
 		raise AutomationNotFound()
 	
-	print("[p9]")
 	await automation.targets.clear(keep_reversed=False)
 	await automation.conditions.clear(keep_reversed=False)
 	await automation.actions.clear(keep_reversed=False)
 	await automation.else_branch.clear(keep_reversed=False)
-	print("[p9]")
-	
-
-
-	print("[p9]")
 	
 	for trigger_schema in data.trigger:
 		await TargetItem.objects.create(
@@ -27,7 +23,6 @@ async def update_automation(name:str, data:AutomationSchema):
 			data=trigger_schema.data, 
 			automation=automation
 			)
-	print("[p9]")
 
 	for condition_schema in data.condition:
 		await ConditionItem.objects.create(
@@ -64,4 +59,22 @@ async def update_automation(name:str, data:AutomationSchema):
 			)
 	automation.name = data.name
 	automation.condition_type = data.condition_type
-	await automation.update(_columns=["name", "condition_type"])
+	automation.is_enabled = data.is_enabled
+	await automation.update(_columns=["name", "condition_type", "is_enabled"])
+
+
+async def update_status(name:str, is_enabled:bool):
+	automation = await Automation.objects.get_or_none(name=name)
+	if not automation:
+		raise AutomationNotFound()
+	
+	await automation.update(is_enabled=is_enabled)
+
+
+	automation_manager.remove_automation_by_name(name)
+	if is_enabled:
+		automation_schema = serialize_automation(automation)
+		automation_manager.add_automation(automation_schema)
+	
+
+	

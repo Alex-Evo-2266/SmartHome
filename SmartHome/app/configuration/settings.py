@@ -50,6 +50,7 @@ SAVE_DEVICE_CONF = 'save-device-data'
 LOOP_DEVICE_POLLING = 'device-polling'
 LOOP_SEND_DEVICE = 'send-device-data'
 LOOP_SAVE_DEVICE = 'save-device-data'
+LOOP_AUTOMATION = 'automation-loop'
 
 #websocket key
 TYPE_SEND_DEVICE = "device-send"
