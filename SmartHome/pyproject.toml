@@ -7,15 +7,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-fastapi = "^0.115.3"
-uvicorn = "^0.32.0"
-ormar = {extras = ["mysql"], version = "^0.20.1"}
-alembic = "^1.13.3"
+fastapi = "^0.115.8"
+ormar = {extras = ["mysql"], version = "^0.20.2"}
+alembic = "^1.14.1"
 pyyaml = "^6.0.2"
-websockets = "^14.1"
+uvicorn = "^0.34.0"
 paho-mqtt = "^2.1.0"
-show = "^1.6.0"
 yeelight = "^0.7.16"
+websockets = "^14.2"
 
 
 [build-system]

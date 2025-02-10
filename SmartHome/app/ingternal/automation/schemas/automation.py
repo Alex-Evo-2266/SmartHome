@@ -3,40 +3,40 @@ from pydantic import BaseModel
 from .enums import ConditionType, Operation, SetType
 from typing import Optional, List, Dict
 
-class TargetItem(BaseModel):
+class TriggerItemSchema(BaseModel):
 	service: str
 	object: str
 	data: str
 
-class ConditionItem(BaseModel):
+class ConditionItemSchema(BaseModel):
 	operation: Operation
 	arg1_service: str
 	arg1_object: str
 	arg1_data: str
-	arg2_ervice: str
+	arg2_service: str
 	arg2_object: str
 	arg2_data: str
 	
 	class Config:  
 		use_enum_values = True
 
-class ActionItem(BaseModel):
+class ActionItemSchema(BaseModel):
 	service: str
 	object: str
+	field: str
 	data: str
-	set: str
 	type_set: SetType
 
 	class Config:  
 		use_enum_values = True
 
-class Automation(BaseModel):
+class AutomationSchema(BaseModel):
 	name:str
-	target:List[TargetItem]
-	condition: List[ConditionItem]
+	trigger:List[TriggerItemSchema]
+	condition: List[ConditionItemSchema]
 	condition_type: ConditionType
-	then: List[ActionItem]
-	else_branch: List[ActionItem]
+	then: List[ActionItemSchema]
+	else_branch: List[ActionItemSchema]
 	
 
 	class Config:  

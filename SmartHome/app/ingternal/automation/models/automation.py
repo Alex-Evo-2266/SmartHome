@@ -15,7 +15,7 @@ class Automation(ormar.Model):
 class TargetItem(ormar.Model):
 	ormar_config = base_ormar_config.copy()
 	
-	id: int = ormar.Integer(primary_key=True)
+	id: int = ormar.Integer(primary_key=True, autoincrement=True)
 	service: str = ormar.String(max_length=200)
 	object: str = ormar.String(max_length=200,default="")
 	data: str = ormar.String(max_length=200)
@@ -24,12 +24,12 @@ class TargetItem(ormar.Model):
 class ConditionItem(ormar.Model):
 	ormar_config = base_ormar_config.copy()
 
-	id: int = ormar.Integer(primary_key=True)
+	id: int = ormar.Integer(primary_key=True, autoincrement=True)
 	operation: Operation = ormar.String(max_length=10, default=Operation.EQUAL)
 	arg1_service: str = ormar.String(max_length=200)
 	arg1_object: str = ormar.String(max_length=200,default="")
 	arg1_data: str = ormar.String(max_length=200)
-	arg2_ervice: str = ormar.String(max_length=200)
+	arg2_service: str = ormar.String(max_length=200)
 	arg2_object: str = ormar.String(max_length=200,default="")
 	arg2_data: str = ormar.String(max_length=200)
 	automation: Optional[Automation] = ormar.ForeignKey(Automation, related_name="conditions", ondelete=ReferentialAction.CASCADE)
@@ -37,21 +37,23 @@ class ConditionItem(ormar.Model):
 class ActionItem(ormar.Model):
 	ormar_config = base_ormar_config.copy()
 
-	id: int = ormar.Integer(primary_key=True)
+	id: int = ormar.Integer(primary_key=True, autoincrement=True)
+	index: int = ormar.Integer()
 	service: str = ormar.String(max_length=200)
 	object: str = ormar.String(max_length=200,default="")
-	data: str = ormar.String(max_length=200)
-	set: str = ormar.String(max_length=400)
+	field: str = ormar.String(max_length=200)
+	data: str = ormar.String(max_length=400)
 	type_set: SetType = ormar.String(max_length=10, default=SetType.DATA)
 	automation: Optional[Automation] = ormar.ForeignKey(Automation, related_name="actions", ondelete=ReferentialAction.CASCADE)
 
 class ActionElseItem(ormar.Model):
 	ormar_config = base_ormar_config.copy()
 
-	id: int = ormar.Integer(primary_key=True)
+	id: int = ormar.Integer(primary_key=True, autoincrement=True)
+	index: int = ormar.Integer()
 	service: str = ormar.String(max_length=200)
 	object: str = ormar.String(max_length=200,default="")
-	data: str = ormar.String(max_length=200)
-	set: str = ormar.String(max_length=400)
+	field: str = ormar.String(max_length=200)
+	data: str = ormar.String(max_length=400)
 	type_set: SetType = ormar.String(max_length=10, default=SetType.DATA)
 	automation: Optional[Automation] = ormar.ForeignKey(Automation, related_name="else_branch", ondelete=ReferentialAction.CASCADE)
