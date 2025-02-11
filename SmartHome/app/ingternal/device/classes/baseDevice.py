@@ -121,3 +121,6 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		res.fields = values
 		res.value = vals
 		return res
+	
+	def close(self):
+		pass

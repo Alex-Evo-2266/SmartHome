@@ -12,18 +12,71 @@ class EventLoopItem(BaseModel):
     function: Callable[[], Any]
     next_run: datetime
 
+# class EventLoop:
+#     def __init__(self):
+#         self.functions: Dict[str, EventLoopItem] = {}
+#         self.running = False
+
+#     def register(self, key: str, function: Callable[[], Any], interval: int = 0):
+#         """
+#         Регистрирует функцию для выполнения.
+#         :param key: Уникальный идентификатор функции
+#         :param function: Функция для выполнения
+#         :param interval: Интервал выполнения в секундах (0 - однократный запуск)
+#         """
+#         self.functions[key] = EventLoopItem(
+#             name=key,
+#             function=function,
+#             interval=interval,
+#             next_run=datetime.now()
+#         )
+
+#     def unregister(self, key: str):
+#         """Удаляет зарегистрированную функцию по ключу."""
+#         self.functions.pop(key, None)
+
+#     def clear(self):
+#         """Очищает все зарегистрированные функции."""
+#         self.functions.clear()
+
+#     async def _run_task(self, item: EventLoopItem):
+#         try:
+#             await item.function()
+#         except Exception as e:
+#             logger.error(f"Ошибка выполнения функции {item.name}: {e}")
+
+#     async def run(self):
+#         """Запускает главный цикл выполнения событий."""
+#         self.running = True
+#         while self.running:
+#             now = datetime.now()
+#             tasks = []
+            
+#             for key, item in list(self.functions.items()):
+#                 if now >= item.next_run:
+#                     tasks.append(self._run_task(item))
+#                     # asyncio.create_task(self._run_task(item))
+#                     if item.interval > 0:
+#                         item.next_run = now + timedelta(seconds=item.interval)
+#                     else:
+#                         del self.functions[key]
+            
+#             if tasks:
+#                 await asyncio.gather(*tasks)
+            
+#             await asyncio.sleep(1)
+
+#     def stop(self):
+#         """Останавливает выполнение событий."""
+#         self.running = False
+
 class EventLoop:
     def __init__(self):
         self.functions: Dict[str, EventLoopItem] = {}
+        self.tasks: Dict[str, asyncio.Task] = {}
         self.running = False
 
     def register(self, key: str, function: Callable[[], Any], interval: int = 0):
-        """
-        Регистрирует функцию для выполнения.
-        :param key: Уникальный идентификатор функции
-        :param function: Функция для выполнения
-        :param interval: Интервал выполнения в секундах (0 - однократный запуск)
-        """
         self.functions[key] = EventLoopItem(
             name=key,
             function=function,
@@ -32,12 +85,17 @@ class EventLoop:
         )
 
     def unregister(self, key: str):
-        """Удаляет зарегистрированную функцию по ключу."""
         self.functions.pop(key, None)
+        task = self.tasks.pop(key, None)
+        if task and not task.done():
+            task.cancel()
 
     def clear(self):
-        """Очищает все зарегистрированные функции."""
         self.functions.clear()
+        for task in self.tasks.values():
+            if not task.done():
+                task.cancel()
+        self.tasks.clear()
 
     async def _run_task(self, item: EventLoopItem):
         try:
@@ -45,26 +103,38 @@ class EventLoop:
         except Exception as e:
             logger.error(f"Ошибка выполнения функции {item.name}: {e}")
 
+    def handle_task_done(self, task: asyncio.Task):
+        if exception := task.exception():
+            logger.error(f"Ошибка в задаче: {exception}")
+        self.tasks.pop(task.get_name(), None)
+
     async def run(self):
-        """Запускает главный цикл выполнения событий."""
         self.running = True
         while self.running:
             now = datetime.now()
-            tasks = []
-            
+            to_remove = []
+
             for key, item in list(self.functions.items()):
                 if now >= item.next_run:
-                    tasks.append(self._run_task(item))
+                    task = asyncio.create_task(self._run_task(item), name=key)
+                    # if key in self.tasks:
+                    #     self.tasks[key].cancel()
+                    self.tasks[key] = task
+                    task.add_done_callback(self.handle_task_done)
+
                     if item.interval > 0:
                         item.next_run = now + timedelta(seconds=item.interval)
                     else:
-                        del self.functions[key]
-            
-            if tasks:
-                await asyncio.gather(*tasks)
-            
+                        to_remove.append(key)
+
+            for key in to_remove:
+                self.unregister(key)
+
             await asyncio.sleep(1)
 
     def stop(self):
-        """Останавливает выполнение событий."""
         self.running = False
+        for task in self.tasks.values():
+            if not task.done():
+                task.cancel()
+        self.tasks.clear()

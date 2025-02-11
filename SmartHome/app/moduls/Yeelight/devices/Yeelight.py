@@ -192,3 +192,12 @@ class YeelightDevice(BaseDevice):
 				self.device.send_command("bg_set_power", ["on" if int(new_val) == 1 else "off"])
 		except Exception as e:
 			logger.exception(f"Error setting Yeelight value ({name}): {e}")
+
+	def close(self):
+		if self.device:
+			try:
+				self.device._socket.close()  # Закрываем сокет напрямую
+			except Exception as e:
+				logger.warning(f"Error closing socket: {e}")
+			finally:
+				self.device = None

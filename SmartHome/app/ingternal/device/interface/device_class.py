@@ -76,3 +76,6 @@ class IDevice():
 
 	def get_schema(self)->DeviceSchema:
 		pass
+
+	def close(self):
+		pass

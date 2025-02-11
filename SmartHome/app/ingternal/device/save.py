@@ -1,4 +1,4 @@
-import logging
+import logging, asyncio
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
 from app.ingternal.device.serialize_model.value_set import save_value
 from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
@@ -12,19 +12,22 @@ async def save_devices():
 	"""
 	Функция сохранения данных устройств.
 	"""
-	# Получение списка зарегистрированных устройств
-	device_list: DeviceRegistry | None = servicesDataPoll.get(DEVICE_DATA_POLL)
-	if not device_list:
-		logger.warning("Invalid key: DEVICE_DATA_POLL not found in servicesDataPoll.")
-		return
+	try:
+		# Получение списка зарегистрированных устройств
+		device_list: DeviceRegistry | None = servicesDataPoll.get(DEVICE_DATA_POLL)
+		if not device_list:
+			logger.warning("Invalid key: DEVICE_DATA_POLL not found in servicesDataPoll.")
+			return
 
-	schemas = device_list.get_all_data()
+		schemas = device_list.get_all_data()
 
-	logger.info(f"Found {len(schemas)} devices to save.")
-	# Обработка каждого устройства
-	for schema in schemas:
-		logger.info(f"try seve {schema}")
-		await save_device(schema)
+		logger.info(f"Found {len(schemas)} devices to save.")
+		# Обработка каждого устройства
+		for schema in schemas:
+			logger.info(f"try seve {schema}")
+			await save_device(schema)
+	finally:
+		asyncio.current_task().cancel()
 	
 
 async def save_device(schema):

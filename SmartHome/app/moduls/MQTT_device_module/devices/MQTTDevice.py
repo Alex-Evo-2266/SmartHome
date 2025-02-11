@@ -11,7 +11,6 @@ from app.ingternal.device.schemas.config import ConfigSchema
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 class MQTTDevice(BaseDevice):
 

@@ -19,9 +19,31 @@ from .utils.create_dirs import create_directorys
 from app.ingternal.automation.run.run_automation import restart_automation
 from app.ingternal.automation.run.register import register_automation
 
+import tracemalloc
+
+tracemalloc.start()
+
+def count_duplicates(arr):
+    counts = {}
+    for item in arr:
+        counts[item] = counts.get(item, 0) + 1
+    return counts
+
+
+async def monitor_memory(data:str = ""):
+    while True:
+        current, peak = tracemalloc.get_traced_memory()
+        active_tasks2 = len(asyncio.all_tasks())
+        print(f"{data} Активные задачи: {active_tasks2}")
+        print(f"{data} Использование памяти: {current / 1024:.2f} KB, Пик: {peak / 1024:.2f} KB")
+        print("tasks")
+        tasks = [a.get_name() for a in asyncio.all_tasks()]
+        print(count_duplicates(tasks))
+        print()
+        await asyncio.sleep(1)
+
 # Logger setup
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 async def startup():
     """
@@ -93,6 +115,7 @@ async def startup():
     try:
         asyncloop = asyncio.get_running_loop()
         asyncloop.create_task(loop.run())
+        asyncloop.create_task(monitor_memory())
         logger.info("Main loop started.")
     except RuntimeError as e:
         logger.error(f"Failed to start main loop: {e}")

@@ -22,18 +22,20 @@ def find_id(fields:list[DeviceField], uuid:str):
 	return None
 
 async def create_field_id():
-	fields = await DeviceField.objects.all()
-	uuid = uuid4().hex
-	while (find_id(fields, uuid)):
-		uuid = uuid4().hex
-	return uuid
+	# fields = await DeviceField.objects.all()
+	# uuid = uuid4().hex
+	# while (find_id(fields, uuid)):
+	# 	uuid = uuid4().hex
+	# return uuid
+	return str(uuid4().hex)
 
 async def create_value_id():
-	values = await Value.objects.all()
-	uuid = uuid4().hex
-	while (find_id(values, uuid)):
-		uuid = uuid4().hex
-	return uuid
+	# values = await Value.objects.all()
+	# uuid = uuid4().hex
+	# while (find_id(values, uuid)):
+	# 	uuid = uuid4().hex
+	# return uuid
+	return str(uuid4().hex)
 
 def map_status(status:DeviceStatusField)->StatusDevice:
 	if(status == DeviceStatusField.UNLINK):
