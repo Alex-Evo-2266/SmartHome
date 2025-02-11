@@ -54,7 +54,7 @@ class IDevice():
 		'''
 		return True
 
-	def set_value(self, field_id: str, value: str, sctrpt:bool = False):
+	def set_value(self, field_id: str, value: str, script:bool = False):
 		pass
 
 	async def save(self):

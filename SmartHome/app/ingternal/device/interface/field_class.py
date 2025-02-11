@@ -1,5 +1,6 @@
 from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema
 from app.ingternal.device.schemas.device import DeviceSerializeFieldSchema
+from app.ingternal.device.schemas.enums import TypeDeviceField
 
 class IField():
 	def get(self)->str | None:
@@ -11,7 +12,7 @@ class IField():
 	def get_low(self):
 		pass
 
-	def get_type(self):
+	def get_type(self)->TypeDeviceField:
 		pass
 
 	def get_id(self)->str:

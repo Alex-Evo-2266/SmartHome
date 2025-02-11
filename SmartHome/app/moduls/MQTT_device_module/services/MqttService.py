@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 class MqttService(BaseService):
     client = None
+    callbacks = {}  # Словарь для хранения колбэков по топикам
 
     @classmethod
     async def start(cls):
@@ -19,7 +20,6 @@ class MqttService(BaseService):
             user = __config__.get(MQTT_USERNAME)
             password = __config__.get(MQTT_PASSWORD)
 
-            # Логирование конфигурации
             logger.info(f"Connecting to broker {broker.value} on port {port.value}.")
 
             cls.client = mqtt.Client()
@@ -59,17 +59,67 @@ class MqttService(BaseService):
     def on_connect(cls, client, userdata, flags, rc):
         logger.info(f"Connected with result code {rc}")
         if rc == 0:
-            client.subscribe("#")
+            client.subscribe("#")  # Подписка на все топики
         else:
             logger.error(f"Connection failed with code {rc}")
 
     @classmethod
-    def on_message(cls, client, userdata, msg):
-        logger.info(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
+    async def async_on_message(cls, msg):
+        # Обновление данных
         topics = servicesDataPoll.get(MQTT_MESSAGES)
         new_topics = update_topic_in_dict(msg.topic, msg.payload.decode(), topics)
-        asyncio.run(servicesDataPoll.set_async(MQTT_MESSAGES, new_topics))
-        print(new_topics)
+        await servicesDataPoll.set_async(MQTT_MESSAGES, new_topics)
+
+        # Вызов всех подходящих колбэков (с учётом иерархии)
+        for topic_pattern, callbacks in cls.callbacks.items():
+            if cls.topic_matches(topic_pattern, msg.topic):
+                for callback in callbacks:
+                    try:
+                        await callback(msg.topic, msg.payload.decode())
+                    except Exception as e:
+                        logger.error(f"Callback error for topic {msg.topic}: {e}")
+
+    @classmethod
+    def on_message(cls, client, userdata, msg):
+        logger.info(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
+        asyncio.run(cls.async_on_message(msg))
+        
+
+    @classmethod
+    def topic_matches(cls, pattern, topic):
+        """
+        Проверка соответствия топика шаблону (иерархическая проверка).
+        """
+        return topic.startswith(pattern)
+
+    @classmethod
+    def subscribe(cls, topic, callback):
+        """
+        Регистрация колбэка для определённого топика.
+        """
+        if topic not in cls.callbacks:
+            cls.callbacks[topic] = []
+            if cls.client:
+                cls.client.subscribe(f"{topic}/#")  # Подписка на все вложенные топики
+                logger.info(f"Subscribed to topic: {topic}/#")
+
+        cls.callbacks[topic].append(callback)
+        logger.info(f"Callback added for topic: {topic}")
+
+    @classmethod
+    def unsubscribe(cls, topic, callback=None):
+        """
+        Отписка от топика или удаление конкретного колбэка.
+        """
+        if topic in cls.callbacks:
+            if callback:
+                cls.callbacks[topic] = [cb for cb in cls.callbacks[topic] if cb != callback]
+                logger.info(f"Callback removed for topic: {topic}")
+            if not cls.callbacks[topic]:  # Если больше нет колбэков
+                del cls.callbacks[topic]
+                if cls.client:
+                    cls.client.unsubscribe(f"{topic}/#")
+                    logger.info(f"Unsubscribed from topic: {topic}/#")
 
     @classmethod
     def get_data(cls):

@@ -1,8 +1,12 @@
 from app.ingternal.device.interface.field_class import IField
-from app.ingternal.device.schemas.device import DeviceSerializeFieldSchema
+from app.ingternal.device.schemas.device import DeviceSerializeFieldSchema, DeviceSchema
 from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema
 from app.ingternal.device.schemas.enums import TypeDeviceField
 from app.ingternal.automation.run.register import automation_manager
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
+from app.configuration.settings import DEVICE_DATA_POLL
+from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
+from typing import Optional
 
 import asyncio
 
@@ -86,6 +90,7 @@ class FieldBase(IField):
 			return None
 
 	def set(self, status: str, script=True):
+		print("adfs",self.device_system_name, status, script)
 		if self.data.type == TypeDeviceField.BINARY:
 			if (not self.data.high is None) and str(self.data.high) == str(status):
 				self.data.value = '1'
@@ -117,13 +122,15 @@ class FieldBase(IField):
 		else:
 			self.data.value = status
 
-		
+		dev_list:Optional[DeviceRegistry] = servicesDataPoll.get(DEVICE_DATA_POLL)
+		if dev_list:
+			device: DeviceSchema | None = dev_list.get(self.device_system_name)
+			if device:
+				device.value[self.data.name] = self.data.value
+		print("p47")
 
-
-
-		if not self.data.virtual_field:
-			pass
 		if script:
+			print("p45")
 			try:
 				asyncloop = asyncio.get_running_loop()
 				asyncloop.create_task(automation_manager.run_device_triggered_automations(self.device_system_name, self.get_name()))

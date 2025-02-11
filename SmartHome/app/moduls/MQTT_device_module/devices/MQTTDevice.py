@@ -16,7 +16,7 @@ class MQTTDevice(BaseDevice):
 
     device_config = ConfigSchema(class_img="MQTT_device_module/logo.png")
 
-    def set_value(self, field_id: str, value: str):
+    def set_value(self, field_id: str, value: str, script:bool = False):
         """
         Устанавливает значение для указанного поля и отправляет команду через MQTT.
         

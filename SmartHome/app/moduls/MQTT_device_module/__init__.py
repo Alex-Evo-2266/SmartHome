@@ -38,7 +38,11 @@ class Module(BaseModule):
             mqtt_service.restart
         )
 
+        if mqtt_service:
+            mqtt_service.subscribe("", device_set_value)
+        
+
         await mqtt_service.start()
 
-        servicesDataPoll.subscribe(MQTT_MESSAGES, MQTT_DEVICE_UPDATE_DATA, device_set_value)
+        # servicesDataPoll.subscribe(MQTT_MESSAGES, MQTT_DEVICE_UPDATE_DATA, device_set_value)
 

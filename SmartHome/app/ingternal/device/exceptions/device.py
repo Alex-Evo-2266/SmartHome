@@ -11,6 +11,32 @@ class DeviceNotFound(Exception):
 		else:
 			return "DeviceNotFound"
 		
+class DeviceNotValueFound(Exception):
+	def __init__(self, *args: object) -> None:
+		if args:
+			self.message = args[0]
+		else:
+			self.message = "device value not found."
+	
+	def __str__(self) -> str:
+		if self.message:
+			return f"DeviceNotValueFound, {self.message}"
+		else:
+			return "DeviceNotValueFound"
+		
+class DeviceFieldNotFound(Exception):
+	def __init__(self, *args: object) -> None:
+		if args:
+			self.message = args[0]
+		else:
+			self.message = "device field not found."
+	
+	def __str__(self) -> str:
+		if self.message:
+			return f"DeviceFieldNotFound, {self.message}"
+		else:
+			return "DeviceFieldNotFound"
+		
 class DevicesStructureNotFound(Exception):
 	def __init__(self, *args: object) -> None:
 		if args:

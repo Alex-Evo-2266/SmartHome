@@ -159,11 +159,11 @@ class YeelightDevice(BaseDevice):
 		self.load()
 		return super().get_values()
 
-	def set_value(self, id, status):
-		new_val = status
-		field = self.get_field(id)
+	def set_value(self, field_id: str, value: str, script:bool = False):
+		new_val = value
+		field = self.get_field(field_id)
 		name = field.get_name()
-		status = super().set_value(name, status)
+		super().set_value(field_id, value, script)
 		try:
 			if name == "state":
 				self.device.turn_on() if int(new_val) == 1 else self.device.turn_off()
