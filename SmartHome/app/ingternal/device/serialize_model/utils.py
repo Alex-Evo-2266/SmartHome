@@ -44,6 +44,6 @@ def map_status(status:DeviceStatusField)->StatusDevice:
 
 def get_default_data(device: DeviceSerializeSchema, status: StatusDevice = StatusDevice.ONLINE):
 	data = DeviceSchema(**(device.model_dump()))
-	data.value = dict()
+	# data.value = dict()
 	data.status = status
 	return data

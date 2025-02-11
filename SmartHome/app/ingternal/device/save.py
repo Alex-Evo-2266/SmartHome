@@ -27,7 +27,8 @@ async def save_devices():
 			logger.info(f"try seve {schema}")
 			await save_device(schema)
 	finally:
-		asyncio.current_task().cancel()
+		pass
+		# asyncio.current_task().cancel()
 	
 
 async def save_device(schema):

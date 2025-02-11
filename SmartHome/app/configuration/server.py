@@ -10,11 +10,11 @@ from app.pkg.ormar.dbormar import database
 from app.configuration.settings import MEDIA_DIR, DEBUG, ORIGINS
 
 import logging
-logging.disable(logging.CRITICAL)
-# logging.basicConfig(
-#     level=logging.ERROR,
-#     format="%(filename)s: %(asctime)s - %(levelname)s - %(message)s"
-# )
+# logging.disable(logging.CRITICAL)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(filename)s: %(asctime)s - %(levelname)s - %(message)s"
+)
 
 def custom_openapi(app:FastAPI):
 	def _custom_openapi():

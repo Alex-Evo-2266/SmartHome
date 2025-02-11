@@ -16,17 +16,6 @@ from app.ingternal.device.serialize_model.read import get_all_row_device, get_se
 logger = logging.getLogger(__name__)
 active_tasks: set[asyncio.Task] = set()
 
-# import tracemalloc
-# def monitor_memory(data:str = ""):
-# 	current, peak = tracemalloc.get_traced_memory()
-# 	active_tasks2 = len(asyncio.all_tasks())
-# 	print(f"{data} Активные задачи: {active_tasks2}")
-# 	print(f"{data} Использование памяти: {current / 1024:.2f} KB, Пик: {peak / 1024:.2f} KB")
-# 	print("tasks")
-# 	for task in asyncio.all_tasks():
-# 		print(task.get_name())
-# 	print()
-
 class LoadingDevice():
 	"""Класс для управления состоянием загрузки устройств. / Class to manage the loading state of devices."""
 	loading: set[str] = set()
@@ -148,7 +137,7 @@ async def polling(device_data: DeviceSerializeSchema):
 		LoadingDevice.remove(device_data.system_name)
 		
 		active_tasks.discard(asyncio.current_task())
-		asyncio.current_task().cancel()
+		# asyncio.current_task().cancel()
 
 
 
@@ -171,7 +160,8 @@ async def polling_all():
 
 		logger.info('Polling for all devices initiated.')
 	finally:
-		asyncio.current_task().cancel()
+		pass
+		# asyncio.current_task().cancel()
 	
 
 async def stop_all_tasks():
