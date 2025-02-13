@@ -90,7 +90,6 @@ class FieldBase(IField):
 			return None
 
 	def set(self, status: str, script=True):
-		print("adfs",self.device_system_name, status, script)
 		if self.data.type == TypeDeviceField.BINARY:
 			if (not self.data.high is None) and str(self.data.high) == str(status):
 				self.data.value = '1'
@@ -127,10 +126,8 @@ class FieldBase(IField):
 			device: DeviceSchema | None = dev_list.get(self.device_system_name)
 			if device:
 				device.value[self.data.name] = self.data.value
-		print("p47")
 
 		if script:
-			print("p45")
 			try:
 				asyncloop = asyncio.get_running_loop()
 				asyncloop.create_task(automation_manager.run_device_triggered_automations(self.device_system_name, self.get_name()))

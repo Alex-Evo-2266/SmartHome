@@ -67,7 +67,7 @@ const HighlightTextarea = ({ words, suggestions }) => {
 
 
 // Пример использования компонента DeviceCard
-const Example = () => {
+export const Example = () => {
 
 
   return <HighlightTextarea 
@@ -75,5 +75,3 @@ const Example = () => {
   suggestions={["useEffect", "useCallback", "component.method"]} 
 />;
 };
-
-export default Example;

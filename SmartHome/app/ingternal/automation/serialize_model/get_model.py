@@ -18,7 +18,7 @@ async def get_automation(name:str):
 
 async def serialize_automation(automation:Automation):
     automation_schema = AutomationSchema(name=automation.name, condition_type=automation.condition_type, is_enabled=automation.is_enabled, trigger=[], condition=[], then=[], else_branch=[])
-    triggers = [serialize_target(trigger) for trigger in await automation.targets.all()]
+    triggers = [serialize_target(trigger) for trigger in await automation.triggers.all()]
     conditions = [serialize_condition(condition) for condition in await automation.conditions.all()]
     automation_schema.trigger = triggers
     automation_schema.condition = conditions

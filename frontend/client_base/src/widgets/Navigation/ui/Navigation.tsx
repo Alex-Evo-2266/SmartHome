@@ -39,6 +39,12 @@ export const Navigation = () => {
 		icon: <Plug/>
 	},
 	{
+		text: "automation",
+		type:"link",
+		to: "/automation",
+		icon: <Plug/>
+	},
+	{
 		text: "settings",
 		type: "link",
 		to: "/settings",

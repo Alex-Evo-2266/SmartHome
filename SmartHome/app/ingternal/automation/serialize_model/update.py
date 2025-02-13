@@ -4,14 +4,14 @@ from app.ingternal.automation.exceptions.automation import AutomationNotFound
 
 from app.ingternal.automation.serialize_model.get_model import serialize_automation
 
-from app.ingternal.automation.run.register import automation_manager
+from app.ingternal.automation.run.register import automation_manager, register_automation
 
 async def update_automation(name:str, data:AutomationSchema):
 	automation = await Automation.objects.get_or_none(name=name)
 	if not automation:
 		raise AutomationNotFound()
 	
-	await automation.targets.clear(keep_reversed=False)
+	await automation.triggers.clear(keep_reversed=False)
 	await automation.conditions.clear(keep_reversed=False)
 	await automation.actions.clear(keep_reversed=False)
 	await automation.else_branch.clear(keep_reversed=False)
@@ -62,6 +62,13 @@ async def update_automation(name:str, data:AutomationSchema):
 	automation.is_enabled = data.is_enabled
 	await automation.update(_columns=["name", "condition_type", "is_enabled"])
 
+	await register_automation()
+
+	# automation_schema = serialize_automation(automation)
+	# automation_manager.remove_automation_by_name(name)
+	# automation_manager.add_automation(automation_schema)
+	
+
 
 async def update_status(name:str, is_enabled:bool):
 	automation = await Automation.objects.get_or_none(name=name)
@@ -71,10 +78,13 @@ async def update_status(name:str, is_enabled:bool):
 	await automation.update(is_enabled=is_enabled)
 
 
-	automation_manager.remove_automation_by_name(name)
-	if is_enabled:
-		automation_schema = serialize_automation(automation)
-		automation_manager.add_automation(automation_schema)
+	# automation_manager.remove_automation_by_name(name)
+	# if is_enabled:
+	# 	automation_schema = serialize_automation(automation)
+	# 	automation_manager.add_automation(automation_schema)
+
+	await register_automation()
+
 	
 
 	

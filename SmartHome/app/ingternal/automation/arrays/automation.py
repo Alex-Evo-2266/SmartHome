@@ -52,7 +52,7 @@ class AutomationManager:
 
         time_to_check = self.last_run_time
 
-        while time_to_check <= current_time:
+        while time_to_check < current_time:
             # Пропуск, если задержка превышает 5 минут
             if (current_time - time_to_check) > timedelta(minutes=5):
                 time_to_check += timedelta(minutes=1)
