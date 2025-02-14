@@ -115,8 +115,8 @@ services:
     restart: always
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
-      interval: 30s
-      timeout: 30s
+      interval: 15s
+      timeout: 15s
       retries: 3
     ports:
       - ${RABITMQ_PORT}:15672
@@ -144,6 +144,23 @@ services:
       - 1884:1883
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt
+    restart: unless-stopped
+    volumes:
+      - ./zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    ports:
+        # Frontend port
+      - 8081:8080
+    environment:
+      - TZ=Europe/Moscow
+    privileged: true
+    depends_on:
+      mosquitto:
+        condition: service_started
+
   # client:
   #   build:
   #     context: ./frontend/client_base
