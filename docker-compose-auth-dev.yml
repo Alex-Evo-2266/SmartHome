@@ -94,9 +94,34 @@ services:
       SMARTHOME_BD_NAME: ${MYSQL_DATABASE}
       SMARTHOME_BD_USER: ${MYSQL_USER}
       SMARTHOME_BD_PASSWORD: ${MYSQL_PASSWORD}
+      DATA_TOPIC: ${DATA_TOPIC}
+      DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
+      DATA_QUEUE: ${DATA_QUEUE}
     volumes:
       - ./SmartHome:/home/device_service/web
       - media_device_voluem:/home/device_service/web/media
+  page_service:
+    build: ./PagesServices
+    restart: always
+    command: bash -c "uvicorn app:create_app --reload --port=8007 --host='0.0.0.0'"
+    ports:
+      - 1236:8007
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    expose:
+      - 8007
+    environment:
+      EMAIL_TOPIK: ${EMAIL_TOPIK}
+      EMAIL_QUEUE: ${EMAIL_QUEUE}
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
+      DATA_TOPIC: ${DATA_TOPIC}
+      DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
+      DATA_QUEUE: ${DATA_QUEUE}
+    volumes:
+      - ./PagesServices:/home/device_service/web
+      - media_page_voluem:/home/device_service/web/media
   nginx:
     build: ./testNginx
     ports:
@@ -105,6 +130,7 @@ services:
       - auth_service
       - email_service
       - device_service
+      - page_service
       # - client
     volumes:
       - media_voluem:/home/smart_home/web/media/auth
@@ -119,7 +145,7 @@ services:
       timeout: 15s
       retries: 3
     ports:
-      - ${RABITMQ_PORT}:15672
+      - ${RABITMQ_OUT_PORT}:15672
   phpmyadmin:
     image: phpmyadmin
     restart: always
@@ -175,3 +201,4 @@ volumes:
   client_voluem:
   bd_auth_data:
   bd_data:
+  media_page_voluem:

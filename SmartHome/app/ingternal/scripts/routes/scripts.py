@@ -7,10 +7,6 @@ from app.ingternal.device.schemas.add_device import AddDeviceSchema
 from app.ingternal.device.schemas.edit_device import EditDeviceSchema
 from app.ingternal.device.schemas.config import DeviceClassConfigSchema
 
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
-from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
-from app.ingternal.device.exceptions.device import DevicesStructureNotFound
-from app.configuration.settings import DEVICE_DATA_POLL
 
 router = APIRouter(
     prefix="/api-devices/scripts",

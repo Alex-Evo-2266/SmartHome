@@ -28,6 +28,10 @@ CONFIG_FILE_NAME = 'service_config'
 ROUTE_PREFIX = "/api-pages"
 CONFIG_TAG = "pages-config"
 
+#poll keys
+DEVICE_DATA_POLL = "poll-device-data"
+SERVICE_DATA_POLL = "poll-service-data"
+
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 
 # DEFAULT_SEND_INTERVAL = 6

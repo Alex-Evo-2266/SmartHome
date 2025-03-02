@@ -1,7 +1,6 @@
 import logging, asyncio
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.ingternal.device.serialize_model.value_set import save_value
-from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
 from app.configuration.loop.loop import loop
 from app.configuration.settings import DEVICE_DATA_POLL, SAVE_DEVICE_CONF, LOOP_SAVE_DEVICE
 from app.pkg import __config__
@@ -14,7 +13,11 @@ async def save_devices():
 	"""
 	try:
 		# Получение списка зарегистрированных устройств
-		device_list: DeviceRegistry | None = servicesDataPoll.get(DEVICE_DATA_POLL)
+		print()
+		print("p4t")
+		print(servicesDataPoll.get_all())
+		print()
+		device_list: ObservableDict | None = servicesDataPoll.get(DEVICE_DATA_POLL)
 		if not device_list:
 			logger.warning("Invalid key: DEVICE_DATA_POLL not found in servicesDataPoll.")
 			return

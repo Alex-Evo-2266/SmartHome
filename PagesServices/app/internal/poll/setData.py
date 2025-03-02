@@ -1,0 +1,15 @@
+from app.internal.poll.serviceDataPoll import servicesDataPoll, ObservableDict
+from app.configuration.settings import SERVICE_DATA_POLL, DEVICE_DATA_POLL
+
+def setDataService(method, properties, body):
+    services_data:ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
+    services_data._data = body
+    print("p75")
+    print(body)
+
+
+def setDataDevice(method, properties, body):
+    services_data:ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
+    services_data._data = body
+    print("p79")
+    print(body)

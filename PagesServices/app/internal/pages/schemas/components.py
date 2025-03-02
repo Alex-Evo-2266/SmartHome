@@ -17,7 +17,10 @@ class ComponentType(str, Enum):
 	SLIDER = "SLIDER",
 	SELECT = "SELECT",
 	SWITCH = "SWITCH",
-	SEND_TEXT = "SEND_TEXT"
+	SEND_TEXT = "SEND_TEXT",
+	CONTENT_BOX = "CONTENT_BOX",
+	JSON = "JSON"
+
 
 class TypeSrc(str, Enum):
 	MANUAL = 'MANUAL',
@@ -150,7 +153,16 @@ class ISendText(ComponentBase):
 	action: Action
 	value:Optional[str] = None
 
-class Component(Card, Text, Button, Columns, IList, IFlexContainer, IGridLayout, IKeyValue, IDivider, IPanel, ISlider, ISelect, ISwitch, ISendText):
+class IContentBox(ComponentBase):
+    type: ComponentType.CONTENT_BOX
+    label: str
+    value: Optional['Component'] = None
+
+class IJSON(ComponentBase):
+    type: ComponentType.JSON
+    value: str = ''
+
+class Component(IContentBox, IJSON, Card, Text, Button, Columns, IList, IFlexContainer, IGridLayout, IKeyValue, IDivider, IPanel, ISlider, ISelect, ISwitch, ISendText):
 	type: ComponentType
 	action: Optional[Action] = None
 	name: str = ""
@@ -165,6 +177,26 @@ class Component(Card, Text, Button, Columns, IList, IFlexContainer, IGridLayout,
 	src: Optional[TypeSrc] = None
 	count: Optional[int] = None
 	img: Optional[str] = None
+
+# Component = Union[IContentBox, IJSON, Card, Text, Button, Columns, IList, IFlexContainer, IGridLayout, IKeyValue, IDivider, IPanel, ISlider, ISelect, ISwitch, ISendText]
+
+# # Обновляем forward references
+# Card.update_forward_refs()
+# Text.update_forward_refs()
+# Button.update_forward_refs()
+# Columns.update_forward_refs()
+# IList.update_forward_refs()
+# IFlexContainer.update_forward_refs()
+# IGridLayout.update_forward_refs()
+# IKeyValue.update_forward_refs()
+# IDivider.update_forward_refs()
+# IPanel.update_forward_refs()
+# ISlider.update_forward_refs()
+# ISelect.update_forward_refs()
+# ISwitch.update_forward_refs()
+# ISendText.update_forward_refs()
+# IContentBox.update_forward_refs()
+# IJSON.update_forward_refs()
 
 class Page(BaseModel):
 	page: Component

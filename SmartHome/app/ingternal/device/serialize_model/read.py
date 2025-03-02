@@ -1,9 +1,8 @@
 from typing import List
 import logging
 from app.ingternal.device.models.device import Device, DeviceField
-from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
 from app.ingternal.device.schemas.device import DeviceSerializeSchema
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.ingternal.device.exceptions.device import DeviceNotFound
 from app.ingternal.device.serialize_model.device_serialize import serialize_device
 from app.configuration.settings import DEVICE_DATA_POLL
@@ -21,14 +20,14 @@ async def get_all_device():
         List: List of devices if found, else an empty list.
     """
     logger.debug("Fetching all devices from service data poll...")  # Log debug
-    devices: DeviceRegistry | None = servicesDataPoll.get(DEVICE_DATA_POLL)
+    devices: ObservableDict | None = servicesDataPoll.get(DEVICE_DATA_POLL)
 
     if not devices:
         logger.warning("Device structure not found in the service data poll.")  # Log warning if no devices
         return []
 
-    logger.debug(f"Found {len(devices.get_all_devices())} devices.")  # Log the number of devices found
-    return devices.get_all_devices()
+    logger.debug(f"Found {len(devices.get_all_data())} devices.")  # Log the number of devices found
+    return devices.get_all_data()
 
 # Helper function to filter out None or empty values
 def filter_fun(data):
@@ -76,7 +75,7 @@ async def get_device(system_name: str):
         Device: The device if found, raises DeviceNotFound if not.
     """
     logger.debug(f"Fetching device with system name: {system_name}...")  # Log debug
-    devices: DeviceRegistry | None = servicesDataPoll.get(DEVICE_DATA_POLL)
+    devices: ObservableDict | None = servicesDataPoll.get(DEVICE_DATA_POLL)
 
     if not devices:
         logger.warning("Device structure not found in the service data poll.")  # Log warning

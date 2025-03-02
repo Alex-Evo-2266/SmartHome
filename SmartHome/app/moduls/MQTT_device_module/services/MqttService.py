@@ -1,12 +1,19 @@
 import paho.mqtt.client as mqtt
-import logging, asyncio
+import logging, asyncio, os
 from app.ingternal.modules.classes.baseService import BaseService
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from ..utils import update_topic_in_dict
 from app.pkg import __config__
 from ..settings import MQTT_PASSWORD, MQTT_BROKER_IP, MQTT_PORT, MQTT_USERNAME, MQTT_MESSAGES
+from app.configuration.settings import SERVICE_DATA_POLL, SERVICE_POLL, LOGS_DIR
 
 logger = logging.getLogger(__name__)
+# Создаем файловый обработчик для записи логов в файл
+file_handler = logging.FileHandler(os.path.join(LOGS_DIR, 'mqttServiceLogs.log'))
+file_handler.setLevel(logging.INFO)  # Устанавливаем уровень логирования для файлового обработчика
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 class MqttService(BaseService):
     client = None
@@ -66,9 +73,10 @@ class MqttService(BaseService):
     @classmethod
     async def async_on_message(cls, msg):
         # Обновление данных
-        topics = servicesDataPoll.get(MQTT_MESSAGES)
+        services_data:ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
+        topics = services_data.get(MQTT_MESSAGES)
         new_topics = update_topic_in_dict(msg.topic, msg.payload.decode(), topics)
-        await servicesDataPoll.set_async(MQTT_MESSAGES, new_topics)
+        await services_data.set_async(MQTT_MESSAGES, new_topics)
 
         # Вызов всех подходящих колбэков (с учётом иерархии)
         for topic_pattern, callbacks in cls.callbacks.items():
@@ -81,7 +89,7 @@ class MqttService(BaseService):
 
     @classmethod
     def on_message(cls, client, userdata, msg):
-        logger.info(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
+        # logger.info(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
         asyncio.run(cls.async_on_message(msg))
         
 
@@ -123,7 +131,8 @@ class MqttService(BaseService):
 
     @classmethod
     def get_data(cls):
-        return servicesDataPoll.get(MQTT_MESSAGES)
+        services_data:ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
+        return services_data.get(MQTT_MESSAGES)
 
     @classmethod
     def run_command(cls, topic, message):

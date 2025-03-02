@@ -57,6 +57,8 @@ TYPE_SEND_DEVICE = "device-send"
 
 #poll keys
 DEVICE_DATA_POLL = "poll-device-data"
+SERVICE_DATA_POLL = "poll-service-data"
+SERVICE_POLL = "poll-service"
 
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 
@@ -67,6 +69,7 @@ DEFAULT_SAVE_INTERVAL = 10
 MEDIA_URL = '/media/device/'
 MODULES_URL = '/media/device/modules/'
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 BACKGROUND_DIR = os.path.join(MEDIA_DIR, 'backgrounds')
 MODULES_DIR = os.path.join(MEDIA_DIR, 'modules')
 

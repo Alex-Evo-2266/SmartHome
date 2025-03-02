@@ -4,7 +4,8 @@ from typing import Optional
 from app.ingternal.device.classes.baseDevice import BaseDevice
 from ..services.MqttService import MqttService
 from ..settings import MQTT_SERVICE_PATH
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
+from app.configuration.settings import SERVICE_POLL
 from app.ingternal.device.schemas.enums import ReceivedDataFormat
 from app.ingternal.device.schemas.config import ConfigSchema
 
@@ -25,7 +26,8 @@ class MQTTDevice(BaseDevice):
         """
         super().set_value(field_id, value)
         # Получаем MQTT сервис
-        mqtt_service: Optional[MqttService] = servicesDataPoll.get(MQTT_SERVICE_PATH)
+        services:ObservableDict = servicesDataPoll.get(SERVICE_POLL)
+        mqtt_service: Optional[MqttService] = services.get(MQTT_SERVICE_PATH)
         if mqtt_service is None:
             logger.error("MQTT service is unavailable. Cannot send command.")
             return

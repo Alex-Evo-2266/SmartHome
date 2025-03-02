@@ -4,18 +4,19 @@ from app.ingternal.automation.schemas.enums import ConditionType, Operation
 from app.ingternal.device.schemas.enums import TypeDeviceField
 from typing import Optional
 
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
-from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.exceptions.device import DeviceNotFound, DeviceNotValueFound, DeviceFieldNotFound
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.device.interface.device_class import IDevice
 
+from app.configuration.settings import DEVICE_DATA_POLL
+
 logger = logging.getLogger(__name__)
 
 async def condition_data(service: str, object: str, data: str):
     if service == 'device':
-        dev: DeviceRegistry = servicesDataPoll.get('poll-device-data')
+        dev: ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
         device: Optional[DeviceSchema] = dev.get(object)
         if not device:
             logger.error(f"Device not found: {object}")

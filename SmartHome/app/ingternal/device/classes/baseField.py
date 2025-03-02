@@ -3,9 +3,8 @@ from app.ingternal.device.schemas.device import DeviceSerializeFieldSchema, Devi
 from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema
 from app.ingternal.device.schemas.enums import TypeDeviceField
 from app.ingternal.automation.run.register import automation_manager
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.configuration.settings import DEVICE_DATA_POLL
-from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
 from typing import Optional
 
 import asyncio
@@ -121,7 +120,7 @@ class FieldBase(IField):
 		else:
 			self.data.value = status
 
-		dev_list:Optional[DeviceRegistry] = servicesDataPoll.get(DEVICE_DATA_POLL)
+		dev_list:Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
 		if dev_list:
 			device: DeviceSchema | None = dev_list.get(self.device_system_name)
 			if device:

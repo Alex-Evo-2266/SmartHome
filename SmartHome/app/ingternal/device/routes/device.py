@@ -14,8 +14,7 @@ from app.ingternal.device.serialize_model.create import add_device
 from app.ingternal.device.serialize_model.delete import delete_device
 from app.ingternal.device.set_device_status import set_status
 
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
-from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.ingternal.device.exceptions.device import DevicesStructureNotFound
 from app.configuration.settings import DEVICE_DATA_POLL
 
@@ -89,10 +88,10 @@ async def get_dev_serialize(system_name: str):
 @router.get("", response_model=List[DeviceSchema])
 async def get_all_dev():
     try:
-        devices_list: Optional[DeviceRegistry] = servicesDataPoll.get(DEVICE_DATA_POLL)
+        devices_list: Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
         if not devices_list:
             raise DevicesStructureNotFound()
-        devices = devices_list.get_all_devices()
+        devices = devices_list.get_all_data()
         return devices
     except Exception as e:
         logger.warning(str(e))

@@ -1,8 +1,7 @@
 import logging
 from typing import Optional
 
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
-from app.ingternal.device.arrays.DeviceRegistry import DeviceRegistry
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.configuration.loop.loop import loop
 from app.pkg.websoket.websocket import WebSocketMenager
 from app.pkg import __config__
@@ -13,13 +12,13 @@ logger = logging.getLogger(__name__)
 # Отправка данных о устройствах
 async def send_device_data():
     logger.info("Attempting to send device data...")
-    devices: Optional[DeviceRegistry] = servicesDataPoll.get(DEVICE_DATA_POLL)
+    devices: Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
     
     if not devices:
         logger.warning("No devices structure found.")
         return
     
-    schemas = devices.get_all_devices()
+    schemas = devices.get_all_data()
     
     try:
         await WebSocketMenager.send_information(TYPE_SEND_DEVICE, [device.dict() for device in schemas])
