@@ -1,6 +1,7 @@
 import logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
+from typing import List
 from app.configuration.settings import ROUTE_PREFIX
 from app.internal.pages.serialize.formater import mapComponent
 from app.internal.pages.serialize.map_menu import mapMenu
@@ -11,6 +12,7 @@ from app.internal.pages.logic.modulesArray import ModulesArray
 from app.internal.pages.schemas.components import Page, Dialog, Component
 from app.internal.pages.schemas.menu import Menu
 from app.internal.pages.schemas.web_constructor import WebConstructorData
+from app.internal.pages.schemas.module_data import ModuleData
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +21,22 @@ router = APIRouter(
 	tags=["send"],
 	responses={404: {"description": "Not found"}},
 )
+
+@router.get("/all", response_model=List[ModuleData], response_model_exclude_none=True)
+async def allPages():
+	try:
+		modules_data:List[ModuleData] = []
+		modules = ModulesArray.get_all()
+		for key, value in modules.items():
+			pages = []
+			for page in value.pages_path:
+				pages.append(page)
+			value.pages_path
+			modules_data.append(ModuleData(name=key, name_pages=pages))
+		return modules_data
+	except Exception as e:
+		logger.error(e)
+		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/{module}/{page}", response_model=WebConstructorData, response_model_exclude_none=True)
 async def send(module: str, page: str):

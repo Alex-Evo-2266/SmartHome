@@ -1,4 +1,6 @@
 import os, importlib
+from app.internal.pages.classes.BaseModules import BaseModule
+from typing import Dict
 
 def getModuls(dir=__name__, init = True):
     list_modules=os.listdir(dir)
@@ -10,7 +12,7 @@ def getModuls(dir=__name__, init = True):
 
 class ModulesArray():
 
-    madules = {}
+    madules:Dict[str, BaseModule] = {}
 
     @classmethod
     def initModules(cls, name:str):
@@ -42,6 +44,10 @@ class ModulesArray():
     @classmethod
     def get(cls, name_module: str):
         return cls.madules[name_module]
+    
+    @classmethod
+    def get_all(cls, ):
+        return cls.madules
     
     @classmethod
     def routers(cls):
