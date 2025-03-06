@@ -18,5 +18,4 @@ def get_all_menu_data(paths:list[str]):
     for path in paths:
         menu = json_read(paths[path])
         menus.append(menu)
-    print(menus)
     return menus

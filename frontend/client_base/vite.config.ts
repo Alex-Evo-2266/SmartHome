@@ -8,6 +8,7 @@ export default defineConfig({
     proxy:{
       '/api-auth': "http://127.0.0.1:1337",
       '/api-devices': "http://127.0.0.1:1337",
+      '/api-pages': "http://127.0.0.1:1337",
       '/ws': "http://127.0.0.1:1337",
       '/media': "http://127.0.0.1:1337"
     }

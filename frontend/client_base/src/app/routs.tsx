@@ -6,6 +6,7 @@ import { DevicePage } from "../pages/Device"
 import {Example} from '../pages/Test/test'
 import { SettingsPage } from "../pages/Settings"
 import { AutomationPage } from "../pages/Automations"
+import { ModulesPage } from "../pages/modules"
 
 
 
@@ -19,6 +20,7 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 					<Route path="home" element={<HomePage/>}/>
 					<Route path="device" element={<DevicePage/>}/>
 					<Route path="automation" element={<AutomationPage/>}/>
+					<Route path="modules/:moduleName/:pageName" element={<ModulesPage/>}/>
 					<Route path="test" element={<Example/>}/>
 					<Route path="settings" element={<SettingsPage/>}/>
 					<Route path="/*" element={<Navigate replace to="/home" />} />

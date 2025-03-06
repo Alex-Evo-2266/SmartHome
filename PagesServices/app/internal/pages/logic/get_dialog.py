@@ -15,7 +15,6 @@ def get_dialog_path(__name__)->dict[str, str]:
 
 def get_dialog_data(path:str):
     dialog = json_read(path)
-    print(dialog)
     return dialog
 
 def get_dialogs_data(paths:list[str]):
@@ -23,5 +22,4 @@ def get_dialogs_data(paths:list[str]):
     for path in paths:
         dialog = json_read(paths[path])
         dialogs.append(dialog)
-    print(dialogs)
     return dialogs

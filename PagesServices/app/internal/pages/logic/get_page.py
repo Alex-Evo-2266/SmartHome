@@ -17,5 +17,4 @@ def get_pages_path(__name__)->dict[str, str]:
 
 def get_page_data(path:str):
     page = json_read(path)
-    print(page)
     return page
