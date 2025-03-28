@@ -1,12 +1,13 @@
 from pathlib import Path
 import datetime
+import logging
 import os
 
-# try:
-#     from app.configuration.settings_local import *
-# except Exception as e:
-#     from app.configuration.settings_prod import *
-from app.configuration.settings_prod import *
+try:
+    # from app.configuration.settings_local import *
+    raise Exception()
+except Exception as e:
+    from app.configuration.settings_prod import *
 
 
 ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
@@ -37,6 +38,9 @@ TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 # DEFAULT_SEND_INTERVAL = 6
 # DEFAULT_SEND_SERVER_DATA_INTERVAL = 30
 # DEFAULT_SAVE_INTERVAL = 10
+
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+LOGS_LEVEL = logging.DEBUG if DEBUG else logging.INFO
 
 MEDIA_URL = '/media/'
 # MODULES_URL = '/media/modules/'

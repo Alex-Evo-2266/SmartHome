@@ -13,10 +13,6 @@ async def save_devices():
 	"""
 	try:
 		# Получение списка зарегистрированных устройств
-		print()
-		print("p4t")
-		print(servicesDataPoll.get_all())
-		print()
 		device_list: ObservableDict | None = servicesDataPoll.get(DEVICE_DATA_POLL)
 		if not device_list:
 			logger.warning("Invalid key: DEVICE_DATA_POLL not found in servicesDataPoll.")

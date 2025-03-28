@@ -7,9 +7,15 @@ from app.ingternal.device.classes.metaDevice import DeviceMeta
 from app.ingternal.device.interface.field_class import IField
 from app.ingternal.device.serialize_model.update import edit_fields, update_device_from_object
 
+from app.ingternal.device_types.schemas.enum import TypesDeviceEnum
+
+from typing import ClassVar, Set, Union
+
 class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 
 	device_config = ConfigSchema()
+	# Статическое поле с допустимыми типами устройств
+	ALLOWED_TYPES: ClassVar[Union[None, Set[TypesDeviceEnum]]] = None
 	
 	def __init__(self, device: DeviceSerializeSchema):
 		self.data = device
@@ -76,7 +82,6 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		field = self.get_field(field_id)
 		if not field:
 			return
-		print("dz", field_id, value, script)
 		field.set(value, script)
 
 	async def save(self):
@@ -101,7 +106,6 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	def dict(self):
 		data = self.get_schema()
 		dict_data = dict(data)
-		print(dict_data)
 		return dict_data
 
 

@@ -9,6 +9,10 @@ from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.device.serialize_model.utils import duble_field
 from app.ingternal.device.schemas.enums import DeviceStatusField, ReceivedDataFormat, DeviceGetData
 
+from app.ingternal.logs import get_base_logger
+
+# Настройка логгера
+logger = get_base_logger.get_logger(__name__)
 
 async def edit_device(system_name: str, data: EditDeviceSchema):
 	"""Редактирование устройства."""
@@ -60,6 +64,30 @@ async def edit_status_device(system_name: str, status: bool):
 	
 	DevicesArray.delete(system_name)
 
+async def edit_status_device(system_name: str, status: bool):
+    """Редактирование статуса устройства."""
+    try:
+        status_str = "LINK" if status else "UNLINK"
+        logger.info(f"Starting status change for device: {system_name}, new status: {status_str}")
+        
+        device: Optional[Device] = await Device.objects.get_or_none(system_name=system_name)
+        
+        if not device:
+            logger.error(f"Device not found for status update: {system_name}")
+            raise DeviceNotFound()
+
+        device.status = DeviceStatusField.LINK if status else DeviceStatusField.UNLINK
+        
+        await device.update(_columns=["status"])
+        
+        logger.debug(f"Clearing cache for device: {system_name}")
+        DevicesArray.delete(system_name)
+        
+        logger.info(f"Successfully updated status for device: {system_name} to {status_str}")
+    except Exception as e:
+        logger.error(f"Error updating status for device {system_name}: {str(e)}", exc_info=True)
+        raise
+
 async def update_device_from_object(system_name:str, status:bool, type_command:ReceivedDataFormat, type_get_data:DeviceGetData, token:str, address:str):
 	"""Редактирование устройства."""
 	device: Optional[Device] = await Device.objects.get_or_none(system_name=system_name)
@@ -72,7 +100,7 @@ async def update_device_from_object(system_name:str, status:bool, type_command:R
 	device.token = token
 	device.type_get_data = type_get_data
 	device.type_command = type_command
-	device.status = status
+	# device.status = status  # пока что закоментировал чтобы корректно работало ручное изменение состояния у отключенных устройств.
 	await device.update(_columns=["address", "token", "type_command", "type_get_data", "status"])
 
 	 # Удаление из кэша

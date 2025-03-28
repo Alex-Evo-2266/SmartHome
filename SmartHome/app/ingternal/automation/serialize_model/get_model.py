@@ -60,4 +60,3 @@ async def get_trigger(trigger: TriggerItemSchema):
         pass
     if trigger.service == "time":
         triggers = await TargetItem.objects.filter(service=trigger.service).all()
-        print(triggers)

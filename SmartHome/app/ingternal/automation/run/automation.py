@@ -30,7 +30,7 @@ async def condition_data(service: str, object: str, data: str):
     elif service == 'value':
         return data
     elif service == 'time':
-        print()
+        pass
     else:
         logger.warning(f"Unknown service type: {service}")
         return None

@@ -13,7 +13,10 @@ from app.ingternal.device.serialize_model.update import edit_fields
 from app.ingternal.device.serialize_model.read import get_all_row_device, get_serialize_device
 
 # Настройка логирования / Logging setup
-logger = logging.getLogger(__name__)
+from app.ingternal.logs import get_polling_logger
+
+# Настройка логгера
+logger = get_polling_logger.get_logger(__name__)
 active_tasks: set[asyncio.Task] = set()
 
 class LoadingDevice():

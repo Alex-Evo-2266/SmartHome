@@ -58,7 +58,6 @@ def mapComponent(data, formaters: dict):
 
         if 'src' in data and data['src'] == TypeSrc.SERVER_GENERATE and 'src_key' in data and data['src_key'] in formaters:
             f = formaters[data['src_key']]
-            print("ppp999999", f)
             formatted_data = f()  # Получаем данные от форматтера
             logger.debug(f"Formatted data from {data['src_key']}: {formatted_data}")
 

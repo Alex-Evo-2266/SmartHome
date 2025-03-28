@@ -55,3 +55,18 @@ class Value(ormar.Model):
 # 	value: str = ormar.String(max_length=500)
 # 	unit: str = ormar.String(max_length=10, default="")
 # 	datatime: str = ormar.String(max_length=20)
+
+
+# {
+# 	system_name: "test1",
+# 	fields:[
+# 		name: "testfield1"
+# 	],
+# 	type_mask: {
+# 		name_type: "tepe_name1",
+# 		fields: [
+# 			name_field_type:str
+# 			name_field_device: str
+# 		]
+# 	}
+# }

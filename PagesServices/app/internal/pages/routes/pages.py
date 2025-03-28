@@ -71,7 +71,6 @@ async def send(module: str, page: str):
         dialogs_data = get_dialogs_data(dialogs_path)
         dialogs_data_serializeble = []
         for dialog in dialogs_data:
-            print("p6000", dialog)
             dialog_components_row = dialog.get("components", None)
             if not dialog_components_row:
                 dialogs_data_serializeble.append(Dialog(name=dialog['name'], title=dialog['title'], components=[Component(type=ComponentType.TEXT, name="", value="")]))

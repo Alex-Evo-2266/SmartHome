@@ -1,8 +1,10 @@
 from app.internal.pages.logic.modulesArray import ModulesArray
 from fastapi import APIRouter
 from app.configuration.settings import ROUTE_PREFIX
+from typing import Type
+from app.internal.pages.classes.BaseModules import BaseModule
 
-def f(data):
+def f(data: Type[BaseModule]):
     print(data)
     print(data.pages_path)
     print(data.dialogs_path)
@@ -16,13 +18,13 @@ def routers():
         responses={404: {"description": "Not found"}},
     )
     
-    ModulesArray.initModules(__name__)
+    ModulesArray.init_modules(__name__)
     routers2 = ModulesArray.routers()
     for r in routers2:
         router.include_router(r)
     return router
 
 def getModule():
-    ModulesArray.initModules(__name__)
+    ModulesArray.init_modules(__name__)
     ModulesArray.start()
-    ModulesArray.forEtch(f)
+    ModulesArray.for_each(f)

@@ -47,8 +47,9 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         return result
 
 class LogManager:
-    def __init__(self, name:str):
+    def __init__(self, name:str, level = logging.DEBUG):
         self.name = name
+        self.level = level
         
     @staticmethod
     def get_current_log_filename(name:str):
@@ -75,7 +76,7 @@ class LogManager:
             '%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s'
         )
         handler.setFormatter(formatter)
-        handler.setLevel(logging.DEBUG)
+        handler.setLevel(self.level)
         
         # Переименовываем текущий файл в формат с датой
         try:
@@ -85,3 +86,17 @@ class LogManager:
             logging.error(f"Failed to rename log file: {str(e)}")
         
         return handler
+    
+class MyLogger:
+    def __init__(self, handler: LogManager):
+        self.handler = handler.get_file_handler()
+
+    def get_logger(self, name: str):
+
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+   
+        logger.handlers.clear()
+        logger.addHandler(self.handler)
+        
+        return logger

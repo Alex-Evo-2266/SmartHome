@@ -1,25 +1,84 @@
-import os, json
+import os
+import logging
+from typing import Dict, List, Optional, Union
+from pathlib import Path
 from app.configuration.settings import BASE_DIR
 from .utils import json_read
+from app.internal.logs.handler_base import handler
 
-def get_dialog_path(__name__)->dict[str, str]:
-    module_dialog_dir = os.path.join(BASE_DIR, *__name__.split('.'), 'dialogs')
-    if not os.path.isdir(module_dialog_dir):
+# Настройка логгера
+logger = logging.getLogger(__name__)
+logger.addHandler(handler.get_file_handler())
+
+def get_dialog_path(module_name: str) -> Dict[str, str]:
+    """
+    Получает пути к JSON-файлам диалогов в указанном модуле.
+    
+    Args:
+        module_name: Имя модуля в формате 'package.module'
+        
+    Returns:
+        Словарь {название_диалога: путь_к_файлу}
+    """
+    try:
+        # Преобразуем в Path для кроссплатформенности
+        module_dialog_dir = Path(BASE_DIR).joinpath(*module_name.split('.')).joinpath('dialogs')
+        logger.debug(f"Поиск диалогов в директории: {module_dialog_dir}")
+        
+        if not module_dialog_dir.is_dir():
+            logger.warning(f"Директория с диалогами не найдена: {module_dialog_dir}")
+            return {}
+            
+        dialogs_path = {}
+        for item in module_dialog_dir.iterdir():
+            if item.is_file() and item.suffix == '.json':
+                logger.debug(f"Найден файл диалога: {item.name}")
+                dialogs_path[item.stem] = str(item)
+                
+        logger.info(f"Найдено {len(dialogs_path)} диалогов в модуле {module_name}")
+        return dialogs_path
+        
+    except Exception as e:
+        logger.error(f"Ошибка при поиске диалогов: {str(e)}", exc_info=True)
         return {}
-    dialogs_path = {}
-    for name in os.listdir(module_dialog_dir):
-        split_name = name.split('.')
-        if len(split_name) == 2 and split_name[1] == 'json':
-            dialogs_path[split_name[0]] = os.path.join(module_dialog_dir, name)
-    return dialogs_path
 
-def get_dialog_data(path:str):
-    dialog = json_read(path)
-    return dialog
+def get_dialog_data(path: str) -> Optional[Union[dict, list]]:
+    """
+    Читает данные диалога из JSON-файла.
+    
+    Args:
+        path: Путь к JSON-файлу
+        
+    Returns:
+        Данные диалога или None в случае ошибки
+    """
+    try:
+        logger.debug(f"Чтение диалога из файла: {path}")
+        dialog = json_read(path)
+        logger.debug(f"Успешно прочитан диалог из {path}")
+        return dialog
+    except Exception as e:
+        logger.error(f"Ошибка чтения диалога из {path}: {str(e)}", exc_info=True)
+        return None
 
-def get_dialogs_data(paths:list[str]):
+def get_dialogs_data(paths: Dict[str, str]) -> List[Union[dict, list]]:
+    """
+    Читает данные нескольких диалогов.
+    
+    Args:
+        paths: Словарь {название: путь} к JSON-файлам
+        
+    Returns:
+        Список данных диалогов
+    """
     dialogs = []
-    for path in paths:
-        dialog = json_read(paths[path])
-        dialogs.append(dialog)
+    for name, path in paths.items():
+        logger.debug(f"Обработка диалога '{name}' по пути {path}")
+        dialog = get_dialog_data(path)
+        if dialog is not None:
+            dialogs.append(dialog)
+        else:
+            logger.warning(f"Не удалось загрузить диалог '{name}'")
+            
+    logger.info(f"Успешно загружено {len(dialogs)} из {len(paths)} диалогов")
     return dialogs
