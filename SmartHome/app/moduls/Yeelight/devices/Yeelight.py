@@ -6,8 +6,12 @@ from app.ingternal.device.classes.baseField import FieldBase
 from app.ingternal.device.schemas.enums import TypeDeviceField, DeviceGetData
 from app.ingternal.device.interface.field_class import IField
 import logging
+from app.ingternal.logs.logs import LogManager
 
 logger = logging.getLogger(__name__)
+logsHandler = LogManager("YeelightDevice", level=logging.DEBUG)
+logger.addHandler(logsHandler.get_file_handler())
+logger.setLevel(logging.DEBUG)
 
 
 def save_new_date(val: IField, status: str):
@@ -57,6 +61,7 @@ class YeelightDevice(BaseDevice):
 			self.minmaxValue = self.device.get_model_specs()
 			self.cached_values = values
 			
+			logger.debug(f"data lamp {str(values)}")
 			if not values:
 				logger.warning("Failed to retrieve device properties.")
 				return
@@ -68,6 +73,7 @@ class YeelightDevice(BaseDevice):
 				"state": ("power", "1", "0", TypeDeviceField.BINARY),
 				"bg_power": ("bg_power", "1", "0", TypeDeviceField.BINARY),
 				"brightness": ("current_brightness", "100", "0", TypeDeviceField.NUMBER),
+				"bg_bright": ("bg_bright", "100", "0", TypeDeviceField.NUMBER),
 				"color": ("hue", "360", "0", TypeDeviceField.NUMBER),
 				"bg_color": ("bg_hue", "360", "0", TypeDeviceField.NUMBER),
 				"saturation": ("sat", "100", "0", TypeDeviceField.NUMBER),
@@ -166,7 +172,8 @@ class YeelightDevice(BaseDevice):
 		super().set_value(field_id, value, script)
 		try:
 			if name == "state":
-				self.device.turn_on() if int(new_val) == 1 else self.device.turn_off()
+				# self.device.turn_on() if int(new_val) == 1 else self.device.turn_off()
+				self.device.send_command("set_power", ["on" if int(new_val) == 1 else "off"])
 			elif name == "brightness":
 				self.device.set_brightness(int(new_val))
 			elif name == "bg_bright":

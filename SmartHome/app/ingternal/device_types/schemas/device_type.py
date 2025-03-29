@@ -1,9 +1,24 @@
 from enum import Enum
 from pydantic import BaseModel
 from typing import Optional, List, Dict
-from app.ingternal.device_types.schemas.enum import TypesDeviceEnum
+from app.ingternal.device_types.types_names import TypesDeviceEnum
 from app.ingternal.device.schemas.enums import TypeDeviceField
 
+class FieldDeviceTypeSchema(BaseModel):
+	name_field_type: str
+	description: Optional[str] = ""    # Описание поля
+	type_field: TypeDeviceField    # Ожидаемый тип поля
+	required: bool = False  # Обязательное ли поле
+
+	class Config:  
+		use_enum_values = True
+
+class DeviceTypeSchema(BaseModel):
+	name: str
+	field: Dict[str, FieldDeviceTypeSchema] 
+
+	class Config:  
+		use_enum_values = True
 
 class FieldDeviceTypeSerializeSchema(BaseModel):
 	id: str
@@ -11,7 +26,7 @@ class FieldDeviceTypeSerializeSchema(BaseModel):
 	id_field_device: str
 	description: str    # Описание поля
 	field_type: TypeDeviceField    # Ожидаемый тип поля
-	required: bool = True  # Обязательное ли поле
+	required: bool = False  # Обязательное ли поле
 	device_type: Optional['DeviceTypeSerializeSchema'] = None
 
 	class Config:  

@@ -7,7 +7,7 @@ from app.ingternal.device.classes.metaDevice import DeviceMeta
 from app.ingternal.device.interface.field_class import IField
 from app.ingternal.device.serialize_model.update import edit_fields, update_device_from_object
 
-from app.ingternal.device_types.schemas.enum import TypesDeviceEnum
+from app.ingternal.device_types.types_names import TypesDeviceEnum
 
 from typing import ClassVar, Set, Union
 

@@ -4,10 +4,11 @@ from typing import List
 
 from app.ingternal.device_types.serialize_model.create import create
 from app.ingternal.device_types.schemas.add_device_type import AddOrEditDeviceTypeSchema
-from app.ingternal.device_types.schemas.device_type import DeviceTypeSerializeSchema
+from app.ingternal.device_types.schemas.device_type import DeviceTypeSerializeSchema, DeviceTypeSchema
 from app.ingternal.device_types.serialize_model.read import get_all_type_device, get_type_device
 from app.ingternal.device_types.serialize_model.delete import delete_type_device_by_device
 from app.ingternal.device_types.serialize_model.update import update_type_device
+from app.ingternal.device_types.serialize_model.get_types import get_all_types as get_types
 from app.ingternal.device_types.exceptions.device_type import DeviceTypeNotFound
 
 from app.ingternal.logs import get_base_logger
@@ -53,8 +54,18 @@ async def add_device_type(data: AddOrEditDeviceTypeSchema):
 			status_code=400,
 			detail=str(e))
 			
+@router.get("/", response_model=List[DeviceTypeSchema])
+async def get_all_types():
+	try:
+		device_types = get_types()
+		return device_types
+	except Exception as e:
+		raise HTTPException(
+			status_code=400,
+			detail=str(e))
+
 @router.get("/maps", response_model=List[DeviceTypeSerializeSchema])
-async def get_all_dev():
+async def get_all_field_map():
 	"""Get all device type mappings"""
 	try:
 		logger.info("Fetching all device type mappings")
