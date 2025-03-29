@@ -49,12 +49,12 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 	return(
 		<FullScrinTemplateDialog header="Type" onHide={onHide} onSave={save}>
 			<div style={{marginInline: '16px'}}>
-				<SelectField border items={["", ...getAvailableTypes(option, types)]} value={typeMap?.name_type ?? ""} onChange={changeType}/>
+				<SelectField border items={["[]", ...getAvailableTypes(option, types)]} value={typeMap?.name_type ?? "[]"} onChange={changeType}/>
 				{
 					typeMap &&
 					<>
 						<div className="device-type-field-map">
-							<TextField readOnly value="type"/><ArrowRight/><TextField value="device"/>
+							<TextField readOnly value="type"/><ArrowRight/><TextField readOnly value="device"/>
 						</div>
 						{
 							getFieldType(types, typeMap.name_type).map((item, index)=>(

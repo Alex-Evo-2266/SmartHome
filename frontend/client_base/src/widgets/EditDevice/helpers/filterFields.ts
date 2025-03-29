@@ -24,7 +24,7 @@ export function getFieldsCondidat(type: TypeDeviceField, device: DeviceSchema):I
     })) ?? []
     formatType.push({
         value: "",
-        title: ""
+        title: "[]"
     })
     return formatType
 }
