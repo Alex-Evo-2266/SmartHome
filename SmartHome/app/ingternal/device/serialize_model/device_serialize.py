@@ -1,6 +1,8 @@
 from app.ingternal.device.models.device import Device, DeviceField
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSerializeFieldSchema
 from app.ingternal.device.serialize_model.utils import map_status
+from app.ingternal.device_types.serialize_model.read import get_type_device
+from app.ingternal.device_types.exceptions.device_type import DeviceTypeNotFound
 from typing import List
 import logging
 
@@ -24,6 +26,12 @@ async def serialize_device(device: Device | None, fields_include: bool = False) 
         return None
     
     logger.debug(f"Serializing device: {device.system_name}...")  # Log the device being serialized
+    try:
+        type_data = await get_type_device(device.system_name)
+    except Exception:
+        type_data = None
+
+
     data = DeviceSerializeSchema(
         name=device.name,
         system_name=device.system_name,
@@ -33,7 +41,8 @@ async def serialize_device(device: Device | None, fields_include: bool = False) 
         token=device.token,
         type_command=device.type_command,
         type_get_data=device.type_get_data,
-        status=map_status(device.status)
+        status=map_status(device.status),
+        type_mask=type_data
     )
     
     if fields_include:

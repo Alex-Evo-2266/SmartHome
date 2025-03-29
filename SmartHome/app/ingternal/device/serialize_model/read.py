@@ -82,12 +82,12 @@ async def get_device(system_name: str):
 
     if not devices:
         logger.warning("Device structure not found in the service data poll.")  # Log warning
-        return []
-
+        raise DeviceNotFound()
+    
     device_data = devices.get(system_name)
     if device_data:
         logger.debug(f"Device {system_name} found.")  # Log successful device retrieval
-        return device_data.device
+        return device_data
 
     logger.error(f"Device with system name {system_name} not found.")  # Log error if not found
     raise DeviceNotFound()

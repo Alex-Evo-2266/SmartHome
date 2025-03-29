@@ -1,5 +1,6 @@
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel
+from app.ingternal.device_types.types_names import TypesDeviceEnum
 
 class ChangeField(BaseModel):
 	creation:bool = True
@@ -29,6 +30,8 @@ class ConfigSchema(BaseModel):
 	class_img: Optional[str] = None
 	init_field: bool = False
 	virtual: bool = False
+	type:bool = True
+	available_types: Optional[List[TypesDeviceEnum]] = None
 
 class DeviceClassConfigSchema(ConfigSchema):
 	class_name: str

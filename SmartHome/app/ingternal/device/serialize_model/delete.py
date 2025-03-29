@@ -2,6 +2,7 @@ from app.ingternal.device.models.device import Device
 from app.ingternal.device.exceptions.device import DeviceNotFound
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
+from app.ingternal.device_types.serialize_model.delete import delete_type_device_by_device
 from app.configuration.settings import DEVICE_DATA_POLL
 from typing import Optional
 
@@ -15,3 +16,4 @@ async def delete_device(system_name:str):
 	if not device_data_list:
 		return
 	device_data_list.delete(system_name)
+	await delete_type_device_by_device(system_name)

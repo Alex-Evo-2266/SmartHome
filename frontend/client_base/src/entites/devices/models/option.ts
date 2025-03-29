@@ -30,6 +30,8 @@ export type OptionSchema = {
 	class_img?: string
 	init_field: boolean
 	virtual: boolean
+	type: boolean
+	available_types?: string[]
 }
 
 export type DeviceClassOptions = OptionSchema & {

@@ -1,6 +1,6 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
-from typing import List
+from typing import List, Union
 
 from app.ingternal.device_types.serialize_model.create import create
 from app.ingternal.device_types.schemas.add_device_type import AddOrEditDeviceTypeSchema
@@ -54,11 +54,23 @@ async def add_device_type(data: AddOrEditDeviceTypeSchema):
 			status_code=400,
 			detail=str(e))
 			
-@router.get("/", response_model=List[DeviceTypeSchema])
+@router.get("", response_model=List[DeviceTypeSchema])
 async def get_all_types():
 	try:
 		device_types = get_types()
 		return device_types
+	except Exception as e:
+		raise HTTPException(
+			status_code=400,
+			detail=str(e))
+
+@router.get("/{system_name}", response_model=Union[DeviceTypeSerializeSchema | None])
+async def get_all_types(system_name:str):
+	try:
+		device_types = await get_type_device(system_name)
+		return device_types
+	except DeviceTypeNotFound:
+		return None
 	except Exception as e:
 		raise HTTPException(
 			status_code=400,

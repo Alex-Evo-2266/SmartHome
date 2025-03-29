@@ -1,3 +1,5 @@
+import { TypeDevice } from "./type";
+
 export enum ReceivedDataFormat {
     JSON = "json",
     STRING = "string",
@@ -53,6 +55,7 @@ export enum StatusDevice {
     type_get_data: DeviceGetData;
     status: StatusDevice;
     fields?: DeviceSerializeFieldSchema[];
+    type_mask?: TypeDevice
   }
   
   export interface DeviceSchema extends DeviceSerializeSchema {

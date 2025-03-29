@@ -1,6 +1,7 @@
 import { useMemo } from "react"
 import { DeviceSchema, useGetOptionDevice } from "../../../entites/devices"
 import { DeviceEditDialog } from "./DeviceEditDialog"
+import './EditDevice.scss'
 
 interface DeviceDataProps{
     data: DeviceSchema

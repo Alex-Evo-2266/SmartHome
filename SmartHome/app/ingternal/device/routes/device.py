@@ -67,7 +67,7 @@ async def get_options_dev():
         return JSONResponse(status_code=400, content={"error": str(e)})
 
 # Получение информации об устройстве по его имени
-@router.get("/{system_name}", response_model=DeviceSerializeSchema)
+@router.get("/{system_name}", response_model=DeviceSchema)
 async def get_dev(system_name: str):
     try:
         return await get_device(system_name)

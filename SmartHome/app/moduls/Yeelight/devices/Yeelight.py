@@ -5,6 +5,7 @@ from app.ingternal.device.classes.baseDevice import BaseDevice
 from app.ingternal.device.classes.baseField import FieldBase
 from app.ingternal.device.schemas.enums import TypeDeviceField, DeviceGetData
 from app.ingternal.device.interface.field_class import IField
+from app.ingternal.device_types.types_names import TypesDeviceEnum
 import logging
 from app.ingternal.logs.logs import LogManager
 
@@ -27,6 +28,8 @@ class YeelightDevice(BaseDevice):
 		virtual=False,
 		token=False,
 		type_get_data=False,
+		type=True,
+		available_types=[TypesDeviceEnum.LIGHT],
 		fields_change=ChangeField(
 			creation=False,
 			deleted=False,
