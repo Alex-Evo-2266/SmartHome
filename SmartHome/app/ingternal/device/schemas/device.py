@@ -36,7 +36,7 @@ class DeviceSerializeSchema(BaseModel):
 	name: str
 	system_name: str
 	class_device: str
-	type: str
+	type: Optional[str] = None
 	address: Optional[str] = None
 	token: Optional[str] = None
 	type_command: ReceivedDataFormat

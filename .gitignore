@@ -56,3 +56,5 @@ SettingsService
 SmartHome_old
 
 service_config.yml
+
+logs

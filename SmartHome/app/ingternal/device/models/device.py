@@ -11,7 +11,7 @@ class Device(ormar.Model):
 	name: str = ormar.String(max_length=200)
 	system_name: str = ormar.String(max_length=200, primary_key=True)
 	class_device: str = ormar.String(max_length=200)
-	type: str = ormar.String(max_length=200)
+	type: Optional[str] = ormar.String(max_length=200, nullable=True)
 	address: Optional[str] = ormar.String(max_length=200, nullable=True)
 	token: Optional[str] = ormar.String(max_length=200, nullable=True)
 	type_command: ReceivedDataFormat = ormar.String(max_length=200, default=ReceivedDataFormat.JSON)
@@ -56,17 +56,3 @@ class Value(ormar.Model):
 # 	unit: str = ormar.String(max_length=10, default="")
 # 	datatime: str = ormar.String(max_length=20)
 
-
-# {
-# 	system_name: "test1",
-# 	fields:[
-# 		name: "testfield1"
-# 	],
-# 	type_mask: {
-# 		name_type: "tepe_name1",
-# 		fields: [
-# 			name_field_type:str
-# 			name_field_device: str
-# 		]
-# 	}
-# }
