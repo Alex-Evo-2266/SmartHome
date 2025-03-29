@@ -63,6 +63,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
                             header={item.name}
                             text={`address: ${item.address}`}
                             control={
+                                option.fields_change.deleted &&
                                 <IconButton
                                 transparent
                                 className="icon-delete-btn"
