@@ -3,10 +3,11 @@ from app.ingternal.device_types.schemas.device_type import DeviceTypeSerializeSc
 from app.ingternal.device_types.exceptions.device_type import DeviceTypeNotFound
 from app.ingternal.device_types.serialize_model.serialize_types import serialive_type_model
 from typing import List
-from app.ingternal.logs import get_base_logger
+from app.ingternal.logs import get_base_logger, get_polling_logger
 
 # Настройка логгера
 logger = get_base_logger.get_logger(__name__)
+# logger = get_polling_logger.get_logger(__name__)
 
 def filter_fun(data) -> bool:
     """Фильтрация невалидных данных"""

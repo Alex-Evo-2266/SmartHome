@@ -1,5 +1,4 @@
 from app.ingternal.device_types.models.device_type import TypeDevice
-from app.ingternal.logs.handlers import handler_types
 from app.ingternal.logs import get_base_logger
 
 # Настройка логгера

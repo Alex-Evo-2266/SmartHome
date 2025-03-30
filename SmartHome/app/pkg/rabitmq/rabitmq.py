@@ -1,7 +1,11 @@
-import pika, json, logging, time, aio_pika
+import pika, json
 from threading import Thread
+from app.ingternal.logs.logs import LogManager, MyLogger
+from app.configuration.settings import LOGS_LEVEL
 
-logger = logging.getLogger(__name__)
+rabbitHandler = LogManager("rabbitLog", LOGS_LEVEL)
+logger_obg = MyLogger(rabbitHandler)
+logger = logger_obg.get_logger(__name__)
 
 class WorkerThread(Thread):
 	def __init__(self):
@@ -136,13 +140,13 @@ class RabbitMQProducer:
                 delivery_mode=2,  # делает сообщение постоянным
             )
         )
-        print(f" [x] Sent {message}")
+        logger.debug(f" [x] Sent {message}")
 
     def close(self):
         """Закрывает соединение с RabbitMQ."""
         if self.connection and self.connection.is_open:
             self.connection.close()
-            print("Connection closed")
+            logger.info("Connection closed")
 
 # class RabbitMQProducer:
 #     def __init__(self, host='rabbitmq', port=5672, queue_name='default_queue'):

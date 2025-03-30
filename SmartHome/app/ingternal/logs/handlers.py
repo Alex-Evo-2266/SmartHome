@@ -1,6 +1,5 @@
 from app.ingternal.logs.logs import LogManager
 from app.configuration.settings import LOGS_LEVEL
 
-handler = LogManager("deviceLog")
-handler_polling = LogManager("devicePollingLog")
-handler_types = LogManager("deviceTypesLog")
+handler_base = LogManager("deviceBaseLog", level=LOGS_LEVEL)
+handler_polling = LogManager("devicePollingLog", level=LOGS_LEVEL)

@@ -7,11 +7,10 @@ from app.ingternal.device.exceptions.device import DeviceNotFound
 from app.ingternal.device.serialize_model.device_serialize import serialize_device
 from app.configuration.settings import DEVICE_DATA_POLL
 
-from app.ingternal.logs.handlers import handler
+from app.ingternal.logs import get_base_logger
 
 # Настройка логгера
-logger = logging.getLogger(__name__)
-logger.addHandler(handler.get_file_handler())
+logger = get_base_logger.get_logger(__name__)
 
 # Fetch all devices from the service data poll
 async def get_all_device():

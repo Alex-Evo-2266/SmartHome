@@ -47,8 +47,8 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         return result
 
 class LogManager:
-    def __init__(self, name:str, level = logging.DEBUG):
-        self.name = name
+    def __init__(self, filename:str, level = logging.DEBUG):
+        self.name = filename
         self.level = level
         
     @staticmethod
@@ -94,9 +94,9 @@ class MyLogger:
     def get_logger(self, name: str):
 
         logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
-   
         logger.handlers.clear()
         logger.addHandler(self.handler)
+        logger.setLevel(self.handler.level)
+   
         
         return logger
