@@ -1,75 +1,16 @@
-import { BaseDialog, Card, LinkIcon, MoreVertical, Pen, Trash, Typography, UnLinkIcon } from "alex-evo-sh-ui-kit"
-import { DeviceSchema, StatusDevice } from "../../../entites/devices"
-import { DeviceField } from "./fields"
-import "./DeviceCard.scss"
-import { useCallback, useState } from "react"
-import { DialogPortal, IconButtonMenu } from "../../../shared"
-import { useDeleteDevice } from "../api/deleteDevice"
-import { useLinkDevice } from "../api/linkDevice"
+import { DeviceCardProps } from "../models/props"
+import { LightDevice } from "./types/Light"
+import { DeviceBaseCard } from "./types/DeviceBaseCard"
 
-const statusColor = {
-    online: "#0f0",
-	offline: "#f00",
-	not_supported: "#ccc",
-	unlink: "#ff0",
-	unknown: "#ccc"
-}
 
-export const DeviceCard: React.FC<{ device: DeviceSchema, onEdit: ()=>void }> = ({ device, onEdit }) => {
+export const DeviceCard: React.FC<DeviceCardProps> = (props) => {
 
-    const {deleteDevice} = useDeleteDevice()
-    const {linkDevice} = useLinkDevice()
-    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
+    const Cards:{[key:string]:React.FC<DeviceCardProps>} = {
+        LIGHT: LightDevice
+    } as const
 
-    const getMenu = useCallback(() => {
-        return [{items:[
-            {
-                title: "edit",
-                icon: <Pen/>,
-                onClick: ()=>{
-                    onEdit()
-                }
-            },
-            {
-                title: "lisk",
-                icon: device.status === StatusDevice.UNLINK? <UnLinkIcon/>:<LinkIcon/>,
-                activated: device.status !== StatusDevice.UNLINK,
-                onClick: ()=>{
-                    linkDevice(device.system_name, device.status === StatusDevice.UNLINK)
-                }
-            },
-            {
-                title: "delete",
-                icon: <Trash primaryColor="#f00"/>,
-                onClick: ()=>{
-                    setDeleteDialogVisible(true)
-                }
-            }
-            ]}]
-    },[onEdit, device, linkDevice])
+    const type = props.device.type_mask?.name_type
+    const Card = type? Cards[type] ?? DeviceBaseCard: DeviceBaseCard
 
-    return(
-        <Card 
-        header={device.name}
-        className="device-card"
-        iconButtonCell={<IconButtonMenu autoHide blocks={getMenu()} icon={<MoreVertical/>}/>}
-        >
-        <Typography type="title-2" className="device-card-system-name">system name: {device.system_name}</Typography>
-        <Typography type="body" className="block">class: <Typography type="body" className="device-card-class">{device.class_device}</Typography></Typography>
-        <div className="device-card-status-container" >
-            <div className="device-card-status" style={{color: "#fff", backgroundColor: statusColor[device.status]}}>{device.status}</div>
-        </div>
-        {
-            (device.fields?.map((item, index)=>(
-                <DeviceField deviceName={device.system_name} field={item} key={index}/>
-            )))
-        }
-        {
-            deleteDialogVisible && 
-            <DialogPortal>
-                <BaseDialog header="delete device" text={`delete device ${device.name}?`} onHide={()=>setDeleteDialogVisible(false)} onSuccess={()=>deleteDevice(device.system_name)}/>
-            </DialogPortal>
-        }
-        </Card>
-    )
+    return <Card {...props}/>
 }

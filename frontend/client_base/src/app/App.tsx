@@ -9,8 +9,8 @@ import { useUpdateDeviceData } from "../entites/devices/hooks/update_device_data
 
 function App() {
 
-  const {isAuthenticated} = useAppSelector(state=>state.auth)
-	const route = useRoutes(isAuthenticated)
+  const {isAuthenticated, role} = useAppSelector(state=>state.auth)
+	const route = useRoutes(isAuthenticated, role)
   const {updateDevicedata} = useUpdateDeviceData()
   const {listenSocket, closeSocket} = useSocket([
     {messageType: "device-send", callback: (data)=>console.log(data)},

@@ -1,112 +1,44 @@
-2025-03-28 10:01:14,892 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:01:14,895 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:01:14,895 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:01:14,895 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
-2025-03-28 10:01:14,904 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:01:14,904 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:01:14,904 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:01:14,904 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
-2025-03-28 10:01:14,904 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
-2025-03-28 10:01:14,904 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
-2025-03-28 10:10:54,188 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:10:54,190 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:31] - Поиск страниц в директории: /home/device_service/web/app/moduls/MQTT_module/pages
-2025-03-28 10:10:54,190 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: topics.json
-2025-03-28 10:10:54,190 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: test2.json
-2025-03-28 10:10:54,191 - app.internal.pages.logic.get_page - INFO - [get_page.py:43] - Найдено 2 страниц в модуле app.moduls.MQTT_module
-2025-03-28 10:10:54,191 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:26] - Поиск диалогов в директории: /home/device_service/web/app/moduls/MQTT_module/dialogs
-2025-03-28 10:10:54,191 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:35] - Найден файл диалога: topic_data.json
-2025-03-28 10:10:54,191 - app.internal.pages.logic.get_dialog - INFO - [get_dialog.py:38] - Найдено 1 диалогов в модуле app.moduls.MQTT_module
-2025-03-28 10:10:54,191 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:10:54,191 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:10:54,191 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
-2025-03-28 10:10:54,200 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:10:54,200 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:10:54,200 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:10:54,200 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
-2025-03-28 10:10:54,200 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
-2025-03-28 10:10:54,200 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
-2025-03-28 10:10:57,518 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:10:57,520 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:31] - Поиск страниц в директории: /home/device_service/web/app/moduls/MQTT_module/pages
-2025-03-28 10:10:57,520 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: topics.json
-2025-03-28 10:10:57,520 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: test2.json
-2025-03-28 10:10:57,520 - app.internal.pages.logic.get_page - INFO - [get_page.py:43] - Найдено 2 страниц в модуле app.moduls.MQTT_module
-2025-03-28 10:10:57,520 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:26] - Поиск диалогов в директории: /home/device_service/web/app/moduls/MQTT_module/dialogs
-2025-03-28 10:10:57,520 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:35] - Найден файл диалога: topic_data.json
-2025-03-28 10:10:57,520 - app.internal.pages.logic.get_dialog - INFO - [get_dialog.py:38] - Найдено 1 диалогов в модуле app.moduls.MQTT_module
-2025-03-28 10:10:57,521 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:10:57,521 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:10:57,521 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
-2025-03-28 10:10:57,528 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:10:57,528 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:10:57,528 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:10:57,528 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
-2025-03-28 10:10:57,528 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
-2025-03-28 10:10:57,528 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
-2025-03-28 10:11:06,890 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:11:06,892 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:31] - Поиск страниц в директории: /home/device_service/web/app/moduls/MQTT_module/pages
-2025-03-28 10:11:06,892 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: topics.json
-2025-03-28 10:11:06,892 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: test2.json
-2025-03-28 10:11:06,892 - app.internal.pages.logic.get_page - INFO - [get_page.py:43] - Найдено 2 страниц в модуле app.moduls.MQTT_module
-2025-03-28 10:11:06,892 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:26] - Поиск диалогов в директории: /home/device_service/web/app/moduls/MQTT_module/dialogs
-2025-03-28 10:11:06,892 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:35] - Найден файл диалога: topic_data.json
-2025-03-28 10:11:06,892 - app.internal.pages.logic.get_dialog - INFO - [get_dialog.py:38] - Найдено 1 диалогов в модуле app.moduls.MQTT_module
-2025-03-28 10:11:06,893 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:11:06,893 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:11:06,893 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
-2025-03-28 10:11:06,900 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:11:06,900 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:11:06,900 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:11:06,900 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
-2025-03-28 10:11:06,900 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
-2025-03-28 10:11:06,900 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
-2025-03-28 10:11:21,035 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:11:21,037 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:31] - Поиск страниц в директории: /home/device_service/web/app/moduls/MQTT_module/pages
-2025-03-28 10:11:21,037 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: topics.json
-2025-03-28 10:11:21,037 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: test2.json
-2025-03-28 10:11:21,037 - app.internal.pages.logic.get_page - INFO - [get_page.py:43] - Найдено 2 страниц в модуле app.moduls.MQTT_module
-2025-03-28 10:11:21,037 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:26] - Поиск диалогов в директории: /home/device_service/web/app/moduls/MQTT_module/dialogs
-2025-03-28 10:11:21,037 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:35] - Найден файл диалога: topic_data.json
-2025-03-28 10:11:21,037 - app.internal.pages.logic.get_dialog - INFO - [get_dialog.py:38] - Найдено 1 диалогов в модуле app.moduls.MQTT_module
-2025-03-28 10:11:21,038 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:11:21,038 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:11:21,038 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
-2025-03-28 10:11:21,044 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:11:21,044 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:11:21,044 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:11:21,044 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
-2025-03-28 10:11:21,044 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
-2025-03-28 10:11:21,044 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
-2025-03-28 10:29:07,556 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:29:07,559 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:31] - Поиск страниц в директории: /home/device_service/web/app/moduls/MQTT_module/pages
-2025-03-28 10:29:07,559 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: topics.json
-2025-03-28 10:29:07,559 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: test2.json
-2025-03-28 10:29:07,559 - app.internal.pages.logic.get_page - INFO - [get_page.py:43] - Найдено 2 страниц в модуле app.moduls.MQTT_module
-2025-03-28 10:29:07,559 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:26] - Поиск диалогов в директории: /home/device_service/web/app/moduls/MQTT_module/dialogs
-2025-03-28 10:29:07,559 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:35] - Найден файл диалога: topic_data.json
-2025-03-28 10:29:07,559 - app.internal.pages.logic.get_dialog - INFO - [get_dialog.py:38] - Найдено 1 диалогов в модуле app.moduls.MQTT_module
-2025-03-28 10:29:07,560 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:29:07,560 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:29:07,560 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
-2025-03-28 10:29:07,570 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:29:07,570 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:29:07,570 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:29:07,570 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
-2025-03-28 10:29:07,570 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
-2025-03-28 10:29:07,571 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
-2025-03-28 10:31:00,623 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:31:00,627 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:31] - Поиск страниц в директории: /home/device_service/web/app/moduls/MQTT_module/pages
-2025-03-28 10:31:00,627 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: topics.json
-2025-03-28 10:31:00,627 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: test2.json
-2025-03-28 10:31:00,627 - app.internal.pages.logic.get_page - INFO - [get_page.py:43] - Найдено 2 страниц в модуле app.moduls.MQTT_module
-2025-03-28 10:31:00,627 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:26] - Поиск диалогов в директории: /home/device_service/web/app/moduls/MQTT_module/dialogs
-2025-03-28 10:31:00,627 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:35] - Найден файл диалога: topic_data.json
-2025-03-28 10:31:00,627 - app.internal.pages.logic.get_dialog - INFO - [get_dialog.py:38] - Найдено 1 диалогов в модуле app.moduls.MQTT_module
-2025-03-28 10:31:00,628 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:31:00,628 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:31:00,628 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
-2025-03-28 10:31:00,639 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
-2025-03-28 10:31:00,639 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
-2025-03-28 10:31:00,639 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
-2025-03-28 10:31:00,639 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
-2025-03-28 10:31:00,639 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
-2025-03-28 10:31:00,639 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
+2025-04-14 14:28:17,055 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
+2025-04-14 14:28:17,058 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
+2025-04-14 14:28:17,058 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
+2025-04-14 14:28:17,058 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
+2025-04-14 14:28:17,066 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
+2025-04-14 14:28:17,066 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
+2025-04-14 14:28:17,066 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
+2025-04-14 14:28:17,066 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
+2025-04-14 14:28:17,066 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
+2025-04-14 14:28:17,066 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
+2025-04-14 14:33:34,389 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
+2025-04-14 14:33:34,392 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:31] - Поиск страниц в директории: /home/device_service/web/app/moduls/MQTT_module/pages
+2025-04-14 14:33:34,392 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: topics.json
+2025-04-14 14:33:34,392 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: test2.json
+2025-04-14 14:33:34,392 - app.internal.pages.logic.get_page - INFO - [get_page.py:43] - Найдено 2 страниц в модуле app.moduls.MQTT_module
+2025-04-14 14:33:34,392 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:26] - Поиск диалогов в директории: /home/device_service/web/app/moduls/MQTT_module/dialogs
+2025-04-14 14:33:34,392 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:35] - Найден файл диалога: topic_data.json
+2025-04-14 14:33:34,392 - app.internal.pages.logic.get_dialog - INFO - [get_dialog.py:38] - Найдено 1 диалогов в модуле app.moduls.MQTT_module
+2025-04-14 14:33:34,393 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
+2025-04-14 14:33:34,393 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
+2025-04-14 14:33:34,393 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
+2025-04-14 14:33:34,403 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
+2025-04-14 14:33:34,403 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
+2025-04-14 14:33:34,403 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
+2025-04-14 14:33:34,403 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
+2025-04-14 14:33:34,403 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
+2025-04-14 14:33:34,403 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module
+2025-04-14 18:49:18,008 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
+2025-04-14 18:49:18,010 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:31] - Поиск страниц в директории: /home/device_service/web/app/moduls/MQTT_module/pages
+2025-04-14 18:49:18,010 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: topics.json
+2025-04-14 18:49:18,011 - app.internal.pages.logic.get_page - DEBUG - [get_page.py:40] - Найден файл страницы: test2.json
+2025-04-14 18:49:18,011 - app.internal.pages.logic.get_page - INFO - [get_page.py:43] - Найдено 2 страниц в модуле app.moduls.MQTT_module
+2025-04-14 18:49:18,011 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:26] - Поиск диалогов в директории: /home/device_service/web/app/moduls/MQTT_module/dialogs
+2025-04-14 18:49:18,011 - app.internal.pages.logic.get_dialog - DEBUG - [get_dialog.py:35] - Найден файл диалога: topic_data.json
+2025-04-14 18:49:18,011 - app.internal.pages.logic.get_dialog - INFO - [get_dialog.py:38] - Найдено 1 диалогов в модуле app.moduls.MQTT_module
+2025-04-14 18:49:18,011 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
+2025-04-14 18:49:18,011 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
+2025-04-14 18:49:18,011 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:243] - Added router from module: MQTT_module
+2025-04-14 18:49:18,021 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:99] - Found 1 modules in app/moduls
+2025-04-14 18:49:18,021 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:171] - Registered module: MQTT_module
+2025-04-14 18:49:18,021 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:142] - Successfully initialized module: MQTT_module
+2025-04-14 18:49:18,021 - app.internal.pages.logic.modulesArray - INFO - [modulesArray.py:176] - Starting all modules
+2025-04-14 18:49:18,021 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:180] - Started module: MQTT_module
+2025-04-14 18:49:18,022 - app.internal.pages.logic.modulesArray - DEBUG - [modulesArray.py:206] - Applied callback to module: MQTT_module

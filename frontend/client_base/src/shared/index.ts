@@ -9,3 +9,6 @@ export {TimeField} from './ui/TimeField'
 import './ui/index.scss'
 
 export {useDebounce} from './lib/hooks/debounce.hook'
+
+
+export {Bulb} from './ui/Lamp/Lamp'

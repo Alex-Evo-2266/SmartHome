@@ -1,4 +1,4 @@
-import { Form, FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
+import { Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useState } from "react"
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions, TypeDeviceField } from "../../../entites/devices"
@@ -75,7 +75,7 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
     },[onSave, value])
 
     return(
-        <FullScrinTemplateDialog header="add field" onHide={onHide} onSave={save}>
+        <FullScreenTemplateDialog header="add field" onHide={onHide} onSave={save}>
             <div style={{marginInline: '16px'}}>
                 <Form value={value} changeValue={change} errors={errors}>
                     {option.fields_change.name && <Form.TextInput border name="name" placeholder="name"/>}
@@ -94,6 +94,6 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
                     {option.fields_change.read_only && <Form.SwitchButtonField name="read_only" placeholder="read only"/>}
                 </Form>
             </div>
-        </FullScrinTemplateDialog>
+        </FullScreenTemplateDialog>
     )
 }

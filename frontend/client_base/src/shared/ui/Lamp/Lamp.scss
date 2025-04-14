@@ -1,0 +1,34 @@
+
+.bulb-element{
+    --color-bulb: "#cdcaaf";
+    --size-bulb: 100px;
+    width: var(--size-bulb);
+    height: var(--size-bulb);
+    position: relative;
+    svg{
+        z-index: 100;
+        display: block;
+        position: relative;
+    }
+    .bulb-light{
+        z-index: 0;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 
+        0 calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.2) calc(var(--size-bulb) * 0.2) var(--color-bulb),
+        0 calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.2) calc(var(--size-bulb) * 0.2) var(--color-bulb),
+        0 calc(var(--size-bulb) * 0.2) calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.1) var(--color-bulb),
+        calc(var(--size-bulb) * 0.3) calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.2) calc(var(--size-bulb) * 0.1) var(--color-bulb),
+        calc(var(--size-bulb) * -0.3) calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.2) calc(var(--size-bulb) * 0.1) var(--color-bulb),
+        calc(var(--size-bulb) * 0.3) calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.2) calc(var(--size-bulb) * 0.1) var(--color-bulb),
+        calc(var(--size-bulb) * -0.3) calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.2) calc(var(--size-bulb) * 0.1) var(--color-bulb),
+        calc(var(--size-bulb) * 0.3) calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.01) var(--color-bulb),
+        calc(var(--size-bulb) * -0.3) calc(var(--size-bulb) * 0.1) calc(var(--size-bulb) * 0.2) calc(var(--size-bulb) * 0.01) var(--color-bulb),
+        ;
+    }
+    
+}

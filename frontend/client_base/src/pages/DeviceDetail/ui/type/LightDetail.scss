@@ -1,0 +1,14 @@
+.base-bulb-panel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.light-detail-page{
+    position: relative;
+    .select-bulb{
+        position: absolute;
+        width: 100px;
+        top: 0;
+        right: 0;
+    }
+}

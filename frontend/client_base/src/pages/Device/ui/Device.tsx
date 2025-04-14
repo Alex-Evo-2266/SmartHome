@@ -1,4 +1,4 @@
-import { FAB, GridLayout, GridLayoutItem, Search } from "alex-evo-sh-ui-kit"
+import { FAB, GridLayout, GridLayoutItem, Plus, Search } from "alex-evo-sh-ui-kit"
 import { DialogPortal } from "../../../shared"
 import { AddDeviceDialog } from "../../../widgets/AddDevice"
 import { DeviceCard } from "../../../widgets/DeviceCard"
@@ -23,7 +23,7 @@ export const DevicePage = () => {
     return(
         <div className="device-page">
             <Search onSearch={data => setSearchQuery(data)}/>
-            <GridLayout className="device-container">
+            <GridLayout className="device-container" itemMaxWith="300px" itemMinWith="200px">
             {
                 filteredDevices.map((item, index)=>(
                     <GridLayoutItem key={index}>
@@ -32,9 +32,7 @@ export const DevicePage = () => {
                 ))
             }
             </GridLayout>
-            <FAB className="base-fab" onClick={showAddDeviceDialog}>
-                <span>+</span>
-            </FAB>
+            <FAB className="base-fab" onClick={showAddDeviceDialog} icon={<Plus/>}/>
             {
                 addDeviceDialogVisible &&
                 <DialogPortal>

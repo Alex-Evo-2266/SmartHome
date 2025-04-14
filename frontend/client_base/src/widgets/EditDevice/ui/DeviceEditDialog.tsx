@@ -1,4 +1,4 @@
-import { ContentBox, Form, FullScrinTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
+import { ContentBox, Form, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useState } from "react"
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions, DeviceSchema, DeviceSerializeFieldSchema } from "../../../entites/devices"
@@ -87,7 +87,7 @@ console.log(option)
     },[value, option, data, onHide])
 
     return(
-        <FullScrinTemplateDialog onHide={onHide} onSave={save}>
+        <FullScreenTemplateDialog onHide={onHide} onSave={save}>
             <ContentBox label="edit main data">
                 <Form value={value} changeValue={change} errors={errors}>
                     <Form.TextInput name="name" border placeholder="name"/>
@@ -99,6 +99,6 @@ console.log(option)
                     <EditType option={option} data={data}/>
                 </Form>
             </ContentBox>
-        </FullScrinTemplateDialog>
+        </FullScreenTemplateDialog>
     )
 }

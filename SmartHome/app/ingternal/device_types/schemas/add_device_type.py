@@ -1,6 +1,6 @@
 from enum import Enum
 from pydantic import BaseModel
-from typing import Optional, List, Dict
+from typing import Optional, List, Union
 from app.ingternal.device_types.types_names import TypesDeviceEnum
 from app.ingternal.device.schemas.enums import TypeDeviceField
 
@@ -18,7 +18,7 @@ class AddFieldDeviceTypeSerializeSchema(BaseModel):
 		
 class AddOrEditDeviceTypeSchema(BaseModel):
 	device: str
-	name_type: TypesDeviceEnum
+	name_type: Union[TypesDeviceEnum, None]
 	fields: Optional[List[AddFieldDeviceTypeSerializeSchema]] = None
 	
 	class Config:  

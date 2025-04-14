@@ -1,4 +1,4 @@
-import { ContentBox, Form, FullScrinTemplateDialog } from "alex-evo-sh-ui-kit"
+import { ContentBox, Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useState } from "react"
 import { AddDeviceData } from "../models/deviceData"
 import { MODAL_ROOT_ID } from "../../../const"
@@ -69,7 +69,7 @@ export const DeviceData:React.FC<DeviceDataProps> = ({option, onHide, onSave}) =
     },[value, option])
 
     return(
-        <FullScrinTemplateDialog onHide={onHide} onSave={save}>
+        <FullScreenTemplateDialog onHide={onHide} onSave={save}>
             <ContentBox label="main data">
                 <Form value={value} changeValue={change} errors={errors}>
                     <Form.TextInput name="name" border placeholder="name"/>
@@ -80,6 +80,6 @@ export const DeviceData:React.FC<DeviceDataProps> = ({option, onHide, onSave}) =
                 </Form>
             </ContentBox>
             <FieldList fields={value.fields} option={option} onChange={data=>change('fields', data)}/>
-        </FullScrinTemplateDialog>
+        </FullScreenTemplateDialog>
     )
 }

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useModulePageAPI } from '../../../entites/modulePages';
 import { useCallback, useEffect, useState } from 'react';
 import { Loading } from '../../../shared/ui/Loading';
-import { IComponents, WebConstructor } from 'alex-evo-web-constructor';
+import { WebConstructor } from 'alex-evo-web-constructor';
 import { PageData } from '../../../entites/modulePages/models/page';
 import { MENU_ROOT_ID, MODAL_ROOT_ID } from '../../../const';
 

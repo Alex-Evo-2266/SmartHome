@@ -41,7 +41,7 @@ export const EditType:React.FC<EditTypeProps> = ({option, data}) => {
         {
         option.type && 
         <div>
-            <TextField onClick={editClick} readOnly placeholder="type" border value={typeVal?.name_type}/>
+            <TextField onClick={editClick} readOnly placeholder="type" border value={typeVal?.name_type ?? "[]"}/>
         </div>
         }
         {

@@ -1,4 +1,4 @@
-import { DialogModal } from "alex-evo-sh-ui-kit"
+import { ModalPortal } from "alex-evo-sh-ui-kit"
 
 export interface DialogPortalProps{
     children: React.ReactNode
@@ -6,8 +6,8 @@ export interface DialogPortalProps{
 
 export const DialogPortal:React.FC<DialogPortalProps> = ({children}) => {
     return(
-        <DialogModal container={document.getElementById("modal-root")}>
+        <ModalPortal container={document.getElementById("modal-root")}>
             {children}
-        </DialogModal>
+        </ModalPortal>
     )
 }

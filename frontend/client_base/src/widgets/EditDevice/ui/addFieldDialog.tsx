@@ -1,4 +1,4 @@
-import { Form, FullScrinTemplateDialog, SigmentedButton } from "alex-evo-sh-ui-kit"
+import { Form, FullScreenTemplateDialog, SegmentedButton } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useState } from "react"
 import { MODAL_ROOT_ID } from "../../../const"
 import { TypeDeviceField } from "../../../entites/devices"
@@ -92,7 +92,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
     },[onSave, value])
 
     return(
-        <FullScrinTemplateDialog header="add field" onHide={onHide} onSave={save}>
+        <FullScreenTemplateDialog header="add field" onHide={onHide} onSave={save}>
             <div style={{marginInline: '16px'}}>
                 <Form value={value} changeValue={change} errors={errors}>
                     <Form.TextInput border name="name" placeholder="name"/>
@@ -108,9 +108,9 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
                     :null
                     }
                     <Form.TextInput border name="unit" placeholder="unit"/>
-                    <SigmentedButton items={['virtual', 'read only']} multiple onChange={segmentsChange}/>
+                    <SegmentedButton items={['virtual', 'read only']} multiple onChange={segmentsChange}/>
                 </Form>
             </div>
-        </FullScrinTemplateDialog>
+        </FullScreenTemplateDialog>
     )
 }

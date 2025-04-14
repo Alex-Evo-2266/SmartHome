@@ -32,6 +32,11 @@ async def add_device_type(data: AddOrEditDeviceTypeSchema):
 	"""
 	try:
 		logger.info(f"Processing device type for device: {data.device}")
+
+		if not data.name_type:
+			await delete_type_device_by_device(data.device)
+			logger.info(f"Successfully delete device type for: {data.device}")
+			return {"message": message}
 		
 		try:
 			# Check if exists and update

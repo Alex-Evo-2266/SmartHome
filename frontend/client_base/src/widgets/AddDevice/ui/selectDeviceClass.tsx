@@ -1,4 +1,4 @@
-import { FullScrinTemplateDialog, ListContainer, ListItem } from "alex-evo-sh-ui-kit"
+import { FullScreenTemplateDialog, ListContainer, ListItem } from "alex-evo-sh-ui-kit"
 import { DeviceClassOptions, useGetOptionDevice } from "../../../entites/devices"
 
 type addDeviceDialogProps = {
@@ -11,7 +11,7 @@ export const SelectDeviceDialog:React.FC<addDeviceDialogProps> = ({onHide, onCha
     const {options} = useGetOptionDevice()
 
     return(
-        <FullScrinTemplateDialog header="Select class device" onHide={onHide}>
+        <FullScreenTemplateDialog header="Select class device" onHide={onHide}>
             <ListContainer transparent>
             {
                 options && options.map((item, index)=>{
@@ -21,6 +21,6 @@ export const SelectDeviceDialog:React.FC<addDeviceDialogProps> = ({onHide, onCha
                 })
             }
             </ListContainer>
-        </FullScrinTemplateDialog>
+        </FullScreenTemplateDialog>
     )
 }

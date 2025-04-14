@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { ConditionType, Automation, TriggerItem, ConditionItem, ActionItem } from "../../../entites/automation/models/automation";
-import { BaseActionCard, Button, ContentBox, FullScrinTemplateDialog, IconButton, ListContainer, ListItem, TextField, Trash } from "alex-evo-sh-ui-kit";
+import { BaseActionCard, Button, ContentBox, FullScreenTemplateDialog, IconButton, ListContainer, ListItem, TextField, Trash } from "alex-evo-sh-ui-kit";
 import { DialogPortal, SelectField } from "../../../shared";
 import { AddTrigger } from "./AddTrigger";
 import { AddCondition } from "./AddCondition";
@@ -55,7 +55,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
   }, []);
 
   return (
-    <FullScrinTemplateDialog header="Edit Automation" onHide={onHide} onSave={handleSave}>
+    <FullScreenTemplateDialog header="Edit Automation" onHide={onHide} onSave={handleSave}>
       {addTrigger && (
         <DialogPortal>
           <AddTrigger onHide={() => setAddTrigger(false)} onSave={addTriggerHandler} />
@@ -79,7 +79,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
           onChange={e => handleChange("name", e.target.value)}
           value={formData.name}
         />
-        <ContentBox label="Trigger" hiding border className="edit-automation-box">
+        <ContentBox label="Trigger" collapsible border className="edit-automation-box">
           <ListContainer transparent>
             {formData.trigger.map((item, index) => (
               <ListItem
@@ -95,7 +95,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
           </BaseActionCard>
         </ContentBox>
 
-        <ContentBox label="Condition" hiding border className="edit-automation-box">
+        <ContentBox label="Condition" collapsible border className="edit-automation-box">
           <SelectField
             placeholder="Condition Type"
             border
@@ -119,7 +119,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
         </ContentBox>
 
         {(["then", "else_branch"] as const).map(branch => (
-          <ContentBox key={branch} label={branch} hiding border className="edit-automation-box">
+          <ContentBox key={branch} label={branch} collapsible border className="edit-automation-box">
             <ListContainer transparent>
               {formData[branch].map((item, index) => (
                 <ListItem
@@ -136,6 +136,6 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
           </ContentBox>
         ))}
       </div>
-    </FullScrinTemplateDialog>
+    </FullScreenTemplateDialog>
   );
 };

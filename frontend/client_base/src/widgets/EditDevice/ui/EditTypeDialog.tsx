@@ -1,4 +1,4 @@
-import { ArrowRight, FullScrinTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
+import { ArrowRight, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
 import { useCallback, useState } from "react"
 import { DeviceClassOptions, DeviceSchema } from "../../../entites/devices"
 import { SelectField } from "../../../shared"
@@ -36,7 +36,9 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 	},[data])
 
 	function getAvailableTypes(option: DeviceClassOptions, types: DeviceType[]){
-		return types.filter(item=>(!option.available_types || option.available_types.includes(item.name))).map(item=>item.name)
+		const availableTypes = types.filter(item=>(!option.available_types || option.available_types.includes(item.name))).map(item=>({title: item.name, value: item.name}))
+		availableTypes.push({title: "[]", value: ""})
+		return availableTypes
 	}
 
 	const changeField = useCallback((id:string, name: string, types:DeviceType[])=>{
@@ -47,9 +49,9 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 	},[])
 
 	return(
-		<FullScrinTemplateDialog header="Type" onHide={onHide} onSave={save}>
+		<FullScreenTemplateDialog header="Type" onHide={onHide} onSave={save}>
 			<div style={{marginInline: '16px'}}>
-				<SelectField border items={["[]", ...getAvailableTypes(option, types)]} value={typeMap?.name_type ?? "[]"} onChange={changeType}/>
+				<SelectField border items={getAvailableTypes(option, types)} value={typeMap?.name_type ?? ""} onChange={changeType}/>
 				{
 					typeMap &&
 					<>
@@ -66,6 +68,6 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 					</>
 				}
 			</div>
-		</FullScrinTemplateDialog>
+		</FullScreenTemplateDialog>
 	)
 }

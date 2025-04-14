@@ -1,26 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
 import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
 import { Slider, Typography } from "alex-evo-sh-ui-kit";
 import "./device-field.scss"
-import { useSendValue } from "../../api/sendValue";
 import { useDebounce } from "../../../../shared";
+import { useGetNumberFieldControl } from "../../hooks/fieldControl.hook";
 
 export const DeviceNumberField: React.FC<{ field: DeviceSerializeFieldSchema; deviceName: string }> = ({ field, deviceName }) => {
-  const [value, setValue] = useState(Number(field.value));
-  const {sendValue} = useSendValue()
+  
+  const {changeField, fieldValue} = useGetNumberFieldControl(field, deviceName)
 
-  useEffect(() => {
-    setValue((prev) => (prev !== Number(field.value) ? Number(field.value) : prev));
-  }, [field.value, field.id]);
-
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(event.target.value);
-    if (isNaN(newValue)) return;
-    setValue(newValue);
-    sendValue(deviceName, field.id, String(newValue))
-  },[sendValue, deviceName, field.id])
-
-  const debouncedSend = useDebounce(handleChange, 300)
+  const debouncedSend = useDebounce(changeField, 300)
 
   return (
     <div className="device-field-container">
@@ -31,10 +19,10 @@ export const DeviceNumberField: React.FC<{ field: DeviceSerializeFieldSchema; de
                 max={field.high?Number(field.high): 100} 
                 min={field.low?Number(field.low): 0} 
                 onChange={debouncedSend} 
-                value={value} 
+                value={fieldValue ?? undefined} 
             />
         </div>
-        <Typography type="body" className="device-field-value">{value} {field.unit && <span className="device-field-unit">{field.unit}</span>}</Typography>
+        <Typography type="body" className="device-field-value">{fieldValue} {field.unit && <span className="device-field-unit">{field.unit}</span>}</Typography>
       </div>
     </div>
   );

@@ -46,7 +46,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
         {
         option.fields_creation && 
         <div>
-            <ContentBox label="field" hiding border>
+            <ContentBox label="field" collapsible border>
                 <Divider/>
                 <ListContainer transparent>
                     {
