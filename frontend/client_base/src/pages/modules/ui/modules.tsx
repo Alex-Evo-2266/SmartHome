@@ -42,7 +42,7 @@ export const ModulesPage = () => {
     console.log("p60", pageData)
 
     return (
-        <div>
+        <div className='container-page'>
             <WebConstructor 
             containerMenu={document.getElementById(MENU_ROOT_ID)} 
             containerModal={document.getElementById(MODAL_ROOT_ID)}

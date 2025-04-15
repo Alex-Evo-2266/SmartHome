@@ -17,7 +17,7 @@ export const AutomationPage = () => {
     if(screen === ScreenSize.MOBILE)
     {
         return(
-            <div className="automation-page-small">
+            <div className="automation-page-small container-page">
                 <Tabs tabs={tabs} activeTabIndex={pageNumber} tabContainerClassName="tabs-container" onTabClick={setPageNumber}/>
                 <div style={{marginTop: '5px'}}>
                 {
@@ -33,7 +33,7 @@ export const AutomationPage = () => {
     }
 
     return(
-        <div className="automation-page">
+        <div className="automation-page container-page">
             <AutomationCard/>
         </div>
     )

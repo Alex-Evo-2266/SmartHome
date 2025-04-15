@@ -21,7 +21,7 @@ export const DevicePage = () => {
     .sort((a, b) => a.name.localeCompare(b.name)),[devicesData, searchQuery]) 
 
     return(
-        <div className="device-page">
+        <div className="device-page container-page">
             <Search onSearch={data => setSearchQuery(data)}/>
             <GridLayout className="device-container" itemMaxWith="300px" itemMinWith="200px">
             {
