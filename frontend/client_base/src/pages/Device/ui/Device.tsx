@@ -6,12 +6,9 @@ import { useAppSelector } from "../../../shared/lib/hooks/redux"
 import "./DevicePage.scss"
 import { useToggle } from "../hooks/addDevice.hook"
 import { useMemo, useState } from "react"
-import { DeviceEdit } from "../../../widgets/EditDevice"
-import { DeviceSchema } from "../../../entites/devices"
 
 export const DevicePage = () => {
     const {visible:addDeviceDialogVisible, show:showAddDeviceDialog, hide:hideAddDeviceDialog} = useToggle()
-    const [editData, setEditData] = useState<DeviceSchema | null>(null)
     const {devicesData} = useAppSelector(state=>state.devices)
     const [searchQuery, setSearchQuery] = useState("")
 
@@ -27,7 +24,7 @@ export const DevicePage = () => {
             {
                 filteredDevices.map((item, index)=>(
                     <GridLayoutItem key={index}>
-                        <DeviceCard device={item} onEdit={()=>setEditData(item)}/>
+                        <DeviceCard device={item}/>
                     </GridLayoutItem>
                 ))
             }
@@ -37,12 +34,6 @@ export const DevicePage = () => {
                 addDeviceDialogVisible &&
                 <DialogPortal>
                     <AddDeviceDialog onHide={hideAddDeviceDialog}/>
-                </DialogPortal>
-            }
-            {
-                editData &&
-                <DialogPortal>
-                    <DeviceEdit onHide={()=>setEditData(null)} data={editData}/>
                 </DialogPortal>
             }
         </div>

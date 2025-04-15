@@ -23,4 +23,5 @@ export interface IMenuOption{
     autoHide?: boolean
     onHide?: ()=>void
     onClick?: ()=>void
+    marginBottom?: number
 }

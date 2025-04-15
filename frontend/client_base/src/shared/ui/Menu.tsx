@@ -16,6 +16,7 @@ export const Menu = () => {
 		autoHide={menu.autoHide} 
 		onClick={menu.onClick} 
 		onHide={menu.onHide} 
+		marginBottom={menu.marginBottom}
 		x={menu.x} 
 		y={menu.y} 
 		/>)

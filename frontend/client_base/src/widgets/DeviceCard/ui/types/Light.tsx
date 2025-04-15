@@ -2,13 +2,12 @@ import { Card, Divider, Switch, Typography } from 'alex-evo-sh-ui-kit'
 import { DeviceCardProps } from '../../models/props'
 import './Light.scss'
 import { Bulb } from '../../../../shared'
-import { getData } from '../../helpers/fieldUtils'
-import { MenuDeviceCard } from '../MenuDeviceCard'
-import { useGetBinaryField, useGetNumberField } from '../../hooks/getField.hook'
+import { getData } from '../../../../features/Device/helpers/fieldUtils'
+import { useGetBinaryField, useGetNumberField } from '../../../../features/Device/hooks/getField.hook'
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react'
 
-export const LightDevice:React.FC<DeviceCardProps> = ({device, onEdit}) => {
+export const LightDevice:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()
     
     const {field: power, fieldValue: powerValue, changeField: changePower} = useGetBinaryField(device, "power")
@@ -20,7 +19,7 @@ export const LightDevice:React.FC<DeviceCardProps> = ({device, onEdit}) => {
     },[device.system_name])
 
     return(
-        <Card className='card-lamb' header={device.name} rootApp='#root' onClick={openDitail} iconButtonCell={<MenuDeviceCard name={device.name} system_name={device.system_name} status={device.status} onEdit={onEdit}/>}>
+        <Card className='card-lamb' header={device.name} rootApp='#root' onClick={openDitail}>
             {
                 power && <Bulb className='lamp-image' onClick={openDitail} status={getData(power.high, power.low, power.value, false)}/>
             }

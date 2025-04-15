@@ -1,7 +1,6 @@
 import { DeviceField } from "../fields"
 import "./DeviceBaseCard.scss"
 import { DeviceCardProps } from "../../models/props"
-import { MenuDeviceCard } from "../MenuDeviceCard"
 import { Card, Typography } from "alex-evo-sh-ui-kit"
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from "react"
@@ -14,7 +13,7 @@ const statusColor = {
 	unknown: "#ccc"
 }
 
-export const DeviceBaseCard: React.FC<DeviceCardProps> = ({ device, onEdit }) => {
+export const DeviceBaseCard: React.FC<DeviceCardProps> = ({ device }) => {
 
     const navigate = useNavigate()
 
@@ -27,7 +26,6 @@ export const DeviceBaseCard: React.FC<DeviceCardProps> = ({ device, onEdit }) =>
         onClick={openDitail}
         header={device.name}
         className="device-card"
-        iconButtonCell={<MenuDeviceCard name={device.name} system_name={device.system_name} status={device.status} onEdit={onEdit}/>}
         >
         <Typography type="title-2" className="device-card-system-name">system name: {device.system_name}</Typography>
         <Typography type="body" className="block">class: <Typography type="body" className="device-card-class">{device.class_device}</Typography></Typography>

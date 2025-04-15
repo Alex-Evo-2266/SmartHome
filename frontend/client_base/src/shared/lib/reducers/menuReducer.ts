@@ -12,7 +12,8 @@ interface PayloadMenu{
     width?: number
     autoHide?: boolean
     onHide?: ()=>void
-    onClick?: ()=>void
+    onClick?: ()=>void,
+    marginBottom?: number
 }
 
 export interface IMenuState{
@@ -24,6 +25,7 @@ export interface IMenuState{
     autoHide?: boolean
     onHide?: ()=>void
     onClick?: ()=>void
+    marginBottom?: number
 }
 
 export interface MenuShowAction{
@@ -58,7 +60,7 @@ export const menuReducer = (state:IMenuState = initState, action:MenuAction) => 
     }
 }
 
-export const showMenu = (blocks: IBlock[], x:number, y:number, option?:IMenuOption):MenuAction => ({type: MenuActionType.SHOW_MENU, payload:{x, y, blocks, width:option?.width, autoHide: option?.autoHide, onHide: option?.onHide, onClick: option?.onClick}})
-export const showBaseMenu = (items: IMenuItem[], x:number, y:number, option?:IMenuOption):MenuAction => ({type: MenuActionType.SHOW_MENU, payload:{x, y, width:option?.width, autoHide: option?.autoHide, onHide: option?.onHide, onClick: option?.onClick, blocks:[{items}]}})
-export const hideMenu = ():MenuAction => ({type: MenuActionType.HIDE_MENU})
+export const showMenu = (blocks: IBlock[], x:number, y:number, option?:IMenuOption):MenuShowAction => ({type: MenuActionType.SHOW_MENU, payload:{x, y, blocks, width:option?.width, autoHide: option?.autoHide, onHide: option?.onHide, onClick: option?.onClick}})
+export const showBaseMenu = (items: IMenuItem[], x:number, y:number, option?:IMenuOption):MenuShowAction => ({type: MenuActionType.SHOW_MENU, payload:{x, y, width:option?.width, autoHide: option?.autoHide, onHide: option?.onHide, onClick: option?.onClick, marginBottom: option?.marginBottom, blocks:[{items}]}})
+export const hideMenu = ():MenuHideAction => ({type: MenuActionType.HIDE_MENU})
 export default menuReducer
