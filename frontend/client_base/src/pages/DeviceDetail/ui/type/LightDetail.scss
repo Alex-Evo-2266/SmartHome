@@ -5,10 +5,52 @@
 }
 .light-detail-page{
     position: relative;
+    background-color: var(--Background-color);
+    height: calc(100vh - 10px);
+    .lamp-image{
+        position: absolute;
+        right: 0;
+        z-index: 0;
+    }
     .select-bulb{
         position: absolute;
         width: 100px;
         top: 0;
-        right: 0;
+        right: 5px;
+        margin-block: 5px;
+        opacity: 0.8;
+    }
+    .main-control{
+        display: block;
+        width: calc(100% - 200px - 10px);
+        &.coll{
+            display: flex;
+            .range-light{
+                height: 200px;
+            }
+        }
+        .range-light{
+            margin: 0;
+        }
+    }
+    .range-light-container{
+        margin-block: 10px;
+        margin-inline: 0;
+        box-shadow: var(--shadow-elevation-8);
+        border-radius: 20px;
+    }
+}
+
+.mobile{
+    .light-detail-page{
+        height: calc(100vh - 80px - 10px)
+    }
+    .main-control{
+        display: block;
+        width: calc(100% - 150px - 10px);
+    }
+    .range-light-container{
+        margin-block: 0;
+        margin-inline: 10px;
     }
 }

@@ -4,11 +4,11 @@ interface BulbProps {
     status?: boolean;
     size?: 0|1|2|3|4|5|6|string; // Добавил string для кастомных размеров
     color?: string;
-    systemName?: string;
+    className?: string;
     onClick?: (event: React.MouseEvent<HTMLOrSVGElement>) => void;
 }
 // cdcaaf
-export const Bulb = ({systemName = "", status = false, size = 1, color = "#cdcaaf", onClick}: BulbProps) => {
+export const Bulb = ({className = "", status = false, size = 1, color = "#cdcaaf", onClick}: BulbProps) => {
     const baseColor = "var(--Tertiary-container-color)";
     const Color2 = "var(--Tertiary-color)";
     
@@ -28,10 +28,10 @@ export const Bulb = ({systemName = "", status = false, size = 1, color = "#cdcaa
     } as React.CSSProperties 
 
     return (
-      <div className='bulb-element' style={styleSVG}>
+      <div className={`bulb-element ${className}`} style={styleSVG}>
       <svg 
             onClick={onClick} 
-            className={`blub-svg ${systemName} ${status ? 'active' : 'inactive'}`}
+            className={`blub-svg ${status ? 'active' : 'inactive'}`}
             role="img"
             aria-label={status ? 'Лампочка включена' : 'Лампочка выключена'}
             xmlns="http://www.w3.org/2000/svg" 
@@ -44,7 +44,6 @@ export const Bulb = ({systemName = "", status = false, size = 1, color = "#cdcaa
               <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="var(--Shadow-color)" />
             </filter>
           </defs>
-            {/* Основная часть лампочки */}
             <path 
                 d="M53.967074,259.275581c0-16.165145,49.172058-67.381159,98.122699-67.381159s93.943153,54.228722,93.943153,67.381159h-192.065852Z" 
                 transform="matrix(1 0 0 1.015637-50-88.474461)" 

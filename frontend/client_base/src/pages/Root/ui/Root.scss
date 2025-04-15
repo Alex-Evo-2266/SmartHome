@@ -1,12 +1,19 @@
 .root-container{
-    margin-inline-start: 85px;
-    margin-inline-end: 5px;
-    margin-block: 5px;
+    margin-inline-start: 80px;
+    // margin-inline-end: 5px;
+    // margin-block: 5px;
+    margin-block-end: 0;
     &.big{
         margin-inline-start: 365px;
     }
     &.mobile{
-        margin-inline-start: 5px;
-        margin-block-end: 85px;
+        // margin-inline-start: 5px;
+        margin-inline-start: 0;
+        margin-block-end: 80px;
     }
+}
+
+.container-page{
+    padding-block: 5px;
+    padding-inline: 5px;
 }

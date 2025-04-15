@@ -19,7 +19,7 @@ export const useGetBinaryField = (device: DeviceSchema, nameField: string) => {
     const control = field && useGetBinaryFieldControl(field, device.system_name)
 
     return{
-        fieldValue : control?.fieldValue,
+        fieldValue : control?.fieldValue ?? null,
         field,
         updateFieldState : control?.updateFieldState ?? foo,
         changeField : control?.changeField ?? foo,
@@ -33,7 +33,7 @@ export const useGetNumberField = (device: DeviceSchema, nameField: string) => {
     const control = field && useGetNumberFieldControl(field, device.system_name)
 
     return{
-        fieldValue : control?.fieldValue,
+        fieldValue : control?.fieldValue ?? null,
         field,
         updateFieldState : control?.updateFieldState ?? foo,
         changeField : control?.changeField ?? foo,

@@ -1,4 +1,4 @@
-import { Card, Switch, Typography } from 'alex-evo-sh-ui-kit'
+import { Card, Divider, Switch, Typography } from 'alex-evo-sh-ui-kit'
 import { DeviceCardProps } from '../../models/props'
 import './Light.scss'
 import { Bulb } from '../../../../shared'
@@ -13,30 +13,35 @@ export const LightDevice:React.FC<DeviceCardProps> = ({device, onEdit}) => {
     
     const {field: power, fieldValue: powerValue, changeField: changePower} = useGetBinaryField(device, "power")
     const {fieldValue: brightnessValue} = useGetNumberField(device, "brightness")
+    const {fieldValue: tempValue} = useGetNumberField(device, "color")
 
     const openDitail = useCallback(()=>{
         navigate(`/device/${device.system_name}`)
     },[device.system_name])
 
     return(
-        <Card rootApp='#root' onClick={openDitail} iconButtonCell={<MenuDeviceCard name={device.name} system_name={device.system_name} status={device.status} onEdit={onEdit}/>}>
+        <Card className='card-lamb' header={device.name} rootApp='#root' onClick={openDitail} iconButtonCell={<MenuDeviceCard name={device.name} system_name={device.system_name} status={device.status} onEdit={onEdit}/>}>
             {
-                power && 
-                <>
-                    <div style={{position:"absolute", top: "30px"}}>
-                        <Bulb onClick={openDitail} status={getData(power.high, power.low, power.value, false)}/>
-                    </div>
-                    <Switch onChange={changePower} checked={powerValue} />
-                </>
+                power && <Bulb className='lamp-image' onClick={openDitail} status={getData(power.high, power.low, power.value, false)}/>
             }
-            <div><Typography type="body">{device.name}</Typography></div>
-            <div><Typography type="small">{device.system_name}</Typography></div>
-            {
-                brightnessValue &&
-                <div>
-                    <span>{brightnessValue}%</span>|
+            <div className='control-container'>
+                <div className='control-row state-switch'>
+                <Typography type="small">{device.system_name}</Typography>
+                {
+                    power && 
+                    <>
+                    <Switch className='lamp-control-switch-state' size='small' onChange={changePower} checked={!!powerValue} />
+                    </>
+                }
                 </div>
-            }
+                <Divider/>
+                {
+                    brightnessValue !== null && <div><span>brightness</span>: <span>{brightnessValue}</span></div>
+                }
+                {
+                    tempValue !== null && <div><span>temp</span>: <span>{tempValue}</span></div>
+                }
+            </div>
         </Card>
     )
 }

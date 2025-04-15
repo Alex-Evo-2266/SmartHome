@@ -67,7 +67,7 @@ export function kelvinGradient(startTemp: number, endTemp: number, steps: number
     return gradient;
 }
 
-export function kelvinCSSGradient(startTemp: number, endTemp: number, steps: number = 10): string {
+export function kelvinCSSGradient(startTemp: number, endTemp: number, steps: number = 10, orientation: string = "to right"): string {
     const colors = kelvinGradient(startTemp, endTemp, steps);
     const percentageStep = 100 / (steps - 1);
     
@@ -76,5 +76,5 @@ export function kelvinCSSGradient(startTemp: number, endTemp: number, steps: num
         return `${color} ${percent}%`;
     }).join(', ');
     
-    return `linear-gradient(to right, ${colorStops})`;
+    return `linear-gradient(${orientation}, ${colorStops})`;
 }
