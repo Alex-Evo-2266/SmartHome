@@ -1,108 +1,129 @@
 from app.ingternal.device.models.device import Value, DeviceField
-from app.ingternal.device.schemas.device import ValueSerializeResponseSchema, ValueSerializeResponseListSchema, ValueSerializeStorysSchema
+from app.ingternal.device.schemas.device import (
+    ValueSerializeResponseSchema,
+    ValueSerializeResponseListSchema,
+    ValueSerializeStorysSchema,
+)
 from app.ingternal.device.serialize_model.value_serialize import value_serialize
 from datetime import datetime, timedelta
 import logging
-from fastapi import HTTPException
 
 logger = logging.getLogger(__name__)
 
-async def serialize_history(field: DeviceField, target_time: datetime = datetime.now() - timedelta(days=7)):
-    # Убедитесь, что target_time - это datetime объект
-    if not isinstance(target_time, datetime):
-        raise ValueError("target_time должен быть datetime объектом")
+
+async def get_field_history(
+    field_id: str, time: datetime = datetime.now() - timedelta(days=7)
+) -> ValueSerializeResponseSchema:
+    """
+    Retrieve history of values for a specific field within a given time range.
     
-    # Форматируем дату в строку (если поле в БД хранится как строка)
-    date_format = "%Y-%m-%d %H:%M:%S"
-    start_date_str = target_time.strftime(date_format)
-    
-    try:
-        # Выполняем запрос
-        # values = await Value.objects.filter(
-        #     datatime__gte=start_date_str,  # Используем datatime вместо your_time_field
-        #     field=field.id
-        # ).order_by("-datatime").limit(100).all()
-
-        query = """
-        SELECT * FROM `values` 
-        WHERE datatime >= STR_TO_DATE(:start_date, '%Y-%m-%d %H:%i:%s') 
-        AND field = :field_id
-        ORDER BY datatime DESC
-        """
-        print("p0")
-        values = await Value.objects.database.fetch_all(
-            query, 
-            {"start_date": start_date_str, "field_id": field.id}
-        )
-        print("p1", len(values))
-        return ValueSerializeResponseSchema(
-            data=[value_serialize(item) for item in values],
-            field_id=field.id,
-            name=field.name,
-            type=field.type,
-            low=field.low,
-            high=field.high
-        )
-    except Exception as e:
-        # Логируем ошибку для отладки
-        logger.error(f"Ошибка при получении истории: {str(e)}")
-        raise HTTPException(status_code=500, detail="Ошибка при получении исторических данных")
-
-
-async def get_field_history(field_id: str, target_time: datetime = datetime.now() - timedelta(days=7)):
-    # Получить 20 записей Value с указанным field_id
-    field:DeviceField = await DeviceField.objects.get_or_none(id=field_id)
-    if(not field):
-        raise Exception("field not found")
-    return await serialize_history(field, target_time)
-
-# async def get_device_history(system_name: str, target_time: datetime = datetime.now() - timedelta(days=7)):
-#     fields:list[DeviceField] = await DeviceField.objects.filter(device=system_name).all()
-#     data = [await serialize_history(field, target_time) for field in fields]
-#     return ValueSerializeResponseListSchema(data=data, system_name=system_name)
-
-async def get_device_history(system_name: str, time: datetime = datetime.now() - timedelta(days=7)):
-    values:Value = await Value.objects.select_related("field").filter(
-        datatime__gte=time,
-        field__device=system_name
-    ).limit(200).all()
-    # Группируем значения по полю (field)
-    grouped = {}
-    for value in values:
-        field_id = str(value.field.id)
-        if field_id not in grouped:
-            grouped[field_id] = {
-                "field": value.field,
-                "values": []
-            }
-        grouped[field_id]["values"].append(value)
-
-    
-    # Формируем ответ согласно схемам
-    response_data = []
-    for field_id, group in grouped.items():
-        field = group["field"]
-        value_schemas = [
-            ValueSerializeStorysSchema(
-                id=str(value.id),
-                datatime=value.datatime,
-                value=str(value.value)
-            )
-            for value in group["values"]
-        ]
+    Args:
+        field_id: ID of the field to get history for
+        time: Start time for the history query (default: 7 days ago)
         
-        response_schema = ValueSerializeResponseSchema(
-            data=value_schemas,
+    Returns:
+        ValueSerializeResponseSchema containing field metadata and historical values
+    """
+    try:
+        logger.info(f"Fetching history for field {field_id} from {time}")
+        
+        # Get the field object
+        field = await DeviceField.objects.get(id=field_id)
+        
+        # Query historical values for the field
+        history = await Value.objects.filter(
+            field=field,  # Use relationship
+            datatime__gte=time
+        ).order_by("-datatime").all()  # Sort from newest to oldest
+        
+        logger.debug(f"Found {len(history)} historical records for field {field_id}")
+        
+        # Create response schema
+        res = ValueSerializeResponseSchema(
             field_id=field_id,
             type=field.type,
-            high=str(field.high) if field.high is not None else None,
-            low=str(field.low) if field.low is not None else None,
-            name=field.name
+            low=field.low,
+            high=field.high,
+            name=field.name,
+            data=[value_serialize(item) for item in history]
         )
-        response_data.append(response_schema)
-    
-    return ValueSerializeResponseListSchema(
-        data=response_data,
-        system_name=system_name
-    )
+        
+        return res
+        
+    except Exception as e:
+        logger.error(f"Error fetching field history for {field_id}: {str(e)}")
+        raise
 
+
+async def get_device_history(
+    system_name: str, time: datetime = datetime.now() - timedelta(days=7)
+) -> ValueSerializeResponseListSchema:
+    """
+    Retrieve history of values for all fields of a specific device within a given time range.
+    
+    Args:
+        system_name: System name of the device to get history for
+        time: Start time for the history query (default: 7 days ago)
+        
+    Returns:
+        ValueSerializeResponseListSchema containing device name and field histories
+    """
+    try:
+        logger.info(f"Fetching device history for {system_name} from {time}")
+        
+        # Query all values for the device with related field information
+        values: Value = await Value.objects.select_related("field").filter(
+            datatime__gte=time,
+            field__device=system_name
+        ).all()
+        
+        logger.debug(f"Found {len(values)} total records for device {system_name}")
+        
+        # Group values by field
+        grouped = {}
+        for value in values:
+            field_id = str(value.field.id)
+            if field_id not in grouped:
+                grouped[field_id] = {
+                    "field": value.field,
+                    "values": []
+                }
+            grouped[field_id]["values"].append(value)
+        
+        # Format response data
+        response_data = []
+        for field_id, group in grouped.items():
+            field = group["field"]
+            
+            # Create value schemas for each historical record
+            value_schemas = [
+                ValueSerializeStorysSchema(
+                    id=str(value.id),
+                    datatime=value.datatime,
+                    value=str(value.value),
+                    status=value.status_device
+                )
+                for value in group["values"]
+            ]
+            
+            # Create field response schema
+            response_schema = ValueSerializeResponseSchema(
+                data=value_schemas,
+                field_id=field_id,
+                type=field.type,
+                high=str(field.high) if field.high is not None else None,
+                low=str(field.low) if field.low is not None else None,
+                name=field.name
+            )
+            response_data.append(response_schema)
+        
+        logger.info(f"Returning history for {len(response_data)} fields of device {system_name}")
+        
+        return ValueSerializeResponseListSchema(
+            data=response_data,
+            system_name=system_name
+        )
+        
+    except Exception as e:
+        logger.error(f"Error fetching device history for {system_name}: {str(e)}")
+        raise

@@ -1,8 +1,8 @@
-import ormar, datetime
+import ormar
 from ormar import ReferentialAction
 from app.pkg.ormar.dbormar import base_ormar_config
-from typing import Optional, List, Dict, Union, ForwardRef
-from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, DeviceGetData, DeviceStatusField
+from typing import Optional, Dict, Union
+from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, DeviceGetData, DeviceStatusField, StatusDevice
 
 
 class Device(ormar.Model):
@@ -41,7 +41,8 @@ class Value(ormar.Model):
 	id: str = ormar.String(max_length=100, primary_key=True)
 	datatime: str = ormar.String(max_length=20)
 	value: str = ormar.String(max_length=500)
-	field: Optional[Union[DeviceField, Dict]] = ormar.ForeignKey(DeviceField, related_name="value", ondelete=ReferentialAction.CASCADE)
+	status_device: StatusDevice = ormar.String(max_length=50, default=StatusDevice.ONLINE)
+	field: Optional[Union[DeviceField, Dict]] = ormar.ForeignKey(DeviceField, related_name="values", ondelete=ReferentialAction.CASCADE)
 
 
 

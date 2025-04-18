@@ -6,4 +6,4 @@ import logging
 logger = logging.getLogger(__name__)
 
 def value_serialize(value:Value):
-    return ValueSerializeStorysSchema(id=value.id, value=value.value, datatime=value.datatime)
+    return ValueSerializeStorysSchema(id=value.id, value=value.value, datatime=value.datatime, status=value.status_device)

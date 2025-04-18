@@ -1,11 +1,10 @@
-from typing import Optional, List
+from typing import List
 import logging
 from datetime import datetime
 
 from app.ingternal.device.schemas.device import DeviceSchema
-from app.ingternal.device.models.device import Device, DeviceField, Value
+from app.ingternal.device.models.device import Value
 from app.ingternal.device.serialize_model.utils import create_value_id
-from app.ingternal.device.exceptions.device import DeviceNotFound
 from app.ingternal.device.serialize_model.cach_field import get_cached_last_value, invalidate_cache_for_field, get_cached_fields, CachFieldData
 
 # Настройка логирования
@@ -21,15 +20,23 @@ async def save_values(data: List[DeviceSchema]):
             continue
         for field in fields:
             value = device.value.get(field.name)  # Безопасное извлечение значения
-            if value is None:
-                logger.warning(f"Field '{field.name}' not found in incoming data, skipping.")
-                continue
             old_value = await get_cached_last_value(field.id)
-            if not old_value or old_value != value:
+            if value is None and old_value and device.status != old_value[1]:
                 try:
                     id = await create_value_id()
                     current_date_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    values_to_create.append(Value(field=field.id, id=id, value=value, datatime=current_date_str))
+                    values_to_create.append(Value(field=field.id, id=id, value=old_value[0], datatime=current_date_str, status_device=device.status))
+                    invalidate_cache_for_field(field.id)
+                except Exception as e:
+                    logger.error(f"Failed to create value ID for field '{field.name}': {e}")
+            if value is None:
+                logger.warning(f"Field '{field.name}' not found in incoming data, skipping.")
+                continue
+            if not old_value or old_value[0] != value or device.status != old_value[1]:
+                try:
+                    id = await create_value_id()
+                    current_date_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    values_to_create.append(Value(field=field.id, id=id, value=value, datatime=current_date_str, status_device=device.status))
                     invalidate_cache_for_field(field.id)
                 except Exception as e:
                     logger.error(f"Failed to create value ID for field '{field.name}': {e}")
