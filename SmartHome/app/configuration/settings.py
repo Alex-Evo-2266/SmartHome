@@ -70,7 +70,8 @@ MEDIA_URL = '/media/device/'
 MODULES_URL = '/media/device/modules/'
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
-LOGS_LEVEL = logging.DEBUG if DEBUG else logging.INFO
+# LOGS_LEVEL = logging.DEBUG if DEBUG else logging.INFO
+LOGS_LEVEL = logging.INFO
 
 BACKGROUND_DIR = os.path.join(MEDIA_DIR, 'backgrounds')
 MODULES_DIR = os.path.join(MEDIA_DIR, 'modules')

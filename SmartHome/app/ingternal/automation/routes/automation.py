@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional, List, Union
 
-from app.ingternal.automation.schemas.automation import AutomationSchema, EnableSchema
+from app.ingternal.automation.schemas.automation import AutomationSchema, EnableSchema, AutomationResponseSchema
 from app.ingternal.automation.serialize_model.add_automation import add_automation
 from app.ingternal.automation.serialize_model.get_model import get_automation, get_all_automation
 from app.ingternal.automation.serialize_model.delete import delete_automation
@@ -27,10 +27,10 @@ async def test(data: AutomationSchema):
         logger.warning(str(e))
         return JSONResponse(status_code=400, content={"error": str(e)})
 
-@router.get("", response_model=List[AutomationSchema])
+@router.get("", response_model=AutomationResponseSchema)
 async def get_all():
     try:
-        return await get_all_automation()
+        return AutomationResponseSchema(data=await get_all_automation())
     except Exception as e:
         logger.warning(str(e))
         return JSONResponse(status_code=400, content={"error": str(e)})

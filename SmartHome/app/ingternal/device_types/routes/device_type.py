@@ -4,7 +4,7 @@ from typing import List, Union
 
 from app.ingternal.device_types.serialize_model.create import create
 from app.ingternal.device_types.schemas.add_device_type import AddOrEditDeviceTypeSchema
-from app.ingternal.device_types.schemas.device_type import DeviceTypeSerializeSchema, DeviceTypeSchema
+from app.ingternal.device_types.schemas.device_type import DeviceTypeSerializeSchema, DeviceTypeResponseSchema, DeviceTypeSerializeResponseSchema
 from app.ingternal.device_types.serialize_model.read import get_all_type_device, get_type_device
 from app.ingternal.device_types.serialize_model.delete import delete_type_device_by_device
 from app.ingternal.device_types.serialize_model.update import update_type_device
@@ -59,11 +59,11 @@ async def add_device_type(data: AddOrEditDeviceTypeSchema):
 			status_code=400,
 			detail=str(e))
 			
-@router.get("", response_model=List[DeviceTypeSchema])
+@router.get("", response_model=DeviceTypeResponseSchema)
 async def get_all_types():
 	try:
 		device_types = get_types()
-		return device_types
+		return DeviceTypeResponseSchema(data=device_types)
 	except Exception as e:
 		raise HTTPException(
 			status_code=400,
@@ -81,14 +81,14 @@ async def get_all_types(system_name:str):
 			status_code=400,
 			detail=str(e))
 
-@router.get("/maps", response_model=List[DeviceTypeSerializeSchema])
+@router.get("/maps", response_model=DeviceTypeSerializeResponseSchema)
 async def get_all_field_map():
 	"""Get all device type mappings"""
 	try:
 		logger.info("Fetching all device type mappings")
 		device_types = await get_all_type_device()
 		logger.debug(f"Found {len(device_types)} device type mappings")
-		return device_types
+		return DeviceTypeSerializeResponseSchema(data=device_types)
 	except Exception as e:
 		logger.error(f"Error fetching device types: {str(e)}", exc_info=True)
 		raise HTTPException(

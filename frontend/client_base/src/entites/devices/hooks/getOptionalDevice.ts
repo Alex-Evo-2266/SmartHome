@@ -12,7 +12,7 @@ export const useGetOptionDevice = () => {
     const [options, useOptions] = useState<DeviceClassOptions[] | undefined>(undefined)
 
     const getOptionDevice = useCallback(async () => {
-        const data:DeviceClassOptions[] = await request('/api-devices/devices/options', TypeRequest.GET)
+        const {data}:{data:DeviceClassOptions[]} = await request('/api-devices/devices/options', TypeRequest.GET)
         console.log(data)
         useOptions(data)
     },[request])

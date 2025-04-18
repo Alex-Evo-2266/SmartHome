@@ -1,11 +1,12 @@
 import logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
+from typing import Dict
 from typing import Optional, List, Union
-from app.ingternal.device.schemas.device import DeviceSchema, StatusForm, DeviceSerializeSchema
+from app.ingternal.device.schemas.device import DeviceSchema, StatusForm, DeviceSerializeSchema, DeviceResponseSchema
 from app.ingternal.device.schemas.add_device import AddDeviceSchema
 from app.ingternal.device.schemas.edit_device import EditDeviceSchema
-from app.ingternal.device.schemas.config import DeviceClassConfigSchema
+from app.ingternal.device.schemas.config import DeviceClassConfigResponseSchema
 
 from app.ingternal.device.serialize_model.read import get_serialize_device, get_device
 from app.ingternal.device.serialize_model.update import edit_status_device, edit_device
@@ -57,11 +58,11 @@ async def delete_dev(system_name: str):
         return JSONResponse(status_code=400, content={"error": str(e)})
 
 # Получение опций устройства
-@router.get("/options", response_model=List[DeviceClassConfigSchema])
+@router.get("/options", response_model=DeviceClassConfigResponseSchema)
 async def get_options_dev():
     try:
         options = get_config_devices()
-        return options
+        return DeviceClassConfigResponseSchema(data=options)
     except Exception as e:
         logger.warning(str(e))
         return JSONResponse(status_code=400, content={"error": str(e)})
@@ -85,24 +86,37 @@ async def get_dev_serialize(system_name: str):
         return JSONResponse(status_code=400, content={"error": str(e)})
 
 # Получение списка всех устройств
-@router.get("", response_model=List[DeviceSchema])
+@router.get("", response_model=DeviceResponseSchema)
 async def get_all_dev():
     try:
         devices_list: Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
         if not devices_list:
             raise DevicesStructureNotFound()
         devices = devices_list.get_all_data()
-        return devices
+        return DeviceResponseSchema(data=devices)
     except Exception as e:
         logger.warning(str(e))
         return JSONResponse(status_code=400, content={"error": str(e)})
-
-# Установка состояния устройства (этот метод нужно реализовать)
-@router.get("/{system_name}/value/{field_id}/set/{value}")
+    
+# Установка состояния устройства
+@router.get("/{system_name}/values/{field_id}/set/{value}")
 async def set_device_state(system_name: str, field_id: str, value: Union[str, int]):
     try:
         logger.info(f"togle {system_name}, {field_id}, {value}")
         await set_status(system_name, field_id, str(value))
+        return JSONResponse(status_code=200, content={"message": "Device state updated"})
+    except Exception as e:
+        logger.warning(str(e))
+        return JSONResponse(status_code=400, content={"error": str(e)})
+    
+# Установка состояния устройства (несколько сразу)
+# нужно в будущем реализовать отправку всех полей разом а не по очереди
+@router.patch("/{system_name}/values")
+async def set_device_state_patch(system_name: str, data: Dict[str, str]):
+    try:
+        logger.info(f"togle {system_name}, {data}")
+        for field_id, value in data.items():
+            await set_status(system_name, field_id, str(value))
         return JSONResponse(status_code=200, content={"message": "Device state updated"})
     except Exception as e:
         logger.warning(str(e))

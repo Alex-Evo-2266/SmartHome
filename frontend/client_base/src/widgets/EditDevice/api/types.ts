@@ -13,7 +13,7 @@ export const useTypeDeviceAPI = () => {
     const [types, setTypes] = useState<DeviceType[]>([])
 
     const getAllTypes = useCallback(async () => {
-        const data:DeviceType[] = await request(`/api-devices/device-types`, TypeRequest.GET)
+        const {data}:{data:DeviceType[]} = await request(`/api-devices/device-types`, TypeRequest.GET)
         setTypes(data)
         return data
     },[request])

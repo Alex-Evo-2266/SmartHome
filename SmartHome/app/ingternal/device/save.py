@@ -1,6 +1,6 @@
 import logging, asyncio
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
-from app.ingternal.device.serialize_model.value_set import save_value
+from app.ingternal.device.serialize_model.value_set import save_values
 from app.configuration.loop.loop import loop
 from app.configuration.settings import DEVICE_DATA_POLL, SAVE_DEVICE_CONF, LOOP_SAVE_DEVICE
 from app.pkg import __config__
@@ -21,22 +21,14 @@ async def save_devices():
 		schemas = device_list.get_all_data()
 
 		logger.info(f"Found {len(schemas)} devices to save.")
-		# Обработка каждого устройства
-		for schema in schemas:
-			logger.info(f"try seve {schema}")
-			await save_device(schema)
+		await save_values(schemas)
+		# for schema in schemas:
+		# 	logger.info(f"try seve {schema}")
+		# 	await save_device(schema)
 	finally:
 		pass
 		# asyncio.current_task().cancel()
 	
-
-async def save_device(schema):
-	try:
-		await save_value(schema)
-		logger.info(f"Successfully saved data for device: {schema.system_name}")
-	except Exception as e:
-		logger.error(f"Failed to save device {schema.system_name}: {e}")
-
 async def restart_save_data():
 	save_device_conf = __config__.get(SAVE_DEVICE_CONF)
 

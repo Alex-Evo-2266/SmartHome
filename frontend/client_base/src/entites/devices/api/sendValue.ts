@@ -9,7 +9,7 @@ export const useSendValue = () => {
         const {showSnackbar} = useSnackbar()
 
     const sendValue = useCallback(async (systemName: string, fieldId: string, value: string) => {
-        await request(`/api-devices/devices/${systemName}/value/${fieldId}/set/${value}`)
+        await request(`/api-devices/devices/${systemName}/values/${fieldId}/set/${value}`)
     },[request])
 
     useEffect(()=>{

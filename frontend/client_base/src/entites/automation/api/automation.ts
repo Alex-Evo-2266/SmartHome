@@ -10,7 +10,7 @@ export const useAutomationAPI = () => {
     const {showSnackbar} = useSnackbar()
 
     const getAutomationAll = useCallback(async()=>{
-        const data: Automation[] = await request('/api-devices/automation')
+        const {data}:{data: Automation[]} = await request('/api-devices/automation')
         return data
     },[request])
 

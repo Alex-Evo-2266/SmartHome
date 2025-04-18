@@ -17,6 +17,7 @@ yeelight = "^0.7.16"
 websockets = "^14.2"
 pika = "^1.3.2"
 aio-pika = "^9.5.5"
+async-lru = "^2.0.5"
 
 
 [build-system]

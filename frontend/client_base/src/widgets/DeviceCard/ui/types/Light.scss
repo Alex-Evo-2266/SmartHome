@@ -1,6 +1,10 @@
-.card-lamb{
+.card-device{
     position: relative;
-    .lamp-image{
+    .header-text{
+        color: var(--Primary-color);
+        padding-inline-end: 70px;
+    }
+    .image-svg-device{
         z-index: 0;
         position: absolute;
         top: 0;
@@ -12,6 +16,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+    }
+}
+
+.card-device{
+    .control-container{
+        .control-row.state-switch{
             .lamp-control-switch-state{
                 margin-block-end: 10px;
             }

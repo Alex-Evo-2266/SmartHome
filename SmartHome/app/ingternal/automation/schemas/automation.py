@@ -43,6 +43,8 @@ class AutomationSchema(BaseModel):
 	class Config:  
 		use_enum_values = True
 
+class AutomationResponseSchema(BaseModel):
+	data: List[AutomationSchema]
 
 class EnableSchema(BaseModel):
 	is_enabled: bool = True

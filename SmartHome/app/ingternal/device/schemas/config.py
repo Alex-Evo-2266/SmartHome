@@ -35,3 +35,6 @@ class ConfigSchema(BaseModel):
 
 class DeviceClassConfigSchema(ConfigSchema):
 	class_name: str
+
+class DeviceClassConfigResponseSchema(BaseModel):
+	data: List[DeviceClassConfigSchema]

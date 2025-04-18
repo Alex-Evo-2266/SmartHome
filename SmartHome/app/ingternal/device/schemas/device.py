@@ -51,12 +51,37 @@ class DeviceSerializeSchema(BaseModel):
 class DeviceSchema(DeviceSerializeSchema):
 	value: Optional[Dict[str,str]] = dict()
 
+class DeviceResponseSchema(BaseModel):
+	data: List[DeviceSchema]
+
 class ValueSerializeSchema(BaseModel):
 	id: str
 	datatime: str
 	value: str
-	field: Optional[DeviceSerializeFieldSchema]
+	field: Optional[DeviceSerializeFieldSchema] = None
 
 	class Config:  
 		use_enum_values = True
 
+class ValueSerializeStorysSchema(BaseModel):
+	id: str
+	datatime: str
+	value: str
+
+	class Config:  
+		use_enum_values = True
+
+class ValueSerializeResponseSchema(BaseModel):
+	data: List[ValueSerializeStorysSchema]
+	field_id: str
+	type: TypeDeviceField
+	high: Optional[str] = None
+	low: Optional[str] = None
+	name: str
+
+	class Config:  
+		use_enum_values = True
+
+class ValueSerializeResponseListSchema(BaseModel):
+	data: List[ValueSerializeResponseSchema]
+	system_name: str

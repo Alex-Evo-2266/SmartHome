@@ -101,6 +101,17 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.26.1)"]
 
 [[package]]
+name = "async-lru"
+version = "2.0.5"
+description = "Simple LRU cache for asyncio"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "async_lru-2.0.5-py3-none-any.whl", hash = "sha256:ab95404d8d2605310d345932697371a5f40def0487c03d6d0ad9138de52c9943"},
+    {file = "async_lru-2.0.5.tar.gz", hash = "sha256:481d52ccdd27275f42c43a928b4a50c3bfb2d67af4e78b170e3e0bb39c66e5bb"},
+]
+
+[[package]]
 name = "click"
 version = "8.1.8"
 description = "Composable command line interface toolkit"
@@ -1224,4 +1235,4 @@ dev = ["Sphinx", "flake8", "flake8-docstrings", "flake8-import-order", "flake8-t
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "ad48d46fe9d706447abd2bfea7355c06bb28b0b6ddbac23279555f43cfa49d36"
+content-hash = "2280bc9b98bac51d168b7eb8cf435689973a5e529677fd22f0f79dae415d4f86"

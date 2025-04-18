@@ -20,6 +20,9 @@ class DeviceTypeSchema(BaseModel):
 	class Config:  
 		use_enum_values = True
 
+class DeviceTypeResponseSchema(BaseModel):
+	data: List[DeviceTypeSchema]
+
 class FieldDeviceTypeSerializeSchema(BaseModel):
 	id: str
 	name_field_type: str
@@ -40,3 +43,6 @@ class DeviceTypeSerializeSchema(BaseModel):
 
 	class Config:  
 		use_enum_values = True
+
+class DeviceTypeSerializeResponseSchema(BaseModel):
+	data: List[DeviceTypeSerializeSchema]
