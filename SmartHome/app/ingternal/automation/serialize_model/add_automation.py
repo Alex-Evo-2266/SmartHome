@@ -16,6 +16,7 @@ async def add_automation(data:AutomationSchema):
 			service=trigger_schema.service, 
 			object=trigger_schema.object, 
 			data=trigger_schema.data, 
+			option=trigger_schema.option,
 			automation=automation
 			)
 

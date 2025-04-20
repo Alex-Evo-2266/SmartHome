@@ -31,7 +31,8 @@ def serialize_target(target: TargetItem):
     return TriggerItemSchema(
         service=target.service,
         object=target.object,
-        data=target.data
+        data=target.data,
+        option=target.option
     )
 
 def serialize_condition(condition: ConditionItem):
