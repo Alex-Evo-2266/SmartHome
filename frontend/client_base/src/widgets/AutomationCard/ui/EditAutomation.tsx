@@ -12,6 +12,15 @@ interface AutomationEditorProps {
   onHide: () => void;
 }
 
+function formatTrigger(item:TriggerItem){
+  let option = ""
+  if(item.option)
+    option = `[${item.option}]`
+  if(item.object)
+    return `${item.service}.${item.object}.${item.data}${option}`
+  return `${item.service}.${item.data}${option}`
+}
+
 export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, onSave, onHide }) => {
   const [formData, setFormData] = useState<Automation>(automation);
   const [addTrigger, setAddTrigger] = useState(false);
@@ -85,7 +94,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
               <ListItem
                 key={index}
                 hovered
-                header={`${item.service}.${item.object}.${item.data}`}
+                header={formatTrigger(item)}
                 control={<IconButton icon={<Trash />} onClick={() => deleteTriggerHandler(index)} />}
               />
             ))}

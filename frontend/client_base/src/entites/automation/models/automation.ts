@@ -21,8 +21,9 @@ export enum SetType {
 // Trigger item interface
 export interface TriggerItem {
     service: string;
-    object: string;
+    object?: string;
     data: string;
+    option?: string
 }
 
 // Condition item interface

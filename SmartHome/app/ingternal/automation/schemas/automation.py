@@ -5,8 +5,9 @@ from typing import Optional, List, Dict
 
 class TriggerItemSchema(BaseModel):
 	service: str
-	object: str
+	object: Optional[str] = ""
 	data: str
+	option: Optional[str] = ""
 
 class ConditionItemSchema(BaseModel):
 	operation: Operation

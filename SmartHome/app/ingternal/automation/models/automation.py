@@ -20,6 +20,7 @@ class TargetItem(ormar.Model):
 	service: str = ormar.String(max_length=200)
 	object: str = ormar.String(max_length=200,default="")
 	data: str = ormar.String(max_length=200)
+	option:str = ormar.String(max_length=200, default="")
 	automation: Optional[Automation] = ormar.ForeignKey(Automation, related_name="triggers", ondelete=ReferentialAction.CASCADE)
 	
 class ConditionItem(ormar.Model):

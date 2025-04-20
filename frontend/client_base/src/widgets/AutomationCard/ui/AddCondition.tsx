@@ -190,7 +190,7 @@ export const AddCondition: React.FC<AddConditionProps> = ({onHide, onSave}) => {
                 }   
                 {
                     object2 !== ""?
-                        <TextField placeholder="field" border readOnly value={data2} onClick={()=>setDataSecrch(1)}/>:
+                        <TextField placeholder="field" border readOnly value={data2} onClick={()=>setDataSecrch(2)}/>:
                     service2 === "value"?
                         operation === Operation.EQUAL || operation === Operation.NOT_EQUAL?
                             <TextField placeholder="data" border value={data2} onChange={(e)=>dataHeandler(e.target.value, 2)}/>:

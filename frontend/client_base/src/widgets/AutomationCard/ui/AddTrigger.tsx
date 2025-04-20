@@ -1,8 +1,9 @@
 import { BaseActionCard, BasicTemplateDialog, Button, DayOfWeekField, SelectionDialog, TextField } from "alex-evo-sh-ui-kit"
 import { DialogPortal, SelectField, TimeField } from "../../../shared"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useAppSelector } from "../../../shared/lib/hooks/redux"
 import {TriggerItem} from '../../../entites/automation';
+import {DateTime} from 'luxon'
 
 interface AddTriggerProps {
   onHide: ()=>void
@@ -14,10 +15,20 @@ const OBJECT_ENABLE = ["device"];
 const FIELD_ENABLE = ["device"];
 const OBJECT_REQUIRED = ["device"];
 
+function formatTimeWithOffset(hour:string, minutes: string): string {
+    return DateTime.now().set({hour:parseInt(hour), minute:parseInt(minutes), second:0}).toFormat('HH:mm:ssZZ');
+}
+
+function getTime(time:string):string{
+    const strs = time.split(":")
+    return `${strs[0]}:${strs[1]}`
+}
+
 export const AddTrigger: React.FC<AddTriggerProps> = ({onHide, onSave}) => {
 
     const [service, setService] = useState("device")
     const [object, setObject] = useState("")
+    const [option, setOption] = useState("")
     const [data, setData] = useState("")
 
     const [objectSecrch, setObjectSearch] = useState(false)
@@ -42,11 +53,15 @@ export const AddTrigger: React.FC<AddTriggerProps> = ({onHide, onSave}) => {
             return value
         })
     }
+    
+    const timeHandler = (value:string) => {
+        const strs = value.split(":")
+        setData(formatTimeWithOffset(strs[0], strs[1]))
+    }
 
     const objectWeekHeandler = (data: string[]) => {
         const value = data.filter(item=>item !== "").join(", ")
-        console.log(value)
-        setObject(value)
+        setOption(value)
     }
 
     const getObject = useCallback(()=>{
@@ -70,7 +85,7 @@ export const AddTrigger: React.FC<AddTriggerProps> = ({onHide, onSave}) => {
     const save = useCallback(()=>{
         console.log(service, object, data)
         if((service !== "" && object !== "" && data !== "") || (service === "time" && data !== ""))
-        onSave({service, object, data})
+        onSave({service, object, data, option})
     },[service, object, data, onSave])
 
 
@@ -93,12 +108,12 @@ export const AddTrigger: React.FC<AddTriggerProps> = ({onHide, onSave}) => {
                 )}
                 {service === "time" && (
                     <>
-                        <DayOfWeekField className="automation-week" value={object.split(',').map(item=>item.trim()).filter(item=>item !== '')} onChange={objectWeekHeandler}/>
-                        <TimeField border value={data} onChange={setData}/>
+                        <DayOfWeekField className="automation-week" value={option.split(',').map(item=>item.trim()).filter(item=>item !== '')} onChange={objectWeekHeandler}/>
+                        <TimeField border value={getTime(data)} onChange={timeHandler}/>
                     </>
                 )}
                 {FIELD_ENABLE.includes(service) && (object || !OBJECT_REQUIRED.includes(service)) && (
-                    <TextField placeholder="Field" border readOnly value={data} onClick={() => setObjectSearch(true)} />
+                    <TextField placeholder="Field" border readOnly value={data} onClick={() => setDataSecrch(true)} />
                 )}
             </div>
         </BasicTemplateDialog>

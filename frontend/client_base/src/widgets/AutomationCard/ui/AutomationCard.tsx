@@ -1,4 +1,4 @@
-import { BaseActionCard, Button, Card, IconButton, ListContainer, ListItem, Trash } from "alex-evo-sh-ui-kit"
+import { BaseActionCard, BaseDialog, Button, Card, IconButton, ListContainer, ListItem, Trash } from "alex-evo-sh-ui-kit"
 import { Automation, ConditionType, useAutomationAPI } from "../../../entites/automation"
 import { useCallback, useEffect, useState } from "react"
 import { AutomationEditor } from "./EditAutomation"
@@ -8,10 +8,11 @@ import './style.scss'
 
 export const AutomationCard = () => {
 
-    const {getAutomationAll, editAutomation, addAutomation} = useAutomationAPI()
+    const {getAutomationAll, editAutomation, addAutomation, deleteAutomation} = useAutomationAPI()
     const [automation, setAutomation] = useState<Automation[]>([])
     const [editAutomationItem, setEditAutomationItem] = useState<Automation | null>(null)
     const [addAutomationItem, setAddAutomationItem] = useState<boolean>(false)
+    const [deleteAutomationDialog, setDeleteAutomationDialog] = useState<string | null>(null)
 
     const getData = useCallback(async()=>{
         const data = await getAutomationAll()
@@ -21,6 +22,12 @@ export const AutomationCard = () => {
     useEffect(()=>{
         getData()
     },[getData])
+
+    const deleteHandler = useCallback(async()=>{
+        if(!deleteAutomationDialog) return
+        await deleteAutomation(deleteAutomationDialog)
+        setTimeout(getData,200)
+    },[deleteAutomation, deleteAutomationDialog, getData])
     
     const save =  useCallback(async(data: Automation)=>{
         if (editAutomationItem){
@@ -47,7 +54,7 @@ export const AutomationCard = () => {
                         key={index}
                         onClick={()=>setEditAutomationItem(item)}
                         header={item.name}
-                        control={<IconButton icon={<Trash/>}/>}
+                        control={<IconButton icon={<Trash/>} onClick={()=>setDeleteAutomationDialog(item.name)}/>}
                     />
                 ))
             }
@@ -59,6 +66,18 @@ export const AutomationCard = () => {
                 </Button>
             </BaseActionCard>
         </Card>
+        {
+            deleteAutomationDialog &&
+            <DialogPortal>
+                <BaseDialog 
+                    header="delete automation" 
+                    text={`are you sure you want to remove automation ${deleteAutomationDialog}`} 
+                    onHide={()=>setDeleteAutomationDialog(null)}
+                    onCancel={()=>setDeleteAutomationDialog(null)}
+                    onSuccess={deleteHandler}
+                    />
+            </DialogPortal>
+        }
         {
             editAutomationItem &&
             <DialogPortal>
