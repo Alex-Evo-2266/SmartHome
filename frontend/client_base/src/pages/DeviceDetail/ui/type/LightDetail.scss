@@ -6,7 +6,8 @@
 .light-detail-page{
     position: relative;
     display: flex;
-    height: calc(100vh - 10px);
+    min-height: calc(100vh - 10px);
+    gap: 5px;
 
     &--min{
         height: calc(100vh - 10px - 80px);
@@ -16,7 +17,7 @@
         flex: 100%;
     }
     .mobile-content{
-        border-radius: 15px;
+        border-radius: var(--card-border-radius);
         position: relative;
         overflow: hidden;
         width: 350px;
@@ -27,7 +28,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background-color: var(--Background-color);
+            background-color: var(--Surface-container-color);
             z-index: -1;
             top: 0;
             left: 0;

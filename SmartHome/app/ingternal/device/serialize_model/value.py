@@ -75,7 +75,7 @@ async def get_device_history(
         values: Value = await Value.objects.select_related("field").filter(
             datatime__gte=time,
             field__device=system_name
-        ).all()
+        ).order_by("-datatime").all()
         
         logger.debug(f"Found {len(values)} total records for device {system_name}")
         

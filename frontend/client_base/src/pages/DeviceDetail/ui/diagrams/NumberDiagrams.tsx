@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Line } from 'react-chartjs-2';
 import { 
   Chart as ChartJS, 
@@ -12,6 +12,9 @@ import {
   ChartData,
   ChartOptions
 } from 'chart.js';
+import { DiagramProps } from './props';
+import './Diagramm.scss'
+import { ColorContext } from 'alex-evo-sh-ui-kit';
 
 // Регистрируем необходимые компоненты Chart.js
 ChartJS.register(
@@ -24,40 +27,78 @@ ChartJS.register(
   Legend
 );
 
-export const NumberDiagram: React.FC = () => {
-  // Типизированные данные для графика
-  const data: ChartData<'line'> = {
-    labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь'],
-    datasets: [
-      {
-        label: 'Продажи за первое полугодие',
-        data: [65, 59, 80, 81, 56, 55],
-        fill: false,
-        backgroundColor: 'rgb(75, 192, 192)',
-        borderColor: 'rgba(75, 192, 192, 0.2)',
-        tension: 0.1
-      },
-    ],
-  };
 
-  // Типизированные опции графика
-  const options: ChartOptions<'line'> = {
+
+export const NumberDiagram: React.FC<DiagramProps> = ({data: fieldHistory, label}) => {
+
+  const {colors} = useContext(ColorContext)
+
+  if(fieldHistory === null)
+    return null
+
+  const now = new Date();
+  const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+  const values = fieldHistory?.data.map((item) => ({...item, value: parseFloat(item.value)})).reverse();
+
+    const chartData: ChartData<'line'> = {
+      datasets: [{
+        label: label ?? fieldHistory.name,
+        data: values.map(item => ({
+          x: new Date(item.datatime).getTime(),
+          y: item.value
+        })),
+        borderColor: colors.Tertiary_color,
+        backgroundColor: colors.Tertiary_color,
+        fill: true,
+        tension: 0,
+        pointRadius: 5,
+      }],
+    };
+
+
+const options: ChartOptions<'line'> = {
     responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'График продаж'
-      }
+    animation: {
+      duration: 0
     },
     scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
+      x: {
+        type: 'time',
+        time: {
+          unit: 'hour',
+          displayFormats: {
+            hour: 'MM-dd HH:mm'
+          },
+          tooltipFormat: 'yyyy-MM-dd HH:mm'
+        },
+        min: twentyFourHoursAgo.getTime(),
+        max: now.getTime(),
+        title: {
+          display: true,
+          text: 'Time (Last 24 hours)'
+        }
+      },
+    },
+    plugins: {
+      legend: { 
+        display: true,
+        position: 'top',
+      },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => {
+            const label = ctx.dataset.label || '';
+            const value = ctx.parsed.y;
+            return `${label}: ${value} (${new Date(ctx.parsed.x).toLocaleTimeString()})`;
+          },
+        },
+      },
+    },
   };
+ 
 
-  return <Line data={data} options={options} />;
+  return <div className='diagramm-min'>
+    <Line data={chartData} options={options} /> 
+  </div> 
 };

@@ -1,15 +1,18 @@
 import { ArrowLeft, ContentBox, IconButton, Range, ScreenSize, SizeContext, Typography } from "alex-evo-sh-ui-kit"
 import { useNavigate } from 'react-router-dom';
 import { DeviceDetailProps } from "../../models/props"
-import { Bulb, SelectField, useDebounce } from "../../../../shared"
+import { Bulb, useDebounce } from "../../../../shared"
 import './LightDetail.scss'
 import { useGetBinaryField, useGetNumberField } from "../../../../features/Device/hooks/getField.hook"
-import { useCallback, useContext, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo } from "react"
 import { kelvinCSSGradient } from "../../../../shared/lib/helpers/tempColor"
 import { DeviceField } from "../../../../widgets/DeviceCard/ui/fields"
 import { MenuDeviceCard } from "../MenuDeviceCard"
 import ColorWheel from "../../../../shared/ui/Color/Palitra";
-import { NumberDiagram } from "../diagrams/NumberDiagrams";
+import { useDeviceHistory } from "../../hooks/history.hook";
+import { getFieldHistory } from "../../helpers/getFieldHistory";
+import { Diagramm } from "../diagrams";
+import { Loading } from "../../../../shared/ui/Loading";
 
 const classNamePostfix = {
     [ScreenSize.MOBILE]: "min",
@@ -25,7 +28,8 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
     const {fieldValue: colorVal, updateFieldState: updateColor, field: color} = useGetNumberField(device, "color")
     const {fieldValue: satVal, updateFieldState: updateSat, field: sat} = useGetNumberField(device, "sat")
 
-    // const [curBulb, setCurBulb] = useState("main")
+    const {history, loading} = useDeviceHistory(device.system_name)
+
     const navigate = useNavigate();
 
     const debouncedBrightnessSend = useDebounce(updateFieldBrightness, 300)
@@ -58,7 +62,15 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
     return (
         <div className={`light-detail-page container-page light-detail-page--${classNamePostfix[screen]}`}>
             <div className="detail-content">
-                <NumberDiagram/>
+                {
+                    loading?
+                    <Loading/>:
+                    <>
+                        <Diagramm data={getFieldHistory(history, power?.id ?? null)}/>
+                        <Diagramm data={getFieldHistory(history, brightness?.id ?? null)}/>
+                        <Diagramm data={getFieldHistory(history, temp?.id ?? null)}/>
+                    </>
+                }
             </div>
             <div className="mobile-content detail-content">
                 {/* <SelectField items={[{title: "main", value: "main"}, {title: "dop", value:"dop"}]} border className="select-bulb" value={curBulb} onChange={setCurBulb}/> */}
