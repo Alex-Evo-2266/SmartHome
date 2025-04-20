@@ -1,6 +1,6 @@
 from typing import List
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.models.device import Value
@@ -35,7 +35,8 @@ async def save_values(data: List[DeviceSchema]):
             if not old_value or old_value[0] != value or device.status != old_value[1]:
                 try:
                     id = await create_value_id()
-                    current_date_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    # current_date_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    current_date_str = datetime.now().isoformat()
                     values_to_create.append(Value(field=field.id, id=id, value=value, datatime=current_date_str, status_device=device.status))
                     invalidate_cache_for_field(field.id)
                 except Exception as e:

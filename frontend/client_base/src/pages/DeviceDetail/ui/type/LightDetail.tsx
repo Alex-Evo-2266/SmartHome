@@ -1,7 +1,7 @@
 import { ArrowLeft, ContentBox, IconButton, Range, ScreenSize, SizeContext, Typography } from "alex-evo-sh-ui-kit"
 import { useNavigate } from 'react-router-dom';
 import { DeviceDetailProps } from "../../models/props"
-import { Bulb, useDebounce } from "../../../../shared"
+import { Bulb, getCurrentDateTime, useDebounce } from "../../../../shared"
 import './LightDetail.scss'
 import { useGetBinaryField, useGetNumberField } from "../../../../features/Device/hooks/getField.hook"
 import { useCallback, useContext, useMemo } from "react"
@@ -20,6 +20,10 @@ const classNamePostfix = {
     [ScreenSize.BIG_SCREEN]: "big"
 }
 
+const now = new Date();
+const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+// now.toUTCString
+
 export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) => {
 
     const {fieldValue: powerValue, updateFieldState: updateFieldPower, field: power} = useGetBinaryField(device, "power")
@@ -27,8 +31,8 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
     const {fieldValue: tempVal, updateFieldState: updateTemp, field: temp} = useGetNumberField(device, "temp")
     const {fieldValue: colorVal, updateFieldState: updateColor, field: color} = useGetNumberField(device, "color")
     const {fieldValue: satVal, updateFieldState: updateSat, field: sat} = useGetNumberField(device, "sat")
-
-    const {history, loading} = useDeviceHistory(device.system_name)
+    
+    const {history, loading} = useDeviceHistory(device.system_name, twentyFourHoursAgo.toISOString())
 
     const navigate = useNavigate();
 

@@ -9,8 +9,12 @@ export const useLoadHistory = () => {
     const {request, loading, error, clearError} = useHttp()
     const {showSnackbar} = useSnackbar()
 
-    const getDeviceHistory = useCallback(async (systemName: string) => {
-        const data:DeviceHistory = await request(`/api-devices/stories/device/${systemName}`)
+    const getDeviceHistory = useCallback(async (systemName: string, time_start?: string) => {
+        let data:DeviceHistory
+        if(time_start)
+            data = await request(`/api-devices/stories/device/${systemName}?time_start=${time_start}`)
+        else
+            data = await request(`/api-devices/stories/device/${systemName}`)
         return data
     },[request])
 

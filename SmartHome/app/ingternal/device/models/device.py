@@ -39,7 +39,7 @@ class Value(ormar.Model):
 	ormar_config = base_ormar_config.copy()
 
 	id: str = ormar.String(max_length=100, primary_key=True)
-	datatime: str = ormar.String(max_length=20)
+	datatime: str = ormar.String(max_length=50)
 	value: str = ormar.String(max_length=500)
 	status_device: StatusDevice = ormar.String(max_length=50, default=StatusDevice.ONLINE)
 	field: Optional[Union[DeviceField, Dict]] = ormar.ForeignKey(DeviceField, related_name="values", ondelete=ReferentialAction.CASCADE)

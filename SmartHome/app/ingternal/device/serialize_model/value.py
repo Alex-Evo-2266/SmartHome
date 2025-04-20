@@ -7,12 +7,13 @@ from app.ingternal.device.schemas.device import (
 from app.ingternal.device.serialize_model.value_serialize import value_serialize
 from datetime import datetime, timedelta
 import logging
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
 
 async def get_field_history(
-    field_id: str, time: datetime = datetime.now() - timedelta(days=7)
+    field_id: str, time: datetime | None = None
 ) -> ValueSerializeResponseSchema:
     """
     Retrieve history of values for a specific field within a given time range.
@@ -25,6 +26,8 @@ async def get_field_history(
         ValueSerializeResponseSchema containing field metadata and historical values
     """
     try:
+        if time is None:
+            time = datetime.now() - timedelta(days=7)
         logger.info(f"Fetching history for field {field_id} from {time}")
         
         # Get the field object
@@ -56,7 +59,7 @@ async def get_field_history(
 
 
 async def get_device_history(
-    system_name: str, time: datetime = datetime.now() - timedelta(days=7)
+    system_name: str, time: datetime | None = None
 ) -> ValueSerializeResponseListSchema:
     """
     Retrieve history of values for all fields of a specific device within a given time range.
@@ -69,6 +72,9 @@ async def get_device_history(
         ValueSerializeResponseListSchema containing device name and field histories
     """
     try:
+
+        if time is None:
+            time = datetime.now() - timedelta(days=7)
         logger.info(f"Fetching device history for {system_name} from {time}")
         
         # Query all values for the device with related field information
@@ -125,5 +131,5 @@ async def get_device_history(
         )
         
     except Exception as e:
-        logger.error(f"Error fetching device history for {system_name}: {str(e)}")
+        logger.error(f"Error fetching device history for {system_name} {time}: {str(e)}")
         raise
