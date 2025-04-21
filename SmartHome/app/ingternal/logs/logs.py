@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 
@@ -21,7 +22,8 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         
         # Формат даты для имен файлов
         self.suffix = "%Y-%m-%d"
-        self.extMatch = r"^\d{4}-\d{2}-\d{2}(\.\w+)?$"
+
+        self.extMatch = re.compile(r"^\d{4}-\d{2}-\d{2}(\.\w+)?$")
         
     def getFilesToDelete(self):
         """
@@ -35,7 +37,7 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         
         for fileName in fileNames:
             if fileName.startswith(prefix) and fileName.endswith('.log'):
-                dateStr = fileName[len(prefix):-4]  # Извлекаем дату из имени файла
+                dateStr = fileName[len(prefix):-4]
                 if self.extMatch.match(dateStr):
                     result.append(os.path.join(dirName, fileName))
         
@@ -46,6 +48,7 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
             result = result[:len(result) - self.backupCount]
         return result
 
+# Остальной код остается без изменений
 class LogManager:
     def __init__(self, filename:str, level = logging.DEBUG):
         self.name = filename
@@ -92,11 +95,8 @@ class MyLogger:
         self.handler = handler.get_file_handler()
 
     def get_logger(self, name: str):
-
         logger = logging.getLogger(name)
         logger.handlers.clear()
         logger.addHandler(self.handler)
         logger.setLevel(self.handler.level)
-   
-        
         return logger

@@ -1,4 +1,4 @@
-from app.ingternal.automation.schemas.automation import AutomationSchema
+from app.ingternal.automation.schemas.automation import AutomationSchema, TriggerItemSchema
 from typing import List, Callable, Optional, Dict, Tuple, Awaitable, TypeVar, Set
 from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel
@@ -16,7 +16,7 @@ KEY_TYPE = TypeVar('KEY_TYPE')
 
 class AutomationManagerSchema(BaseModel):
     """Схема для хранения списка автоматизаций и времени последнего запуска"""
-    data: List[AutomationSchema]
+    data: List[str]
     last_run_time: Optional[datetime] = None
 
 
@@ -29,7 +29,7 @@ class AutomationManager:
         
         :param callback: Асинхронная функция для выполнения автоматизаций
         """
-        self.automations: List[AutomationSchema] = []
+        self.automations: Dict[str, AutomationSchema] = {}
         self.callback = callback
         self.time_index: Dict[str, AutomationManagerSchema] = {}
         self.device_index: Dict[Tuple[str, str], AutomationManagerSchema] = {}
@@ -44,25 +44,25 @@ class AutomationManager:
         :param automation: Автоматизация для добавления
         :return: True если добавлено успешно, False если автоматизация уже существует
         """
-        if any(a.name == automation.name for a in self.automations):
+        if any(a == automation.name for a in self.automations):
             logger.warning(f"Автоматизация с именем '{automation.name}' уже существует")
             return False
 
-        self.automations.append(automation)
+        self.automations[automation.name] = automation
         
         for trigger in automation.trigger:
             try:
                 if trigger.service == "time":
-                    self._process_time_trigger(automation, trigger)
+                    self._process_time_trigger(automation.name, trigger)
                 elif trigger.service == "device":
-                    self._process_device_trigger(automation, trigger)
+                    self._process_device_trigger(automation.name, trigger)
             except Exception as e:
                 logger.error(f"Ошибка обработки триггера для автоматизации '{automation.name}': {e}")
                 continue
                 
         return True
 
-    def _process_time_trigger(self, automation: AutomationSchema, trigger) -> None:
+    def _process_time_trigger(self, automation_name: str, trigger) -> None:
         """Обрабатывает временной триггер и добавляет в соответствующие индексы"""
         try:
             time_utc = datetime.strptime(trigger.data, TIME_FORMAT).astimezone(timezone.utc)
@@ -73,20 +73,20 @@ class AutomationManager:
                     key = (day.strip(), time_str)
                     if key not in self.weekday_time_index:
                         self.weekday_time_index[key] = AutomationManagerSchema(data=[])
-                    self.weekday_time_index[key].data.append(automation)
+                    self.weekday_time_index[key].data.append(automation_name)
             else:  # Ежедневный триггер
                 if time_str not in self.time_index:
                     self.time_index[time_str] = AutomationManagerSchema(data=[])
-                self.time_index[time_str].data.append(automation)
+                self.time_index[time_str].data.append(automation_name)
         except ValueError as e:
-            logger.error(f"Неверный формат времени в автоматизации '{automation.name}': {e}")
+            logger.error(f"Неверный формат времени в автоматизации '{automation_name}': {e}")
 
-    def _process_device_trigger(self, automation: AutomationSchema, trigger) -> None:
+    def _process_device_trigger(self, automation_name: str, trigger) -> None:
         """Обрабатывает триггер устройства и добавляет в индекс устройств"""
         key = (trigger.object, trigger.data)
         if key not in self.device_index:
             self.device_index[key] = AutomationManagerSchema(data=[])
-        self.device_index[key].data.append(automation)
+        self.device_index[key].data.append(automation_name)
 
     async def run_due_automations(self) -> None:
         """Запускает автоматизации, для которых наступило время выполнения"""
@@ -108,19 +108,19 @@ class AutomationManager:
             time_str = time_to_check.strftime(UTC_TIME_FORMAT)
             due_automations = self._get_due_automations(time_str, current_weekday, current_time)
             
-            for automation in due_automations:
-                if automation.name not in self._processed_automations:
+            for automation_name in due_automations:
+                if automation_name not in self._processed_automations and automation_name in self.automations:
                     try:
-                        await self.callback(automation)
-                        self._processed_automations.add(automation.name)
+                        await self.callback(self.automations[automation_name])
+                        self._processed_automations.add(automation_name)
                     except Exception as e:
-                        logger.error(f"Ошибка выполнения автоматизации '{automation.name}': {e}")
+                        logger.error(f"Ошибка выполнения автоматизации '{automation_name}': {e}")
 
             time_to_check += timedelta(minutes=1)
 
         self.last_run_time = current_time
 
-    def _get_due_automations(self, time_str: str, current_weekday: str, current_time: datetime) -> List[AutomationSchema]:
+    def _get_due_automations(self, time_str: str, current_weekday: str, current_time: datetime) -> List[str]:
         """Возвращает список автоматизаций, которые должны быть выполнены в указанное время"""
         due_automations = []
         
@@ -155,11 +155,11 @@ class AutomationManager:
         if key not in self.device_index:
             return
             
-        for automation in self.device_index[key].data:
+        for automation_name in self.device_index[key].data:
             try:
-                await self.callback(automation)
+                await self.callback(self.automations[automation_name])
             except Exception as e:
-                logger.error(f"Ошибка выполнения автоматизации '{automation.name}' по триггеру устройства: {e}")
+                logger.error(f"Ошибка выполнения автоматизации '{automation_name}' по триггеру устройства: {e}")
 
     def clear_automations(self) -> None:
         """Очищает все автоматизации и сбрасывает состояние менеджера"""
@@ -182,7 +182,7 @@ class AutomationManager:
             return False
             
         for automation in automations_to_remove:
-            self.automations.remove(automation)
+            self.automations.pop(automation)
             self._remove_automation_from_indexes(automation)
             
         return True
@@ -191,11 +191,11 @@ class AutomationManager:
         """Удаляет автоматизацию из всех индексов"""
         for trigger in automation.trigger:
             if trigger.service == "time":
-                self._remove_from_time_indexes(automation, trigger)
+                self._remove_from_time_indexes(automation.name, trigger)
             elif trigger.service == "device":
-                self._remove_from_device_index(automation, trigger)
+                self._remove_from_device_index(automation.name, trigger)
 
-    def _remove_from_time_indexes(self, automation: AutomationSchema, trigger) -> None:
+    def _remove_from_time_indexes(self, automation_name: str, trigger: TriggerItemSchema) -> None:
         """Удаляет автоматизацию из временных индексов"""
         try:
             time_utc = datetime.strptime(trigger.data, TIME_FORMAT).astimezone(timezone.utc)
@@ -204,26 +204,26 @@ class AutomationManager:
             if trigger.option:
                 for day in trigger.option.split(","):
                     key = (day.strip(), time_str)
-                    self._remove_from_index(automation, key, self.weekday_time_index)
+                    self._remove_from_index(automation_name, key, self.weekday_time_index)
             else:
-                self._remove_from_index(automation, time_str, self.time_index)
+                self._remove_from_index(automation_name, time_str, self.time_index)
         except ValueError:
             pass
 
-    def _remove_from_device_index(self, automation: AutomationSchema, trigger) -> None:
+    def _remove_from_device_index(self, automation_name: str, trigger: TriggerItemSchema) -> None:
         """Удаляет автоматизацию из индекса устройств"""
         key = (trigger.object, trigger.data)
-        self._remove_from_index(automation, key, self.device_index)
+        self._remove_from_index(automation_name, key, self.device_index)
 
     @staticmethod
     def _remove_from_index(
-        automation: AutomationSchema,
+        automation_name: str,
         key: KEY_TYPE,
         index: Dict[KEY_TYPE, AutomationManagerSchema]
     ) -> None:
         """Удаляет автоматизацию из конкретного индекса"""
         if key in index:
-            index[key].data = [a for a in index[key].data if a.name != automation.name]
+            index[key].data = [a for a in index[key].data if a != automation_name]
             if not index[key].data:
                 del index[key]
 
@@ -237,4 +237,4 @@ class AutomationManager:
         time_count = sum(len(schema.data) for schema in self.time_index.values())
         device_count = sum(len(schema.data) for schema in self.device_index.values())
         weekday_count = sum(len(schema.data) for schema in self.weekday_time_index.values())
-        return (len(self.automations), time_count, device_count, weekday_count)
+        return (len(self.automations.keys()), time_count, device_count, weekday_count)
