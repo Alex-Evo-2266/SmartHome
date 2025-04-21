@@ -30,7 +30,8 @@ SmartHome/files/server-config.yml
 !SmartHome/files/styles/light.yml
 !SmartHome/files/styles/night.yml
 SmartHome/staticfile/
-SmartHome/logs
+SmartHome/logs/*
+PagesServices/logs/*
 settings_local.py
 
 castom_moduls-*
@@ -57,5 +58,5 @@ SmartHome_old
 
 service_config.yml
 
-logs
+/logs/*
 .log

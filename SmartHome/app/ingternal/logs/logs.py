@@ -48,7 +48,6 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
             result = result[:len(result) - self.backupCount]
         return result
 
-# Остальной код остается без изменений
 class LogManager:
     def __init__(self, filename:str, level = logging.DEBUG):
         self.name = filename

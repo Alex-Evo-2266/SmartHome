@@ -9,10 +9,10 @@ from pydantic import BaseModel
 async def get_cached_last_value(field_id: int) -> Optional[Tuple[str,StatusDevice]]:
 	try:
 		value: Value = await Value.objects.filter(field__id=field_id).order_by("-datatime").first()
-		return (str(value.value), value.status_device) if value else None
+		return (str(value.value), value.status_device) if value else (None, None)
 	except Exception:
 		# Логируем ошибку и не кэшируем её
-		return None
+		return (None, None)
 
 # Функция для инвалидации кеша
 def invalidate_cache_for_field(field_id: int):
