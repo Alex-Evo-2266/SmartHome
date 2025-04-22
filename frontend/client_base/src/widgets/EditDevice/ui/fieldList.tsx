@@ -78,7 +78,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
                 <Divider/>
                 {
                     option.fields_change.creation &&
-                    <Button onClick={()=>setAddFieldVisible(true)} styleType='filledTotal'>+</Button>
+                    <Button onClick={()=>setAddFieldVisible(true)} type="button" styleType='filledTotal'>+</Button>
                 }
             </ContentBox>
         </div>

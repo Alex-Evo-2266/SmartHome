@@ -51,11 +51,18 @@ export const BooleanTimelineChart: React.FC<DiagramProps> = ({ data: fieldHistor
   const now = new Date();
   const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
+  function t(d:any){
+    const d2 = new Date(d)
+    console.log(d2, d)
+
+    return d2.getTime()
+  }
+
   const chartData: ChartData<'line'> = {
     datasets: [{
       label: label ?? fieldHistory.name,
       data: fieldHistory.data.map(item => ({
-        x: new Date(item.datatime).getTime(),
+        x: t(item.datatime),
         y: getBooleanFieldStatus(item.value, fieldHistory.high, fieldHistory.low) ? 1 : 0
       })),
       borderColor: colors.Tertiary_color,

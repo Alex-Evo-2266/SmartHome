@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useSocket } from "../shared/lib/hooks/webSocket.hook";
 
 import { useUpdateDeviceData } from "../entites/devices/hooks/update_device_data";
+import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit";
 
 function App() {
 
@@ -26,7 +27,11 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        {route}
+        <ColorProvider>
+          <SizeProvider>
+            {route}
+          </SizeProvider>
+        </ColorProvider>
       </BrowserRouter>
     </>
   )

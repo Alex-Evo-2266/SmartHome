@@ -64,7 +64,6 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
 
     const validField = (field:FieldData) => {
         const errors:{[key:string]: string} = {}
-
         if(field.name.length === 1)
         {
             errors.name = 'short name'
@@ -98,7 +97,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
                     <Form.TextInput border name="name" placeholder="name"/>
                     {value.virtual_field?null:<Form.TextInput border name="address" placeholder="address"/>}
                     
-                    <Form.SelectInput container_id={MODAL_ROOT_ID} border name="type" items={getOption()} placeholder="type"/>
+                    <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>
                     {
                     (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?
                     <>
@@ -106,6 +105,13 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
                         <Form.TextInput border name="high" placeholder="high"/>
                     </>
                     :null
+                    }
+                    {
+                        (value.type === TypeDeviceField.ENUM)?
+                        <> 
+                        <Form.MoreTextField border name="enum_values"/>
+                        </>:
+                        null
                     }
                     <Form.TextInput border name="unit" placeholder="unit"/>
                     <SegmentedButton items={['virtual', 'read only']} multiple onChange={segmentsChange}/>

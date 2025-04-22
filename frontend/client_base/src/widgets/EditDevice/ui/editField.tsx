@@ -80,13 +80,15 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
                 <Form value={value} changeValue={change} errors={errors}>
                     {option.fields_change.name && <Form.TextInput border name="name" placeholder="name"/>}
                     {option.fields_change.address && !value.virtual_field && <Form.TextInput border name="address" placeholder="address"/>}
-                    {option.fields_change.type && <Form.SelectInput container_id={MODAL_ROOT_ID} border name="type" items={getOption()} placeholder="type"/>}
+                    {option.fields_change.type && <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>}
                     {
                     (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?
                     <>
                         {option.fields_change.low && <Form.TextInput border name="low" placeholder="low"/>}
                         {option.fields_change.high && <Form.TextInput border name="high" placeholder="high"/>}
                     </>
+                    :(value.type === TypeDeviceField.ENUM && option.fields_change.enum_values)?
+                        <Form.MoreTextField name="enum_values"/>
                     :null
                     }
                     {option.fields_change.unit && <Form.TextInput border name="unit" placeholder="unit"/>}

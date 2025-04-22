@@ -9,6 +9,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/redux';
 import { useState } from 'react';
 import { DialogPortal } from '../../../shared';
 import { DeviceEdit } from '../../../widgets/EditDevice';
+import { DetailDeviceSwitch } from './type/SwitchDetail';
 
 function getDevice(devcies: DeviceSchema[], systemName: string){
     return devcies.find(item=>item.system_name===systemName)
@@ -28,11 +29,17 @@ export const DetailDevice = () => {
     const device = getDevice(devicesData, systemName)
 
     const components:{[key: string]: React.FC<DeviceDetailProps>} = {
-        "LIGHT": DetailDeviceLight
+        "LIGHT": DetailDeviceLight,
+        "SWITCH": DetailDeviceSwitch
     } as const 
 
     if(!device)
         return <Loading/>
+
+    if (!device.fields) {
+        return <div>Device fields not loaded</div>;
+    }
+    
 
     const Component = (device.type_mask?.name_type && Object.keys(components).includes(device.type_mask.name_type))? components[device.type_mask.name_type]: DetailDeviceUncnow
 

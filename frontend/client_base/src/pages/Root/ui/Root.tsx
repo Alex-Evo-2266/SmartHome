@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import { Navigation } from '../../../widgets/Navigation'
-import { ColorProvider, ScreenSize, SizeProvider, useScreenSize } from "alex-evo-sh-ui-kit"
+import { ScreenSize, useScreenSize } from "alex-evo-sh-ui-kit"
 import './Root.scss'
 
 export const RootPage = () => {
@@ -17,15 +17,12 @@ export const RootPage = () => {
 	}
 
     return(
-		<ColorProvider>
-		<SizeProvider>
+
 			<div className="root-page">
 				<Navigation/>
 				<div className={`root-container ${getStyleClass(screen)}`}>
 					<Outlet/>
 				</div>
 			</div>	
-		</SizeProvider>
-		</ColorProvider>
     )
 }
