@@ -24,7 +24,7 @@ async def save_values(data: List[DeviceSchema]):
             if value is None and status_old and device.status != status_old:
                 try:
                     id = await create_value_id()
-                    current_date_str = datetime.now().isoformat()
+                    current_date_str = datetime.now(timezone.utc).isoformat()
                     values_to_create.append(Value(field=field.id, id=id, value=old_value, datatime=current_date_str, status_device=device.status))
                     invalidate_cache_for_field(field.id)
                     continue
@@ -37,7 +37,7 @@ async def save_values(data: List[DeviceSchema]):
             if not old_value or old_value != value or device.status != status_old:
                 try:
                     id = await create_value_id()
-                    current_date_str = datetime.now().isoformat()
+                    current_date_str = datetime.now(timezone.utc).isoformat()
                     values_to_create.append(Value(field=field.id, id=id, value=value, datatime=current_date_str, status_device=device.status))
                     invalidate_cache_for_field(field.id)
                 except Exception as e:
