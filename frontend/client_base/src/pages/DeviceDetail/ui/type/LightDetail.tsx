@@ -1,28 +1,20 @@
-import { ArrowLeft, ContentBox, IconButton, Range, ScreenSize, SizeContext, Typography } from "alex-evo-sh-ui-kit"
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useMemo } from "react"
+import { useGetBinaryField, useGetNumberField } from "../../../../features/Device"
+import { Bulb, useDebounce } from "../../../../shared"
+import { getFieldHistory } from "../../helpers/getFieldHistory"
+import { useDeviceHistory } from "../../hooks/history.hook"
 import { DeviceDetailProps } from "../../models/props"
-import { Bulb, getCurrentDateTime, useDebounce } from "../../../../shared"
-import './LightDetail.scss'
-import { useGetBinaryField, useGetNumberField } from "../../../../features/Device/hooks/getField.hook"
-import { useCallback, useContext, useMemo } from "react"
+import { DetailDeviceTemplate } from "./Temlate.DetailPage"
+import { FieldHistory } from "../../../../entites/devices/models/history"
+import { ContentBox, Range } from "alex-evo-sh-ui-kit"
 import { kelvinCSSGradient } from "../../../../shared/lib/helpers/tempColor"
+import ColorWheel from "../../../../shared/ui/Color/Palitra"
 import { DeviceField } from "../../../../widgets/DeviceCard/ui/fields"
-import { MenuDeviceCard } from "../MenuDeviceCard"
-import ColorWheel from "../../../../shared/ui/Color/Palitra";
-import { useDeviceHistory } from "../../hooks/history.hook";
-import { getFieldHistory } from "../../helpers/getFieldHistory";
-import { Diagramm } from "../diagrams";
-import { Loading } from "../../../../shared/ui/Loading";
 
-const classNamePostfix = {
-    [ScreenSize.MOBILE]: "min",
-    [ScreenSize.STANDART]: "base",
-    [ScreenSize.BIG_SCREEN]: "big"
-}
+import './LightDetail.scss'
 
 const now = new Date();
 const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-// now.toUTCString
 
 export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) => {
 
@@ -31,15 +23,19 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
     const {fieldValue: tempVal, updateFieldState: updateTemp, field: temp} = useGetNumberField(device, "temp")
     const {fieldValue: colorVal, updateFieldState: updateColor, field: color} = useGetNumberField(device, "color")
     const {fieldValue: satVal, updateFieldState: updateSat, field: sat} = useGetNumberField(device, "sat")
-    
-    const {history, loading} = useDeviceHistory(device.system_name, twentyFourHoursAgo.toISOString())
-
-    const navigate = useNavigate();
 
     const debouncedBrightnessSend = useDebounce(updateFieldBrightness, 300)
     const debouncedTempSend = useDebounce(updateTemp, 300)
 
-    const {screen} = useContext(SizeContext)
+    const {history, loading} = useDeviceHistory(device.system_name, twentyFourHoursAgo.toISOString())
+
+    const historyFields = useMemo<FieldHistory[]>(()=>!loading?[
+        getFieldHistory(history, power?.id ?? null),
+        getFieldHistory(history, power?.id ?? null),
+        getFieldHistory(history, power?.id ?? null),
+    ].filter(item=>!!item):[],[history, power, loading])
+
+    console.log(historyFields)
 
     const usedField = useMemo(()=>{
         const field = [
@@ -63,30 +59,14 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
         updateSat(Number(sat))
     },[updateColor, updateSat])
 
-    return (
-        <div className={`light-detail-page container-page light-detail-page--${classNamePostfix[screen]}`}>
-            <div className="detail-content">
-                {
-                    loading?
-                    <Loading/>:
-                    <>
-                        <Diagramm data={getFieldHistory(history, power?.id ?? null)}/>
-                        <Diagramm data={getFieldHistory(history, brightness?.id ?? null)}/>
-                        <Diagramm data={getFieldHistory(history, temp?.id ?? null)}/>
-                    </>
-                }
-            </div>
-            <div className="mobile-content detail-content">
-                {/* <SelectField items={[{title: "main", value: "main"}, {title: "dop", value:"dop"}]} border className="select-bulb" value={curBulb} onChange={setCurBulb}/> */}
-                <IconButton onClick={()=>navigate("/device")} className="light-detail-back" icon={<ArrowLeft/>} transparent/>
-                <div className="header-container">
-                    <div className="image-container">
-                        <Bulb className="lamp-image" size={6} status={!!powerValue} onClick={()=>updateFieldPower(!powerValue)}/>
-                    </div>
-                </div>
-                <Typography className="light-detail-name" type='heading'>{device.name}</Typography>
-                <Typography className="light-detail-name" type='body'>{device.system_name}</Typography>
-                <div className={`main-control ${screen === ScreenSize.MOBILE? "coll": ""}`}>
+    return(
+        <DetailDeviceTemplate 
+            device={device} 
+            onEdit={onEdit} 
+            diagrams={historyFields} 
+            imageControl={<Bulb className="lamp-image" size={6} status={!!powerValue} onClick={()=>updateFieldPower(!powerValue)}/>}
+        >
+                <div className={`main-control`}>
                     {
                         brightness && 
                         <div className="range-light-container">
@@ -133,12 +113,7 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
                         }
                     </ContentBox>
                 }
-                
-            </div>
-            <div className="detail-content">
-
-            </div>
-            <MenuDeviceCard status={device.status} system_name={device.system_name} name={device.name} onEdit={onEdit}/>
-        </div>
+        </DetailDeviceTemplate>
     )
 }
+

@@ -1,26 +1,18 @@
-import { ArrowLeft, ContentBox, IconButton, ScreenSize, SizeContext, Typography } from "alex-evo-sh-ui-kit"
-import { useNavigate } from 'react-router-dom';
+import { useMemo } from "react"
+import { useGetBinaryField, useGetNumberField } from "../../../../features/Device"
+import { getFieldHistory } from "../../helpers/getFieldHistory"
+import { useDeviceHistory } from "../../hooks/history.hook"
 import { DeviceDetailProps } from "../../models/props"
-import './LightDetail.scss'
-import { useGetBinaryField, useGetNumberField } from "../../../../features/Device/hooks/getField.hook"
-import { useContext, useMemo } from "react"
+import { DetailDeviceTemplate } from "./Temlate.DetailPage"
+import { FieldHistory } from "../../../../entites/devices/models/history"
+import { ContentBox } from "alex-evo-sh-ui-kit"
 import { DeviceField } from "../../../../widgets/DeviceCard/ui/fields"
-import { MenuDeviceCard } from "../MenuDeviceCard"
-import { useDeviceHistory } from "../../hooks/history.hook";
-import { getFieldHistory } from "../../helpers/getFieldHistory";
-import { Diagramm } from "../diagrams";
-import { Loading } from "../../../../shared/ui/Loading";
-import { Switch, SwitchBtnProps } from "../../../../shared/ui/Switch/Switch";
+import { Switch, SwitchBtnProps } from "../../../../shared/ui/Switch/Switch"
 
-const classNamePostfix = {
-    [ScreenSize.MOBILE]: "min",
-    [ScreenSize.STANDART]: "base",
-    [ScreenSize.BIG_SCREEN]: "big"
-}
+import './SwitchDetail.scss'
 
 const now = new Date();
 const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-// now.toUTCString
 
 export const DetailDeviceSwitch:React.FC<DeviceDetailProps> = ({device, onEdit}) => {
 
@@ -28,12 +20,14 @@ export const DetailDeviceSwitch:React.FC<DeviceDetailProps> = ({device, onEdit})
     const {fieldValue: state2Value, updateFieldState: updateState2, field: state2} = useGetBinaryField(device, "state2")
     const {fieldValue: state3Value, updateFieldState: updateState3, field: state3} = useGetBinaryField(device, "state3")
     const {fieldValue: actionValue, field: action} = useGetNumberField(device, "action")
-    
+
     const {history, loading} = useDeviceHistory(device.system_name, twentyFourHoursAgo.toISOString())
 
-    const navigate = useNavigate();
-
-    const {screen} = useContext(SizeContext)
+    const historyFields = useMemo<FieldHistory[]>(()=>!loading?[
+        getFieldHistory(history, state1?.id ?? null),
+        getFieldHistory(history, state2?.id ?? null),
+        getFieldHistory(history, state3?.id ?? null),
+    ].filter(item=>!!item):[],[history, state1, state2, state3, loading])
 
     const usedField = useMemo(()=>{
         const field = [
@@ -47,8 +41,6 @@ export const DetailDeviceSwitch:React.FC<DeviceDetailProps> = ({device, onEdit})
     },[state1, state2, state3, action]
     )
 
-    const notuUsedField = useMemo(()=>device.fields?.filter(item=>!usedField.includes(item.id)) ?? [],[device.fields, usedField])
-
     const btns = useMemo<SwitchBtnProps[]>(()=>{
         const btnArr: SwitchBtnProps[] = []
         if(state1Value !== null)
@@ -60,49 +52,28 @@ export const DetailDeviceSwitch:React.FC<DeviceDetailProps> = ({device, onEdit})
         return btnArr
     },[state1Value, updateState1, state2Value, updateState2, state3Value, updateState3])
 
-    return (
-        <div className={`light-detail-page container-page light-detail-page--${classNamePostfix[screen]}`}>
-            <div className="detail-content">
-                {
-                    loading?
-                    <Loading/>:
-                    <>
-                        <Diagramm data={getFieldHistory(history, state1?.id ?? null)}/>
-                        <Diagramm data={getFieldHistory(history, action?.id ?? null)}/>
-                    </>
-                }
-            </div>
-            <div className="mobile-content detail-content">
-                <IconButton onClick={()=>navigate("/device")} className="light-detail-back" icon={<ArrowLeft/>} transparent/>
-                <div className="header-container">
-                    <div className="image-container">
-                        {
-                        btns && btns.length > 0 &&
-                            <Switch className="switch-image" btns={btns} size={6}/>
-                        } 
-                    </div>
-                </div>
-                <Typography className="light-detail-name" type='heading'>{device.name}</Typography>
-                <Typography className="light-detail-name" type='body'>{device.system_name}</Typography>
-                <div className={`main-control ${screen === ScreenSize.MOBILE? "coll": ""}`}>
+    const notuUsedField = useMemo(()=>device.fields?.filter(item=>!usedField.includes(item.id)) ?? [],[device.fields, usedField])
 
-                </div>
-                {
-                    notuUsedField && notuUsedField.length > 0 && 
-                    <ContentBox label="other" collapsible defaultVisible>
-                        {
-                            notuUsedField.map((item, index)=>(
-                                <DeviceField deviceName={device.system_name} field={item} key={`${device.system_name}-field-${index}`}/>
-                            ))
-                        }
-                    </ContentBox>
-                }
-                
+    return(
+        <DetailDeviceTemplate 
+            device={device} 
+            onEdit={onEdit} 
+            diagrams={historyFields} 
+            imageControl={btns && btns.length > 0 && <Switch className="switch-image" btns={btns} size={6}/>}
+        >
+            <div className={`main-control`}>
             </div>
-            <div className="detail-content">
-
-            </div>
-            <MenuDeviceCard status={device.status} system_name={device.system_name} name={device.name} onEdit={onEdit}/>
-        </div>
+            {
+                notuUsedField && notuUsedField.length > 0 && 
+                <ContentBox label="other" collapsible defaultVisible>
+                    {
+                        notuUsedField.map((item, index)=>(
+                            <DeviceField deviceName={device.system_name} field={item} key={`${device.system_name}-field-${index}`}/>
+                        ))
+                    }
+                </ContentBox>
+            }
+        </DetailDeviceTemplate>
     )
 }
+
