@@ -62,11 +62,10 @@ import logging
 from typing import Dict, List, Type, Callable, Optional, Any
 from pathlib import Path
 from app.internal.pages.classes.BaseModules import BaseModule
-from app.internal.logs.handler_base import handler
+from app.internal.logs import get_base_logger
 
 # Настройка логгера
-logger = logging.getLogger(__name__)
-logger.addHandler(handler.get_file_handler())
+logger = get_base_logger.get_logger(__name__)
 
 def get_modules(directory: str = __name__, exclude_init: bool = True) -> List[str]:
     """

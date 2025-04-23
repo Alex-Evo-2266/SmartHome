@@ -5,11 +5,10 @@ from pathlib import Path
 from app.configuration.settings import BASE_DIR
 from .utils import json_read
 
-from app.internal.logs.handler_base import handler
+from app.internal.logs import get_base_logger
 
 # Настройка логгера
-logger = logging.getLogger(__name__)
-logger.addHandler(handler.get_file_handler())
+logger = get_base_logger.get_logger(__name__)
 
 def get_pages_path(module_name: str) -> Dict[str, str]:
     """
