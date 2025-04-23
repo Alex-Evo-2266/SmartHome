@@ -1,0 +1,37 @@
+.card-device{
+    position: relative;
+    .header-text{
+        color: var(--Primary-color);
+        padding-inline-end: 70px;
+    }
+    .image-svg-device{
+        z-index: 0;
+        position: absolute;
+        top: 0;
+        right: 10px;
+    }
+    .control-container{
+        padding-block-start: 20px;
+        .control-row.state-switch{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .card-device-checkbox-container{
+                display: block;
+                & > label{
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.card-device{
+    .control-container{
+        .control-row.state-switch{
+            .control-switch-state{
+                margin-block-end: 10px;
+            }
+        }
+    }
+}

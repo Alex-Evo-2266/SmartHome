@@ -19,7 +19,7 @@ export const DetailDeviceSwitch:React.FC<DeviceDetailProps> = ({device, onEdit})
     const {fieldValue: state1Value, updateFieldState: updateState1, field: state1} = useGetBinaryField(device, "state1")
     const {fieldValue: state2Value, updateFieldState: updateState2, field: state2} = useGetBinaryField(device, "state2")
     const {fieldValue: state3Value, updateFieldState: updateState3, field: state3} = useGetBinaryField(device, "state3")
-    const {fieldValue: actionValue, field: action} = useGetNumberField(device, "action")
+    const {field: action} = useGetNumberField(device, "action")
 
     const {history, loading} = useDeviceHistory(device.system_name, twentyFourHoursAgo.toISOString())
 

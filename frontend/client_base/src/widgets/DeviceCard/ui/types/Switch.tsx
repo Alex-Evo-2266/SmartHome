@@ -1,0 +1,47 @@
+import { Card, Divider, Switch, Typography } from 'alex-evo-sh-ui-kit'
+import { DeviceCardProps } from '../../models/props'
+import './Switch.scss'
+import './DeviceCardTemplate.scss'
+import { useGetBinaryField, useGetEnumField } from '../../../../features/Device/hooks/getField.hook'
+import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react'
+
+export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
+    const navigate = useNavigate()
+    
+    const {fieldValue: state1Value, changeField: updateState1, field: state1} = useGetBinaryField(device, "state1")
+    const {fieldValue: state2Value, changeField: updateState2, field: state2} = useGetBinaryField(device, "state2")
+    const {fieldValue: state3Value, changeField: updateState3, field: state3} = useGetBinaryField(device, "state3")
+    const {fieldValue: actionValue} = useGetEnumField(device, "action")
+
+    const openDitail = useCallback(()=>{
+        navigate(`/device/${device.system_name}`)
+    },[device.system_name])
+
+    return(
+        <Card className='card-device' rootApp='#root' onClick={openDitail}>
+            <div onClick={openDitail}><Typography className='header-text' type='heading'>{device.name}</Typography></div>
+
+            <div className='control-container'>
+                <div className='control-row state-switch'>
+                <Typography type="small">{device.system_name}</Typography>
+                <div className='card-device-checkbox-container'>
+                    {state1 && <Switch className='control-switch-state' size='small' onChange={updateState1} checked={!!state1Value} />}
+                    {state2 && <Switch className='control-switch-state' size='small' onChange={updateState2} checked={!!state2Value} />}
+                    {state3 && <Switch className='control-switch-state' size='small' onChange={updateState3} checked={!!state3Value} />}
+                </div>
+                </div>
+                {
+                    device.status !== 'online'?
+                    <Divider style={{color:"var(--Error-color)"}} text={device.status}/>:
+                    <Divider/>
+                }
+                <div onClick={openDitail}>
+                {
+                    actionValue !== null && <div><span>action</span>: <span>{actionValue}</span></div>
+                }
+                </div>
+            </div>
+        </Card>
+    )
+}

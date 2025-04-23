@@ -61,3 +61,33 @@ export const useGetNumberFieldControl = (field: DeviceSerializeFieldSchema | nul
         updateFieldState
     }
 }
+
+export const useGetEnumFieldControl = (field: DeviceSerializeFieldSchema | null, deviceName: string) => {
+
+    const [fieldValue, setFieldValue] = useState(field?field.value:null)
+    
+    const {sendValue} = useSendValue()
+    
+    useEffect(() => {
+        if(!field)return;
+        setFieldValue((prev) => (prev !== field.value ? field.value: prev));
+    }, [field]);
+
+    const updateFieldState = useCallback((newValue: string)=>{
+        if(!field)return;
+        if (newValue === undefined || newValue === null) return;
+        setFieldValue(newValue);
+        sendValue(deviceName, field.id, String(newValue))
+    },[sendValue, deviceName, field])
+    
+    const changeField = useCallback((event: React.ChangeEvent<HTMLInputElement>)=>{
+        const newValue = event.target.value;
+        updateFieldState(newValue)
+    },[updateFieldState])
+
+    return{
+        fieldValue: field===null?null:fieldValue,
+        changeField,
+        updateFieldState
+    }
+}

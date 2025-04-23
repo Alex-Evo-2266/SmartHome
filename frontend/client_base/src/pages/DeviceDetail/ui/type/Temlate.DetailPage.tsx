@@ -15,12 +15,12 @@ const classNamePostfix = {
 }
 
 export interface DetailDeviceTemplateProps extends DeviceDetailProps{
-    diagrams: FieldHistory[]
+    diagrams?: FieldHistory[]
     children: React.ReactNode
     imageControl?: React.ReactNode
 }
 
-export const DetailDeviceTemplate:React.FC<DetailDeviceTemplateProps> = ({device, onEdit, diagrams, children, imageControl}) => {
+export const DetailDeviceTemplate:React.FC<DetailDeviceTemplateProps> = ({device, onEdit, diagrams=[], children, imageControl}) => {
 
     const {screen} = useContext(SizeContext)
     const navigate = useNavigate();

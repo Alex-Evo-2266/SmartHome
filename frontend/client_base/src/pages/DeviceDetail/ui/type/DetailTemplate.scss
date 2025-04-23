@@ -80,6 +80,8 @@
         justify-content: start;
         .detail-content{
             flex: auto;
+            width: 350px;
+            max-width: 350px;
             height: auto;
         }
         .detail-content:nth-child(2){

@@ -1,5 +1,5 @@
 import { DeviceSchema } from "../../../entites/devices"
-import { useGetBinaryFieldControl, useGetNumberFieldControl } from "./fieldControl.hook"
+import { useGetBinaryFieldControl, useGetEnumFieldControl, useGetNumberFieldControl } from "./fieldControl.hook"
 
 function getField(device: DeviceSchema, nameField: string){
     const typeField = device.type_mask?.fields.find(item=>item.name_field_type === nameField)
@@ -31,6 +31,20 @@ export const useGetNumberField = (device: DeviceSchema, nameField: string) => {
     const field = getField(device, nameField)
     
     const control = useGetNumberFieldControl(field, device.system_name)
+
+    return{
+        fieldValue : control?.fieldValue ?? null,
+        field,
+        updateFieldState : control?.updateFieldState ?? foo,
+        changeField : control?.changeField ?? foo,
+    }
+}
+
+export const useGetEnumField = (device: DeviceSchema, nameField: string) => {
+
+    const field = getField(device, nameField)
+    
+    const control = useGetEnumFieldControl(field, device.system_name)
 
     return{
         fieldValue : control?.fieldValue ?? null,

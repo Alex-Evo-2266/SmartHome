@@ -68,7 +68,7 @@ export const BooleanTimelineChart: React.FC<DiagramProps> = ({ data: fieldHistor
       borderColor: colors.Tertiary_color,
       backgroundColor: colors.Tertiary_color,
       fill: false,
-      stepped: "before",
+      stepped: "after",
       tension: 0,
       pointRadius: 5,
     }],
@@ -129,6 +129,7 @@ export const BooleanTimelineChart: React.FC<DiagramProps> = ({ data: fieldHistor
         data={chartData} 
         options={options} 
         ref={chartRef}
+        width={"auto"}
       />
     </div>
   );

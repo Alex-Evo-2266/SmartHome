@@ -1,14 +1,13 @@
 import { Card, Divider, Switch, Typography } from 'alex-evo-sh-ui-kit'
 import { DeviceCardProps } from '../../models/props'
 import './Light.scss'
-import './DeviceCardTemplate.scss'
 import { Bulb } from '../../../../shared'
 import { getData } from '../../../../features/Device/helpers/fieldUtils'
 import { useGetBinaryField, useGetNumberField } from '../../../../features/Device/hooks/getField.hook'
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react'
 
-export const LightDevice:React.FC<DeviceCardProps> = ({device}) => {
+export const DeviceTemplateCard:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()
     
     const {field: power, fieldValue: powerValue, changeField: changePower} = useGetBinaryField(device, "power")
