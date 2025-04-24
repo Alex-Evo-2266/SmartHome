@@ -7,6 +7,7 @@ export const baseAPI = async(url:string, method: TypeRequest = TypeRequest.GET, 
 		headers['Content-Type'] = 'application/json'
 		newBody = JSON.stringify(body);
 	}
+	console.log(url, {method, body: newBody, headers})
 	let response = await fetch(url, {method, body: newBody, headers});
 	return response
 }
@@ -14,7 +15,6 @@ export const baseAPI = async(url:string, method: TypeRequest = TypeRequest.GET, 
 export const APIWitchToken = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict<any> | Dict<any>[] | undefined | null = undefined, token:string | undefined | null, headers:Dict<any> = {}, file:boolean = false) => {
 	if(token){
 		headers["Authorization"] = token
-		// headers["Authorization"] = "Bearer " + token
 	}
 	return await baseAPI(url, method, body, headers, file)
 }

@@ -1,4 +1,4 @@
-homeassistant: 
+homeassistant:
   enabled: false
 permit_join: false
 frontend:
@@ -43,3 +43,6 @@ advanced:
     - 226
     - 213
 version: 4
+devices:
+  '0x04cf8cdf3c7b5bf0':
+    friendly_name: '0x04cf8cdf3c7b5bf0'

@@ -61,7 +61,7 @@ class Action(BaseModel):
 	action_target: Optional[str] = None
 	close_dialog: Optional[bool] = None
 	query: Optional[Dict[str,str]] = None
-	data: Optional["Component"]
+	# data: Optional["Component"]
 	arg: Optional[List[str | Dict[str,str]]] = None
 
 class ComponentBase(BaseModel):

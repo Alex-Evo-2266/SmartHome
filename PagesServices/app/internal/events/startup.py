@@ -7,6 +7,8 @@ from typing import Dict, List
 from app.internal.poll.deviceGetData import loadServiceData, loadDeviceData
 from app.internal.poll.setData import setDataService, setDataDevice
 
+from app.internal.senderPoll.sender import init_sender
+
 from app.moduls import getModule
 
 logger = logging.getLogger(__name__)
@@ -24,5 +26,7 @@ async def startup():
 
 	loadServiceData.connect(DATA_QUEUE, setDataService)
 	loadDeviceData.connect(DATA_DEVICE_QUEUE, setDataDevice)
+
+	init_sender()
 	
 	logger.info("starting")

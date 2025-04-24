@@ -57,8 +57,8 @@ async def send(module: str, page: str):
             logger.error(f"Page '{page}' not found in module '{module}'")
             raise Exception("page not found")
 
-        dialogs_path = module_data.dialogs_path or []
-        menu_path = module_data.menu_path or []
+        dialogs_path = module_data.dialogs_path or {}
+        menu_path = module_data.menu_path or {}
         logger.debug(f"Module '{module}' has {len(dialogs_path)} dialogs and {len(menu_path)} menu items")
 
         # Fetch page data

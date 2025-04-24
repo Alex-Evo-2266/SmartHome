@@ -1,1 +1,1 @@
-from .rabitmq import WorkerThread, Publisher
+from .rabitmq import WorkerThread, RabbitMQProducer

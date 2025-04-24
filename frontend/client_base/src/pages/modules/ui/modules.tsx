@@ -6,12 +6,14 @@ import { Loading } from '../../../shared/ui/Loading';
 import { WebConstructor } from 'alex-evo-web-constructor';
 import { PageData } from '../../../entites/modulePages/models/page';
 import { MENU_ROOT_ID, MODAL_ROOT_ID } from '../../../const';
+import { useFetch } from '../api/moduleFetch';
 
 export const ModulesPage = () => {
 
     const { moduleName, pageName } = useParams<{ moduleName: string, pageName:string }>();
     const {getPage, loading} = useModulePageAPI()
     const [pageData, setPageData] = useState<null | PageData>(null)
+    const {fetchData} = useFetch(moduleName)
 
     if(!moduleName || !pageName)
         throw new Error("error page url")
@@ -39,8 +41,6 @@ export const ModulesPage = () => {
         )
     }
 
-    console.log("p60", pageData)
-
     return (
         <div className='container-page'>
             <WebConstructor 
@@ -49,6 +49,7 @@ export const ModulesPage = () => {
             data={pageData.page.page} 
             dialogs={pageData.dialogs} 
             menu={pageData.menu}
+            fetchFunction={fetchData}
             />
         </div>
     )

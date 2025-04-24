@@ -97,6 +97,7 @@ services:
       DATA_TOPIC: ${DATA_TOPIC}
       DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
       DATA_QUEUE: ${DATA_QUEUE}
+      DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
     volumes:
       - ./SmartHome:/home/device_service/web
       - media_device_voluem:/home/device_service/web/media
@@ -119,6 +120,7 @@ services:
       DATA_TOPIC: ${DATA_TOPIC}
       DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
       DATA_QUEUE: ${DATA_QUEUE}
+      DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
     volumes:
       - ./PagesServices:/home/device_service/web
       - media_page_voluem:/home/device_service/web/media

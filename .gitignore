@@ -60,3 +60,5 @@ service_config.yml
 
 /logs/*
 .log
+
+/zigbee2mqtt/*

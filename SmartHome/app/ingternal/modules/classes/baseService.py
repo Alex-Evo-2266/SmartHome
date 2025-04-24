@@ -20,3 +20,7 @@ class BaseService(IBaseService, metaclass=ServiceMeta, use=False):
     @classmethod
     def run_command(cls, *arg, **keys):
         pass
+
+    @classmethod
+    def on_load_data(cls, data):
+        pass
