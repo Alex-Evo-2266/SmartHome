@@ -11,7 +11,7 @@ export const DeviceSwitchField: React.FC<{ field: DeviceSerializeFieldSchema; de
       <div className="device-field-input-container">
       <label className="device-field-label">{field.name}</label>
         <div className="device-field-input">
-            <Switch checked={fieldValue} onChange={changeField}/>
+            <Switch checked={fieldValue ?? false} onChange={changeField}/>
         </div>
       </div>
     </div>

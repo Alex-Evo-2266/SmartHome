@@ -24,6 +24,7 @@ from app.ingternal.modules.classes.baseService import BaseService
 
 from app.ingternal.poll.deviceGetData import loadServiceData
 from app.ingternal.poll.setData import setDataService
+from app.ingternal.device.device_edit_queue.device_queue import DeviceQueue
 
 import tracemalloc
 
@@ -109,6 +110,8 @@ async def startup():
     await register_automation()
 
     await restart_automation()
+
+    loop.register("device_add_queue", DeviceQueue.start, 10)
 
     # Загрузка конфигурации
     try:

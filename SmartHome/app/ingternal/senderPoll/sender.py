@@ -14,7 +14,7 @@ class Sender:
         self.publisher.connect()
 
     async def send(self, *args, **keys):
-        print("send", self.data.get_all())
+        print("send")
         self.publisher.publish(self.data.get_all())
 
     def disconnect(self):

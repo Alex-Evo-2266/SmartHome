@@ -56,7 +56,7 @@ async def get_type_device(system_name: str) -> DeviceTypeSerializeSchema:
         device_types: List[TypeDevice] = await TypeDevice.objects.filter(device=system_name).all()
         
         if len(device_types) == 0:
-            logger.error(f"Device type not found for device: {system_name}")
+            logger.warning(f"Device type not found for device: {system_name}")
             raise DeviceTypeNotFound("Device type not found")
         
         logger.debug(f"Found device type for {system_name}, proceeding with serialization")

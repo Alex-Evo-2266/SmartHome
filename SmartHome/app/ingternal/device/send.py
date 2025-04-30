@@ -19,7 +19,7 @@ async def send_device_data():
         return
     
     schemas = devices.get_all_data()
-    
+
     try:
         await WebSocketMenager.send_information(TYPE_SEND_DEVICE, [device.dict() for device in schemas])
         logger.info("Device data successfully sent.")

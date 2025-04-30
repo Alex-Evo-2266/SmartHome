@@ -29,7 +29,12 @@ async def update_field(field:DeviceField, new_field: Dict[str, str], option:None
 		field.type = new_field["type"]
 	if not option.fields_change.unit:
 		field.unit = new_field["unit"]
-	await field.update(_columns=["address", "read_only", "enum_values", "high", "low", "icon", "name", "type", "unit"])
+	if not option.fields_change.category:
+		field.category = new_field["category"]
+	if not option.fields_change.tag:
+		field.tag = new_field["tag"]
+
+	await field.update(_columns=["address", "read_only", "enum_values", "high", "low", "icon", "name", "type", "unit", "tag", "category"])
 
 async def edit_fields(device: Device, new_fields: List[AddDeviceFieldSchema], option:None | ConfigSchema = None):
 	editable_field = []

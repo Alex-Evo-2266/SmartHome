@@ -12,7 +12,9 @@ from app.ingternal.device.interface.device_class import IDevice
 
 from app.configuration.settings import DEVICE_DATA_POLL
 
-logger = logging.getLogger(__name__)
+from app.ingternal.logs import get_automatization
+
+logger = get_automatization.get_logger(__name__)
 
 async def condition_data(service: str, object: str, data: str):
     if service == 'device':
@@ -39,6 +41,11 @@ async def condition(condition: ConditionItemSchema) -> bool:
     condition_item1 = await condition_data(condition.arg1_service, condition.arg1_object, condition.arg1_data)
     condition_item2 = await condition_data(condition.arg2_service, condition.arg2_object, condition.arg2_data)
     
+    if condition.operation == Operation.EQUAL:
+        return condition_item1 == condition_item2
+    elif condition.operation == Operation.NOT_EQUAL:
+        return condition_item1 != condition_item2
+
     try:
         condition_item1 = int(condition_item1)
         condition_item2 = int(condition_item2)
@@ -48,11 +55,8 @@ async def condition(condition: ConditionItemSchema) -> bool:
     
     logger.info(f"Evaluating condition: {condition.operation} with values {condition_item1} and {condition_item2}")
     
-    if condition.operation == Operation.EQUAL:
-        return condition_item1 == condition_item2
-    elif condition.operation == Operation.NOT_EQUAL:
-        return condition_item1 != condition_item2
-    elif condition.operation == Operation.MORE:
+    
+    if condition.operation == Operation.MORE:
         return condition_item1 > condition_item2
     elif condition.operation == Operation.MORE_OR_EQUAL:
         return condition_item1 >= condition_item2

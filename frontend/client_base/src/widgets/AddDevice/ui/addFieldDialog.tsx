@@ -98,7 +98,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
                 <Form value={value} changeValue={change} errors={errors}>
                     <Form.TextInput border name="name" placeholder="name"/>
                     <Form.TextInput border name="address" placeholder="address"/>
-                    <Form.SelectInput container_id={MODAL_ROOT_ID} border name="type" items={getOption()} placeholder="type"/>
+                    <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>
                     {
                     (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?
                     <>

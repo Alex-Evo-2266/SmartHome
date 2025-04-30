@@ -4,6 +4,7 @@ import { DeviceNumberField } from "./number";
 import { DeviceSwitchField } from "./switch";
 import { DeviceTextField } from "./text";
 import './device-field.scss'
+import { DeviceEnumField } from "./enum";
 
 
 export const DeviceField: React.FC<{ field: DeviceSerializeFieldSchema, deviceName:string}> = ({ field, deviceName }) => {
@@ -13,7 +14,7 @@ export const DeviceField: React.FC<{ field: DeviceSerializeFieldSchema, deviceNa
         [TypeDeviceField.BASE]: DeviceTextField,
         [TypeDeviceField.BINARY]: DeviceSwitchField,
         [TypeDeviceField.COUNTER]: DeviceNumberField,
-        [TypeDeviceField.ENUM]: DeviceTextField,
+        [TypeDeviceField.ENUM]: DeviceEnumField,
         [TypeDeviceField.TEXT]: DeviceTextField
     }
 

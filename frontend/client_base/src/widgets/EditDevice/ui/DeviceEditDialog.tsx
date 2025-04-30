@@ -28,13 +28,13 @@ function serializeField(field:DeviceSerializeFieldSchema):FieldData{
     }
 }
 
-function getInitData(option: DeviceClassOptions, data:DeviceSchema):EditDeviceData{
+function getInitData(data:DeviceSchema):EditDeviceData{
     return {
         name: data.name,
         system_name: data.system_name,
-        address: option.address? data.address: undefined,
-        token: option.token? data.token: undefined,
-        type_get_data: option.type_get_data? data.type_get_data: undefined,
+        address: data.address,
+        token: data.token,
+        type_get_data: data.type_get_data,
         fields: data.fields?.map(serializeField) ?? []
     }
 }
@@ -63,7 +63,7 @@ const validDevice = (data:EditDeviceData, option:DeviceClassOptions) => {
 
 export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option}) => {
 
-    const [value, setValue] = useState<EditDeviceData>(getInitData(option, data))
+    const [value, setValue] = useState<EditDeviceData>(getInitData(data))
     const [errors, setErrors] = useState<{[key:string]:string}>({})
     const {editDevice} = useEditDevice()
 
@@ -72,9 +72,8 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
     }
 
     useEffect(()=>{
-        console.log(value)
-    },[value])
-console.log(option)
+        console.log("data",value, option, data)
+    },[value, option])
 
     const save = useCallback(async()=>{
         const errors = validDevice(value, option)

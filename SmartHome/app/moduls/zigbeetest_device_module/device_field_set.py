@@ -1,11 +1,13 @@
-import json
-import logging
+import json, logging
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.schemas.enums import ReceivedDataFormat
-from .settings import MQTT_DEVICE_CLASS
+from .settings import ZIGBEE_DEVICE_CLASS
+# from .logs import getLogger
 
 # Настройка логирования
+# logger = getLogger(__name__)
+
 logger = logging.getLogger(__name__)
 
 async def device_set_value(topik, value):
@@ -26,7 +28,7 @@ async def device_set_value(topik, value):
             address_device = device.get_address()
             type_message = device.get_type_command()
 
-            if class_device != MQTT_DEVICE_CLASS:
+            if class_device != ZIGBEE_DEVICE_CLASS:
                 continue
 
             fields = device.get_fields()
@@ -38,19 +40,17 @@ async def device_set_value(topik, value):
 
             if type_message == ReceivedDataFormat.JSON:
                 logger.info(f"Processing JSON message for device {address_device}")
-                print("p5600 3")
+
                 # Получаем данные из токена
                 if data is None or address_device != topik:
                     logger.warning(f"No data extracted for device {address_device}, skipping...")
                     continue
-                print("p5600 4", data)
 
                 try:
                     json_data = json.loads(data)
                 except json.JSONDecodeError:
                     logger.error(f"Invalid JSON data for device {address_device}: {data}")
                     continue
-                print("p5600", fields)
 
                 for field in fields:
                     field_address = field.get_address()
@@ -59,7 +59,6 @@ async def device_set_value(topik, value):
                         if new_data is None:
                             continue
                         logger.info(f"Setting field {field_address} for device {address_device} to {new_data}")
-                        print("p5600 56", field_address, new_data)
                         field.set(str(new_data))
             elif type_message == ReceivedDataFormat.STRING:
                 logger.info(f"Processing STRING message for device {address_device}")
@@ -75,6 +74,6 @@ async def device_set_value(topik, value):
                     logger.info(f"Setting field {field_address} for device {address_device} to {data}")
                     field.set(data)
     except Exception as e:
-        print(e)
+        logger.error(e)
 
     logger.info("MQTT message processing complete.")

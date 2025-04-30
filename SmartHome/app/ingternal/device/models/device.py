@@ -2,7 +2,7 @@ import ormar
 from ormar import ReferentialAction
 from app.pkg.ormar.dbormar import base_ormar_config
 from typing import Optional, Dict, Union
-from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, DeviceGetData, DeviceStatusField, StatusDevice
+from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, DeviceGetData, DeviceStatusField, StatusDevice, DeviceFieldCategory
 
 
 class Device(ormar.Model):
@@ -23,6 +23,8 @@ class DeviceField(ormar.Model):
 
 	id: str = ormar.String(max_length=100, primary_key=True)
 	name: str = ormar.String(max_length=200)
+	category: Optional[DeviceFieldCategory] = ormar.String(max_length=50, nullable=True)
+	tag: Optional[str] = ormar.String(max_length=200, nullable=True)
 	address: Optional[str] = ormar.String(max_length=200, nullable=True)
 	type: TypeDeviceField = ormar.String(max_length=200)
 	low: Optional[str] = ormar.String(max_length=200, nullable=True)

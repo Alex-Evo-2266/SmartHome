@@ -27,3 +27,8 @@ class TypeDeviceField(str, Enum):
 class DeviceGetData(str, Enum):
 	PULL = "pull"
 	PUSH = 'push'
+
+
+class DeviceFieldCategory(str, Enum):
+	CONFIG = 'config'
+	DIAGNOSTIC = 'diagnostic'

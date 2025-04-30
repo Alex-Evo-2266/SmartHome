@@ -81,7 +81,7 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
                 <Form value={value} changeValue={change} errors={errors}>
                     {option.fields_change.name && <Form.TextInput border name="name" placeholder="name"/>}
                     {option.fields_change.address && <Form.TextInput border name="address" placeholder="address"/>}
-                    {option.fields_change.type && <Form.SelectInput container_id={MODAL_ROOT_ID} border name="type" items={getOption()} placeholder="type"/>}
+                    {option.fields_change.type && <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>}
                     {
                     (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?
                     <>

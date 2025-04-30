@@ -1,20 +1,26 @@
 export function getInitData(high:string|null|undefined, value:string|null|undefined){
-    if(!high && value == "1")
-        return true
-    if(high && value == high)
+    // if(!high && value == "1")
+    //     return true
+    // if(high && value == high)
+    //     return true
+    if(value == "1")
         return true
     return false  
 }
 
 export function getData(high:string|null|undefined, low:string|null|undefined, value:string|null|undefined, old:boolean){
-    if(!high && value == "1")
-        return true
-    if(high && value == high)
-        return true
-    if(!low && value == "0")
+    // if(!high && value == "1")
+    //     return true
+    // if(high && value == high)
+    //     return true
+    // if(!low && value == "0")
+    //     return false
+    // if(low && value == low)
+    //     return false
+    if(value == "0")
         return false
-    if(low && value == low)
-        return false
+    if(value == "1")
+        return true
     return old
 }
 

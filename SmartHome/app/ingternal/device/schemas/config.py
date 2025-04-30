@@ -18,6 +18,8 @@ class ChangeField(BaseModel):
 	value:bool = False
 	virtual_field:bool = True
 	read_only:bool = True
+	tag:bool = True
+	category: bool = False
 
 class ConfigSchema(BaseModel):
 	address: bool = True

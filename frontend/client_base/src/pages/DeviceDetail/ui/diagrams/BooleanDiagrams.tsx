@@ -53,8 +53,6 @@ export const BooleanTimelineChart: React.FC<DiagramProps> = ({ data: fieldHistor
 
   function t(d:any){
     const d2 = new Date(d)
-    console.log(d2, d)
-
     return d2.getTime()
   }
 

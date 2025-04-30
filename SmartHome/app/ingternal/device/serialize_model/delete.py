@@ -12,7 +12,7 @@ async def delete_device(system_name:str):
 		raise DeviceNotFound()
 	DevicesArray.delete(system_name)
 	await device.delete()
-	device_data_list:Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
+	device_data_list:ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
 	if not device_data_list:
 		return
 	device_data_list.delete(system_name)

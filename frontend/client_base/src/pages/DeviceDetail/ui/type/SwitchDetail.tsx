@@ -10,6 +10,7 @@ import { DeviceField } from "../../../../widgets/DeviceCard/ui/fields"
 import { Switch, SwitchBtnProps } from "../../../../shared/ui/Switch/Switch"
 
 import './SwitchDetail.scss'
+import { useGetEnumField } from "../../../../features/Device/hooks/getField.hook"
 
 const now = new Date();
 const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -19,7 +20,7 @@ export const DetailDeviceSwitch:React.FC<DeviceDetailProps> = ({device, onEdit})
     const {fieldValue: state1Value, updateFieldState: updateState1, field: state1} = useGetBinaryField(device, "state1")
     const {fieldValue: state2Value, updateFieldState: updateState2, field: state2} = useGetBinaryField(device, "state2")
     const {fieldValue: state3Value, updateFieldState: updateState3, field: state3} = useGetBinaryField(device, "state3")
-    const {field: action} = useGetNumberField(device, "action")
+    const {field: action, fieldValue: actionValue} = useGetEnumField(device, "action")
 
     const {history, loading} = useDeviceHistory(device.system_name, twentyFourHoursAgo.toISOString())
 
@@ -62,6 +63,7 @@ export const DetailDeviceSwitch:React.FC<DeviceDetailProps> = ({device, onEdit})
             imageControl={btns && btns.length > 0 && <Switch className="switch-image" btns={btns} size={6}/>}
         >
             <div className={`main-control`}>
+                action: {actionValue}
             </div>
             {
                 notuUsedField && notuUsedField.length > 0 && 
