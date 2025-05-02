@@ -10,7 +10,8 @@ from app.ingternal.device.schemas.device import DeviceSerializeSchema
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.serialize_model.utils import get_default_data
 from app.ingternal.device.serialize_model.update import edit_fields
-from app.ingternal.device.serialize_model.read import get_all_row_device, get_serialize_device
+from app.ingternal.device.serialize_model.read import get_serialize_device
+from app.ingternal.device.get_cached_device_data import get_cached_device_data
 
 # Настройка логирования / Logging setup
 from app.ingternal.logs import get_polling_logger
@@ -143,7 +144,6 @@ async def polling(device_data: DeviceSerializeSchema):
 		# asyncio.current_task().cancel()
 
 
-
 def handle_task_done(task: asyncio.Task):
 	active_tasks.discard(task)
 	if exception := task.exception():
@@ -153,7 +153,7 @@ async def polling_all():
 	"""Функция для опроса всех устройств асинхронно. / Poll all devices asynchronously."""
 	try:
 		logger.info('Starting polling for all devices.')
-		devices_data = await get_all_row_device()
+		devices_data = await get_cached_device_data()
 		logger.info(f"Found {len(devices_data)} devices to poll.")
 
 		for device in devices_data:
