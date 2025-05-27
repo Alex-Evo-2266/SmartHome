@@ -10,9 +10,9 @@ from app.configuration.settings import SERVICE_DATA_POLL
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
-logsHandler = LogManager("mqttServiceLogs", level=logging.DEBUG)
+logsHandler = LogManager("mqttServiceLogs", level=logging.INFO)
 logger.addHandler(logsHandler.get_file_handler())
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 class MqttService(BaseService):
     client = None

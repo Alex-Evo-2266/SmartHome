@@ -1,4 +1,9 @@
 .card-device{
+    .ellipsis {
+        white-space: nowrap;       /* Не переносить текст */
+        overflow: hidden;          /* Скрыть выходящий за пределы контент */
+        text-overflow: ellipsis;   /* Поставить многоточие */
+    }
     position: relative;
     .header-text{
         color: var(--Primary-color);
@@ -16,6 +21,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            .text-container{
+                width: calc(100% - 50px);
+                align-items: center;
+                display: flex;
+                justify-content: space-between;
+            }
             .card-device-checkbox-container{
                 display: block;
                 & > label{

@@ -140,7 +140,7 @@ class RabbitMQProducer:
                 delivery_mode=2,  # делает сообщение постоянным
             )
         )
-        logger.debug(f" [x] Sent {message}")
+        # logger.debug(f" [x] Sent {message}")
 
     def close(self):
         """Закрывает соединение с RabbitMQ."""

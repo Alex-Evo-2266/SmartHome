@@ -1,13 +1,15 @@
-import { Card, Divider, Switch, Typography } from 'alex-evo-sh-ui-kit'
+import { Card, Divider, RunningLine, SizeContext, Switch, Typography } from 'alex-evo-sh-ui-kit'
 import { DeviceCardProps } from '../../models/props'
 import './Switch.scss'
 import './DeviceCardTemplate.scss'
 import { useGetBinaryField, useGetEnumField } from '../../../../features/Device/hooks/getField.hook'
 import { useNavigate } from 'react-router-dom';
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
+import { cardSizeStyle } from '../../models/sizeDeviceCard'
 
 export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()
+    const {screen} = useContext(SizeContext)
     
     const {fieldValue: state1Value, changeField: updateState1, field: state1} = useGetBinaryField(device, "state1")
     const {fieldValue: state2Value, changeField: updateState2, field: state2} = useGetBinaryField(device, "state2")
@@ -19,12 +21,15 @@ export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
     },[device.system_name])
 
     return(
-        <Card className='card-device' rootApp='#root' onClick={openDitail}>
-            <div onClick={openDitail}><Typography className='header-text' type='heading'>{device.name}</Typography></div>
+        <Card className='card-device' rootApp='#root' onClick={openDitail} style={cardSizeStyle(screen, 'light')}>
+            <div style={{width: "calc(100% - 50px)"}} onClick={openDitail}><RunningLine className='header-text' weight='bold' type='title' screensize={screen} text={device.name}></RunningLine></div>
 
             <div className='control-container'>
                 <div className='control-row state-switch'>
-                <Typography type="small">{device.system_name}</Typography>
+                    <div className='text-container'>
+                        <Typography type='small' className="ellipsis">{device.system_name}</Typography>
+                    </div>
+                
                 <div className='card-device-checkbox-container'>
                     {state1 && <Switch className='control-switch-state' size='small' onChange={updateState1} checked={!!state1Value} />}
                     {state2 && <Switch className='control-switch-state' size='small' onChange={updateState2} checked={!!state2Value} />}

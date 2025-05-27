@@ -125,7 +125,7 @@ services:
       - ./PagesServices:/home/device_service/web
       - media_page_voluem:/home/device_service/web/media
   nginx:
-    build: ./testNginx
+    build: ./Nginx
     ports:
       - 1337:80
     depends_on:
@@ -188,6 +188,22 @@ services:
     depends_on:
       mosquitto:
         condition: service_started
+
+  # matter-bridge:
+  #   # image: matter-bridge
+  #   build:
+  #     context: ./MatterBridge
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #     - "5540:5540"
+  #   volumes:
+  #     - ./config:/app/config
+  #   # devices:
+  #   #   - "/dev/ttyACM0:/dev/ttyACM0"
+  #   environment:
+  #     - MATTER_LOG_LEVEL=DEBUG
+  #   restart: unless-stopped
 
   # client:
   #   build:
