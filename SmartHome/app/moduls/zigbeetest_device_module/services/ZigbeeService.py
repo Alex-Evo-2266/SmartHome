@@ -8,7 +8,7 @@ from uuid import uuid4
 from app.ingternal.logs.logs import LogManager
 
 from app.ingternal.device.device_edit_queue.device_queue import DeviceQueue, Types
-from app.ingternal.device.schemas.add_device import AddDeviceSchema, AddDeviceFieldSchema, ReceivedDataFormat, DeviceGetData, TypeDeviceField
+from app.ingternal.device.schemas.add_device import AddDeviceSchema, AddDeviceFieldSchema, ReceivedDataFormat, DeviceGetData, TypeDeviceField, FieldGetDataType
 from ..device_field_set import device_set_value
 
 from app.ingternal.modules.arrays.serviceDataPoll import ObservableDict, servicesDataPoll
@@ -40,6 +40,20 @@ def map_type(type:str)->TypeDeviceField:
 
 def is_read_only(field: dict) -> bool:
     return not(field.get("access", 0) & 2 != 0)
+
+def get_access_flags(field: dict) -> dict:
+    access = field.get("access", 0)
+    return {
+        "readable": bool(access & 1),
+        "writable": bool(access & 2),
+        "published": bool(access & 4)
+    }
+
+def get_type_read_value(field: dict) -> FieldGetDataType:
+    flags = get_access_flags(field)
+    if flags.get("published", False):
+        return FieldGetDataType.PUBLISH
+    return FieldGetDataType.READ
 
 class ZigbeeServiceCoordinator():
     def __init__(self, root):
@@ -203,7 +217,8 @@ class ZigbeeServiceCoordinator():
                 icon="",
                 unit=data.get("unit", None),
                 virtual_field=False,
-                category=data.get("category", None)
+                category=data.get("category", None),
+                type_get_value=get_type_read_value(data)
             )]
         if type_exposes == "numeric":
             return [AddDeviceFieldSchema(
@@ -217,7 +232,8 @@ class ZigbeeServiceCoordinator():
                 icon="",
                 unit=data.get("unit", None),
                 virtual_field=False,
-                category=data.get("category", None)
+                category=data.get("category", None),
+                type_get_value=get_type_read_value(data)
             )]
         if type_exposes == "enum":
             return [AddDeviceFieldSchema(
@@ -230,7 +246,8 @@ class ZigbeeServiceCoordinator():
                 enum_values=", ".join(data.get("values",[])),
                 unit=data.get("unit", None),
                 category=data.get("category", None),
-                virtual_field=False
+                virtual_field=False,
+                type_get_value=get_type_read_value(data)
             )]
         if type_exposes == "text":
             return [AddDeviceFieldSchema(
@@ -242,7 +259,8 @@ class ZigbeeServiceCoordinator():
                 icon="",
                 unit=data.get("unit", None),
                 category=data.get("category", None),
-                virtual_field=False
+                virtual_field=False,
+                type_get_value=get_type_read_value(data)
             )]
         if type_exposes == "switch":
             return [x for item in data["features"] for x in self.exposes_pars2(item)]

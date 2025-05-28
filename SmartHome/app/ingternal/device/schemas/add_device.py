@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel
 from typing import Optional, List, Dict
-from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, DeviceGetData, DeviceFieldCategory
+from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, DeviceGetData, DeviceFieldCategory, FieldGetDataType
 
 class AddDeviceFieldSchema(BaseModel):
 	name: str
@@ -17,6 +17,7 @@ class AddDeviceFieldSchema(BaseModel):
 	virtual_field: bool
 	tag:Optional[str] = None
 	category: Optional[DeviceFieldCategory] = None
+	type_get_value: Optional[FieldGetDataType] = FieldGetDataType.PUBLISH
 
 	class Config:  
 		use_enum_values = True

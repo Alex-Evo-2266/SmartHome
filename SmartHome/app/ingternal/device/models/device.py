@@ -2,7 +2,7 @@ import ormar
 from ormar import ReferentialAction
 from app.pkg.ormar.dbormar import base_ormar_config
 from typing import Optional, Dict, Union
-from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, DeviceGetData, DeviceStatusField, StatusDevice, DeviceFieldCategory
+from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, FieldGetDataType, DeviceGetData, DeviceStatusField, StatusDevice, DeviceFieldCategory
 
 
 class Device(ormar.Model):
@@ -27,6 +27,7 @@ class DeviceField(ormar.Model):
 	tag: Optional[str] = ormar.String(max_length=200, nullable=True)
 	address: Optional[str] = ormar.String(max_length=200, nullable=True)
 	type: TypeDeviceField = ormar.String(max_length=200)
+	type_get_value: FieldGetDataType = ormar.String(max_length=200, default=FieldGetDataType.PUBLISH, nullable=True)
 	low: Optional[str] = ormar.String(max_length=200, nullable=True)
 	high: Optional[str] = ormar.String(max_length=200, nullable=True)
 	enum_values: Optional[str] = ormar.String(max_length=200, nullable=True)

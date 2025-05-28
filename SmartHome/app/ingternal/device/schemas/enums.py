@@ -28,6 +28,9 @@ class DeviceGetData(str, Enum):
 	PULL = "pull"
 	PUSH = 'push'
 
+class FieldGetDataType(str, Enum):
+	PUBLISH = "publish"
+	READ = 'read'
 
 class DeviceFieldCategory(str, Enum):
 	CONFIG = 'config'

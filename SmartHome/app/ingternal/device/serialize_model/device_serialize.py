@@ -96,7 +96,8 @@ async def serialize_device_field(field: DeviceField, device_include: bool = Fals
         entity=field.entity,
         virtual_field=field.virtual_field,
         tag=field.tag,
-        category=field.category
+        category=field.category,
+        type_get_value=field.type_get_value
     )
     
     if device_include:

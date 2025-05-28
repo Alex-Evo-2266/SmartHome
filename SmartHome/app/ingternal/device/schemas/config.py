@@ -20,6 +20,7 @@ class ChangeField(BaseModel):
 	read_only:bool = True
 	tag:bool = True
 	category: bool = False
+	type_get_value: bool = False
 
 class ConfigSchema(BaseModel):
 	address: bool = True
