@@ -1,9 +1,13 @@
 .card-device{
-    .control-container{
-        .control-row.state-switch{
-            .lamp-control-switch-state{
-                margin-block-end: 10px;
-            }
-        }
+    .header-container{
+        display: flex;
+        justify-content: space-between;
     }
+    // .control-container{
+    //     .control-row.state-switch{
+    //         .lamp-control-switch-state{
+    //             margin-block-end: 10px;
+    //         }
+    //     }
+    // }
 }

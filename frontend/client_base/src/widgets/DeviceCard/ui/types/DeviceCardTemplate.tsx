@@ -23,9 +23,6 @@ export const DeviceTemplateCard:React.FC<DeviceCardProps> = ({device}) => {
     return(
         <Card className='card-device' rootApp='#root' onClick={openDitail} style={cardSizeStyle(screen)}>
             <div style={{width: "calc(100% - 50px)"}} onClick={openDitail}><RunningLine className='header-text' weight='bold' type='title' screensize={screen} text={device.name}></RunningLine></div>
-            {
-                power && <Bulb className='image-svg-device' onClick={openDitail} status={getData(power.high, power.low, power.value, false)}/>
-            }
             <div className='control-container'>
                 <div className='control-row state-switch'>
                     <div className='text-container'>

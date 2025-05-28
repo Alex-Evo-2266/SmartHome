@@ -1,4 +1,4 @@
-import { Card, Divider, RunningLine, SizeContext, Switch, Typography } from 'alex-evo-sh-ui-kit'
+import { Card, Divider, RunningLine, SizeContext, Switch, Typography, SwitchIcon } from 'alex-evo-sh-ui-kit'
 import { DeviceCardProps } from '../../models/props'
 import './Switch.scss'
 import './DeviceCardTemplate.scss'
@@ -6,6 +6,7 @@ import { useGetBinaryField, useGetEnumField } from '../../../../features/Device/
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useContext } from 'react'
 import { cardSizeStyle } from '../../models/sizeDeviceCard'
+import img1 from '../../../../../public/img/device/switch1.png'
 
 export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()
@@ -22,8 +23,12 @@ export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
 
     return(
         <Card className='card-device' rootApp='#root' onClick={openDitail} style={cardSizeStyle(screen, 'light')}>
-            <div style={{width: "calc(100% - 50px)"}} onClick={openDitail}><RunningLine className='header-text' weight='bold' type='title' screensize={screen} text={device.name}></RunningLine></div>
-
+            <div className='header-container' onClick={openDitail}>
+                            <div style={{width: "calc(100% - 60px)"}}>
+                                <RunningLine className='header-text' weight='bold' type='title' screensize={screen} text={device.name}/>
+                            </div>
+                            <img style={{margin: "-5px"}} className='card-device-img' src={img1}/>
+                        </div>
             <div className='control-container'>
                 <div className='control-row state-switch'>
                     <div className='text-container'>

@@ -1,8 +1,7 @@
-import { Card, Divider, RunningLine, SizeContext, Switch, Typography } from 'alex-evo-sh-ui-kit'
+import { Card, Divider, LampIcon, RunningLine, SizeContext, Switch, Typography } from 'alex-evo-sh-ui-kit'
 import { DeviceCardProps } from '../../models/props'
 import './Light.scss'
 import './DeviceCardTemplate.scss'
-import { Bulb } from '../../../../shared'
 import { getData } from '../../../../features/Device/helpers/fieldUtils'
 import { useGetBinaryField, useGetNumberField } from '../../../../features/Device/hooks/getField.hook'
 import { useNavigate } from 'react-router-dom';
@@ -23,10 +22,14 @@ export const LightDevice:React.FC<DeviceCardProps> = ({device}) => {
 
     return(
         <Card className='card-device' rootApp='#root' onClick={openDitail} style={cardSizeStyle(screen, 'light')}>
-            <div style={{width: "calc(100% - 50px)"}} onClick={openDitail}><RunningLine className='header-text' weight='bold' type='title' screensize={screen} text={device.name}></RunningLine></div>
-            {
-                power && <Bulb className='image-svg-device' onClick={openDitail} status={getData(power.high, power.low, power.value, false)}/>
-            }
+            <div className='header-container' onClick={openDitail}>
+                <div style={{width: "calc(100% - 60px)"}}>
+                    <RunningLine className='header-text' weight='bold' type='title' screensize={screen} text={device.name}/>
+                </div>
+                {
+                    power && <LampIcon size='60' secondaryColor={getData(power.high, power.low, power.value, false)? "yellow": undefined} onClick={openDitail}/>
+                }
+            </div>
             <div className='control-container'>
                 <div className='control-row state-switch'>
                     <div className='text-container'>
@@ -34,9 +37,9 @@ export const LightDevice:React.FC<DeviceCardProps> = ({device}) => {
                     </div>
                 {
                     power && 
-                    <>
-                    <Switch className='lamp-control-switch-state' size='small' onChange={changePower} checked={!!powerValue} />
-                    </>
+                    <div className='card-device-checkbox-container' style={{marginBottom: "5px"}}>
+                        <Switch className='lamp-control-switch-state' size='small' onChange={changePower} checked={!!powerValue} />
+                    </div>
                 }
                 </div>
                 {
