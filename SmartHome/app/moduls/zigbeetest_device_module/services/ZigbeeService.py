@@ -38,6 +38,9 @@ def map_type(type:str)->TypeDeviceField:
     }
     return types.get(type, TypeDeviceField.TEXT)
 
+def is_read_only(field: dict) -> bool:
+    return not(field.get("access", 0) & 2 != 0)
+
 class ZigbeeServiceCoordinator():
     def __init__(self, root):
         service:ObservableDict = servicesDataPoll.get(SERVICE_POLL)
@@ -195,7 +198,7 @@ class ZigbeeServiceCoordinator():
                 type=TypeDeviceField.BINARY,
                 low=data.get("value_off", None),
                 high=data.get("value_on", None),
-                read_only=("category" in data and data["category"] == "diagnostic"),
+                read_only=is_read_only(data),
                 entity=None,
                 icon="",
                 unit=data.get("unit", None),
@@ -209,7 +212,7 @@ class ZigbeeServiceCoordinator():
                 type=TypeDeviceField.NUMBER,
                 low= None if data.get("value_min", None) is None else str(data.get("value_min", None)) ,
                 high= None if data.get("value_max", None) is None else str(data.get("value_max", None)) ,
-                read_only=("category" in data and data["category"] == "diagnostic"),
+                read_only=is_read_only(data),
                 entity=None,
                 icon="",
                 unit=data.get("unit", None),
@@ -221,7 +224,7 @@ class ZigbeeServiceCoordinator():
                 name=data["name"]+str(data.get("endpoint", "")),
                 address=data["property"],
                 type=TypeDeviceField.ENUM,
-                read_only=("category" in data and data["category"] == "diagnostic"),
+                read_only=is_read_only(data),
                 entity=None,
                 icon="",
                 enum_values=", ".join(data.get("values",[])),
@@ -234,7 +237,7 @@ class ZigbeeServiceCoordinator():
                 name=data["name"]+str(data.get("endpoint", "")),
                 address=data["property"],
                 type=TypeDeviceField.TEXT,
-                read_only=("category" in data and data["category"] == "diagnostic"),
+                read_only=is_read_only(data),
                 entity=None,
                 icon="",
                 unit=data.get("unit", None),
