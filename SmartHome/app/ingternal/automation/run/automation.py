@@ -81,13 +81,17 @@ async def action(data: ActionItemSchema):
         if field.get_type() == TypeDeviceField.BINARY and data.data == "target":
             value = field.get()
             logger.info(f"Processing binary field: {field}, current value: {value}")
-            if (field.get_low() == "" and value == "0"):
+            if value is None and field.get_high() is None:
                 device_control.set_value(field.get_id(), "1", script=True)
-            elif field.get_low() == value:
+            elif value is None:
                 device_control.set_value(field.get_id(), field.get_high(), script=True)
-            elif (field.get_high() == "" and value == "1"):
+            elif (field.get_high() is None and value == "0"):
+                device_control.set_value(field.get_id(), "1", script=True)
+            elif field.get_high() is not None and value == "0":
+                device_control.set_value(field.get_id(), field.get_high(), script=True)
+            elif (field.get_low() is None and value == "1"):
                 device_control.set_value(field.get_id(), "0", script=True)
-            elif field.get_high() == value:
+            elif (field.get_low() is not None and value == "1"):
                 device_control.set_value(field.get_id(), field.get_low(), script=True)
         else:
             logger.info(f"Setting field {data.field} to {data.data}")
@@ -97,7 +101,11 @@ async def action(data: ActionItemSchema):
         pass
 
 async def automation(data: AutomationSchema):
-    logger.info(f"Activate: {data}")
+    logger.debug(f"Activate: {data}")
+    logger.info(f"Activate: {data.name}, status: {data.is_enabled}")
+    if not data.is_enabled:
+        logger.info(f"{data.name}, status: {data.is_enabled} skiped")
+        return
     conditions = [await condition(condition_schema) for condition_schema in data.condition]
     if len(conditions) == 0 or (data.condition_type == ConditionType.AND and all(conditions)) or (data.condition_type == ConditionType.OR and any(conditions)):
         logger.info("Executing THEN branch actions")

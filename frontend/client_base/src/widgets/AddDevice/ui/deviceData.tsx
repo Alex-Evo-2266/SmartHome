@@ -76,7 +76,7 @@ export const DeviceData:React.FC<DeviceDataProps> = ({option, onHide, onSave}) =
                     <Form.TextInput name="system_name" border placeholder="system name"/>
                     {option.address && <Form.TextInput name="address" border placeholder="address"/>}
                     {option.token && <Form.TextInput name="token" border placeholder="token"/>}
-                    {option.type_get_data && <Form.SelectInput container_id={MODAL_ROOT_ID} items={['pull', 'push']} name="type_get_data" border placeholder="type get data"/>}
+                    {option.type_get_data && <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} items={['pull', 'push']} name="type_get_data" border placeholder="type get data"/>}
                 </Form>
             </ContentBox>
             <FieldList fields={value.fields} option={option} onChange={data=>change('fields', data)}/>

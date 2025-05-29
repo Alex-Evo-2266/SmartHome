@@ -32,7 +32,7 @@ export const useAutomationAPI = () => {
     },[request])
 
     const enableAutomation = useCallback(async(name:string, enabled:boolean)=>{
-        await request(`/api-devices/automation/${name}`, TypeRequest.PATCH, {is_enabled: enabled})
+        await request(`/api-devices/automation/${name}/enable`, TypeRequest.PATCH, {is_enabled: enabled})
     },[request])
 
     useEffect(()=>{

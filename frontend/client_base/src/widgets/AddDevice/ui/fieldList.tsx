@@ -84,7 +84,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
         {
             addFieldVisible && 
             <DialogPortal>
-                <AddField onHide={()=>setAddFieldVisible(false)} onSave={addField}/>
+                <AddField option={option} onHide={()=>setAddFieldVisible(false)} onSave={addField}/>
             </DialogPortal>
         }
         </>

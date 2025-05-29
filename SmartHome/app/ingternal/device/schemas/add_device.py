@@ -5,7 +5,7 @@ from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceFie
 
 class AddDeviceFieldSchema(BaseModel):
 	name: str
-	address: Optional[str]
+	address: Optional[str] = "virtual"
 	type: TypeDeviceField
 	low: Optional[str] = None
 	high: Optional[str] = None
@@ -27,7 +27,7 @@ class AddDeviceSchema(BaseModel):
 	system_name: str
 	class_device: str
 	type: Optional[str] = None
-	address: Optional[str]
+	address: Optional[str] = "virtual"
 	token: Optional[str] = None
 	type_command: ReceivedDataFormat = ReceivedDataFormat.JSON
 	type_get_data: DeviceGetData = DeviceGetData.PUSH

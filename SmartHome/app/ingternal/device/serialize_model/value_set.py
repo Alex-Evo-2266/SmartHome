@@ -6,9 +6,10 @@ from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.models.device import Value
 from app.ingternal.device.serialize_model.utils import create_value_id
 from app.ingternal.device.serialize_model.cach_field import get_cached_last_value, invalidate_cache_for_field, get_cached_fields, CachFieldData
+from app.ingternal.logs import get_device_save
 
 # Настройка логирования
-logger = logging.getLogger(__name__)
+logger = get_device_save.get_logger(__name__)
 
 async def save_values(data: List[DeviceSchema]):
     values_to_create:List[Value] = []  # Буфер для batch-создания записей

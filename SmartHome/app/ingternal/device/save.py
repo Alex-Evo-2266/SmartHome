@@ -5,7 +5,10 @@ from app.configuration.loop.loop import loop
 from app.configuration.settings import DEVICE_DATA_POLL, SAVE_DEVICE_CONF, LOOP_SAVE_DEVICE
 from app.pkg import __config__
 
-logger = logging.getLogger(__name__)
+from app.ingternal.logs import get_device_save
+
+# Настройка логирования
+logger = get_device_save.get_logger(__name__)
 
 async def save_devices():
 	"""

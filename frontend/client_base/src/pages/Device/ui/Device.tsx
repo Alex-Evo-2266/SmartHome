@@ -99,7 +99,7 @@ export const DevicePage = () => {
     .sort((a, b) => a.name.localeCompare(b.name)),[devicesData, searchQuery, selectedFilters]) 
 
     const filters = useMemo<FilterGroup[]>(()=>{
-        const keys_val = extractUniqueValues(devicesData, ['type_mask', 'class_device'])
+        const keys_val = extractUniqueValues(devicesData, ['type_mask', 'class_device', 'status'])
         return objectToArray(keys_val)
     },[devicesData])
 

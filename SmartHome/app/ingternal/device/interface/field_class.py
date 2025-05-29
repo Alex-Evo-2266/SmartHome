@@ -5,6 +5,9 @@ from app.ingternal.device.schemas.enums import TypeDeviceField
 class IField():
 	def get(self)->str | None:
 		pass
+
+	def get_full_value(self)->str | None:
+		pass
 	
 	def get_high(self):
 		pass

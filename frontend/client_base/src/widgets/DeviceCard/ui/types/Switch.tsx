@@ -6,7 +6,7 @@ import { useGetBinaryField, useGetEnumField } from '../../../../features/Device/
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useContext } from 'react'
 import { cardSizeStyle } from '../../models/sizeDeviceCard'
-import img1 from '../../../../../public/img/device/switch1.png'
+import img1 from '../../../../../public/img/device/switch2.png'
 
 export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()

@@ -1,9 +1,10 @@
 import { BaseActionCard, BasicTemplateDialog, Button, NumberField, SelectionDialog, TextField } from "alex-evo-sh-ui-kit"
 import { DialogPortal, SelectField } from "../../../shared"
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useAppSelector } from "../../../shared/lib/hooks/redux"
 import {ConditionItem, Operation} from '../../../entites/automation';
 import { TypeDeviceField } from "../../../entites/devices";
+import { splitEnum } from "../../../shared/lib/helpers/enumStrimg";
 
 interface AddConditionProps {
   onHide: ()=>void
@@ -26,6 +27,50 @@ export const AddCondition: React.FC<AddConditionProps> = ({onHide, onSave}) => {
     const [dataSecrch, setDataSecrch] = useState<null | 1 | 2>(null)
 
     const {devicesData} = useAppSelector(state=>state.devices)
+
+    const getFieldType1 = useMemo<{type:"any"|"binary"|"number"|"enum", option: string[]}>(()=>{
+        if(service1 === 'value'){
+            return {type: 'any', option:[]}
+        }
+        if(service1 === 'device'){
+            const device = devicesData.find(item=>item.system_name === object1)
+            if(device === undefined)
+                return {type: 'any', option:[]}
+            const field = device.fields?.find(item=>item.name === data1)
+            if(field === undefined)
+                return {type: 'any', option:[]}
+            if(field.type === TypeDeviceField.BINARY)
+                return {type: 'binary', option:[]}
+            if(field.type === TypeDeviceField.NUMBER)
+                return {type: 'number', option:[]}
+            if(field.type === TypeDeviceField.ENUM)
+                return {type: 'enum', option: splitEnum(field.enum_values ?? "")}
+            return {type: 'any', option:[]}
+        }
+        return {type: 'any', option:[]}
+    },[service1, object1, data1])
+
+    const getFieldType2 = useMemo<{type:"any"|"binary"|"number"|"enum", option: string[]}>(()=>{
+        if(service2 === 'value'){
+            return {type: 'any', option:[]}
+        }
+        if(service2 === 'device'){
+            const device = devicesData.find(item=>item.system_name === object2)
+            if(device === undefined)
+                return {type: 'any', option:[]}
+            const field = device.fields?.find(item=>item.name === data2)
+            if(field === undefined)
+                return {type: 'any', option:[]}
+            if(field.type === TypeDeviceField.BINARY)
+                return {type: 'binary', option:[]}
+            if(field.type === TypeDeviceField.NUMBER)
+                return {type: 'number', option:[]}
+            if(field.type === TypeDeviceField.ENUM)
+                return {type: 'enum', option: splitEnum(field.enum_values ?? "")}
+            return {type: 'any', option:[]}
+        }
+        return {type: 'any', option:[]}
+    },[service2, object2, data2])
 
     const serviceHeandler = (value: string, argNumber: 1 | 2) => {
         if(argNumber === 1)
@@ -173,6 +218,8 @@ export const AddCondition: React.FC<AddConditionProps> = ({onHide, onSave}) => {
                         <TextField placeholder="field" border readOnly value={data1} onClick={()=>setDataSecrch(1)}/>:
                     service1 === "value"?
                         operation === Operation.EQUAL || operation === Operation.NOT_EQUAL?
+                        getFieldType2.type === 'enum'?
+                            <SelectField border items={getFieldType2.option} value={data2} onChange={(val)=>dataHeandler(val, 2)}/>:
                             <TextField placeholder="data" border value={data1} onChange={(e)=>dataHeandler(e.target.value, 1)}/>:
                             <NumberField placeholder="data" border value={Number(data1)} onChange={(value)=>dataHeandler(String(value), 1)}/>:
                     null
@@ -193,6 +240,8 @@ export const AddCondition: React.FC<AddConditionProps> = ({onHide, onSave}) => {
                         <TextField placeholder="field" border readOnly value={data2} onClick={()=>setDataSecrch(2)}/>:
                     service2 === "value"?
                         operation === Operation.EQUAL || operation === Operation.NOT_EQUAL?
+                            getFieldType1.type === 'enum'?
+                            <SelectField border items={getFieldType1.option} value={data2} onChange={(val)=>dataHeandler(val, 2)}/>:
                             <TextField placeholder="data" border value={data2} onChange={(e)=>dataHeandler(e.target.value, 2)}/>:
                             <NumberField placeholder="data" border value={Number(data2)} onChange={(value)=>dataHeandler(String(value), 2)}/>:
                     null
@@ -209,7 +258,12 @@ export const AddCondition: React.FC<AddConditionProps> = ({onHide, onSave}) => {
         {
             dataSecrch &&
             <DialogPortal>
-                <SelectionDialog header="get data" items={getData(dataSecrch, ![Operation.EQUAL, Operation.NOT_EQUAL].includes(operation))} onHide={()=>setDataSecrch(null)} onSuccess={(data)=>dataHeandler(data, dataSecrch)}/>
+                <SelectionDialog 
+                header="get data" 
+                items={getData(dataSecrch, ![Operation.EQUAL, Operation.NOT_EQUAL].includes(operation))} 
+                onHide={()=>setDataSecrch(null)} 
+                onSuccess={(data)=>dataHeandler(data, dataSecrch)}
+                />
             </DialogPortal>
         }
         </>

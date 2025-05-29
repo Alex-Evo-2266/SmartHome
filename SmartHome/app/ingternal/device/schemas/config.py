@@ -27,6 +27,7 @@ class ConfigSchema(BaseModel):
 	token: bool = False
 	type_get_data: bool = True
 	fields_creation: bool = True
+	fields_creation_data: ChangeField = ChangeField()
 	fields_change: ChangeField = ChangeField()
 	creation_url: Optional[str] = None
 	change_url: Optional[str] = None

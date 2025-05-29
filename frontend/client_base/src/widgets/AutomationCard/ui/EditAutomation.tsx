@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { ConditionType, Automation, TriggerItem, ConditionItem, ActionItem } from "../../../entites/automation/models/automation";
-import { BaseActionCard, Button, ContentBox, FullScreenTemplateDialog, IconButton, ListContainer, ListItem, TextField, Trash } from "alex-evo-sh-ui-kit";
+import { BaseActionCard, BaseDialog, Button, ContentBox, FullScreenTemplateDialog, IconButton, ListContainer, ListItem, TextField, Trash } from "alex-evo-sh-ui-kit";
 import { DialogPortal, SelectField } from "../../../shared";
 import { AddTrigger } from "./AddTrigger";
 import { AddCondition } from "./AddCondition";
@@ -10,6 +10,7 @@ interface AutomationEditorProps {
   automation: Automation;
   onSave: (updatedAutomation: Automation) => void;
   onHide: () => void;
+  onDelete?: (name: string) => void
 }
 
 function formatTrigger(item:TriggerItem){
@@ -21,11 +22,12 @@ function formatTrigger(item:TriggerItem){
   return `${item.service}.${item.data}${option}`
 }
 
-export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, onSave, onHide }) => {
+export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, onSave, onHide, onDelete }) => {
   const [formData, setFormData] = useState<Automation>(automation);
   const [addTrigger, setAddTrigger] = useState(false);
   const [addCondition, setAddCondition] = useState(false);
   const [addAction, setAddAction] = useState<null | "then" | "else_branch">(null);
+  const [deleteAutomationDialog, setDeleteAutomationDialog] = useState<boolean>(false)
 
   const handleChange = <K extends keyof Automation>(field: K, value: Automation[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -145,6 +147,21 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
           </ContentBox>
         ))}
       </div>
+      {
+        onDelete && <Button style={{width: "100%", color: "var(--Error-color)", borderColor:  "var(--Error-color)"}} styleType='outline' onClick={()=>setDeleteAutomationDialog(true)}>delete</Button>
+      }
+      {
+        deleteAutomationDialog &&
+                  <DialogPortal>
+                      <BaseDialog
+                          header="delete automation" 
+                          text={`are you sure you want to remove automation ${deleteAutomationDialog}`} 
+                          onHide={()=>setDeleteAutomationDialog(false)}
+                          onCancel={()=>setDeleteAutomationDialog(false)}
+                          onSuccess={()=>onDelete && onDelete(automation.name)}
+                          />
+                  </DialogPortal>
+      }
     </FullScreenTemplateDialog>
   );
 };

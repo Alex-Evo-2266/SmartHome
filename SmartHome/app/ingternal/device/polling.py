@@ -124,7 +124,7 @@ async def polling(device_data: DeviceSerializeSchema):
 		# Обновление статуса устройства и данных / Update device status and data
 		data = connection_device.get_schema()
 		data.status = StatusDevice.ONLINE
-		logger.info(f"Device {device_data.system_name} data: {data}")
+		logger.debug(f"Device {device_data.system_name} data: {data}")
 		update_device_in_poll(data)
 
 		# LoadingDevice.remove(device_data.system_name)

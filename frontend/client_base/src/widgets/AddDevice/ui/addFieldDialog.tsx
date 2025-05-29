@@ -2,7 +2,7 @@ import { Form, FullScreenTemplateDialog, SegmentedButton } from "alex-evo-sh-ui-
 import { useCallback, useEffect, useState } from "react"
 import { FieldData } from "../models/deviceData"
 import { MODAL_ROOT_ID } from "../../../const"
-import { TypeDeviceField } from "../../../entites/devices"
+import { DeviceClassOptions, TypeDeviceField } from "../../../entites/devices"
 
 const BINARY_HIGH = '1'
 const BINARY_LOW = '0'
@@ -12,7 +12,7 @@ const NUMBER_LOW = '0'
 interface FieldDataProps{
     onHide: ()=>void
     onSave: (data: FieldData)=>void
-
+    option: DeviceClassOptions
 }
 
 function getInitData():FieldData{
@@ -33,7 +33,7 @@ function getOption() {
     return types
 }
 
-export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
+export const AddField:React.FC<FieldDataProps> = ({onHide, onSave, option}) => {
 
     const [value, setValue] = useState<FieldData>(getInitData())
     const [errors, setErrors] = useState<{[key:string]:string}>({})
@@ -54,10 +54,6 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
         setValue(prev=>({...prev, [name]: data}))
     }
 
-    const segmentsChange = (value: string[]) => {
-        setValue(prev=>({...prev, virtual_field: value.includes('virtual'), read_only: value.includes('read only')}))
-    }
-
     useEffect(()=>{
         console.log(value)
     },[value])
@@ -73,7 +69,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
         {
             errors.name = 'заполните имя'
         }
-        if(field.address.length === 0)
+        if(field.address.length === 0 && option.fields_creation_data.address)
         {
             errors.address = 'заполните адрес'
         }
@@ -97,7 +93,10 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
             <div style={{marginInline: '16px'}}>
                 <Form value={value} changeValue={change} errors={errors}>
                     <Form.TextInput border name="name" placeholder="name"/>
-                    <Form.TextInput border name="address" placeholder="address"/>
+                    {
+                        option.fields_creation_data.address &&
+                        <Form.TextInput border name="address" placeholder="address"/>
+                    }
                     <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>
                     {
                     (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?
@@ -108,7 +107,8 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
                     :null
                     }
                     <Form.TextInput border name="unit" placeholder="unit"/>
-                    <SegmentedButton items={['virtual', 'read only']} multiple onChange={segmentsChange}/>
+                    {option.fields_change.virtual_field && <Form.SwitchButtonField name="virtual_field" placeholder="virtual"/>}
+                    {option.fields_change.read_only && <Form.SwitchButtonField name="read_only" placeholder="read only"/>}
                 </Form>
             </div>
         </FullScreenTemplateDialog>

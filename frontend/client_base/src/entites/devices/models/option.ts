@@ -25,6 +25,7 @@ export type OptionSchema = {
 	type_get_data: boolean
 	fields_creation: boolean
 	fields_change: ChangeField
+	fields_creation_data: ChangeField
 	creation_url?: string
 	change_url?: string
 	class_img?: string

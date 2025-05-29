@@ -6,7 +6,7 @@ import json, logging
 from typing import Dict, Any
 from uuid import uuid4
 from app.ingternal.logs.logs import LogManager
-
+from app.pkg.websoket.websocket import WebSocketMenager
 from app.ingternal.device.device_edit_queue.device_queue import DeviceQueue, Types
 from app.ingternal.device.schemas.add_device import AddDeviceSchema, AddDeviceFieldSchema, ReceivedDataFormat, DeviceGetData, TypeDeviceField, FieldGetDataType
 from ..device_field_set import device_set_value
@@ -128,6 +128,7 @@ class ZigbeeServiceCoordinator():
                 if not data:
                     logger.warning("Отсутствует data в сообщении device_interview")
                     return
+                await WebSocketMenager.send_information("info", data)
                 ieee_address = data.get("ieee_address")
                 if not ieee_address:
                     logger.warning("Отсутствует IEEE-адрес устройства")
