@@ -5,21 +5,13 @@ import { DialogPortal, SelectField } from "../../../shared";
 import { AddTrigger } from "./AddTrigger";
 import { AddCondition } from "./AddCondition";
 import { AddAction } from "./AddAction";
+import { joinAutomation } from "../../../shared/lib/helpers/joinAutomation";
 
 interface AutomationEditorProps {
   automation: Automation;
   onSave: (updatedAutomation: Automation) => void;
   onHide: () => void;
   onDelete?: (name: string) => void
-}
-
-function formatTrigger(item:TriggerItem){
-  let option = ""
-  if(item.option)
-    option = `[${item.option}]`
-  if(item.object)
-    return `${item.service}.${item.object}.${item.data}${option}`
-  return `${item.service}.${item.data}${option}`
 }
 
 export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, onSave, onHide, onDelete }) => {
@@ -96,7 +88,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
               <ListItem
                 key={index}
                 hovered
-                header={formatTrigger(item)}
+                header={joinAutomation([item.service, item.object, item.data], item.option)}
                 control={<IconButton icon={<Trash />} onClick={() => deleteTriggerHandler(index)} />}
               />
             ))}
@@ -119,7 +111,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
               <ListItem
                 key={index}
                 hovered
-                header={`${item.arg1_service}.${item.arg1_object}.${item.arg1_data} ${item.operation} ${item.arg2_service}.${item.arg2_object}.${item.arg2_data}`}
+                header={`${joinAutomation([item.arg1_service, item.arg1_object, item.arg1_data])} ${item.operation} ${joinAutomation([item.arg2_service, item.arg2_object, item.arg2_data])}`}
                 control={<IconButton icon={<Trash />} onClick={() => deleteConditionHandler(index)} />}
               />
             ))}
@@ -136,7 +128,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
                 <ListItem
                   key={index}
                   hovered
-                  header={`${item.service}.${item.object}.${item.field} = ${item.data}`}
+                  header={`${joinAutomation([item.service, item.object, item.field])} = ${item.data}`}
                   control={<IconButton icon={<Trash />} onClick={() => deleteActionHandler(index, branch as "then" | "else_branch")} />}
                 />
               ))}

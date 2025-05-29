@@ -4,6 +4,7 @@ import { useCallback, useState } from "react"
 import { AutomationEditor } from "./EditAutomation"
 import { DialogPortal } from "../../../shared"
 import './style.scss'
+import { joinAutomation } from "../../../shared/lib/helpers/joinAutomation"
 
 interface AutomationItemProps {
     automation: Automation
@@ -50,6 +51,7 @@ export const AutomationItem:React.FC<AutomationItemProps> = ({automation, update
             onClick={()=>setEditAutomationItem(true)}
             header={automation.name}
             control={<Switch size='small' checked={automation.is_enabled} onChange={()=>editStatus(automation.name, automation.is_enabled)}/>}
+            text={`triggers: ${automation.trigger.map(item=>joinAutomation([item.service, item.object, item.data], item.option))}`}
         />
         {
             editAutomationItem &&
