@@ -47,6 +47,7 @@ class DeviceSerializeSchema(BaseModel):
 	status: StatusDevice = StatusDevice.UNKNOWN
 	fields: Optional[List[DeviceSerializeFieldSchema]] = None
 	type_mask: Optional[DeviceTypeSerializeSchema] = None
+	all_types: List[DeviceTypeSerializeSchema] = []
 
 	class Config:  
 		use_enum_values = True

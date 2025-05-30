@@ -1,26 +1,45 @@
-import { ArrowRight, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
+import { ArrowRight, Button, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
 import { useCallback, useState } from "react"
 import { DeviceClassOptions, DeviceSchema } from "../../../entites/devices"
 import { SelectField } from "../../../shared"
 import { DeviceType, DeviceTypeEditData } from "../models/type"
 import { getFieldMap, getFieldsCondidat, getFieldType, getType } from "../helpers/filterFields"
 import { editField } from "../helpers/fieldTypeEdit"
+import { TypeDevice } from "../../../entites/devices/models/type"
+import { useTypeDeviceAPI } from "../api/types"
 
 
-interface TypeDataProps{
-	onHide: ()=>void
-	onSave: (data: DeviceTypeEditData | null)=>void
-	option: DeviceClassOptions
-	data: DeviceSchema
-	types: DeviceType[]
+interface BaseProps {
+  onHide: () => void;
+  option: DeviceClassOptions;
+  data: DeviceSchema;
+  types: DeviceType[];
 }
 
-export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, data, types}) => {
-	const [typeMap, setTypeMap] = useState<DeviceTypeEditData | null>(getType(data.type_mask))
+interface WithType extends BaseProps {
+  type: TypeDevice;
+  onSave: (data: DeviceTypeEditData | null, id: string) => void;
+  onHideAndLoad: () => void;
+}
+
+interface WithoutType extends BaseProps {
+	type?: undefined
+  	onSave: (data: DeviceTypeEditData) => void;
+  	onHideAndLoad?: undefined
+}
+
+type TypeDataProps = WithType | WithoutType;
+
+export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, data, types, type, onHideAndLoad}) => {
+	const [typeMap, setTypeMap] = useState<DeviceTypeEditData | null>(getType(type))
+	const {setTypeMain} = useTypeDeviceAPI()
 
 	const save = useCallback(()=>{
-		onSave(typeMap)
-	},[typeMap])
+		if(type)
+			onSave(typeMap, type?.id)
+		else if(typeMap)
+			onSave(typeMap)
+	},[typeMap, type])
 
 	const changeType = useCallback((newValue: string) => {
 		if(newValue === ""){
@@ -48,6 +67,13 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 		})
 	},[])
 
+	const setMain = useCallback(async()=>{
+		if(type?.id){
+			await setTypeMain(data.system_name, type.id)
+			onHideAndLoad && onHideAndLoad()
+		}
+	},[onHideAndLoad, setTypeMain, data.system_name, type])
+
 	return(
 		<FullScreenTemplateDialog header="Type" onHide={onHide} onSave={save}>
 			<div style={{marginInline: '16px'}}>
@@ -66,6 +92,9 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 							))
 						}
 					</>
+				}
+				{
+					type?.id && <Button onClick={setMain}>set main</Button>
 				}
 			</div>
 		</FullScreenTemplateDialog>

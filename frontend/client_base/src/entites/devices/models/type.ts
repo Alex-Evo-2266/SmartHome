@@ -15,4 +15,5 @@ export interface TypeDevice{
     name_type: string,
     fields: TypeField[],
     device: string
+    main: boolean
 }

@@ -26,7 +26,8 @@ async def serialive_type_model(device_type: TypeDevice, fields_include: bool = T
         data = DeviceTypeSerializeSchema(
             id=device_type.id,
             name_type=device_type.name_type,
-            device=device_type.device
+            device=device_type.device,
+            main=device_type.main
         )
         
         if fields_include:

@@ -1,7 +1,7 @@
 from app.ingternal.device.models.device import Device, DeviceField
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSerializeFieldSchema
 from app.ingternal.device.serialize_model.utils import map_status
-from app.ingternal.device_types.serialize_model.read import get_type_device
+from app.ingternal.device_types.serialize_model.read import get_type_main_device
 from app.ingternal.device_types.exceptions.device_type import DeviceTypeNotFound
 from typing import List
 import logging
@@ -27,7 +27,7 @@ async def serialize_device(device: Device | None, fields_include: bool = False) 
     
     logger.debug(f"Serializing device: {device.system_name}...")  # Log the device being serialized
     try:
-        type_data = await get_type_device(device.system_name)
+        type_data = await get_type_main_device(device.system_name)
     except Exception:
         type_data = None
 

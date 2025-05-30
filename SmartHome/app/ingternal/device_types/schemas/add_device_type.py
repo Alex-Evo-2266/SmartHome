@@ -23,3 +23,7 @@ class AddOrEditDeviceTypeSchema(BaseModel):
 	
 	class Config:  
 		use_enum_values = True
+
+class SetMain(BaseModel):
+	id: str
+	

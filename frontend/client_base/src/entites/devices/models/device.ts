@@ -55,7 +55,8 @@ export enum StatusDevice {
     type_get_data: DeviceGetData;
     status: StatusDevice;
     fields?: DeviceSerializeFieldSchema[];
-    type_mask?: TypeDevice
+    type_mask?: TypeDevice;
+    all_types: TypeDevice[];
   }
   
   export interface DeviceSchema extends DeviceSerializeSchema {

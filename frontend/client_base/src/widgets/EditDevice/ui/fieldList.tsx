@@ -49,7 +49,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
         <>
         {
         option.fields_change.edit && 
-        <div>
+        <div style={{marginBlock: "14px"}}>
             <ContentBox label="field" collapsible border>
                 <Divider/>
                 <ListContainer transparent>

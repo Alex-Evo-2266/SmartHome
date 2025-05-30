@@ -40,6 +40,7 @@ class DeviceTypeSerializeSchema(BaseModel):
 	name_type: TypesDeviceEnum
 	fields: Optional[List[FieldDeviceTypeSerializeSchema]] = None
 	device: Optional[str] = None
+	main: bool = False
 
 	class Config:  
 		use_enum_values = True

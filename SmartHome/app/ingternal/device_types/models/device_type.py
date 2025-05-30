@@ -10,6 +10,7 @@ class TypeDevice(ormar.Model):
 	id: str = ormar.String(max_length=100, primary_key=True)
 	name_type: str = ormar.String(max_length=100)
 	device: str = ormar.String(max_length=100)
+	main: bool = ormar.Boolean(default=True)
 
 class FieldTypeDevice(ormar.Model):
 	ormar_config = base_ormar_config.copy()

@@ -1,6 +1,11 @@
 from app.ingternal.device_types.models.device_type import TypeDevice, FieldTypeDevice
 from app.ingternal.device_types.schemas.add_device_type import AddOrEditDeviceTypeSchema
 from app.ingternal.device_types.serialize_model.utils import get_id
+from app.ingternal.device_types.serialize_model.read import get_type_main_device
+from app.ingternal.device_types.exceptions.device_type import DeviceTypeNotFound
+from app.ingternal.device.get_cached_device_data import invalidate_cache_device_data
+from app.ingternal.device.serialize_model.cach_field import invalidate_cache_field
+from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.logs import get_base_logger
 
 # Настройка логгера
@@ -18,10 +23,18 @@ async def create(type_obj: AddOrEditDeviceTypeSchema):
         # Создание основного типа устройства
         type_id = get_id()
         logger.debug(f"Generated ID for new device type: {type_id}")
+        is_main_type = True
+        try:
+            main_type = await get_type_main_device(type_obj.device)
+            if main_type is not None:
+                is_main_type = False
+        except DeviceTypeNotFound as e:
+            is_main_type = True
         new_type_device = await TypeDevice.objects.create(
             name_type=type_obj.name_type,
             id=type_id,
-            device=type_obj.device
+            device=type_obj.device,
+            main=is_main_type
         )
         logger.info(f"Successfully created base device type: {type_obj.name_type} (ID: {type_id})")
         
@@ -46,7 +59,9 @@ async def create(type_obj: AddOrEditDeviceTypeSchema):
         
         logger.info(f"Completed device type creation. Successfully created {fields_created} "
                   f"out of {len(type_obj.fields)} fields for device type {type_obj.name_type}")
-        
+        invalidate_cache_device_data()
+        invalidate_cache_field(system_name=type_obj.device)
+        DevicesArray.delete(type_obj.device)
         return new_type_device
         
     except Exception as e:

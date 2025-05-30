@@ -40,7 +40,7 @@ async def get_all_type_device() -> List[DeviceTypeSerializeSchema]:
         logger.error(f"Failed to fetch device types: {str(e)}", exc_info=True)
         raise
 
-async def get_type_device(system_name: str) -> DeviceTypeSerializeSchema:
+async def get_type_device(system_name: str) -> List[DeviceTypeSerializeSchema]:
     """
     Получение типа устройства по системному имени устройства
     Args:
@@ -54,6 +54,37 @@ async def get_type_device(system_name: str) -> DeviceTypeSerializeSchema:
         logger.info(f"Fetching device type for device: {system_name}")
         
         device_types: List[TypeDevice] = await TypeDevice.objects.filter(device=system_name).all()
+        
+        if len(device_types) == 0:
+            logger.warning(f"Device type not found for device: {system_name}")
+            raise DeviceTypeNotFound("Device type not found")
+        
+        logger.debug(f"Found device type for {system_name}, proceeding with serialization")
+        serialized_device_type = [await serialive_type_model(device_type, fields_include=True) for device_type in device_types]
+        
+        logger.info(f"Successfully retrieved device type for {system_name}")
+        return serialized_device_type
+        
+    except DeviceTypeNotFound:
+        raise  # Перевыбрасываем уже залогированное исключение
+    except Exception as e:
+        logger.error(f"Error fetching device type for {system_name}: {str(e)}", exc_info=True)
+        raise
+
+async def get_type_main_device(system_name: str) -> DeviceTypeSerializeSchema:
+    """
+    Получение типа устройства по системному имени устройства
+    Args:
+        system_name (str): Системное имя устройства
+    Returns:
+        DeviceTypeSerializeSchema: Сериализованный тип устройства
+    Raises:
+        DeviceTypeNotFound: Если тип устройства не найден
+    """
+    try:
+        logger.info(f"Fetching device type for device: {system_name}")
+        
+        device_types: List[TypeDevice] = await TypeDevice.objects.filter(device=system_name, main=True).all()
         
         if len(device_types) == 0:
             logger.warning(f"Device type not found for device: {system_name}")

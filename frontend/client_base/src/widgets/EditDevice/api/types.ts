@@ -19,22 +19,35 @@ export const useTypeDeviceAPI = () => {
     },[request])
 
     const getType = useCallback(async (systemName:string) => {
-        const data:TypeDevice | null = await request(`/api-devices/device-types/${systemName}`, TypeRequest.GET)
+        const data:{data:TypeDevice[]} = await request(`/api-devices/device-types/${systemName}`, TypeRequest.GET)
+        return data.data
+    },[request])
+
+    const getTypeMain = useCallback(async (systemName:string) => {
+        const data:TypeDevice | null = await request(`/api-devices/device-types/${systemName}/main`, TypeRequest.GET)
         return data
     },[request])
 
-    const updateTypes = useCallback(async (deviceSystemName:string, body: DeviceTypeEditData | null) => {
+    const setTypeMain = useCallback(async (systemName:string, id:string) => {
+        await request(`/api-devices/device-types/${systemName}/main`, TypeRequest.PATCH, {id})
+    },[request])
+
+    const updateTypes = useCallback(async (id:string, body: DeviceTypeEditData | null) => {
         if(!body)
         {
-            await deleteTypes(deviceSystemName)
+            await deleteTypes(id)
         }
         else{
-            await request(`/api-devices/device-types`, TypeRequest.POST, body as any)
+            await request(`/api-devices/device-types/${id}`, TypeRequest.PUT, body as any)
         }
     },[request])
 
-    const deleteTypes = useCallback(async (systemName:string) => {
-        await request(`/api-devices/device-types/${systemName}`, TypeRequest.DELETE)
+    const createTypes = useCallback(async (body: DeviceTypeEditData) => {
+        await request(`/api-devices/device-types`, TypeRequest.POST, body as any)
+    },[request])
+
+    const deleteTypes = useCallback(async (id:string) => {
+        await request(`/api-devices/device-types/${id}`, TypeRequest.DELETE)
     },[request])
 
     useEffect(()=>{
@@ -55,6 +68,9 @@ export const useTypeDeviceAPI = () => {
         types,
         deleteTypes,
         updateTypes,
-        getType
+        getType,
+        getTypeMain,
+        createTypes,
+        setTypeMain
     }
 }
