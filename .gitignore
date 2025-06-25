@@ -67,3 +67,5 @@ service_config.yml
 
 /MatterController/connectedhomeip/
 /MatterController/
+
+/SmartHome_env_dev_local/

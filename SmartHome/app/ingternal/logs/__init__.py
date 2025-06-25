@@ -1,4 +1,4 @@
-from app.ingternal.logs.handlers import handler_base, handler_polling, handler_automatization, handler_device_crud, handler_device_base_calss, handler_device_save
+from app.ingternal.logs.handlers import handler_base, handler_polling,handler_room, handler_automatization, handler_device_crud, handler_device_base_calss, handler_device_save
 from app.ingternal.logs.logs import MyLogger
 
 get_base_logger = MyLogger(handler_base)
@@ -7,3 +7,4 @@ get_automatization = MyLogger(handler_automatization)
 get_device_crud = MyLogger(handler_device_crud)
 get_device_base_class = MyLogger(handler_device_base_calss)
 get_device_save = MyLogger(handler_device_save)
+get_room_logger = MyLogger(handler_room)
