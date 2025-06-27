@@ -1,4 +1,4 @@
-import { FilterGroup, GridLayout, GridLayoutItem, Panel, SearchAndFilter, SelectedFilters, Typography } from 'alex-evo-sh-ui-kit';
+import { BaseDialog, FilterGroup, GridLayout, GridLayoutItem, MoreVertical, Panel, SearchAndFilter, SelectedFilters, Trash, Typography } from 'alex-evo-sh-ui-kit';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRoomAPI } from '../../../entites/rooms/api/roomsAPI';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -8,7 +8,7 @@ import { TypeDevice } from '../../../entites/devices/models/type';
 import { useAppSelector } from '../../../shared/lib/hooks/redux';
 import { DeviceCard } from '../../../widgets/DeviceCard';
 import './RoomPage.scss'
-import { capitalizeFirst } from '../../../shared';
+import { capitalizeFirst, DialogPortal, IconButtonMenu } from '../../../shared';
 
 function isTypeDevice(value: unknown): value is TypeDevice{
   return (
@@ -89,11 +89,12 @@ export const RoomPage:React.FC = () => {
 
     const navigate = useNavigate();
     const { name } = useParams<{name: string}>();
-    const {getRoom} = useRoomAPI()
+    const {getRoom, deleteRoom} = useRoomAPI()
     const [room, setRoom] = useState<Room | null>(null)
     const {devicesData} = useAppSelector(state=>state.devices)
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({})
+    const [deleteVisible, setDeleteVisible] = useState<boolean>(false)
 
     const filters = useMemo<FilterGroup[]>(()=>{
         const keys_val = extractUniqueValues(devicesData, ['type_mask', 'class_device', 'status'])
@@ -112,6 +113,13 @@ export const RoomPage:React.FC = () => {
         setRoom(room)
     },[name])
 
+    const deleteRoomHandler = useCallback(async()=>{
+      if(!name) return;
+      await deleteRoom(name)
+      setDeleteVisible(false)
+      navigate('/room')
+    },[deleteRoom, name])
+
     useEffect(()=>{
         loadRoom()
     },[loadRoom])
@@ -125,6 +133,13 @@ export const RoomPage:React.FC = () => {
         <div className="room-page-device-list container-page">
             <Panel borderRadius={24} className='rooms-header-panel'>
                 <Typography type='heading'>{capitalizeFirst(name)}</Typography>
+                <IconButtonMenu icon={<MoreVertical/>} blocks={[{
+                  items:[{
+                    title: "delete",
+                    icon: <Trash/>,
+                    onClick: ()=>setDeleteVisible(true)
+                  }]
+                }]}/>
             </Panel>
             <SearchAndFilter filters={filters} onSearch={setSearchQuery} onChangeFilter={setSelectedFilters} selectedFilters={selectedFilters}/>
             <GridLayout className="device-container" itemMaxWith="300px" itemMinWith="200px">
@@ -136,6 +151,13 @@ export const RoomPage:React.FC = () => {
                 ))
             }
             </GridLayout>
+            { 
+              deleteVisible&&
+              <DialogPortal>
+                <BaseDialog header='delete room' text='delete room' onHide={()=>setDeleteVisible(false)} onSuccess={deleteRoomHandler}/>
+              </DialogPortal>
+            }
+            
         </div>
     )
 }
