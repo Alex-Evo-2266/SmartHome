@@ -32,6 +32,7 @@ class AddDeviceSchema(BaseModel):
 	type_command: ReceivedDataFormat = ReceivedDataFormat.JSON
 	type_get_data: DeviceGetData = DeviceGetData.PUSH
 	fields: List[AddDeviceFieldSchema]
+	room: Optional[str] = None
 	
 	class Config:  
 		use_enum_values = True

@@ -7,6 +7,7 @@ import { SettingsPage } from "../pages/Settings"
 import { AutomationPage } from "../pages/Automations"
 import { ModulesPage } from "../pages/modules"
 import { DetailDevice } from "../pages/DeviceDetail/ui/DeviceDetail"
+import { RoomPage, RoomsPage } from "../pages/Room"
 
 
 
@@ -25,6 +26,9 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 					<Route path="automation" element={<AutomationPage/>}/>
 					<Route path="modules/:moduleName/:pageName" element={<ModulesPage/>}/>
 					<Route path="settings" element={<SettingsPage/>}/>
+					<Route path="room" element={<RoomsPage/>}/>
+					<Route path="room/:name" element={<RoomPage/>}/>
+					
 					<Route path="/*" element={<Navigate replace to="/home" />} />
 				</Route>
 				:<>

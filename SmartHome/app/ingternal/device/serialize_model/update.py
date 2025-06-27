@@ -10,6 +10,7 @@ from app.ingternal.device.serialize_model.utils import duble_field
 from app.ingternal.device.schemas.enums import DeviceStatusField, ReceivedDataFormat, DeviceGetData
 from app.ingternal.device.serialize_model.cach_field import invalidate_cache_field
 from app.ingternal.device.get_cached_device_data import invalidate_cache_device_data
+from app.ingternal.room.serialize_model.room import is_room_exists
 
 from app.ingternal.logs import get_base_logger
 
@@ -34,7 +35,11 @@ async def edit_device(system_name: str, data: EditDeviceSchema):
     device.token = data.token
     device.type_command = data.type_command
     device.type_get_data = data.type_get_data
-    await device.update(_columns=["system_name", "name", "type", "address", "token", "type_command", "type_get_data", "type_get_data"])
+    if is_room_exists(data.room):
+        device.room = data.room
+    else:
+        device.room = None
+    await device.update(_columns=["system_name", "name", "type", "address", "token", "type_command", "type_get_data", "type_get_data", "room"])
     invalidate_cache_field(system_name)
     invalidate_cache_device_data()
      # Удаление из кэша

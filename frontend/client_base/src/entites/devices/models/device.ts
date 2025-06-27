@@ -57,6 +57,8 @@ export enum StatusDevice {
     fields?: DeviceSerializeFieldSchema[];
     type_mask?: TypeDevice;
     all_types: TypeDevice[];
+    room?: string
+    position_in_room?: string
   }
   
   export interface DeviceSchema extends DeviceSerializeSchema {

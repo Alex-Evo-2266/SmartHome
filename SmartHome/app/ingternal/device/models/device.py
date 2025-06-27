@@ -3,7 +3,7 @@ from ormar import ReferentialAction
 from app.pkg.ormar.dbormar import base_ormar_config
 from typing import Optional, Dict, Union
 from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, FieldGetDataType, DeviceGetData, DeviceStatusField, StatusDevice, DeviceFieldCategory
-
+from app.ingternal.room.models.room import Room
 
 class Device(ormar.Model):
 	ormar_config = base_ormar_config.copy()
@@ -17,6 +17,8 @@ class Device(ormar.Model):
 	type_command: ReceivedDataFormat = ormar.String(max_length=200, default=ReceivedDataFormat.JSON)
 	type_get_data: DeviceGetData = ormar.String(max_length=200, default=DeviceGetData.PUSH)
 	status: DeviceStatusField = ormar.String(max_length=200, default=DeviceStatusField.LINK)
+	room: Optional[Room] = ormar.ForeignKey(Room, related_name="devices",default=None, nullable=True, ondelete=ReferentialAction.SET_NULL)
+	position_in_room: Optional[str] = ormar.String(max_length=200,nullable=True, default=None)
 	
 class DeviceField(ormar.Model):
 	ormar_config = base_ormar_config.copy()

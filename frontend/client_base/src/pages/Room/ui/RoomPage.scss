@@ -1,0 +1,16 @@
+.room-card{
+    width: 100%;
+    margin: 5px;
+    text-align: center;
+}
+
+.rooms-header-panel{
+    text-align: center;
+    padding: 5px;
+}
+
+.room-page-device-list{
+    & > *{
+        margin-bottom: 5px;
+    }
+}

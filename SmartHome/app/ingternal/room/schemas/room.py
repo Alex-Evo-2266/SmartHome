@@ -1,25 +1,31 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 class RoomCreate(BaseModel):
     name_room: str
 
-class RoomDevciesUpdate(BaseModel):
-    devices: List[str]
+class DeviceRoom(BaseModel):
+    system_name: str
+    poz: Optional[str] = None
 
-
+class RoomDevicesUpdate(BaseModel):
+    devices: List[DeviceRoom]
 
 class RoomUpdate(BaseModel):
     name_room: str
 
-class RoomDevciesRaw(BaseModel):
+class RoomDevicesRaw(BaseModel):
     name_room: str
-    devices: List[str]
+    devices: List[DeviceRoom]
 
 class RoomDevciesRawList(BaseModel):
-    rooms: List[RoomDevciesRaw]
+    rooms: List[RoomDevicesRaw]
 
-class RoomDevciesMove(BaseModel):
+class RoomDevicesLink(BaseModel):
     name_room: str
     device: str
-    poz: str
+
+class RoomDevicesMove(BaseModel):
+    name_room: str
+    device: str
+    poz: Optional[str] = None

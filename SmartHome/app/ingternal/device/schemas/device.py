@@ -48,6 +48,8 @@ class DeviceSerializeSchema(BaseModel):
 	fields: Optional[List[DeviceSerializeFieldSchema]] = None
 	type_mask: Optional[DeviceTypeSerializeSchema] = None
 	all_types: List[DeviceTypeSerializeSchema] = []
+	room: Optional[str] = None
+	position_in_room: Optional[str] = None
 
 	class Config:  
 		use_enum_values = True

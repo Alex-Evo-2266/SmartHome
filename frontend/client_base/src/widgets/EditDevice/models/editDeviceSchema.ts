@@ -22,6 +22,7 @@ export type EditDeviceData = {
     type_get_data?: 'pull' | 'push'
     type_command?: string
     fields: FieldData[]
+    room?: string
 }
 
 export type EditDeviceDataSendSchema = {

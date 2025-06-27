@@ -14,3 +14,5 @@ export {useDebounce} from './lib/hooks/debounce.hook'
 export {Bulb} from './ui/Lamp/Lamp'
 
 export {getCurrentDateTime} from './lib/helpers/timeFormat'
+
+export {capitalizeFirst} from './lib/helpers/capitalizeFirst'

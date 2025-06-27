@@ -6,6 +6,7 @@ import { EditDeviceData, FieldData } from "../models/editDeviceSchema"
 import { FieldList } from "./fieldList"
 import { useEditDevice } from "../api/editDevice"
 import { EditType } from "./editType"
+import { SelectRoom } from "../../../features/Room"
 
 interface DeviceDataProps{
     data: DeviceSchema
@@ -35,7 +36,8 @@ function getInitData(data:DeviceSchema):EditDeviceData{
         address: data.address,
         token: data.token,
         type_get_data: data.type_get_data,
-        fields: data.fields?.map(serializeField) ?? []
+        fields: data.fields?.map(serializeField) ?? [],
+        room: data.room
     }
 }
 
@@ -71,6 +73,13 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
         setValue(prev=>({...prev, [name]: data}))
     }
 
+    const changeRoom = (roomName: string) => {
+        if(roomName == "")
+            setValue(prev=>({...prev, room: undefined}))
+        else
+            setValue(prev=>({...prev, room: roomName}))
+    }
+
     useEffect(()=>{
         console.log("data",value, option, data)
     },[value, option])
@@ -96,6 +105,7 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
                     {option.type_get_data? <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} items={['pull', 'push']} name="type_get_data" border placeholder="type get data"/>:<TextField readOnly border placeholder="type get data" name="type_get_data" value={data.type_get_data}/>}
                     <FieldList fields={value.fields} option={option} onChange={data=>change('fields', data)}/>
                     <EditType option={option} data={data}/>
+                    <SelectRoom value={value.room ?? ""} onChange={changeRoom}/>
                 </Form>
             </ContentBox>
         </FullScreenTemplateDialog>
