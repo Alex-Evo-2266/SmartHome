@@ -112,6 +112,7 @@ services:
       DATA_QUEUE: ${DATA_QUEUE}
       DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
       EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+      DEVICE_VALUE_SEND: ${DEVICE_VALUE_SEND}
     volumes:
       - ./SmartHome:/home/device_service/web
       - media_device_voluem:/home/device_service/web/media

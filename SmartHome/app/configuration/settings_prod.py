@@ -16,3 +16,6 @@ EXCHANGE_DEVICE_DATA = os.environ.get("EXCHANGE_DEVICE_DATA")
 
 RABITMQ_HOST = os.environ.get("RABITMQ_HOST")
 RABITMQ_PORT = os.environ.get("RABITMQ_PORT")
+
+# запрос на обновление состояния устройст
+DEVICE_VALUE_SEND = os.environ.get("DEVICE_VALUE_SEND")

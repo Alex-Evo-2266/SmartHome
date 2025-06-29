@@ -62,7 +62,6 @@ async def startup():
     def df(data):
         logger.info(f"load device")
 
-
     devices_listener.connect(DATA_DEVICE_QUEUE, df)
 
     logger.info("Device service started successfully.")

@@ -8,7 +8,7 @@ from app.pkg import itemConfig, ConfigItemType, __config__
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.configuration.loop.loop import loop
 from app.pkg.ormar.dbormar import database
-from app.configuration.settings import FREQUENCY, SEND_DEVICE_CONF, DEVICE_DATA_POLL, EXCHANGE_DEVICE_DATA, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
+from app.configuration.settings import FREQUENCY, DEVICE_VALUE_SEND, SEND_DEVICE_CONF, DEVICE_DATA_POLL, EXCHANGE_DEVICE_DATA, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
 from app.ingternal.device.polling import restart_polling
 from app.ingternal.device.send import restart_send_device_data
 from app.ingternal.device.save import restart_save_data
@@ -22,9 +22,12 @@ from app.ingternal.senderPoll.sender import sender_device, sender_service
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.modules.classes.baseService import BaseService
 
-from app.ingternal.poll.deviceGetData import loadServiceData
-from app.ingternal.poll.setData import setDataService
+from app.ingternal.listener.service.serviceGetData import loadServiceData
+from app.ingternal.listener.service.setData import setDataService
+from app.ingternal.listener.device.device_connected import loadDeviceData
+from app.ingternal.listener.device.device_listener import device_listener
 from app.ingternal.device.device_edit_queue.device_queue import DeviceQueue
+
 
 import tracemalloc
 
@@ -138,5 +141,6 @@ async def startup():
     service_data_poll.subscribe_all("sender", sender_service.send)
 
     loadServiceData.connect(DATA_LISTEN_QUEUE, setDataService)
+    loadDeviceData.connect(DEVICE_VALUE_SEND, device_listener)
 
     logger.info("Device service started successfully.")

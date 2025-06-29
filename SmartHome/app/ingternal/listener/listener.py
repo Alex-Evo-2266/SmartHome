@@ -1,7 +1,6 @@
 from app.pkg.rabitmq import WorkerThread
 from app.configuration.settings import RABITMQ_HOST, RABITMQ_PORT
 
-
 class LoadData:
     def __init__(self):
         self.worker = WorkerThread()
@@ -14,6 +13,3 @@ class LoadData:
 
     def disconnect(self):
         self.worker.stop()
-
-loadDeviceData = LoadData()
-loadServiceData = LoadData()
