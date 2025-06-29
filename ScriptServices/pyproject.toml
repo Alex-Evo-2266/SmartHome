@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "scriptservices"
+version = "0.1.0"
+description = ""
+authors = ["Alex-Evo-2266 <ghbdtn2266@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.14"
+ormar = {extras = ["mysql"], version = "^0.20.2"}
+pika = "^1.3.2"
+alembic = "^1.16.2"
+uvicorn = "^0.34.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

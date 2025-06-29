@@ -6,8 +6,9 @@ from app.configuration.loop.loop import loop
 from app.pkg.websoket.websocket import WebSocketMenager
 from app.pkg import __config__
 from app.configuration.settings import TYPE_SEND_DEVICE, SEND_DEVICE_CONF, LOOP_SEND_DEVICE, DEVICE_DATA_POLL
+from app.ingternal.logs import get_base_logger
 
-logger = logging.getLogger(__name__)
+logger = get_base_logger.get_logger(__name__)
 
 # Отправка данных о устройствах
 async def send_device_data():

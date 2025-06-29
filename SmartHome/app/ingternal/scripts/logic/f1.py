@@ -2,6 +2,17 @@ import re
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional, List
+import copy
+
+# token_types.py — типы токенов и регулярные выражения.
+# groups.py — перечисление логических групп выражений.
+# models.py — dataclass Call, представляющий дерево выражений.
+# utils.py — функции отладки (print_call_tree).
+# context.py — получение контекста устройств и комнат.
+# tests/test_parser.py — юнит-тесты для парсера.
+# tests/test_evaluator.py — юнит-тесты для вычисления выражений.
+# parser_module.py для самого CommandAnaliz.
+# evaluator.py для CalculateCall.
 
 # Определение типов токенов
 class TokenType(Enum):
@@ -89,6 +100,20 @@ class Token:
     type: TokenType
     value: str
 
+def print_call_tree(call: Call, indent: int = 0):
+    pad = "  " * indent
+    print(f"{pad}{call.type.name} → {repr(call.value)}")
+    
+    if call.args:
+        print(f"{pad}  Args:")
+        for arg in call.args:
+            print_call_tree(arg, indent + 2)
+
+    if call.atr:
+        print(f"{pad}  Attr:")
+        print_call_tree(call.atr, indent + 2)
+
+
 class CommandAnaliz:
     def __init__(self):
         self.str = ""
@@ -154,9 +179,9 @@ class CommandAnaliz:
                         c.atr = self.I()
                         return c
                     return c
-                raise ValueError(f"Ожидалась закрывающая скобка, получено: '{self.str[:10]}'")
+                raise ValueError(f"Ожидалась закрывающая скобка, получено: '{self.str[:10]}' '{c}'")
             return c
-        raise ValueError(f"Ожидался идентификатор, получено: '{self.str[:10]}'")
+        raise ValueError(f"Ожидался идентификатор, получено: '{self.curToken.type} = {self.curToken.value}'")
 
     def P1(self):
         '''обработка чисел и группировки в скобках'''
@@ -294,9 +319,179 @@ class CommandAnaliz:
         return Call(type=Groups.LIST, value=None, args=items)
 
 
+class CalculateCall():
+
+    @staticmethod
+    def get_value_from_context(path: Call, context: dict):
+        """Рекурсивно достаёт значение из контекста по OBJECT цепочке."""
+        if path is None:
+            return None
+        if path.type == Groups.IDENTIFIC:
+            return context.get(path.value, None)
+        elif path.type == Groups.OBJECT:
+            new_context = context.get(path.value, None)
+            if type(new_context) is dict:
+                return CalculateCall.get_value_from_context(path.atr, new_context)
+            else:
+                return None
+        return None
+
+    @staticmethod
+    def convert(value):
+        """Простое приведение типов"""
+        if isinstance(value, str):
+            if value.lower() in ("true", "false"):
+                return value.lower() == "true"
+            try:
+                return int(value) if '.' not in value else float(value)
+            except ValueError:
+                return value
+        return value
+
+    @staticmethod
+    def evaluate_call(call: Call, context: dict):
+        if call.type == Groups.NUMBER:
+            return CalculateCall.convert(call.value)
+
+        if call.type == Groups.IDENTIFIC:
+            return CalculateCall.convert(context.get(call.value))
+
+        if call.type == Groups.OBJECT:
+            return CalculateCall.convert(CalculateCall.get_value_from_context(call, context))
+
+        if call.type == Groups.SET:
+            # Присваивание: call.value = call.args[0]
+            right = CalculateCall.evaluate_call(call.args[0], context)
+            call.args = [right]
+            return call  
+
+        if call.type == Groups.PLUS:
+            return CalculateCall.evaluate_call(call.args[0], context) + CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.MINUS:
+            return CalculateCall.evaluate_call(call.args[0], context) - CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.MULTIPLY:
+            return CalculateCall.evaluate_call(call.args[0], context) * CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.DIVIDE:
+            return CalculateCall.evaluate_call(call.args[0], context) / CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.EQUALLY:
+            return CalculateCall.evaluate_call(call.args[0], context) == CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.NOT_EQUALLY:
+            return CalculateCall.evaluate_call(call.args[0], context) != CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.LESS:
+            return CalculateCall.evaluate_call(call.args[0], context) < CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.MORE:
+            return CalculateCall.evaluate_call(call.args[0], context) > CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.LESS_OR_EQUALLY:
+            return CalculateCall.evaluate_call(call.args[0], context) <= CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.MORE_OR_EQUALLY:
+            return CalculateCall.evaluate_call(call.args[0], context) >= CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.AND:
+            return CalculateCall.evaluate_call(call.args[0], context) and CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.OR:
+            return CalculateCall.evaluate_call(call.args[0], context) or CalculateCall.evaluate_call(call.args[1], context)
+
+        if call.type == Groups.NOT:
+            return not CalculateCall.evaluate_call(call.args[1], context)
+        
+        if call.type == Groups.GROUP:
+            return CalculateCall.evaluate_call(call.args[0], context)
+
+        raise NotImplementedError(f"Операция {call.type} не поддерживается")
+
+devices = {
+            "lamp1": {
+                "f1": "45",
+                "f2": "True"
+            },
+            "lamp2": {
+                "f1": "76",
+                "f2": "False"
+            },
+            "lamp3": {
+                "f1": "56",
+                "f2": "False"
+            },
+            "d2": {
+                "t4": "78",
+                "f3": "True"
+            }
+        }
+
+rooms_dict = {
+    "r1":{
+        "light": {
+            "state": [ 
+                {
+                    "system_name": "lamp2",
+                    "field": "f2"
+                },
+                {
+                    "system_name": "lamp3",
+                    "field": "f2"
+                }
+            ],
+            "brightness": [
+                {
+                    "system_name": "lamp3",
+                    "field": "f1"
+                },
+                {
+                    "system_name": "lamp2",
+                    "field": "f1"
+                }
+            ]
+        },
+        "door": {
+            "state": [
+                {
+                    "system_name": "d2",
+                    "field": "f3"
+                }
+            ]
+        }
+    }
+}
+def g(confs:list[dict], devices:dict[str, dict]):
+    values = []
+    for dev_conf in confs:
+        name = dev_conf.get("system_name")
+        field = dev_conf.get("field")
+        device = devices.get(name, None)
+        if device is None:
+            continue
+        value = device.get(field, None)
+        if device is None:
+            continue
+        values.append(value)
+    if len(values) == 1:
+        return values[0]
+    return min(*values)
+def get_context(room:dict, devices:dict):
+    room_copy = copy.deepcopy(room)
+    for name in room_copy:
+        for dev_name in room_copy[name]:
+            for field_name in room_copy[name][dev_name]:
+                room_copy[name][dev_name][field_name] = g(room_copy[name][dev_name][field_name], devices)
+    
+    return{
+        "device": devices,
+        "room": room_copy
+    }
 
 # Пример использования
 if __name__ == "__main__":
+
     test = CommandAnaliz()
 
     exs = [
@@ -313,17 +508,72 @@ if __name__ == "__main__":
         "fe.f.g(5, 4 + 6 * 2).s.g()",
         "fe.f.g4(56 + 4).s.g()",
         "fe.f.g4(56 + 4.7).s.g()",
-        "device.lamp1.brigtnes = device.lightSens.lum * 5",
+        "device.lamp1.brightness = device.lightSens.lum * 5",
     ]
 
     for ex in exs:
 
         test.set_text(ex)
         try:
-            parsed_result = test.get_tree()
             print()
-            print(parsed_result)
+            print(ex)
+            parsed_result = test.get_tree()
+            print_call_tree(parsed_result)
             print()
         except Exception as e:
             print("Error", e)
 
+    context = get_context(rooms_dict, devices)
+    expr = "device.lamp1.f1 = (2 + room.r1.light.brightness)"
+    parser = CommandAnaliz()
+    parser.set_text(expr)
+    call_tree = parser.get_tree()
+    print_call_tree(call_tree)
+
+    result = CalculateCall.evaluate_call(call_tree, context)
+    print("Результат:", result)
+
+
+
+import pytest
+
+# Тестовые выражения и ожидаемые типы корневого узла
+test_cases = [
+    ("a = b + c", Groups.SET),
+    ("a = (5 + 6) * 9", Groups.SET),
+    ("a = 5 + 6 * 9", Groups.SET),
+    ("dev.gf.le()", Groups.OBJECT),
+    ("dev.gf.le", Groups.OBJECT),
+    ("fe.f.g().g()", Groups.OBJECT),
+    ("fe.f.g(5, 4 + 6 * 2).s.g()", Groups.OBJECT),
+    ("device.lamp1.brigtnes = device.lightSens.lum * 5", Groups.SET),
+    ("a >= b && a < c", Groups.AND),
+    ("a == b || c != d", Groups.OR),
+]
+
+@pytest.mark.parametrize("expr, expected_group", test_cases)
+def test_parser_returns_correct_group(expr, expected_group):
+    parser = CommandAnaliz()
+    parser.set_text(expr)
+    result = parser.get_tree()
+    assert isinstance(result, Call)
+    assert result.type == expected_group
+
+context = get_context(rooms_dict, devices)
+print(f"context: {context}")
+test_calculate_cases = [
+    ("device.lamp1.f1 + 5 * (2 + room.r1.light.brightness)", 335, context),
+    ("device.lamp1.f1 = (2 + room.r1.light.brightness)", Call(type=Groups.SET, value=Call(type=Groups.OBJECT, value="device", args=[], atr=Call(type=Groups.OBJECT, value="lamp1", args=[], atr=Call(Groups.IDENTIFIC, args=[], atr=None, value="f1"))), args=[58], atr=None), context),
+    ("device.lamp1.f2 == room.r1.light.state", False, context),
+    ("device.lamp1.f2 == room.r1.door.state", True, context),
+    ("device.lamp1.f2", True, context),
+    ("room.r1.light.state", False, context),
+]
+
+@pytest.mark.parametrize("expr, expected_res, context", test_calculate_cases)
+def test_calculate(expr, expected_res, context):
+    parser = CommandAnaliz()
+    parser.set_text(expr)
+    result = parser.get_tree()
+    res = CalculateCall.evaluate_call(result, context)
+    assert res == expected_res

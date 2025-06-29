@@ -3,7 +3,6 @@ from typing import Callable, Dict, List, Awaitable, Generic, TypeVar
 import time
 import logging
 import asyncio, json
-from app.ingternal.utils.throttle import async_throttle
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +16,6 @@ class ObservableDict(Generic[T]):
         self._global_subscribers: Dict[str, Callable[[str, T], Awaitable[None]]] = {}
         logger.info("ObservableDict инициализирован")
 
-    @async_throttle(1)
     async def _notify_subscribers(self, key: str, value: T):
         
         # Уведомляем подписчиков ключа

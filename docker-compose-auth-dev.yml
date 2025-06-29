@@ -14,6 +14,19 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  sh_db_script:
+    image: mariadb
+    # image: 459below/mariadb-armv7:latest
+    restart: always
+    ports:
+      - 3309:3306
+    volumes:
+      - bd_data_script:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_SCRIPT_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_SCRIPT_DATABASE}
+      MYSQL_USER: ${MYSQL_SCRIPT_USER}
+      MYSQL_PASSWORD: ${MYSQL_SCRIPT_PASSWORD}
   sh_auth_db:
     image: mariadb
     # image: 459below/mariadb-armv7:latest
@@ -98,6 +111,7 @@ services:
       DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
       DATA_QUEUE: ${DATA_QUEUE}
       DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
+      EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
     volumes:
       - ./SmartHome:/home/device_service/web
       - media_device_voluem:/home/device_service/web/media
@@ -121,9 +135,39 @@ services:
       DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
       DATA_QUEUE: ${DATA_QUEUE}
       DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
+      EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
     volumes:
       - ./PagesServices:/home/device_service/web
       - media_page_voluem:/home/device_service/web/media
+  
+  script_service:
+    build: ./ScriptServices
+    restart: always
+    command: bash -c "uvicorn app:create_app --reload --port=8008 --host='0.0.0.0'"
+    ports:
+      - 1246:8008
+    depends_on:
+      sh_db_script:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    expose:
+      - 8008
+    environment:
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
+      DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
+      DEVICE_VALUE_SEND: ${DEVICE_VALUE_SEND}
+      DATA_SCRIPT: ${DATA_SCRIPT}
+      SMARTHOME_SCRIPT_BD_HOST: ${SMARTHOME_SCRIPT_BD_HOST}
+      SMARTHOME_SCRIPT_BD_PORT: ${SMARTHOME_SCRIPT_BD_PORT}
+      SMARTHOME_SCRIPT_BD_NAME: ${MYSQL_SCRIPT_DATABASE}
+      SMARTHOME_SCRIPT_BD_USER: ${MYSQL_SCRIPT_USER}
+      SMARTHOME_SCRIPT_BD_PASSWORD: ${MYSQL_SCRIPT_PASSWORD}
+      EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+    volumes:
+      - ./ScriptServices:/home/script_service/web
+
   nginx:
     build: ./Nginx
     ports:
@@ -133,6 +177,7 @@ services:
       - email_service
       - device_service
       - page_service
+      - script_service
       # - client
     volumes:
       - media_voluem:/home/smart_home/web/media/auth
@@ -220,3 +265,4 @@ volumes:
   bd_auth_data:
   bd_data:
   media_page_voluem:
+  bd_data_script:

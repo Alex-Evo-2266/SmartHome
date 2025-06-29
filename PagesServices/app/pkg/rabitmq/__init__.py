@@ -1,1 +1,1 @@
-from .rabitmq import WorkerThread, RabbitMQProducer
+from .rabitmq import WorkerThread, RabbitMQProducer, FanoutConsumer

@@ -8,7 +8,7 @@ from app.pkg import itemConfig, ConfigItemType, __config__
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.configuration.loop.loop import loop
 from app.pkg.ormar.dbormar import database
-from app.configuration.settings import FREQUENCY, SEND_DEVICE_CONF, DEVICE_DATA_POLL, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
+from app.configuration.settings import FREQUENCY, SEND_DEVICE_CONF, DEVICE_DATA_POLL, EXCHANGE_DEVICE_DATA, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
 from app.ingternal.device.polling import restart_polling
 from app.ingternal.device.send import restart_send_device_data
 from app.ingternal.device.save import restart_save_data
@@ -131,7 +131,7 @@ async def startup():
         logger.error(f"Failed to start main loop: {e}")
 
     data_poll: ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
-    sender_device.connect(DATA_DEVICE_QUEUE, data_poll)
+    sender_device.connect(EXCHANGE_DEVICE_DATA, data_poll)
     data_poll.subscribe_all("sender", sender_device.send)
     service_data_poll: ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
     sender_service.connect(DATA_QUEUE, service_data_poll)

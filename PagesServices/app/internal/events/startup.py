@@ -1,7 +1,7 @@
 import logging, asyncio
 from app.pkg import itemConfig, ConfigItemType, __config__
 from app.internal.poll.serviceDataPoll import servicesDataPoll, ObservableDict
-from app.configuration.settings import DEVICE_DATA_POLL, SERVICE_DATA_POLL, DATA_DEVICE_QUEUE, DATA_QUEUE
+from app.configuration.settings import DEVICE_DATA_POLL, SERVICE_DATA_POLL, DATA_DEVICE_QUEUE, DATA_QUEUE, EXCHANGE_DEVICE_DATA
 from app.internal.poll.schemas.device import DeviceSchema
 from typing import Dict, List
 from app.internal.poll.deviceGetData import loadServiceData, loadDeviceData
@@ -25,7 +25,7 @@ async def startup():
 	getModule()
 
 	loadServiceData.connect(DATA_QUEUE, setDataService)
-	loadDeviceData.connect(DATA_DEVICE_QUEUE, setDataDevice)
+	loadDeviceData.connect(EXCHANGE_DEVICE_DATA, setDataDevice)
 
 	init_sender()
 	

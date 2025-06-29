@@ -1,11 +1,8 @@
 import pika, json
 from threading import Thread
-from app.ingternal.logs.logs import LogManager, MyLogger
-from app.configuration.settings import LOGS_LEVEL
+from app.internal.logs import get_sender_logger
 
-rabbitHandler = LogManager("rabbitLog", LOGS_LEVEL)
-logger_obg = MyLogger(rabbitHandler)
-logger = logger_obg.get_logger(__name__)
+logger = get_sender_logger.get_logger(__name__)
 
 class WorkerThread(Thread):
 	def __init__(self):
@@ -148,38 +145,6 @@ class RabbitMQProducer:
 			self.connection.close()
 			logger.info("Connection closed")
 
-class RabbitMQProducerFanout:
-	def __init__(self, host='localhost', port=5672, exchange_name='broadcast'):
-		self.host = host
-		self.port = port
-		self.exchange_name = exchange_name
-		self.connection = None
-		self.channel = None
-
-	def connect(self):
-		"""Устанавливает соединение и объявляет fanout exchange."""
-		self.connection = pika.BlockingConnection(
-			pika.ConnectionParameters(host=self.host, port=self.port, heartbeat=600)
-		)
-		self.channel = self.connection.channel()
-		self.channel.exchange_declare(exchange=self.exchange_name, exchange_type='fanout')
-
-	def publish(self, message: dict):
-		"""Публикует сообщение всем подписанным на exchange."""
-		if not self.connection or self.connection.is_closed:
-			self.connect()
-
-		self.channel.basic_publish(
-			exchange=self.exchange_name,
-			routing_key='',  # Игнорируется в fanout
-			body=json.dumps(message),
-			properties=pika.BasicProperties(delivery_mode=2)  # persistent
-		)
-
-	def close(self):
-		"""Закрывает соединение."""
-		if self.connection and self.connection.is_open:
-			self.connection.close()
 
 class FanoutConsumer(Thread):
 	def __init__(self, host='localhost', port=5672, exchange='broadcast', callback=None):
