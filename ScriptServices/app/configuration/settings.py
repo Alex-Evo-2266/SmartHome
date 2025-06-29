@@ -22,8 +22,6 @@ ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SCRIPT_AUTOMATION_PREFEX = "automation"
-
 MODULS_DIR = os.path.join(BASE_DIR, "app","moduls")
 
 TIME_UPPDATA = 6

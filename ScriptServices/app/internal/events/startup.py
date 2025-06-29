@@ -9,7 +9,9 @@ from .utils.create_dirs import create_directorys
 from app.internal.device.array.serviceDataPoll import servicesDataPoll
 from app.internal.sender.device_set_value import sender_device
 from app.internal.listener.device import devices_listener
-from app.configuration.settings import DEVICE_VALUE_SEND, DATA_DEVICE_QUEUE
+from app.internal.listener.script import script_listener
+from app.configuration.settings import DEVICE_VALUE_SEND, EXCHANGE_DEVICE_DATA, DATA_SCRIPT
+from app.internal.logs import get_base_logger
 
 import tracemalloc
 
@@ -35,7 +37,6 @@ async def monitor_memory(data:str = ""):
 
 # Logger setup
 # logger = logging.getLogger(__name__)
-from app.internal.logs import get_base_logger
 logger = get_base_logger.get_logger(__name__)
 
 async def startup():
@@ -59,9 +60,10 @@ async def startup():
 
     sender_device.connect(DEVICE_VALUE_SEND)
 
-    def df(data):
+    def df(method, properties, body):
         logger.info(f"load device")
 
-    devices_listener.connect(DATA_DEVICE_QUEUE, df)
+    devices_listener.connect(EXCHANGE_DEVICE_DATA, df)
+    script_listener.connect(DATA_SCRIPT, df)
 
     logger.info("Device service started successfully.")

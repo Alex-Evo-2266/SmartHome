@@ -188,7 +188,8 @@ class FanoutConsumer(Thread):
 			if self._is_interrupted:
 				ch.stop_consuming()
 			if self.callback:
-				self.callback(json.loads(body))
+				body = json.loads(body)
+				self.callback(method, properties, body)
 
 		self.channel.basic_consume(queue=self.queue_name, on_message_callback=on_message, auto_ack=True)
 

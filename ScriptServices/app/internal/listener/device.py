@@ -1,3 +1,3 @@
-from .listener import LoadData
+from .listener import LoadDataDevice
 
-devices_listener = LoadData()
+devices_listener = LoadDataDevice()
