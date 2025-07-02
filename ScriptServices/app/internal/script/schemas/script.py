@@ -68,7 +68,6 @@ class ScriptEdgeCreate(BaseModel):
 class ScriptSerializeCreate(BaseModel):
 	name: str
 	description: Optional[str] = None
-	is_active: bool
 	nods: List[ScriptNodeCreate]
 	edgs: List[ScriptEdgeCreate]
 	
@@ -77,6 +76,18 @@ class ScriptSerializeCreate(BaseModel):
 
 class ScriptSerializeUpdate(ScriptSerializeCreate):
 	id: str
+	is_active: bool
+	
+	class Config:  
+		use_enum_values = True
+
+class CheckText(BaseModel):
+	text: str
+
+class CheckResult(BaseModel):
+	result: bool
+	message: Optional[str] = None
+	index: Optional[int] = None
 	
 	class Config:  
 		use_enum_values = True

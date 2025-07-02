@@ -7,9 +7,10 @@ from datetime import datetime
 async def save_script_to_db(script_data: ScriptSerializeCreate) -> Script:
     # 1. Создание самого сценария
     script = await Script.objects.create(
+        id = uuid.uuid4().hex,
         name=script_data.name,
         description=script_data.description,
-        is_active=script_data.is_active,
+        is_active=True,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -19,13 +20,13 @@ async def save_script_to_db(script_data: ScriptSerializeCreate) -> Script:
 
     # 3. Сохраняем узлы
     for node_in in script_data.nods:
-        real_id = uuid.uuid4()
+        real_id = uuid.uuid4().hex
         node_id_map[node_in.id] = real_id
 
         await ScriptNode.objects.create(
             id=real_id,
             script=script,
-            type=node_in.type.value,
+            type=node_in.type,
             expression=node_in.expression,
             description=node_in.description,
             x=node_in.x,
@@ -41,6 +42,7 @@ async def save_script_to_db(script_data: ScriptSerializeCreate) -> Script:
         target_node = await ScriptNode.objects.get(id=target_id)
 
         await ScriptEdge.objects.create(
+            id = uuid.uuid4().hex,
             script=script,
             source_node=source_node,
             target_node=target_node,

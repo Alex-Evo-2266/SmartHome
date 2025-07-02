@@ -8,6 +8,7 @@ import { AutomationPage } from "../pages/Automations"
 import { ModulesPage } from "../pages/modules"
 import { DetailDevice } from "../pages/DeviceDetail/ui/DeviceDetail"
 import { RoomPage, RoomsPage } from "../pages/Room"
+import { ScriptConstructor } from "../pages/Scripts"
 
 
 
@@ -28,6 +29,7 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 					<Route path="settings" element={<SettingsPage/>}/>
 					<Route path="room" element={<RoomsPage/>}/>
 					<Route path="room/:name" element={<RoomPage/>}/>
+					<Route path="script/constructor" element={<ScriptConstructor/>}/>
 					
 					<Route path="/*" element={<Navigate replace to="/home" />} />
 				</Route>

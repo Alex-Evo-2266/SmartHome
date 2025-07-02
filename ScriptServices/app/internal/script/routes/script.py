@@ -3,10 +3,12 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Dict
 from typing import Optional, List, Union
-from app.internal.script.schemas.script import ScriptSerializeCreate, ScriptSerialize, ScriptSerializeList
+from app.internal.script.schemas.script import ScriptSerializeCreate, ScriptSerialize, ScriptSerializeList, CheckResult, CheckText
 from app.internal.script.serialize.create import save_script_to_db
 from app.internal.script.serialize.get import serialize_script
 from app.internal.script.models.script import Script
+from app.internal.expression_parser.grammar import CommandAnaliz
+from app.internal.logs import get_router_logger
 
 router = APIRouter(
     prefix="/api-scripts/scripts",
@@ -14,7 +16,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-logger = logging.getLogger(__name__)
+logger = get_router_logger.get_logger(__name__)
 
 # Добавление устройства
 @router.post("")
@@ -44,6 +46,21 @@ async def get_secripts_url():
         scripts = await Script.objects.all()
         data = [await serialize_script(script) for script in scripts]
         return ScriptSerializeList(scripts=data)
+    except Exception as e:
+        logger.warning(str(e))
+        return JSONResponse(status_code=400, content={"error": str(e)})
+
+@router.post("/check", response_model=CheckResult)
+async def get_secripts_check_url(data:CheckText):
+    try:
+        parser = CommandAnaliz()
+        parser.set_text(data.text)
+        try:
+            data = parser.get_tree()
+            logger.debug(str(data))
+            return CheckResult(result=True)
+        except Exception as e:
+            return CheckResult(result=False, message=str(e), index=str(len(parser.text) - len(parser.str) - 1))
     except Exception as e:
         logger.warning(str(e))
         return JSONResponse(status_code=400, content={"error": str(e)})

@@ -1,0 +1,21 @@
+import { IconButton, Panel, Pen, Typography } from "alex-evo-sh-ui-kit"
+import { Handle, Position } from '@xyflow/react';
+import { EditNode, ScriptConstructorEditContext } from "../../context/context";
+import { useContext } from "react";
+
+
+export const Action = (props:{data: {label: string, node: EditNode}}) => {
+    const {editNode} = useContext(ScriptConstructorEditContext)
+
+    return(
+        <Panel>
+            <Typography type="body" style={{display: 'block'}}>{props.data.label}</Typography>
+            <Typography type="small">{props.data.node.expression}</Typography>
+            <div>
+                <IconButton size='small' icon={<Pen/>} onClick={()=>editNode(props.data.node)}/>
+            </div>
+            <Handle type="target" position={Position.Top}/>
+            <Handle type="source" position={Position.Bottom} id="true"/>
+        </Panel>
+    )
+}
