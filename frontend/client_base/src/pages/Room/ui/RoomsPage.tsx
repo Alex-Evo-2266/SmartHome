@@ -21,8 +21,8 @@ export const RoomsPage = () => {
             <GridLayout itemWith="300px">
             {
                 rooms.map((item)=>(
-                    <GridLayoutItem>
-                        <RoomCard key={item.name_room} name={item.name_room}></RoomCard>
+                    <GridLayoutItem key={item.name_room}>
+                        <RoomCard name={item.name_room}></RoomCard>
                     </GridLayoutItem>
                 ))
             }

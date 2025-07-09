@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { TypeScriptNode } from "../models/script";
+import { TypeScriptNode } from "../../../entites/script/models/script";
 
 export interface EditNode{
     type: TypeScriptNode

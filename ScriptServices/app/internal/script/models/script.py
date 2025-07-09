@@ -8,7 +8,7 @@ class Script(ormar.Model):
 	ormar_config = base_ormar_config.copy()
 
 	id: str = ormar.String(primary_key=True, max_length=200)
-	name: str = ormar.String(max_length=200)
+	name: str = ormar.String(max_length=200, unique=True)
 	description: Optional[str] = ormar.String(max_length=500, nullable=True)
 	is_active: bool = ormar.Boolean(default=True)
 	created_at: datetime.datetime = ormar.DateTime(default=datetime.datetime.utcnow)

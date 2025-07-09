@@ -24,5 +24,21 @@ def get_context(room: dict, devices: dict):
                 room_copy[name][dev_name][field_name] = g(room_copy[name][dev_name][field_name], devices)
     return {
         "device": devices,
-        "room": room_copy
+        "room": room_copy,
+        "delay": {
+            "method": {
+                "args": ["time"],
+                "call": lambda x, context_command = None: print(f"test 3 {x} com {context_command}")
+            }
+        },
+        "test": {
+            "test2": {
+                "f":{
+                    "method": {
+                        "args": ["time"],
+                        "call": lambda x, context_command = None: print(f"test 3 {x} com {context_command}")
+                    }   
+                }
+            }
+        }
     }

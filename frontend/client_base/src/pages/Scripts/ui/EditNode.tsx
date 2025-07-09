@@ -1,7 +1,7 @@
 import { FullScreenTemplateDialog, TextField, Typography } from "alex-evo-sh-ui-kit"
 import { EditNode } from "../context/context"
 import { ChangeEvent, useCallback, useState } from "react"
-import { useScriptAPI } from "../api/scriptAPI"
+import { useScriptAPI } from "../../../entites/script/api/scriptAPI"
 import { useDebounce } from "../../../shared"
 
 export interface EditNodeDialogProps {

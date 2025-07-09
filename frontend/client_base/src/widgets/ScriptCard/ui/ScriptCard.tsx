@@ -1,13 +1,11 @@
 import { BaseActionCard, Button, Card, FilterGroup, ListContainer, SearchAndFilter, SelectedFilters } from "alex-evo-sh-ui-kit"
-import { Automation, ConditionType, useAutomationAPI } from "../../../entites/automation"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { AutomationEditor } from "./EditAutomation"
-import { DialogPortal } from "../../../shared"
-import './style.scss'
-import { AutomationItem } from "./AutomationItem"
+import { ScriptItem } from "./ScriptItem"
+import { Script, useScriptAPI } from "../../../entites/script"
+import { useNavigate } from 'react-router-dom';
 
 function matchesFilterFromSelected(
-  automation: Automation,
+  automation: Script,
   filters: SelectedFilters
 ): boolean {
     console.log("ds2", filters, automation)
@@ -19,7 +17,7 @@ function matchesFilterFromSelected(
       continue;
     }
 
-    const value = automation[key as keyof Automation];
+    const value = automation[key as keyof Script];
 
     if (value === undefined) return false;
 
@@ -34,65 +32,54 @@ function matchesFilterFromSelected(
 
 
 
-export const AutomationCard = () => {
+export const ScriptCard = () => {
 
-    const {getAutomationAll, addAutomation} = useAutomationAPI()
-    const [automation, setAutomation] = useState<Automation[]>([])
-    const [addAutomationItem, setAddAutomationItem] = useState<boolean>(false)
+    const {getScripts} = useScriptAPI()
+    const [script, setScript] = useState<Script[]>([])
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({})
+    const navigate = useNavigate()
 
     const getData = useCallback(async()=>{
-        const data = await getAutomationAll()
-        setAutomation(data)
-    },[getAutomationAll])
+        const data = await getScripts()
+        setScript(data.scripts)
+    },[getScripts])
 
-    const filteredAutomation = useMemo(()=>automation
+    const filteredAutomation = useMemo(()=>script
         .filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .filter(item => matchesFilterFromSelected(item, selectedFilters))
-        .sort((a, b) => a.name.localeCompare(b.name)),[automation, searchQuery, selectedFilters]) 
+        .sort((a, b) => a.name.localeCompare(b.name)),
+        [script, searchQuery, selectedFilters]
+    ) 
 
     useEffect(()=>{
         getData()
     },[getData])
 
-    const addAutomationHandler =  useCallback(async(data: Automation)=>{
-        if (addAutomationItem){
-            await addAutomation(data)
-            await getData()
-        }
-    },[addAutomationItem])
+    const addScript = () => {
+        navigate("/script/constructor")
+    }
 
     const filters:FilterGroup[] = [{name: "is_enabled", options: ["true", "false"]}]
 
     return(
         <>
-        <Card header="Automation" className="automation-card">
+        <Card header="Script" className="automation-card">
             <SearchAndFilter border onSearch={setSearchQuery} onChangeFilter={setSelectedFilters} filters={filters} selectedFilters={selectedFilters}/>
             <ListContainer transparent>
             {
                 filteredAutomation && filteredAutomation.map((item)=>(
-                    <AutomationItem updateData={getData} automation={item} key={`automation-${item.name}`}/>
+                    <ScriptItem updateData={getData} script={item} key={`script-${item.id}`}/>
                 ))
             }
             </ListContainer>
             
             <BaseActionCard>
-                <Button onClick={()=>setAddAutomationItem(true)}>
-                    add automation
+                <Button onClick={addScript}>
+                    add script
                 </Button>
             </BaseActionCard>
         </Card>
-        {
-            addAutomationItem &&
-            <DialogPortal>
-                <AutomationEditor 
-                    onHide={()=>setAddAutomationItem(false)} 
-                    automation={{condition:[], trigger: [], then: [], else_branch:[], name:"", condition_type:ConditionType.AND}} 
-                    onSave={addAutomationHandler}
-                />
-            </DialogPortal>
-        }
         </>
     )
 }

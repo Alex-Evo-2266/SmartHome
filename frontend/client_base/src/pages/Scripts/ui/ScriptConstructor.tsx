@@ -9,19 +9,18 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { v4 as uuidv4 } from 'uuid'
-import { ScriptCreate, TypeScriptNode } from '../models/script';
+import { ScriptCreate, TypeScriptNode } from '../../../entites/script/models/script';
 import { Trigger } from './block/trigger';
-import { BaseButton, TextField } from 'alex-evo-sh-ui-kit';
+import { BaseButton, FAB, Plus, SelectionDialog, TextField } from 'alex-evo-sh-ui-kit';
 import { Start } from './block/start';
 import { EditNode, ScriptConstructorEditContext } from '../context/context';
 import { Condition } from './block/condition';
 import { Action } from './block/action';
+import { useParams, useNavigate } from 'react-router-dom';
 import './stype.scss'
 import { DialogPortal } from '../../../shared';
 import { EditNodeDialog } from './EditNode';
-import { useScriptAPI } from '../api/scriptAPI';
-
-const LOCAL_STORAGE_KEY = 'unsaved-script';
+import { useScriptAPI } from '../../../entites/script/api/scriptAPI';
 
 interface ScriptNode{
   id:string,
@@ -73,11 +72,48 @@ const toScript = (nodes:ScriptNode[], edges:Edges[], name: string): ScriptCreate
 
 
 export const ScriptConstructor: React.FC = () => {
+  const { id } = useParams<{id: string}>();
   const [nodes, setNodes, onNodesChange] = useNodesState<ScriptNode>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edges>([]);
   const [name, setName] = useState<string>("script")
   const [editHodeDialogVisible, setEditHodeDialogVisible] = useState<EditNode | null>(null)
-  const {createScript} = useScriptAPI()
+  const {createScript, getScript, editScript} = useScriptAPI()
+  const navigate = useNavigate()
+  const [selectNodeDialogVisible, setSelectNodeDialogVisible] = useState<boolean>(false)
+
+  const loadScript = useCallback(async()=>{
+    if(!id)return;
+    const script = await getScript(id)
+    const loadedNodes: ScriptNode[] = script.nods.map((node) => ({
+    id: node.id,
+    type: node.type.toLowerCase() as ScriptNode["type"], // Преобразуем к нужному формату типа
+    position: {
+      x: node.x,
+      y: node.y,
+    },
+    data: {
+      label: node.type.toLowerCase(),
+      node: {
+        id: node.id,
+        type: node.type,
+        expression: node.expression,
+        description: node.description ?? "",
+      },
+    },
+    deletable: node.id !== "start", // Старт не должен быть удаляемым
+  }));
+
+  const loadedEdges: Edges[] = script.edgs.map((edge) => ({
+    id: edge.id,
+    source: edge.id_start,
+    target: edge.id_end,
+    sourceHandle: edge.condition_label,
+  }));
+
+  setNodes(loadedNodes);
+  setEdges(loadedEdges);
+  setName(script.name)
+  },[id, getScript])
 
   const nodeTypes = {trigger: Trigger, start: Start, condition: Condition, action: Action}
  
@@ -141,6 +177,7 @@ export const ScriptConstructor: React.FC = () => {
         y: Math.random() 
       }
     }])
+    setSelectNodeDialogVisible(false)
   }
 
   const editNode = (data: EditNode) => {
@@ -164,43 +201,41 @@ export const ScriptConstructor: React.FC = () => {
 
   const saveScript = useCallback(async()=>{
     const script = toScript(nodes, edges, name)
-    await createScript(script)
-  },[nodes, edges, name])
+    if(id){
+      await editScript(id, script)
+    }
+    else{
+      await createScript(script)
+    }
+    navigate("/automation")
+  },[nodes, edges, name, id])
 
-//   useEffect(() => {
-//     const data = {
-//       nodes,
-//       edges,
-//     };
-//     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-//   }, [nodes, edges]);
+  const items = [
+    {
+      title: "trigger",
+      data: "trigger"
+    },
+    {
+      title: "condition",
+      data: "condition"
+    },
+    {
+      title: "action",
+      data: "action"
+    }
+  ] as const
 
-//   useEffect(() => {
-//   const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-//   if (!saved) return;
-
-//   try {
-//     const { nodes: savedNodes, edges: savedEdges } = JSON.parse(saved);
-
-//     // Проверка: соответствуют ли данные ожидаемой структуре
-//     if (Array.isArray(savedNodes) && Array.isArray(savedEdges)) {
-//       setNodes(savedNodes);
-//       setEdges(savedEdges);
-//     }
-//   } catch (err) {
-//     console.warn("Ошибка при загрузке черновика из localStorage:", err);
-//   }
-// }, []);
-
+  useEffect(()=>{
+    loadScript()
+  },[loadScript])
  
   return (
     <ScriptConstructorEditContext.Provider value={{editNode}}>
     <div className='constructor-container'>
-      <BaseButton onClick={()=>addNode('trigger')}>add trigger</BaseButton>
-      <BaseButton onClick={()=>addNode('condition')}>add condition</BaseButton>
-      <BaseButton onClick={()=>addNode('action')}>add action</BaseButton>
-      <BaseButton onClick={saveScript}>save</BaseButton>
-      <TextField value={name} onChange={changeNameHandler} placeholder="name" border/>
+      <div className='constructor-script-control'>
+        <TextField styleContainer={{height: "64px"}} value={name} onChange={changeNameHandler} placeholder="name" border/>
+        <BaseButton style={{height: "64px", borderRadius: "10px"}} onClick={saveScript}>save</BaseButton>
+      </div>
       <ReactFlow
         className='drow-container'
         nodes={nodes}
@@ -220,6 +255,13 @@ export const ScriptConstructor: React.FC = () => {
         <EditNodeDialog onSave={saveEditNode} data={editHodeDialogVisible} onHide={()=>setEditHodeDialogVisible(null)}/>
       </DialogPortal>
     }
+    {
+      selectNodeDialogVisible &&
+      <DialogPortal>
+        <SelectionDialog header="Select node" items={[...items]} onSuccess={addNode} onHide={()=>setSelectNodeDialogVisible(false)}/>
+      </DialogPortal>
+    }
+    <FAB icon={<Plus/>} onClick={()=>setSelectNodeDialogVisible(true)}/>
     </ScriptConstructorEditContext.Provider>
   );
 }

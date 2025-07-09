@@ -1,3 +1,8 @@
 .tabs-container{
     background-color: var(--Surface-container-color);
 }
+.automation-page{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}

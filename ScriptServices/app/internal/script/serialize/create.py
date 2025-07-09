@@ -50,3 +50,56 @@ async def save_script_to_db(script_data: ScriptSerializeCreate) -> Script:
         )
 
     return script
+
+
+
+async def update_script_to_db(id: str, script_data: ScriptSerializeCreate) -> Script:
+    # 1. Создание самого сценария
+    script = await Script.objects.get_or_none(id=id)
+    if not script:
+        raise Exception("script not found")
+    
+    await ScriptEdge.objects.filter(script=script).delete()
+    await ScriptNode.objects.filter(script=script).delete()
+
+    await script.update(
+        name=script_data.name,
+        description=script_data.description,
+        updated_at=datetime.utcnow()
+    )
+
+    # 2. Словарь соответствия: client_id → real UUID
+    node_id_map: Dict[str, uuid.UUID] = {}
+
+    # 3. Сохраняем узлы
+    for node_in in script_data.nods:
+        real_id = uuid.uuid4().hex
+        node_id_map[node_in.id] = real_id
+
+        await ScriptNode.objects.create(
+            id=real_id,
+            script=script,
+            type=node_in.type,
+            expression=node_in.expression,
+            description=node_in.description,
+            x=node_in.x,
+            y=node_in.y
+        )
+
+    # 4. Сохраняем связи
+    for edge_in in script_data.edgs:
+        source_id = node_id_map[edge_in.id_start]
+        target_id = node_id_map[edge_in.id_end]
+
+        source_node = await ScriptNode.objects.get(id=source_id)
+        target_node = await ScriptNode.objects.get(id=target_id)
+
+        await ScriptEdge.objects.create(
+            id = uuid.uuid4().hex,
+            script=script,
+            source_node=source_node,
+            target_node=target_node,
+            condition_label=edge_in.condition_label,
+        )
+
+    return script

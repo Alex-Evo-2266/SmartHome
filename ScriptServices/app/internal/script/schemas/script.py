@@ -92,3 +92,5 @@ class CheckResult(BaseModel):
 	class Config:  
 		use_enum_values = True
 
+class EditStatus(BaseModel):
+	status: bool

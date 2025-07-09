@@ -3,6 +3,7 @@ import { useScreenSize, ScreenSize, Tabs } from "alex-evo-sh-ui-kit"
 import './Automations.scss'
 import { useState } from "react"
 import { AutomationCard } from "../../../widgets/AutomationCard"
+import { ScriptCard } from "../../../widgets/ScriptCard"
 
 export const AutomationPage = () => {
 
@@ -24,7 +25,7 @@ export const AutomationPage = () => {
                     pageNumber == 0?
                     <AutomationCard/>:
                     pageNumber == 1?
-                    null:
+                    <ScriptCard/>:
                     null
                 }
                 </div>
@@ -35,6 +36,7 @@ export const AutomationPage = () => {
     return(
         <div className="automation-page container-page">
             <AutomationCard/>
+            <ScriptCard/>
         </div>
     )
 }

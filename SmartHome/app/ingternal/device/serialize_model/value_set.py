@@ -5,7 +5,8 @@ from datetime import datetime, timezone
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.models.device import Value
 from app.ingternal.device.serialize_model.utils import create_value_id
-from app.ingternal.device.serialize_model.cach_field import get_cached_last_value, invalidate_cache_for_field, get_cached_fields, CachFieldData
+from app.ingternal.device.cache.invalidate_cache import invalidate_cache_device_data_by_field
+from app.ingternal.device.cache.cach_field import get_cached_last_value, get_cached_fields, CachFieldData
 from app.ingternal.logs import get_device_save
 
 # Настройка логирования
@@ -27,7 +28,7 @@ async def save_values(data: List[DeviceSchema]):
                     id = await create_value_id()
                     current_date_str = datetime.now(timezone.utc).isoformat()
                     values_to_create.append(Value(field=field.id, id=id, value=old_value, datatime=current_date_str, status_device=device.status))
-                    invalidate_cache_for_field(field.id)
+                    invalidate_cache_device_data_by_field(field.id)
                     continue
                 except Exception as e:
                     logger.error(f"Failed to create value ID for field '{field.name}': {e}")
@@ -40,7 +41,7 @@ async def save_values(data: List[DeviceSchema]):
                     id = await create_value_id()
                     current_date_str = datetime.now(timezone.utc).isoformat()
                     values_to_create.append(Value(field=field.id, id=id, value=value, datatime=current_date_str, status_device=device.status))
-                    invalidate_cache_for_field(field.id)
+                    invalidate_cache_device_data_by_field(field.id)
                 except Exception as e:
                     logger.error(f"Failed to create value ID for field '{field.name}': {e}")
     # Создаём записи одним запросом, если есть данные

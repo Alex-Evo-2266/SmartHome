@@ -1,7 +1,6 @@
 from app.ingternal.device_types.models.device_type import TypeDevice
 from app.ingternal.logs import get_base_logger
-from app.ingternal.device.get_cached_device_data import invalidate_cache_device_data
-from app.ingternal.device.serialize_model.cach_field import invalidate_cache_field
+from app.ingternal.device.cache.invalidate_cache import invalidate_cache, invalidate_cache_device_data_by_device
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
 
 # Настройка логгера
@@ -24,8 +23,8 @@ async def delete_type_device_by_device(device_system_name: str):
         await TypeDevice.objects.filter(device=device_system_name).delete()
         
         logger.info(f"Successfully deleted {count} device type(s) for device {device_system_name}")
-        invalidate_cache_device_data()
-        invalidate_cache_field(system_name=device_system_name)
+        invalidate_cache()
+        invalidate_cache_device_data_by_device(system_name=device_system_name)
         DevicesArray.delete(device_system_name)
     except Exception as e:
         logger.error(
@@ -53,8 +52,8 @@ async def delete_type_device(id: str):
         
         
         logger.info(f"Successfully deleted {name} device type id: {id}")
-        invalidate_cache_device_data()
-        invalidate_cache_field(system_name=system_name)
+        invalidate_cache()
+        invalidate_cache_device_data_by_device(system_name=system_name)
         DevicesArray.delete(system_name)
     except Exception as e:
         logger.error(

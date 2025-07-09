@@ -96,7 +96,6 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			self.data.address
 			)
 
-
 	def load(self):
 		pass
 

@@ -9,9 +9,10 @@ from app.ingternal.device.schemas.enums import StatusDevice, DeviceGetData
 from app.ingternal.device.schemas.device import DeviceSerializeSchema
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.serialize_model.utils import get_default_data
-from app.ingternal.device.serialize_model.update import edit_fields
+from app.ingternal.device.serialize_model.update import edit_fields, edit_status_device
 from app.ingternal.device.serialize_model.read import get_serialize_device
-from app.ingternal.device.get_cached_device_data import get_cached_device_data
+from app.ingternal.device.cache.get_cached_device_data import get_cached_device_data
+from collections import defaultdict
 
 # Настройка логирования / Logging setup
 from app.ingternal.logs import get_polling_logger
@@ -19,6 +20,7 @@ from app.ingternal.logs import get_polling_logger
 # Настройка логгера
 logger = get_polling_logger.get_logger(__name__)
 active_tasks: set[asyncio.Task] = set()
+_failed_attempts = defaultdict(int)
 
 class LoadingDevice():
 	"""Класс для управления состоянием загрузки устройств. / Class to manage the loading state of devices."""
@@ -58,6 +60,10 @@ async def init_device(device_data: DeviceSerializeSchema):
 	# Инициализация устройства / Device initialization
 	device = device_class(device_data)
 	await device.async_init()
+	if not device.is_conected:
+		logger.warning(f"Device {device_data.system_name} is offline.")  # Логирование оффлайн устройства
+		_failed_attempts[device_data.system_name] += 1
+		return StatusDevice.OFFLINE
 	await device.save()
 	device.close()
 	del device
@@ -66,6 +72,7 @@ async def init_device(device_data: DeviceSerializeSchema):
 	# Проверка подключения устройства / Check if device is connected
 	if not device.is_conected:
 		logger.warning(f"Device {device_data.system_name} is offline.")  # Логирование оффлайн устройства
+		_failed_attempts[device_data.system_name] += 1
 		return StatusDevice.OFFLINE
 
 	# Обновление полей, если необходимо / Update fields if necessary
@@ -109,6 +116,9 @@ async def polling(device_data: DeviceSerializeSchema):
 			if device == StatusDevice.NOT_SUPPORTED or device == StatusDevice.OFFLINE:
 				update_device_in_poll(get_default_data(device_data, device))
 				LoadingDevice.remove(device_data.system_name)
+				if _failed_attempts[device_data.system_name] >= 10:
+					await edit_status_device(device_data.system_name, False)
+					_failed_attempts[device_data.system_name] = 0
 				return
 			connection_device = device
 		else:
