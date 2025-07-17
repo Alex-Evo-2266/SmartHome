@@ -1,5 +1,6 @@
 import pika, json
 from threading import Thread
+import inspect, asyncio
 from app.internal.logs import get_sender_logger
 
 logger = get_sender_logger.get_logger(__name__)
@@ -21,6 +22,21 @@ class WorkerThread(Thread):
 	def stop(self):
 		self._is_interrupted = True
 
+	def run_async_safely(func, *args, **kwargs):
+		result = func(*args, **kwargs)
+		if inspect.iscoroutine(result):
+			try:
+				loop = asyncio.get_running_loop()
+				# Мы уже в async среде
+				return asyncio.create_task(result)
+			except RuntimeError:
+				try:
+					loop = asyncio.get_event_loop()
+				except RuntimeError:
+					loop = asyncio.new_event_loop()
+					asyncio.set_event_loop(loop)
+				return loop.run_until_complete(result)
+
 	def run(self):
 		self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host))
 		self.channel = self.connection.channel()
@@ -31,8 +47,11 @@ class WorkerThread(Thread):
 			if not all(message):
 				continue
 			method, properties, body = message
-			body = json.loads(body)
-			self.callback(method, properties, body)
+			try:
+				body = json.loads(body)
+				self.run_async_safely(self.callback, method, properties, body)
+			except Exception as e:
+				logger.exception(f"Ошибка обработки сообщения: {e}")
 	
 class Publisher:
 	def __init__(self):

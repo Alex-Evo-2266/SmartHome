@@ -4,6 +4,7 @@ from app.ingternal.device_types.serialize_model.utils import get_id
 from app.ingternal.device_types.serialize_model.read import get_type_main_device
 from app.ingternal.device_types.exceptions.device_type import DeviceTypeNotFound
 from app.ingternal.device.cache.invalidate_cache import invalidate_cache, invalidate_cache_device_data_by_device
+from app.ingternal.room.cache.all_rooms import invalidate_cache_room__type_device_data
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.logs import get_base_logger
 
@@ -60,6 +61,7 @@ async def create(type_obj: AddOrEditDeviceTypeSchema):
                   f"out of {len(type_obj.fields)} fields for device type {type_obj.name_type}")
         invalidate_cache()
         invalidate_cache_device_data_by_device(system_name=type_obj.device)
+        invalidate_cache_room__type_device_data()
         DevicesArray.delete(type_obj.device)
         return new_type_device
         

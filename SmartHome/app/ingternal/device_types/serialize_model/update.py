@@ -2,6 +2,7 @@ from app.ingternal.device_types.schemas.add_device_type import AddOrEditDeviceTy
 from app.ingternal.device_types.serialize_model.delete import delete_type_device
 from app.ingternal.device_types.serialize_model.create import create
 from app.ingternal.device.cache.invalidate_cache import invalidate_cache, invalidate_cache_device_data_by_device
+from app.ingternal.room.cache.all_rooms import invalidate_cache_room__type_device_data
 from app.ingternal.device_types.models.device_type import TypeDevice
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.logs import get_base_logger
@@ -36,6 +37,7 @@ async def update_type_device(data: AddOrEditDeviceTypeSchema, id:str) -> None:
         logger.info(f"Completed device type update for device: {data.device}")
         invalidate_cache()
         invalidate_cache_device_data_by_device(system_name=data.device)
+        invalidate_cache_room__type_device_data()
         DevicesArray.delete(data.device)
     except Exception as e:
         logger.error(
@@ -57,10 +59,12 @@ async def set_main(system_name: str, id:str) -> None:
             await device_type.update(_columns=["main"])
             invalidate_cache()
             invalidate_cache_device_data_by_device(system_name)
+            invalidate_cache_room__type_device_data()
             DevicesArray.delete(system_name)
         else:
             invalidate_cache()
             invalidate_cache_device_data_by_device(system_name)
+            invalidate_cache_room__type_device_data()
             DevicesArray.delete(system_name)
             raise Exception("invalid id")
     except Exception as e:

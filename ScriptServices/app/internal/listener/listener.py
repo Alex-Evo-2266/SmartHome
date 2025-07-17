@@ -2,7 +2,7 @@ from app.pkg.rabitmq import WorkerThread, FanoutConsumer
 from app.configuration.settings import RABITMQ_HOST, RABITMQ_PORT
 
 
-class LoadDataDevice:
+class LoadDataFanout:
     def __init__(self):
         self.worker = FanoutConsumer()
         

@@ -1,9 +1,9 @@
 import logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
-from typing import Optional, List, Union, Dict
 from app.ingternal.room.schemas.room import RoomCreate, RoomDevicesUpdate, RoomUpdate, RoomDevicesRaw, RoomDevciesRawList, RoomDevicesLink
-from app.ingternal.room.serialize_model.room import create_room, delete_room, update_device_room, get_room, update_room, get_room_all
+from app.ingternal.room.serialize_model.room import create_room, delete_room, update_device_room, update_room
+from app.ingternal.room.serialize_model.get_room import get_room, get_room_all
 from app.ingternal.room.serialize_model.device_in_room import room_add_device
 
 router = APIRouter(

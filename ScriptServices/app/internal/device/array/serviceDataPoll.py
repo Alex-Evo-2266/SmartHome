@@ -98,4 +98,5 @@ class ObservableDict(Generic[T]):
     def json(self):
         return json.dumps(self.get_all(), default=lambda o: o.json())
                 
-servicesDataPoll = ObservableDict[ObservableDict]()
+deviceDataPoll = ObservableDict[ObservableDict]()
+roomDataPoll = ObservableDict[ObservableDict]()

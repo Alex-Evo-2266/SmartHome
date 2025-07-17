@@ -1,4 +1,5 @@
 import copy
+from app.internal.device.array.serviceDataPoll import roomDataPoll, deviceDataPoll
 
 def g(confs: list[dict], devices: dict[str, dict]):
     values = []
@@ -16,12 +17,13 @@ def g(confs: list[dict], devices: dict[str, dict]):
         return values[0]
     return min(*values)
 
-def get_context(room: dict, devices: dict):
+def get_context(room: list[dict], devices: dict):
     room_copy = copy.deepcopy(room)
     for name in room_copy:
         for dev_name in room_copy[name]:
             for field_name in room_copy[name][dev_name]:
                 room_copy[name][dev_name][field_name] = g(room_copy[name][dev_name][field_name], devices)
+    print("p8888")
     return {
         "device": devices,
         "room": room_copy,

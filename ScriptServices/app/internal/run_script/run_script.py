@@ -3,7 +3,8 @@ from app.internal.script.schemas.enum import ScriptNodeType
 from app.internal.script.schemas.script import ScriptSerialize, ScriptNode
 from app.internal.expression_parser.grammar import CommandAnaliz
 from app.internal.expression_parser.evaluator import CalculateCall
-from app.internal.expression_parser.context import get_context
+from app.internal.run_script.context_build import get_context
+from app.internal.device.array.serviceDataPoll import deviceDataPoll, roomDataPoll
 import asyncio
 
 async def run(id: str, target = None):
@@ -26,7 +27,6 @@ async def Node1(script:ScriptSerialize, node: ScriptNode):
     await asyncio.gather(*tasks)
 
 async def NodeStart(node: ScriptNode):
-    print(node)
     if node.type == ScriptNodeType.START:
         return "true"
     elif node.type == ScriptNodeType.CONDITION:
@@ -42,6 +42,5 @@ async def calculateNode(node: ScriptNode):
     parser = CommandAnaliz()
     parser.set_text(node.expression)
     result = parser.get_tree()
-    res = CalculateCall.evaluate_call(result, get_context({}, {}))
-    print(res, type(res))
+    res = await CalculateCall.evaluate_call(result, get_context(roomDataPoll.get_all_data(), deviceDataPoll.get_all()))
     return res

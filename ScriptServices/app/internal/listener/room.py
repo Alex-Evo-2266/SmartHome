@@ -1,3 +1,3 @@
 from .listener import LoadDataFanout
 
-devices_listener = LoadDataFanout()
+rooms_listener = LoadDataFanout()

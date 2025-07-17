@@ -28,7 +28,7 @@ async def get_cached_fields(system_name: str) -> Optional[List[CachFieldData]]:
 		fields: List[DeviceField] = await DeviceField.objects.filter(device=system_name).all()
 		value = [CachFieldData(id=item.id, name=item.name) for item in fields]
 		return value
-	except Exception:
+	except Exception as e:
 		return None
 
 def invalidate_cache_field(system_name: str):

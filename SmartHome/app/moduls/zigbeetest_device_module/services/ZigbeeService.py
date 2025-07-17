@@ -7,9 +7,9 @@ from typing import Dict, Any
 from uuid import uuid4
 from app.ingternal.logs.logs import LogManager
 from app.pkg.websoket.websocket import WebSocketMenager
-from app.ingternal.device.device_edit_queue.device_queue import DeviceQueue, Types
 from app.ingternal.device.schemas.add_device import AddDeviceSchema, AddDeviceFieldSchema, ReceivedDataFormat, DeviceGetData, TypeDeviceField, FieldGetDataType
 from ..device_field_set import device_set_value
+from app.configuration.queue import __queue__
 
 from app.ingternal.modules.arrays.serviceDataPoll import ObservableDict, servicesDataPoll
 from app.configuration.settings import DEVICE_DATA_POLL
@@ -138,7 +138,7 @@ class ZigbeeServiceCoordinator():
                 logger.debug(f"p9800 {devices_schemas}")
                 for device in devices_schemas:
                     if device.address == f"{self.root}/{ieee_address}":
-                        DeviceQueue.add(Types.STATUS, key=device.system_name, value=False)
+                        __queue__.add("edit_status", system_name=device.system_name, status=False)
                         logger.info(f"Успешно изменена модель устройства {device.system_name}")
                         return 
             else:
@@ -172,7 +172,7 @@ class ZigbeeServiceCoordinator():
             logger.debug(f"p9800 {devices_schemas}")
             for device in devices_schemas:
                 if device.address == f"{self.root}/{ieee_address}":
-                    DeviceQueue.add(Types.STATUS, key=device.system_name, value=True)
+                    __queue__.add("edit_status", system_name=device.system_name, status=True)
                     logger.info(f"Успешно изменена модель устройства {device.system_name}")
                     return 
             logger.debug([field_data for field_data in definition.get("exposes", [])])
@@ -192,7 +192,7 @@ class ZigbeeServiceCoordinator():
             logger.info(f"Успешно создана модель устройства {device.name} (IEEE: {ieee_address})")
             logger.debug(f"Детали устройства: {device}")
 
-            DeviceQueue.add(Types.ADD ,key="", value=device)
+            __queue__.add("add", object=device)
 
         except KeyError as e:
             logger.error(f"Отсутствует обязательное поле {e} в данных устройства")

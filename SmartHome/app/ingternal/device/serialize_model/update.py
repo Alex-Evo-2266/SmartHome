@@ -9,7 +9,8 @@ from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.device.serialize_model.utils import duble_field
 from app.ingternal.device.schemas.enums import DeviceStatusField, ReceivedDataFormat, DeviceGetData
 from app.ingternal.device.cache.invalidate_cache import invalidate_cache, invalidate_cache_device_data_by_device
-from app.ingternal.room.serialize_model.room import is_room_exists
+from app.ingternal.room.cache.all_rooms import invalidate_cache_room__type_device_data
+from app.ingternal.room.serialize_model.get_room import is_room_exists
 
 from app.ingternal.logs import get_base_logger
 
@@ -41,6 +42,7 @@ async def edit_device(system_name: str, data: EditDeviceSchema):
     await device.update(_columns=["system_name", "name", "type", "address", "token", "type_command", "type_get_data", "type_get_data", "room"])
     invalidate_cache_device_data_by_device(system_name)
     invalidate_cache()
+    invalidate_cache_room__type_device_data()
      # Удаление из кэша
     DevicesArray.delete(system_name)
       
@@ -55,6 +57,7 @@ async def edit_fields(system_name: str, data: List[AddDeviceFieldSchema]):
     await ef(device, data)
     invalidate_cache_device_data_by_device(system_name)
     invalidate_cache()
+    invalidate_cache_room__type_device_data()
 
      # Удаление из кэша
     DevicesArray.delete(system_name)
@@ -92,6 +95,7 @@ async def edit_status_device(system_name: str, status: bool):
         logger.debug(f"Clearing cache for device: {system_name}")
         DevicesArray.delete(system_name)
         invalidate_cache()
+        invalidate_cache_room__type_device_data()
         
         logger.info(f"Successfully updated status for device: {system_name} to {status_str}")
     except Exception as e:
@@ -113,6 +117,7 @@ async def update_device_from_object(system_name:str, status:bool, type_command:R
     # device.status = status  # пока что закоментировал чтобы корректно работало ручное изменение состояния у отключенных устройств.
     await device.update(_columns=["address", "token", "type_command", "type_get_data", "status"])
     invalidate_cache()
+    invalidate_cache_room__type_device_data()
 
      # Удаление из кэша
     DevicesArray.delete(system_name)
