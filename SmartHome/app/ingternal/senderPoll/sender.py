@@ -1,5 +1,5 @@
 from app.pkg.rabitmq import RabbitMQProducer, RabbitMQProducerFanout
-from app.configuration.settings import RABITMQ_HOST, DEVICE_DATA_POLL, SERVICE_DATA_POLL, DATA_DEVICE_QUEUE, DATA_QUEUE, EXCHANGE_DEVICE_DATA, EXCHANGE_ROOM_DATA
+from app.configuration.settings import RABITMQ_HOST, DEVICE_DATA_POLL, SERVICE_DATA_POLL, DATA_SCRIPT, DATA_DEVICE_QUEUE, DATA_QUEUE, EXCHANGE_DEVICE_DATA, EXCHANGE_ROOM_DATA
 from app.ingternal.modules.arrays.serviceDataPoll import ObservableDict
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
 from app.ingternal.logs import get_sender_logger
@@ -59,6 +59,25 @@ class SenderRoom(SenderMore):
     def disconnect(self):
         self.publisher.close()
 
+class SenderScript:
+    def __init__(self, ):
+        self.publisher = None
+        
+    def connect(self, queue_name: str):
+        self.queue_name = queue_name
+        self.publisher = RabbitMQProducer(host=RABITMQ_HOST, queue_name=queue_name)
+        self.publisher.connect()
+
+    async def send(self, data, *args, **keys):
+        logger.info(f"send script")
+        try:
+            self.publisher.publish(data)
+        except Exception as e:
+            print(e)
+
+    def disconnect(self):
+        self.publisher.close()
+
 class SenderDevice(SenderMore):
     async def send(self, *args, **keys):
         data = self.data.get_all()
@@ -73,6 +92,7 @@ class SenderDevice(SenderMore):
 sender_device = SenderDevice()
 sender_room = SenderRoom()
 sender_service = Sender()
+sender_script = SenderScript()
 
 async def send_data():
     logger.info(f"ex {EXCHANGE_ROOM_DATA}")
@@ -84,6 +104,7 @@ def init_sender():
     sender_device.connect(EXCHANGE_DEVICE_DATA, data_poll)
     sender_room.connect(EXCHANGE_ROOM_DATA)
     data_poll.subscribe_all("sender", send_data)
+    sender_script.connect(DATA_SCRIPT)
     # data_poll.subscribe_all("sender2", sender_room.send)
     service_data_poll: ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
     sender_service.connect(DATA_QUEUE, service_data_poll)

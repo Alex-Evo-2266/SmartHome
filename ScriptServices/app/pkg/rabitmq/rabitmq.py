@@ -22,7 +22,7 @@ class WorkerThread(Thread):
 	def stop(self):
 		self._is_interrupted = True
 
-	def run_async_safely(func, *args, **kwargs):
+	def run_async_safely(self, func, *args, **kwargs):
 		result = func(*args, **kwargs)
 		if inspect.iscoroutine(result):
 			try:

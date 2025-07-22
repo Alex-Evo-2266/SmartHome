@@ -15,6 +15,8 @@ from app.configuration.settings import DEVICE_VALUE_SEND, EXCHANGE_DEVICE_DATA, 
 from app.internal.logs import get_base_logger
 from app.internal.run_script.run import run_script
 from app.internal.script.serialize.parse_room_listener_data import parse_room_data
+from app.configuration.loop.loop import loop
+from app.configuration.queue import __queue__
 
 import tracemalloc
 
@@ -74,6 +76,17 @@ async def startup():
                 asyncio.run(roomDataPoll.set_async(data["room_name"], parse_room_data(data)))
         except Exception as e:
             print("error", e)
+
+    loop.register("device_add_queue", __queue__.start, 1)
+
+    # Запуск основного цикла
+    try:
+        asyncloop = asyncio.get_running_loop()
+        asyncloop.create_task(loop.run())
+        # asyncloop.create_task(monitor_memory())
+        logger.info("Main loop started.")
+    except RuntimeError as e:
+        logger.error(f"Failed to start main loop: {e}")
 
 
     devices_listener.connect(EXCHANGE_DEVICE_DATA, setDevice)

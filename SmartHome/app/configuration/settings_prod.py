@@ -20,3 +20,4 @@ RABITMQ_PORT = os.environ.get("RABITMQ_PORT")
 
 # запрос на обновление состояния устройст
 DEVICE_VALUE_SEND = os.environ.get("DEVICE_VALUE_SEND")
+DATA_SCRIPT = os.environ.get("DATA_SCRIPT")

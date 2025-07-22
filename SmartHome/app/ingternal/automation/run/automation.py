@@ -9,6 +9,7 @@ from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.device.exceptions.device import DeviceNotFound, DeviceNotValueFound, DeviceFieldNotFound
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.device.interface.device_class import IDevice
+from app.ingternal.senderPoll.sender import sender_script
 
 from app.configuration.settings import DEVICE_DATA_POLL
 
@@ -97,6 +98,7 @@ async def action(data: ActionItemSchema):
             logger.info(f"Setting field {data.field} to {data.data}")
             device_control.set_value(field.get_id(), data.data, script=True)
     elif data.service == "script":
+        await sender_script.send(data.model_dump())
         logger.info(f"Executing script action: {data.object}")
         pass
 

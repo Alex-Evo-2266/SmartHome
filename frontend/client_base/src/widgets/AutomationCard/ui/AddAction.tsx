@@ -1,17 +1,18 @@
 import { BaseActionCard, BasicTemplateDialog, Button, NumberField, SelectionDialog, TextField } from "alex-evo-sh-ui-kit";
 import { DialogPortal, SelectField } from "../../../shared";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "../../../shared/lib/hooks/redux";
 import { ActionItem, SetType } from "../../../entites/automation";
 import { TypeDeviceField } from "../../../entites/devices";
+import { Script, useScriptAPI } from "../../../entites/script";
 
 interface AddConditionProps {
   onHide: () => void;
   onSave: (data: ActionItem) => void;
 }
 
-const SERVICES = ["device", "delay"];
-const OBJECT_ENABLE = ["device"];
+const SERVICES = ["device", "delay", "script"];
+const OBJECT_ENABLE = ["device", "script"];
 const FIELD_ENABLE = ["device"];
 const OBJECT_REQUIRED = ["device"];
 
@@ -21,10 +22,19 @@ export const AddAction: React.FC<AddConditionProps> = ({ onHide, onSave }) => {
   const [field, setField] = useState("");
   const [data, setData] = useState("");
 
+  const [script, setScript] = useState<Script[]>([])
+
   const [objectSearch, setObjectSearch] = useState(false);
   const [fieldSearch, setFieldSearch] = useState(false);
 
   const { devicesData } = useAppSelector((state) => state.devices);
+
+  const {getScripts} = useScriptAPI()
+
+  const getData = useCallback(async()=>{
+    const data = await getScripts()
+    setScript(data.scripts)
+  },[getScripts])
 
   const dataConf = useMemo(() => {
     if (service === "delay") {
@@ -48,7 +58,11 @@ export const AddAction: React.FC<AddConditionProps> = ({ onHide, onSave }) => {
   }, [service, object, field, devicesData]);
 
   const getObject = useMemo(
-    () => (service === "device" ? devicesData.map((item) => ({ title: item.name, data: item.system_name })) : []),
+    () => (
+      service === "device" ? devicesData.map((item) => ({ title: item.name, data: item.system_name })):
+      service === "script" ? script.map(item=>({title: item.name, data: item.id})):
+      []
+    ),
     [service, devicesData]
   );
 
@@ -62,6 +76,7 @@ export const AddAction: React.FC<AddConditionProps> = ({ onHide, onSave }) => {
   const isValid = useMemo(() => {
     if (service === "delay") return data !== "";
     if (service === "device") return data !== "" && object !== "" && field !== "";
+    if (service === "script") return object !== "";
     return false;
   }, [service, object, field, data]);
 
@@ -96,6 +111,10 @@ export const AddAction: React.FC<AddConditionProps> = ({ onHide, onSave }) => {
       setTimeout(onHide, 0);
     }
   }, [service, object, data, field, onSave, onHide, isValid]);
+
+  useEffect(()=>{
+    getData()
+  },[getData])
 
   return (
     <>

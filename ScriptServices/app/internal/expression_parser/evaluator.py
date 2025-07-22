@@ -1,12 +1,16 @@
 import copy
 from .ast import Call, Groups, ResObject
 from app.internal.sender.device_set_value import sender_device
+from app.internal.logs import get_base_logger
+
+logger = get_base_logger.get_logger(__name__)
 
 class CalculateCall():
 
     @staticmethod
     def value(node: Call, context: dict, context_command: list[str] = []):
         value = context.get(node.value, None)
+        logger.debug(f"[value] node={node.value}, context_command={context_command}, value={value}")
         if value is None:
             return None
         if isinstance(value, dict):
@@ -18,22 +22,29 @@ class CalculateCall():
     @staticmethod
     async def method(node: Call, context: dict, context_command: list[str] = []):
         value = context.get(node.value, None)
+        logger.debug(f"[method] node={node.value}, context_command={context_command}, context_val={value}")
         if value is None:
             return None
         if isinstance(value, dict):
             method = value.get("method", None)
             if method is None:
+                logger.debug(f"[method] Метод не найден для {node.value}")
                 return None
             call = method.get("call", None)
             if call is not None:
                 args = node.args[0].args if len(node.args) > 0 else []
+                logger.debug(f"[method] Вызов {node.value} с args={args}")
                 return await call(*args, context_command=context_command)
-    
+            else:
+                logger.debug(f"[method] 'call' не определён в методе {node.value}")
+
     @staticmethod
     async def method_args_parse(path: Call, context: dict, context_command: list[str] = []):
         if path is None:
             return None
+        logger.debug(f"[method_args_parse] type={path.type}, value={path.value}, context_command={context_command}")
         if path.type == Groups.IDENTIFIC:
+            node = copy.copy(path)
             return CalculateCall.value(node, context, [*context_command, path.value])
         elif path.type == Groups.MEHOD:
             node = copy.copy(path)
@@ -41,29 +52,25 @@ class CalculateCall():
             return await CalculateCall.method(node, context, [*context_command, path.value])
         elif path.type == Groups.OBJECT:
             new_context = context.get(path.value, None)
+            logger.debug(f"[method_args_parse] OBJECT -> new_context={new_context}")
             if type(new_context) is dict:
                 res = await CalculateCall.method_args_parse(path.atr, new_context, [*context_command, path.value])
                 if res is None:
+                    logger.debug(f"[method_args_parse] OBJECT context вернул None (dict)")
                     return None
                 return res
-                # if res.type == Groups.MEHOD:
-                #     return ResObject(type=Groups.MEHOD, value=Call(type=Groups.OBJECT, value=path.value, args=path.args, atr=res.value))
-                # else:
-                #     return res
             else:
                 res = await CalculateCall.method_args_parse(path.atr, {}, [*context_command, path.value])
                 if res is None:
+                    logger.debug(f"[method_args_parse] OBJECT context вернул None (empty dict)")
                     return None
                 return res
-                # if res.type == Groups.MEHOD:
-                #     return ResObject(type=Groups.MEHOD, value=Call(type=Groups.OBJECT, value=path.value, args=path.args, atr=res.value))
-                # else:
-                #     return res
         return None
 
     @staticmethod
     def convert(value):
         """Простое приведение типов"""
+        logger.debug(f"[convert] raw={value}")
         if isinstance(value, str):
             if value.lower() in ("true", "false"):
                 return value.lower() == "true"
@@ -75,7 +82,7 @@ class CalculateCall():
     
     @staticmethod
     async def set_device(target, data, context_command):
-        print(data, target)
+        logger.debug(f"[set_device] target={target}, data={data}, context_command={context_command}")
         if len(target) >= 3 and target[0] == "device":
             await sender_device.send({
                 "system_name": target[1],
@@ -84,7 +91,7 @@ class CalculateCall():
             })
 
     @staticmethod
-    def parse_call(call:Call):
+    def parse_call(call: Call):
         if call is None:
             return []
         if call.type == Groups.OBJECT:
@@ -95,6 +102,8 @@ class CalculateCall():
 
     @staticmethod
     async def evaluate_call(call: Call, context: dict, context_command: list[str] = []):
+        logger.debug(f"[evaluate_call] type={call.type}, value={getattr(call, 'value', None)}")
+
         if call.type == Groups.NUMBER:
             return CalculateCall.convert(call.value)
 
@@ -114,11 +123,6 @@ class CalculateCall():
             return CalculateCall.convert(call)
 
         if call.type == Groups.SET:
-            # Присваивание: call.value = call.args[0]
-            # right = await CalculateCall.evaluate_call(call.args[0], context)
-            # await CalculateCall.set_device(context_command=context_command)
-            # call.args = [right]
-            # return call  
             right = await CalculateCall.evaluate_call(call.args[0], context)
             return await CalculateCall.set_device(target=CalculateCall.parse_call(call.value), data=right, context_command=context_command)
 
@@ -171,4 +175,5 @@ class CalculateCall():
         if call.type == Groups.WORD:
             return call.value
 
+        logger.debug(f"[evaluate_call] NotImplemented for type {call.type}")
         raise NotImplementedError(f"Операция {call.type} не поддерживается")

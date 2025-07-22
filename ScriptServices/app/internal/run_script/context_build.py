@@ -28,6 +28,11 @@ def get_context(room: List[RoomData], devices_objs: dict):
     
     room_copy = copy.deepcopy(room)
     room_data_res:dict = {}
+    _devices = {
+        devices_objs[key]["system_name"]: {
+            x["name"]: devices_objs[key]["value"].get(x["name"],None) for x in devices_objs[key]["fields"]
+        } for key in devices_objs
+    }
     for room_data in room_copy:
         name = room_data.room_name
         devices:Dict[str, Dict[str, List[RoomDeviceData]]] = room_data.devices
@@ -39,7 +44,7 @@ def get_context(room: List[RoomData], devices_objs: dict):
             for field_name in devices[dev_name]:
                 room_data_res[name][dev_name][field_name] = g(devices[dev_name][field_name], devices_objs)
     return {
-        "device": devices,
+        "device": _devices,
         "room": room_copy,
         "delay": {
             "method": {

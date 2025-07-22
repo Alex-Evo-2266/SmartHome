@@ -19,10 +19,11 @@ def g(confs: list[dict], devices: dict[str, dict]):
 
 def get_context(room: list[dict], devices: dict):
     room_copy = copy.deepcopy(room)
+    device_copy = copy.deepcopy(devices)
     for name in room_copy:
         for dev_name in room_copy[name]:
             for field_name in room_copy[name][dev_name]:
-                room_copy[name][dev_name][field_name] = g(room_copy[name][dev_name][field_name], devices)
+                room_copy[name][dev_name][field_name] = g(room_copy[name][dev_name][field_name], device_copy)
     print("p8888")
     return {
         "device": devices,

@@ -1,4 +1,4 @@
-import logging
+import logging, asyncio
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from app.internal.script.schemas.script import ScriptSerializeCreate, ScriptSerialize, ScriptSerializeList, CheckResult, CheckText, EditStatus
@@ -9,6 +9,7 @@ from app.internal.script.serialize.delete import delete_script_to_db
 from app.internal.expression_parser.grammar import CommandAnaliz
 from app.internal.logs import get_router_logger
 from app.internal.run_script.run_script import run
+from app.internal.utils.track_background_task import track_background_task
 
 router = APIRouter(
     prefix="/api-scripts/scripts",
@@ -85,7 +86,7 @@ async def delete_script(id:str):
 @router.post("/run/{id}")
 async def run_script(id:str):
     try:
-        await run(id)
+        track_background_task(run(id))
         return "ok"
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
