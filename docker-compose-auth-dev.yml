@@ -228,7 +228,7 @@ services:
     image: koenkk/zigbee2mqtt
     restart: unless-stopped
     volumes:
-      - ./zigbee2mqtt:/app/data
+      - ./Configurate/zigbee2mqtt:/app/data
       - /run/udev:/run/udev:ro
     ports:
         # Frontend port
