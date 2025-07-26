@@ -1,12 +1,13 @@
 // lib/rabbitmq.ts
 import amqp from 'amqplib';
+import {RABBITMQ_HOST} from './envVar'
 
 export async function consumeExchange(
   exchangeName: string,
   type: 'fanout' | 'direct' | 'topic',
   onMessage: (msg: string) => void,
 ) {
-  const connection = await amqp.connect('amqp://localhost');
+  const connection = await amqp.connect(`amqp://${RABBITMQ_HOST}`);
   const channel = await connection.createChannel();
 
   await channel.assertExchange(exchangeName, type, { durable: false });

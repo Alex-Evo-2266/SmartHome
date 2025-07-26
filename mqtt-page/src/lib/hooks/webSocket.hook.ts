@@ -4,12 +4,12 @@ import {useCallback, useRef} from 'react'
 
 export type ISocketData = {
     type: string
-    data: any | any[]
+    data: string
 }
 
 export interface MessageCallback {
   messageType: string; // Тип сообщения
-  callback: (data: any) => void; // Функция callback, которая принимает любые данные
+  callback: (data: string) => void; // Функция callback, которая принимает любые данные
 }
 
 export const useSocket = (callbacks: MessageCallback[] = []) =>{
@@ -18,7 +18,7 @@ export const useSocket = (callbacks: MessageCallback[] = []) =>{
 
   const connectSocket = useCallback(()=>{
     try{
-      let path = `ws://${window.location.host}`
+      const path = `ws://${window.location.host}`
       socket.current = new WebSocket(path)
     }catch(e){
       console.error(e)
@@ -43,7 +43,7 @@ export const useSocket = (callbacks: MessageCallback[] = []) =>{
       socket.current.onmessage = function(e) {
         console.log(`socket ${e.data}`)
         const data: ISocketData = JSON.parse(e.data);
-        for(let collback of callbacks){
+        for(const collback of callbacks){
           if(collback.messageType === data.type)
           {
             collback.callback(data.data)
@@ -58,7 +58,7 @@ export const useSocket = (callbacks: MessageCallback[] = []) =>{
         }, 10000);
       };
     }
-  },[closeSocket, connectSocket])
+  },[closeSocket, connectSocket, callbacks])
 
   return{
     listenSocket,

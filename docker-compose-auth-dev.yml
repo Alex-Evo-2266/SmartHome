@@ -141,6 +141,7 @@ services:
       DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
       EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
     volumes:
+      - ./Configurate/page_service:/home/device_service/web/config
       - ./PagesServices:/home/device_service/web
       - media_page_voluem:/home/device_service/web/media
   
@@ -239,6 +240,23 @@ services:
     depends_on:
       mosquitto:
         condition: service_started
+  
+  mqtt_page:
+    container_name: mqtt_page
+    build:
+      context: ./mqtt-page
+      dockerfile: Dockerfile
+    command: npm start
+    restart: always
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - 3009:3000
+    environment:
+      RMQ_HOST: ${RABITMQ_HOST}
+      RMQ_PORT: ${RABITMQ_PORT}
+      EXCHANGE_SERVICE_DATA: ${EXCHANGE_SERVICE_DATA}
 
 volumes:
   media_voluem:

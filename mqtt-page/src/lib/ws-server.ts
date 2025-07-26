@@ -1,10 +1,12 @@
 // lib/ws-server.ts
 import { WebSocketServer } from 'ws';
 import { consumeExchange } from './rabbitmq';
+import { Server } from 'http';
+import {EXCHANGE_SERVICE_DATA} from './envVar'
 
 let started = false;
 
-export function startWebSocketServer(server: any) {
+export function startWebSocketServer(server: Server) {
   if (started) return;
 
   const wss = new WebSocketServer({ server });
@@ -13,7 +15,7 @@ export function startWebSocketServer(server: any) {
     console.log('🔌 Client connected');
   });
 
-  consumeExchange('exchangeServiceData', 'fanout', (msg) => {
+  consumeExchange(EXCHANGE_SERVICE_DATA ?? 'exchangeServiceData', 'fanout', (msg) => {
     console.log('➡️ Broadcasting message:', msg);
     wss.clients.forEach((client) => {
       if (client.readyState === 1) {

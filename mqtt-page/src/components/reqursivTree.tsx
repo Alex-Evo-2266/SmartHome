@@ -1,14 +1,5 @@
+import { TreeProps } from "@/lib/models/types";
 import React, { useState } from "react";
-
-type Obj1 = {
-  _value: string;
-  [key: string]: Obj1 | string;
-};
-
-type TreeProps = {
-  data: Obj1;
-  label?: string;
-};
 
 const RecursiveTree: React.FC<TreeProps> = ({ data, label }) => {
   const [expanded, setExpanded] = useState(false);
