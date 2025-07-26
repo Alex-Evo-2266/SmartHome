@@ -113,6 +113,7 @@ services:
       DATA_QUEUE: ${DATA_QUEUE}
       DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
       EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+      EXCHANGE_SERVICE_DATA: ${EXCHANGE_SERVICE_DATA}
       EXCHANGE_ROOM_DATA: ${EXCHANGE_ROOM_DATA}
       DEVICE_VALUE_SEND: ${DEVICE_VALUE_SEND}
     volumes:
@@ -197,6 +198,7 @@ services:
       retries: 3
     ports:
       - ${RABITMQ_OUT_PORT}:15672
+      - ${RABITMQ_PORT}:${RABITMQ_PORT}
   phpmyadmin:
     image: phpmyadmin
     restart: always
@@ -238,30 +240,6 @@ services:
       mosquitto:
         condition: service_started
 
-  # matter-bridge:
-  #   # image: matter-bridge
-  #   build:
-  #     context: ./MatterBridge
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  #     - "5540:5540"
-  #   volumes:
-  #     - ./config:/app/config
-  #   # devices:
-  #   #   - "/dev/ttyACM0:/dev/ttyACM0"
-  #   environment:
-  #     - MATTER_LOG_LEVEL=DEBUG
-  #   restart: unless-stopped
-
-  # client:
-  #   build:
-  #     context: ./frontend/client_base
-  #     dockerfile: Dockerfile
-  #     args:
-  #       REACT_APP_WS_HOST: ${HOST}
-  #   volumes:
-  #     - client_voluem:/client/build
 volumes:
   media_voluem:
   media_device_voluem:

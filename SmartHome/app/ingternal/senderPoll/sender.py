@@ -1,5 +1,5 @@
 from app.pkg.rabitmq import RabbitMQProducer, RabbitMQProducerFanout
-from app.configuration.settings import RABITMQ_HOST, DEVICE_DATA_POLL, SERVICE_DATA_POLL, DATA_SCRIPT, DATA_DEVICE_QUEUE, DATA_QUEUE, EXCHANGE_DEVICE_DATA, EXCHANGE_ROOM_DATA
+from app.configuration.settings import RABITMQ_HOST, DEVICE_DATA_POLL, SERVICE_DATA_POLL, DATA_SCRIPT, EXCHANGE_SERVICE_DATA, EXCHANGE_DEVICE_DATA, EXCHANGE_ROOM_DATA
 from app.ingternal.modules.arrays.serviceDataPoll import ObservableDict
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll
 from app.ingternal.logs import get_sender_logger
@@ -82,16 +82,12 @@ class SenderDevice(SenderMore):
     async def send(self, *args, **keys):
         data = self.data.get_all()
         data = {key: value.model_dump() for key, value in data.items()}
-        try:
-            print("p700", data["lamp1"])
-        except Exception as e:
-            print("p600", e)
         logger.info(f"send device")
         self.publisher.publish(data)
 
 sender_device = SenderDevice()
 sender_room = SenderRoom()
-sender_service = Sender()
+sender_service = SenderMore()
 sender_script = SenderScript()
 
 async def send_data():
@@ -107,5 +103,5 @@ def init_sender():
     sender_script.connect(DATA_SCRIPT)
     # data_poll.subscribe_all("sender2", sender_room.send)
     service_data_poll: ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
-    sender_service.connect(DATA_QUEUE, service_data_poll)
+    sender_service.connect(EXCHANGE_SERVICE_DATA, service_data_poll)
     service_data_poll.subscribe_all("sender", sender_service.send)

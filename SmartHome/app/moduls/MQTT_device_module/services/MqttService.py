@@ -71,7 +71,19 @@ class MqttService(BaseService):
         if rc != 0:
             logger.error(f"Unexpected MQTT disconnection. Reason: {rc} - {mqtt.error_string(rc)}")
             logger.info("Attempting to reconnect...")
-            asyncio.create_task(cls._handle_reconnection())
+            try:
+                asyncio.run(cls._handle_reconnection())
+            except RuntimeError as e:
+                if "Event loop is closed" in str(e):
+                    logger.warning("Event loop closed, creating new one for reconnection")
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    loop.run_until_complete(cls._handle_reconnection())
+                    loop.close()
+                else:
+                    logger.error(f"Error processing reconnection: {str(e)}", exc_info=True)
+            except Exception as e:
+                logger.error(f"Unexpected error in reconnection: {str(e)}", exc_info=True)
         else:
             logger.info("MQTT client disconnected gracefully")
 
@@ -130,6 +142,7 @@ class MqttService(BaseService):
             services_data:ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
             topics = services_data.get(MQTT_MESSAGES)
             new_topics = update_topic_in_dict(msg.topic, msg.payload.decode(), topics)
+            logger.debug(f"topics {new_topics}")
             await services_data.set_async(MQTT_MESSAGES, new_topics)
 
             # Вызов всех подходящих колбэков (с учётом иерархии)
@@ -234,17 +247,3 @@ class MqttService(BaseService):
         except Exception as e:
             logger.error(f"Error in run_command: {str(e)}", exc_info=True)
             return False
-
-
-
-        # try:
-        #     if not topic or not message:
-        #         logger.error("Error: Topic and message must be provided.")
-        #         return
-        #     if cls.client:
-        #         cls.client.publish(topic, message)
-        #         logger.info(f"Sent message: {message} to topic {topic}")
-        #     else:
-        #         logger.error("Error: MQTT client not initialized.")
-        # except Exception as e:
-        #     logger.error(f"Failed to send message: {e}")

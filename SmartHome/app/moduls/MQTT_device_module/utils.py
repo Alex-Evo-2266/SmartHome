@@ -21,26 +21,25 @@ def get_value_from_token(token: str, current_dict: dict) -> str | None:
         return get_value_from_token('/'.join(parts[1:]), current_dict.get(part, {}))
 
 def update_topic_in_dict(topic: str, data: str, current_dict: dict = None) -> dict:
-    # Разбиваем строку на части по символу '/'
     parts = topic.split('/')
-    
-    # Если current_dict не передан, создаем пустой словарь
+
     if current_dict is None:
         current_dict = {}
-    
-    # Начинаем с первого элемента из parts
+
     part = parts[0]
-    
-    # Если это последний элемент, обновляем _value
+
+    # Если последний элемент
     if len(parts) == 1:
-        current_dict[part] = {"_value": data}
+        if part in current_dict and "_value" in current_dict[part]:
+            current_dict[part]["_value"] = data
+        else:
+            current_dict[part] = {"_value": data}
     else:
-        # Если элемента нет в словаре, создаем его с _value
-        if part not in current_dict:
+        # Если ключа нет — создаём
+        if part not in current_dict or not isinstance(current_dict[part], dict):
             current_dict[part] = {"_value": None}
-        
-        # Рекурсивно продолжаем работать с оставшимися частями
+
+        # Рекурсивно обновляем вложенный словарь
         current_dict[part] = update_topic_in_dict('/'.join(parts[1:]), data, current_dict[part])
-    
-    # Возвращаем обновленный словарь
+
     return current_dict
