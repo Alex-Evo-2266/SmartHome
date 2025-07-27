@@ -246,7 +246,10 @@ services:
     build:
       context: ./mqtt-page
       dockerfile: Dockerfile
-    command: npm start
+      args:
+        CONTAINER_NAME: mqtt_page
+        PORT: 3000
+    command: sh -c "cp -r /app/config_local/* /app/config && npm run start"
     restart: always
     depends_on:
       rabbitmq:
@@ -257,6 +260,8 @@ services:
       RMQ_HOST: ${RABITMQ_HOST}
       RMQ_PORT: ${RABITMQ_PORT}
       EXCHANGE_SERVICE_DATA: ${EXCHANGE_SERVICE_DATA}
+    volumes:
+      - ./Configurate/mqtt_page:/app/config 
 
 volumes:
   media_voluem:
