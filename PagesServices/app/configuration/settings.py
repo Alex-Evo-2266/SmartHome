@@ -26,6 +26,7 @@ SCRIPT_AUTOMATION_PREFEX = "automation"
 
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
 CONFIG_FILE_NAME = 'service_config'
+CONFIG_SERVICES_DIR = os.path.join(BASE_DIR, "config_services") 
 ROUTE_PREFIX = "/api-pages"
 CONFIG_TAG = "pages-config"
 

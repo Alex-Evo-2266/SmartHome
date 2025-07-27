@@ -163,6 +163,8 @@ COPY . .
 
 # Создаём директорию media и устанавливаем права
 RUN mkdir -p media && chmod 755 media
+RUN mkdir -p config && chmod 755 config
+RUN mkdir -p config_services && chmod 755 config_services
 
 # Запускаем контейнер от имени пользователя device_service
 # USER device_service

@@ -142,6 +142,7 @@ services:
       EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
     volumes:
       - ./Configurate/page_service:/home/device_service/web/config
+      - ./Configurate:/home/device_service/web/config_services
       - ./PagesServices:/home/device_service/web
       - media_page_voluem:/home/device_service/web/media
   

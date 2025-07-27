@@ -1,16 +1,26 @@
 
 import { useParams } from 'react-router-dom';
 import { useModulePageAPI } from '../../../entites/modulePages';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Loading } from '../../../shared/ui/Loading';
 import { WebConstructor } from 'alex-evo-web-constructor';
 import { PageData } from '../../../entites/modulePages/models/page';
 import { MENU_ROOT_ID, MODAL_ROOT_ID } from '../../../const';
 import { useFetch } from '../api/moduleFetch';
+import { useNavigationData } from '../../../entites/navigation';
 
 export const ModulesPage = () => {
 
+    const {navigation: navigations} = useNavigationData()
     const { moduleName, pageName } = useParams<{ moduleName: string, pageName:string }>();
+
+    const navigation = useMemo(
+        ()=>navigations.find(item=>item.service === moduleName && item.page_name === pageName),
+        [navigations]
+    )
+
+
+
     const {getPage, loading} = useModulePageAPI()
     const [pageData, setPageData] = useState<null | PageData>(null)
     const {fetchData} = useFetch(moduleName)
@@ -31,6 +41,25 @@ export const ModulesPage = () => {
     {
         return (<Loading/>)
     }
+
+    if(!navigation){
+        return (
+            <div>
+                error loading page
+            </div>
+        )
+    }
+
+    if(navigation.type === "website"){
+        return (
+            <div className='container-page'>
+                <iframe>
+
+                </iframe>
+            </div>
+        )
+    }
+
 
     if(!pageData)
     {

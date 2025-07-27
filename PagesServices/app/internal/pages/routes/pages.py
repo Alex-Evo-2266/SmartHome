@@ -10,7 +10,7 @@ from app.internal.pages.logic.get_dialog import get_dialogs_data
 from app.internal.pages.logic.get_menu import get_all_menu_data
 from app.internal.pages.logic.modulesArray import ModulesArray
 from app.internal.pages.schemas.components import Page, Dialog, Component, ComponentType
-from app.internal.pages.schemas.menu import Menu
+from app.internal.pages.schemas.navigation import NavigationData
 from app.internal.pages.schemas.web_constructor import WebConstructorData
 from app.internal.pages.schemas.module_data import ModuleData
 
@@ -97,10 +97,10 @@ async def send(module: str, page: str):
         logger.error(f"Error fetching data for module '{module}' and page '{page}': {e}", exc_info=True)
         return JSONResponse(status_code=400, content=str(e))
 
-@router.get("/navigations", response_model=Dict[str, Any])
+@router.get("/navigations", response_model=NavigationData)
 async def navigation():
 	try:
-		return {"g": load_navigation_configs()}
+		return load_navigation_configs()
 	except Exception as e:
 		logger.error(e)
 		return JSONResponse(status_code=400, content=str(e))

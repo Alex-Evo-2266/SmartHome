@@ -1,63 +1,11 @@
-// import fs from 'fs';
-// import path from 'path';
-
-// const appDir = path.resolve(__dirname, '../src/app');
-// const outputPath = path.resolve(__dirname, '../config/pages-description.json');
-// const CONTAINER_NAME = process.env.CONTAINER_NAME ?? "localhost"
-// const PORT = process.env.PORT ?? 3000
-
-// function isPageFile(fileName: string) {
-//   return fileName === 'page.tsx' || fileName === 'page.jsx';
-// }
-
-// function getRouteFromPath(filePath: string) {
-//   return filePath
-//     .replace(appDir, '')
-//     .replace(/\/page\.(tsx|jsx)$/, '')
-//     .replace(/\[(.*?)\]/g, ':$1') || '/';
-// }
-
-// function scanDir(dir: string): string[] {
-//   const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-//   return entries.flatMap((entry) => {
-//     const fullPath = path.join(dir, entry.name);
-
-//     if (entry.isDirectory()) {
-//       return scanDir(fullPath);
-//     } else if (isPageFile(entry.name)) {
-//       return [fullPath];
-//     }
-//     return [];
-//   });
-// }
-
-// function main() {
-//   const pages = scanDir(appDir);
-//   const result = pages.map((filePath) => ({
-//     path: getRouteFromPath(filePath),
-//     file: filePath.replace(appDir + '/', ''),
-//     host: `${CONTAINER_NAME}:${PORT}`,
-//     full_path: `${CONTAINER_NAME}:${PORT}${getRouteFromPath(filePath)}`
-//   }));
-
-//   fs.writeFileSync(outputPath, JSON.stringify(result, null, 2), 'utf-8');
-//   console.log(`✅ Page description written to: ${outputPath}`);
-// }
-
-// main();
-
-
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 
 const appDir = path.resolve(__dirname, '../src/app');
 const outputPath = path.resolve(__dirname, '../config/navigation.yml');
-
 const CONTAINER_NAME = process.env.CONTAINER_NAME ?? "localhost";
 const PORT = process.env.PORT ?? 3000;
-console.log(CONTAINER_NAME, PORT)
 
 function isPageFile(fileName: string) {
   return fileName === 'page.tsx' || fileName === 'page.jsx';
@@ -87,19 +35,60 @@ function scanDir(dir: string): string[] {
   });
 }
 
+function extractPageNameFromMeta(filePath: string): {
+  name: string,
+  pageName: string
+} | undefined {
+  const metaPath = filePath.replace(/page\.(tsx|jsx)$/, 'page.meta.yml');
+  if (fs.existsSync(metaPath)) {
+    try {
+      const content = fs.readFileSync(metaPath, 'utf-8');
+      const data = yaml.load(content);
+      if (typeof data === 'object' && data && 'name' in data) {
+        let pageName = ""
+        if("page_name" in data)
+          pageName = (data as any).page_name
+        else
+          pageName = getRouteFromPath(filePath).slice(1)
+        return {
+          name:(data as any).name,
+          pageName: pageName,
+        };
+      }
+    } catch (err) {
+      console.warn(`⚠️ Ошибка чтения ${metaPath}:`, err);
+    }
+  }
+  return undefined;
+}
+
 function main() {
   const pages = scanDir(appDir);
-  const result = pages.map((filePath) => ({
-    path: getRouteFromPath(filePath),
-    file: filePath.replace(appDir + '/', ''),
-    host: `${CONTAINER_NAME}:${PORT}`,
-    full_path: `${CONTAINER_NAME}:${PORT}${getRouteFromPath(filePath)}`,
-    type: "website"
-  }));
+  const result = pages.map((filePath) => {
+    const relativePath = filePath.replace(appDir + '/', '');
+    const route = getRouteFromPath(filePath);
+    let meta = extractPageNameFromMeta(filePath);
+    if(meta === undefined){
+      meta = {
+        name: 'Без названия',
+        pageName: route.slice(1)
+      }
+    }
+
+    return {
+      path: route,
+      file: relativePath,
+      host: `${CONTAINER_NAME}:${PORT}`,
+      full_path: `${CONTAINER_NAME}:${PORT}${route}`,
+      type: 'website',
+      name: meta.name,
+      service: CONTAINER_NAME,
+      page_name: meta.pageName
+    };
+  });
 
   const yamlStr = yaml.dump(result, { lineWidth: 1000 });
   fs.writeFileSync(outputPath, yamlStr, 'utf-8');
-
   console.log(`✅ Page description written to: ${outputPath}`);
 }
 
