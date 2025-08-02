@@ -7,6 +7,7 @@ from app.internal.user.exceptions.user import UserNotFoundException
 from app.internal.user.models.user import User
 
 from app.internal.auth.schemas.auth import Tokens
+from app.internal.auth.exceptions.login import InvalidTempTokenException
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +34,19 @@ async def create_tokens(user: User)->Tokens:
 		expires_at = access_toket_expires_at
 	)
 
-async def create_token(data: dict, expires_at: datetime = datetime.now(settings.TIMEZONE) + timedelta(minutes=15), type: str = "access", secret: str = settings.SECRET_JWT_KEY):
+async def create_token(data: dict, expires_at: datetime = datetime.now(settings.TIMEZONE) + timedelta(minutes=15), type: str = "access", secret: str = settings.SECRET_JWT_KEY, service: str | None = None):
 	to_encode = data.copy()
-	to_encode.update({'exp': expires_at, 'sub': type})
+	to_encode.update({'exp': expires_at, 'sub': type, 'service': service})
 	encoded_jwt = jwt.encode(to_encode, secret, algorithm = settings.ALGORITHM)
 	return encoded_jwt
+
+
+async def temp_token_check(token:str):
+	data = jwt.decode(token,settings.SECRET_JWT_KEY,algorithms=[settings.ALGORITHM])
+	if data.get("sub", "") != "temp_token" or "user_role" not in data or "user_id" not in data:
+		raise InvalidTempTokenException()
+	return {
+		"user_id": data.get("user_id"),
+		"user_role": data.get("user_role"),
+		"service": data.get("service", None)
+	}

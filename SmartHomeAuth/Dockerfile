@@ -40,6 +40,7 @@ RUN poetry install $(test "$YOUR_ENV" == production && echo "--no-dev") --no-int
 COPY . $APP_HOME
 
 RUN mkdir media
+RUN mkdir -p config_services && chmod 755 config_services
 RUN chmod 777 media/
 
 RUN groupadd auth_service

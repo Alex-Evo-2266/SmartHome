@@ -1,6 +1,6 @@
 import datetime
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 class Login(BaseModel):
 	name: str
@@ -18,4 +18,17 @@ class SessionSchema(BaseModel):
 	host: str
 
 class LoginHeaders(BaseModel):
-    Host: Optional[str] = None
+	Host: Optional[str] = None
+
+class TempTokenData(BaseModel):
+	token: str
+	
+class ConfigFilePageData(BaseModel):
+	roles: List[str]
+	iframe_only: bool
+	service: str
+	path: str
+	full_path: str
+
+class ConfigFileData(BaseModel):
+	pages: List[ConfigFilePageData]

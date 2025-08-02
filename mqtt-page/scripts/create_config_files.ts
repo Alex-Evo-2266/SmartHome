@@ -4,6 +4,7 @@ import yaml from 'js-yaml';
 
 const appDir = path.resolve(__dirname, '../src/app');
 const outputPath = path.resolve(__dirname, '../config/navigation.yml');
+const authPath = path.resolve(__dirname, '../config/auth.yml');
 const CONTAINER_NAME = process.env.CONTAINER_NAME ?? "localhost";
 const PORT = process.env.PORT ?? 3000;
 
@@ -37,7 +38,11 @@ function scanDir(dir: string): string[] {
 
 function extractPageNameFromMeta(filePath: string): {
   name: string,
-  pageName: string
+  pageName: string,
+  auth: {
+    role: string[]
+    iframe_only?: boolean
+  }
 } | undefined {
   const metaPath = filePath.replace(/page\.(tsx|jsx)$/, 'page.meta.yml');
   if (fs.existsSync(metaPath)) {
@@ -53,6 +58,7 @@ function extractPageNameFromMeta(filePath: string): {
         return {
           name:(data as any).name,
           pageName: pageName,
+          auth: (data as any).auth,
         };
       }
     } catch (err) {
@@ -64,18 +70,25 @@ function extractPageNameFromMeta(filePath: string): {
 
 function main() {
   const pages = scanDir(appDir);
-  const result = pages.map((filePath) => {
+  const nav = []
+  const auth = []
+
+
+  for(const filePath of pages){
     const relativePath = filePath.replace(appDir + '/', '');
     const route = getRouteFromPath(filePath);
     let meta = extractPageNameFromMeta(filePath);
     if(meta === undefined){
       meta = {
         name: 'Без названия',
-        pageName: route.slice(1)
+        pageName: route.slice(1),
+        auth: {
+          role: ["admin"],
+          iframe_only: false
+        }
       }
     }
-
-    return {
+    nav.push({
       path: route,
       file: relativePath,
       host: `${CONTAINER_NAME}:${PORT}`,
@@ -84,12 +97,29 @@ function main() {
       name: meta.name,
       service: CONTAINER_NAME,
       page_name: meta.pageName
-    };
-  });
+    });
+    if(meta.auth.iframe_only === undefined)
+      meta.auth.iframe_only = false
+    auth.push({
+      ...meta.auth,
+      service: CONTAINER_NAME,
+      path: route,
+      full_path: `${CONTAINER_NAME}:${PORT}${route}`
+    })
+  }
 
-  const yamlStr = yaml.dump(result, { lineWidth: 1000 });
+  const yamlStr = yaml.dump(nav, { lineWidth: 1000 });
   fs.writeFileSync(outputPath, yamlStr, 'utf-8');
   console.log(`✅ Page description written to: ${outputPath}`);
+
+  const authData = {
+    service: CONTAINER_NAME,
+    pages: auth
+  }
+
+  const yamlAuthStr = yaml.dump(authData, { lineWidth: 1000 });
+  fs.writeFileSync(authPath, yamlAuthStr, 'utf-8');
+  console.log(`✅ Page description written to: ${authPath}`);
 }
 
 main();

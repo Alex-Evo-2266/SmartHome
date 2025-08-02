@@ -11,3 +11,16 @@ class InvalidInputException(Exception):
 			return f"InvalidInputException, {self.message}"
 		else:
 			return "InvalidInputException"
+		
+class InvalidTempTokenException(Exception):
+	def __init__(self, *args: object) -> None:
+		if args:
+			self.message = args[0]
+		else:
+			self.message = "invalid temp token"
+	
+	def __str__(self) -> str:
+		if self.message:
+			return f"InvalidTempTokenException, {self.message}"
+		else:
+			return "InvalidTempTokenException"

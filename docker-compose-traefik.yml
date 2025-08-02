@@ -10,11 +10,17 @@ services:
       - --entrypoints.web.address=:80
       - --api.dashboard=true
       - --log.level=INFO
+      - --api.insecure=true   # включить Dashboard без авторизации (только для локалки)
+      - --entrypoints.websecure.address=:443
     ports:
       - "1337:80"
+      - "1338:443"
       - "8080:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro
+      - ./certs:/certs:ro
 
   sh_db:
     image: mariadb
@@ -69,16 +75,28 @@ services:
       EMAIL_QUEUE: ${EMAIL_QUEUE}
       RABITMQ_HOST: ${RABITMQ_HOST}
       RABITMQ_PORT: ${RABITMQ_PORT}
+    ports:
+      - 8004:8004
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.auth.rule=PathPrefix(`/api-auth`)"
-      - "traefik.http.routers.auth.entrypoints=web"
+      - "traefik.http.routers.auth.entrypoints=web,websecure"
+      - "traefik.http.routers.auth.tls=true"  # включить TLS для websecure
       - "traefik.http.services.auth.loadbalancer.server.port=8004"
+
+      # middleware для обычной проверки
       - "traefik.http.middlewares.auth.forwardauth.address=http://auth_service:8004/api-auth/check"
       - "traefik.http.middlewares.auth.forwardauth.trustforwardheader=true"
       - "traefik.http.middlewares.auth.forwardauth.authresponseheaders=X-User-Id,X-User-Role,X-Access-Token"
+
+      # middleware для iframe-сервисов
+      - "traefik.http.middlewares.moduleauth.forwardauth.address=http://auth_service:8004/api-auth/module-service/check"
+      - "traefik.http.middlewares.moduleauth.forwardauth.trustforwardheader=true"
+      - "traefik.http.middlewares.moduleauth.forwardauth.authrequestheaders=Cookie,X-Original-Uri"
+      - "traefik.http.middlewares.moduleauth.forwardauth.authresponseheaders=X-User-Id,X-User-Role,X-Access-Token,X-Target-Service,X-Path-Inside"
     volumes:
       - ./SmartHomeAuth:/home/auth_service/web
+      - ./Configurate:/home/auth_service/web/config_services
       - media_voluem:/home/auth_service/web/media
     depends_on:
       rabbitmq:
@@ -98,7 +116,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.email.rule=PathPrefix(`/api-email`)"
-      - "traefik.http.routers.email.entrypoints=web"
+      - "traefik.http.routers.email.entrypoints=web,websecure"
+      - "traefik.http.routers.email.tls=true"
       - "traefik.http.services.email.loadbalancer.server.port=8005"
       - "traefik.http.routers.email.middlewares=auth@docker"
     volumes:
@@ -139,8 +158,9 @@ services:
       - "traefik.http.routers.device_ws.service=device_ws"
       - "traefik.http.services.device.loadbalancer.server.port=8006"
       - "traefik.http.services.device_ws.loadbalancer.server.port=8006"
-      - "traefik.http.routers.device.entrypoints=web"
+      - "traefik.http.routers.device.entrypoints=web,websecure"
       - "traefik.http.routers.device_ws.entrypoints=web"
+      - "traefik.http.routers.device.tls=true"
       - "traefik.http.routers.device.middlewares=auth@docker"
     volumes:
       - ./SmartHome:/home/device_service/web
@@ -166,7 +186,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.page.rule=PathPrefix(`/api-pages`)"
-      - "traefik.http.routers.page.entrypoints=web"
+      - "traefik.http.routers.page.entrypoints=web,websecure"
+      - "traefik.http.routers.page.tls=true"
       - "traefik.http.services.page.loadbalancer.server.port=8007"
       - "traefik.http.routers.page.middlewares=auth@docker"
     volumes:
@@ -198,7 +219,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.script.rule=PathPrefix(`/api-scripts`)"
-      - "traefik.http.routers.script.entrypoints=web"
+      - "traefik.http.routers.script.entrypoints=web,websecure"
+      - "traefik.http.routers.script.tls=true"
       - "traefik.http.services.script.loadbalancer.server.port=8008"
       - "traefik.http.routers.script.middlewares=auth@docker"
     volumes:
@@ -217,6 +239,7 @@ services:
       args:
         CONTAINER_NAME: mqtt_page
         PORT: 3000
+        NEXT_BASE_PATH: "/modules/mqtt_page"
     command: sh -c "cp -r /app/config_local/* /app/config && npm run start"
     restart: always
     environment:
@@ -225,10 +248,12 @@ services:
       EXCHANGE_SERVICE_DATA: ${EXCHANGE_SERVICE_DATA}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mqtt.rule=PathPrefix(`/`)"
-      - "traefik.http.routers.mqtt.entrypoints=web"
+      - "traefik.http.routers.mqtt.rule=PathPrefix(`/modules/mqtt_page`)"
+      - "traefik.http.routers.mqtt.entrypoints=web,websecure"
       - "traefik.http.services.mqtt.loadbalancer.server.port=3000"
-      - "traefik.http.routers.mqtt.middlewares=auth@docker"
+      - "traefik.http.routers.mqtt.tls=true"
+      - "traefik.http.routers.mqtt.middlewares=moduleauth@docker,module-mqtt_page-strip"
+      - "traefik.http.middlewares.module-mqtt_page-strip.stripprefixregex.regex=^/modules/mqtt_page"
     volumes:
       - ./Configurate/mqtt_page:/app/config
     depends_on:
@@ -273,21 +298,21 @@ services:
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
 
-  zigbee2mqtt:
-    container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt
-    restart: unless-stopped
-    volumes:
-      - ./Configurate/zigbee2mqtt:/app/data
-      - /run/udev:/run/udev:ro
-    ports:
-      - 8081:8080
-    environment:
-      - TZ=Europe/Moscow
-    privileged: true
-    depends_on:
-      mosquitto:
-        condition: service_started
+  # zigbee2mqtt:
+  #   container_name: zigbee2mqtt
+  #   image: koenkk/zigbee2mqtt
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./Configurate/zigbee2mqtt:/app/data
+  #     - /run/udev:/run/udev:ro
+  #   ports:
+  #     - 8081:8080
+  #   environment:
+  #     - TZ=Europe/Moscow
+  #   privileged: true
+  #   depends_on:
+  #     mosquitto:
+  #       condition: service_started
 
 volumes:
   media_voluem:
