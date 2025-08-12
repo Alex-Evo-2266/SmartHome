@@ -9,7 +9,7 @@ let started = false;
 export function startWebSocketServer(server: Server) {
   if (started) return;
 
-  const wss = new WebSocketServer({ server });
+  const wss = new WebSocketServer({ server, path: "/ws/mqtt_page" });
 
   wss.on('connection', (ws) => {
     console.log('🔌 Client connected');

@@ -50,3 +50,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MODULES_DIR = os.path.join(MEDIA_ROOT, 'modules')
 
 
+PREFIX_PATH = os.environ.get("PREFIX_PATH")

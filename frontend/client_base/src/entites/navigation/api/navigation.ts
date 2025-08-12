@@ -10,7 +10,7 @@ export const useNavigation = () => {
     const {showSnackbar} = useSnackbar()
 
     const getNavigation = useCallback(async()=>{
-        const {pages}:NavigationData = await request('/api-pages/pages/navigations')
+        const pages:NavigationData = await request('/api-pages/pages/navigations')
         return pages
     },[request])
 
@@ -32,10 +32,12 @@ export const useNavigationData = () => {
 
     const {getNavigation, loading} = useNavigation()
     const [navigation, setNavigation] = useState<NavigationItem[]>([])
+    const [prefix, setPrefix] = useState<string>("")
 
     const getData = useCallback(async ()=>{
         const data = await getNavigation()
-        setNavigation(data)
+        setNavigation(data.pages)
+        setPrefix(data.prefix)
     },[getNavigation])
 
     useEffect(()=>{
@@ -46,6 +48,7 @@ export const useNavigationData = () => {
         getNavigation,
         loading,
         getData,
-        navigation
+        navigation,
+        prefix
     }
 }

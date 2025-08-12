@@ -25,7 +25,7 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 					<Route path="device" element={<DevicePage/>}/>
 					<Route path="device/:systemName" element={<DetailDevice/>}/>
 					<Route path="automation" element={<AutomationPage/>}/>
-					<Route path="modules/:moduleName/:pageName" element={<ModulesPage/>}/>
+					<Route path="module_pages/:moduleName/:pageName" element={<ModulesPage/>}/>
 					<Route path="settings" element={<SettingsPage/>}/>
 					<Route path="room" element={<RoomsPage/>}/>
 					<Route path="room/:name" element={<RoomPage/>}/>

@@ -32,7 +32,7 @@ def service_config(name, path: str = "/"):
 
     configs = load_auth_configs()
     print(configs, name, path)
-    config_cond = [item for item in configs if item.service == name and item.path == path]
+    config_cond = [item for item in configs if item.service == name]
     if len(config_cond) < 1:
         raise ConfigNotFoundException()
     return config_cond[0]

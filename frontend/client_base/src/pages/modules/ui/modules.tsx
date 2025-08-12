@@ -8,19 +8,18 @@ import { PageData } from '../../../entites/modulePages/models/page';
 import { MENU_ROOT_ID, MODAL_ROOT_ID } from '../../../const';
 import { useFetch } from '../api/moduleFetch';
 import { useNavigationData } from '../../../entites/navigation';
+import { useToken } from '../../../entites/navigation/api/get_temp_token';
 
 export const ModulesPage = () => {
 
-    const {navigation: navigations} = useNavigationData()
-    const { moduleName, pageName } = useParams<{ moduleName: string, pageName:string }>();
+    const {navigation: navigations, prefix} = useNavigationData()
+    const {moduleName, pageName} = useParams<{ moduleName: string, pageName:string }>();
+    const {token} = useToken(moduleName || "")
 
     const navigation = useMemo(
         ()=>navigations.find(item=>item.service === moduleName && item.page_name === pageName),
         [navigations]
     )
-
-
-
     const {getPage, loading} = useModulePageAPI()
     const [pageData, setPageData] = useState<null | PageData>(null)
     const {fetchData} = useFetch(moduleName)
@@ -50,10 +49,10 @@ export const ModulesPage = () => {
         )
     }
 
-    if(navigation.type === "website"){
+    if(navigation.type === "website" && token !== "" && token !== undefined && token !== null){
         return (
             <div className='container-page'>
-                <iframe>
+                <iframe style={{width:"100%", height: "90vh"}} src={`/${prefix}/${navigation.service}${navigation.path}?temp_token=${token}`}>
 
                 </iframe>
             </div>

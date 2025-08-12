@@ -79,9 +79,19 @@ services:
       - 8004:8004
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.auth.rule=PathPrefix(`/api-auth`)"
-      - "traefik.http.routers.auth.entrypoints=web,websecure"
-      - "traefik.http.routers.auth.tls=true"  # включить TLS для websecure
+
+      # http (без TLS)
+      - "traefik.http.routers.auth_http.rule=PathPrefix(`/api-auth`)"
+      - "traefik.http.routers.auth_http.entrypoints=web"
+      - "traefik.http.routers.auth_http.service=auth"
+
+      # https (с TLS)
+      - "traefik.http.routers.auth_https.rule=PathPrefix(`/api-auth`)"
+      - "traefik.http.routers.auth_https.entrypoints=websecure"
+      - "traefik.http.routers.auth_https.tls=true"
+      - "traefik.http.routers.auth_https.service=auth"
+
+      # общий сервис
       - "traefik.http.services.auth.loadbalancer.server.port=8004"
 
       # middleware для обычной проверки
@@ -115,9 +125,16 @@ services:
       RABITMQ_PORT: ${RABITMQ_PORT}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.email.rule=PathPrefix(`/api-email`)"
-      - "traefik.http.routers.email.entrypoints=web,websecure"
-      - "traefik.http.routers.email.tls=true"
+      # http (без TLS)
+      - "traefik.http.routers.email_http.rule=PathPrefix(`/api-email`)"
+      - "traefik.http.routers.email_http.entrypoints=web"
+      - "traefik.http.routers.email_http.service=email"
+      # https (с TLS)
+      - "traefik.http.routers.email_https.rule=PathPrefix(`/api-email`)"
+      - "traefik.http.routers.email_https.entrypoints=websecure"
+      - "traefik.http.routers.email_https.tls=true"
+      - "traefik.http.routers.email_https.service=email"
+      # общий сервис
       - "traefik.http.services.email.loadbalancer.server.port=8005"
       - "traefik.http.routers.email.middlewares=auth@docker"
     volumes:
@@ -152,15 +169,22 @@ services:
       DEVICE_VALUE_SEND: ${DEVICE_VALUE_SEND}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.device.rule=PathPrefix(`/api-devices`)"
-      - "traefik.http.routers.device.service=device"
-      - "traefik.http.routers.device_ws.rule=PathPrefix(`/ws`)"
+      # http (без TLS)
+      - "traefik.http.routers.device_http.rule=PathPrefix(`/api-devices`)"
+      - "traefik.http.routers.device_http.entrypoints=web"
+      - "traefik.http.routers.device_http.service=device"
+      # https (с TLS)
+      - "traefik.http.routers.device_https.rule=PathPrefix(`/api-devices`)"
+      - "traefik.http.routers.device_https.entrypoints=websecure"
+      - "traefik.http.routers.device_https.tls=true"
+      - "traefik.http.routers.device_https.service=device"
+      # websocket
+      - "traefik.http.routers.device_ws.rule=PathPrefix(`/ws/base`)"
       - "traefik.http.routers.device_ws.service=device_ws"
-      - "traefik.http.services.device.loadbalancer.server.port=8006"
       - "traefik.http.services.device_ws.loadbalancer.server.port=8006"
-      - "traefik.http.routers.device.entrypoints=web,websecure"
       - "traefik.http.routers.device_ws.entrypoints=web"
-      - "traefik.http.routers.device.tls=true"
+      # общий сервис
+      - "traefik.http.services.device.loadbalancer.server.port=8006"
       - "traefik.http.routers.device.middlewares=auth@docker"
     volumes:
       - ./SmartHome:/home/device_service/web
@@ -173,6 +197,8 @@ services:
     build: ./PagesServices
     restart: always
     command: bash -c "uvicorn app:create_app --reload --port=8007 --host='0.0.0.0'"
+    ports:
+      - 1236:8007
     environment:
       EMAIL_TOPIK: ${EMAIL_TOPIK}
       EMAIL_QUEUE: ${EMAIL_QUEUE}
@@ -183,11 +209,19 @@ services:
       DATA_QUEUE: ${DATA_QUEUE}
       DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
       EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+      PREFIX_PATH: modules
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.page.rule=PathPrefix(`/api-pages`)"
-      - "traefik.http.routers.page.entrypoints=web,websecure"
-      - "traefik.http.routers.page.tls=true"
+      # http (без TLS)
+      - "traefik.http.routers.page_http.rule=PathPrefix(`/api-pages`)"
+      - "traefik.http.routers.page_http.entrypoints=web"
+      - "traefik.http.routers.page_http.service=page"
+      # https (с TLS)
+      - "traefik.http.routers.page_https.rule=PathPrefix(`/api-pages`)"
+      - "traefik.http.routers.page_https.entrypoints=websecure"
+      - "traefik.http.routers.page_https.tls=true"
+      - "traefik.http.routers.page_https.service=page"
+      # общий сервис
       - "traefik.http.services.page.loadbalancer.server.port=8007"
       - "traefik.http.routers.page.middlewares=auth@docker"
     volumes:
@@ -218,9 +252,16 @@ services:
       EXCHANGE_ROOM_DATA: ${EXCHANGE_ROOM_DATA}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.script.rule=PathPrefix(`/api-scripts`)"
-      - "traefik.http.routers.script.entrypoints=web,websecure"
-      - "traefik.http.routers.script.tls=true"
+      # http (без TLS)
+      - "traefik.http.routers.script_http.rule=PathPrefix(`/api-scripts`)"
+      - "traefik.http.routers.script_http.entrypoints=web"
+      - "traefik.http.routers.script_http.service=script"
+      # https (с TLS)
+      - "traefik.http.routers.script_https.rule=PathPrefix(`/api-scripts`)"
+      - "traefik.http.routers.script_https.entrypoints=websecure"
+      - "traefik.http.routers.script_https.tls=true"
+      - "traefik.http.routers.script_https.service=script"
+      # общий сервис
       - "traefik.http.services.script.loadbalancer.server.port=8008"
       - "traefik.http.routers.script.middlewares=auth@docker"
     volumes:
@@ -248,11 +289,25 @@ services:
       EXCHANGE_SERVICE_DATA: ${EXCHANGE_SERVICE_DATA}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mqtt.rule=PathPrefix(`/modules/mqtt_page`)"
-      - "traefik.http.routers.mqtt.entrypoints=web,websecure"
+      # http (без TLS)
+      - "traefik.http.routers.mqtt_http.rule=PathPrefix(`/modules/mqtt_page`)"
+      - "traefik.http.routers.mqtt_http.entrypoints=web"
+      - "traefik.http.routers.mqtt_http.middlewares=moduleauth@docker,module-mqtt_page-strip"
+      - "traefik.http.routers.mqtt_http.service=mqtt"
+      # https (с TLS)
+      - "traefik.http.routers.mqtt_https.rule=PathPrefix(`/modules/mqtt_page`)"
+      - "traefik.http.routers.mqtt_https.entrypoints=websecure"
+      - "traefik.http.routers.mqtt_https.middlewares=moduleauth@docker,module-mqtt_page-strip"
+      - "traefik.http.routers.mqtt_https.tls=true"
+      - "traefik.http.routers.mqtt_https.service=mqtt"
+      # websocket
+      - "traefik.http.routers.mqtt_page_ws.rule=PathPrefix(`/ws/mqtt_page`)"
+      - "traefik.http.routers.mqtt_page_ws.service=mqtt_page_ws"
+      - "traefik.http.services.mqtt_page_ws.loadbalancer.server.port=3000"
+      - "traefik.http.routers.mqtt_page_ws.entrypoints=websecure"
+      # общий сервис
       - "traefik.http.services.mqtt.loadbalancer.server.port=3000"
-      - "traefik.http.routers.mqtt.tls=true"
-      - "traefik.http.routers.mqtt.middlewares=moduleauth@docker,module-mqtt_page-strip"
+
       - "traefik.http.middlewares.module-mqtt_page-strip.stripprefixregex.regex=^/modules/mqtt_page"
     volumes:
       - ./Configurate/mqtt_page:/app/config
@@ -298,21 +353,21 @@ services:
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
 
-  # zigbee2mqtt:
-  #   container_name: zigbee2mqtt
-  #   image: koenkk/zigbee2mqtt
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./Configurate/zigbee2mqtt:/app/data
-  #     - /run/udev:/run/udev:ro
-  #   ports:
-  #     - 8081:8080
-  #   environment:
-  #     - TZ=Europe/Moscow
-  #   privileged: true
-  #   depends_on:
-  #     mosquitto:
-  #       condition: service_started
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt
+    restart: unless-stopped
+    volumes:
+      - ./Configurate/zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    ports:
+      - 8081:8080
+    environment:
+      - TZ=Europe/Moscow
+    privileged: true
+    depends_on:
+      mosquitto:
+        condition: service_started
 
 volumes:
   media_voluem:

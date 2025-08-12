@@ -12,4 +12,5 @@ export interface NavigationItem{
 
 export interface NavigationData{
     pages: NavigationItem[]
+    prefix: string
 }

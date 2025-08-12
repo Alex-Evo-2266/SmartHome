@@ -25,6 +25,7 @@ from app.internal.auth.schemas.depends import SessionDepData
 from app.internal.auth.depends.auth import session_dep
 from app.internal.auth.logic.token import create_token
 from app.internal.auth.logic.service_auth import module_service_auth
+from app.internal.auth.logic.get_service_auth import service_config
 
 from app.internal.auth.logic.get_session import get_session_by_id
 
@@ -120,10 +121,11 @@ async def get_temp_token(service: str, session:SessionDepData = Depends(session_
 	return TempTokenData(token=token)
 	
 @router.get("/module-service/check")
-async def chack_user(request: Request, module_auth_sh: Optional[str] = Cookie(None)):
+async def chack_user(request: Request):
 	try:
 		temp_token = request.query_params.get("temp_token")
 		forwarded_uri = request.headers.get("X-Forwarded-Uri")
+		dest = request.headers.get("sec-fetch-dest")
 		scheme = request.headers.get("X-Forwarded-Proto", "http")
 		host = request.headers.get("X-Forwarded-Host", "localhost")
 		if not forwarded_uri:
@@ -142,7 +144,7 @@ async def chack_user(request: Request, module_auth_sh: Optional[str] = Cookie(No
 		inner_path = "/" + "/".join(parts[2:]) if len(parts) > 2 else "/"
 
 		if temp_token:
-			session = await module_service_auth(temp_token=temp_token, path=inner_path, service=service, host=host)
+			session = await module_service_auth(temp_token=temp_token, path=inner_path, service=service, host=host, dest=dest)
 			parsed = urlparse(forwarded_uri)
 			query = parse_qs(parsed.query)
 			query.pop("temp_token", None)  # удаляем temp_token
@@ -163,7 +165,7 @@ async def chack_user(request: Request, module_auth_sh: Optional[str] = Cookie(No
 			)
 			return resp
 		else:
-			print(request, cookies, module_auth_sh)
+
 			session_id = cookies.get(MODULES_COOKIES_NAME)
 			if not session_id:
 				raise HTTPException(status_code=401, detail="No session cookie")
@@ -171,6 +173,9 @@ async def chack_user(request: Request, module_auth_sh: Optional[str] = Cookie(No
 			sess: Session = await get_session_by_id(session_id)
 			if not sess or sess.expires_at < datetime.utcnow():
 				raise HTTPException(status_code=401, detail="Session expired")
+			config = service_config(sess.service, path=inner_path)
+			if config.iframe_only and dest != "iframe":
+				raise HTTPException(status_code=403, detail="Only iframe access allowed")
 			resp = Response(status_code=200)
 
 			await sess.user.load()
@@ -183,5 +188,6 @@ async def chack_user(request: Request, module_auth_sh: Optional[str] = Cookie(No
 	except HTTPException:
 		raise
 	except Exception as e:
-		raise HTTPException(400, str(e))
+		error = f"err {str(e)}"
+		raise HTTPException(400, error)
 	

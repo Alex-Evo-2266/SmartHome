@@ -1,6 +1,6 @@
 import os
 import yaml
-from app.configuration.settings import CONFIG_SERVICES_DIR
+from app.configuration.settings import CONFIG_SERVICES_DIR, PREFIX_PATH
 from app.internal.pages.schemas.navigation import Navigation, NavigationData
 
 def load_navigation_configs() -> NavigationData:
@@ -14,4 +14,4 @@ def load_navigation_configs() -> NavigationData:
                     # если структура файла — список словарей
                     for entry in data:
                         result.append(Navigation(**entry))
-    return NavigationData(pages=result)
+    return NavigationData(pages=result, prefix=PREFIX_PATH)

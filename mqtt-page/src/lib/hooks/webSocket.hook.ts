@@ -18,7 +18,7 @@ export const useSocket = (callbacks: MessageCallback[] = []) =>{
 
   const connectSocket = useCallback(()=>{
     try{
-      const path = `ws://${window.location.host}`
+      const path = `ws://${window.location.host}/ws/mqtt_page`
       socket.current = new WebSocket(path)
     }catch(e){
       console.error(e)

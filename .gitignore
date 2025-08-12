@@ -69,3 +69,5 @@ service_config.yml
 /MatterController/
 
 /SmartHome_env_dev_local/
+
+/certs/*

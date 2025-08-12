@@ -2,10 +2,12 @@
 import {GearIcon, Home, LogoutIcon, MenuIcon, NavigationBar, NavigationDrawer, NavigationRail, NavigationButton as NB, Plug, Room, ScreenSize, useScreenSize} from 'alex-evo-sh-ui-kit'
 import {useHttp} from "../../../shared/lib/hooks/http.hook"
 import { useState } from "react"
+import { useNavigationData } from '../../../entites/navigation'
 
 export const Navigation = () => {
 
 	const {screen} = useScreenSize()
+	const {navigation, prefix} = useNavigationData()
 
 	const [visible, setVisible] = useState<boolean>(false)
 
@@ -89,6 +91,7 @@ export const Navigation = () => {
 			openAlways={false}
 			visible={visible} 
 			mainBtn={RailBtn} 
+			otherBtn={navigation.map(item=>({to:`module_pages/${item.service}${item.path}`, text: item.page_name, type: "link", icon: <></>}))}
 			/>
 			<NavigationRail 
 			onToggleMenu={()=>setVisible(prev=>!prev)} 

@@ -6,7 +6,7 @@ from app.internal.role.logic.get_role import get_role_by_id
 from app.internal.user.logic.get_user import get_user
 from app.internal.auth.logic.create_session import create_session_module
 
-async def module_service_auth(temp_token: str | None = None, path:str = "/", service:str = "", host="localhost"):
+async def module_service_auth(temp_token: str | None = None, path:str = "/", service:str = "", host="localhost", dest:str = ""):
 	payload = await temp_token_check(temp_token)
 	print(payload)
 	if not payload:
@@ -24,6 +24,9 @@ async def module_service_auth(temp_token: str | None = None, path:str = "/", ser
 
 	if user_role.role_name not in config.roles or not user:
 		raise HTTPException(403, "permission denied")
+	
+	if config.iframe_only and dest != "iframe":
+		raise HTTPException(status_code=403, detail="Only iframe access allowed")
 		
 	session = await create_session_module(user, service=service, host=host)
 

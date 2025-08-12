@@ -13,3 +13,4 @@ class Navigation(BaseModel):
 
 class NavigationData(BaseModel):
     pages: List[Navigation]
+    prefix: str
