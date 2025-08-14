@@ -1,10 +1,8 @@
 import { TreeProps } from "@/lib/models/types";
 import React, { useState } from "react";
 
-const RecursiveTree: React.FC<TreeProps> = ({ data, label }) => {
-  const [expanded, setExpanded] = useState(false);
-
-  console.log(data)
+const RecursiveTree: React.FC<TreeProps> = ({ data, label, opened}) => {
+  const [expanded, setExpanded] = useState(opened ?? false);
 
   // Ключи, кроме _value
   const childrenKeys = Object.keys(data).filter((key) => key !== "_value");

@@ -1,8 +1,8 @@
 from asyncio.log import logger
 import json, logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from urllib.parse import urlparse, parse_qs, urlencode
-from app.configuration.settings import ROUTE_PREFIX, MODULES_COOKIES_NAME, MODULE_TOKEN_EXPIRE_MINUTES
+from app.configuration.settings import ROUTE_PREFIX, MODULES_COOKIES_NAME, TIMEZONE
 
 from fastapi import APIRouter, Response, Cookie, Depends, Header, Request, HTTPException
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -115,6 +115,7 @@ async def get_temp_token(service: str, session:SessionDepData = Depends(session_
 			"user_id": user.id,
 			"user_role": role.id
 		},
+		expires_at=datetime.now(TIMEZONE) + timedelta(minutes=15),
 		type="temp_token",
 		service=service
 	)

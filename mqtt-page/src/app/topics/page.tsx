@@ -12,7 +12,7 @@ export default function SocketClient() {
   return (
     <div>
       <h2>WebSocket Messages</h2>
-        <RecursiveTree label='mqtt' data={messages}/>
+        <RecursiveTree label='mqtt' data={messages} opened/>
     </div>
   );
 }

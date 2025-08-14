@@ -34,7 +34,9 @@ async def create_tokens(user: User)->Tokens:
 		expires_at = access_toket_expires_at
 	)
 
-async def create_token(data: dict, expires_at: datetime = datetime.now(settings.TIMEZONE) + timedelta(minutes=15), type: str = "access", secret: str = settings.SECRET_JWT_KEY, service: str | None = None):
+async def create_token(data: dict, expires_at: datetime | None = None, type: str = "access", secret: str = settings.SECRET_JWT_KEY, service: str | None = None):
+	if expires_at is None:
+		expires_at = datetime.now(settings.TIMEZONE) + timedelta(minutes=15)
 	to_encode = data.copy()
 	to_encode.update({'exp': expires_at, 'sub': type, 'service': service})
 	encoded_jwt = jwt.encode(to_encode, secret, algorithm = settings.ALGORITHM)

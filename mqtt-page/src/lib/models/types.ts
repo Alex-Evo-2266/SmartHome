@@ -6,4 +6,5 @@ export type Obj1 = {
 export type TreeProps = {
   data: Obj1;
   label?: string;
+  opened?: boolean
 };

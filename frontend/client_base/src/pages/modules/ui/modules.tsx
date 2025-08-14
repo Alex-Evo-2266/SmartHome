@@ -9,6 +9,8 @@ import { MENU_ROOT_ID, MODAL_ROOT_ID } from '../../../const';
 import { useFetch } from '../api/moduleFetch';
 import { useNavigationData } from '../../../entites/navigation';
 import { useToken } from '../../../entites/navigation/api/get_temp_token';
+import './modules.scss'
+import { Panel } from 'alex-evo-sh-ui-kit';
 
 export const ModulesPage = () => {
 
@@ -52,9 +54,10 @@ export const ModulesPage = () => {
     if(navigation.type === "website" && token !== "" && token !== undefined && token !== null){
         return (
             <div className='container-page'>
-                <iframe style={{width:"100%", height: "90vh"}} src={`/${prefix}/${navigation.service}${navigation.path}?temp_token=${token}`}>
-
-                </iframe>
+                <Panel>
+                    <iframe className='modules-frame' src={`/${prefix}/${navigation.service}${navigation.path}?temp_token=${token}`}>
+                    </iframe>
+                </Panel>
             </div>
         )
     }
