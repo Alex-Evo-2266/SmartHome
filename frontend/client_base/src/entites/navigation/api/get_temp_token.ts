@@ -15,8 +15,12 @@ export const useToken = (service:string) => {
     },[request])
 
     const loadToken = useCallback(async(service:string)=>{
-        const data = await getToken(service)
-        setToken(data)
+        if(service === "")
+            setToken("")
+        else{
+            const data = await getToken(service)
+            setToken(data)
+        }
     },[getToken])
 
     useEffect(()=>{

@@ -1,4 +1,4 @@
-import { BaseButton, Button, ListItem, Switch } from "alex-evo-sh-ui-kit"
+import { BaseButton, Button, IconButton, ListItem, Play, Switch } from "alex-evo-sh-ui-kit"
 import { useCallback } from "react"
 import { Script, useScriptAPI } from "../../../entites/script"
 import { useNavigate } from 'react-router-dom';
@@ -45,8 +45,8 @@ export const ScriptItem:React.FC<ScriptItemProps> = ({script, updateData}) => {
             header={script.name}
             control={
                 <div>
+                    <IconButton icon={<Play/>} onClick={()=>runScript(script.id)}></IconButton>
                     <Switch size='small' checked={script.is_active} onChange={()=>editStatus(script.id, script.is_active)}/>
-                    <BaseButton onClick={()=>runScript(script.id)}>run</BaseButton>
                 </div>
             }
             text={`name: ${script.name}`}

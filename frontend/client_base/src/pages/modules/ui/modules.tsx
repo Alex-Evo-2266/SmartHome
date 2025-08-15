@@ -16,12 +16,14 @@ export const ModulesPage = () => {
 
     const {navigation: navigations, prefix} = useNavigationData()
     const {moduleName, pageName} = useParams<{ moduleName: string, pageName:string }>();
-    const {token} = useToken(moduleName || "")
-
     const navigation = useMemo(
         ()=>navigations.find(item=>item.service === moduleName && item.page_name === pageName),
-        [navigations]
+        [navigations, pageName, moduleName]
     )
+    console.log(navigation)
+    const {token} = useToken(navigation?.type === "website"?moduleName || "": "")
+
+    
     const {getPage, loading} = useModulePageAPI()
     const [pageData, setPageData] = useState<null | PageData>(null)
     const {fetchData} = useFetch(moduleName)
@@ -30,8 +32,11 @@ export const ModulesPage = () => {
         throw new Error("error page url")
 
     const loadPage = useCallback(async()=>{
-        const data = await getPage(moduleName, pageName)
-        setPageData(data)
+        if(navigation?.type === "module")
+        {
+            const data = await getPage(moduleName, pageName)
+            setPageData(data)
+        }
     },[getPage, moduleName, pageName])
 
     useEffect(()=>{

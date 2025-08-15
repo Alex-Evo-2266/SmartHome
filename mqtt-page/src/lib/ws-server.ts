@@ -6,6 +6,12 @@ import {EXCHANGE_SERVICE_DATA} from './envVar'
 
 let started = false;
 
+// let lastMessage: string = "";
+
+// export function getLastMessage(){
+//   return lastMessage
+// }
+
 export function startWebSocketServer(server: Server) {
   if (started) return;
 
@@ -17,9 +23,10 @@ export function startWebSocketServer(server: Server) {
 
   consumeExchange(EXCHANGE_SERVICE_DATA ?? 'exchangeServiceData', 'fanout', (msg) => {
     console.log('➡️ Broadcasting message:', msg);
+    const message = JSON.stringify({type: "message_service", data: msg})
     wss.clients.forEach((client) => {
       if (client.readyState === 1) {
-        client.send(JSON.stringify({type: "message_service", data: msg}));
+        client.send(message);
       }
     });
   });

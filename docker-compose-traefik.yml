@@ -97,13 +97,13 @@ services:
       # middleware для обычной проверки
       - "traefik.http.middlewares.auth.forwardauth.address=http://auth_service:8004/api-auth/check"
       - "traefik.http.middlewares.auth.forwardauth.trustforwardheader=true"
-      - "traefik.http.middlewares.auth.forwardauth.authresponseheaders=X-User-Id,X-User-Role,X-Access-Token"
+      - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=x-user-id,x-user-role,x-access-token,x-user-privilege"
 
       # middleware для iframe-сервисов
       - "traefik.http.middlewares.moduleauth.forwardauth.address=http://auth_service:8004/api-auth/module-service/check"
       - "traefik.http.middlewares.moduleauth.forwardauth.trustforwardheader=true"
       - "traefik.http.middlewares.moduleauth.forwardauth.authrequestheaders=Cookie,X-Original-Uri"
-      - "traefik.http.middlewares.moduleauth.forwardauth.authresponseheaders=X-User-Id,X-User-Role,X-Access-Token,X-Target-Service,X-Path-Inside"
+      - "traefik.http.middlewares.moduleauth.forwardauth.authResponseHeaders=x-user-id,x-user-role,x-access-token,x-user-privilege"
     volumes:
       - ./SmartHomeAuth:/home/auth_service/web
       - ./Configurate:/home/auth_service/web/config_services
@@ -129,14 +129,15 @@ services:
       - "traefik.http.routers.email_http.rule=PathPrefix(`/api-email`)"
       - "traefik.http.routers.email_http.entrypoints=web"
       - "traefik.http.routers.email_http.service=email"
+      - "traefik.http.routers.email_http.middlewares=auth@docker"
       # https (с TLS)
       - "traefik.http.routers.email_https.rule=PathPrefix(`/api-email`)"
       - "traefik.http.routers.email_https.entrypoints=websecure"
       - "traefik.http.routers.email_https.tls=true"
       - "traefik.http.routers.email_https.service=email"
+      - "traefik.http.routers.email_https.middlewares=auth@docker"
       # общий сервис
       - "traefik.http.services.email.loadbalancer.server.port=8005"
-      - "traefik.http.routers.email.middlewares=auth@docker"
     volumes:
       - ./EmailService:/home/email_service/web
       - media_voluem:/home/email_service/web/media
@@ -173,11 +174,13 @@ services:
       - "traefik.http.routers.device_http.rule=PathPrefix(`/api-devices`)"
       - "traefik.http.routers.device_http.entrypoints=web"
       - "traefik.http.routers.device_http.service=device"
+      - "traefik.http.routers.device_http.middlewares=auth@docker"
       # https (с TLS)
       - "traefik.http.routers.device_https.rule=PathPrefix(`/api-devices`)"
       - "traefik.http.routers.device_https.entrypoints=websecure"
       - "traefik.http.routers.device_https.tls=true"
       - "traefik.http.routers.device_https.service=device"
+      - "traefik.http.routers.device_https.middlewares=auth@docker"
       # websocket
       - "traefik.http.routers.device_ws.rule=PathPrefix(`/ws/base`)"
       - "traefik.http.routers.device_ws.service=device_ws"
@@ -185,7 +188,6 @@ services:
       - "traefik.http.routers.device_ws.entrypoints=web"
       # общий сервис
       - "traefik.http.services.device.loadbalancer.server.port=8006"
-      - "traefik.http.routers.device.middlewares=auth@docker"
     volumes:
       - ./SmartHome:/home/device_service/web
       - media_device_voluem:/home/device_service/web/media
@@ -216,14 +218,15 @@ services:
       - "traefik.http.routers.page_http.rule=PathPrefix(`/api-pages`)"
       - "traefik.http.routers.page_http.entrypoints=web"
       - "traefik.http.routers.page_http.service=page"
+      - "traefik.http.routers.page_http.middlewares=auth@docker"
       # https (с TLS)
       - "traefik.http.routers.page_https.rule=PathPrefix(`/api-pages`)"
       - "traefik.http.routers.page_https.entrypoints=websecure"
       - "traefik.http.routers.page_https.tls=true"
       - "traefik.http.routers.page_https.service=page"
+      - "traefik.http.routers.page_https.middlewares=auth@docker"
       # общий сервис
       - "traefik.http.services.page.loadbalancer.server.port=8007"
-      - "traefik.http.routers.page.middlewares=auth@docker"
     volumes:
       - ./Configurate/page_service:/home/device_service/web/config
       - ./Configurate:/home/device_service/web/config_services
@@ -256,11 +259,13 @@ services:
       - "traefik.http.routers.script_http.rule=PathPrefix(`/api-scripts`)"
       - "traefik.http.routers.script_http.entrypoints=web"
       - "traefik.http.routers.script_http.service=script"
+      - "traefik.http.routers.script_http.middlewares=auth@docker"
       # https (с TLS)
       - "traefik.http.routers.script_https.rule=PathPrefix(`/api-scripts`)"
       - "traefik.http.routers.script_https.entrypoints=websecure"
       - "traefik.http.routers.script_https.tls=true"
       - "traefik.http.routers.script_https.service=script"
+      - "traefik.http.routers.script_https.middlewares=auth@docker"
       # общий сервис
       - "traefik.http.services.script.loadbalancer.server.port=8008"
       - "traefik.http.routers.script.middlewares=auth@docker"

@@ -1,7 +1,5 @@
 from asyncio.log import logger
 import json, logging
-from datetime import datetime, timedelta
-from urllib.parse import urlparse, parse_qs, urlencode
 from app.configuration.settings import ROUTE_PREFIX, MODULES_COOKIES_NAME, TIMEZONE
 
 from fastapi import APIRouter, Response, Cookie, Depends, Header, Request, HTTPException
@@ -9,10 +7,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from typing import Optional, Annotated
 
 from app.internal.exceptions.base import InvalidInputException
-
-from app.internal.user.models.user import User
-from app.internal.role.models.role import Role
-
+from app.internal.auth.routes.utils import generate_temp_token, handle_existing_session, handle_temp_token, parse_forwarded_uri
 from app.internal.auth.logic.login import login_data_check
 from app.internal.auth.logic.create_session import create_session
 from app.internal.auth.logic.get_session import get_token
@@ -23,11 +18,6 @@ from app.internal.auth.models.auth import Session
 from app.internal.auth.schemas.auth import Login, LoginHeaders, TempTokenData
 from app.internal.auth.schemas.depends import SessionDepData
 from app.internal.auth.depends.auth import session_dep
-from app.internal.auth.logic.token import create_token
-from app.internal.auth.logic.service_auth import module_service_auth
-from app.internal.auth.logic.get_service_auth import service_config
-
-from app.internal.auth.logic.get_session import get_session_by_id
 
 logger = logging.getLogger(__name__)
 
@@ -105,90 +95,26 @@ async def logout(response:Response = Response("ok", 200), userData:SessionDepDat
 	except Exception as e:
 		logger.error(str(e))
 		return JSONResponse(status_code=400, content={"message": str(e)})
-	
+
 @router.get("/module-service/temp-token", response_model=TempTokenData)
-async def get_temp_token(service: str, session:SessionDepData = Depends(session_dep)):
-	user: User = session.user
-	role: Role = session.role
-	token = await create_token(
-		data={
-			"user_id": user.id,
-			"user_role": role.id
-		},
-		expires_at=datetime.now(TIMEZONE) + timedelta(minutes=15),
-		type="temp_token",
-		service=service
-	)
-	return TempTokenData(token=token)
-	
+async def get_temp_token(service: str, session: SessionDepData = Depends(session_dep)):
+    """Эндпоинт для генерации временного токена."""
+    return await generate_temp_token(session.user, session.role, service)
+
+
 @router.get("/module-service/check")
-async def chack_user(request: Request):
-	try:
-		temp_token = request.query_params.get("temp_token")
-		forwarded_uri = request.headers.get("X-Forwarded-Uri")
-		dest = request.headers.get("sec-fetch-dest")
-		scheme = request.headers.get("X-Forwarded-Proto", "http")
-		host = request.headers.get("X-Forwarded-Host", "localhost")
-		if not forwarded_uri:
-			raise HTTPException(400, "Missing X-Forwarded-Uri")
-			
-		parsed = urlparse(forwarded_uri)
-		query_params = parse_qs(parsed.query)
-		cookies = request.cookies
-		temp_token = query_params.get("temp_token", [None])[0]
-		parts = parsed.path.strip("/").split("/")  
+async def check_user(request: Request):
+    """
+    Проверка пользователя при обращении к модульному сервису.
+    """
+    try:
+        forwarded_uri, dest, scheme, host, service, inner_path, temp_token = parse_forwarded_uri(request)
+        if temp_token:
+            return await handle_temp_token(temp_token, forwarded_uri, scheme, host, inner_path, service, dest)
+        return await handle_existing_session(request, inner_path, dest)
 
-		if len(parts) < 2 or parts[0] != "modules":
-			raise HTTPException(400, "Invalid path format")
-
-		service = parts[1]  # service-b
-		inner_path = "/" + "/".join(parts[2:]) if len(parts) > 2 else "/"
-
-		if temp_token:
-			session = await module_service_auth(temp_token=temp_token, path=inner_path, service=service, host=host, dest=dest)
-			parsed = urlparse(forwarded_uri)
-			query = parse_qs(parsed.query)
-			query.pop("temp_token", None)  # удаляем temp_token
-			clean_qs = urlencode(query, doseq=True)
-
-			clean_path = parsed.path
-			if clean_qs:
-				clean_path += "?" + clean_qs
-			absolute_url = f"{scheme}://{host}{clean_path}"
-			resp = RedirectResponse(url=absolute_url)
-			resp.set_cookie(
-				key=MODULES_COOKIES_NAME,
-				value=session.id,
-				httponly=True,
-				secure=True,
-				samesite="none",
-				path="/",   # доступно во всех путях
-			)
-			return resp
-		else:
-
-			session_id = cookies.get(MODULES_COOKIES_NAME)
-			if not session_id:
-				raise HTTPException(status_code=401, detail="No session cookie")
-			
-			sess: Session = await get_session_by_id(session_id)
-			if not sess or sess.expires_at < datetime.utcnow():
-				raise HTTPException(status_code=401, detail="Session expired")
-			config = service_config(sess.service, path=inner_path)
-			if config.iframe_only and dest != "iframe":
-				raise HTTPException(status_code=403, detail="Only iframe access allowed")
-			resp = Response(status_code=200)
-
-			await sess.user.load()
-			await sess.user.role.load()
-			resp.headers["X-Status-Auth"] = "ok"
-			resp.headers["X-User-Role"] = sess.user.role.role_name
-			resp.headers["X-User-Privilege"]= ", ".join([privilege.privilege for privilege in await get_privilege(sess.user.role)])
-			resp.headers["X-User-Id"]=sess.user.id
-			return resp
-	except HTTPException:
-		raise
-	except Exception as e:
-		error = f"err {str(e)}"
-		raise HTTPException(400, error)
-	
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception("Ошибка при проверке пользователя")
+        raise HTTPException(400, f"Unexpected error: {str(e)}")
