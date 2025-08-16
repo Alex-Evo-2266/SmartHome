@@ -8,7 +8,7 @@ from app.pkg import itemConfig, ConfigItemType, __config__
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.configuration.loop.loop import loop
 from app.pkg.ormar.dbormar import database
-from app.configuration.settings import EXCHANGE_ROOM_DATA,EXCHANGE_SERVICE_DATA, FREQUENCY, DEVICE_VALUE_SEND, DATA_SCRIPT, SEND_DEVICE_CONF, DEVICE_DATA_POLL, EXCHANGE_DEVICE_DATA, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
+from app.configuration.settings import EXCHANGE_ROOM_DATA,EXCHANGE_SERVICE_DATA, RABITMQ_HOST, FREQUENCY, DEVICE_VALUE_SEND, DATA_SCRIPT, SEND_DEVICE_CONF, DEVICE_DATA_POLL, EXCHANGE_DEVICE_DATA, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
 from app.ingternal.device.polling import restart_polling
 from app.ingternal.device.send import restart_send_device_data
 from app.ingternal.device.save import restart_save_data
@@ -22,10 +22,7 @@ from app.ingternal.senderPoll.sender import sender_device, sender_service, sende
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.modules.classes.baseService import BaseService
 
-from app.ingternal.listener.service.serviceGetData import loadServiceData
-from app.ingternal.listener.service.setData import setDataService
-from app.ingternal.listener.device.device_connected import loadDeviceData
-from app.ingternal.listener.device.device_listener import device_listener
+from app.ingternal.listener.listener import loadServiceData, loadDeviceData
 from app.configuration.queue import __queue__
 
 from app.ingternal.test_print import print_test
@@ -135,21 +132,23 @@ async def startup():
     except RuntimeError as e:
         logger.error(f"Failed to start main loop: {e}")
 
-    async def printServiceSend(*args, **keys):
-        logger.info("sendService p8888")
+    # подключение отправление rabitqm
+    sender_device.connect(exchange_name=EXCHANGE_DEVICE_DATA, host=RABITMQ_HOST)
+    sender_room.connect(exchange_name=EXCHANGE_ROOM_DATA, host=RABITMQ_HOST)
+    sender_script.connect(queue_name=DATA_SCRIPT, host=RABITMQ_HOST)
+    sender_service.connect(exchange_name=EXCHANGE_SERVICE_DATA, host=RABITMQ_HOST)
 
+    # подписка на изменение
     data_poll: ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
-    sender_device.connect(EXCHANGE_DEVICE_DATA, data_poll)
     data_poll.subscribe_all("sender", sender_device.send)
-    sender_room.connect(EXCHANGE_ROOM_DATA)
     data_poll.subscribe_all("sender2", sender_room.send)
-    sender_script.connect(DATA_SCRIPT)
+
     service_data_poll: ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
-    sender_service.connect(EXCHANGE_SERVICE_DATA, service_data_poll)
     service_data_poll.subscribe_all("sender", sender_service.send)
     service_data_poll.subscribe_all("prinbt", print_test)
 
-    loadServiceData.connect(DATA_LISTEN_QUEUE, setDataService)
-    loadDeviceData.connect(DEVICE_VALUE_SEND, device_listener)
+    # слушатели
+    loadServiceData.start()
+    loadDeviceData.start()
 
     logger.info("Device service started successfully.")

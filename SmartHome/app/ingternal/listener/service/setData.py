@@ -1,7 +1,6 @@
-from app.configuration.settings import SERVICE_POLL, DEVICE_DATA_POLL
+from app.configuration.settings import SERVICE_POLL
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.ingternal.modules.classes.baseServiceInterface import IBaseService
-import asyncio
 
 def setDataService(method, properties, body):
     try:
