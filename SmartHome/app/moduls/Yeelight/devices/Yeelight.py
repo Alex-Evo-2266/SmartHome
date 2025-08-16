@@ -106,7 +106,7 @@ class YeelightDevice(BaseDevice):
 	@property
 	def is_conected(self):
 		try:
-			return self.device and self.device.get_properties() is not None
+			return self.device is not None and self.device.get_properties() is not None
 		except Exception:
 			return False
 

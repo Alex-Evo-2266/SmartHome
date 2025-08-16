@@ -111,7 +111,7 @@ async def polling(device_data: DeviceSerializeSchema):
 		# Обработка подключения устройства / Handle device connection
 		connection_device_item = DevicesArray.get(device_data.system_name)
 		logger.info(f"connect item: {connection_device_item}")
-		if not connection_device_item:
+		if connection_device_item is None:
 			device = await init_device(device_data)
 			if device == StatusDevice.NOT_SUPPORTED or device == StatusDevice.OFFLINE:
 				update_device_in_poll(get_default_data(device_data, device))
