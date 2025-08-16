@@ -1,5 +1,4 @@
-from app.configuration.queue.types import QueueItem
-from typing import Any
+from queue_lib import QueueItem
 from app.ingternal.logs import get_base_logger
 from app.ingternal.device.serialize_model.create import add_device
 from app.ingternal.device.serialize_model.delete import delete_device
