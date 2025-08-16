@@ -139,6 +139,7 @@ RUN python3 --version  # Должно вывести 3.12.x
 # Создаём рабочие директории
 RUN mkdir -p /home/device_service/web
 WORKDIR /home/device_service/web
+RUN mkdir -p /home/device_service/web/shared_lib
 
 # Удаляем старую директорию .venv, если она есть
 # RUN rm -rf /home/device_service/web/.venv
@@ -148,12 +149,14 @@ WORKDIR /home/device_service/web
 
 # Копируем файлы poetry.lock и pyproject.toml
 COPY poetry.lock pyproject.toml ./
+COPY ./external/whl_all ./shared_lib
 
 # Очистка кэша Poetry
 RUN poetry cache clear pypi --all
 
 # Устанавливаем зависимости
 RUN poetry install --no-interaction --no-ansi $(test "$YOUR_ENV" == "production" && echo "--no-dev")
+RUN poetry add ./shared_lib/*.whl
 
 # Проверяем, что Poetry использует правильный Python
 RUN poetry run python --version  # Должно вывести 3.12.x

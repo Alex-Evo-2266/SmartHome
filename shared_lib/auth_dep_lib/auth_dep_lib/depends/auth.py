@@ -31,7 +31,6 @@ def auth_privilege_dep(pivilege:str):
 				"X_user_privilege": request.headers.get("x-user-privilege"),
 			}
 			headers = Headers(**headers_data)
-			print(headers)
 			headers.X_user_privilege
 			if not headers.X_user_id or not headers.X_user_privilege:
 				raise HTTPException(status_code=400, detail="invalid auth data")
