@@ -76,6 +76,7 @@ export const Navigation = () => {
 				openAlways={false}
 				visible={visible} 
 				mainBtn={RailBtn} 
+				otherBtn={navigation.map(item=>({to:`module_pages/${item.service}${item.path}`, text: item.page_name, type: "link", icon: <></>}))}
 				/>
 				<NavigationBar
 					btns={BarBtn}
@@ -107,6 +108,7 @@ export const Navigation = () => {
 			openAlways={true}
 			visible={visible} 
 			mainBtn={RailBtn} 
+			otherBtn={navigation.map(item=>({to:`module_pages/${item.service}${item.path}`, text: item.page_name, type: "link", icon: <></>}))}
 			/>
 	</>
 	)
