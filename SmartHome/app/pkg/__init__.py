@@ -2,7 +2,7 @@ from app.configuration.settings import CONFIG_TAG, ROUTE_PREFIX, CONFIG_DIR, CON
 from config_lib import get_router, ConfigRouterOption, Config, itemConfig, ConfigItemType
 from auth_dep_lib import auth_privilege_dep
 from app.pkg.loop import EventLoop, EventLoopItem
-from .rabitmq import *
+from rabitmq import *
 
 __config__ = Config(CONFIG_DIR, CONFIG_FILE_NAME)
 
