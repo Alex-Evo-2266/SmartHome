@@ -32,6 +32,10 @@ export const useRoomAPI = () => {
         await request(`/api-devices/rooms/${roomName}/devices`, TypeRequest.PATCH, {devices: deviceNameList})
     },[request])
 
+    const roomSetDeviceValue = useCallback(async (roomName: string, device_type: string, field_name: string, value: string)=>{
+        await request(`/api-devices/rooms/set/value`, TypeRequest.PATCH, {name_room: roomName, device_type: device_type, field_name: field_name, value: value})
+    },[request])
+
     useEffect(()=>{
         if (error)
             showSnackbar(error, {}, 10000)
@@ -46,6 +50,7 @@ export const useRoomAPI = () => {
         addRoom,
         deleteRoom,
         roomSetDevice,
+        roomSetDeviceValue,
         loading
     }
 }
