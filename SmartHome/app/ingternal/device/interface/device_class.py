@@ -6,6 +6,7 @@ from app.ingternal.device.schemas.enums import ReceivedDataFormat, DeviceGetData
 class IDevice():
 
 	device_config = ConfigSchema()
+	data: DeviceSerializeSchema
 
 	async def async_init(self):
 		'''

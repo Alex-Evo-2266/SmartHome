@@ -2,7 +2,7 @@ from app.ingternal.device.models.device import Device, DeviceField
 from app.ingternal.room.models.room import Room
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceSerializeFieldSchema
 from app.ingternal.device.serialize_model.utils import map_status
-from app.ingternal.device_types.serialize_model.read import get_type_main_device
+from app.ingternal.device_types.serialize_model.read import get_type_main_device, get_type_device
 from app.ingternal.device_types.exceptions.device_type import DeviceTypeNotFound
 from typing import List
 from app.ingternal.logs import get_base_logger
@@ -34,14 +34,17 @@ async def serialize_device(device: Device | None, fields_include: bool = False) 
     logger.debug(f"Serializing device: {device.system_name}...")  # Log the device being serialized
     try:
         logger.debug(f"Error type device3")
-        type_data = await get_type_main_device(device.system_name)
+        types = await get_type_device(device.system_name)
+        type_data = None
+        for item in types:
+            if item.main:
+                type_data = item
         logger.debug(f"Error type device4")
     except Exception:
         logger.debug(f"Error type device")
         type_data = None
+        types = []
 
-
-    logger.debug(f"u00 {device}")
     data = DeviceSerializeSchema(
         name=device.name,
         system_name=device.system_name,
@@ -53,10 +56,10 @@ async def serialize_device(device: Device | None, fields_include: bool = False) 
         type_get_data=device.type_get_data,
         status=map_status(device.status),
         type_mask=type_data,
+        all_types=types,
         room=get_room_name(device.room),
         position_in_room=device.position_in_room
     )
-    logger.debug(f"u01 {data}")
     
     if fields_include:
         logger.debug(f"Fields included in the serialization for device: {device.system_name}.")  # Log if fields are included

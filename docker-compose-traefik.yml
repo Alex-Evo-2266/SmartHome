@@ -149,6 +149,8 @@ services:
     build: ./SmartHome
     restart: always
     command: bash -c "uvicorn app:create_app --reload --port=8006 --host='0.0.0.0'"
+    ports:
+      - 1235:8006
     environment:
       EMAIL_TOPIK: ${EMAIL_TOPIK}
       EMAIL_QUEUE: ${EMAIL_QUEUE}

@@ -23,7 +23,7 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		if device.fields:
 			for item in device.fields:
 				self.fields.append(FieldBase(item, device.system_name))
-		self.device = None	
+		self.device = None
 
 	def _add_field(self, item:DeviceInitFieldSchema):
 		self.fields.append(FieldBase(DeviceSerializeFieldSchema(**(item.dict()), id=""), self.data.system_name))

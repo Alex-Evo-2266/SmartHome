@@ -1,10 +1,11 @@
 import logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
-from app.ingternal.room.schemas.room import RoomCreate, RoomDevicesUpdate, RoomUpdate, RoomDevicesRaw, RoomDevciesRawList, RoomDevicesLink
+from app.ingternal.room.schemas.room import RoomCreate, RoomDevicesUpdate, RoomUpdate, RoomDevicesRaw, RoomDevciesRawList, RoomDevicesLink, RoomDevicesSet
 from app.ingternal.room.serialize_model.room import create_room, delete_room, update_device_room, update_room
 from app.ingternal.room.serialize_model.get_room import get_room, get_room_all
 from app.ingternal.room.serialize_model.device_in_room import room_add_device
+from app.ingternal.room.set_value_room import set_value_room
 
 router = APIRouter(
     prefix="/api-devices/rooms",
@@ -76,3 +77,7 @@ async def link_room(data:RoomDevicesLink):
     except Exception as e:
         logger.warning(str(e))
         return JSONResponse(status_code=400, content={"error": str(e)})
+
+@router.patch("/set/value")
+async def set_device_value_in_room(data: RoomDevicesSet):
+    await set_value_room(data.name_room, data.device_type, data.field_name, data.value)

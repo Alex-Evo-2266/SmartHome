@@ -21,9 +21,8 @@ def custom_openapi(app:FastAPI):
 		if app.openapi_schema:
 			return app.openapi_schema
 		openapi_schema = get_openapi(
-			title="WebSocket API",
+			title="Device service",
 			version="1.0.0",
-			description="This is a simple WebSocket API",
 			routes=app.routes,
 		)
 		openapi_schema["paths"]["/ws/base"] = {
