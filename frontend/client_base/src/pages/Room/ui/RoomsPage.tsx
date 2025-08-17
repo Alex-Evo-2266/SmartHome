@@ -4,10 +4,11 @@ import { RoomCard } from "./RoomCard"
 import { DialogPortal } from "../../../shared"
 import { useCallback, useState } from "react"
 import './RoomPage.scss'
+import { Loading } from "../../../shared/ui/Loading"
 
 export const RoomsPage = () => {
 
-    const {rooms, addRoom, getRooms} = useRoom()
+    const {rooms, addRoom, getRooms, loading} = useRoom()
     const [visible, setVisible] = useState<boolean>(false)
 
     const addRoomHandler = useCallback(async(data:string)=>{
@@ -15,6 +16,11 @@ export const RoomsPage = () => {
         await getRooms()
         setVisible(false)
     },[addRoom])
+
+    if(loading)
+    {
+        return <Loading/>
+    }
 
     return(
         <div className="rooms-page container-page">
