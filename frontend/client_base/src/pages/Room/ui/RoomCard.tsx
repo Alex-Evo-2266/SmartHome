@@ -18,6 +18,7 @@ export const RoomCard:React.FC<RoomCardProps> = ({children, room}) => {
     const {click: clickLight, value: light_val} = useBoolRoom("LIGHT", "power", room)
     const {click: clickDecoLight, value: deco_light_val} = useBoolRoom("LIGHT_DECO", "power", room)
     const {value: lum} = useNumberRoom("ILLUMINANCE", "lum", room)
+    const {value: temp} = useNumberRoom("CLIMATE", "temp", room)
 
     const clickLightHandler = useCallback((e:React.MouseEvent<HTMLDivElement>)=>{
         e.stopPropagation()
@@ -52,6 +53,10 @@ export const RoomCard:React.FC<RoomCardProps> = ({children, room}) => {
                 {
                     lum !== undefined &&
                     <Typography type="title-1">lum: {lum}</Typography>
+                }
+                {
+                    temp !== undefined &&
+                    <Typography type="title-1">temp: {temp}</Typography>
                 }
                 {children}
             </div>
