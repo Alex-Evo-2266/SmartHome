@@ -1,4 +1,4 @@
-import { Card, Divider, RunningLine, SizeContext, Switch } from 'alex-evo-sh-ui-kit'
+import { Card, Divider, RunningLine, ScreenSize, SizeContext, Switch } from 'alex-evo-sh-ui-kit'
 import { DeviceCardProps } from '../../models/props'
 import './Light.scss'
 import './DeviceCardTemplate.scss'
@@ -11,7 +11,7 @@ import img2 from '../../../../../public/img/device/lamp2.png'
 
 export const LightDevice:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()
-    const {screen} = useContext(SizeContext)
+    const {screen} = useContext<{screen: ScreenSize}>(SizeContext)
     
     const {field: power, fieldValue: powerValue, changeField: changePower} = useGetBinaryField(device, "power")
     const {fieldValue: brightnessValue} = useGetNumberField(device, "brightness")
@@ -27,7 +27,7 @@ export const LightDevice:React.FC<DeviceCardProps> = ({device}) => {
                 <div style={{width: "calc(100% - 60px)"}}>
                     <RunningLine className='header-text' weight='bold' type='title' screensize={screen} text={device.name}/>
                 </div>
-                <img style={{margin: "-5px"}} className='card-device-img' src={powerValue? img2: img1}/>
+                <img style={{margin: "-5px"}} className='card-device-img' src={powerValue? img2: img1} loading="lazy"/>
             </div>
             <div className='control-container'>
                 <div className='control-row state-switch'>
