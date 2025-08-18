@@ -1,2 +1,2 @@
 export * from './models/room'
-export {useRoomAPI} from './api/roomsAPI'
+export {useRoomAPI, useRooms} from './api/roomsAPI'

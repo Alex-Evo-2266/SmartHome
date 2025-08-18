@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
 import { Room, RoomCreate, Rooms } from ".."
@@ -52,5 +52,27 @@ export const useRoomAPI = () => {
         roomSetDevice,
         roomSetDeviceValue,
         loading
+    }
+}
+
+export const useRooms = () => {
+
+    const {getRooms, loading} = useRoomAPI()
+    const [rooms, setRooms] = useState<Room[]>([])
+
+    const loadRoom = useCallback(async()=>{
+        const data = await getRooms()
+        setRooms(data.rooms)
+    },[getRooms])
+
+    useEffect(()=>{
+        loadRoom()
+    },[loadRoom])
+
+    return {
+        getRooms,
+        loading,
+        rooms,
+        loadRoom
     }
 }
