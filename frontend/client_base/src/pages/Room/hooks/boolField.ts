@@ -4,19 +4,9 @@ import { DeviceTypeModel, Room, useRoomAPI } from "../../../entites/rooms";
 import { useAppSelector } from "../../../shared/lib/hooks/redux";
 
 export function statusBoolConvert(data: DeviceSerializeFieldSchema): boolean {
-    const { value, high, low } = data;
+    const {value} = data
 
-    // Если значение отсутствует, возвращаем false
-    if (value == null) return false;
-
-    // Если указано high и текущее значение ему соответствует → true
-    if (high != null && value === high) return true;
-
-    // Если указано low и текущее значение ему соответствует → false
-    if (low != null && value === low) return false;
-
-    // Если high не указано, пробуем привести значение как булевое (строка "1" или "true")
-    if (high == null && (value === "1" || String(value).toLowerCase() === "true"))
+    if (value === "1" || String(value).toLowerCase() === "true")
         return true;
 
     // По умолчанию считаем false

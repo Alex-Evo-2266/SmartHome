@@ -46,7 +46,7 @@ export const RoomCard:React.FC<RoomCardProps> = ({children, room}) => {
                     deco_light_val !== undefined &&
                     <div className="room-card-bool-indicator-container">
                         <div onClick={clickDecoLightHandler} className={`room-card-bool-indicator ${deco_light_val? "active": ""}`}>
-                            <Typography type="title-1">light</Typography>
+                            <Typography type="title-1">light deco</Typography>
                         </div>
                     </div>
                 }

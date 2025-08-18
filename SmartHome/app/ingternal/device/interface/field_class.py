@@ -9,10 +9,10 @@ class IField():
 	def get_full_value(self)->str | None:
 		pass
 	
-	def get_high(self):
+	def get_high(self)-> str | None:
 		pass
 
-	def get_low(self):
+	def get_low(self) -> str | None:
 		pass
 
 	def get_type(self)->TypeDeviceField:

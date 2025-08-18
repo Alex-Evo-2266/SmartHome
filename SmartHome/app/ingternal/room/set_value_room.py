@@ -3,6 +3,7 @@ from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.schemas.device import DeviceSerializeSchema
 from app.ingternal.device_types.exceptions.device_type import DeviceTypeNotFound
 from app.ingternal.device_types.serialize_model.read import get_type_device
+from app.ingternal.device.set_device_status import set_status_for_device
 import logging
 
 logger = logging.getLogger(__name__)
@@ -39,7 +40,7 @@ async def set_value_room(room: str, device_type: str, field: str, value: str):
             ]
             for field_info in matching_fields:
                 try:
-                    device.set_value(field_info.id_field_device, value)
+                    set_status_for_device(device, field_info.id_field_device, value)
                     logger.info(
                         f"Значение {field} устройства {device.data.system_name} обновлено на {value}"
                     )

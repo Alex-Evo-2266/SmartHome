@@ -20,7 +20,7 @@ class RoomDevicesRaw(BaseModel):
     devices: List[DeviceRoom]
     device_room: Optional[Dict[str, DeviceTypeModel]] = None
 
-class RoomDevciesRawList(BaseModel):
+class RoomDevicesRawList(BaseModel):
     rooms: List[RoomDevicesRaw]
 
 class RoomDevicesLink(BaseModel):
