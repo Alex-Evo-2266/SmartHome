@@ -5,7 +5,7 @@ from app.ingternal.device.schemas.enums import TypeDeviceField
 from typing import Optional
 
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
-from app.ingternal.device.schemas.device import DeviceSchema
+from app.ingternal.device.schemas.device import DeviceSchema, DeviceSerializeFieldSchema
 from app.ingternal.device.exceptions.device import DeviceNotFound, DeviceNotValueFound, DeviceFieldNotFound
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
 from app.ingternal.device.interface.device_class import IDevice
@@ -17,20 +17,38 @@ from app.ingternal.logs import get_automatization
 
 logger = get_automatization.get_logger(__name__)
 
-async def condition_data(service: str, object: str, data: str):
+async def condition_data(service: str, arg: str):
+    ar = arg.split('.')
+    
     if service == 'device':
-        dev: ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
-        device: Optional[DeviceSchema] = dev.get(object)
+        if len(ar) != 2:
+            raise Exception("invalid condition")
+        object = ar[0]
+        data = ar[1]
+        dev = DevicesArray.get(object)
+        device:IDevice = dev.device
+        # dev: ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
+        # device: Optional[DeviceSchema] = dev.get(object)
         if not device:
             logger.error(f"Device not found: {object}")
             raise DeviceNotFound()
-        value = device.value.get(data, None)
+        f = device.get_field(data)
+        value = f.get()
         logger.info(f"Fetched device value: {value} for device {object}")
         if value is None:
             logger.error(f"Device value not found: {data} in {object}")
             raise DeviceNotValueFound()
+        if f.get_type() == TypeDeviceField.BINARY:
+            if value =='1':
+                return "true"
+            elif value == '1':
+                return "false"
         return value
     elif service == 'value':
+        if len(ar) != 1:
+            raise Exception("invalid condition")
+        data = ar[0]
+        logger.info(f"Fetched value: {data}")
         return data
     elif service == 'time':
         pass
@@ -39,8 +57,9 @@ async def condition_data(service: str, object: str, data: str):
         return None
 
 async def condition(condition: ConditionItemSchema) -> bool:
-    condition_item1 = await condition_data(condition.arg1_service, condition.arg1_object, condition.arg1_data)
-    condition_item2 = await condition_data(condition.arg2_service, condition.arg2_object, condition.arg2_data)
+    condition_item1 = await condition_data(condition.arg1_service, condition.arg1)
+    condition_item2 = await condition_data(condition.arg2_service, condition.arg2)
+    logger.info(f"arg1: {condition_item1}, arg2; {condition_item2}")
     
     if condition.operation == Operation.EQUAL:
         return condition_item1 == condition_item2
@@ -69,14 +88,19 @@ async def condition(condition: ConditionItemSchema) -> bool:
 
 async def action(data: ActionItemSchema):
     if data.service == "device":
-        device = DevicesArray.get(data.object)
+        ar = data.action.split('.')
+        if len(ar) != 2:
+            raise Exception("invalid action")
+        system_name = ar[0]
+        field = ar[1]
+        device = DevicesArray.get(system_name)
         if not device:
-            logger.error(f"Device not found: {data.object}")
+            logger.error(f"Device not found: {system_name}")
             raise DeviceNotFound()
         device_control: IDevice = device.device
-        field = device_control.get_field_by_name(data.field)
+        field = device_control.get_field_by_name(field)
         if not field:
-            logger.error(f"Device field not found: {data.field} in {data.object}")
+            logger.error(f"Device field not found: {field} in {system_name}")
             raise DeviceFieldNotFound()
         
         if field.get_type() == TypeDeviceField.BINARY and data.data == "target":
@@ -95,11 +119,11 @@ async def action(data: ActionItemSchema):
             elif (field.get_low() is not None and value == "1"):
                 device_control.set_value(field.get_id(), field.get_low(), script=True)
         else:
-            logger.info(f"Setting field {data.field} to {data.data}")
+            logger.info(f"Setting field {field} to {data.data}")
             device_control.set_value(field.get_id(), data.data, script=True)
     elif data.service == "script":
         await sender_script.send(data.model_dump())
-        logger.info(f"Executing script action: {data.object}")
+        logger.info(f"Executing script action: {system_name}")
         pass
 
 async def automation(data: AutomationSchema):

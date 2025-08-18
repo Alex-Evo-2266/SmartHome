@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { ConditionType, Automation, TriggerItem, ConditionItem, ActionItem } from "../../../entites/automation/models/automation";
 import { BaseActionCard, BaseDialog, Button, ContentBox, FullScreenTemplateDialog, IconButton, ListContainer, ListItem, TextField, Trash } from "alex-evo-sh-ui-kit";
 import { DialogPortal, SelectField } from "../../../shared";
@@ -79,7 +79,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
           border
           type="text"
           placeholder="Name Automation"
-          onChange={e => handleChange("name", e.target.value)}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>) => handleChange("name", e.target.value)}
           value={formData.name}
         />
         <ContentBox label="Trigger" collapsible border className="edit-automation-box">
@@ -88,7 +88,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
               <ListItem
                 key={index}
                 hovered
-                header={joinAutomation([item.service, item.object, item.data], item.option)}
+                header={joinAutomation([item.service, item.trigger], item.option)}
                 control={<IconButton icon={<Trash />} onClick={() => deleteTriggerHandler(index)} />}
               />
             ))}
@@ -111,7 +111,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
               <ListItem
                 key={index}
                 hovered
-                header={`${joinAutomation([item.arg1_service, item.arg1_object, item.arg1_data])} ${item.operation} ${joinAutomation([item.arg2_service, item.arg2_object, item.arg2_data])}`}
+                header={`${joinAutomation([item.arg1_service, item.arg1])} ${item.operation} ${joinAutomation([item.arg2_service, item.arg2])}`}
                 control={<IconButton icon={<Trash />} onClick={() => deleteConditionHandler(index)} />}
               />
             ))}
@@ -128,7 +128,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
                 <ListItem
                   key={index}
                   hovered
-                  header={`${joinAutomation([item.service, item.object, item.field])} = ${item.data}`}
+                  header={`${joinAutomation([item.service, item.action])} = ${item.data}`}
                   control={<IconButton icon={<Trash />} onClick={() => deleteActionHandler(index, branch as "then" | "else_branch")} />}
                 />
               ))}

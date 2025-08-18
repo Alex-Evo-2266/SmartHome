@@ -30,8 +30,7 @@ async def serialize_automation(automation:Automation):
 def serialize_target(target: TargetItem):
     return TriggerItemSchema(
         service=target.service,
-        object=target.object,
-        data=target.data,
+        trigger=target.trigger,
         option=target.option
     )
 
@@ -39,19 +38,16 @@ def serialize_condition(condition: ConditionItem):
     return ConditionItemSchema(
         operation=condition.operation, 
         arg1_service=condition.arg1_service, 
-        arg1_object=condition.arg1_object, 
-        arg1_data=condition.arg1_data, 
+        arg1=condition.arg1, 
         arg2_service=condition.arg2_service, 
-        arg2_object=condition.arg2_object, 
-        arg2_data=condition.arg2_data
+        arg2=condition.arg2, 
     )
 
 def serialize_action(actions: List[ActionItem] | List[ActionElseItem]):
     actions.sort(key=attrgetter('index'))
     return[ActionItemSchema(
         service=action.service, 
-        object=action.object, 
-        field=action.field,
+        action=action.action,
         data=action.data, 
         type_set=action.type_set
     ) for action in actions]

@@ -20,28 +20,24 @@ export enum SetType {
 
 // Trigger item interface
 export interface TriggerItem {
-    service: string;
-    object?: string;
-    data: string;
+    trigger: string
+    service: string
     option?: string
 }
 
 // Condition item interface
 export interface ConditionItem {
     operation: Operation;
-    arg1_service: string;
-    arg1_object: string;
-    arg1_data: string;
-    arg2_service: string;
-    arg2_object: string;
-    arg2_data: string;
+    arg1_service: string
+    arg2_service: string
+    arg1: string;
+    arg2: string;
 }
 
 // Action item interface
 export interface ActionItem {
     service: string;
-    object: string;
-    field: string;
+    action: string
     data: string;
     type_set: SetType;
 }

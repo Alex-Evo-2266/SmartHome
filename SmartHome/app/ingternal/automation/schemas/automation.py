@@ -5,26 +5,22 @@ from typing import Optional, List, Dict
 
 class TriggerItemSchema(BaseModel):
 	service: str
-	object: Optional[str] = ""
-	data: str
+	trigger: str
 	option: Optional[str] = ""
 
 class ConditionItemSchema(BaseModel):
 	operation: Operation
 	arg1_service: str
-	arg1_object: str
-	arg1_data: str
+	arg1: str
 	arg2_service: str
-	arg2_object: str
-	arg2_data: str
+	arg2: str
 	
 	class Config:  
 		use_enum_values = True
 
 class ActionItemSchema(BaseModel):
 	service: str
-	object: str
-	field: str
+	action: str
 	data: str
 	type_set: SetType
 

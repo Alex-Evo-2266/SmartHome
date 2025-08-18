@@ -62,10 +62,10 @@ class AutomationManager:
                 
         return True
 
-    def _process_time_trigger(self, automation_name: str, trigger) -> None:
+    def _process_time_trigger(self, automation_name: str, trigger:TriggerItemSchema) -> None:
         """Обрабатывает временной триггер и добавляет в соответствующие индексы"""
         try:
-            time_utc = datetime.strptime(trigger.data, TIME_FORMAT).astimezone(timezone.utc)
+            time_utc = datetime.strptime(trigger.trigger, TIME_FORMAT).astimezone(timezone.utc)
             time_str = time_utc.strftime(UTC_TIME_FORMAT)
             
             if trigger.option:  # Триггер с указанием дней недели
@@ -81,9 +81,14 @@ class AutomationManager:
         except ValueError as e:
             logger.error(f"Неверный формат времени в автоматизации '{automation_name}': {e}")
 
-    def _process_device_trigger(self, automation_name: str, trigger) -> None:
+    def _process_device_trigger(self, automation_name: str, trigger:TriggerItemSchema) -> None:
         """Обрабатывает триггер устройства и добавляет в индекс устройств"""
-        key = (trigger.object, trigger.data)
+        if trigger.service != "device":
+            return
+        d = trigger.trigger.split(".")
+        if len(d) != 2:
+            return
+        key = (d[0], d[1])
         if key not in self.device_index:
             self.device_index[key] = AutomationManagerSchema(data=[])
         self.device_index[key].data.append(automation_name)
@@ -198,7 +203,7 @@ class AutomationManager:
     def _remove_from_time_indexes(self, automation_name: str, trigger: TriggerItemSchema) -> None:
         """Удаляет автоматизацию из временных индексов"""
         try:
-            time_utc = datetime.strptime(trigger.data, TIME_FORMAT).astimezone(timezone.utc)
+            time_utc = datetime.strptime(trigger.trigger, TIME_FORMAT).astimezone(timezone.utc)
             time_str = time_utc.strftime(UTC_TIME_FORMAT)
             
             if trigger.option:
@@ -212,7 +217,10 @@ class AutomationManager:
 
     def _remove_from_device_index(self, automation_name: str, trigger: TriggerItemSchema) -> None:
         """Удаляет автоматизацию из индекса устройств"""
-        key = (trigger.object, trigger.data)
+        d = trigger.trigger.split(".")
+        if len(d) != 2:
+            return
+        key = (d[0], d[1])
         self._remove_from_index(automation_name, key, self.device_index)
 
     @staticmethod
