@@ -21,6 +21,7 @@ from app.ingternal.automation.run.register import register_automation
 from app.ingternal.senderPoll.sender import sender_device, sender_service, sender_room, sender_script
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.modules.classes.baseService import BaseService
+from app.ingternal.room.array.RoomArray import RoomArray
 
 from app.ingternal.listener.listener import loadServiceData, loadDeviceData
 from app.configuration.queue import __queue__
@@ -125,8 +126,8 @@ async def startup():
 
     # Запуск основного цикла
     try:
-        asyncloop = asyncio.get_running_loop()
-        asyncloop.create_task(loop.run())
+        # asyncloop = asyncio.get_running_loop()
+        asyncio.create_task(loop.run())
         # asyncloop.create_task(monitor_memory())
         logger.info("Main loop started.")
     except RuntimeError as e:
@@ -146,6 +147,8 @@ async def startup():
     service_data_poll: ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
     service_data_poll.subscribe_all("sender", sender_service.send)
     service_data_poll.subscribe_all("prinbt", print_test)
+
+    await RoomArray.init_rooms()
 
     # слушатели
     loadServiceData.start()

@@ -1,21 +1,37 @@
-import logging
 from app.ingternal.automation.schemas.automation import AutomationSchema, ConditionItemSchema, ActionItemSchema
 from app.ingternal.automation.schemas.enums import ConditionType, Operation
 from app.ingternal.device.schemas.enums import TypeDeviceField
-from typing import Optional
 
-from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
-from app.ingternal.device.schemas.device import DeviceSchema, DeviceSerializeFieldSchema
 from app.ingternal.device.exceptions.device import DeviceNotFound, DeviceNotValueFound, DeviceFieldNotFound
 from app.ingternal.device.arrays.DevicesArray import DevicesArray
+from app.ingternal.room.array.RoomArray import RoomArray
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.senderPoll.sender import sender_script
-
-from app.configuration.settings import DEVICE_DATA_POLL
+from app.ingternal.room.set_value_room import set_value_room
 
 from app.ingternal.logs import get_automatization
+from typing import List
 
 logger = get_automatization.get_logger(__name__)
+
+def _get_device_value(system_name:str, field_id:str):
+    dev = DevicesArray.get(system_name)
+    device:IDevice = dev.device
+    if not device:
+        logger.error(f"Device not found: {system_name}")
+        raise DeviceNotFound()
+    f = device.get_field(field_id)
+    value = f.get()
+    logger.info(f"Fetched device value: {value} for device {system_name}")
+    if value is None:
+        logger.error(f"Device value not found: {field_id} in {system_name}")
+        raise DeviceNotValueFound()
+    if f.get_type() == TypeDeviceField.BINARY:
+        if value =='1':
+            return "true"
+        elif value == '0':
+            return "false"
+    return value
 
 async def condition_data(service: str, arg: str):
     ar = arg.split('.')
@@ -25,25 +41,7 @@ async def condition_data(service: str, arg: str):
             raise Exception("invalid condition")
         object = ar[0]
         data = ar[1]
-        dev = DevicesArray.get(object)
-        device:IDevice = dev.device
-        # dev: ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
-        # device: Optional[DeviceSchema] = dev.get(object)
-        if not device:
-            logger.error(f"Device not found: {object}")
-            raise DeviceNotFound()
-        f = device.get_field(data)
-        value = f.get()
-        logger.info(f"Fetched device value: {value} for device {object}")
-        if value is None:
-            logger.error(f"Device value not found: {data} in {object}")
-            raise DeviceNotValueFound()
-        if f.get_type() == TypeDeviceField.BINARY:
-            if value =='1':
-                return "true"
-            elif value == '1':
-                return "false"
-        return value
+        return _get_device_value(object, data)
     elif service == 'value':
         if len(ar) != 1:
             raise Exception("invalid condition")
@@ -52,11 +50,21 @@ async def condition_data(service: str, arg: str):
         return data
     elif service == 'time':
         pass
+    elif service == "room":
+        logger.info(f"room arg {ar}")
+        if len(ar) != 3:
+            raise Exception("invalid condition")
+        room_name = ar[0]
+        object = ar[1]
+        data = ar[2]
+        value = RoomArray.get_value(room_name, object, data)
+        return value
     else:
         logger.warning(f"Unknown service type: {service}")
         return None
 
 async def condition(condition: ConditionItemSchema) -> bool:
+    logger.info(f"start condition")
     condition_item1 = await condition_data(condition.arg1_service, condition.arg1)
     condition_item2 = await condition_data(condition.arg2_service, condition.arg2)
     logger.info(f"arg1: {condition_item1}, arg2; {condition_item2}")
@@ -124,7 +132,26 @@ async def action(data: ActionItemSchema):
     elif data.service == "script":
         await sender_script.send(data.model_dump())
         logger.info(f"Executing script action: {system_name}")
-        pass
+    elif data.service == "room":
+        ar = data.action.split('.')
+        if len(ar) != 3:
+            raise Exception("invalid action")
+        room = ar[0]
+        device = ar[1]
+        field = ar[2]
+        print("p7777", room, device, field, data)
+        data_f = RoomArray.get_value_and_type(room, device, field)
+        print("p8888",data_f)
+        if data_f[1] == TypeDeviceField.BINARY and data.data == "target":
+            if data_f[0] == "true":
+                print("p9999")
+                await set_value_room(room=room, device_type=device, field=field, value="0")
+            else:
+                await set_value_room(room=room, device_type=device, field=field, value="1")
+        else:
+            logger.info(f"Setting field {field} to {data.data}")
+            await set_value_room(room=room, device_type=device, field=field, value=data.data)
+        
 
 async def automation(data: AutomationSchema):
     logger.debug(f"Activate: {data}")

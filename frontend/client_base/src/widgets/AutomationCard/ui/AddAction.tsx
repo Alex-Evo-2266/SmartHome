@@ -7,6 +7,7 @@ import { useAppSelector } from "../../../shared/lib/hooks/redux";
 import { ActionItem, SetType } from "../../../entites/automation";
 import { TypeDeviceField } from "../../../entites/devices";
 import { Script, useScriptAPI } from "../../../entites/script";
+import { useRooms } from "../../../entites/rooms";
 
 interface AddActionProps {
   onHide: () => void;
@@ -29,10 +30,13 @@ interface SelectStep {
 
 type Step = CustomStep | SelectStep;
 
+type Acc = { enum: string[]; min: number | undefined; max: number | undefined };
+
 export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
   const { devicesData } = useAppSelector((state) => state.devices);
   const { getScripts } = useScriptAPI();
   const [scripts, setScripts] = useState<Script[]>([]);
+  const { rooms } = useRooms();
 
   const [service, setService] = useState("device");
   const [values, setValues] = useState<Record<string,string>>({});
@@ -150,6 +154,111 @@ export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
           getItems: () => scripts.map(s=>({title:s.name,data:s.id}))
         }
       ]
+    },
+    room: {
+      steps: [
+        {
+          key: "room",
+          label: "Room",
+          type: "select",
+          getItems() {
+            return rooms.map(i=>({data:i.name_room, title: i.name_room}))
+          },
+        },
+        {
+          key: "device",
+          label: "Device",
+          type: "select",
+          getItems(vals) {
+            const room = rooms.find(i=>i.name_room === vals.room)
+            if(!room)
+              return []
+            return Object.keys(room.device_room).map(i=>({title: i, data: i}))
+          },
+        },
+        {
+          key: "field",
+          label: "Field",
+          type: "select",
+          getItems(vals) {
+            const room = rooms.find(i=>i.name_room === vals.room)
+            const dev_name = vals.device
+            const dev = room?.device_room[dev_name]
+            if(!dev)
+              return []
+            return Object.keys(dev.fields).map(i=>({title: i, data: i}))
+          },
+        },
+        {
+          key: "data",
+          label: "Data",
+          type: "custom",
+          render: (vals,setVal) => {
+            const room = rooms.find(i=>i.name_room === vals.room)
+            const dev = room?.device_room[vals.device]
+            const field = dev?.fields[vals.field]
+            const devs = field?.devices ?? []
+            const conf = devs.reduce<Acc>((prev, cur)=>{
+              const de = devicesData.find(d=>d.system_name === cur.system_name)
+              const f = de?.fields?.find(f=>f.id === cur.id_field_device)
+              if(!f)
+                return prev
+              return {
+                enum: [...prev.enum, ...(f.enum_values?.split(",").map(x=>x.trim()) ?? [])], 
+                min: Math.min(Number(prev.min), Number(f.low)) , 
+                max: Math.max(Number(prev.max), Number(f.high))
+              }
+            },{enum: [], min: NaN, max: NaN})
+            if(!field) return null;
+            if(field.field_type===TypeDeviceField.ENUM){
+              return (
+                <SelectField 
+                  placeholder="Data" 
+                  border 
+                  value={vals.data||""}
+                  items={conf.enum} 
+                  onChange={v=>setVal("data",v)}
+                />
+              );
+            }
+            if(field.field_type===TypeDeviceField.BINARY){
+              return (
+                <SelectField 
+                  placeholder="Data"
+                  border 
+                  value={vals.data||""}
+                  items={[
+                    {title:"on",value:"1"},
+                    {title:"off",value:"0"},
+                    {title:"target",value:"target"}
+                  ]}
+                  onChange={v=>setVal("data",v)}
+                />
+              );
+            }
+            if(field.field_type===TypeDeviceField.NUMBER){
+              return (
+                <NumberField 
+                  placeholder="Data" 
+                  border 
+                  min={Number(conf.min)} 
+                  max={Number(conf.max)}
+                  value={Number(vals.data||0)}
+                  onChange={(v:number)=>setVal("data",String(v))}
+                />
+              );
+            }
+            return (
+              <TextField 
+                placeholder="Data" 
+                border 
+                value={vals.data||""}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setVal("data",e.target.value)}
+              />
+            );
+          }
+        }
+      ]
     }
   };
 
@@ -174,6 +283,7 @@ export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
     if(service==="delay") return !!values.data;
     if(service==="device") return !!values.object && !!values.field && !!values.data;
     if(service==="script") return !!values.object;
+    if(service==="room") return !!values.room && !!values.device && !!values.field && !!values.data;
     return false;
   },[service,values]);
 

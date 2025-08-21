@@ -18,15 +18,15 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	ALLOWED_TYPES: ClassVar[Union[None, Set[TypesDeviceEnum]]] = None
 	
 	def __init__(self, device: DeviceSerializeSchema):
-		self.data = device
+		self.data:DeviceSerializeSchema = device
 		self.fields: list[FieldBase] = []
 		if device.fields:
 			for item in device.fields:
-				self.fields.append(FieldBase(item, device.system_name))
+				self.fields.append(FieldBase(item, device.system_name, self.data.room))
 		self.device = None
 
 	def _add_field(self, item:DeviceInitFieldSchema):
-		self.fields.append(FieldBase(DeviceSerializeFieldSchema(**(item.dict()), id=""), self.data.system_name))
+		self.fields.append(FieldBase(DeviceSerializeFieldSchema(**(item.dict()), id=""), self.data.system_name, self.data.room))
 	
 	def get_value(self, field_id: str)->str | None:
 		field = self.get_field(field_id)

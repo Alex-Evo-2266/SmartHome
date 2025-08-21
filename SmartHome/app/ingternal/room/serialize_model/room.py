@@ -4,7 +4,7 @@ from app.ingternal.room.exceptions.room import RoomNotFoundException
 from app.ingternal.device.models.device import Device
 from typing import List
 from app.ingternal.logs import get_room_logger
-from app.ingternal.room.cache.all_rooms import invalidate_cache_room_data, invalidate_cache_room__type_device_data
+from app.ingternal.room.cache.all_rooms import invalidate_cache_room_data, invalidate_cache_room__type_device_data,invalidate_cache_room
 
 logger = get_room_logger.get_logger(__name__)
 
@@ -19,6 +19,7 @@ async def create_room(data: RoomCreate):
         logger.info(f"Комната '{data.name_room}' успешно создана.")
         invalidate_cache_room_data()
         invalidate_cache_room__type_device_data()
+        invalidate_cache_room(data.name_room)
     except Exception as e:
         logger.exception("Ошибка при создании комнаты")
         raise
@@ -31,6 +32,7 @@ async def delete_room(name: str):
             logger.info(f"Комната '{name}' успешно удалена.")
             invalidate_cache_room_data()
             invalidate_cache_room__type_device_data()
+            invalidate_cache_room(name)
         else:
             logger.warning(f"Комната '{name}' не найдена для удаления.")
     except Exception as e:
@@ -52,6 +54,7 @@ async def create_device_link(devices: List[str], room: Room):
         logger.info(f"Связи с комнатой '{room.name}' успешно созданы для устройств: {existing_keys}")
         invalidate_cache_room_data()
         invalidate_cache_room__type_device_data()
+        invalidate_cache_room(room.name)
     except Exception as e:
         logger.exception("Ошибка при создании связей устройств")
         raise
@@ -63,6 +66,7 @@ async def delete_device_link(room: Room):
         logger.info(f"Связи устройств с комнатой '{room.name}' успешно удалены.")
         invalidate_cache_room_data()
         invalidate_cache_room__type_device_data()
+        invalidate_cache_room(room.name)
     except Exception as e:
         logger.exception("Ошибка при удалении связей устройств")
         raise
@@ -79,6 +83,7 @@ async def update_device_room(name: str, data: RoomDevicesUpdate):
         logger.info(f"Устройства комнаты '{name}' успешно обновлены.")
         invalidate_cache_room_data()
         invalidate_cache_room__type_device_data()
+        invalidate_cache_room(name)
     except Exception as e:
         logger.exception("Ошибка при обновлении устройств комнаты")
         raise
@@ -90,6 +95,7 @@ async def update_room(name: str, data: RoomUpdate):
         logger.info(f"Комната '{name}' переименована в '{data.name_room}'.")
         invalidate_cache_room_data()
         invalidate_cache_room__type_device_data()
+        invalidate_cache_room(name)
     except Exception as e:
         logger.exception("Ошибка при обновлении комнаты")
         raise

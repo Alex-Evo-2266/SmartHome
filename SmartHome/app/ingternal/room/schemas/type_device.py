@@ -1,6 +1,6 @@
 from typing import List, Dict
 from pydantic import BaseModel
-
+from app.ingternal.device.schemas.enums import TypeDeviceField
 
 class DeviceField(BaseModel):
     system_name: str
@@ -8,7 +8,7 @@ class DeviceField(BaseModel):
 
 
 class DeviceFieldType(BaseModel):
-    field_type: str
+    field_type: TypeDeviceField
     devices: List[DeviceField] = []
 
 

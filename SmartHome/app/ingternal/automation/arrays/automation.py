@@ -4,6 +4,9 @@ from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel
 import logging
 
+from app.ingternal.room.cache.all_rooms import get_cached_room_data
+from app.ingternal.room.schemas.room import RoomDevicesRaw
+
 # Настройка логирования
 logger = logging.getLogger(__name__)
 
@@ -33,9 +36,12 @@ class AutomationManager:
         self.callback = callback
         self.time_index: Dict[str, AutomationManagerSchema] = {}
         self.device_index: Dict[Tuple[str, str], AutomationManagerSchema] = {}
+        self.room_index: Dict[Tuple[str, str, str], AutomationManagerSchema] = {}
         self.weekday_time_index: Dict[Tuple[str, str], AutomationManagerSchema] = {}
         self.last_run_time: Optional[datetime] = None
         self._processed_automations: Set[str] = set()
+
+        self._running_rooms = set()  # во время инициализации
 
     def add_automation(self, automation: AutomationSchema) -> bool:
         """
@@ -56,6 +62,14 @@ class AutomationManager:
                     self._process_time_trigger(automation.name, trigger)
                 elif trigger.service == "device":
                     self._process_device_trigger(automation.name, trigger)
+                elif trigger.service == "room":
+                    d = trigger.trigger.split(".")
+                    if len(d) != 3:
+                        return
+                    key = (d[0], d[1], d[2])
+                    if key not in self.room_index:
+                        self.room_index[key] = AutomationManagerSchema(data=[])
+                    self.room_index[key].data.append(automation.name)
             except Exception as e:
                 logger.error(f"Ошибка обработки триггера для автоматизации '{automation.name}': {e}")
                 continue
@@ -154,17 +168,40 @@ class AutomationManager:
             (current_time - manager_schema.last_run_time) > timedelta(minutes=2)
         )
 
-    async def run_device_triggered_automations(self, device_id: str, field_id: str) -> None:
+    async def run_device_triggered_automations(self, device_id: str, field_name: str) -> None:
         """Запускает автоматизации, связанные с указанным устройством"""
-        key = (device_id, field_id)
+        key = (device_id, field_name)
         if key not in self.device_index:
             return
-            
+        
         for automation_name in self.device_index[key].data:
             try:
                 await self.callback(self.automations[automation_name])
             except Exception as e:
                 logger.error(f"Ошибка выполнения автоматизации '{automation_name}' по триггеру устройства: {e}")
+        
+    async def run_room_triggered_automations(self, device_id: str,field_id:str, room_name:str) -> None:
+        rooms:List[RoomDevicesRaw] = await get_cached_room_data()
+        room = next(r for r in rooms if r.name_room == room_name)
+        for type_dev, d in room.device_room.items():
+            for field_dev, f in d.fields.items():
+                for dev in f.devices:
+                    if dev.system_name == device_id and dev.id_field_device == field_id:
+                        key = (room.name_room, type_dev, field_dev)
+                        if key not in self.room_index:
+                            return
+                        if key in self._running_rooms:
+                            logger.warning(f"Aвтоматизации выполняется '{key}'")
+                            return
+                        self._running_rooms.add(key)
+                        try:
+                            for automation_name in self.room_index[key].data:
+                                try:
+                                    await self.callback(self.automations[automation_name])
+                                except Exception as e:
+                                    logger.error(f"Ошибка выполнения автоматизации '{automation_name}' по триггеру комнаты: {e}")
+                        finally:
+                            self._running_rooms.remove(key)
 
     def clear_automations(self) -> None:
         """Очищает все автоматизации и сбрасывает состояние менеджера"""
@@ -199,6 +236,8 @@ class AutomationManager:
                 self._remove_from_time_indexes(automation.name, trigger)
             elif trigger.service == "device":
                 self._remove_from_device_index(automation.name, trigger)
+            elif trigger.service == "room":
+                self._remove_from_room_index(automation.name, trigger)
 
     def _remove_from_time_indexes(self, automation_name: str, trigger: TriggerItemSchema) -> None:
         """Удаляет автоматизацию из временных индексов"""
@@ -223,6 +262,14 @@ class AutomationManager:
         key = (d[0], d[1])
         self._remove_from_index(automation_name, key, self.device_index)
 
+    def _remove_from_room_index(self, automation_name: str, trigger: TriggerItemSchema) -> None:
+        """Удаляет автоматизацию из индекса устройств"""
+        d = trigger.trigger.split(".")
+        if len(d) != 3:
+            return
+        key = (d[0], d[1], d[2])
+        self._remove_from_index(automation_name, key, self.room_index)
+
     @staticmethod
     def _remove_from_index(
         automation_name: str,
@@ -235,7 +282,7 @@ class AutomationManager:
             if not index[key].data:
                 del index[key]
 
-    def get_automation_count(self) -> Tuple[int, int, int, int]:
+    def get_automation_count(self) -> Tuple[int, int, int, int, int]:
         """
         Возвращает статистику по автоматизациям
         
@@ -244,5 +291,6 @@ class AutomationManager:
         """
         time_count = sum(len(schema.data) for schema in self.time_index.values())
         device_count = sum(len(schema.data) for schema in self.device_index.values())
+        room_count = sum(len(schema.data) for schema in self.room_index.values())
         weekday_count = sum(len(schema.data) for schema in self.weekday_time_index.values())
-        return (len(self.automations.keys()), time_count, device_count, weekday_count)
+        return (len(self.automations.keys()), time_count, device_count, weekday_count, room_count)

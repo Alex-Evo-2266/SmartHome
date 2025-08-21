@@ -5,6 +5,7 @@ import { useAppSelector } from "../../../shared/lib/hooks/redux";
 import { ConditionItem, Operation } from '../../../entites/automation';
 import { TypeDeviceField } from "../../../entites/devices";
 import { splitEnum } from "../../../shared/lib/helpers/enumStrimg";
+import { DeviceFieldType, useRooms } from "../../../entites/rooms";
 
 type TypesField = {type:"number" | "text" | "bool" | "enum" | "any", option?: string[]}
 
@@ -31,8 +32,26 @@ interface ArgInfo{
 
 type IArg = Record<string, ArgInfo>;
 
+function types_automation_to_type_device(type:TypesField){
+  return type.type==="bool" ? [TypeDeviceField.BINARY] :
+    type.type==="enum" ? [TypeDeviceField.TEXT,TypeDeviceField.ENUM] :
+    type.type==="number" ? [TypeDeviceField.NUMBER] :
+    [TypeDeviceField.ENUM,TypeDeviceField.TEXT,TypeDeviceField.COUNTER];
+}
+
+function types_device_to_type_automation(type?:TypeDeviceField, enum_option?: string | null):TypesField{
+  if(!type) return {type:"any"};
+        if(type===TypeDeviceField.BINARY) return {type:"bool"};
+        if(type===TypeDeviceField.NUMBER || type === TypeDeviceField.COUNTER) return {type:"number"};
+        if(type===TypeDeviceField.ENUM) return enum_option !== undefined && enum_option !== null?{type:"enum", option:splitEnum(enum_option??"")}:{type:"text"};
+        if([TypeDeviceField.TEXT].includes(type)) return {type: "text"}
+        return {type:"any"};
+}
+
 export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>void}> = ({onHide,onSave})=>{
   const { devicesData } = useAppSelector(state=>state.devices);
+  const { rooms } = useRooms();
+  
   const [values,setValues] = useState<Record<string,string>>({arg1_service:"device",arg2_service:"device"});
   const [openStep,setOpenStep] = useState<string|null>(null);
   const [operation,setOperation] = useState<Operation>(Operation.EQUAL);
@@ -56,11 +75,7 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
           getItems(vals,arg,type){
             console.log(vals,arg,type)
             const device = devicesData.find(i=>i.system_name===vals[`${arg}_object`]);
-            const typesField =
-              type.type==="bool" ? [TypeDeviceField.BINARY] :
-              type.type==="enum" ? [TypeDeviceField.TEXT,TypeDeviceField.ENUM] :
-              type.type==="number" ? [TypeDeviceField.NUMBER] :
-              [TypeDeviceField.ENUM,TypeDeviceField.TEXT,TypeDeviceField.COUNTER];
+            const typesField = types_automation_to_type_device(type)
             console.log(device,typesField)
             if(type.type === "any")
                 return device?.fields?.map(f=>({title:f.name,data:f.id})) ?? [];
@@ -73,12 +88,7 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
       type_arg(vals,arg){
         const device = devicesData.find(i=>i.system_name===vals[`${arg}_object`]);
         const field = device?.fields?.find(i=>i.id===vals[`${arg}_field`]);
-        if(!field) return {type:"any"};
-        if(field.type===TypeDeviceField.BINARY) return {type:"bool"};
-        if(field.type===TypeDeviceField.NUMBER || field.type === TypeDeviceField.COUNTER) return {type:"number"};
-        if(field.type===TypeDeviceField.ENUM) return {type:"enum", option:splitEnum(field.enum_values??"")};
-        if([TypeDeviceField.TEXT].includes(field.type)) return {type: "text"}
-        return {type:"any"};
+        return types_device_to_type_automation(field?.type, field?.enum_values)
       }
     },
     value:{
@@ -102,6 +112,58 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
         // если просто value — тип любой, от операции зависит
         return {type:"any"};
       }
+    },
+    room:{
+      steps:[
+        {
+          key: "room_name",
+          label: "Room",
+          type: "select",
+          getItems(){
+            return rooms.map(i=>({title:i.name_room, data:i.name_room}))
+          },
+        },
+        {
+          key: "device",
+          label: "Device",
+          type: "select",
+          getItems(vals, arg) {
+            const room = rooms.find(i=>i.name_room === vals[`${arg}_room_name`])
+            if(!room)
+              return []
+            return Object.keys(room.device_room).map(i=>({title: i, data: i}))
+          },
+        },
+        {
+          key: "field",
+          label: "Field",
+          type: "select",
+          getItems(vals, arg, type) {
+            const room = rooms.find(i=>i.name_room === vals[`${arg}_room_name`])
+            const dev_name = vals[`${arg}_device`]
+            const dev = room?.device_room[dev_name]
+            if(!dev)
+              return []
+            if(type.type === "any")
+            { 
+              return Object.keys(dev.fields).map(i=>({title: i, data: i}))
+            }
+            const field_types = types_automation_to_type_device(type)
+            const filtered = Object.keys(dev.fields).reduce((acc, key) => {
+              if (field_types.includes(dev.fields[key].field_type)) acc[key] = dev.fields[key];
+              return acc;
+            }, {} as Record<string, DeviceFieldType>);
+            return Object.keys(filtered).map(i=>({title:i, data:i}))
+          },
+        }
+      ],
+      type_arg(vals, arg) {
+        const room = rooms.find(i=>i.name_room === vals[`${arg}_room_name`])
+        const dev_name = vals[`${arg}_device`]
+        const field_name = vals[`${arg}_field`]
+        const type = room?.device_room[dev_name]?.fields[field_name]?.field_type
+        return types_device_to_type_automation(type)
+      },
     }
   };
   

@@ -21,6 +21,7 @@ async def set_value_room(room: str, device_type: str, field: str, value: str):
     Для всех устройств в комнате указанного типа
     устанавливает значение для заданного поля.
     """
+    print("u999999", room, device_type, field, value)
     devices = get_devices_room(room)
     for device in devices:
         try:

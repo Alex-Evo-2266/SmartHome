@@ -1,3 +1,4 @@
+import { TypeDeviceField } from "../../devices";
 
 export interface RoomDevice {
     system_name: string
@@ -10,7 +11,7 @@ export interface DeviceField {
 }
 
 export interface DeviceFieldType {
-  field_type: string;
+  field_type: TypeDeviceField;
   devices: DeviceField[];
 }
 

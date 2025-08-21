@@ -85,3 +85,14 @@ async def set_device_value_in_room(data: RoomDevicesSet) -> JSONResponse:
     return await handle_request(lambda: set_value_room(
         data.name_room, data.device_type, data.field_name, data.value
     ))
+
+from app.ingternal.room.array.RoomArray import RoomArray
+@router.get("/test/eee")
+async def test() -> Any:
+    try:
+        rooms = RoomArray.all()
+        print("p9999", rooms)
+        return rooms
+    except Exception as e:
+        logger.warning(f"Get all rooms error: {e}")
+        return JSONResponse(status_code=400, content={"error": str(e)})

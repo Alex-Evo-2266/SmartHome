@@ -2,7 +2,6 @@ from yeelight import Bulb, PowerMode
 from app.ingternal.device.schemas.config import ChangeField, ConfigSchema
 from app.ingternal.device.schemas.device import DeviceSerializeSchema, DeviceInitFieldSchema
 from app.ingternal.device.classes.baseDevice import BaseDevice
-from app.ingternal.device.classes.baseField import FieldBase
 from app.ingternal.device.schemas.enums import TypeDeviceField, DeviceGetData
 from app.ingternal.device.interface.field_class import IField
 from app.ingternal.device_types.types_names import TypesDeviceEnum

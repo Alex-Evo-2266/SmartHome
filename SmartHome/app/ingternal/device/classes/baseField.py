@@ -138,7 +138,6 @@
 			
 
 import asyncio
-import logging
 from typing import Optional
 
 from app.ingternal.device.interface.field_class import IField
@@ -149,13 +148,16 @@ from app.ingternal.automation.run.register import automation_manager
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.configuration.settings import DEVICE_DATA_POLL
 from app.ingternal.logs import get_device_base_class
+from app.ingternal.device.map_value_field import normalize_value
+from app.ingternal.room.array.RoomArray import RoomArray
 
 logger = get_device_base_class.get_logger(__name__)
 
 class FieldBase(IField):
-	def __init__(self, field: DeviceSerializeFieldSchema, device_system_name: str):
+	def __init__(self, field: DeviceSerializeFieldSchema, device_system_name: str, room: str):
 		self.data = field
 		self.device_system_name = device_system_name
+		self.room = room
 
 	def get(self):
 		return self.data.value
@@ -313,6 +315,14 @@ class FieldBase(IField):
 			asyncloop = asyncio.get_running_loop()
 			asyncloop.create_task(
 				automation_manager.run_device_triggered_automations(self.device_system_name, self.get_name())
+			)
+			asyncloop.create_task(
+				automation_manager.run_room_triggered_automations(self.device_system_name, self.get_id(), self.room)
+			)
+			RoomArray.update_room(
+				self.device_system_name, 
+				self.get_id(), 
+				normalize_value(self.get(), self.get_type(), self.get_low(), self.get_high())
 			)
 			logger.debug(f"Scheduled automation for device '{self.device_system_name}' field '{self.get_name()}'")
 		except RuntimeError as e:

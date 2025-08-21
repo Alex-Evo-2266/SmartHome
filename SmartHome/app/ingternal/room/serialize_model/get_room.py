@@ -133,7 +133,7 @@ async def build_device_types(devices) -> Dict[str, DeviceTypeModel]:
                 device_type_model.fields[field.name_field_type].devices.append(
                     DeviceField(
                         system_name=device.system_name,
-                        id_field_device=field.id_field_device
+                        id_field_device=field.id_field_device,
                     )
                 )
 
@@ -156,6 +156,7 @@ async def get_room(name: str) -> RoomDevicesRaw:
     Если комната не найдена — генерирует RoomNotFoundException.
     """
     try:
+        logger.info(f"Запрос комнаты имя = '{name}'")
         room = await Room.objects.filter(name=name).prefetch_related('devices').get_or_none()
         if not room:
             logger.warning(f"Комната '{name}' не найдена.")
