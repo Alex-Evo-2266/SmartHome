@@ -262,6 +262,12 @@ class FieldBase(IField):
 
 		self._update_device_data()
 
+		RoomArray.update_room(
+			self.device_system_name, 
+			self.get_id(), 
+			normalize_value(self.get(), self.get_type(), self.get_low(), self.get_high())
+		)
+
 		if script:
 			self._trigger_automation()
 
@@ -319,11 +325,7 @@ class FieldBase(IField):
 			asyncloop.create_task(
 				automation_manager.run_room_triggered_automations(self.device_system_name, self.get_id(), self.room)
 			)
-			RoomArray.update_room(
-				self.device_system_name, 
-				self.get_id(), 
-				normalize_value(self.get(), self.get_type(), self.get_low(), self.get_high())
-			)
+			
 			logger.debug(f"Scheduled automation for device '{self.device_system_name}' field '{self.get_name()}'")
 		except RuntimeError as e:
 			logger.warning(f"Could not schedule automation: {e}")

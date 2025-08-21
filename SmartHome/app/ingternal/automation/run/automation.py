@@ -139,12 +139,10 @@ async def action(data: ActionItemSchema):
         room = ar[0]
         device = ar[1]
         field = ar[2]
-        print("p7777", room, device, field, data)
         data_f = RoomArray.get_value_and_type(room, device, field)
-        print("p8888",data_f)
         if data_f[1] == TypeDeviceField.BINARY and data.data == "target":
             if data_f[0] == "true":
-                print("p9999")
+                logger.info("action binary room")
                 await set_value_room(room=room, device_type=device, field=field, value="0")
             else:
                 await set_value_room(room=room, device_type=device, field=field, value="1")

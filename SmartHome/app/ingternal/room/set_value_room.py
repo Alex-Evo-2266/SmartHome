@@ -21,11 +21,12 @@ async def set_value_room(room: str, device_type: str, field: str, value: str):
     Для всех устройств в комнате указанного типа
     устанавливает значение для заданного поля.
     """
-    print("u999999", room, device_type, field, value)
+    logger.info(f"set value input data: room={room} devcie={device_type} field={field} value={value}")
     devices = get_devices_room(room)
     for device in devices:
         try:
-            types = await get_type_device(device.data.system_name)
+            types= device.data.all_types
+            # types = await get_type_device(device.data.system_name)
         except DeviceTypeNotFound:
             logger.debug(
                 f"Тип устройства не найден для {device.data.system_name}, пропускаем."

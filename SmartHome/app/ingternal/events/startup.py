@@ -26,9 +26,6 @@ from app.ingternal.room.array.RoomArray import RoomArray
 from app.ingternal.listener.listener import loadServiceData, loadDeviceData
 from app.configuration.queue import __queue__
 
-from app.ingternal.test_print import print_test
-
-
 import tracemalloc
 
 tracemalloc.start()
@@ -146,7 +143,6 @@ async def startup():
 
     service_data_poll: ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
     service_data_poll.subscribe_all("sender", sender_service.send)
-    service_data_poll.subscribe_all("prinbt", print_test)
 
     await RoomArray.init_rooms()
 
