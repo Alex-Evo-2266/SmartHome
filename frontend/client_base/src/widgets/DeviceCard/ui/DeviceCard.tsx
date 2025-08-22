@@ -3,6 +3,7 @@ import { LightDevice } from "./types/Light"
 import { DeviceBaseCard } from "./types/DeviceBaseCard"
 import { SwitchDevice } from "./types/Switch"
 import { ClimateDevice } from "./types/Climate"
+import { MoveSensorDevice } from "./types/MoveSensor"
 
 
 export const DeviceCard: React.FC<DeviceCardProps> = (props) => {
@@ -10,7 +11,9 @@ export const DeviceCard: React.FC<DeviceCardProps> = (props) => {
     const Cards:{[key:string]:React.FC<DeviceCardProps>} = {
         LIGHT: LightDevice,
         SWITCH: SwitchDevice,
-        CLIMATE: ClimateDevice
+        CLIMATE: ClimateDevice,
+        MOTION: MoveSensorDevice,
+        LIGHT_DECO: LightDevice
     } as const
 
     const type = props.device.type_mask?.name_type
