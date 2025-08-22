@@ -2,20 +2,20 @@ import { Card, Divider, RunningLine, SizeContext, Switch, Typography, ScreenSize
 import { DeviceCardProps } from '../../models/props'
 import './Switch.scss'
 import './DeviceCardTemplate.scss'
-import { useGetBinaryField, useGetEnumField } from '../../../../features/Device/hooks/getField.hook'
+import { useGetBinaryField, useGetNumberField } from '../../../../features/Device/hooks/getField.hook'
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useContext } from 'react'
 import { cardSizeStyle } from '../../models/sizeDeviceCard'
-import img1 from '../../../../../public/img/device/switch2.png'
+import img1 from '../../../../../public/img/device/cool.png'
+import img2 from '../../../../../public/img/device/temp.png'
 
-export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
+export const ClimateDevice:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()
     const {screen} = useContext<{screen: ScreenSize}>(SizeContext)
     
-    const {fieldValue: state1Value, changeField: updateState1, field: state1} = useGetBinaryField(device, "state1")
-    const {fieldValue: state2Value, changeField: updateState2, field: state2} = useGetBinaryField(device, "state2")
-    const {fieldValue: state3Value, changeField: updateState3, field: state3} = useGetBinaryField(device, "state3")
-    const {fieldValue: actionValue} = useGetEnumField(device, "action")
+    const {fieldValue: coolValue, changeField: updateCool, field: cool} = useGetBinaryField(device, "cool")
+    const {fieldValue: heatValue, changeField: updateHeat, field: heat} = useGetBinaryField(device, "heat")
+    const {fieldValue: tempValue} = useGetNumberField(device, "temp")
 
     const openDitail = useCallback(()=>{
         navigate(`/device/${device.system_name}`)
@@ -27,7 +27,7 @@ export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
                             <div style={{width: "calc(100% - 60px)"}}>
                                 <RunningLine className='header-text' weight='bold' type='title' screensize={screen} text={device.name}/>
                             </div>
-                            <img style={{margin: "-5px"}} className='card-device-img' src={img1}/>
+                            <img style={{margin: "-5px"}} className='card-device-img' src={cool===null && heat===null?img2:img1}/>
                         </div>
             <div className='control-container'>
                 <div className='control-row state-switch'>
@@ -36,22 +36,16 @@ export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
                     </div>
                 
                 <div className='card-device-checkbox-container'>
-                    {state1 && 
+                    {cool && 
                         <div style={{display: "flex", alignItems: "center"}}>
-                            <Typography type='small'>state_1</Typography>
-                            <Switch className='control-switch-state' size='small' onChange={updateState1} checked={!!state1Value} />
+                            <Typography type='small'>cool</Typography>
+                            <Switch className='control-switch-state' size='small' onChange={updateCool} checked={!!coolValue} />
                         </div>
                     }
-                    {state2 && 
+                    {heat && 
                         <div style={{display: "flex", alignItems: "center"}}>
-                            <Typography type='small'>state_2</Typography>
-                            <Switch className='control-switch-state' size='small' onChange={updateState2} checked={!!state2Value} />
-                        </div>
-                    }
-                    {state3 && 
-                        <div style={{display: "flex", alignItems: "center"}}>
-                            <Typography type='small'>state_2</Typography>
-                            <Switch className='control-switch-state' size='small' onChange={updateState3} checked={!!state3Value} />
+                            <Typography type='small'>heat</Typography>
+                            <Switch className='control-switch-state' size='small' onChange={updateHeat} checked={!!heatValue} />
                         </div>
                     }
                 </div>
@@ -63,7 +57,7 @@ export const SwitchDevice:React.FC<DeviceCardProps> = ({device}) => {
                 }
                 <div onClick={openDitail}>
                 {
-                    actionValue !== null && <div><span>action</span>: <span>{actionValue}</span></div>
+                    tempValue !== null && <div><span>temp</span>: <span>{tempValue}</span></div>
                 }
                 </div>
             </div>
