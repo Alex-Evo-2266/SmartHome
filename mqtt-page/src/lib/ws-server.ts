@@ -22,7 +22,6 @@ export function startWebSocketServer(server: Server) {
   });
 
   consumeExchange(EXCHANGE_SERVICE_DATA ?? 'exchangeServiceData', 'fanout', (msg) => {
-    console.log('➡️ Broadcasting message:', msg);
     const message = JSON.stringify({type: "message_service", data: msg})
     wss.clients.forEach((client) => {
       if (client.readyState === 1) {

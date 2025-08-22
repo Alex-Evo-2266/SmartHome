@@ -16,7 +16,7 @@ class BaseSender:
 
     async def send(self, *args, **kwargs):
         self.logger.info(f"send {self.__class__.__name__}")
-        if self.data_provider:
+        if self.data_provider is not None:
             data = await self.data_provider()
         else:
             # если провайдера нет — данные должны передаваться напрямую

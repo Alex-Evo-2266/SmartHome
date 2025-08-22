@@ -130,8 +130,8 @@ async def action(data: ActionItemSchema):
             logger.info(f"Setting field {field} to {data.data}")
             device_control.set_value(field.get_id(), data.data, script=True)
     elif data.service == "script":
-        await sender_script.send(data.model_dump())
-        logger.info(f"Executing script action: {system_name}")
+        await sender_script.send(data={"object":data.action, "service": data.service})
+        logger.info(f"Executing script action: {data}")
     elif data.service == "room":
         ar = data.action.split('.')
         if len(ar) != 3:
@@ -150,7 +150,6 @@ async def action(data: ActionItemSchema):
             logger.info(f"Setting field {field} to {data.data}")
             await set_value_room(room=room, device_type=device, field=field, value=data.data)
         
-
 async def automation(data: AutomationSchema):
     logger.debug(f"Activate: {data}")
     logger.info(f"Activate: {data.name}, status: {data.is_enabled}")
