@@ -76,7 +76,7 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
                             max={Number(brightness?.high) ?? 100} 
                             min={Number(brightness?.low) ?? 0} 
                             value={brightnessValue ?? undefined} 
-                            onChange={e=>debouncedBrightnessSend(Number(e.target.value))}
+                            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedBrightnessSend(Number(e.target.value))}
                             />
                         </div>
                     }
@@ -91,7 +91,7 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
                             max={Number(temp?.high) ?? 100} 
                             min={Number(temp?.low) ?? 0} 
                             value={tempVal ?? undefined} 
-                            onChange={e=>debouncedTempSend(Number(e.target.value))} 
+                            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedTempSend(Number(e.target.value))} 
                             colorBg={kelvinCSSGradient(Number(temp?.high) ?? 10000, Number(temp?.low) ?? 2000, 10, "to right")}
                             />
                         </div>

@@ -1,9 +1,65 @@
+import { GridLayout, GridLayoutItem } from "alex-evo-sh-ui-kit"
+import { DashboardCard } from "../../../entites/dashboard"
+import { WIDTH_PANEL } from "../const"
+import { GridCard } from "./gridCard"
+import { HomePageContext } from "../context"
+import { useRoom } from "../../../features/Room"
+
+const TEST_DASHBOARD:DashboardCard[] = [
+    {
+        title: "test",
+        type: "grid",
+        items:[
+            {
+                type: "bool",
+                readonly: false,
+                data: "device.lamp1.state",
+                title: "lamp state",
+                width: 1
+            },
+            {
+                type: "bool",
+                readonly: false,
+                data: "room.спальня.LIGHT.power",
+                title: "свет спальни",
+                width: 2
+            },
+            {
+                type: "number",
+                readonly: false,
+                data: "device.lamp1.brightness",
+                title: "яркость",
+                width: 2
+            },
+            {
+                type: "number",
+                readonly: true,
+                data: "device.lamp1.temp",
+                title: "temp",
+                width: 2
+            },
+        ]
+    }
+]
 
 export const HomePage = () => {
 
+    const {rooms} = useRoom()
+
     return(
-        <div className="home-page container-page">
-            
-        </div>
+        <HomePageContext.Provider value={{rooms}}>
+            <div className="home-page container-page">
+                <GridLayout itemWith={`${WIDTH_PANEL}px`}>
+                {
+                    TEST_DASHBOARD.map((item, index)=>(
+                        <GridLayoutItem key={index}>
+                            <GridCard cardData={item}/>
+                        </GridLayoutItem>
+                    ))
+                }
+                </GridLayout>
+            </div>
+        </HomePageContext.Provider>
+        
     )
 }

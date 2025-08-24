@@ -1,5 +1,5 @@
 import { FAB, GridLayout, GridLayoutItem, Plus, TextDialog } from "alex-evo-sh-ui-kit"
-import { useRoom } from "../hooks/rooms.hook"
+import { useRoom } from "../../../features/Room/hooks/rooms.hook"
 import { RoomCard } from "./RoomCard"
 import { DialogPortal } from "../../../shared"
 import { useCallback, useState } from "react"

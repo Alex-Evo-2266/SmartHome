@@ -16,11 +16,11 @@ export function statusBoolConvert(data: DeviceSerializeFieldSchema): boolean {
 export const boolValDevice = (
     name_device_type: string,
     name_field: string,
-    devices_types: Record<string, DeviceTypeModel>,
+    devices_types: Record<string, DeviceTypeModel> | null,
     devices: DeviceSchema[]
 ): boolean | undefined => {
     // Получаем поля устройства типа LIGHT
-    const devices_type_field = devices_types[name_device_type]?.fields;
+    const devices_type_field = devices_types===null?undefined:devices_types[name_device_type]?.fields;
     if (!devices_type_field) return undefined;
 
     const powerDevices = devices_type_field[name_field]?.devices;
@@ -51,13 +51,14 @@ export const boolValDevice = (
     return false;
 };
 
-export const useBoolRoom = (type: string, field: string, room: Room) => {
+export const useBoolRoom = (type: string, field: string, room: Room | null) => {
     const {devicesData} = useAppSelector(state=>state.devices)
     const {roomSetDeviceValue} = useRoomAPI()
-    const value = useMemo(()=>boolValDevice(type, field, room.device_room, devicesData),[devicesData, room])
+    const value = useMemo(()=>boolValDevice(type, field, room?.device_room || null, devicesData),[devicesData, room])
 
     const click = useCallback(async()=>{
-        await roomSetDeviceValue(room.name_room, type, field, value?"0":"1")
+        if(!!room)
+            await roomSetDeviceValue(room.name_room, type, field, value?"0":"1")
     },[value, room, type, field])
 
     return {

@@ -1,4 +1,4 @@
-import { Card, Divider, RunningLine, SizeContext, Switch, Typography, ScreenSize } from 'alex-evo-sh-ui-kit'
+import { Card, Divider, RunningLine, SizeContext, Typography, ScreenSize } from 'alex-evo-sh-ui-kit'
 import { DeviceCardProps } from '../../models/props'
 import './Switch.scss'
 import './DeviceCardTemplate.scss'

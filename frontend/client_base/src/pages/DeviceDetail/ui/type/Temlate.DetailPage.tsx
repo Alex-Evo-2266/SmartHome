@@ -22,7 +22,7 @@ export interface DetailDeviceTemplateProps extends DeviceDetailProps{
 
 export const DetailDeviceTemplate:React.FC<DetailDeviceTemplateProps> = ({device, onEdit, diagrams=[], children, imageControl}) => {
 
-    const {screen} = useContext(SizeContext)
+    const {screen} = useContext<{screen: ScreenSize}>(SizeContext)
     const navigate = useNavigate();
 
     return (

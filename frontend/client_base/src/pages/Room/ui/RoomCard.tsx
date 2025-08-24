@@ -2,11 +2,10 @@ import { Card, Typography } from "alex-evo-sh-ui-kit"
 import { capitalizeFirst } from "../../../shared";
 import { useNavigate } from 'react-router-dom';
 import './RoomPage.scss'
-import { useBoolRoom } from "../hooks/boolField";
 import { Room } from "../../../entites/rooms";
-import { useNumberRoom } from "../hooks/number";
 import { useCallback } from "react";
 import * as React from "react";
+import { useBoolRoom, useNumberRoom } from "../../../features/Room";
 
 export interface RoomCardProps{
     children?: React.ReactNode

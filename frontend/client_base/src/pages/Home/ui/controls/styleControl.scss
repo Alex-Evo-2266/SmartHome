@@ -1,0 +1,27 @@
+.dashboard-control-bool-1{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: var(--Primary-container-color);
+    color: var(--On-primary-container-color);
+    border-radius: 10px;
+    cursor: pointer;
+    &.action{
+        color: var(--On-primary-color);
+        background-color: var(--Primary-color);
+    }
+    .dashboard-control-bool-1-title{
+        position: absolute;
+        bottom: 3px;
+    }
+}
+
+.dashboard-card{
+    background-color: var(--Surface-container-low-color);
+}
+
+.dashboard-control-number-1{
+    position: relative;
+}
