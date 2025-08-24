@@ -1,11 +1,12 @@
-import { Range, Typography } from "alex-evo-sh-ui-kit"
+import { Range } from "alex-evo-sh-ui-kit"
 import { ControlElementNumber } from "../../../../entites/dashboard/models/panel"
 import './styleControl.scss'
 import { useGetNumberFieldControl } from "../../../../features/Device"
 import { useAppSelector } from "../../../../shared/lib/hooks/redux"
 import { useMemo } from "react"
-import { SIZE1_ITEM_WIDTH, SIZE2_ITEM_WIDTH, SIZE_ITEM_HEIGHT } from "../../const"
+import { WIDTH_PANEL_ITEM } from "../../const"
 import { useDebounce } from "../../../../shared"
+import { ControlTemplate } from "./template"
 
 interface BoolControlElementProps{
     value: number
@@ -21,10 +22,11 @@ const NumberControlElement:React.FC<BoolControlElementProps> = ({value, onChange
     const debouncedSend = useDebounce(onChange, 300)
 
     return(
-        <div className={`dashboard-control-number-1 ${value?"action":undefined}`} style={{width: size === 1?SIZE1_ITEM_WIDTH:SIZE2_ITEM_WIDTH, height: SIZE_ITEM_HEIGHT}}>
-            <Range max={max} min={min} value={value} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedSend(Number(e.target.value))}/>
-            <Typography className="dashboard-control-number-1-title" type="small">{title}</Typography>
-        </div>
+        <ControlTemplate title={title} size={size}>
+            <div style={{width: "100%", height: `${WIDTH_PANEL_ITEM - 20}px`}}>
+                <Range max={max} min={min} value={value} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedSend(Number(e.target.value))}/>
+            </div>
+        </ControlTemplate>
     )
 }
 
@@ -32,16 +34,17 @@ interface ReadOnlyControlElementProps{
     value: number
     onClick?: ()=>void
     title: string
-    size?: 1 | 2 | 3 | 4
+    size: 1 | 2 | 3 | 4
 }
 
 const ReadOnlyControlElement:React.FC<ReadOnlyControlElementProps> = ({value, onClick, title, size}) => {
 
     return(
-        <div className={`dashboard-control-bool-1 ${value?"action":undefined}`} style={{width: size === 1?SIZE1_ITEM_WIDTH:SIZE2_ITEM_WIDTH, height: SIZE_ITEM_HEIGHT}} onClick={onClick}>
-            <Typography className="dashboard-control-bool-1-val" type="title-2">{value}</Typography>
-            <Typography className="dashboard-control-bool-1-title" type="small">{title}</Typography>
-        </div>
+        <ControlTemplate onClick={onClick} title={title} size={size}>
+            <div className="dashboard-control-number-value">
+                {value}
+            </div>
+        </ControlTemplate>
     )
 }
 

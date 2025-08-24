@@ -22,7 +22,7 @@ const TEST_DASHBOARD:DashboardCard[] = [
                 readonly: false,
                 data: "room.спальня.LIGHT.power",
                 title: "свет спальни",
-                width: 2
+                width: 1
             },
             {
                 type: "number",

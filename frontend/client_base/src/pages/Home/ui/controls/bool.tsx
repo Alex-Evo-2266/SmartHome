@@ -1,4 +1,3 @@
-import { Typography } from "alex-evo-sh-ui-kit"
 import { ControlElementBool } from "../../../../entites/dashboard/models/panel"
 import './styleControl.scss'
 import { useGetBinaryFieldControl } from "../../../../features/Device"
@@ -6,7 +5,8 @@ import { useAppSelector } from "../../../../shared/lib/hooks/redux"
 import { useCallback, useContext, useMemo } from "react"
 import { useBoolRoom } from "../../../../features/Room"
 import { HomePageContext } from "../../context"
-import { SIZE1_ITEM_WIDTH, SIZE2_ITEM_WIDTH, SIZE_ITEM_HEIGHT } from "../../const"
+import { ControlTemplate } from "./template"
+import { WIDTH_PANEL_ITEM } from "../../const"
 
 interface BoolControlElementProps{
     value: boolean
@@ -18,10 +18,10 @@ interface BoolControlElementProps{
 const BoolControlElement:React.FC<BoolControlElementProps> = ({value, onClick, title, size}) => {
 
     return(
-        <div className={`dashboard-control-bool-1 ${value?"action":undefined}`} style={{width: size === 1?SIZE1_ITEM_WIDTH:SIZE2_ITEM_WIDTH, height: SIZE_ITEM_HEIGHT}} onClick={onClick}>
-            <Typography className="dashboard-control-bool-1-val" type="title-2">{value?"True":"False"}</Typography>
-            <Typography className="dashboard-control-bool-1-title" type="small">{title}</Typography>
-        </div>
+        <ControlTemplate onClick={onClick} title={title} size={size}>
+            <div className={`dashboard-control-bool-1-val-container ${value?"action":""}`} style={{width: `${WIDTH_PANEL_ITEM - 20}px`, height: `${WIDTH_PANEL_ITEM - 20}px`}}>
+            </div>
+        </ControlTemplate>
     )
 }
 
