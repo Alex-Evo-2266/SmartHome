@@ -9,6 +9,7 @@ import { useDebounce } from "../../../../shared"
 import { ControlTemplate } from "./template"
 import { HomePageContext } from "../../context"
 import { useNumberRoom } from "../../../../features/Room"
+import { ErrorControl } from "./readonly"
 
 interface NumberControlElementProps{
     value: number
@@ -17,16 +18,17 @@ interface NumberControlElementProps{
     size: 2 | 3 | 4,
     min?: number,
     max?: number
+    disabled?: boolean
 }
 
-const NumberControlElement:React.FC<NumberControlElementProps> = ({value, onChange, title, size, max = 100, min = 0}) => {
+const NumberControlElement:React.FC<NumberControlElementProps> = ({value, onChange, title, disabled, size, max = 100, min = 0}) => {
 
     const debouncedSend = useDebounce(onChange, 300)
 
     return(
         <ControlTemplate title={title} size={size}>
-            <div className="dashboard-control-number-value-range" style={{height: `${WIDTH_PANEL_ITEM - 20}px`}}>
-                <Range max={max} min={min} value={value} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedSend(Number(e.target.value))}/>
+            <div className={`dashboard-control-number-value-range`} style={{height: `${WIDTH_PANEL_ITEM - 20}px`}}>
+                <Range disabled={disabled} colorBg={disabled?"var(--Outline-color)":undefined} max={max} min={min} value={value} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedSend(Number(e.target.value))}/>
             </div>
         </ControlTemplate>
     )
@@ -57,13 +59,13 @@ const useControlDevice = (data: string, field_key: "id" | "name" = "name") => {
 }
 
 const NumberControlDevice: React.FC<NumberControlDeviceProps> = ({ data }) => {
-    const {fieldValue, updateFieldState, field} = useControlDevice(data.data)
+    const {fieldValue, updateFieldState, field, device} = useControlDevice(data.data)
 
     if(!field)
-        return null
+        return <ErrorControl data={data}/>
 
     return (
-        <NumberControlElement max={Number(field.high)} min={Number(field.low)} size={data.width} title={data.title} onChange={updateFieldState} value={fieldValue ?? 0}/>
+        <NumberControlElement disabled={device?.status !== "online"} max={Number(field.high)} min={Number(field.low)} size={data.width} title={data.title} onChange={updateFieldState} value={fieldValue ?? 0}/>
     )
 };
 
@@ -74,6 +76,9 @@ const NumberControlRoom: React.FC<NumberControlDeviceProps> = ({ data }) => {
     const {rooms} = useContext(HomePageContext)
     const room = useMemo(()=>rooms.find(i=>i.name_room===room_name),[rooms])
     const {change, value} = useNumberRoom(typeDevice, field, room ?? null)
+
+    if(room === undefined)
+        return <ErrorControl data={data}/>
 
     return (
         <NumberControlElement title={data.title} onChange={change} value={value ?? 0} size={data.width}/>
@@ -92,6 +97,6 @@ export const NumberControl:React.FC<NumberControlProps> = ({data}) => {
     if(type === 'room')
         return <NumberControlRoom data={data}/>
 
-    return null
+    return <ErrorControl data={data}/>
 }
 

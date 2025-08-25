@@ -7,19 +7,21 @@ import { useBoolRoom } from "../../../../features/Room"
 import { HomePageContext } from "../../context"
 import { ControlTemplate } from "./template"
 import { WIDTH_PANEL_ITEM } from "../../const"
+import { ErrorControl } from "./readonly"
 
 interface BoolControlElementProps{
     value: boolean
     onClick?: ()=>void
     title: string
-    size: 1 | 2 | 3 | 4
+    size: 1 | 2 | 3 | 4,
+    disabled?: boolean
 }
 
-const BoolControlElement:React.FC<BoolControlElementProps> = ({value, onClick, title, size}) => {
+const BoolControlElement:React.FC<BoolControlElementProps> = ({value, onClick, title, size, disabled}) => {
 
     return(
         <ControlTemplate onClick={onClick} title={title} size={size}>
-            <div className={`dashboard-control-bool-1-val-container ${value?"action":""}`} style={{width: `${WIDTH_PANEL_ITEM - 20}px`, height: `${WIDTH_PANEL_ITEM - 20}px`}}>
+            <div className={`dashboard-control-bool-1-val-container ${value?"action":""} ${disabled?"disabled":""}`} style={{width: `${WIDTH_PANEL_ITEM - 20}px`, height: `${WIDTH_PANEL_ITEM - 20}px`}}>
             </div>
         </ControlTemplate>
     )
@@ -50,14 +52,17 @@ const useControlDevice = (data: string, field_key: "id" | "name" = "name") => {
 }
 
 const BoolControlDevice: React.FC<BoolControlDeviceProps> = ({ data }) => {
-    const {fieldValue, updateFieldState} = useControlDevice(data.data);
+    const {fieldValue, updateFieldState, device} = useControlDevice(data.data);
 
     const click = useCallback(()=>{
         updateFieldState(!fieldValue)
     },[fieldValue])
 
+    if(!device)
+        return <ErrorControl data={data}/>
+
     return (
-        <BoolControlElement title={data.title} onClick={click} value={fieldValue ?? false} size={data.width}/>
+        <BoolControlElement disabled={device.status !== "online"} title={data.title} onClick={click} value={fieldValue ?? false} size={data.width}/>
     )
 };
 
@@ -68,6 +73,9 @@ const BoolControlRoom: React.FC<BoolControlDeviceProps> = ({ data }) => {
     const {rooms} = useContext(HomePageContext)
     const room = useMemo(()=>rooms.find(i=>i.name_room===room_name),[rooms])
     const {click, value} = useBoolRoom(typeDevice, field, room ?? null)
+
+    if(room === undefined)
+        return <ErrorControl data={data}/>
 
     return (
         <BoolControlElement title={data.title} onClick={click} value={value ?? false} size={data.width}/>
@@ -87,6 +95,6 @@ export const BoolControl:React.FC<BoolControlProps> = ({data}) => {
     if(type === 'room')
         return <BoolControlRoom data={data}/>
 
-    return null
+    return <ErrorControl data={data}/>
 }
 

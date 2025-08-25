@@ -30,6 +30,9 @@
         color: var(--On-primary-color);
         background-color: var(--Primary-color);
     }
+    &.disabled{
+        background-color: var(--Outline-color);
+    }
 }
 
 .dashboard-control-number-value{

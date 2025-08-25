@@ -94,6 +94,16 @@ interface ReadOnlyControlProps{
     data: ControlElement
 }
 
+export const ErrorControl:React.FC<ReadOnlyControlProps> = ({data}) => {
+    return(
+        <ControlTemplate className="undefined-control-container" title={"undefined"} size={data.width}>
+            <div className="dashboard-control-number-value readonly undefined-control">
+                undefined
+            </div>
+        </ControlTemplate>
+    )
+}
+
 export const ReadOnlyControl:React.FC<ReadOnlyControlProps> = ({data}) => {
     const type = data.data.split(".")[0] ?? ""
 
@@ -102,12 +112,6 @@ export const ReadOnlyControl:React.FC<ReadOnlyControlProps> = ({data}) => {
     if(type === 'room')
         return <ReadOnlyControlRoom data={data}/>
 
-    return(
-        <ControlTemplate className="undefined-control-container" title={"undefined"} size={data.width}>
-            <div className="dashboard-control-number-value readonly undefined-control">
-                undefined
-            </div>
-        </ControlTemplate>
-    )
+    return(<ErrorControl data={data}/>)
 }
 
