@@ -34,6 +34,11 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   sh_db_script:
     image: mariadb
@@ -47,6 +52,11 @@ services:
       MYSQL_DATABASE: ${MYSQL_SCRIPT_DATABASE}
       MYSQL_USER: ${MYSQL_SCRIPT_USER}
       MYSQL_PASSWORD: ${MYSQL_SCRIPT_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   sh_auth_db:
     image: mariadb
@@ -60,6 +70,11 @@ services:
       MYSQL_DATABASE: ${MYSQL_AUTH_DATABASE}
       MYSQL_USER: ${MYSQL_AUTH_USER}
       MYSQL_PASSWORD: ${MYSQL_AUTH_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   auth_service:
     build: ./SmartHomeAuth
@@ -112,7 +127,7 @@ services:
       rabbitmq:
         condition: service_healthy
       sh_auth_db:
-        condition: service_started
+        condition: service_healthy
 
   email_service:
     build: ./EmailService
@@ -196,6 +211,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      sh_db:
+        condition: service_healthy
 
   page_service:
     build: ./PagesServices
@@ -275,7 +292,7 @@ services:
       - ./ScriptServices:/home/script_service/web
     depends_on:
       sh_db_script:
-        condition: service_started
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
 
