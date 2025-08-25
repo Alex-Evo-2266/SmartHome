@@ -52,13 +52,13 @@ const useControlDevice = (data: string, field_key: "id" | "name" = "name") => {
 }
 
 const BoolControlDevice: React.FC<BoolControlDeviceProps> = ({ data }) => {
-    const {fieldValue, updateFieldState, device} = useControlDevice(data.data);
+    const {fieldValue, updateFieldState, device, field} = useControlDevice(data.data);
 
     const click = useCallback(()=>{
         updateFieldState(!fieldValue)
     },[fieldValue])
 
-    if(!device)
+    if(!device || !field)
         return <ErrorControl data={data}/>
 
     return (

@@ -61,11 +61,11 @@ const useControlDevice = (data: string, field_key: "id" | "name" = "name") => {
 const NumberControlDevice: React.FC<NumberControlDeviceProps> = ({ data }) => {
     const {fieldValue, updateFieldState, field, device} = useControlDevice(data.data)
 
-    if(!field)
+    if(!field || !device)
         return <ErrorControl data={data}/>
 
     return (
-        <NumberControlElement disabled={device?.status !== "online"} max={Number(field.high)} min={Number(field.low)} size={data.width} title={data.title} onChange={updateFieldState} value={fieldValue ?? 0}/>
+        <NumberControlElement disabled={device.status !== "online"} max={Number(field.high)} min={Number(field.low)} size={data.width} title={data.title} onChange={updateFieldState} value={fieldValue ?? 0}/>
     )
 };
 

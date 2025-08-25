@@ -59,6 +59,14 @@ const TEST_DASHBOARD:DashboardCard[] = [
                 title: "яркость",
                 width: 4
             },
+            {
+                type: "bool",
+                readonly: false,
+                data: "device.lamp1.state",
+                title: "lamp state",
+                width: 1
+            },
+            
         ]
     }
 ]
