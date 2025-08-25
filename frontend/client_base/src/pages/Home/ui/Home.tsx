@@ -1,7 +1,7 @@
 import { GridLayout, GridLayoutItem } from "alex-evo-sh-ui-kit"
 import { DashboardCard } from "../../../entites/dashboard"
 import { WIDTH_PANEL } from "../const"
-import { GridCard } from "./gridCard"
+import { GridCard } from "./cards/gridCard"
 import { HomePageContext } from "../context"
 import { useRoom } from "../../../features/Room"
 

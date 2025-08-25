@@ -1,10 +1,10 @@
-import { ControlElement, TypeControlElements } from "../../../../entites/dashboard/models/panel"
+import { ControlElement, TypeControlElements } from "../../../../../entites/dashboard/models/panel"
 import './styleControl.scss'
-import { useGetBinaryFieldControl, useGetEnumFieldControl, useGetNumberFieldControl, useGetTextFieldControl } from "../../../../features/Device"
-import { useAppSelector } from "../../../../shared/lib/hooks/redux"
+import { useGetBinaryFieldControl, useGetEnumFieldControl, useGetNumberFieldControl, useGetTextFieldControl } from "../../../../../features/Device"
+import { useAppSelector } from "../../../../../shared/lib/hooks/redux"
 import { useContext, useMemo } from "react"
-import { useBoolRoom, useNumberRoom, useTextRoom } from "../../../../features/Room"
-import { HomePageContext } from "../../context"
+import { useBoolRoom, useNumberRoom, useTextRoom } from "../../../../../features/Room"
+import { HomePageContext } from "../../../context"
 import { ControlTemplate } from "./template"
 
 interface ReadOnlyControlElementProps{

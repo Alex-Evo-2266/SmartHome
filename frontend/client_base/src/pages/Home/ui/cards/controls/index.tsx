@@ -1,4 +1,4 @@
-import { ControlElement } from "../../../../entites/dashboard"
+import { ControlElement } from "../../../../../entites/dashboard"
 import { BoolControl } from "./bool"
 import { NumberControl } from "./number"
 import { ReadOnlyControl } from "./readonly"

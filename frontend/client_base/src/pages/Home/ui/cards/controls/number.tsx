@@ -1,14 +1,14 @@
 import { Range } from "alex-evo-sh-ui-kit"
-import { ControlElementNumberControl } from "../../../../entites/dashboard/models/panel"
+import { ControlElementNumberControl } from "../../../../../entites/dashboard/models/panel"
 import './styleControl.scss'
-import { useGetNumberFieldControl } from "../../../../features/Device"
-import { useAppSelector } from "../../../../shared/lib/hooks/redux"
+import { useGetNumberFieldControl } from "../../../../../features/Device"
+import { useAppSelector } from "../../../../../shared/lib/hooks/redux"
 import { useContext, useMemo } from "react"
-import { WIDTH_PANEL_ITEM } from "../../const"
-import { useDebounce } from "../../../../shared"
+import { WIDTH_PANEL_ITEM } from "../../../const"
+import { useDebounce } from "../../../../../shared"
 import { ControlTemplate } from "./template"
-import { HomePageContext } from "../../context"
-import { useNumberRoom } from "../../../../features/Room"
+import { HomePageContext } from "../../../context"
+import { useNumberRoom } from "../../../../../features/Room"
 import { ErrorControl } from "./readonly"
 
 interface NumberControlElementProps{

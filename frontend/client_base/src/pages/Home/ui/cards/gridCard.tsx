@@ -1,6 +1,6 @@
 import { GridLayout, GridLayoutItem, Panel, Typography, useColor } from "alex-evo-sh-ui-kit"
-import { WIDTH_PANEL_CONTENT, WIDTH_PANEL_ITEM, WIDTH_PANEL_PADDING } from "../const"
-import { DashboardCardGrid } from "../../../entites/dashboard/models/panel"
+import { WIDTH_PANEL_CONTENT, WIDTH_PANEL_ITEM, WIDTH_PANEL_PADDING } from "../../const"
+import { DashboardCardGrid } from "../../../../entites/dashboard/models/panel"
 import { Controls } from "./controls"
 
 interface GridCardProps{

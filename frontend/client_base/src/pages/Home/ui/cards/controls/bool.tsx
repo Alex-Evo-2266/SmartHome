@@ -1,13 +1,13 @@
-import { ControlElementBool } from "../../../../entites/dashboard/models/panel"
+import { ControlElementBool } from "@src/entites/dashboard/models/panel"
 import './styleControl.scss'
-import { useGetBinaryFieldControl } from "../../../../features/Device"
-import { useAppSelector } from "../../../../shared/lib/hooks/redux"
+import { useGetBinaryFieldControl } from "@src/features/Device"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
 import { useCallback, useContext, useMemo } from "react"
-import { useBoolRoom } from "../../../../features/Room"
-import { HomePageContext } from "../../context"
+import { useBoolRoom } from "@src/features/Room"
 import { ControlTemplate } from "./template"
-import { WIDTH_PANEL_ITEM } from "../../const"
 import { ErrorControl } from "./readonly"
+import { HomePageContext } from "@src/pages/Home/context"
+import { WIDTH_PANEL_ITEM } from "@src/pages/Home/const"
 
 interface BoolControlElementProps{
     value: boolean

@@ -1,5 +1,5 @@
 import { Typography } from "alex-evo-sh-ui-kit"
-import { SIZE1_ITEM_WIDTH, SIZE2_ITEM_WIDTH, SIZE3_ITEM_WIDTH, SIZE4_ITEM_WIDTH, SIZE_ITEM_HEIGHT } from "../../const"
+import { SIZE1_ITEM_WIDTH, SIZE2_ITEM_WIDTH, SIZE3_ITEM_WIDTH, SIZE4_ITEM_WIDTH, SIZE_ITEM_HEIGHT } from "../../../const"
 import './styleControl.scss'
 
 interface ControlTemplateProps{
