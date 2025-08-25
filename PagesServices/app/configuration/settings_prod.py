@@ -1,6 +1,6 @@
 import os
 
-DEBUG = True
+DEBUG = False
 
 DATA_TOPIC = os.environ.get("DATA_TOPIC")
 DATA_QUEUE = os.environ.get("DATA_QUEUE")

@@ -6,7 +6,12 @@ from fastapi.staticfiles import StaticFiles
 from app.configuration.routes import __routes__
 from app.configuration.settings import MEDIA_ROOT, DEBUG, ORIGINS
 
-
+import logging
+# logging.disable(logging.CRITICAL)
+logging.basicConfig(
+    level=logging.WARNING,
+    format="%(filename)s: %(asctime)s - %(levelname)s - %(message)s"
+)
 
 class Server:
 	
