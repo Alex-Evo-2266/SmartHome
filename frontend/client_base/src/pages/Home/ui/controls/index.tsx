@@ -1,12 +1,16 @@
 import { ControlElement } from "../../../../entites/dashboard"
 import { BoolControl } from "./bool"
 import { NumberControl } from "./number"
+import { ReadOnlyControl } from "./readonly"
 
 interface ControlsProps {
     data: ControlElement
 }
 
 export const Controls:React.FC<ControlsProps> = ({data}) => {
+
+    if(data.readonly)
+        return <ReadOnlyControl data={data}/>
 
     if(data.type === "bool"){
         return <BoolControl data={data}/>

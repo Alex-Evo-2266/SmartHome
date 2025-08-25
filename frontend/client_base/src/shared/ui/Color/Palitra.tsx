@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import './Palitra.scss'
 
 const ColorWheel = ({onChange, color, sat}:{onChange?:(color: string, set: string)=>void, color: string, sat: string}) => {

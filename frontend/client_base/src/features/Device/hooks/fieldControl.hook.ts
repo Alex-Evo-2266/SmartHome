@@ -92,3 +92,4 @@ export const useGetEnumFieldControl = (field: DeviceSerializeFieldSchema | null,
     }
 }
 
+export const useGetTextFieldControl = useGetEnumFieldControl

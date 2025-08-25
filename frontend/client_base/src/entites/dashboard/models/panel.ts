@@ -1,6 +1,7 @@
+export type TypeControlElements = "bool" | "number" | "text" | "enum"
 
 export interface ControlElementbase{
-    type: "bool" | "number" | "text" | "enum"
+    type: TypeControlElements
     data: string
     title: string
     readonly: boolean
@@ -11,21 +12,21 @@ export interface ControlElementBool extends ControlElementbase{
     type: "bool"
     data: string
     readonly: boolean
-    width: 1 | 2
+    width: 1 | 2 | 3 | 4
 }
 
 export interface ControlElementNumberReadonly extends ControlElementbase{
     type: "number"
     data: string
     readonly: true
-    width: 1 | 2
+    width: 1 | 2 | 3 | 4
 }
 
 export interface ControlElementNumberControl extends ControlElementbase{
     type: "number"
     data: string
     readonly: false
-    width: 2
+    width: 2 | 3 | 4
 }
 
 export type ControlElementNumber = ControlElementNumberReadonly | ControlElementNumberControl

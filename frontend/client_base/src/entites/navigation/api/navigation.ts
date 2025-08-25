@@ -36,6 +36,8 @@ export const useNavigationData = () => {
 
     const getData = useCallback(async ()=>{
         const data = await getNavigation()
+        if(!data)
+            return
         setNavigation(data.pages)
         setPrefix(data.prefix)
     },[getNavigation])

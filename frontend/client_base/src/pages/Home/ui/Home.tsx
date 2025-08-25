@@ -19,7 +19,7 @@ const TEST_DASHBOARD:DashboardCard[] = [
             },
             {
                 type: "bool",
-                readonly: false,
+                readonly: true,
                 data: "room.спальня.LIGHT.power",
                 title: "свет спальни",
                 width: 1
@@ -33,10 +33,24 @@ const TEST_DASHBOARD:DashboardCard[] = [
             },
             {
                 type: "number",
-                readonly: true,
+                readonly: false,
                 data: "device.lamp1.temp",
                 title: "temp",
                 width: 2
+            },
+            {
+                type: "number",
+                readonly: true,
+                data: "room.спальня.LIGHT.brightness",
+                title: "яркость",
+                width: 4
+            },
+            {
+                type: "number",
+                readonly: true,
+                data: "fdb.спальня.LIGHT.brightness",
+                title: "яркость",
+                width: 3
             },
         ]
     }

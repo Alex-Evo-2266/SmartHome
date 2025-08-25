@@ -11,7 +11,7 @@ export const MenuDeviceCard = ({status, system_name, name, onEdit}:{status:Statu
     const {deleteDevice} = useDeleteDevice()
     const {linkDevice} = useLinkDevice()
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
-    const {screen} = useContext(SizeContext)
+    const {screen} = useContext<{screen: ScreenSize}>(SizeContext)
     const [poz, setPoz] = useState<IPoint | null>(null)
 
     const menuItems = useMemo<IMenuItem[]>(() => {

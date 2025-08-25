@@ -3,5 +3,5 @@ export {useLinkDevice} from './api/linkDevice'
 
 export {getData, getInitData, getOutData} from './helpers/fieldUtils'
 
-export {useGetBinaryFieldControl, useGetNumberFieldControl} from './hooks/fieldControl.hook'
-export {useGetBinaryField, useGetNumberField} from './hooks/getField.hook'
+export {useGetBinaryFieldControl, useGetNumberFieldControl, useGetTextFieldControl, useGetEnumFieldControl} from './hooks/fieldControl.hook'
+export {useGetBinaryField, useGetNumberField, useGetEnumField} from './hooks/getField.hook'

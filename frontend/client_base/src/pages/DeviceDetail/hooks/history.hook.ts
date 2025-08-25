@@ -10,7 +10,10 @@ export const useDeviceHistory = (systemName:string, time_start?: string) => {
 
     const loadHistory = useCallback(async()=>{
         const data = await getDeviceHistory(systemName, time_start)
-        setHistory(data)
+        if(!data)
+            setHistory(null)
+        else
+            setHistory(data)
     },[getDeviceHistory, systemName, time_start])
 
     useEffect(()=>{

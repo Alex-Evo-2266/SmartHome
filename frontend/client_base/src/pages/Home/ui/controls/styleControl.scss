@@ -1,5 +1,4 @@
 .dashboard-card{
-    background-color: var(--Surface-container-low-color);
     .dashboard-card-title{
         height: 30px;
     }
@@ -23,6 +22,7 @@
     background-color: var(--Primary-container-color);
     color: var(--On-primary-container-color);
     width: 100%;
+    cursor: pointer;
     height: 100%;
     border-radius: 50%;
     position: relative;
@@ -35,10 +35,22 @@
 .dashboard-control-number-value{
     border-radius: 25px;
     background-color: var(--Primary-container-color);
-    width: 100%;
+    width: calc(100% - 20px);
     height: 40px;
     color: var(--On-primary-container-color);
     display: flex;
     justify-content: center;
     align-items: center;
+    &.readonly{
+        border: 1px solid var(--Primary-color);
+    }
+    &.undefined-control{
+        background-color: var(--Error-container-color);
+        border: 1px solid var(--Error-color);
+        color: var(--On-error-container-color);
+    }
 }
+.dashboard-control-number-value-range{
+    width: calc(100% - 20px);
+}
+

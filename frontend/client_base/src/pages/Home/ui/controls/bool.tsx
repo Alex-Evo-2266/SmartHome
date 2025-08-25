@@ -12,7 +12,7 @@ interface BoolControlElementProps{
     value: boolean
     onClick?: ()=>void
     title: string
-    size: 1 | 2
+    size: 1 | 2 | 3 | 4
 }
 
 const BoolControlElement:React.FC<BoolControlElementProps> = ({value, onClick, title, size}) => {
@@ -56,12 +56,6 @@ const BoolControlDevice: React.FC<BoolControlDeviceProps> = ({ data }) => {
         updateFieldState(!fieldValue)
     },[fieldValue])
 
-    if (data.readonly) {
-        return (
-            <BoolControlElement title={data.title} value={fieldValue ?? false} size={data.width}/>
-        );
-    }
-
     return (
         <BoolControlElement title={data.title} onClick={click} value={fieldValue ?? false} size={data.width}/>
     )
@@ -74,12 +68,6 @@ const BoolControlRoom: React.FC<BoolControlDeviceProps> = ({ data }) => {
     const {rooms} = useContext(HomePageContext)
     const room = useMemo(()=>rooms.find(i=>i.name_room===room_name),[rooms])
     const {click, value} = useBoolRoom(typeDevice, field, room ?? null)
-
-    if (data.readonly) {
-        return (
-            <BoolControlElement title={data.title} value={value ?? false} size={data.width}/>
-        );
-    }
 
     return (
         <BoolControlElement title={data.title} onClick={click} value={value ?? false} size={data.width}/>

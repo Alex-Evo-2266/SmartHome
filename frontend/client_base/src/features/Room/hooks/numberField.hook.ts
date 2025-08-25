@@ -32,10 +32,10 @@ export function statusNumberConvert(data: DeviceSerializeFieldSchema): number {
 export const numberValDevice = (
     name_device_type: string,
     name_field: string,
-    devices_types: Record<string, DeviceTypeModel>,
+    devices_types: Record<string, DeviceTypeModel> | null,
     devices: DeviceSchema[]
 ): {val:number | undefined, max: number, min: number} => {
-    const devices_type_field = devices_types[name_device_type]?.fields;
+    const devices_type_field = devices_types===null?undefined:devices_types[name_device_type]?.fields;
     if (!devices_type_field) return {val: undefined, max: 0, min: 0};
 
     const fieldDevices = devices_type_field[name_field]?.devices;
@@ -68,17 +68,19 @@ export const numberValDevice = (
     return buff;
 };
 
-export const useNumberRoom = (type: string, field: string, room: Room) => {
+export const useNumberRoom = (type: string, field: string, room: Room | null) => {
     const {devicesData} = useAppSelector(state=>state.devices)
     const {roomSetDeviceValue} = useRoomAPI()
-    const {val: value, max, min} = useMemo(()=>numberValDevice(type, field, room.device_room, devicesData),[devicesData, room])
+    const {val: value, max, min} = useMemo(()=>numberValDevice(type, field, room?.device_room ?? null, devicesData),[devicesData, room])
 
     const change = useCallback(async(val: number)=>{
-        await roomSetDeviceValue(room.name_room, type, field, val.toString())
+        if(room)
+            await roomSetDeviceValue(room.name_room, type, field, val.toString())
     },[room, type, field])
 
     const changeHandler = useCallback(async(e: React.ChangeEvent<HTMLInputElement>)=>{
-        await roomSetDeviceValue(room.name_room, type, field, e.target.value)
+        if(room)
+            await roomSetDeviceValue(room.name_room, type, field, e.target.value)
     },[room, type, field])
 
     return {

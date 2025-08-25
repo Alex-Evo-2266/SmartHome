@@ -1,55 +1,39 @@
 import { Range } from "alex-evo-sh-ui-kit"
-import { ControlElementNumber } from "../../../../entites/dashboard/models/panel"
+import { ControlElementNumberControl } from "../../../../entites/dashboard/models/panel"
 import './styleControl.scss'
 import { useGetNumberFieldControl } from "../../../../features/Device"
 import { useAppSelector } from "../../../../shared/lib/hooks/redux"
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import { WIDTH_PANEL_ITEM } from "../../const"
 import { useDebounce } from "../../../../shared"
 import { ControlTemplate } from "./template"
+import { HomePageContext } from "../../context"
+import { useNumberRoom } from "../../../../features/Room"
 
-interface BoolControlElementProps{
+interface NumberControlElementProps{
     value: number
     onChange: (value:number)=>void
     title: string
-    size: 1 | 2,
+    size: 2 | 3 | 4,
     min?: number,
     max?: number
 }
 
-const NumberControlElement:React.FC<BoolControlElementProps> = ({value, onChange, title, size, max = 100, min = 0}) => {
+const NumberControlElement:React.FC<NumberControlElementProps> = ({value, onChange, title, size, max = 100, min = 0}) => {
 
     const debouncedSend = useDebounce(onChange, 300)
 
     return(
         <ControlTemplate title={title} size={size}>
-            <div style={{width: "100%", height: `${WIDTH_PANEL_ITEM - 20}px`}}>
+            <div className="dashboard-control-number-value-range" style={{height: `${WIDTH_PANEL_ITEM - 20}px`}}>
                 <Range max={max} min={min} value={value} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedSend(Number(e.target.value))}/>
             </div>
         </ControlTemplate>
     )
 }
 
-interface ReadOnlyControlElementProps{
-    value: number
-    onClick?: ()=>void
-    title: string
-    size: 1 | 2 | 3 | 4
-}
-
-const ReadOnlyControlElement:React.FC<ReadOnlyControlElementProps> = ({value, onClick, title, size}) => {
-
-    return(
-        <ControlTemplate onClick={onClick} title={title} size={size}>
-            <div className="dashboard-control-number-value">
-                {value}
-            </div>
-        </ControlTemplate>
-    )
-}
-
-interface BoolControlDeviceProps{
-    data: ControlElementNumber
+interface NumberControlDeviceProps{
+    data: ControlElementNumberControl
 }
 
 const useControlDevice = (data: string, field_key: "id" | "name" = "name") => {
@@ -72,45 +56,32 @@ const useControlDevice = (data: string, field_key: "id" | "name" = "name") => {
     }
 }
 
-const NumberControlDevice: React.FC<BoolControlDeviceProps> = ({ data }) => {
+const NumberControlDevice: React.FC<NumberControlDeviceProps> = ({ data }) => {
     const {fieldValue, updateFieldState, field} = useControlDevice(data.data)
 
     if(!field)
         return null
-
-    if (data.readonly) {
-        return (
-            <ReadOnlyControlElement size={data.width} title={data.title} value={fieldValue ?? 0} />
-        );
-    }
 
     return (
         <NumberControlElement max={Number(field.high)} min={Number(field.low)} size={data.width} title={data.title} onChange={updateFieldState} value={fieldValue ?? 0}/>
     )
 };
 
-// const BoolControlRoom: React.FC<BoolControlDeviceProps> = ({ data }) => {
-//     const room_name = data.data.split(".")[1] ?? ""
-//     const typeDevice = data.data.split(".")[2] ?? ""
-//     const field = data.data.split(".")[3] ?? ""
-//     const {rooms} = useContext(HomePageContext)
-//     const room = useMemo(()=>rooms.find(i=>i.name_room===room_name),[rooms])
-//     const {click, value} = useBoolRoom(typeDevice, field, room ?? null)
+const NumberControlRoom: React.FC<NumberControlDeviceProps> = ({ data }) => {
+    const room_name = data.data.split(".")[1] ?? ""
+    const typeDevice = data.data.split(".")[2] ?? ""
+    const field = data.data.split(".")[3] ?? ""
+    const {rooms} = useContext(HomePageContext)
+    const room = useMemo(()=>rooms.find(i=>i.name_room===room_name),[rooms])
+    const {change, value} = useNumberRoom(typeDevice, field, room ?? null)
 
-//     if (data.readonly) {
-//         return (
-//             <BoolControlElement title={data.title} value={value ?? false}/>
-//         );
-//     }
-
-//     return (
-//         <BoolControlElement title={data.title} onClick={click} value={value ?? false}/>
-//     )
-// };
-
+    return (
+        <NumberControlElement title={data.title} onChange={change} value={value ?? 0} size={data.width}/>
+    )
+};
 
 interface NumberControlProps{
-    data: ControlElementNumber
+    data: ControlElementNumberControl
 }
 
 export const NumberControl:React.FC<NumberControlProps> = ({data}) => {
@@ -118,8 +89,8 @@ export const NumberControl:React.FC<NumberControlProps> = ({data}) => {
 
     if(type === "device")
         return <NumberControlDevice data={data}/>
-    // if(type === 'room')
-    //     return <BoolControlRoom data={data}/>
+    if(type === 'room')
+        return <NumberControlRoom data={data}/>
 
     return null
 }
