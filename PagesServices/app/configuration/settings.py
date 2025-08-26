@@ -25,6 +25,7 @@ MODULES_DIR = os.path.join(BASE_DIR, "app", "moduls")
 SCRIPT_AUTOMATION_PREFEX = "automation"
 
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
+DASHBOARD_FOLDER = os.path.join(CONFIG_DIR, "dashboards") 
 CONFIG_FILE_NAME = 'service_config'
 CONFIG_SERVICES_DIR = os.path.join(BASE_DIR, "config_services") 
 ROUTE_PREFIX = "/api-pages"
@@ -36,18 +37,12 @@ SERVICE_DATA_POLL = "poll-service-data"
 
 TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 
-# DEFAULT_SEND_INTERVAL = 6
-# DEFAULT_SEND_SERVER_DATA_INTERVAL = 30
-# DEFAULT_SAVE_INTERVAL = 10
-
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 LOGS_LEVEL = logging.DEBUG if DEBUG else logging.INFO
 
 MEDIA_URL = '/media/'
 # MODULES_URL = '/media/modules/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# BACKGROUND_DIR = os.path.join(MEDIA_ROOT, 'backgrounds')
-# MODULES_DIR = os.path.join(MEDIA_ROOT, 'modules')
 
 
 PREFIX_PATH = os.environ.get("PREFIX_PATH")

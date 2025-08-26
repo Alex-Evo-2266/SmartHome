@@ -45,3 +45,14 @@ export interface DashboardCardGrid extends DashboardCardBase{
 }
 
 export type DashboardCard = DashboardCardGrid
+
+export interface Dashboard{
+    title: string
+    id: string
+    private: boolean,
+    cards: DashboardCard[]
+}
+
+export interface Dashboards{
+    dashboards: Dashboard[]
+}

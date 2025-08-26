@@ -165,6 +165,7 @@ COPY . .
 RUN mkdir -p media && chmod 755 media
 RUN mkdir -p config && chmod 755 config
 RUN mkdir -p config_services && chmod 755 config_services
+RUN mkdir -p config_services/dashboards && chmod 755 config_services/dashboards
 
 # Запускаем контейнер от имени пользователя device_service
 # USER device_service

@@ -1,17 +1,19 @@
-import { GridLayout, GridLayoutItem, ToolsIcon } from "alex-evo-sh-ui-kit"
-import { DashboardCard } from "../../../entites/dashboard"
+import { GridLayout, GridLayoutItem, TextDialog, ToolsIcon } from "alex-evo-sh-ui-kit"
+import { DashboardCard, useDashboardAPI } from "../../../entites/dashboard"
 import { WIDTH_PANEL } from "../const"
 import { GridCard } from "./cards/gridCard"
 import { HomePageContext } from "../context"
 import { useRoom } from "../../../features/Room"
 import './Home.scss'
-import { Menu } from "@src/shared"
-import { useCallback } from "react"
+import { DialogPortal, Menu } from "@src/shared"
+import { useCallback, useState } from "react"
 import { getModuleButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
 import { useNavigationData } from "@src/entites/navigation"
 import { getBarButtonsHomePage } from "@src/widgets/Navigation/config/barButtons"
 import { useAppDispatch, useAppSelector } from "@src/shared/lib/hooks/redux"
 import { hideMenu, showBaseMenu } from "@src/shared/lib/reducers/menuReducer"
+import { v4 as uuidv4 } from 'uuid';
+
 
 const TEST_DASHBOARD:DashboardCard[] = [
     {
@@ -86,10 +88,18 @@ export const HomePage = () => {
     const {navigation} = useNavigationData()
     const {visible} = useAppSelector(state=>state.menu)
     const mainBtn = useMainButtons()
+    const {createDashboard} = useDashboardAPI()
 
-    const addDashboard = () => {
+    const [visibleCreateDashboard, setVisibleCreateDashboard] = useState(false)
 
-    }
+    const addDashboard = useCallback(async(name: string) => {
+        await createDashboard({
+            title: name,
+            id: uuidv4(),
+            cards:[],
+            private: false
+        })
+    },[createDashboard])
 
     const addCard = () => {
 
@@ -104,7 +114,7 @@ export const HomePage = () => {
             dispatch(showBaseMenu([
                 {
                     title: "add dashboard",
-                    onClick: addDashboard
+                    onClick: ()=>setVisibleCreateDashboard(true)
                 },
                 {
                     title: "add card",
@@ -113,7 +123,7 @@ export const HomePage = () => {
             ], poz.x + 60, poz.y, {autoHide: true}))
         }
             
-    },[dispatch, visible, addDashboard])
+    },[dispatch, visible])
 
     return(
         <HomePageContext.Provider value={{rooms}}>
@@ -135,6 +145,13 @@ export const HomePage = () => {
                 }
                 </GridLayout>
             </div>
+            {
+                visibleCreateDashboard && 
+                <DialogPortal>
+                    <TextDialog header="create dashboard" onHide={()=>setVisibleCreateDashboard(false)} onSuccess={addDashboard}/>
+                </DialogPortal>
+            }
+            
         </HomePageContext.Provider>
         
     )
