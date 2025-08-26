@@ -20,8 +20,9 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 		<Routes>
 			{
 				isAuthenticated?
+				<>
+				<Route path="/home" element={<HomePage/>}/>
 				<Route path="/" element={<RootPage/>}>
-					<Route path="home" element={<HomePage/>}/>
 					<Route path="device" element={<DevicePage/>}/>
 					<Route path="device/:systemName" element={<DetailDevice/>}/>
 					<Route path="automation" element={<AutomationPage/>}/>
@@ -34,6 +35,7 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 					
 					<Route path="/*" element={<Navigate replace to="/home" />} />
 				</Route>
+				</>
 				:<>
 					<Route path="auth" element={<AuthPage/>}/>
 					<Route path="/*" element={<Navigate replace to="/auth" />} />

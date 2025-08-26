@@ -1,11 +1,15 @@
 import { Outlet } from "react-router-dom"
-import { Navigation } from '../../../widgets/Navigation'
 import { ScreenSize, useScreenSize } from "alex-evo-sh-ui-kit"
+import { useNavigationData } from '../../../entites/navigation'
+import { getBarButtons, getModuleButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
+import { Menu } from "@src/shared"
 import './Root.scss'
 
 export const RootPage = () => {
 
     const {screen} = useScreenSize()
+	const {navigation} = useNavigationData()
+	const mainBtn = useMainButtons()
 
 	const getStyleClass = (screen: ScreenSize) => {
 		if(screen === ScreenSize.BIG_SCREEN)
@@ -17,9 +21,9 @@ export const RootPage = () => {
 	}
 
     return(
-
 			<div className="root-page">
-				<Navigation/>
+				<Menu/>
+				<Navigation mainBtn={mainBtn} otherBtn={getModuleButtons(navigation)} barBtn={getBarButtons()}/>
 				<div className={`root-container ${getStyleClass(screen)}`}>
 					<Outlet/>
 				</div>

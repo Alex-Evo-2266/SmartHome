@@ -1,9 +1,17 @@
-import { GridLayout, GridLayoutItem } from "alex-evo-sh-ui-kit"
+import { GridLayout, GridLayoutItem, ToolsIcon } from "alex-evo-sh-ui-kit"
 import { DashboardCard } from "../../../entites/dashboard"
 import { WIDTH_PANEL } from "../const"
 import { GridCard } from "./cards/gridCard"
 import { HomePageContext } from "../context"
 import { useRoom } from "../../../features/Room"
+import './Home.scss'
+import { Menu } from "@src/shared"
+import { useCallback } from "react"
+import { getModuleButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
+import { useNavigationData } from "@src/entites/navigation"
+import { getBarButtonsHomePage } from "@src/widgets/Navigation/config/barButtons"
+import { useAppDispatch, useAppSelector } from "@src/shared/lib/hooks/redux"
+import { hideMenu, showBaseMenu } from "@src/shared/lib/reducers/menuReducer"
 
 const TEST_DASHBOARD:DashboardCard[] = [
     {
@@ -74,9 +82,48 @@ const TEST_DASHBOARD:DashboardCard[] = [
 export const HomePage = () => {
 
     const {rooms} = useRoom()
+    const dispatch = useAppDispatch()
+    const {navigation} = useNavigationData()
+    const {visible} = useAppSelector(state=>state.menu)
+    const mainBtn = useMainButtons()
+
+    const addDashboard = () => {
+
+    }
+
+    const addCard = () => {
+
+    }
+
+    const showTool = useCallback((e?:React.MouseEvent<HTMLDivElement, MouseEvent>)=>{
+        if(visible)
+            dispatch(hideMenu())
+        else
+        {
+            const poz = {x: e?.clientX ?? 0, y: e?.clientY ?? 0}
+            dispatch(showBaseMenu([
+                {
+                    title: "add dashboard",
+                    onClick: addDashboard
+                },
+                {
+                    title: "add card",
+                    onClick: addCard
+                }
+            ], poz.x + 60, poz.y, {autoHide: true}))
+        }
+            
+    },[dispatch, visible, addDashboard])
 
     return(
         <HomePageContext.Provider value={{rooms}}>
+            <Menu/>
+            <Navigation mainBtn={mainBtn} otherBtn={getModuleButtons(navigation)} barBtn={getBarButtonsHomePage()} first_btn={{
+                text: "tools",
+                type:"button",
+                onClick:showTool,
+                icon: <ToolsIcon/>
+              }}/>
             <div className="home-page container-page">
                 <GridLayout itemWith={`${WIDTH_PANEL}px`}>
                 {
