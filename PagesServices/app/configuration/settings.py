@@ -9,6 +9,15 @@ try:
 except Exception as e:
     from app.configuration.settings_prod import *
 
+DB_URL = "".join([
+	"mysql+pymysql://",
+    MYSQL_USER,":",
+    MYSQL_PASSWORD,"@",
+    MYSQL_HOST,":",MYSQL_PORT,"/",
+    MYSQL_DATABASE
+	])
+print("bd: ",DB_URL)
+
 
 ORIGINS = ["localhost",'127.0.0.1','192.168.0.9','192.168.0.4']
 

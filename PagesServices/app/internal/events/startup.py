@@ -1,7 +1,7 @@
 import logging, asyncio, os
 from app.pkg import itemConfig, ConfigItemType, __config__
 from app.internal.poll.serviceDataPoll import servicesDataPoll, ObservableDict
-from app.configuration.settings import DEVICE_DATA_POLL, SERVICE_DATA_POLL, DATA_DEVICE_QUEUE, DATA_QUEUE, EXCHANGE_DEVICE_DATA, DASHBOARD_FOLDER
+from app.configuration.settings import DEVICE_DATA_POLL, SERVICE_DATA_POLL, DATA_QUEUE, EXCHANGE_DEVICE_DATA, DASHBOARD_FOLDER
 from app.internal.poll.schemas.device import DeviceSchema
 from typing import Dict, List
 from app.internal.poll.deviceGetData import loadServiceData, loadDeviceData
@@ -10,6 +10,7 @@ from app.internal.poll.setData import setDataService, setDataDevice
 from app.internal.senderPoll.sender import init_sender
 
 from app.moduls import getModule
+from app.pkg.ormar.dbormar import database
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,10 @@ def create_directorys():
     print(DASHBOARD_FOLDER)
 
 async def startup():
+     
+	database_ = database
+	if not database_.is_connected:
+		await database_.connect()
 	
 	logger.info("generete config")
 

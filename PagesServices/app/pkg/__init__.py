@@ -1,6 +1,6 @@
 from app.configuration.settings import CONFIG_TAG, ROUTE_PREFIX, CONFIG_DIR, CONFIG_FILE_NAME
 from app.pkg.config import get_router, ConfigRouterOption, Config, itemConfig, ConfigItemType
-from app.pkg.auth import auth_privilege_dep
+from auth_dep_lib import auth_privilege_dep
 
 __config__ = Config(CONFIG_DIR, CONFIG_FILE_NAME)
 

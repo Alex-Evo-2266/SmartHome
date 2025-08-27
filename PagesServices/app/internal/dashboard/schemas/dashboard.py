@@ -30,3 +30,9 @@ class Dashboard(BaseModel):
 
 class DashboardsData(BaseModel):
 	dashboards: List[Dashboard]
+
+class DashboardOut(Dashboard):
+	pass
+
+class DashboardIn(Dashboard):
+	pass

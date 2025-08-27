@@ -76,6 +76,24 @@ services:
       timeout: 5s
       retries: 5
 
+  sh_page_db:
+    image: mariadb
+    restart: always
+    ports:
+      - 3310:3306
+    volumes:
+      - bd_page_data2:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PAGE_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_PAGE_DATABASE}
+      MYSQL_USER: ${MYSQL_PAGE_USER}
+      MYSQL_PASSWORD: ${MYSQL_PAGE_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   auth_service:
     build: ./SmartHomeAuth
     restart: always
@@ -230,6 +248,11 @@ services:
       DATA_QUEUE: ${DATA_QUEUE}
       DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
       EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+      SMARTHOME_PAGE_BD_HOST: ${SMARTHOME_PAGE_BD_HOST}
+      SMARTHOME_PAGE_BD_PORT: ${SMARTHOME_PAGE_BD_PORT}
+      SMARTHOME_PAGE_BD_NAME: ${MYSQL_PAGE_DATABASE}
+      SMARTHOME_PAGE_BD_USER: ${MYSQL_PAGE_USER}
+      SMARTHOME_PAGE_BD_PASSWORD: ${MYSQL_PAGE_PASSWORD}
       PREFIX_PATH: modules
     labels:
       - "traefik.enable=true"
@@ -253,6 +276,8 @@ services:
       - media_page_voluem:/home/device_service/web/media
     depends_on:
       rabbitmq:
+        condition: service_healthy
+      sh_page_db:
         condition: service_healthy
 
   script_service:
@@ -398,6 +423,7 @@ volumes:
   media_device_voluem:
   client_voluem:
   bd_auth_data:
+  bd_page_data2:
   bd_data:
   media_page_voluem:
   bd_data_script:
