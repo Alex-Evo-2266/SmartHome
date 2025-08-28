@@ -1,0 +1,37 @@
+export interface UserForm {
+name: string;
+password: string;
+email: string;
+}
+
+
+export interface UserSchema {
+id: string;
+name: string;
+email?: string | null;
+role: string;
+image_url?: string | null;
+host?: string | null;
+}
+
+
+export interface UserEditSchema {
+name: string;
+email?: string;
+}
+
+
+export interface UserEditLevelSchema {
+id: string;
+role: string;
+}
+
+
+export interface UserEditPasswordSchema {
+old_password: string;
+new_password: string;
+}
+
+export interface UsersDataSchema {
+users: UserSchema[]
+}

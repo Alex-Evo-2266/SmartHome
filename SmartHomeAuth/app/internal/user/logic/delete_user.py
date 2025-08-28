@@ -12,10 +12,13 @@ async def delete_user(id:str):
 		logger.error(f"none user")
 		raise UserNotFoundException()
 	message = "Account deleted name = " + user.name
-	send_email(EmailSendSchema(
+	try:
+		send_email(EmailSendSchema(
 			to_email=user.email,
 			title="Account smart home",
 			message=message
-			))
+		))
+	except Exception:
+		pass
 	logger.info(f"user delete. id:{id}. user name:{user.name}")
 	await user.delete()

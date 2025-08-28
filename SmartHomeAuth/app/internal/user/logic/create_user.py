@@ -29,7 +29,7 @@ async def add_user(data: UserForm):
 		cond = await User.objects.get_or_none(name=data.name)
 		if(cond):
 			raise UserAlreadyExistsException('such user already exists')
-		role = await get_role(BASE_ROLE.ADMIN)
+		role = await get_role(BASE_ROLE.BASE)
 		if(not role):
 			raise Exception("error add user")
 		newUser = await User.objects.create(id=uuid, name=data.name, email=data.email, password=hashedPass, role=role)
