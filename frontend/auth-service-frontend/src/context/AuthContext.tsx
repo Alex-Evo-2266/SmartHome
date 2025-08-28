@@ -31,8 +31,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logout = async () => {
-        await apiLogout();
         setUser(null);
+        await apiLogout();
     };
 
     const initState = ():AuthData => {
@@ -66,4 +66,12 @@ export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("AuthContext not found");
   return ctx;
+};
+
+export const usePrivilege = (privilege: string) => {
+  const {user} = useAuth()
+
+  return{
+    valid_privilege: !!(user && user.privileges.includes(privilege))
+  }
 };

@@ -12,7 +12,7 @@ from app.internal.role.logic.create_role import add_role
 from app.internal.role.logic.get_role import get_role_all
 from app.internal.role.logic.delete_role import delete_role_by_id
 from app.internal.role.logic.edit_role_privilege import edit_privilege_role
-from app.internal.role.schemas.role import RoleForm, RoleResponseSchema, EditPrivilegeRoleForm
+from app.internal.role.schemas.role import RoleForm, RoleResponseSchema, EditPrivilegeRoleForm, RoleResponseSchemaList
 from app.internal.role.serialization.map_role import map_role
 
 from app.configuration.settings import BASE_ROLE
@@ -33,14 +33,12 @@ async def add(data: RoleForm, user_data:SessionDepData = Depends(user_preveleg_d
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.get("", response_model=List[RoleResponseSchema])
+@router.get("/all", response_model=RoleResponseSchemaList)
 async def get_role(user_data:SessionDepData = Depends(user_preveleg_dep(BASE_ROLE.ADMIN))):
 	try:
 		roles = await get_role_all()
-		roles_data = []
-		for role in roles:
-			roles_data.append(await map_role(role))
-		return roles_data
+		roles_data = [await map_role(role) for role in roles]
+		return RoleResponseSchemaList(roles=roles_data)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 	

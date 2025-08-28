@@ -9,21 +9,16 @@ export const login = async (data: LoginForm) => {
   const resp = await api.post("/login", data);
   const token = resp.headers["authorization"]?.replace("Bearer ", "");
   const date = resp.headers['X-Token-Expires-At']
+  const prev:string[] = resp.headers["x-user-privilege"]?.split(",") || []
   const d = {
     role: resp.headers["x-user-role"],
     userId: resp.headers["x-user-id"],
-    privileges: resp.headers["x-user-privilege"]?.split(",") || [],
+    privileges: prev.map(i=>i.trim()),
     expires_at: new Date(date),
     token
   };
   if (token) setAccessToken(d);
-  return {
-    role: resp.headers["x-user-role"],
-    userId: resp.headers["x-user-id"],
-    privileges: resp.headers["x-user-privilege"]?.split(",") || [],
-    expires_at: new Date(date),
-    token
-  };
+  return d;
 };
 
 export const logout = async () => {

@@ -5,6 +5,9 @@ import AddUser from "./pages/AddUser";
 import LoginPage from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import Roles from "./pages/Roles";
+import Privileges from "./pages/Privileges";
+import { ADD_USER } from "./const";
 
 const { Header, Content } = Layout;
 
@@ -18,8 +21,9 @@ function AppLayout() {
           {user && (
             <>
               <Menu.Item key="1"><Link to="/users">Пользователи</Link></Menu.Item>
-              <Menu.Item key="2"><Link to="/users/add">Добавить</Link></Menu.Item>
-              <Menu.Item key="3" onClick={logout}>Выйти</Menu.Item>
+              <Menu.Item key="2"><Link to="/roles">Роли</Link></Menu.Item>
+              <Menu.Item key="3"><Link to="/privileges">Права</Link></Menu.Item>
+              <Menu.Item key="10" onClick={logout}>Выйти</Menu.Item>
             </>
           )}
         </Menu>
@@ -30,7 +34,11 @@ function AppLayout() {
             user?
             <>
               <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
-              <Route path="/users/add" element={<ProtectedRoute><AddUser /></ProtectedRoute>} />
+              <Route path="/roles" element={<ProtectedRoute><Roles /></ProtectedRoute>} />
+              <Route path="/privileges" element={<ProtectedRoute><Privileges /></ProtectedRoute>} />
+              {
+                <Route path="/users/add" element={<ProtectedRoute prev={ADD_USER}><AddUser /></ProtectedRoute>} />
+              }
               <Route path="/*" element={<Navigate replace to="/users" />} />
             </>:
             <>

@@ -5,7 +5,7 @@ class RoleForm(BaseModel):
     role_name: str
 
 class RoleSchema(BaseModel):
-    id: int
+    id: str
     role_name: str
 
 class PrivilegeForm(BaseModel):
@@ -16,10 +16,16 @@ class PrivilegeSchema(BaseModel):
     privilege: str
 
 class RoleResponseSchema(BaseModel):
-    id: int
+    id: str
     role_name: str
     privileges: List[PrivilegeSchema]
+
+class RoleResponseSchemaList(BaseModel):
+    roles: List[RoleResponseSchema]
 
 class EditPrivilegeRoleForm(BaseModel):
     role_name: str
     privileges: List[PrivilegeForm]
+
+class PrivilegeSchemaList(BaseModel):
+    privileges: List[PrivilegeSchema]

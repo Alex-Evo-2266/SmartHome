@@ -18,6 +18,7 @@ from app.internal.auth.models.auth import Session
 from app.internal.auth.schemas.auth import Login, LoginHeaders, TempTokenData
 from app.internal.auth.schemas.depends import SessionDepData
 from app.internal.auth.depends.auth import session_dep
+from app.internal.role.logic.get_role import get_role_by_id
 
 logger = logging.getLogger(__name__)
 
@@ -33,12 +34,12 @@ async def login(headers: Annotated[LoginHeaders, Header()], response:Response = 
 		user = await login_data_check(data)
 		session = await create_session(user, headers.Host)
 		tokens = await get_token(session)
-		await user.role.load()
+		role = await get_role_by_id(user.role.id)
 		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
 		response.headers["Authorization"]= f"Bearer {tokens.access}"
 		response.headers["X-Token-Expires-At"]=str(tokens.expires_at.timestamp())
-		response.headers["X-User-Role"]=user.role.role_name
-		response.headers["X-User-Privilege"]= ", ".join([privilege.privilege for privilege in await get_privilege(user.role)])
+		response.headers["X-User-Role"]=role.role_name
+		response.headers["X-User-Privilege"]= ", ".join([privilege.privilege for privilege in await get_privilege(role)])
 		response.headers["X-Status-Auth"] = "ok"
 		response.headers["X-User-Id"]=user.id
 		return "ok"
@@ -59,12 +60,12 @@ async def refrash(response:Response = Response("ok", 200), smart_home: Optional[
 		if not session:
 			raise Exception("session not found")
 		await session.user.load()
-		await session.user.role.load()
+		role = await get_role_by_id(session.user.role.id)
 		response.set_cookie(key="smart_home", value=tokens.refresh, httponly=True)
 		response.headers["Authorization"]= f"Bearer {tokens.access}"
 		response.headers["X-Token-Expires-At"]=str(tokens.expires_at.timestamp())
-		response.headers["X-User-Role"]=session.user.role.role_name
-		response.headers["X-User-Privilege"]= ", ".join([privilege.privilege for privilege in await get_privilege(session.user.role)])
+		response.headers["X-User-Role"]=role.role_name
+		response.headers["X-User-Privilege"]= ", ".join([privilege.privilege for privilege in await get_privilege(role)])
 		response.headers["X-Status-Auth"] = "ok"
 		response.headers["X-User-Id"]=session.user.id
 		return "ok"
@@ -76,9 +77,10 @@ async def refrash(response:Response = Response("ok", 200), smart_home: Optional[
 	
 @router.get("/check")
 async def chack_user(response:Response = Response("ok", 200), session:SessionDepData = Depends(session_dep)):
+	role = await get_role_by_id(session.role.id)
 	response.headers["X-Status-Auth"] = "ok"
-	response.headers["X-User-Role"] = session.role.role_name
-	response.headers["X-User-Privilege"]= ", ".join([privilege.privilege for privilege in await get_privilege(session.role)])
+	response.headers["X-User-Role"] = role.role_name
+	response.headers["X-User-Privilege"]= ", ".join([privilege.privilege for privilege in await get_privilege(role)])
 	response.headers["X-User-Id"]=session.user.id
 	return "ok"
 

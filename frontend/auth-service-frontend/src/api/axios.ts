@@ -47,10 +47,18 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       try {
         const resp = await api.get("/refresh");
-        const newToken = resp.headers["authorization"]?.replace("Bearer ", "");
-        if (newToken) {
-          setAccessToken(newToken);
-          error.config.headers.Authorization = `Bearer ${newToken}`;
+        const token = resp.headers["authorization"]?.replace("Bearer ", "");
+        const date = resp.headers['X-Token-Expires-At']
+        const d = {
+          role: resp.headers["x-user-role"],
+          userId: resp.headers["x-user-id"],
+          privileges: resp.headers["x-user-privilege"]?.split(",") || [],
+          expires_at: new Date(date),
+          token
+        };
+        if (d.token) {
+          setAccessToken(d);
+          error.config.headers.Authorization = `Bearer ${d.token}`;
           return api.request(error.config); // повторяем запрос
         }
       } catch (e) {

@@ -11,7 +11,7 @@ from app.internal.auth.depends.auth import user_preveleg_dep
 from app.internal.role.logic.create_privilege import add_privilege
 from app.internal.role.logic.get_privilege import get_privilege_all
 from app.internal.role.logic.delete_privilege import delete_privilege_by_id
-from app.internal.role.schemas.role import PrivilegeForm, PrivilegeSchema
+from app.internal.role.schemas.role import PrivilegeForm, PrivilegeSchema, PrivilegeSchemaList
 
 from app.configuration.settings import BASE_ROLE
 
@@ -31,13 +31,11 @@ async def add(data: PrivilegeForm, user_data:SessionDepData = Depends(user_preve
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.get("", response_model=List[PrivilegeSchema])
+@router.get("", response_model=PrivilegeSchemaList)
 async def get(user_data:SessionDepData = Depends(user_preveleg_dep(BASE_ROLE.ADMIN))):
 	try:
-		print("p89")
 		privileges = await get_privilege_all()
-		print("p89")
-		return [PrivilegeSchema(id=x.id, privilege=x.privilege) for x in privileges]
+		return PrivilegeSchemaList(privileges=[PrivilegeSchema(id=x.id, privilege=x.privilege) for x in privileges])
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 	

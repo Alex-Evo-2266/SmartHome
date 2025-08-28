@@ -35,3 +35,35 @@ new_password: string;
 export interface UsersDataSchema {
 users: UserSchema[]
 }
+
+export interface CreateRole {
+role_name: string
+}
+
+export interface Privilege {
+    id: string
+    privilege: string
+}
+
+export interface Role {
+    id: string
+    role_name: string
+    privileges: Privilege[]
+}
+
+export interface RoleList {
+    roles: Role[]
+}
+
+export interface PrivilegeForm{
+    privilege: string
+}
+
+export interface EditPrivilegeRoleForm{
+    role_name: string
+    privileges: PrivilegeForm[]
+}
+
+export interface PrivilegeSchemaList{
+    privileges: Privilege[]
+}

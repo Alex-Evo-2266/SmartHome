@@ -18,19 +18,22 @@ export default function AddUser() {
   };
 
   return (
-    <Card title="Добавить пользователя" style={{ maxWidth: 400 }}>
-      <Form layout="vertical" form={form} onFinish={onFinish}>
-        <Form.Item name="name" label="Имя" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="email" label="Email" rules={[{ type: "email" }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="password" label="Пароль" rules={[{ required: true }]}>
-          <Input.Password />
-        </Form.Item>
-        <Button type="primary" htmlType="submit">Создать</Button>
-      </Form>
-    </Card>
+    <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
+      <Card title="Добавить пользователя" style={{ maxWidth: 400, minWidth: 300 }}>
+        <Form layout="vertical" form={form} onFinish={onFinish}>
+          <Form.Item name="name" label="Имя" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="email" label="Email" rules={[{ type: "email" }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="password" label="Пароль" rules={[{ required: true }]}>
+            <Input.Password />
+          </Form.Item>
+          <Button type="primary" htmlType="submit">Создать</Button>
+        </Form>
+      </Card>
+    </div>
+    
   );
 }
