@@ -1,11 +1,12 @@
 import { Form, Input, Button, message, Card } from "antd";
-import { addUser } from "../api/users";
+import { useUserAPI } from "../api/users";
 import { useNavigate } from "react-router-dom";
 import type { UserForm } from "../types";
 
 export default function AddUser() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const {addUser} = useUserAPI()
 
   const onFinish = async (values:UserForm) => {
     try {

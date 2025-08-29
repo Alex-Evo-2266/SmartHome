@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Table, Button, Popconfirm, message, Space, Modal, Form, Input } from "antd";
-import { deleteRole } from "../api/role";
+import { useRoleAPI } from "../api/role";
 import type { Privilege } from "../types";
-import { addPrivilege, getPrivileges } from "../api/privileges";
+import { usePrivilegesAPI } from "../api/privileges";
 import { usePrivilege } from "../context/AuthContext";
 import { EDIT_ROLE } from "../const";
 
@@ -12,6 +12,8 @@ export default function Privileges() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const {valid_privilege} = usePrivilege(EDIT_ROLE)
+  const {getPrivileges, addPrivilege} = usePrivilegesAPI()
+  const {deleteRole} = useRoleAPI()
 
   const fetchPrivileges = async () => {
     setLoading(true);

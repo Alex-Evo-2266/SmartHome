@@ -2,7 +2,7 @@ import jwt, logging
 from jwt import ExpiredSignatureError
 from datetime import datetime
 from typing import Annotated, Optional
-from fastapi import Header, HTTPException, Cookie, Response
+from fastapi import Header, HTTPException, Request
 
 from app.configuration import settings
 from app.internal.exceptions.base import InvalidInputException
@@ -48,9 +48,18 @@ async def auth(jwtdata:str)->UserDepData:
 	await user.role.load()
 	return UserDepData(user=user, role=user.role)
 
-async def session_dep(headers: Annotated[AuthHeaders, Header()])->SessionDepData:
+async def session_dep(request: Request)->SessionDepData:
 	try:
-		jwtdata = getJWT(headers.Authorization)
+		headers_data = { 
+			"Authorization": request.headers.get("authorization"),
+			"X_status_auth": request.headers.get("x-status-auth"),
+			"X_forwarded_for": request.headers.get("x-forwarded-for"),
+			"X_user_id": request.headers.get("x-user-id"),
+			"X_user_role": request.headers.get("x-user-role"),
+			"Host": request.headers.get("host"),
+			"X_user_privilege": request.headers.get("x-user-privilege"),
+		}
+		jwtdata = getJWT(headers_data["Authorization"])
 		if not jwtdata:
 			raise HTTPException(status_code=403, detail="invalid jwt")
 		auth_data = await auth(jwtdata)
@@ -63,7 +72,6 @@ async def session_dep(headers: Annotated[AuthHeaders, Header()])->SessionDepData
 			raise HTTPException(status_code=403, detail="session not found")
 		return SessionDepData(user=auth_data.user, role=auth_data.role, session=u_session)
 	except HTTPException as e:
-		print("ty", e)
 		raise
 	except ExpiredSignatureError as e:
 		raise HTTPException(status_code=401, detail="outdated jwt")
@@ -75,9 +83,18 @@ def check_privilege(role: Role, privilege:str):
 	return True
 	
 def user_preveleg_dep(privilege: str | settings.BASE_ROLE):
-	async def _user_role_dep(headers: Annotated[AuthHeaders, Header()]):
+	async def _user_role_dep(request: Request):
 		try:
-			jwtdata = getJWT(headers.Authorization)
+			headers_data = { 
+				"Authorization": request.headers.get("authorization"),
+				"X_status_auth": request.headers.get("x-status-auth"),
+				"X_forwarded_for": request.headers.get("x-forwarded-for"),
+				"X_user_id": request.headers.get("x-user-id"),
+				"X_user_role": request.headers.get("x-user-role"),
+				"Host": request.headers.get("host"),
+				"X_user_privilege": request.headers.get("x-user-privilege"),
+			}
+			jwtdata = getJWT(headers_data["Authorization"])
 			if not jwtdata:
 				raise HTTPException(status_code=403, detail="invalid jwt")
 			auth_data = await auth(jwtdata)

@@ -12,6 +12,7 @@ async def delete_session_user(id:str, user: User):
 		raise Exception("session not found")
 	if(session.user == user):
 		await session.delete()
+		return
 	raise Exception("session not user")
 
 async def delete_session(id:str):

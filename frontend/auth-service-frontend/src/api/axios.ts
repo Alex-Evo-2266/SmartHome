@@ -9,7 +9,7 @@ const SMARTHOME_USER_DATA = "auth-user-data-sh"
 // let accessToken: string | null = null;
 
 // Устанавливаем токен после логина
-export const setAccessToken = (data: {    
+export const setUserData = (data: {    
     role: string,
     userId: string,
     privileges: string[],
@@ -33,7 +33,6 @@ api.interceptors.request.use((config) => {
     if(!data)
         return config
     const obj = JSON.parse(data)
-    console.log(obj.token, config)
   if (obj.token) {
     config.headers.Authorization = `Bearer ${obj.token}`;
   }
@@ -57,7 +56,7 @@ api.interceptors.response.use(
           token
         };
         if (d.token) {
-          setAccessToken(d);
+          setUserData(d);
           error.config.headers.Authorization = `Bearer ${d.token}`;
           return api.request(error.config); // повторяем запрос
         }

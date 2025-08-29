@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Table, Button, Popconfirm, message, Space } from "antd";
-import { getAllUsers, deleteUser } from "../api/users";
+import { useUserAPI } from "../api/users";
 import type { UserSchema } from "../types";
 import { useAuth, usePrivilege } from "../context/AuthContext";
 import { ADD_USER, DELETE_USER, EDIT_ROLE_USER, EDIT_USER } from "../const";
@@ -18,6 +18,7 @@ export default function Users() {
   const {valid_privilege:valid_edit_role} = usePrivilege(EDIT_ROLE_USER)
   const [editRoleUserModal, setEditRoleUserModal] = useState<null | UserSchema>(null);
   const [editUserModal, setEditUserModal] = useState<null | UserSchema>(null);
+  const {getAllUsers, deleteUser} = useUserAPI()
   
 
   const fetchUsers = async () => {

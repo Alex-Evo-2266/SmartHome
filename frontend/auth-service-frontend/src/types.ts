@@ -67,3 +67,13 @@ export interface EditPrivilegeRoleForm{
 export interface PrivilegeSchemaList{
     privileges: Privilege[]
 }
+export interface Session {
+  id: string;
+  service: string;
+  host: string
+  expires_at: Date
+}
+
+export interface SessionResp {
+    sessions: Session[]
+}

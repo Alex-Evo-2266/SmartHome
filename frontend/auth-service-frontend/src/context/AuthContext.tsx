@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { login as apiLogin, logout as apiLogout, type LoginForm } from "../api/auth";
+import { useAuthAPI, type LoginForm } from "../api/auth";
+import type { AxiosResponse } from "axios";
 
 interface AuthData {
   userId: string;
@@ -21,6 +22,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<AuthData | null>(null);
+    const {login: apiLogin, logout:apiLogout} = useAuthAPI()
 
     const login = async (data: LoginForm) => {
         const u = await apiLogin(data);
@@ -34,6 +36,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
         await apiLogout();
     };
+
+    useEffect(()=>{
+      console.log(user)
+      if(user === null){
+        logout()
+      }
+    },[user])
 
     const initState = ():AuthData => {
         let datauser = localStorage.getItem(SMARTHOME_USER_DATA)
@@ -75,3 +84,17 @@ export const usePrivilege = (privilege: string) => {
     valid_privilege: !!(user && user.privileges.includes(privilege))
   }
 };
+
+export const useErrorLogout = () => {
+  const {logout} = useAuth()
+
+  return <T, Y>(data:Promise<AxiosResponse<T, Y>>):Promise<AxiosResponse<T, Y>> => {
+          return data.then(val=>{
+              return val
+          }).catch(err=>{
+              if(err.status === 403)
+                  logout()
+              throw err
+          })
+      }
+}

@@ -13,9 +13,9 @@ class Tokens(BaseModel):
 
 class SessionSchema(BaseModel):
 	id: str
-	service: str
+	service: Optional[str] = ""
 	expires_at: datetime.datetime
-	host: str
+	host: Optional[str] = ""
 
 class LoginHeaders(BaseModel):
 	Host: Optional[str] = None
@@ -32,3 +32,6 @@ class ConfigFilePageData(BaseModel):
 
 class ConfigFileData(BaseModel):
 	pages: List[ConfigFilePageData]
+
+class SessionSchemaList(BaseModel):
+	sessions: List[SessionSchema]

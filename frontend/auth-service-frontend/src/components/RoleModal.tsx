@@ -1,8 +1,8 @@
 import { Modal, Form, Select, Spin, message } from "antd";
 import { useEffect, useState } from "react";
-import { editRole, getRoles } from "../api/role";
-import type { Privilege, Role, UserSchema } from "../types";
-import { changeRole } from "../api/users";
+import { useRoleAPI } from "../api/role";
+import type { Role, UserSchema } from "../types";
+import { useUserAPI } from "../api/users";
 
 export default function RoleModal(
     { open, onClose, user, onSuccess }:{open: boolean, onClose:()=>void, user:UserSchema, onSuccess:()=>void}
@@ -10,6 +10,8 @@ export default function RoleModal(
   const [form] = Form.useForm<{role: string}>();
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(false);
+  const {changeRole} = useUserAPI()
+  const {getRoles} = useRoleAPI()
 
   // загрузить все роли при открытии
     useEffect(() => {

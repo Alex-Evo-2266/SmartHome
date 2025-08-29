@@ -1,8 +1,8 @@
 import { Modal, Form, Select, Spin, message } from "antd";
 import { useEffect, useState } from "react";
-import { editRole } from "../api/role";
+import { useRoleAPI } from "../api/role";
 import type { Privilege, Role } from "../types";
-import { getPrivileges } from "../api/privileges";
+import { usePrivilegesAPI } from "../api/privileges";
 
 export default function RolePrivilegeModal(
     { open, onClose, role, onSuccess }:{open: boolean, onClose:()=>void, role:Role, onSuccess:()=>void}
@@ -10,6 +10,8 @@ export default function RolePrivilegeModal(
   const [form] = Form.useForm<{privileges: string[]}>();
   const [preveliges, setPreveliges] = useState<Privilege[]>([]);
   const [loading, setLoading] = useState(false);
+  const {getPrivileges} = usePrivilegesAPI()
+  const {editRole} = useRoleAPI()
 
   // загрузить все роли при открытии
     useEffect(() => {

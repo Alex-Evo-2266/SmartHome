@@ -1,12 +1,13 @@
-import { Modal, Form, message, Card, Input, Button } from "antd";
+import { Modal, Form, message, Input, Button } from "antd";
 import { useEffect } from "react";
 import type { UserSchema } from "../types";
-import { editUser } from "../api/users";
+import { useUserAPI } from "../api/users";
 
 export default function UserModal(
     { open, onClose, user, onSuccess }:{open: boolean, onClose:()=>void, user:UserSchema, onSuccess:()=>void}
 ) {
   const [form] = Form.useForm<{name: string, email: string}>();
+  const {editUser} = useUserAPI()
 
   // загрузить все роли при открытии
     useEffect(() => {
