@@ -1,7 +1,0 @@
-export {AutomationActionField} from './AutomationActionField/ui/AutomationActionField'
-export {AutomationEntitiesField} from './AutomationEntityField/ui/AutomationEntitiesField'
-export {AutomationConditionField} from './AutomationConditionField/ui/AutomationConditionField'
-export {AutomationConditionNumber} from './AutomationConditionField/ui/AutomationConditionNimber'
-export {useAutomationCondition} from './AutomationConditionField/lib/hooks/automationCondition.hook'
-export {useAutomationAction} from './AutomationActionField/lib/hooks/automationAction.hook'
-export {useAutomationTrigger} from './AutomationEntityField/lib/hooks/automationCondition.hook'

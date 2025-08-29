@@ -71,3 +71,4 @@ service_config.yml
 /SmartHome_env_dev_local/
 
 /certs/*
+certs

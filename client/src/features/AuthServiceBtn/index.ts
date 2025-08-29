@@ -1,1 +1,0 @@
-export {AuthServiceBtn} from './ui/AutuServiceBtnComponent'
