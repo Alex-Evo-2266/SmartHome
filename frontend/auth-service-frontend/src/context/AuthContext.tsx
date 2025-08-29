@@ -38,16 +38,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     useEffect(()=>{
-      console.log(user)
-      if(user === null){
+      const data = initState()
+      setUser(data)
+      if(!data){
         logout()
       }
-    },[user])
+    },[])
 
-    const initState = ():AuthData => {
+    const initState = ():AuthData | null => {
         let datauser = localStorage.getItem(SMARTHOME_USER_DATA)
         if (!datauser)
-            datauser = '{}';
+            return null
         const data = JSON.parse(datauser)
         let newdata: AuthData = {
             token: data?.token || '',
@@ -58,11 +59,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         return newdata
     }
-
-    useEffect(()=>{
-        const data = initState()
-        setUser(data)
-    },[])
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
