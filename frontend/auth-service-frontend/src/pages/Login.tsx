@@ -1,6 +1,7 @@
 import { Form, Input, Button, Card, message } from "antd";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { AUTH_SERVICE_PREFIX } from "../const";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -10,7 +11,7 @@ export default function LoginPage() {
     try {
       await login(values);
       message.success("Успешный вход");
-      navigate("/users");
+      navigate(`${AUTH_SERVICE_PREFIX}/users`);
     } catch {
       message.error("Неверное имя или пароль");
     }

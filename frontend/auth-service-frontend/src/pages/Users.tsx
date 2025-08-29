@@ -3,7 +3,7 @@ import { Table, Button, Popconfirm, message, Space } from "antd";
 import { useUserAPI } from "../api/users";
 import type { UserSchema } from "../types";
 import { useAuth, usePrivilege } from "../context/AuthContext";
-import { ADD_USER, DELETE_USER, EDIT_ROLE_USER, EDIT_USER } from "../const";
+import { ADD_USER, AUTH_SERVICE_PREFIX, DELETE_USER, EDIT_ROLE_USER, EDIT_USER } from "../const";
 import RoleModal from "../components/RoleModal";
 import { NavLink } from "react-router-dom";
 import UserModal from "../components/UserEditModal";
@@ -93,7 +93,7 @@ export default function Users() {
     <div>
         {
           valid_add &&
-          <NavLink to={"/users/add"}>
+          <NavLink to={`${AUTH_SERVICE_PREFIX}/users/add`}>
             <Button type="primary" style={{ marginBottom: 16 }}>
               Добавить пользователя
             </Button>

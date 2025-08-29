@@ -2,6 +2,7 @@ import { Form, Input, Button, message, Card } from "antd";
 import { useUserAPI } from "../api/users";
 import { useNavigate } from "react-router-dom";
 import type { UserForm } from "../types";
+import { AUTH_SERVICE_PREFIX } from "../const";
 
 export default function AddUser() {
   const [form] = Form.useForm();
@@ -12,7 +13,7 @@ export default function AddUser() {
     try {
       await addUser(values);
       message.success("Пользователь добавлен");
-      navigate("/users");
+      navigate(`${AUTH_SERVICE_PREFIX}/users`);
     } catch {
       message.error("Ошибка добавления");
     }
