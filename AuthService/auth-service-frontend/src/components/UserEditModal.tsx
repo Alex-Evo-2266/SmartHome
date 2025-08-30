@@ -1,4 +1,4 @@
-import { Modal, Form, message, Input, Button } from "antd";
+import { Modal, Form, message, Input } from "antd";
 import { useEffect } from "react";
 import type { UserSchema } from "../types";
 import { useUserAPI } from "../api/users";
@@ -44,14 +44,13 @@ export default function UserModal(
       okText="Сохранить"
       cancelText="Отмена"
     >
-        <Form layout="vertical" form={form} onFinish={handleOk}>
+        <Form layout="vertical" form={form}>
           <Form.Item name="name" label="Имя" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
           <Form.Item name="email" label="Email" rules={[{ type: "email" }]}>
             <Input />
           </Form.Item>
-          <Button type="primary" htmlType="submit">Создать</Button>
         </Form>
     </Modal>
   );

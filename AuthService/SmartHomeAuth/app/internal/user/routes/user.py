@@ -68,6 +68,14 @@ async def edit(data:UserEditSchema, session:SessionDepData = Depends(session_dep
 		await edit_user(session.user, data)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
+	
+@router.put("/{id}")
+async def edit(id:str, data:UserEditSchema, session:SessionDepData = Depends(session_dep)):
+	try:
+		user = await get_user(id)
+		await edit_user(user, data)
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
 
 @router.delete("/{id}")
 async def delete(id: str, session:SessionDepData = Depends(user_preveleg_dep(BASE_ROLE.ADMIN))):
