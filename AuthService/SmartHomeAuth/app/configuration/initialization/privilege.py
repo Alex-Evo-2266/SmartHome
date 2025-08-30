@@ -1,14 +1,15 @@
 from app.internal.role.schemas.role import PrivilegeForm
 from app.internal.role.logic.create_privilege import add_privilege
 from app.internal.role.logic.get_privilege import get_privilege_by_privilege
-from app.configuration.settings import BASE_ROLE
+from app.configuration.settings import BASE_PRIVILEGE_NAME
 
 privieges = [
     "user.add",
     "user.edit",
     "user.editrole",
     "user.delete",
-    "role.edit"
+    "role.edit",
+    BASE_PRIVILEGE_NAME
 ]
 
 async def initPriviege():

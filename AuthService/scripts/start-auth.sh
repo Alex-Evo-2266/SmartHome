@@ -15,11 +15,11 @@ if ! docker network ls | grep -q "^.*${NETWORK_NAME}.*$"; then
 fi
 
 # Собираем и поднимаем все сервисы
-sudo docker compose --env-file $BASE_DIR/.env \
+docker compose --env-file $BASE_DIR/.env \
   -f $BASE_DIR/docker-compose-base.yml \
   -f $BASE_DIR/docker-compose-auth.yml build
 
 # Собираем и поднимаем все сервисы
-sudo docker compose --env-file $BASE_DIR/.env \
+docker compose --env-file $BASE_DIR/.env \
   -f $BASE_DIR/docker-compose-base.yml \
   -f $BASE_DIR/docker-compose-auth.yml up

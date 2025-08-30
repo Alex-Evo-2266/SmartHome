@@ -2,16 +2,34 @@ from async_lru import alru_cache
 import logging
 from typing import List
 from app.internal.role.models.role import Role, Privilege
-from app.configuration.settings import BASE_ROLE
+from app.configuration.settings import BASE_ROLE, BASE_PRIVILEGE_NAME
 from app.internal.role.logic.get_role import get_role_by_id
 
 logger = logging.getLogger(__name__)
+
+async def get_base_privilege()->Privilege:
+	try:
+		privilege = await Privilege.objects.get_or_none(privilege=BASE_PRIVILEGE_NAME)
+		return privilege
+	except Exception as e:
+		logger.error(f"error get privilege: {e}")
+		raise
 	
 async def get_privilege(role: Role)->List[Privilege]:
 	try:
 		if role.role_name == BASE_ROLE.ADMIN:
 			return await get_privilege_all()
-		privileges = [await x.load() for x in role.privileges]
+		include_base = False
+		privileges = []
+		for x in role.privileges:
+			await x.load()
+			privileges.append(x)
+			if x.privilege == BASE_PRIVILEGE_NAME:
+				include_base = True
+		if not include_base:
+			base = await get_base_privilege()
+			if base:
+				privileges.append(base)
 		return privileges
 	except Exception as e:
 		logger.error(f"error get privilege: {e}")
@@ -21,15 +39,10 @@ async def get_privilege(role: Role)->List[Privilege]:
 async def get_privilege_by_role_id(role_id: str)->List[Privilege]:
 	try:
 		role = await get_role_by_id(role_id)
-		if role.role_name == BASE_ROLE.ADMIN:
-			return await get_privilege_all()
-		privileges = [await x.load() for x in role.privileges]
-		return privileges
+		return await get_privilege(role)
 	except Exception as e:
 		logger.error(f"error get privilege: {e}")
 		raise
-
-
 	
 async def get_privilege_all()->List[Privilege]:
 	try:

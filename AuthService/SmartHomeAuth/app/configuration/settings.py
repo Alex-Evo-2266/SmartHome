@@ -52,6 +52,8 @@ CONFIG_SERVICES_DIR = os.path.join(BASE_DIR, "config_services")
 ADMIN_BASE_LOGIN = "admin"
 ADMIN_BASE_PASSWORD = "admin"
 
+BASE_PRIVILEGE_NAME = "base"
+
 
 class BASE_ROLE(str, Enum):
 	ADMIN = "admin"
