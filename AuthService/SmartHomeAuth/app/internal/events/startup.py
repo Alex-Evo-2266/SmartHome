@@ -1,6 +1,7 @@
 import logging, time
 from app.configuration.initialization.role import initRole
 from app.configuration.initialization.user import initUser
+from app.configuration.initialization.privilege import initPriviege
 from app.pkg.email import send_email, EmailSendSchema, email_connect
 
 from app.pkg.ormar.dbormar import database
@@ -15,6 +16,7 @@ async def startup():
 
 	await initRole()
 	await initUser()
+	await initPriviege()
 
 	email_connect()
 

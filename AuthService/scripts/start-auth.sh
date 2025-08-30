@@ -3,7 +3,7 @@ set -e  # завершить скрипт при любой ошибке
 BASE_DIR="$(dirname "$(realpath "$0")")/.."
 
 # Загружаем переменные из .env
-export $(grep -v '^#' ./.env | xargs)
+export $(grep -v '^#' $BASE_DIR/.env | xargs)
 
 # Создаём сеть, если её ещё нет
 if ! docker network ls | grep -q "^.*${NETWORK_NAME}.*$"; then
@@ -15,11 +15,11 @@ if ! docker network ls | grep -q "^.*${NETWORK_NAME}.*$"; then
 fi
 
 # Собираем и поднимаем все сервисы
-sudo docker compose --env-file ./.env \
+sudo docker compose --env-file $BASE_DIR/.env \
   -f $BASE_DIR/docker-compose-base.yml \
   -f $BASE_DIR/docker-compose-auth.yml build
 
 # Собираем и поднимаем все сервисы
-sudo docker compose --env-file ./.env \
+sudo docker compose --env-file $BASE_DIR/.env \
   -f $BASE_DIR/docker-compose-base.yml \
   -f $BASE_DIR/docker-compose-auth.yml up
