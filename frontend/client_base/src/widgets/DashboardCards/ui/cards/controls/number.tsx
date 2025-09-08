@@ -1,102 +1,122 @@
 import { Range } from "alex-evo-sh-ui-kit"
-import './styleControl.scss'
-import { useGetNumberFieldControl } from "../../../../../features/Device"
-import { useAppSelector } from "../../../../../shared/lib/hooks/redux"
+import "./styleControl.scss"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
 import { useContext, useMemo } from "react"
-import { WIDTH_PANEL_ITEM } from "../../../../../entites/dashboard/const"
-import { useDebounce } from "../../../../../shared"
+import { WIDTH_PANEL_ITEM } from "@src/entites/dashboard/const"
+import { useDebounce } from "@src/shared"
 import { ControlTemplate } from "./template"
-import { DashboardPageContext } from "../../../../../entites/dashboard/context"
-import { useNumberRoom } from "../../../../../features/Room"
+import { DashboardPageContext } from "@src/entites/dashboard/context"
 import { ErrorControl } from "./readonly"
 import { ControlElementbase } from "@src/entites/dashboard/models/panel"
+import { deviceHooks, parseDataPath, roomHooks } from "./controlUtils"
 
-interface NumberControlElementProps{
+/**
+ * Презентационный компонент слайдера (без логики).
+ */
+const NumberControlElement = ({
+    value,
+    onChange,
+    title,
+    disabled,
+    size,
+    max = 100,
+    min = 0
+}: {
     value: number
-    onChange: (value:number)=>void
+    onChange: (value: number) => void
     title: string
-    size: 1 | 2 | 3 | 4,
-    min?: number,
+    size: 1 | 2 | 3 | 4
+    min?: number
     max?: number
     disabled?: boolean
-}
-
-const NumberControlElement:React.FC<NumberControlElementProps> = ({value, onChange, title, disabled, size, max = 100, min = 0}) => {
-
+}) => {
     const debouncedSend = useDebounce(onChange, 300)
 
-    return(
+    return (
         <ControlTemplate title={title} size={size}>
-            <div className={`dashboard-control-number-value-range`} style={{height: `${WIDTH_PANEL_ITEM - 20}px`}}>
-                <Range disabled={disabled} colorBg={disabled?"var(--Outline-color)":undefined} max={max} min={min} value={value} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedSend(Number(e.target.value))}/>
+            <div
+                className="dashboard-control-number-value-range"
+                style={{ height: `${WIDTH_PANEL_ITEM - 20}px` }}
+            >
+                <Range
+                    disabled={disabled}
+                    colorBg={disabled ? "var(--Outline-color)" : undefined}
+                    max={max}
+                    min={min}
+                    value={value}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        debouncedSend(Number(e.target.value))
+                    }
+                />
             </div>
         </ControlTemplate>
     )
 }
 
-interface NumberControlDeviceProps{
-    data: ControlElementbase
+/**
+ * Контрол для управления числовым полем устройства.
+ */
+const NumberControlDevice = ({ data }: { data: ControlElementbase }) => {
+    // data.data = "device.system_name.field"
+    const [, system_name = "", field_name = ""] = parseDataPath(data.data)
+
+    const { devicesData } = useAppSelector(state => state.devices)
+    const device = useMemo(
+        () => devicesData.find(i => i.system_name === system_name),
+        [system_name, devicesData]
+    )
+    const field = device?.fields?.find(i => i.name === field_name)
+
+    const { fieldValue, updateFieldState } = deviceHooks["number"](field ?? null, system_name)
+
+    if (!device || !field) return <ErrorControl data={data} />
+    return (
+        <NumberControlElement
+            disabled={device.status !== "online"}
+            max={Number(field.high)}
+            min={Number(field.low)}
+            size={data.width}
+            title={data.title}
+            onChange={updateFieldState}
+            value={fieldValue ?? 0}
+        />
+    )
 }
 
-const useControlDevice = (data: string, field_key: "id" | "name" = "name") => {
-    const system_name = data.split(".")[1] ?? ""
-    const field_name = data.split(".")[2] ?? ""
-    const {devicesData} = useAppSelector(state=>state.devices)
-    const device = useMemo(()=>devicesData.find(i=>i.system_name === system_name), [system_name, devicesData])
-    const field = device?.fields?.find(i=>i[field_key] === field_name)
+/**
+ * Контрол для управления числовым полем комнаты.
+ */
+const NumberControlRoom = ({ data }: { data: ControlElementbase }) => {
+    // data.data = "room.room_name.deviceType.field"
+    const [, room_name = "", typeDevice = "", field = ""] = parseDataPath(data.data)
 
-    const {fieldValue, changeField, updateFieldState} = useGetNumberFieldControl(field ?? null, system_name)
+    const { rooms } = useContext(DashboardPageContext)
+    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms])
 
-    return{
-        system_name,
-        field_name,
-        device: device ?? null,
-        field,
-        fieldValue,
-        changeField,
-        updateFieldState
-    }
-}
 
-const NumberControlDevice: React.FC<NumberControlDeviceProps> = ({ data }) => {
-    const {fieldValue, updateFieldState, field, device} = useControlDevice(data.data)
+    const { change, value } = roomHooks["number"](typeDevice, field, room ?? null)
 
-    if(!field || !device)
-        return <ErrorControl data={data}/>
+    if (!room) return <ErrorControl data={data} />
 
     return (
-        <NumberControlElement disabled={device.status !== "online"} max={Number(field.high)} min={Number(field.low)} size={data.width} title={data.title} onChange={updateFieldState} value={fieldValue ?? 0}/>
+        <NumberControlElement
+            title={data.title}
+            onChange={change}
+            value={value ?? 0}
+            size={data.width}
+        />
     )
-};
-
-const NumberControlRoom: React.FC<NumberControlDeviceProps> = ({ data }) => {
-    const room_name = data.data.split(".")[1] ?? ""
-    const typeDevice = data.data.split(".")[2] ?? ""
-    const field = data.data.split(".")[3] ?? ""
-    const {rooms} = useContext(DashboardPageContext)
-    const room = useMemo(()=>rooms.find(i=>i.name_room===room_name),[rooms])
-    const {change, value} = useNumberRoom(typeDevice, field, room ?? null)
-
-    if(room === undefined)
-        return <ErrorControl data={data}/>
-
-    return (
-        <NumberControlElement title={data.title} onChange={change} value={value ?? 0} size={data.width}/>
-    )
-};
-
-interface NumberControlProps{
-    data: ControlElementbase
 }
 
-export const NumberControl:React.FC<NumberControlProps> = ({data}) => {
-    const type = data.data.split(".")[0] ?? ""
+/**
+ * Универсальный NumberControl.
+ * Определяет, к чему относится control: к устройству или комнате.
+ */
+export const NumberControl = ({ data }: { data: ControlElementbase }) => {
+    const [type = ""] = parseDataPath(data.data)
 
-    if(type === "device")
-        return <NumberControlDevice data={data}/>
-    if(type === 'room')
-        return <NumberControlRoom data={data}/>
+    if (type === "device") return <NumberControlDevice data={data} />
+    if (type === "room") return <NumberControlRoom data={data} />
 
-    return <ErrorControl data={data}/>
+    return <ErrorControl data={data} />
 }
-
