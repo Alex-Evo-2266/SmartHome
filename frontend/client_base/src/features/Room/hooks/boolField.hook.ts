@@ -61,8 +61,14 @@ export const useBoolRoom = (type: string, field: string, room: Room | null) => {
             await roomSetDeviceValue(room.name_room, type, field, value?"0":"1")
     },[value, room, type, field])
 
+    const change = useCallback(async(val: boolean)=>{
+        if(!!room)
+            await roomSetDeviceValue(room.name_room, type, field, val?"1":"0")
+    },[value, room, type, field])
+
     return {
         click,
+        change,
         value
     }
 }

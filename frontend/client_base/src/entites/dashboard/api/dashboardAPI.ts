@@ -10,8 +10,8 @@ export const useDashboardAPI = () => {
     const {request, loading, error, clearError} = useHttp()
     const {showSnackbar} = useSnackbar()
     
-    const getDashboardsAll = useCallback(async (id: string) => {
-        const data:Dashboards = await request(`/api-pages/dashboard/${id}`)
+    const getDashboardsAll = useCallback(async () => {
+        const data:Dashboards = await request(`/api-pages/dashboard`)
         if(!data)
             return
         return data.dashboards

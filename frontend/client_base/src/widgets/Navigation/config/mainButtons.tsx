@@ -1,4 +1,4 @@
-import { GearIcon, Home, LogoutIcon, Plug, Room } from 'alex-evo-sh-ui-kit'
+import { Dashboard, GearIcon, Home, LogoutIcon, Plug, Room } from 'alex-evo-sh-ui-kit'
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { NavigationButton as NB } from 'alex-evo-sh-ui-kit'
 
@@ -10,6 +10,7 @@ export const useMainButtons = (): NB[] => {
     { text: "room", type: "link", to: "/room", icon: <Room/> },
     { text: "automation", type: "link", to: "/automation", icon: <Plug/> },
     { text: "settings", type: "link", to: "/settings", icon: <GearIcon/> },
+    { text: "dashboards", type: "link", to: "/dashboard", icon: <Dashboard/>},
     { text: "logout", type: "button", icon: <LogoutIcon/>, onClick: logout }
   ]
 }

@@ -1,21 +1,21 @@
 import { Range } from "alex-evo-sh-ui-kit"
-import { ControlElementNumberControl } from "../../../../../entites/dashboard/models/panel"
 import './styleControl.scss'
 import { useGetNumberFieldControl } from "../../../../../features/Device"
 import { useAppSelector } from "../../../../../shared/lib/hooks/redux"
 import { useContext, useMemo } from "react"
-import { WIDTH_PANEL_ITEM } from "../../../const"
+import { WIDTH_PANEL_ITEM } from "../../../../../entites/dashboard/const"
 import { useDebounce } from "../../../../../shared"
 import { ControlTemplate } from "./template"
-import { HomePageContext } from "../../../context"
+import { DashboardPageContext } from "../../../../../entites/dashboard/context"
 import { useNumberRoom } from "../../../../../features/Room"
 import { ErrorControl } from "./readonly"
+import { ControlElementbase } from "@src/entites/dashboard/models/panel"
 
 interface NumberControlElementProps{
     value: number
     onChange: (value:number)=>void
     title: string
-    size: 2 | 3 | 4,
+    size: 1 | 2 | 3 | 4,
     min?: number,
     max?: number
     disabled?: boolean
@@ -35,7 +35,7 @@ const NumberControlElement:React.FC<NumberControlElementProps> = ({value, onChan
 }
 
 interface NumberControlDeviceProps{
-    data: ControlElementNumberControl
+    data: ControlElementbase
 }
 
 const useControlDevice = (data: string, field_key: "id" | "name" = "name") => {
@@ -73,7 +73,7 @@ const NumberControlRoom: React.FC<NumberControlDeviceProps> = ({ data }) => {
     const room_name = data.data.split(".")[1] ?? ""
     const typeDevice = data.data.split(".")[2] ?? ""
     const field = data.data.split(".")[3] ?? ""
-    const {rooms} = useContext(HomePageContext)
+    const {rooms} = useContext(DashboardPageContext)
     const room = useMemo(()=>rooms.find(i=>i.name_room===room_name),[rooms])
     const {change, value} = useNumberRoom(typeDevice, field, room ?? null)
 
@@ -86,7 +86,7 @@ const NumberControlRoom: React.FC<NumberControlDeviceProps> = ({ data }) => {
 };
 
 interface NumberControlProps{
-    data: ControlElementNumberControl
+    data: ControlElementbase
 }
 
 export const NumberControl:React.FC<NumberControlProps> = ({data}) => {

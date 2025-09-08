@@ -1,10 +1,6 @@
 import { GridLayout, GridLayoutItem, TextDialog, ToolsIcon } from "alex-evo-sh-ui-kit"
-import { DashboardCard, useDashboardAPI } from "../../../entites/dashboard"
-import { WIDTH_PANEL } from "../const"
-import { GridCard } from "./cards/gridCard"
-import { HomePageContext } from "../context"
-import { useRoom } from "../../../features/Room"
-import './Home.scss'
+import { DashboardCard, DashboardPageContext, useDashboardAPI, WIDTH_PANEL } from "@src/entites/dashboard"
+import { useRoom } from "@src/features/Room"
 import { DialogPortal, Menu } from "@src/shared"
 import { useCallback, useState } from "react"
 import { getModuleButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
@@ -13,6 +9,8 @@ import { getBarButtonsHomePage } from "@src/widgets/Navigation/config/barButtons
 import { useAppDispatch, useAppSelector } from "@src/shared/lib/hooks/redux"
 import { hideMenu, showBaseMenu } from "@src/shared/lib/reducers/menuReducer"
 import { v4 as uuidv4 } from 'uuid';
+import { GridCard } from "@src/widgets/DashboardCards"
+import './Home.scss'
 
 
 const TEST_DASHBOARD:DashboardCard[] = [
@@ -126,7 +124,7 @@ export const HomePage = () => {
     },[dispatch, visible])
 
     return(
-        <HomePageContext.Provider value={{rooms}}>
+        <DashboardPageContext.Provider value={{rooms}}>
             <Menu/>
             <Navigation mainBtn={mainBtn} otherBtn={getModuleButtons(navigation)} barBtn={getBarButtonsHomePage()} first_btn={{
                 text: "tools",
@@ -152,7 +150,7 @@ export const HomePage = () => {
                 </DialogPortal>
             }
             
-        </HomePageContext.Provider>
+        </DashboardPageContext.Provider>
         
     )
 }

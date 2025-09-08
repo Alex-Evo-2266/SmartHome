@@ -7,6 +7,7 @@ class ControlElementType(str, Enum):
 	NUMBER = "number"
 	TEXT = "text"
 	Enum = "enum"
+	Button = "button"
 
 class ControlElement(BaseModel):
 	type: ControlElementType

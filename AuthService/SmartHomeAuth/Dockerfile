@@ -18,19 +18,8 @@ ENV APP_HOME=/home/auth_service/web
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
-# RUN pip3 install --upgrade pip
-# RUN set -x && apt-get -qq update \
-#     && apt-get install -y --no-install-recommends \
-#     libpq-dev python3-dev git \
-#     && apt-get purge -y --auto-remove\
-#     && rm -rf /var/lib/apt/lists/*
-
 RUN curl -sSL https://install.python-poetry.org | python3 -
 RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
-# RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
-#     cd /usr/local/bin && \
-#     ln -s /opt/poetry/bin/poetry && \
-#     poetry config virtualenvs.create false
 
 COPY poetry.lock $APP_HOME/
 COPY pyproject.toml $APP_HOME/

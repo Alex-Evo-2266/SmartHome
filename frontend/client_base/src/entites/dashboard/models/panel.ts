@@ -1,4 +1,4 @@
-export type TypeControlElements = "bool" | "number" | "text" | "enum"
+export type TypeControlElements = "bool" | "number" | "text" | "enum" | "button"
 
 export interface ControlElementbase{
     type: TypeControlElements
@@ -6,32 +6,27 @@ export interface ControlElementbase{
     title: string
     readonly: boolean
     width: 1 | 2 | 3 | 4
+    icon: string
+}
+
+export interface ControlElementButton extends ControlElementbase{
+    type: "button"
 }
 
 export interface ControlElementBool extends ControlElementbase{
     type: "bool"
-    data: string
-    readonly: boolean
-    width: 1 | 2 | 3 | 4
 }
 
-export interface ControlElementNumberReadonly extends ControlElementbase{
+export interface ControlElementNumber extends ControlElementbase{
     type: "number"
-    data: string
-    readonly: true
-    width: 1 | 2 | 3 | 4
 }
 
-export interface ControlElementNumberControl extends ControlElementbase{
-    type: "number"
-    data: string
-    readonly: false
-    width: 2 | 3 | 4
+export interface ControlElementTextControl extends ControlElementbase{
+    type: "text" | "enum"
 }
 
-export type ControlElementNumber = ControlElementNumberReadonly | ControlElementNumberControl
 
-export type ControlElement = ControlElementBool | ControlElementNumber
+export type ControlElement = ControlElementBool | ControlElementNumber | ControlElementTextControl | ControlElementButton
 
 export interface DashboardCardBase{
     title: string

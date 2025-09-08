@@ -9,6 +9,8 @@ import { ModulesPage } from "../pages/modules"
 import { DetailDevice } from "../pages/DeviceDetail/ui/DeviceDetail"
 import { RoomPage, RoomsPage } from "../pages/Room"
 import { ScriptConstructor } from "../pages/Scripts"
+import { DashboardsPage } from "@src/pages/Dashboards/ui/Dashboards"
+import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/Preview"
 
 
 
@@ -32,6 +34,8 @@ export const useRoutes = (isAuthenticated:boolean, role?: string)=>{
 					<Route path="room/:name" element={<RoomPage/>}/>
 					<Route path="script/constructor" element={<ScriptConstructor/>}/>
 					<Route path="script/constructor/:id" element={<ScriptConstructor/>}/>
+					<Route path="dashboard" element={<DashboardsPage/>}/>
+					<Route path="dashboard/:id" element={<PreviewDashboardPage/>}/>
 					
 					<Route path="/*" element={<Navigate replace to="/home" />} />
 				</Route>

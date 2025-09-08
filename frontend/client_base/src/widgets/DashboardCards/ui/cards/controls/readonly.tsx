@@ -4,7 +4,7 @@ import { useGetBinaryFieldControl, useGetEnumFieldControl, useGetNumberFieldCont
 import { useAppSelector } from "../../../../../shared/lib/hooks/redux"
 import { useContext, useMemo } from "react"
 import { useBoolRoom, useNumberRoom, useTextRoom } from "../../../../../features/Room"
-import { HomePageContext } from "../../../context"
+import { DashboardPageContext } from "../../../../../entites/dashboard/context"
 import { ControlTemplate } from "./template"
 
 interface ReadOnlyControlElementProps{
@@ -32,7 +32,8 @@ const configDeviceHooks = {
     bool: {hook: useGetBinaryFieldControl},
     number: {hook: useGetNumberFieldControl},
     text: {hook: useGetTextFieldControl},
-    enum: {hook: useGetEnumFieldControl}
+    enum: {hook: useGetEnumFieldControl},
+    button: {hook: useGetTextFieldControl}
 }
 
 const useControlDevice = (type: TypeControlElements, data: string, field_key: "id" | "name" = "name") => {
@@ -72,14 +73,15 @@ const configRoomHooks = {
     bool: {hook: useBoolRoom},
     number: {hook: useNumberRoom},
     text: {hook: useTextRoom},
-    enum: {hook: useTextRoom}
+    enum: {hook: useTextRoom},
+    button: {hook: useTextRoom}
 }
 
 const ReadOnlyControlRoom: React.FC<ReadOnlyControlDeviceProps> = ({ data }) => {
     const room_name = data.data.split(".")[1] ?? ""
     const typeDevice = data.data.split(".")[2] ?? ""
     const field = data.data.split(".")[3] ?? ""
-    const {rooms} = useContext(HomePageContext)
+    const {rooms} = useContext(DashboardPageContext)
     const room = useMemo(()=>rooms.find(i=>i.name_room===room_name),[rooms])
     const hook = configRoomHooks[data.type].hook
     const {value} = hook(typeDevice, field, room ?? null)

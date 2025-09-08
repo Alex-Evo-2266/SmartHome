@@ -8,6 +8,7 @@ import { ActionItem, SetType } from "../../../entites/automation";
 import { TypeDeviceField } from "../../../entites/devices";
 import { Script, useScriptAPI } from "../../../entites/script";
 import { useRooms } from "../../../entites/rooms";
+import { getConfigRoomField } from "@src/features/Room";
 
 interface AddActionProps {
   onHide: () => void;
@@ -29,8 +30,6 @@ interface SelectStep {
 }
 
 type Step = CustomStep | SelectStep;
-
-type Acc = { enum: string[]; min: number | undefined; max: number | undefined };
 
 export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
   const { devicesData } = useAppSelector((state) => state.devices);
@@ -197,18 +196,7 @@ export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
             const room = rooms.find(i=>i.name_room === vals.room)
             const dev = room?.device_room[vals.device]
             const field = dev?.fields[vals.field]
-            const devs = field?.devices ?? []
-            const conf = devs.reduce<Acc>((prev, cur)=>{
-              const de = devicesData.find(d=>d.system_name === cur.system_name)
-              const f = de?.fields?.find(f=>f.id === cur.id_field_device)
-              if(!f)
-                return prev
-              return {
-                enum: [...prev.enum, ...(f.enum_values?.split(",").map(x=>x.trim()) ?? [])], 
-                min: Math.min(Number(prev.min), Number(f.low)) , 
-                max: Math.max(Number(prev.max), Number(f.high))
-              }
-            },{enum: [], min: NaN, max: NaN})
+            const conf = getConfigRoomField(field, devicesData)
             if(!field) return null;
             if(field.field_type===TypeDeviceField.ENUM){
               return (

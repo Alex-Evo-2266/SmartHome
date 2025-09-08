@@ -44,7 +44,7 @@ export const useTextRoom = (type: string, field: string, room: Room | null) => {
     const {roomSetDeviceValue} = useRoomAPI()
     const value = useMemo(()=>textValDevice(type, field, room?.device_room ?? null, devicesData),[devicesData, room])
 
-    const change = useCallback(async(val: number)=>{
+    const change = useCallback(async(val: string)=>{
         if(room)
             await roomSetDeviceValue(room.name_room, type, field, val.toString())
     },[room, type, field])
