@@ -17,7 +17,6 @@
         justify-content: center;
     }
 }
-
 .dashboard-control-bool-1-val-container{
     background-color: var(--Primary-container-color);
     color: var(--On-primary-container-color);
@@ -33,6 +32,9 @@
     &.disabled{
         background-color: var(--Outline-color);
     }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .dashboard-control-number-value{

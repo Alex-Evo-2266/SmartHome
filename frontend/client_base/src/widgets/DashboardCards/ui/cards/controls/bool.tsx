@@ -9,22 +9,31 @@ import { DashboardPageContext } from "@src/entites/dashboard"
 import { useGetBinaryFieldControl } from "@src/features/Device"
 import { useBoolRoom } from "@src/features/Room"
 import { parseDataPath } from "./controlUtils"
+import { getIcons } from "alex-evo-sh-ui-kit"
 
-const BoolControlElement = ({ value, onClick, title, size, disabled }: {
+const BoolControlElement = ({ value, onClick, title, size, disabled, icon }: {
     value: boolean
     onClick?: () => void
     title: string
     size: 1 | 2 | 3 | 4
-    disabled?: boolean
-}) => (
-    <ControlTemplate onClick={onClick} title={title} size={size}>
-        <div
-            className={`dashboard-control-bool-1-val-container ${value ? "action" : ""} ${disabled ? "disabled" : ""}`}
-            style={{ width: `${WIDTH_PANEL_ITEM - 20}px`, height: `${WIDTH_PANEL_ITEM - 20}px` }}
-        />
-    </ControlTemplate>
-)
+    disabled?: boolean,
+    icon?: string
+}) => {
 
+    const Icon = icon? getIcons(icon): undefined
+
+    return(
+        <ControlTemplate onClick={onClick} title={title} size={size}>
+            <div
+                className={`dashboard-control-bool-1-val-container ${value ? "action" : ""} ${disabled ? "disabled" : ""}`}
+                style={{ width: `${WIDTH_PANEL_ITEM - 20}px`, height: `${WIDTH_PANEL_ITEM - 20}px` }}
+            >{
+                Icon && <Icon primaryColor={value?"var(--On-primary-color)":"var(--On-primary-container-color)"}/>
+            }</div>
+        </ControlTemplate>
+    )
+}
+    
 const BoolControlDevice = ({ data }: { data: ControlElementBool }) => {
     const [, system_name = "", field_name = ""] = parseDataPath(data.data)
     const { devicesData } = useAppSelector(state => state.devices)
@@ -45,6 +54,7 @@ const BoolControlDevice = ({ data }: { data: ControlElementBool }) => {
             onClick={click}
             value={fieldValue ?? false}
             size={data.width}
+            icon={data.icon}
         />
     )
 }
@@ -64,6 +74,7 @@ const BoolControlRoom = ({ data }: { data: ControlElementBool }) => {
             onClick={click}
             value={value ?? false}
             size={data.width}
+            icon={data.icon}
         />
     )
 }

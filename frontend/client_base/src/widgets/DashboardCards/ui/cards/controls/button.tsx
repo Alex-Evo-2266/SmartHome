@@ -12,6 +12,7 @@ import {
     parseDataPath,
     roomHooks
 } from "./controlUtils"
+import { getIcons } from "alex-evo-sh-ui-kit"
 
 /**
  * Презентационный компонент кнопки.
@@ -20,20 +21,29 @@ const ButtonControlElement = ({
     onClick,
     title,
     size,
+    icon,
     disabled = false
 }: {
     onClick?: () => void
     title: string
     size: 1 | 2 | 3 | 4,
+    icon?: string,
     disabled?: boolean
-}) => (
+}) => {
+
+    const Icon = icon? getIcons(icon): undefined
+
+    return(
     <ControlTemplate onClick={onClick} title={title} size={size}>
         <div
             className={`dashboard-control-bool-1-val-container ${disabled ? "disabled" : ""}`}
             style={{ width: `${WIDTH_PANEL_ITEM - 20}px`, height: `${WIDTH_PANEL_ITEM - 20}px` }}
-        />
+        >{
+            Icon && <Icon primaryColor={"var(--On-primary-container-color)"}/>
+        }</div>
     </ControlTemplate>
-)
+    )
+}
 
 /**
  * Вариант кнопки, работающий с конкретным устройством.
@@ -60,10 +70,10 @@ const ButtonControlDevice = ({ data }: { data: ControlElementButton }) => {
     const hookType = normalizeType(field?.type)
     const { updateFieldState } = deviceHooks[hookType](field ?? null, system_name)
 
-    const click = useCallback(() => updateFieldState(value as never), [value])
+    const click = useCallback(() => updateFieldState(value as never), [value, updateFieldState])
 
     if (!device || !field) return <ErrorControl data={data} />
-    return <ButtonControlElement title={data.title} onClick={click} size={data.width} />
+    return <ButtonControlElement title={data.title} onClick={click} size={data.width} icon={data.icon}/>
 }
 
 /**
@@ -81,10 +91,10 @@ const ButtonControlRoom = ({ data }: { data: ControlElementButton }) => {
     const hook = roomHooks[normalizeType(type)]
     const { change } = hook(typeDevice, field, room ?? null)
 
-    const click = () => change(castValue(type, rawValue) as never)
+    const click = useCallback(() => change(castValue(type, rawValue) as never), [type, rawValue, change])
 
     if (!room) return <ErrorControl data={data} />
-    return <ButtonControlElement title={data.title} onClick={click} size={data.width} />
+    return <ButtonControlElement title={data.title} onClick={click} size={data.width} icon={data.icon}/>
 }
 
 /**

@@ -15,6 +15,7 @@ class ControlElement(BaseModel):
 	title: str
 	readonly: bool
 	width: Literal[1, 2, 3, 4]
+	icon: Optional[str] = ""
 
 class DashboardCard(BaseModel):
 	title: str
