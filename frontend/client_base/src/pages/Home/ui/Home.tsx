@@ -1,4 +1,4 @@
-import { GridLayout, GridLayoutItem, TextDialog, ToolsIcon } from "alex-evo-sh-ui-kit"
+import { GridLayout, GridLayoutItem, ScreenSize, TextDialog, ToolsIcon, useScreenSize } from "alex-evo-sh-ui-kit"
 import { DashboardCard, DashboardPageContext, useDashboardAPI, WIDTH_PANEL } from "@src/entites/dashboard"
 import { useRoom } from "@src/features/Room"
 import { DialogPortal, Menu } from "@src/shared"
@@ -87,6 +87,7 @@ export const HomePage = () => {
     const {visible} = useAppSelector(state=>state.menu)
     const mainBtn = useMainButtons()
     const {createDashboard} = useDashboardAPI()
+    const {screen} = useScreenSize()
 
     const [visibleCreateDashboard, setVisibleCreateDashboard] = useState(false)
 
@@ -123,6 +124,19 @@ export const HomePage = () => {
             
     },[dispatch, visible])
 
+    const style = 
+    screen === ScreenSize.MOBILE?
+    {
+        marginBlockEnd: "80px"
+    }:
+    screen === ScreenSize.STANDART?
+    {
+        marginInlineStart: "80px"
+    }:
+    {
+        marginInlineStart: "360px"
+    }
+
     return(
         <DashboardPageContext.Provider value={{rooms}}>
             <Menu/>
@@ -132,7 +146,7 @@ export const HomePage = () => {
                 onClick:showTool,
                 icon: <ToolsIcon/>
               }}/>
-            <div className="home-page container-page">
+            <div className="home-page container-page" style={style}>
                 <GridLayout itemWith={`${WIDTH_PANEL}px`}>
                 {
                     TEST_DASHBOARD.map((item, index)=>(
