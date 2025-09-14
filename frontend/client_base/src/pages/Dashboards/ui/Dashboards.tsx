@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useState } from "react"
-import { Card, FAB, GridLayout, GridLayoutItem, Plus, Search, TextDialog } from "alex-evo-sh-ui-kit"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { ArrowUp, FAB, IColumn, IconButton, IDataItem, Plus, ScreenSize, Search, Table, TextDialog, ToolsIcon, Trash, Typography } from "alex-evo-sh-ui-kit"
 import { v4 as uuidv4 } from 'uuid';
 
 import { Dashboard, useDashboardAPI } from "@src/entites/dashboard"
@@ -8,17 +8,36 @@ import { DialogPortal } from "@src/shared"
 
 export const DashboardsPage = () => {
 
-    const {getDashboardsAll, createDashboard} = useDashboardAPI()
+    const {getDashboardsAllType, createDashboard, setUserDashboard} = useDashboardAPI()
     const [search, setSearchQuery] = useState("")
     const [addDeviceDialogVisible, setAddDeviceDialogVisible] = useState(false)
     const [dashboards, setDashboards] = useState<Dashboard[]>([])
+    const [userDashboards, setUserDashboards] = useState<Dashboard[]>([])
+    const data = useMemo<IDataItem[]>(()=>{
+        return dashboards.filter(item=>item.title.startsWith(search) && !userDashboards.map(i=>i.id).includes(item.id)).map(item=>({
+                title: item.title,
+                id: item.id,
+                included: userDashboards.map(i=>i.id).includes(item.id)?"true":"false"
+        }))
+    },[dashboards, userDashboards])
+
+    const dataUser = useMemo<IDataItem[]>(()=>{
+        return userDashboards.filter(item=>item.title.startsWith(search)).map(item=>({
+                title: item.title,
+                id: item.id,
+                included: "true"
+        }))
+    },[userDashboards])
     const navigate = useNavigate()
 
     const loadDashboard = useCallback(async() => {
-        const data = await getDashboardsAll()
+        const data = await getDashboardsAllType()
         if(data)
-            setDashboards(data)
-    },[getDashboardsAll])
+        {
+            setDashboards(data[0])
+            setUserDashboards(data[1])
+        }
+    },[getDashboardsAllType])
 
     const addDashboard = useCallback(async(name: string) => {
         await createDashboard({
@@ -45,13 +64,50 @@ export const DashboardsPage = () => {
     const openPreview = (id:string) => {
         navigate(`/dashboard/${id}`)
     }
-    
+
+    const addUserDashboards = useCallback(async(id: string) => {
+        const data = [...(userDashboards.map(i=>i.id)), id]
+        await setUserDashboard(data)
+        loadDashboard()
+    },[setUserDashboard, userDashboards])
+
+    const deleteUserDashboards = useCallback(async(id: string) => {
+        const data = userDashboards.map(i=>i.id).filter(i=>i!==id)
+        await setUserDashboard(data)
+        loadDashboard()
+    },[setUserDashboard, userDashboards])
+
+    const columns:IColumn[] = [
+        {
+            title: "name",
+            field: "title"
+        },
+        {
+            title: "control",
+            field: "control",
+            template: (_, data)=>(
+                <div>
+                    {
+                        data.included === "true"?
+                        <IconButton icon={<Trash/>} onClick={()=>deleteUserDashboards(data.id as string)}/>:
+                        <IconButton icon={<ArrowUp/>} onClick={()=>addUserDashboards(data.id as string)}/>
+                    }
+                    <IconButton icon={<ToolsIcon/>} onClick={()=>openPreview(data.id as string)}/>
+                </div>
+            )
+        }
+    ]
+
     return(
         <div className="device-page container-page">
             <Search
                 onSearch={data => setSearchQuery(data)}
             />
-            <GridLayout className="device-container" itemMaxWith="300px" itemMinWith="200px">
+            <Typography type="heading">Active dashboards</Typography>
+            <Table columns={columns} data={dataUser} screenSize={ScreenSize.STANDART}/>
+            <Typography type="heading">Other dashboards</Typography>
+            <Table columns={columns} data={data} screenSize={ScreenSize.STANDART}/>
+            {/* <GridLayout className="device-container" itemMaxWith="300px" itemMinWith="200px">
             {
                 dashboards.filter(item=>item.title.startsWith(search)).map((item, index)=>(
                     <GridLayoutItem key={index}>
@@ -59,7 +115,7 @@ export const DashboardsPage = () => {
                     </GridLayoutItem>
                 ))
             }
-            </GridLayout>
+            </GridLayout> */}
             <FAB className="base-fab" onClick={showAddDeviceDialog} icon={<Plus/>}/>
             {
                 addDeviceDialogVisible &&

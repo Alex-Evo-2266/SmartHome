@@ -1,6 +1,5 @@
 import logging, json
 from fastapi import APIRouter, HTTPException, Depends
-from typing import List
 from app.configuration.settings import ROUTE_PREFIX
 from app.internal.dashboard.models.dashboard import Dashboard
 from app.internal.dashboard.schemas.dashboard import DashboardIn, DashboardOut, DashboardsData

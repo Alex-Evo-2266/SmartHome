@@ -1,11 +1,10 @@
-import pika, json
+import pika, json, logging
 from threading import Thread
 from app.internal.logs.logs import LogManager, MyLogger
 from app.configuration.settings import LOGS_LEVEL
 
-rabbitHandler = LogManager("rabbitLog", LOGS_LEVEL)
-logger_obg = MyLogger(rabbitHandler)
-logger = logger_obg.get_logger(__name__)
+
+logger = logging.getLogger(__name__)
 
 class WorkerThread(Thread):
 	def __init__(self):

@@ -74,35 +74,35 @@ services:
       sh_auth_db:
         condition: service_healthy
 
-  # client_auth:
-  #   container_name: client_auth
-  #   networks: 
-  #     - local_auth_network
-  #   build:
-  #     context: ${AUTH_SERVICE_DIR}/auth-service-frontend          # путь к вашему фронтенду (папка с package.json, vite.config.js)
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   volumes:
-  #     - client_auth_voluem:/home/frontend/web
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.middlewares.client_auth_strip.stripprefix.prefixes=/auth-service"
-  #     # http (без TLS)
-  #     - "traefik.http.routers.client_auth_http.rule=PathPrefix(`/auth-service`)"
-  #     - "traefik.http.routers.client_auth_http.entrypoints=web"
-  #     - "traefik.http.routers.client_auth_http.service=client_auth"
-  #     - "traefik.http.routers.client_auth_http.middlewares=client_auth_strip"
-  #     # https (с TLS)
-  #     - "traefik.http.routers.client_auth_https.rule=PathPrefix(`/auth-service`)"
-  #     - "traefik.http.routers.client_auth_https.entrypoints=websecure"
-  #     - "traefik.http.routers.client_auth_https.tls=true"
-  #     - "traefik.http.routers.client_auth_https.service=client_auth"
-  #     - "traefik.http.routers.client_auth_https.middlewares=client_auth_strip"
-  #     # общий сервис
-  #     - "traefik.http.services.client_auth.loadbalancer.server.port=80"
-  #   depends_on:
-  #     auth_service:
-  #       condition: service_started
+  client_auth:
+    container_name: client_auth
+    networks: 
+      - local_auth_network
+    build:
+      context: ${AUTH_SERVICE_DIR}/auth-service-frontend          # путь к вашему фронтенду (папка с package.json, vite.config.js)
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - client_auth_voluem:/home/frontend/web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.client_auth_strip.stripprefix.prefixes=/auth-service"
+      # http (без TLS)
+      - "traefik.http.routers.client_auth_http.rule=PathPrefix(`/auth-service`)"
+      - "traefik.http.routers.client_auth_http.entrypoints=web"
+      - "traefik.http.routers.client_auth_http.service=client_auth"
+      - "traefik.http.routers.client_auth_http.middlewares=client_auth_strip"
+      # https (с TLS)
+      - "traefik.http.routers.client_auth_https.rule=PathPrefix(`/auth-service`)"
+      - "traefik.http.routers.client_auth_https.entrypoints=websecure"
+      - "traefik.http.routers.client_auth_https.tls=true"
+      - "traefik.http.routers.client_auth_https.service=client_auth"
+      - "traefik.http.routers.client_auth_https.middlewares=client_auth_strip"
+      # общий сервис
+      - "traefik.http.services.client_auth.loadbalancer.server.port=80"
+    depends_on:
+      auth_service:
+        condition: service_started
 
 volumes:
   media_voluem:

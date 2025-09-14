@@ -33,6 +33,23 @@ export const useDashboardAPI = () => {
     const deleteDashboard = useCallback(async (id: string) => {
         await request(`/api-pages/dashboard/${id}`, TypeRequest.DELETE)
     },[request])
+
+    const setUserDashboard = useCallback(async (ids: string[]) => {
+        await request(`/api-pages/user-dashboard/set`, TypeRequest.POST, {dashboards: ids})
+    },[request])
+
+    const getUserDashboard = useCallback(async () => {
+        const data: Dashboards = await request(`/api-pages/user-dashboard`, TypeRequest.GET)
+        if(!data)
+            return
+        return data.dashboards
+    },[request])
+
+    const getDashboardsAllType = useCallback(async () => {
+        const data1:Dashboards = await request(`/api-pages/dashboard`)
+        const data2: Dashboards = await request(`/api-pages/user-dashboard`)
+        return [data1?.dashboards ?? [], data2?.dashboards ?? []]
+    },[request])
     
     useEffect(()=>{
             if (error)
@@ -48,6 +65,9 @@ export const useDashboardAPI = () => {
         createDashboard,
         updateDashboard,
         deleteDashboard,
+        setUserDashboard,
+        getUserDashboard,
+        getDashboardsAllType,
         loading
     }
 }
