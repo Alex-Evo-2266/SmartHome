@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { ArrowUp, FAB, IColumn, IconButton, IDataItem, Plus, ScreenSize, Search, Table, TextDialog, ToolsIcon, Trash, Typography } from "alex-evo-sh-ui-kit"
+import { ArrowUp, FAB, IColumn, IconButton, IDataItem, Panel, Plus, ScreenSize, Search, Table, TextDialog, ToolsIcon, Trash, Typography } from "alex-evo-sh-ui-kit"
 import { v4 as uuidv4 } from 'uuid';
 
 import { Dashboard, useDashboardAPI } from "@src/entites/dashboard"
@@ -112,7 +112,9 @@ export const DashboardsPage = () => {
             <Search
                 onSearch={data => setSearchQuery(data)}
             />
-            <Table columns={columns} data={data} screenSize={ScreenSize.STANDART}/>
+            <div style={{marginBlockStart: "10px"}}>
+                <Table columns={columns} data={data} screenSize={ScreenSize.STANDART}/>
+            </div>
             <FAB className="base-fab" onClick={showAddDeviceDialog} icon={<Plus/>}/>
             {
                 addDeviceDialogVisible &&

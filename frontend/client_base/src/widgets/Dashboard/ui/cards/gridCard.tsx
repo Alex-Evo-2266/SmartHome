@@ -25,6 +25,8 @@ export const GridCard:React.FC<GridCardProps> = ({cardData, onClick, onSave}) =>
     const contextHandler = (e:React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation()
         e.preventDefault()
+        if(!onSave)
+            return;
         dispatch(showBaseMenu(
             [
                 {

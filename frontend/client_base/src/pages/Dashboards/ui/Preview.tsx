@@ -6,8 +6,8 @@ import { useAppDispatch, useAppSelector } from "@src/shared/lib/hooks/redux"
 import { hideMenu, showBaseMenu } from "@src/shared/lib/reducers/menuReducer"
 import { useParams } from 'react-router-dom';
 import { useRoom } from "@src/features/Room"
-import { GridCard } from "@src/widgets/DashboardCards"
 import { CardDialog } from "./CreateCardDialog"
+import { GridCard } from "@src/widgets/Dashboard"
 
 export const PreviewDashboardPage = () => {
 
