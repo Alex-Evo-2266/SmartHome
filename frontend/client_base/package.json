@@ -12,7 +12,7 @@
   "dependencies": {
     "@types/react-redux": "^7.1.34",
     "@xyflow/react": "^12.8.1",
-    "alex-evo-sh-ui-kit": "^1.1.46",
+    "alex-evo-sh-ui-kit": "^1.1.47",
     "alex-evo-web-constructor": "^1.0.23",
     "chart.js": "^4.4.9",
     "chartjs-adapter-date-fns": "^3.0.0",

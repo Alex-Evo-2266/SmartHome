@@ -14,20 +14,29 @@ export const DashboardsPage = () => {
     const [dashboards, setDashboards] = useState<Dashboard[]>([])
     const [userDashboards, setUserDashboards] = useState<Dashboard[]>([])
     const data = useMemo<IDataItem[]>(()=>{
-        return dashboards.filter(item=>item.title.startsWith(search) && !userDashboards.map(i=>i.id).includes(item.id)).map(item=>({
-                title: item.title,
-                id: item.id,
-                included: userDashboards.map(i=>i.id).includes(item.id)?"true":"false"
-        }))
-    },[dashboards, userDashboards])
-
-    const dataUser = useMemo<IDataItem[]>(()=>{
-        return userDashboards.filter(item=>item.title.startsWith(search)).map(item=>({
+        return [
+            {
+                __all__:{
+                    content: <Typography type="heading">Active dashboards</Typography>
+                }
+            },
+            ...userDashboards.filter(item=>item.title.startsWith(search)).map(item=>({
                 title: item.title,
                 id: item.id,
                 included: "true"
-        }))
-    },[userDashboards])
+            })),
+            {
+                __all__:{
+                    content: <Typography type="heading">Other dashboards</Typography>
+                }
+            },
+            ...dashboards.filter(item=>item.title.startsWith(search) && !userDashboards.map(i=>i.id).includes(item.id)).map(item=>({
+                title: item.title,
+                id: item.id,
+                included: userDashboards.map(i=>i.id).includes(item.id)?"true":"false"
+            }))]
+    },[dashboards, userDashboards])
+
     const navigate = useNavigate()
 
     const loadDashboard = useCallback(async() => {
@@ -103,19 +112,7 @@ export const DashboardsPage = () => {
             <Search
                 onSearch={data => setSearchQuery(data)}
             />
-            <Typography type="heading">Active dashboards</Typography>
-            <Table columns={columns} data={dataUser} screenSize={ScreenSize.STANDART}/>
-            <Typography type="heading">Other dashboards</Typography>
             <Table columns={columns} data={data} screenSize={ScreenSize.STANDART}/>
-            {/* <GridLayout className="device-container" itemMaxWith="300px" itemMinWith="200px">
-            {
-                dashboards.filter(item=>item.title.startsWith(search)).map((item, index)=>(
-                    <GridLayoutItem key={index}>
-                        <Card header={`Dashboard: ${item.title}`} onClick={()=>openPreview(item.id)}></Card>
-                    </GridLayoutItem>
-                ))
-            }
-            </GridLayout> */}
             <FAB className="base-fab" onClick={showAddDeviceDialog} icon={<Plus/>}/>
             {
                 addDeviceDialogVisible &&
