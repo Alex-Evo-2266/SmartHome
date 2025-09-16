@@ -1,22 +1,14 @@
-import { GridLayout, GridLayoutItem, ScreenSize, Tabs, useScreenSize } from "alex-evo-sh-ui-kit"
-import { Dashboard, DashboardPageContext, useDashboardAPI, WIDTH_PANEL } from "@src/entites/dashboard"
+import { Tabs } from "alex-evo-sh-ui-kit"
+import { Dashboard, DashboardPageContext, useDashboardAPI } from "@src/entites/dashboard"
 import { useRoom } from "@src/features/Room"
-import { Menu } from "@src/shared"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { getModuleButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
-import { useNavigationData } from "@src/entites/navigation"
-import { getBarButtonsHomePage } from "@src/widgets/Navigation/config/barButtons"
 import './Home.scss'
 import { PreviewDashboard } from "@src/widgets/Dashboard/ui/Dashboard"
-import { GridCard } from "@src/widgets/Dashboard"
 
 export const HomePage = () => {
 
     const {rooms} = useRoom()
-    const {navigation} = useNavigationData()
-    const mainBtn = useMainButtons()
     const {getUserDashboard} = useDashboardAPI()
-    const {screen} = useScreenSize()
     const [dashboards, setDashboards] = useState<Dashboard[]>([])
 
     const load = useCallback(async() => {
@@ -46,27 +38,9 @@ export const HomePage = () => {
         return data
     },[dashboards])
 
-    const style = 
-    screen === ScreenSize.MOBILE?
-    {
-        marginBlockEnd: "80px"
-    }:
-    screen === ScreenSize.STANDART?
-    {
-        marginInlineStart: "80px"
-    }:
-    {
-        marginInlineStart: "360px"
-    }
-
-   
-
     return(
         <DashboardPageContext.Provider value={{rooms}}>
-            <Menu/>
-            <Navigation mainBtn={mainBtn} otherBtn={getModuleButtons(navigation)} barBtn={getBarButtonsHomePage()}/>
-              
-            <div className="home-page container-page" style={style}>
+            <div className="home-page container-page">
                 <Tabs tabs={tabs}/>
             </div>
         </DashboardPageContext.Provider>

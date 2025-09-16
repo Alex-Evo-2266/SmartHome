@@ -11,9 +11,7 @@ import { RoomPage, RoomsPage } from "../pages/Room"
 import { ScriptConstructor } from "../pages/Scripts"
 import { DashboardsPage } from "@src/pages/Dashboards/ui/Dashboards"
 import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/Preview"
-import { ColorContext, ColorProvider, IColorContext, SizeProvider, Switch } from "alex-evo-sh-ui-kit"
-import { useContext, useEffect } from "react"
-import { ColorField } from "@src/shared"
+import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit"
 
 interface RoutesComponentProps{
 	isAuthenticated:boolean, 
@@ -23,25 +21,16 @@ interface RoutesComponentProps{
 export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated, role})=>{
 
 	console.log("role: ", role)
-	const {updateThemeColor, colors, activeTheme, setActiveTheme} = useContext<IColorContext>(ColorContext)
-
-	useEffect(()=>{
-		console.log("colors", colors)
-	},[colors])
 
 	return (
 		<ColorProvider>
           <SizeProvider>
-			<div style={{marginInlineStart: "80px"}}>
-				<Switch checked={activeTheme === "dark"} showLabel labelOff="light" labelOn="dark" onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{setActiveTheme(!e.target.checked?"light":"dark")}}/>
-				<ColorField value={colors.Primary_color} onChange={c=>updateThemeColor(activeTheme, "Primary_color", c)}/>
-			</div>
 			<Routes>
 			{
 				isAuthenticated?
 				<>
-				<Route path="/home" element={<HomePage/>}/>
 				<Route path="/" element={<RootPage/>}>
+					<Route path="home" element={<HomePage/>}/>
 					<Route path="device" element={<DevicePage/>}/>
 					<Route path="device/:systemName" element={<DetailDevice/>}/>
 					<Route path="automation" element={<AutomationPage/>}/>
