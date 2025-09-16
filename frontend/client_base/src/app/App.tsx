@@ -1,4 +1,4 @@
-import { useRoutes } from "./routs"
+import { RoutesComponent } from "./routs"
 import { BrowserRouter } from 'react-router-dom';
 import '../shared/ui/index.scss'
 import { useAppSelector } from "../shared/lib/hooks/redux";
@@ -11,7 +11,6 @@ import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit";
 function App() {
 
   const {isAuthenticated, role} = useAppSelector(state=>state.auth)
-	const route = useRoutes(isAuthenticated, role)
   const {updateDevicedata} = useUpdateDeviceData()
   const {listenSocket, closeSocket} = useSocket([
     {messageType: "device-send", callback: (data)=>console.log(data)},
@@ -29,7 +28,7 @@ function App() {
       <BrowserRouter>
         <ColorProvider>
           <SizeProvider>
-            {route}
+            <RoutesComponent isAuthenticated={isAuthenticated} role={role}/>
           </SizeProvider>
         </ColorProvider>
       </BrowserRouter>
