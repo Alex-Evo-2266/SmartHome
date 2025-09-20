@@ -20,7 +20,7 @@ const BoolControlElement = ({ value, onClick, title, size, disabled, icon }: {
     icon?: string
 }) => {
 
-    const Icon = icon? getIcons(icon): undefined
+    const Icon = icon? getIcons(icon as any): undefined
 
     return(
         <ControlTemplate onClick={onClick} title={title} size={size}>

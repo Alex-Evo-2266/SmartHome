@@ -60,7 +60,7 @@ export const GridCardDialog:React.FC<IGridCardDialog> = ({onHide, data, onSave }
             <ListContainer transparent>
             {
                 items.map((item, index)=>(
-                    <ListItem hovered onClick={()=>setEditDialogVisible(index)} header={item.type} control={<IconButton icon={<Trash/>} onClick={()=>setDeleteDislog(index)}/>}/>
+                    <ListItem key={index} hovered onClick={()=>setEditDialogVisible(index)} header={item.type} control={<IconButton icon={<Trash/>} onClick={()=>setDeleteDislog(index)}/>}/>
                 ))
             }
             </ListContainer>
