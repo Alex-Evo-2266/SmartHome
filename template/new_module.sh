@@ -8,7 +8,7 @@ if [ -z "$APP_NAME" ]; then
 fi
 
 # создаём приложение
-npx create-next-app@latest $APP_NAME --typescript --eslint --app
+npx create-next-app@latest $APP_NAME --typescript --eslint --app --src-dir
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 BASE_DIR=$PWD
@@ -18,6 +18,12 @@ mkdir -p $BASE_DIR/$APP_NAME/scripts
 cp "$SCRIPT_DIR/src/create_config_files.ts" "$BASE_DIR/$APP_NAME/scripts/"
 cp "$SCRIPT_DIR/src/tsconfig.scripts.json" "$BASE_DIR/$APP_NAME/"
 cp "$SCRIPT_DIR/src/next.config.ts" "$BASE_DIR/$APP_NAME/"
+cp "$SCRIPT_DIR/src/Dockerfile" "$BASE_DIR/$APP_NAME/"
+cp "$SCRIPT_DIR/src/generate_page.sh" "$BASE_DIR/$APP_NAME/scripts/"
+
+TEMPLATE_FILE="$SCRIPT_DIR/src/docker-compose.yml"
+
+sed "s/__MODULE_NAME__/$APP_NAME/g" "$TEMPLATE_FILE" > "$BASE_DIR/$APP_NAME/docker-compose.yml"
 
 cd $APP_NAME
 
