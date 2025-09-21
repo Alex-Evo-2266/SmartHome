@@ -1,9 +1,9 @@
-version: "3.3"
-
 services:
   traefik:
     image: traefik:v3.0
     restart: always
+    networks: 
+      - local_sh_network
     command:
       - --providers.docker
       - --providers.docker.exposedbydefault=false
@@ -25,6 +25,8 @@ services:
   sh_db:
     image: mariadb
     restart: always
+    networks: 
+      - local_sh_network
     ports:
       - 3307:3306
     volumes:
@@ -43,6 +45,8 @@ services:
   sh_db_script:
     image: mariadb
     restart: always
+    networks: 
+      - local_sh_network
     ports:
       - 3309:3306
     volumes:
@@ -58,27 +62,11 @@ services:
       timeout: 5s
       retries: 5
 
-  sh_auth_db:
-    image: mariadb
-    restart: always
-    ports:
-      - 3308:3306
-    volumes:
-      - bd_auth_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_AUTH_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_AUTH_DATABASE}
-      MYSQL_USER: ${MYSQL_AUTH_USER}
-      MYSQL_PASSWORD: ${MYSQL_AUTH_PASSWORD}
-    healthcheck:
-      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   sh_page_db:
     image: mariadb
     restart: always
+    networks: 
+      - local_sh_network
     ports:
       - 3310:3306
     volumes:
@@ -94,62 +82,11 @@ services:
       timeout: 5s
       retries: 5
 
-  auth_service:
-    build: ./AuthService/SmartHomeAuth
-    restart: always
-    command: bash -c "alembic upgrade head && uvicorn app:create_app --reload --port=8004 --host='0.0.0.0'"
-    environment:
-      SMARTHOME_AUTH_BD_HOST: ${AUTH_BD_HOST}
-      SMARTHOME_AUTH_BD_PORT: ${AUTH_BD_PORT}
-      SMARTHOME_AUTH_BD_NAME: ${MYSQL_AUTH_DATABASE}
-      SMARTHOME_AUTH_BD_USER: ${MYSQL_AUTH_USER}
-      SMARTHOME_AUTH_BD_PASSWORD: ${MYSQL_AUTH_PASSWORD}
-      EMAIL_TOPIK: ${EMAIL_TOPIK}
-      EMAIL_QUEUE: ${EMAIL_QUEUE}
-      RABITMQ_HOST: ${RABITMQ_HOST}
-      RABITMQ_PORT: ${RABITMQ_PORT}
-    ports:
-      - 8004:8004
-    labels:
-      - "traefik.enable=true"
-
-      # http (без TLS)
-      - "traefik.http.routers.auth_http.rule=PathPrefix(`/api-auth`)"
-      - "traefik.http.routers.auth_http.entrypoints=web"
-      - "traefik.http.routers.auth_http.service=auth"
-
-      # https (с TLS)
-      - "traefik.http.routers.auth_https.rule=PathPrefix(`/api-auth`)"
-      - "traefik.http.routers.auth_https.entrypoints=websecure"
-      - "traefik.http.routers.auth_https.tls=true"
-      - "traefik.http.routers.auth_https.service=auth"
-
-      # общий сервис
-      - "traefik.http.services.auth.loadbalancer.server.port=8004"
-
-      # middleware для обычной проверки
-      - "traefik.http.middlewares.auth.forwardauth.address=http://auth_service:8004/api-auth/check"
-      - "traefik.http.middlewares.auth.forwardauth.trustforwardheader=true"
-      - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=x-user-id,x-user-role,x-access-token,x-user-privilege"
-
-      # middleware для iframe-сервисов
-      - "traefik.http.middlewares.moduleauth.forwardauth.address=http://auth_service:8004/api-auth/module-service/check"
-      - "traefik.http.middlewares.moduleauth.forwardauth.trustforwardheader=true"
-      - "traefik.http.middlewares.moduleauth.forwardauth.authrequestheaders=Cookie,X-Original-Uri"
-      - "traefik.http.middlewares.moduleauth.forwardauth.authResponseHeaders=x-user-id,x-user-role,x-access-token,x-user-privilege"
-    volumes:
-      - ./SmartHomeAuth:/home/auth_service/web
-      - ./Configurate:/home/auth_service/web/config_services
-      - media_voluem:/home/auth_service/web/media
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      sh_auth_db:
-        condition: service_healthy
-
   email_service:
     build: ./EmailService
     restart: always
+    networks: 
+      - local_sh_network
     command: bash -c "uvicorn app:create_app --reload --port=8005 --host='0.0.0.0'"
     environment:
       EMAIL_TOPIK: ${EMAIL_TOPIK}
@@ -181,6 +118,8 @@ services:
   device_service:
     build: ./SmartHome
     restart: always
+    networks: 
+      - local_sh_network
     command: bash -c "uvicorn app:create_app --reload --port=8006 --host='0.0.0.0'"
     ports:
       - 1235:8006
@@ -236,6 +175,8 @@ services:
     build: ./PagesServices
     restart: always
     command: bash -c "uvicorn app:create_app --reload --port=8007 --host='0.0.0.0'"
+    networks: 
+      - local_sh_network
     ports:
       - 1236:8007
     environment:
@@ -284,6 +225,8 @@ services:
     build: ./ScriptServices
     restart: always
     command: bash -c "uvicorn app:create_app --reload --port=8008 --host='0.0.0.0'"
+    networks: 
+      - local_sh_network
     environment:
       RABITMQ_HOST: ${RABITMQ_HOST}
       RABITMQ_PORT: ${RABITMQ_PORT}
@@ -332,6 +275,8 @@ services:
         NEXT_BASE_PATH: "/modules/mqtt_page"
     command: sh -c "cp -r /app/config_local/* /app/config && npm run start"
     restart: always
+    networks: 
+      - local_sh_network
     environment:
       RMQ_HOST: ${RABITMQ_HOST}
       RMQ_PORT: ${RABITMQ_PORT}
@@ -367,6 +312,8 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     restart: always
+    networks: 
+      - local_sh_network
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
       interval: 15s
@@ -379,6 +326,8 @@ services:
   phpmyadmin:
     image: phpmyadmin
     restart: always
+    networks: 
+      - local_sh_network
     ports:
       - 8088:80
     environment:
@@ -393,6 +342,8 @@ services:
         MOSQUITTO_USER: ${MOSQUITTO_USER}
         MOSQUITTO_PASSWD: ${MOSQUITTO_PASSWD}
     restart: always
+    networks: 
+      - local_sh_network
     volumes:
       - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
       - ./mosquitto/data:/mosquitto/data
@@ -405,6 +356,8 @@ services:
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt
+    networks: 
+      - local_sh_network
     restart: unless-stopped
     volumes:
       - ./Configurate/zigbee2mqtt:/app/data
@@ -418,35 +371,10 @@ services:
       mosquitto:
         condition: service_started
 
-  client_auth:
-    container_name: client_auth
-    build:
-      context: ./AuthService/auth-service-frontend          # путь к вашему фронтенду (папка с package.json, vite.config.js)
-      dockerfile: Dockerfile
-    restart: always
-    volumes:
-      - client_auth_voluem:/home/frontend/web
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.client_auth_strip.stripprefix.prefixes=/auth-service"
-      # http (без TLS)
-      - "traefik.http.routers.client_auth_http.rule=PathPrefix(`/auth-service`)"
-      - "traefik.http.routers.client_auth_http.entrypoints=web"
-      - "traefik.http.routers.client_auth_http.service=client_auth"
-      - "traefik.http.routers.client_auth_http.middlewares=client_auth_strip"
-      # https (с TLS)
-      - "traefik.http.routers.client_auth_https.rule=PathPrefix(`/auth-service`)"
-      - "traefik.http.routers.client_auth_https.entrypoints=websecure"
-      - "traefik.http.routers.client_auth_https.tls=true"
-      - "traefik.http.routers.client_auth_https.service=client_auth"
-      - "traefik.http.routers.client_auth_https.middlewares=client_auth_strip"
-      # общий сервис
-      - "traefik.http.services.client_auth.loadbalancer.server.port=80"
-    depends_on:
-      auth_service:
-        condition: service_started
-      traefik:
-        condition: service_started
+networks:
+  local_sh_network:
+    name: ${NETWORK_NAME}
+    external: true
 
 volumes:
   media_voluem:

@@ -3,7 +3,7 @@
 APP_NAME=$1
 
 if [ -z "$APP_NAME" ]; then
-  echo "Использование: ./create-next.sh <app-name>"
+  echo "Использование: ./new_module.sh <app-name>"
   exit 1
 fi
 
@@ -34,3 +34,5 @@ jq '.compilerOptions["outDir"]="dist"' tsconfig.json > "$tmpfile" && mv "$tmpfil
 
 rm -rf $BASE_DIR/$APP_NAME/src/app
 rm -rf $BASE_DIR/$APP_NAME/public
+mkdir $BASE_DIR/$APP_NAME/src/app
+mkdir $BASE_DIR/$APP_NAME/public
