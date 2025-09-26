@@ -30,6 +30,7 @@ cd $APP_NAME
 echo "Next.js приложение $APP_NAME создано!"
 
 npm install js-yaml
+npm install --save-dev @types/js-yaml
 npm install
 
 tmpfile=$(mktemp)
@@ -42,3 +43,6 @@ rm -rf $BASE_DIR/$APP_NAME/src/app
 rm -rf $BASE_DIR/$APP_NAME/public
 mkdir $BASE_DIR/$APP_NAME/src/app
 mkdir $BASE_DIR/$APP_NAME/public
+
+TEMPLATE_FILE_LAYOUT="$SCRIPT_DIR/src/layout.tsx"
+sed "s/__MODULE_NAME__/$APP_NAME/g" "$TEMPLATE_FILE_LAYOUT" > "$BASE_DIR/$APP_NAME/src/app/layout.tsx"

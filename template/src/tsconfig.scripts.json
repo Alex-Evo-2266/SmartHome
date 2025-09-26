@@ -1,11 +1,12 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": false,
+    "noEmit": false,          // нужно, чтобы скомпилировать в JS
     "outDir": "dist",
-    "module": "commonjs",
     "target": "ES2020",
-    "jsx": "react-jsx"
+    "module": "commonjs",     // удобно для node dist/...
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": ["scripts/create_config_files.ts"]
 }
