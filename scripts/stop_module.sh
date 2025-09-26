@@ -8,10 +8,11 @@ if [ -z "$MODULE_NAME" ]; then
 fi
 
 BASE_DIR="$(dirname "$(realpath "$0")")/.."
+MODULES_DIR="$BASE_DIR/modules"
 CONFIG_DIR="$BASE_DIR/Configurate"
 
-docker compose --env-file $BASE_DIR/.env -f $BASE_DIR/$MODULE_NAME/docker-compose.yml stop
-docker compose --env-file $BASE_DIR/.env -f $BASE_DIR/$MODULE_NAME/docker-compose.yml rm
+docker compose --env-file $BASE_DIR/.env -f $MODULES_DIR/$MODULE_NAME/docker-compose.yml stop
+docker compose --env-file $BASE_DIR/.env -f $MODULES_DIR/$MODULE_NAME/docker-compose.yml rm
 
 echo delete "$CONFIG_DIR/$MODULE_NAME"
 rm -rf "$CONFIG_DIR/$MODULE_NAME"

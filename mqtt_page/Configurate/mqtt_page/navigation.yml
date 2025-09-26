@@ -1,8 +1,0 @@
-- path: /topics
-  file: topics/page.tsx
-  host: mqtt_page:3000
-  full_path: mqtt_page:3000/topics
-  type: website
-  name: topics
-  service: mqtt_page
-  page_name: topics

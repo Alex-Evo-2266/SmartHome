@@ -1,8 +1,0 @@
-service: mqtt_page
-pages:
-  - roles:
-      - admin
-    iframe_only: false
-    service: mqtt_page
-    path: /topics
-    full_path: mqtt_page:3000/topics

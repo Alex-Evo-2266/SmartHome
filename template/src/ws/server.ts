@@ -3,9 +3,9 @@ import next from 'next';
 import { createServer } from 'http';
 import { parse } from 'url';
 import { startWebSocketServer } from './lib/ws-server';
-import {CONTAINER_NAME} from './lib/envVar'
+import { CONTAINER_NAME, PORT } from './lib/envVar'
 
-const port = 3000;
+const port = PORT;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
