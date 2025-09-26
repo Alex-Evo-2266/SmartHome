@@ -1,0 +1,32 @@
+{
+  "name": "mqtt-page",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node src/server.ts",
+    "build": "next build && tsc -p tsconfig.server.json && tsc -p tsconfig.scripts.json",
+    "start": "NODE_ENV=production node dist/server.js",
+    "generate:pages": "node dist/create_config_files.js"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "next": "15.4.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/amqplib": "^0.10.7",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.19.9",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
+    "amqplib": "^0.10.8",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5",
+    "ws": "^8.18.3"
+  }
+}

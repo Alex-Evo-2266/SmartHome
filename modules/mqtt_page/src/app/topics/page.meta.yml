@@ -1,0 +1,5 @@
+name: topics
+page_name: topics
+auth:
+  roles:
+    - admin
