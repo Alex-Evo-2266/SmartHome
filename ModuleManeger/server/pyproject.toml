@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "modulemenegerserver"
+version = "0.1.0"
+description = ""
+authors = ["Alex-Evo-2266 <ghbdtn2266@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.2"
+uvicorn = "^0.37.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

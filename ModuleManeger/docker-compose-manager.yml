@@ -1,0 +1,69 @@
+services:
+  modules_manager:
+    build: ${MENEGER_SERVICE_DIR}/server
+    restart: always
+    networks: 
+      - local_module_manager_network
+    command: bash -c "uvicorn app:create_app --reload --port=8005 --host='0.0.0.0'"
+    ports:
+      - 8005:8005
+    labels:
+      - "traefik.enable=true"
+
+      # http (без TLS)
+      - "traefik.http.routers.module_manager_http.rule=PathPrefix(`/api-modules-manager`)"
+      - "traefik.http.routers.module_manager_http.entrypoints=web"
+      - "traefik.http.routers.module_manager_http.service=module_manager"
+
+      # https (с TLS)
+      - "traefik.http.routers.module_manager_https.rule=PathPrefix(`/api-modules-manager`)"
+      - "traefik.http.routers.module_manager_https.entrypoints=websecure"
+      - "traefik.http.routers.module_manager_https.tls=true"
+      - "traefik.http.routers.module_manager_https.service=module_manager"
+
+      # общий сервис
+      - "traefik.http.services.module_manager.loadbalancer.server.port=8005"
+    volumes:
+      - ${MENEGER_SERVICE_DIR}/server:/home/module_manager/web
+      - ./Configurate:/home/module_manager/web/config_services
+      - ./modules:/home/module_manager/web/modules
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      auth_service:
+        condition: service_started
+
+  # client_auth:
+  #   container_name: client_auth
+  #   networks: 
+  #     - local_auth_network
+  #   build:
+  #     context: ${AUTH_SERVICE_DIR}/auth-service-frontend          # путь к вашему фронтенду (папка с package.json, vite.config.js)
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   volumes:
+  #     - client_auth_voluem:/home/frontend/web
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.middlewares.client_auth_strip.stripprefix.prefixes=/auth-service"
+  #     # http (без TLS)
+  #     - "traefik.http.routers.client_auth_http.rule=PathPrefix(`/auth-service`)"
+  #     - "traefik.http.routers.client_auth_http.entrypoints=web"
+  #     - "traefik.http.routers.client_auth_http.service=client_auth"
+  #     - "traefik.http.routers.client_auth_http.middlewares=client_auth_strip"
+  #     # https (с TLS)
+  #     - "traefik.http.routers.client_auth_https.rule=PathPrefix(`/auth-service`)"
+  #     - "traefik.http.routers.client_auth_https.entrypoints=websecure"
+  #     - "traefik.http.routers.client_auth_https.tls=true"
+  #     - "traefik.http.routers.client_auth_https.service=client_auth"
+  #     - "traefik.http.routers.client_auth_https.middlewares=client_auth_strip"
+  #     # общий сервис
+  #     - "traefik.http.services.client_auth.loadbalancer.server.port=80"
+  #   depends_on:
+  #     auth_service:
+  #       condition: service_started
+
+networks:
+  local_module_manager_network:
+    name: ${NETWORK_NAME}
+    external: true
