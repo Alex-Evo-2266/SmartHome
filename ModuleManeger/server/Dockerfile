@@ -29,10 +29,13 @@ COPY ./external/whl_all $APP_HOME/shared_lib
 RUN poetry install $(echo "--no-dev") --no-interaction --no-ansi
 RUN poetry add $APP_HOME/shared_lib/*.whl
 
+RUN apt-get update && apt-get install -y docker.io docker-compose
+
 COPY . $APP_HOME
 
 RUN mkdir media
 RUN mkdir -p config_services && chmod 755 config_services
+RUN mkdir -p config && chmod 755 config
 RUN mkdir -p modules && chmod 755 modules
 RUN chmod 777 media/
 

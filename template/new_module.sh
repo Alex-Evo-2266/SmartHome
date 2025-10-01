@@ -13,6 +13,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 BASE_DIR=$SCRIPT_DIR/../modules
 
 COMPOSE_FILE="$BASE_DIR/$APP_NAME/docker-compose.yml"
+COMPOSE_FILE_TEMPLATE="$BASE_DIR/$APP_NAME/docker-compose-template.yml"
 
 npx create-next-app@latest $BASE_DIR/$APP_NAME --typescript --eslint --app --src-dir
 
@@ -27,6 +28,7 @@ cp "$SCRIPT_DIR/src/generate_page.sh" "$BASE_DIR/$APP_NAME/scripts/"
 TEMPLATE_FILE="$SCRIPT_DIR/src/docker-compose.yml"
 
 sed "s/__MODULE_NAME__/$APP_NAME/g" "$TEMPLATE_FILE" > "$COMPOSE_FILE"
+cp $TEMPLATE_FILE $COMPOSE_FILE_TEMPLATE
 
 cd $BASE_DIR/$APP_NAME
 
@@ -90,6 +92,22 @@ add_env_var_and_compose() {
   else
     echo "⚠️ Уже существует в docker-compose.yml: $VAR_NAME"
   fi
+
+  # --- docker-compose-template.yml ---
+  if ! grep -q "  $VAR_NAME:" "$COMPOSE_FILE_TEMPLATE"; then
+    # вставляем в блок environment (после строки 'environment:')
+    awk -v varname="$VAR_NAME" '
+      /environment:/ {
+        print;
+        print "      " varname ": ${" varname "}";
+        next
+      }
+      {print}
+    ' "$COMPOSE_FILE_TEMPLATE" > "$COMPOSE_FILE_TEMPLATE.tmp" && mv "$COMPOSE_FILE_TEMPLATE.tmp" "$COMPOSE_FILE_TEMPLATE"
+    echo "✅ Добавлено в docker-compose-template.yml: $VAR_NAME"
+  else
+    echo "⚠️ Уже существует в docker-compose-template.yml: $VAR_NAME"
+  fi
 }
 
 add_traefik_ws_labels() {
@@ -113,6 +131,26 @@ add_traefik_ws_labels() {
   ' "$COMPOSE_FILE" > "$COMPOSE_FILE.tmp" && mv "$COMPOSE_FILE.tmp" "$COMPOSE_FILE"
 
   echo "✅ Добавлены Traefik WS labels в docker-compose.yml"
+
+  if grep -q "traefik.http.routers.__MODULE_NAME____ws.rule" "$COMPOSE_FILE_TEMPLATE"; then
+    echo "⚠️ Traefik WS labels уже существуют в docker-compose-template.yml"
+    return
+  fi
+
+  # Добавляем новые labels внутрь существующего блока labels
+  awk -v service="__MODULE_NAME__" '
+    /labels:/ {
+      print;
+      print "      - \"traefik.http.routers." service "__ws.rule=PathPrefix(`/ws/" service "`)\"";
+      print "      - \"traefik.http.routers." service "__ws.service=" service "__ws\"";
+      print "      - \"traefik.http.services." service "__ws.loadbalancer.server.port=3000\"";
+      print "      - \"traefik.http.routers." service "__ws.entrypoints=websecure\"";
+      next
+    }
+    {print}
+  ' "$COMPOSE_FILE_TEMPLATE" > "$COMPOSE_FILE_TEMPLATE.tmp" && mv "$COMPOSE_FILE_TEMPLATE.tmp" "$COMPOSE_FILE_TEMPLATE"
+
+  echo "✅ Добавлены Traefik WS labels в docker-compose-template.yml"
 }
 
 

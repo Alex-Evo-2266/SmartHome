@@ -25,8 +25,13 @@ services:
       - "traefik.http.services.module_manager.loadbalancer.server.port=8005"
     volumes:
       - ${MENEGER_SERVICE_DIR}/server:/home/module_manager/web
-      - ./Configurate:/home/module_manager/web/config_services
+      - ${CONFIGURATE_DIR}:/home/module_manager/web/config_services
+      - ${CONFIGURATE_DIR}/_managers_:/home/module_manager/web/config
       - ./modules:/home/module_manager/web/modules
+      - .env:/home/module_manager/web/.env
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - CONFIGURATE_DIR=${CONFIGURATE_DIR}
     depends_on:
       rabbitmq:
         condition: service_healthy
