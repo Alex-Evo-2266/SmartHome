@@ -4,7 +4,7 @@ import requests
 import yaml
 from typing import Dict, Any, List
 from app.configuration.settings import CACHE_FILE
-from app.internal.module.schemas.modules import ModulesConf
+from app.internal.module.schemas.modules import ModulesConfAndLoad
 
 def ensure_cache_file(path: str):
     if not os.path.exists(path):
@@ -96,13 +96,13 @@ def get_all_modules(
     token: str = None,
     force_refresh: bool = False,
     no_cash: bool = False
-) -> Dict[str, ModulesConf]:
+) -> Dict[str, ModulesConfAndLoad]:
     """
     Главная функция: собирает все module_config.yml из списка modules.json
     и приводит к Dict[str, ModulesConf]
     """
     repos = load_modules_list(list_repo_url, token)
-    result: Dict[str, ModulesConf] = {}
+    result: Dict[str, ModulesConfAndLoad] = {}
 
     for repo_url in repos:
         config_dict = get_root_module_config_with_cache(
@@ -113,7 +113,7 @@ def get_all_modules(
         if not config_dict:
             continue
         try:
-            result[repo_url] = ModulesConf.parse_obj(config_dict)
+            result[repo_url] = ModulesConfAndLoad.parse_obj(config_dict)
         except Exception as e:
             print(f"⚠️ Ошибка валидации module_config.yml для {repo_url}: {e}")
 

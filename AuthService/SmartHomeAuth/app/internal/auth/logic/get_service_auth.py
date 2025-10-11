@@ -34,5 +34,12 @@ def service_config(name, path: str = "/"):
     print(configs, name, path)
     config_cond = [item for item in configs if item.service == name]
     if len(config_cond) < 1:
-        raise ConfigNotFoundException()
+        return ConfigFilePageData(
+            roles=["admin"],
+            iframe_only=False,
+            service=name,
+            path=path,
+            full_path=path
+        )
+        # raise ConfigNotFoundException()
     return config_cond[0]

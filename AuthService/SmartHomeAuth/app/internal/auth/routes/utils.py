@@ -79,8 +79,11 @@ def parse_forwarded_uri(request: Request) -> tuple[str, str, str, str, str, str]
 
     parts = parsed.path.strip("/").split("/")
     if len(parts) < 2 or parts[0] != "modules":
-        logger.warning("Некорректный формат пути", extra={"path": parsed.path})
-        raise HTTPException(400, "Invalid path format")
+        service = parts[0]
+        inner_path = "/" + "/".join(parts[1:]) if len(parts) > 1 else "/"
+        return forwarded_uri, dest, scheme, host, service, inner_path, temp_token
+        # logger.warning("Некорректный формат пути", extra={"path": parsed.path})
+        # raise HTTPException(400, "Invalid path format")
 
     service = parts[1]
     inner_path = "/" + "/".join(parts[2:]) if len(parts) > 2 else "/"

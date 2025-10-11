@@ -1,0 +1,1 @@
+export {ModuleManagerPage} from "./ui/Manager"

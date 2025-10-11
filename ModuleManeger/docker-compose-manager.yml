@@ -14,12 +14,16 @@ services:
       - "traefik.http.routers.module_manager_http.rule=PathPrefix(`/api-modules-manager`)"
       - "traefik.http.routers.module_manager_http.entrypoints=web"
       - "traefik.http.routers.module_manager_http.service=module_manager"
+      # - "traefik.http.routers.module_manager_http.middlewares=moduleauth@docker,module_manager-strip"
 
       # https (с TLS)
       - "traefik.http.routers.module_manager_https.rule=PathPrefix(`/api-modules-manager`)"
       - "traefik.http.routers.module_manager_https.entrypoints=websecure"
       - "traefik.http.routers.module_manager_https.tls=true"
       - "traefik.http.routers.module_manager_https.service=module_manager"
+      # - "traefik.http.routers.module_manager_https.middlewares=moduleauth@docker,module_manager-strip"
+
+      # - "traefik.http.middlewares.module_manager-strip.stripprefixregex.regex=^/modules/mqtt_page"
 
       # общий сервис
       - "traefik.http.services.module_manager.loadbalancer.server.port=8005"
@@ -38,35 +42,38 @@ services:
       auth_service:
         condition: service_started
 
-  # client_auth:
-  #   container_name: client_auth
-  #   networks: 
-  #     - local_auth_network
-  #   build:
-  #     context: ${AUTH_SERVICE_DIR}/auth-service-frontend          # путь к вашему фронтенду (папка с package.json, vite.config.js)
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   volumes:
-  #     - client_auth_voluem:/home/frontend/web
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.middlewares.client_auth_strip.stripprefix.prefixes=/auth-service"
-  #     # http (без TLS)
-  #     - "traefik.http.routers.client_auth_http.rule=PathPrefix(`/auth-service`)"
-  #     - "traefik.http.routers.client_auth_http.entrypoints=web"
-  #     - "traefik.http.routers.client_auth_http.service=client_auth"
-  #     - "traefik.http.routers.client_auth_http.middlewares=client_auth_strip"
-  #     # https (с TLS)
-  #     - "traefik.http.routers.client_auth_https.rule=PathPrefix(`/auth-service`)"
-  #     - "traefik.http.routers.client_auth_https.entrypoints=websecure"
-  #     - "traefik.http.routers.client_auth_https.tls=true"
-  #     - "traefik.http.routers.client_auth_https.service=client_auth"
-  #     - "traefik.http.routers.client_auth_https.middlewares=client_auth_strip"
-  #     # общий сервис
-  #     - "traefik.http.services.client_auth.loadbalancer.server.port=80"
-  #   depends_on:
-  #     auth_service:
-  #       condition: service_started
+#   client_manager:
+#     container_name: modules_manager_frontend
+#     networks: 
+#       - local_module_manager_network
+#     build:
+#       context: ${MENEGER_SERVICE_DIR}/frontend
+#       dockerfile: Dockerfile
+#     restart: always
+#     # volumes:
+#     #   - client_manager_voluem:/home/frontend/web
+#     labels:
+#       - "traefik.enable=true"
+#       # http (без TLS)
+#       - "traefik.http.routers.module_manager_client_http.rule=PathPrefix(`/modules-manager`)"
+#       - "traefik.http.routers.module_manager_client_http.entrypoints=web"
+#       - "traefik.http.routers.module_manager_client_http.service=module_manager_client"
+#       - "traefik.http.routers.module_manager_client_http.middlewares=moduleauth@docker,module_manager-strip"
+#       # https (с TLS)
+#       - "traefik.http.routers.module_manager_client_https.rule=PathPrefix(`/modules-manager`)"
+#       - "traefik.http.routers.module_manager_client_https.entrypoints=websecure"
+#       - "traefik.http.routers.module_manager_client_https.tls=true"
+#       - "traefik.http.routers.module_manager_client_https.service=module_manager_client"
+#       - "traefik.http.routers.module_manager_client_https.middlewares=moduleauth@docker,module_manager-strip"
+#       # общий сервис
+#       - "traefik.http.middlewares.module_manager-strip.stripprefixregex.regex=^/modules-manager"
+#       - "traefik.http.services.module_manager_client.loadbalancer.server.port=80"
+#     depends_on:
+#       auth_service:
+#         condition: service_started
+
+# volumes:
+#   client_manager_voluem:
 
 networks:
   local_module_manager_network:

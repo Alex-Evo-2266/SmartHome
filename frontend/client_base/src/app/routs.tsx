@@ -12,6 +12,7 @@ import { ScriptConstructor } from "../pages/Scripts"
 import { DashboardsPage } from "@src/pages/Dashboards/ui/Dashboards"
 import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/Preview"
 import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit"
+import { ModuleManagerPage } from "@src/pages/Manager/ui/Manager"
 
 interface RoutesComponentProps{
 	isAuthenticated:boolean, 
@@ -35,6 +36,7 @@ export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated,
 					<Route path="device/:systemName" element={<DetailDevice/>}/>
 					<Route path="automation" element={<AutomationPage/>}/>
 					<Route path="module_pages/:moduleName/:pageName" element={<ModulesPage/>}/>
+					<Route path="manager" element={<ModuleManagerPage/>}/>
 					<Route path="settings" element={<SettingsPage/>}/>
 					<Route path="room" element={<RoomsPage/>}/>
 					<Route path="room/:name" element={<RoomPage/>}/>

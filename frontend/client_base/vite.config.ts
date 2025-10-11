@@ -18,6 +18,8 @@ export default defineConfig({
       '/api-pages': "http://127.0.0.1:1337",
       '/api-scripts': "http://127.0.0.1:1337",
       '/modules': "https://localhost:1338",
+      '/modules-manager': "https://localhost:1338",
+      '/api-modules-manager': "https://localhost:1338",
       '/ws': "http://127.0.0.1:1337",
       '/media': "http://127.0.0.1:1337"
     }

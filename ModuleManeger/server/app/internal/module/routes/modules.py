@@ -5,14 +5,14 @@ from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, MODU
 from app.internal.module.search_modules import get_all_modules
 from app.internal.module.install_module import clone_module
 from app.internal.module.run_module import run_module_in_container, stop_module_in_container
-from app.internal.module.schemas.modules import ModulesConf
+from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, ModulesLoadData
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 logger = logging.getLogger(__name__)
 
-def load_module_configs(modules_dir: str):
+def load_module_configs(modules_dir: str)->List[ModuleData]:
 	configs = []
 	for root, dirs, files in os.walk(modules_dir):
 		if "module_config.yml" in files:
@@ -23,11 +23,11 @@ def load_module_configs(modules_dir: str):
 				except yaml.YAMLError as e:
 					print(f"Ошибка чтения {config_path}: {e}")
 					continue
-			configs.append({
-				"module": os.path.basename(root),
-				"path": root,
-				"config": config
-			})
+			configs.append(ModuleData(
+				module=os.path.basename(root),
+				path=root,
+				config=config
+			))
 	return configs
 
 router = APIRouter(
@@ -36,11 +36,16 @@ router = APIRouter(
 	responses={404: {"description": "Not found"}},
 )
 	
-@router.get("/all", response_model=Dict[str, ModulesConf])
+@router.get("/all", response_model=Dict[str, ModulesConfAndLoad])
 async def get_role(no_cash: bool = False):
 	try:
 		files = get_all_modules(URL_REPO_MODULES_LIST, token=None, force_refresh=False, no_cash=no_cash)
-		# return load_module_configs(MODULES_DIR)
+		data = load_module_configs(MODULES_DIR)
+		for key, item in files.items():
+			filtred = [ModulesLoadData(name=item2.module, path=item2.path) for item2 in data if item2.config.name == item.name]
+			if(len(filtred) > 0):
+				files[key].load = True
+				files[key].load_module_name = filtred
 		return files
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))

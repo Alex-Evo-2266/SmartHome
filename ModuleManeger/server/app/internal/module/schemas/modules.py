@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-from enum import Enum
-from typing import List
+from typing import List, Optional
 
 class ContaiderConfig(BaseModel):
 	restart: str
@@ -17,3 +16,16 @@ class ModulesConf(BaseModel):
 	name: str
 	multiply: bool
 	containers: List[ContaiderData]
+
+class ModulesLoadData(BaseModel):
+	name: str
+	path: Optional[str]
+
+class ModulesConfAndLoad(ModulesConf):
+	load: bool = False
+	load_module_name: List[ModulesLoadData] = []
+
+class ModuleData(BaseModel):
+	module: str
+	path: str
+	config: ModulesConf
