@@ -2,8 +2,8 @@ import os
 import json
 import requests
 import yaml
-from typing import Dict, Any, List
-from app.configuration.settings import CACHE_FILE
+from typing import Dict, Any, List, Optional
+from app.configuration.settings import CACHE_FILE, CACHE_INFO_FILE
 from app.internal.module.schemas.modules import ModulesConfAndLoad
 
 def ensure_cache_file(path: str):
@@ -77,18 +77,58 @@ def get_root_module_config_with_cache(repo_url: str, token: str = None, force_re
     save_cache(CACHE_FILE, cache)
     return cache[repo_url]
 
-def load_modules_list(list_repo_url: str, token: str = None) -> List[str]:
-    """Загружает modules.json из репозитория со списком модулей"""
+# def load_modules_list(list_repo_url: str, token: str = None) -> List[str]:
+#     """Загружает modules.json из репозитория со списком модулей"""
+#     parts = list_repo_url.rstrip("/").split("/")
+#     owner, repo = parts[-2], parts[-1]
+
+#     print(f"📥 Загружаем modules.json из {list_repo_url}...")
+#     content = github_get_file_content(owner, repo, "modules.json", token)
+#     try:
+#         modules = json.loads(content)
+#         return modules
+#     except Exception as e:
+#         print(f"Ошибка парсинга modules.json: {e}")
+#         return []
+
+def load_modules_list(list_repo_url: str, token: Optional[str] = None, on_cach: bool = False) -> List[str]:
+    """
+    Загружает modules.json из репозитория со списком модулей.
+    Использует локальный кэш (с TTL).
+    """
+    ensure_cache_file(CACHE_INFO_FILE)
+    cache = load_cache(CACHE_INFO_FILE)
+
+    # Проверяем актуальность кэша
+    modules = cache.get("modules")
+
+    if modules and not on_cach:
+        print(f"📦 Используется кэшированный modules.json")
+        return modules
+
+    # Загружаем из GitHub
     parts = list_repo_url.rstrip("/").split("/")
     owner, repo = parts[-2], parts[-1]
 
     print(f"📥 Загружаем modules.json из {list_repo_url}...")
-    content = github_get_file_content(owner, repo, "modules.json", token)
     try:
+        content = github_get_file_content(owner, repo, "modules.json", token)
         modules = json.loads(content)
+
+        # Обновляем кэш
+        cache["modules"] = modules
+        save_cache(CACHE_INFO_FILE, cache)
+        print(f"✅ Кэш обновлён: {CACHE_INFO_FILE}")
+
         return modules
+
     except Exception as e:
-        print(f"Ошибка парсинга modules.json: {e}")
+        print(f"❌ Ошибка загрузки modules.json: {e}")
+
+        if modules:
+            print("📦 Используется предыдущий кэшированный список модулей.")
+            return modules
+
         return []
 
 def get_all_modules(

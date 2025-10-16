@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState } from "react"
-import { useModulesAPI } from "../api/moduleAPI"
-import { AllModulesData, ModuleData } from "../models/modules"
 import { Loading } from "@src/shared/ui/Loading"
-import { Check, FAB, ListContainer, ListItem, Plus } from "alex-evo-sh-ui-kit"
-import './ManagerPage.scss'
+import { ArrowLeft, Check, FAB, IconButton, ListContainer, ListItem, Panel, Plus } from "alex-evo-sh-ui-kit"
+import { useNavigate } from 'react-router-dom';
+import './Manager.scss'
+import { useModulesAPI } from "@src/entites/moduleManager";
+import { AllModulesData, ModuleData } from "@src/entites/moduleManager/modules/modules";
 
 
-export const ModuleManagerPage = () => {
+export const ManagerPage = () => {
 
     const {getModulesAll, loading} = useModulesAPI()
     const [allModules, setModules] = useState<AllModulesData>({})
-    const [selectModule, setSelectModule] = useState<ModuleData | null>(null)
+    const navigate = useNavigate()
 
     const load = useCallback(async()=>{
         const data = await getModulesAll()
@@ -22,29 +23,30 @@ export const ModuleManagerPage = () => {
         load()
     },[load])
 
+    const clickModule = (data: ModuleData) => {
+        navigate(`/manager/${data.name_module}`)
+    }
+
     if(loading)
         return(
             <Loading></Loading>
     )
 
-    if(selectModule){
-        return(
-            <div></div>
-        )
-    }
-
     return (
         <div className="manager-page">
-            <ListContainer>
-                {
-                    Object.entries(allModules).map(([path, data])=>{
-                        return(
-                        <ListItem onClick={()=>setSelectModule(data)} header={data.name} text={path} icon={data.load? <Check primaryColor="#00aa00"/>: <i></i>}>
-                        </ListItem>
-                        )
-                    })
-                }
-            </ListContainer>
+            <Panel>
+                <IconButton icon={<ArrowLeft/>} onClick={()=>navigate(-1)}/>
+                <ListContainer>
+                    {
+                        Object.entries(allModules).map(([path, data])=>{
+                            return(
+                            <ListItem onClick={()=>clickModule(data)} header={data.name_module} text={path} icon={data.load? <Check primaryColor="#00aa00"/>: <i></i>}>
+                            </ListItem>
+                            )
+                        })
+                    }
+                </ListContainer>
+            </Panel>
             <FAB icon={<Plus/>}/>
         </div>
     )

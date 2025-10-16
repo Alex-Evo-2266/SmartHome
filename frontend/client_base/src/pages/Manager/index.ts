@@ -1,1 +1,1 @@
-export {ModuleManagerPage} from "./ui/Manager"
+export {ManagerPage} from "./ui/Manager"

@@ -1,7 +1,7 @@
 import { useHttp } from "@src/shared/lib/hooks/http.hook"
 import { useSnackbar } from "@src/shared/lib/hooks/snackbar.hook"
 import { useCallback, useEffect } from "react"
-import { AllModulesData } from "../models/modules"
+import { AllModulesData, ModuleData } from "../modules/modules"
 
 export const useModulesAPI = () => {
 
@@ -14,6 +14,17 @@ export const useModulesAPI = () => {
             return
         return data
     },[request])
+
+    const getModule = useCallback(async (name: string) => {
+        const data: ModuleData = await request(`/api-modules-manager/modules/data/${name}`)
+        if(!data)
+            return
+        return data
+    },[request])
+
+    const installModule = useCallback(async (name: string) => {
+        await request(`/api-modules-manager/modules/install?name=${name}`)
+    },[request])
     
     useEffect(()=>{
             if (error)
@@ -25,6 +36,8 @@ export const useModulesAPI = () => {
     
     return{
         loading,
-        getModulesAll
+        getModulesAll,
+        getModule,
+        installModule
     }
 }

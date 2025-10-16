@@ -12,7 +12,10 @@ import { ScriptConstructor } from "../pages/Scripts"
 import { DashboardsPage } from "@src/pages/Dashboards/ui/Dashboards"
 import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/Preview"
 import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit"
-import { ModuleManagerPage } from "@src/pages/Manager/ui/Manager"
+import { ManagerPage } from "@src/pages/Manager/ui/Manager"
+import { ManagerModulePage } from "@src/pages/ManagerModule"
+import { ManagerContainerPage } from "@src/pages/ManagerContainer"
+import { ManagerExemplePage } from "@src/pages/ManagerExemple"
 
 interface RoutesComponentProps{
 	isAuthenticated:boolean, 
@@ -36,7 +39,10 @@ export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated,
 					<Route path="device/:systemName" element={<DetailDevice/>}/>
 					<Route path="automation" element={<AutomationPage/>}/>
 					<Route path="module_pages/:moduleName/:pageName" element={<ModulesPage/>}/>
-					<Route path="manager" element={<ModuleManagerPage/>}/>
+					<Route path="manager" element={<ManagerPage/>}/>
+					<Route path="manager/:module_name" element={<ManagerExemplePage/>}/>
+					<Route path="manager/:module_name/:module_exempl" element={<ManagerModulePage/>}/>
+					<Route path="manager/:module_name/:module_exempl/:container" element={<ManagerContainerPage/>}/>
 					<Route path="settings" element={<SettingsPage/>}/>
 					<Route path="room" element={<RoomsPage/>}/>
 					<Route path="room/:name" element={<RoomPage/>}/>

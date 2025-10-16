@@ -10,6 +10,8 @@ from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, 
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
+TEST_TOCKEN = None
+
 logger = logging.getLogger(__name__)
 
 def load_module_configs(modules_dir: str)->List[ModuleData]:
@@ -24,25 +26,64 @@ def load_module_configs(modules_dir: str)->List[ModuleData]:
 					print(f"Ошибка чтения {config_path}: {e}")
 					continue
 			configs.append(ModuleData(
-				module=os.path.basename(root),
+				module=config["name_module"],
+				exemle=config["name"],
 				path=root,
 				config=config
 			))
 	return configs
+
+def load_module_config_by_name(modules_dir: str, module_name: str) -> List[ModuleData]:
+	"""
+	Ищет и загружает конфиг конкретного модуля по названию папки.
+
+	:param modules_dir: Путь к директории, где лежат все модули.
+	:param module_name: Название нужного модуля (имя папки).
+	:return: ModuleData или None, если модуль не найден или есть ошибка.
+	"""
+	found_modules: List[ModuleData] = []
+	for folder in os.listdir(modules_dir):
+		module_path = os.path.join(modules_dir, folder)
+		config_path = os.path.join(module_path, "module_config.yml")
+
+		if not os.path.isdir(module_path) or not os.path.exists(config_path):
+			continue
+
+		try:
+			with open(config_path, "r", encoding="utf-8") as f:
+				config = yaml.safe_load(f)
+		except yaml.YAMLError as e:
+			print(f"Ошибка чтения {config_path}: {e}")
+			continue
+
+		if config.get("name_module") == module_name:
+			found_modules.append(
+				ModuleData(
+					exemle=config["name"],
+					module=config["name_module"],
+					path=module_path,
+					config=config
+				)
+			)
+
+	if not found_modules:
+		print(f"Модули с именем '{module_name}' не найдены в {modules_dir}")
+
+	return found_modules
 
 router = APIRouter(
 	prefix=f"{ROUTE_PREFIX}/modules",
 	tags=["modules"],
 	responses={404: {"description": "Not found"}},
 )
-	
+
 @router.get("/all", response_model=Dict[str, ModulesConfAndLoad])
 async def get_role(no_cash: bool = False):
 	try:
-		files = get_all_modules(URL_REPO_MODULES_LIST, token=None, force_refresh=False, no_cash=no_cash)
+		files = get_all_modules(URL_REPO_MODULES_LIST, token=TEST_TOCKEN, force_refresh=False, no_cash=no_cash)
 		data = load_module_configs(MODULES_DIR)
 		for key, item in files.items():
-			filtred = [ModulesLoadData(name=item2.module, path=item2.path) for item2 in data if item2.config.name == item.name]
+			filtred = [ModulesLoadData(name=item2.exemle , path=item2.path) for item2 in data if item2.module == item.name_module]
 			if(len(filtred) > 0):
 				files[key].load = True
 				files[key].load_module_name = filtred
@@ -50,10 +91,32 @@ async def get_role(no_cash: bool = False):
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
+@router.get("/data/{name_module}", response_model=ModulesConfAndLoad)
+async def get_role(name_module:str, no_cash: bool = False):
+	try:
+		files = get_all_modules(URL_REPO_MODULES_LIST, token=TEST_TOCKEN, force_refresh=False, no_cash=no_cash)
+		find_module = next((item for item in files.values() if item.name_module == name_module), None)
+		module_data_list = load_module_config_by_name(MODULES_DIR, name_module)
+		config:ModulesConfAndLoad | None = None
+
+		if len(module_data_list) > 0:
+			config = ModulesConfAndLoad(**module_data_list[0].config.dict())
+		elif find_module:
+			config = find_module
+		else:
+			return JSONResponse(status_code=404, content=f"Модуль '{name_module}' не найден")
+
+		config.load_module_name = [ModulesLoadData(name=item.exemle, path=item.path) for item in module_data_list]
+		config.load = len(config.load_module_name) > 0
+
+		return config
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
+	
 @router.get("/install")
 async def get_role(name: str):
 	try:
-		res_folder = clone_module(name)
+		res_folder = clone_module(name, TEST_TOCKEN)
 		# return load_module_configs(MODULES_DIR)
 		return res_folder
 	except Exception as e:

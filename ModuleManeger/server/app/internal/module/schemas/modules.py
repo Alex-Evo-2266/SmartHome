@@ -1,12 +1,13 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
 class ContaiderConfig(BaseModel):
+	build: Optional[Dict[str, Any]]
+	command: str
 	restart: str
-	ports: List[str]
-	volumes: List[str]
+	environment: Dict[str, Any]
 	labels: List[str]
-	depends_on: List[str]
+	volumes: List[str]
 
 class ContaiderData(BaseModel):
 	name: str
@@ -14,6 +15,7 @@ class ContaiderData(BaseModel):
 
 class ModulesConf(BaseModel):
 	name: str
+	name_module: str
 	multiply: bool
 	containers: List[ContaiderData]
 
@@ -27,5 +29,6 @@ class ModulesConfAndLoad(ModulesConf):
 
 class ModuleData(BaseModel):
 	module: str
+	exemle: str
 	path: str
 	config: ModulesConf

@@ -1,10 +1,11 @@
 
 export interface ContainerConfig{
-    restart: string
-    ports: string[]
-    volumes: string[]
-    labels: string[]
-    depends_on: string[]
+    build?: Record<string, unknown>
+	command: string
+	restart: string
+	environment: Record<string, unknown>
+	labels: string[]
+	volumes: string[]
 }
 
 export interface Containers{
@@ -14,6 +15,7 @@ export interface Containers{
 
 export interface ModuleData{
     name: string
+    name_module: string
     multiply: boolean
     containers: Containers[]
     load: boolean
