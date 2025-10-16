@@ -43,21 +43,22 @@ def run_module_in_container(name: str):
 
 	module_dir = os.path.join(MODULES_DIR, name)
 
-	env = update_env_var_to_local("CONFIGURATE_DIR", os.path.join(CONFIGURATE_DIR, name))
-
 	compose_file = os.path.join(module_dir, "docker-compose.yml")
 	if not os.path.exists(compose_file):
 		raise FileNotFoundError(f"docker-compose.yml не найден в {module_dir}")
 
 	cmd = [
 		"docker", "compose",
-		"--env-file", env,
+		"--env-file", ENV_FILE,
 		"-f", compose_file,
 		"up", "-d"
 	]
 
+	env = os.environ.copy()
+	env["CONFIGURATE_DIR"] = CONFIGURATE_DIR
+
 	try:
-		subprocess.run(cmd, cwd=module_dir, check=True)
+		subprocess.run(cmd, cwd=module_dir, check=True, env=env)
 		print(f"✅ Модуль {module_dir} запущен в контейнере")
 	except subprocess.CalledProcessError as e:
 		print(f"❌ Ошибка запуска модуля {module_dir}: {e}")
@@ -71,20 +72,22 @@ def stop_module_in_container(name: str):
 
 	module_dir = os.path.join(MODULES_DIR, name)
 
-	env = update_env_var_to_local("CONFIGURATE_DIR", os.path.join(CONFIGURATE_DIR, name))
 	compose_file = os.path.join(module_dir, "docker-compose.yml")
 	if not os.path.exists(compose_file):
 		raise FileNotFoundError(f"docker-compose.yml не найден в {module_dir}")
 
 	cmd = [
 		"docker", "compose",
-		"--env-file", env,
+		"--env-file", ENV_FILE,
 		"-f", compose_file,
 		"stop"
-		]
+	]
+	
+	env = os.environ.copy()
+	env["CONFIGURATE_DIR"] = CONFIGURATE_DIR
 
 	try:
-		subprocess.run(cmd, cwd=module_dir, check=True)
+		subprocess.run(cmd, cwd=module_dir, check=True, env=env)
 		print(f"✅ Модуль {module_dir} остановлен")
 	except subprocess.CalledProcessError as e:
 		print(f"❌ Ошибка остановки модуля {module_dir}: {e}")
