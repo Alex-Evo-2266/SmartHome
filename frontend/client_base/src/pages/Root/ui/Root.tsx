@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom"
 import { ScreenSize, useScreenSize } from "alex-evo-sh-ui-kit"
 import { useNavigationData } from '../../../entites/navigation'
-import { getBarButtons, getModuleButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
+import { getBarButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
 import { Menu } from "@src/shared"
 import './Root.scss'
+import { getHidenBtn } from "@src/widgets/Navigation/config/hidenBtn"
 
 export const RootPage = () => {
 
@@ -23,7 +24,7 @@ export const RootPage = () => {
     return(
 			<div className="root-page">
 				<Menu/>
-				<Navigation mainBtn={mainBtn} otherBtn={getModuleButtons(navigation)} barBtn={getBarButtons()}/>
+				<Navigation mainBtn={mainBtn} otherBtn={getHidenBtn(navigation)} barBtn={getBarButtons()}/>
 				<div className={`root-container ${getStyleClass(screen)}`}>
 					<Outlet/>
 				</div>
