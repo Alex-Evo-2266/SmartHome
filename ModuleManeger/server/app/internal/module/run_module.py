@@ -92,3 +92,30 @@ def stop_module_in_container(name: str):
 	except subprocess.CalledProcessError as e:
 		print(f"❌ Ошибка остановки модуля {module_dir}: {e}")
 		raise
+
+def remove_module_containers(name: str):
+    """
+    Удаляет контейнеры, созданные модулем, через docker compose down.
+    """
+    module_dir = os.path.join(MODULES_DIR, name)
+    compose_file = os.path.join(module_dir, "docker-compose.yml")
+
+    if not os.path.exists(compose_file):
+        print(f"ℹ️ docker-compose.yml не найден в {module_dir}, пропуск удаления контейнеров.")
+        return
+
+    cmd = [
+        "docker", "compose",
+        "--env-file", ENV_FILE,
+        "-f", compose_file,
+        "down"
+    ]
+
+    env = os.environ.copy()
+    env["CONFIGURATE_DIR"] = CONFIGURATE_DIR
+
+    try:
+        subprocess.run(cmd, cwd=module_dir, check=True, env=env)
+        print(f"🧹 Контейнеры модуля '{name}' удалены.")
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️ Ошибка при удалении контейнеров '{name}': {e}")

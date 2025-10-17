@@ -40,8 +40,8 @@ export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated,
 					<Route path="automation" element={<AutomationPage/>}/>
 					<Route path="module_pages/:moduleName/:pageName" element={<ModulesPage/>}/>
 					<Route path="manager" element={<ManagerPage/>}/>
-					<Route path="manager/:module_name" element={<ManagerExemplePage/>}/>
-					<Route path="manager/:module_name/:module_exempl" element={<ManagerModulePage/>}/>
+					<Route path="manager/:module_name" element={<ManagerModulePage/>}/>
+					<Route path="manager/:module_name/:module_exempl" element={<ManagerExemplePage/>}/>
 					<Route path="manager/:module_name/:module_exempl/:container" element={<ManagerContainerPage/>}/>
 					<Route path="settings" element={<SettingsPage/>}/>
 					<Route path="room" element={<RoomsPage/>}/>

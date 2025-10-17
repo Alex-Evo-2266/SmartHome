@@ -1,5 +1,4 @@
-import { ArrowLeft, IconButton, ListContainer, ListItem, Panel, Typography } from 'alex-evo-sh-ui-kit';
-import './ManagerModule.scss'
+import { ArrowLeft, Button, Check, IColumn, IconButton, ListContainer, ListItem, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
 import { useParams } from 'react-router-dom';
 import { useModulesAPI } from '@src/entites/moduleManager';
 import { useCallback, useEffect, useState } from 'react';
@@ -9,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const ManagerModulePage:React.FC = () => {
 
-    const {getModule, loading} = useModulesAPI()
+    const {getModule, loading, installModule, runModule, deleteModule, stopModule} = useModulesAPI()
     const [modules, setModules] = useState<ModuleData | null>(null)
     const { module_name } = useParams<{module_name: string}>();
     const navigate = useNavigate()
@@ -21,13 +20,58 @@ export const ManagerModulePage:React.FC = () => {
             setModules(data)
     },[getModule, module_name])
 
-    const clickContainer = (data: string) => {
+    const clickExempl = (data: string) => {
         navigate(`/manager/${module_name}/${data}`)
+    }
+
+    const install = async () => {
+        if(!module_name) return
+        await installModule(module_name)
+        setTimeout(()=>load(),100)
+    }
+
+    const click = (f: (...arg: string[])=>void, ...arg: string[]) => {
+        return (e:React.MouseEvent<HTMLButtonElement>) => {
+            e.stopPropagation()
+            f(...arg)
+            setTimeout(load, 100)
+        }
     }
     
     useEffect(()=>{
         load()
     },[load])
+
+
+    const tableCol: IColumn[] = [
+        {
+            title: "Название экземпляра",
+            field: "name"
+        },
+        {
+            title: "статус",
+            field: "status",
+            template(cell) {
+                return(<div>{cell[0].content === "true" ? <Check/>: <X/>}</div>)
+            },
+        },
+        {
+            title: "действия",
+            field: "action",
+            template(_, data) {
+                if(data.status === "true")
+                    return(
+                        <Button onClick={click(stopModule, data.name as string)}>остановка</Button>
+                    )
+                return(
+                    <>
+                        <Button onClick={click(runModule, data.name as string)}>запуск</Button>
+                        <Button onClick={click(deleteModule, data.name as string)}>удалить</Button>
+                    </>
+                )
+            },
+        }
+    ]
 
     if(loading)
         return(
@@ -53,16 +97,18 @@ export const ManagerModulePage:React.FC = () => {
                 <IconButton icon={<ArrowLeft/>} onClick={()=>navigate(-1)}/>
                 <Typography type="title">{module_name}</Typography>
                 <br/>
-                <Typography type="body">Контейнеры</Typography>
-                <ListContainer>
                 {
-                    modules.containers.map(item=>{
-                        return(
-                            <ListItem onClick={()=>clickContainer(item.name)} header={item.name}/>
-                        )
-                    })
+                    modules.load_module_name.length > 0?
+                    <>
+                        <Button onClick={install}>Установка</Button>
+                        <Typography type="body">Установленны</Typography>
+                        <Table columns={tableCol} data={modules.load_module_name.map(item=>({name: item.name, status: String(!!item.status?.all_running)}))}/>
+                    </>:
+                    <>
+                        <Typography type="body">Установка</Typography>
+                        <Button onClick={install}>Установка</Button>
+                    </>
                 }
-                </ListContainer>
             </Panel>
         </div>
     )

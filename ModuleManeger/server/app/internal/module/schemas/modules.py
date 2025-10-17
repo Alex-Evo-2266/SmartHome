@@ -1,6 +1,15 @@
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
+class ContainerStatus(BaseModel):
+	name: str
+	state: str
+	status: str
+
+class ExemplStatus(BaseModel):
+	containers: List[ContainerStatus]
+	all_running: bool
+
 class ContaiderConfig(BaseModel):
 	build: Optional[Dict[str, Any]]
 	command: str
@@ -22,6 +31,7 @@ class ModulesConf(BaseModel):
 class ModulesLoadData(BaseModel):
 	name: str
 	path: Optional[str]
+	status: Optional[ExemplStatus] = None
 
 class ModulesConfAndLoad(ModulesConf):
 	load: bool = False
@@ -32,3 +42,5 @@ class ModuleData(BaseModel):
 	exemle: str
 	path: str
 	config: ModulesConf
+
+

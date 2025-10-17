@@ -2,6 +2,7 @@ import { useHttp } from "@src/shared/lib/hooks/http.hook"
 import { useSnackbar } from "@src/shared/lib/hooks/snackbar.hook"
 import { useCallback, useEffect } from "react"
 import { AllModulesData, ModuleData } from "../modules/modules"
+import { TypeRequest } from "@src/shared/api/type"
 
 export const useModulesAPI = () => {
 
@@ -25,6 +26,18 @@ export const useModulesAPI = () => {
     const installModule = useCallback(async (name: string) => {
         await request(`/api-modules-manager/modules/install?name=${name}`)
     },[request])
+
+    const runModule = useCallback(async (name: string) => {
+        await request(`/api-modules-manager/modules/run?name=${name}`)
+    },[request])
+
+    const stopModule = useCallback(async (name: string) => {
+        await request(`/api-modules-manager/modules/stop?name=${name}`)
+    },[request])
+
+    const deleteModule = useCallback(async (name: string) => {
+        await request(`/api-modules-manager/modules/${name}`, TypeRequest.DELETE)
+    },[request])
     
     useEffect(()=>{
             if (error)
@@ -38,6 +51,9 @@ export const useModulesAPI = () => {
         loading,
         getModulesAll,
         getModule,
-        installModule
+        installModule,
+        runModule,
+        stopModule,
+        deleteModule
     }
 }

@@ -5,6 +5,8 @@ from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, MODU
 from app.internal.module.search_modules import get_all_modules
 from app.internal.module.install_module import clone_module
 from app.internal.module.run_module import run_module_in_container, stop_module_in_container
+from app.internal.module.delete import remove_module
+from app.internal.module.status import get_module_containers_status
 from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, ModulesLoadData
 
 from fastapi import APIRouter, Depends
@@ -83,7 +85,7 @@ async def get_role(no_cash: bool = False):
 		files = get_all_modules(URL_REPO_MODULES_LIST, token=TEST_TOCKEN, force_refresh=False, no_cash=no_cash)
 		data = load_module_configs(MODULES_DIR)
 		for key, item in files.items():
-			filtred = [ModulesLoadData(name=item2.exemle , path=item2.path) for item2 in data if item2.module == item.name_module]
+			filtred = [ModulesLoadData(name=item2.exemle , path=item2.path, status=get_module_containers_status(item2.exemle)) for item2 in data if item2.module == item.name_module]
 			if(len(filtred) > 0):
 				files[key].load = True
 				files[key].load_module_name = filtred
@@ -106,7 +108,7 @@ async def get_role(name_module:str, no_cash: bool = False):
 		else:
 			return JSONResponse(status_code=404, content=f"Модуль '{name_module}' не найден")
 
-		config.load_module_name = [ModulesLoadData(name=item.exemle, path=item.path) for item in module_data_list]
+		config.load_module_name = [ModulesLoadData(name=item.exemle, path=item.path, status=get_module_containers_status(item.exemle)) for item in module_data_list]
 		config.load = len(config.load_module_name) > 0
 
 		return config
@@ -136,5 +138,22 @@ async def get_role(name: str):
 	try:
 		# return load_module_configs(MODULES_DIR)
 		return stop_module_in_container(name)
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
+
+@router.delete("/{name}")
+async def get_role(name: str):
+	try:
+		# return load_module_configs(MODULES_DIR)
+		return remove_module(name)
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
+
+
+@router.get("/status")
+async def get_role(name: str):
+	try:
+		# return load_module_configs(MODULES_DIR)
+		return get_module_containers_status(name)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))

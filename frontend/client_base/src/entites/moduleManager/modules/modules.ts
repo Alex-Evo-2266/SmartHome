@@ -22,6 +22,10 @@ export interface ModuleData{
     load_module_name: {
         name: string
         path: string
+        status?: {
+            continers: unknown[],
+            all_running: boolean
+        }
     }[]
 }
 
