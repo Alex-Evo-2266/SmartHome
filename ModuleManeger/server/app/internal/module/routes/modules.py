@@ -149,18 +149,19 @@ async def get_role(name: str):
 
 
 @router.get("/run")
-async def get_role(name: str):
+async def get_role(name: str, container_name: Optional[str] = None):
 	try:
 		# return load_module_configs(MODULES_DIR)
-		return run_module_in_container(name)
+		return run_module_in_container(name, container_name)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/stop")
-async def get_role(name: str):
+async def get_role(name: str, container_name: Optional[str] = None):
 	try:
 		# return load_module_configs(MODULES_DIR)
-		return stop_module_in_container(name)
+		print(name, container_name)
+		return stop_module_in_container(name, container_name)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 

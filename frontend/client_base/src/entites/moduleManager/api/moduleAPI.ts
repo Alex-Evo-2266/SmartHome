@@ -27,12 +27,20 @@ export const useModulesAPI = () => {
         await request(`/api-modules-manager/modules/install?name=${name}`)
     },[request])
 
-    const runModule = useCallback(async (name: string) => {
+    const runModule = useCallback(async (name: string, container?: string) => {
+        if(container){
+            await request(`/api-modules-manager/modules/run?name=${name}&container_name=${container}`)
+        }
         await request(`/api-modules-manager/modules/run?name=${name}`)
     },[request])
 
-    const stopModule = useCallback(async (name: string) => {
-        await request(`/api-modules-manager/modules/stop?name=${name}`)
+    const stopModule = useCallback(async (name: string, container?: string) => {
+        if(container){
+            await request(`/api-modules-manager/modules/stop?name=${name}&container_name=${container}`)
+        }
+        else{
+            await request(`/api-modules-manager/modules/stop?name=${name}`)
+        }
     },[request])
 
     const deleteModule = useCallback(async (name: string) => {

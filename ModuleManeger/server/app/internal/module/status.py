@@ -28,7 +28,7 @@ def get_module_containers_status(name: str) -> Dict[str, Any]:
         "docker", "compose",
         "--env-file", ENV_FILE,
         "-f", compose_file,
-        "ps",
+        "ps", "--all",
         "--format", "json"
     ]
 

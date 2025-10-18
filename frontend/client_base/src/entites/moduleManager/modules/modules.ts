@@ -13,6 +13,19 @@ export interface Containers{
     confog: ContainerConfig
 }
 
+export interface Exemple{
+    name: string
+    path: string
+    status?: {
+        containers: {
+            name: string
+            state: string
+            status: string
+        }[],
+        all_running: boolean
+    }
+}
+
 export interface ModuleData{
     name: string
     name_module: string
@@ -21,14 +34,7 @@ export interface ModuleData{
     load: boolean
     repo?: string
     local: boolean
-    load_module_name: {
-        name: string
-        path: string
-        status?: {
-            continers: unknown[],
-            all_running: boolean
-        }
-    }[]
+    load_module_name: Exemple[]
 }
 
 export type AllModulesData = {

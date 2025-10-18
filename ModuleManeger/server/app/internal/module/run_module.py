@@ -34,14 +34,7 @@ def update_env_var_to_local(key: str, value: str, env_file: str = ENV_FILE) -> s
 
 	return local_env_file
 
-
-
-def run_module_in_container(name: str):
-	"""
-	Запускает модуль через docker compose внутри контейнера modules_manager,
-	используя .env файл, чтобы подставить NETWORK_NAME и другие переменные.
-	"""
-
+def build_module_in_container(name: str, container: str | None = None):
 	module_dir = os.path.join(MODULES_DIR, name)
 
 	compose_file = os.path.join(module_dir, "docker-compose.yml")
@@ -49,7 +42,7 @@ def run_module_in_container(name: str):
 		generate_docker_compose_from_module(module_dir)
 		if not os.path.exists(compose_file):
 			raise FileNotFoundError(f"docker-compose.yml не найден в {module_dir}")
-	
+
 	cmd = [
 		"docker", "compose",
 		"--env-file", ENV_FILE,
@@ -67,12 +60,29 @@ def run_module_in_container(name: str):
 		print(f"❌ Ошибка запуска модуля {module_dir}: {e}")
 		raise
 
+def run_module_in_container(name: str, container: str | None = None):
+	"""
+	Запускает модуль через docker compose внутри контейнера modules_manager,
+	используя .env файл, чтобы подставить NETWORK_NAME и другие переменные.
+	"""
+
+	module_dir = os.path.join(MODULES_DIR, name)
+
+	compose_file = os.path.join(module_dir, "docker-compose.yml")
+	if not os.path.exists(compose_file):
+		generate_docker_compose_from_module(module_dir)
+		if not os.path.exists(compose_file):
+			raise FileNotFoundError(f"docker-compose.yml не найден в {module_dir}")
+	
 	cmd = [
 		"docker", "compose",
 		"--env-file", ENV_FILE,
 		"-f", compose_file,
 		"up", "-d"
 	]
+
+	if container:
+		cmd.append(container)
 
 	env = os.environ.copy()
 	env["CONFIGURATE_DIR"] = CONFIGURATE_DIR
@@ -84,7 +94,7 @@ def run_module_in_container(name: str):
 		print(f"❌ Ошибка запуска модуля {module_dir}: {e}")
 		raise
 
-def stop_module_in_container(name: str):
+def stop_module_in_container(name: str, container: str | None = None):
 	"""
 	Запускает модуль через docker compose внутри контейнера modules_manager,
 	используя .env файл, чтобы подставить NETWORK_NAME и другие переменные.
@@ -102,6 +112,9 @@ def stop_module_in_container(name: str):
 		"-f", compose_file,
 		"stop"
 	]
+
+	if container:
+		cmd.append(container)
 	
 	env = os.environ.copy()
 	env["CONFIGURATE_DIR"] = CONFIGURATE_DIR

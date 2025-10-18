@@ -1,4 +1,4 @@
-import { ArrowLeft, Button, Check, IColumn, IconButton, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
+import { ArrowLeft, Button, Check, IColumn, IconButton, IDataItem, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
 import { useParams } from 'react-router-dom';
 import { useModulesAPI } from '@src/entites/moduleManager';
 import { useCallback, useEffect, useState } from 'react';
@@ -20,8 +20,8 @@ export const ManagerModulePage:React.FC = () => {
             setModules(data)
     },[getModule, module_name])
 
-    const clickExempl = (data: string) => {
-        navigate(`/manager/${module_name}/${data}`)
+    const clickExempl = (data: IDataItem) => {
+        navigate(`/manager/${module_name}/${data["name"]}`)
     }
 
     const install = async () => {
@@ -32,6 +32,7 @@ export const ManagerModulePage:React.FC = () => {
 
     const click = (f: (...arg: string[])=>void, ...arg: string[]) => {
         return (e:React.MouseEvent<HTMLButtonElement>) => {
+            console.log("f90")
             e.stopPropagation()
             f(...arg)
             setTimeout(load, 100)
@@ -105,7 +106,7 @@ export const ManagerModulePage:React.FC = () => {
                     modules.load_module_name.length > 0?
                     <>
                         <Button onClick={install}>Установка</Button>
-                        <Table columns={tableCol} data={modules.load_module_name.map(item=>({name: item.name, status: String(!!item.status?.all_running), local: String(modules.local)}))}/>
+                        <Table onClickRow={clickExempl} columns={tableCol} data={modules.load_module_name.map(item=>({name: item.name, status: String(!!item.status?.all_running), local: String(modules.local)}))}/>
                     </>:
                     <>
                         <Typography type="body">Установка</Typography>
