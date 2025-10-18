@@ -7,11 +7,11 @@ from app.internal.module.search_modules import get_all_modules
 from app.configuration.settings import URL_REPO_MODULES_LIST, MODULES_DIR, CONFIG_SERVICES_DIR
 from app.internal.module.schemas.modules import ModulesConf
 
-def clone_module(name: str, token: str | None = None):
+def clone_module(name: str, token: str | None = None, base_dir: str = MODULES_DIR):
     modules = get_all_modules(URL_REPO_MODULES_LIST, token=token, force_refresh=False)
     for repo_url, config in modules.items():
         if(config.name_module == name):
-            return clone_module_repo(repo_url, config.name_module)
+            return clone_module_repo(repo_url, config.name_module, base_dir)
 
 
 def clone_module_repo(repo_url: str, name_module: str, base_dir: str = MODULES_DIR) -> str:

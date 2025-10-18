@@ -3,8 +3,6 @@ from typing import Optional, List, Dict
 
 from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, CORE_MODULES_DIR, GIT_HUB_TOKEN
 from app.internal.module.search_modules import get_all_modules
-from app.internal.module.install_module import clone_module
-from app.internal.module.delete import remove_module
 from app.internal.module.status import get_module_containers_status
 from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, ModulesLoadData, AllModulesResData
 
