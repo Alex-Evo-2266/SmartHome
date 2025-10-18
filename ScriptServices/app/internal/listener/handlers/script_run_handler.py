@@ -1,4 +1,4 @@
-from app.configuration.queue.types import QueueItem
+from queue_lib import QueueItem
 from typing import Any
 from app.internal.logs import get_base_logger
 from app.internal.run_script.run_script import run

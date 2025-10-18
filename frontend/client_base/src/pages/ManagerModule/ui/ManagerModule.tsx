@@ -1,4 +1,4 @@
-import { ArrowLeft, Button, Check, IColumn, IconButton, ListContainer, ListItem, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
+import { ArrowLeft, Button, Check, IColumn, IconButton, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
 import { useParams } from 'react-router-dom';
 import { useModulesAPI } from '@src/entites/moduleManager';
 import { useCallback, useEffect, useState } from 'react';
@@ -67,6 +67,10 @@ export const ManagerModulePage:React.FC = () => {
                     <>
                         <Button onClick={click(runModule, data.name as string)}>запуск</Button>
                         <Button onClick={click(deleteModule, data.name as string)}>удалить</Button>
+                        {/* {
+                            data.local &&
+                            <Button onClick={click(deleteModule, data.name as string)}>создать docker compose</Button>
+                        } */}
                     </>
                 )
             },
@@ -101,8 +105,7 @@ export const ManagerModulePage:React.FC = () => {
                     modules.load_module_name.length > 0?
                     <>
                         <Button onClick={install}>Установка</Button>
-                        <Typography type="body">Установленны</Typography>
-                        <Table columns={tableCol} data={modules.load_module_name.map(item=>({name: item.name, status: String(!!item.status?.all_running)}))}/>
+                        <Table columns={tableCol} data={modules.load_module_name.map(item=>({name: item.name, status: String(!!item.status?.all_running), local: String(modules.local)}))}/>
                     </>:
                     <>
                         <Typography type="body">Установка</Typography>

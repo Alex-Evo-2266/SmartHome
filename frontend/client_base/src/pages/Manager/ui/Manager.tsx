@@ -10,13 +10,13 @@ import { AllModulesData, ModuleData } from "@src/entites/moduleManager/modules/m
 export const ManagerPage = () => {
 
     const {getModulesAll, loading} = useModulesAPI()
-    const [allModules, setModules] = useState<AllModulesData>({})
+    const [allModules, setModules] = useState<ModuleData[]>([])
     const navigate = useNavigate()
 
     const load = useCallback(async()=>{
         const data = await getModulesAll()
         if(data)
-            setModules(data)
+            setModules(data.data)
     },[getModulesAll])
 
     useEffect(()=>{
@@ -38,9 +38,9 @@ export const ManagerPage = () => {
                 <IconButton icon={<ArrowLeft/>} onClick={()=>navigate(-1)}/>
                 <ListContainer>
                     {
-                        Object.entries(allModules).map(([path, data])=>{
+                        allModules.map((data)=>{
                             return(
-                            <ListItem onClick={()=>clickModule(data)} header={data.name_module} text={path} icon={data.load? <Check primaryColor="#00aa00"/>: <i></i>}>
+                            <ListItem onClick={()=>clickModule(data)} header={data.name_module} text={data.repo} icon={data.load? <Check primaryColor="#00aa00"/>: <i></i>}>
                             </ListItem>
                             )
                         })

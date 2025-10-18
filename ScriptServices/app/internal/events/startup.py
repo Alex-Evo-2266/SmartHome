@@ -6,15 +6,10 @@ from typing import Dict, List
 # Local modules
 from app.pkg.ormar.dbormar import database
 from .utils.create_dirs import create_directorys
-from app.internal.device.array.serviceDataPoll import deviceDataPoll, roomDataPoll
 from app.internal.sender.device_set_value import sender_device
-from app.internal.listener.device import devices_listener
-from app.internal.listener.script import script_listener
-from app.internal.listener.room import rooms_listener
-from app.configuration.settings import DEVICE_VALUE_SEND, EXCHANGE_DEVICE_DATA, DATA_SCRIPT, EXCHANGE_ROOM_DATA
+from app.internal.listener.listener import loadDeviceData, loadScriptData, loadRoomData
+from app.configuration.settings import DEVICE_VALUE_SEND, RABITMQ_HOST
 from app.internal.logs import get_base_logger
-from app.internal.run_script.run import run_script
-from app.internal.script.serialize.parse_room_listener_data import parse_room_data
 from app.configuration.loop.loop import loop
 from app.configuration.queue import __queue__
 
@@ -63,19 +58,7 @@ async def startup():
             logger.error(f"Failed to connect to database: {e}")
             return  # Прерываем запуск при ошибке
 
-    sender_device.connect(DEVICE_VALUE_SEND)
-
-    def setDevice(method, properties, body):
-        print(body["lamp1"])
-        deviceDataPoll._data = body
-        
-    def setRoom(method, properties, body):
-        print("rooms ", body)
-        try:
-            for data in body:
-                asyncio.run(roomDataPoll.set_async(data["room_name"], parse_room_data(data)))
-        except Exception as e:
-            print("error", e)
+    sender_device.connect(queue_name=DEVICE_VALUE_SEND, host=RABITMQ_HOST)
 
     loop.register("device_add_queue", __queue__.start, 1)
 
@@ -89,8 +72,8 @@ async def startup():
         logger.error(f"Failed to start main loop: {e}")
 
 
-    devices_listener.connect(EXCHANGE_DEVICE_DATA, setDevice)
-    rooms_listener.connect(EXCHANGE_ROOM_DATA, setRoom)
-    script_listener.connect(DATA_SCRIPT, run_script)
+    loadDeviceData.start()
+    loadScriptData.start()
+    loadRoomData.start()
 
     logger.info("Script service started successfully.")

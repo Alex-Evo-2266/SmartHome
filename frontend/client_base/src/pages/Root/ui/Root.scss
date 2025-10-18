@@ -2,6 +2,8 @@
     margin-inline-start: 80px;
     // margin-inline-end: 5px;
     // margin-block: 5px;
+    position: relative;
+    height: 100vh;
     margin-block-end: 0;
     &.big{
         margin-inline-start: 365px;
@@ -10,6 +12,7 @@
         // margin-inline-start: 5px;
         margin-inline-start: 0;
         margin-block-end: 80px;
+        height: calc(100vh - 80px);
     }
 }
 

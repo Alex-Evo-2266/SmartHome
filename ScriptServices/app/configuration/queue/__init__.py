@@ -1,6 +1,11 @@
-from app.configuration.queue.universal_queue import UniversalQueue
+from queue_lib import UniversalQueue
 from app.internal.listener.handlers.script_run_handler import RunItem, handle_run
+import logging
 
-__queue__ = UniversalQueue(registrations={
-    "run_script": (RunItem, handle_run),
-})
+logger = logging.getLogger(__name__)
+
+__queue__ = UniversalQueue(
+    logger=logger, 
+    registrations={
+        "run_script": (RunItem, handle_run),
+    })

@@ -84,7 +84,7 @@ class CalculateCall():
     async def set_device(target, data, context_command):
         logger.debug(f"[set_device] target={target}, data={data}, context_command={context_command}")
         if len(target) >= 3 and target[0] == "device":
-            await sender_device.send({
+            await sender_device.send(data={
                 "system_name": target[1],
                 "field": target[2],
                 "value": data

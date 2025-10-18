@@ -34,6 +34,8 @@ class ModulesLoadData(BaseModel):
 	status: Optional[ExemplStatus] = None
 
 class ModulesConfAndLoad(ModulesConf):
+	repo: Optional[str] = None
+	local: bool = False
 	load: bool = False
 	load_module_name: List[ModulesLoadData] = []
 
@@ -43,4 +45,5 @@ class ModuleData(BaseModel):
 	path: str
 	config: ModulesConf
 
-
+class AllModulesResData(BaseModel):
+	data: List[ModulesConfAndLoad]

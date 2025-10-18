@@ -38,7 +38,7 @@ def github_get_file_content(owner: str, repo: str, path: str, token: str = None)
     return ""
 
 def get_root_module_config_with_cache(repo_url: str, token: str = None, force_refresh: bool = False) -> Dict[str, Any]:
-    """Получает module_config.yml из корня репозитория (с кешированием, как словарь)"""
+    """Получает module-config-template.yml из корня репозитория (с кешированием, как словарь)"""
     ensure_cache_file(CACHE_FILE)
     cache = load_cache(CACHE_FILE)
 
@@ -49,7 +49,7 @@ def get_root_module_config_with_cache(repo_url: str, token: str = None, force_re
     parts = repo_url.rstrip("/").split("/")
     owner, repo = parts[-2], parts[-1]
 
-    print(f"🔍 Проверяем {repo_url} на наличие module_config.yml в корне...")
+    print(f"🔍 Проверяем {repo_url} на наличие module-config-template.yml в корне...")
 
     # Получаем список файлов в корне
     api_url = f"https://api.github.com/repos/{owner}/{repo}/contents/"
@@ -64,9 +64,9 @@ def get_root_module_config_with_cache(repo_url: str, token: str = None, force_re
     files = resp.json()
     config_data = {}
     for file in files:
-        if file["type"] == "file" and file["name"] == "module_config.yml":
-            print(f"📄 Нашли module_config.yml в {repo}")
-            content = github_get_file_content(owner, repo, "module_config.yml", token)
+        if file["type"] == "file" and file["name"] == "module-config-template.yml":
+            print(f"📄 Нашли module-config-template.yml в {repo}")
+            content = github_get_file_content(owner, repo, "module-config-template.yml", token)
             try:
                 config_data = yaml.safe_load(content)
             except yaml.YAMLError as e:
@@ -138,7 +138,7 @@ def get_all_modules(
     no_cash: bool = False
 ) -> Dict[str, ModulesConfAndLoad]:
     """
-    Главная функция: собирает все module_config.yml из списка modules.json
+    Главная функция: собирает все module-config-template.yml из списка modules.json
     и приводит к Dict[str, ModulesConf]
     """
     repos = load_modules_list(list_repo_url, token)
@@ -154,7 +154,8 @@ def get_all_modules(
             continue
         try:
             result[repo_url] = ModulesConfAndLoad.parse_obj(config_dict)
+            result[repo_url].repo = repo_url
         except Exception as e:
-            print(f"⚠️ Ошибка валидации module_config.yml для {repo_url}: {e}")
+            print(f"⚠️ Ошибка валидации module-config-template.yml для {repo_url}: {e}")
 
     return result

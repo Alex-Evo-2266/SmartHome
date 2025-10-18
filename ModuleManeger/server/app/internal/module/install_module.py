@@ -51,17 +51,18 @@ def clone_module_repo(repo_url: str, name_module: str, base_dir: str = MODULES_D
 
 def replace_module_name_in_config(module_path: str, module_name: str) -> bool:
     """
-    Открывает module_config.yml в указанной папке и заменяет все вхождения
+    Открывает module-config-template.yml в указанной папке и заменяет все вхождения
     '__MODULE_NAME__' на переданное module_name.
 
-    :param module_path: Путь к директории модуля (где лежит module_config.yml)
+    :param module_path: Путь к директории модуля (где лежит module-config.yml)
     :param module_name: Имя экземпляра модуля для подстановки
     :return: True, если замена выполнена успешно, иначе False
     """
-    config_path = os.path.join(module_path, "module_config.yml")
+    config_path = os.path.join(module_path, "module-config-template.yml")
+    config_path_out = os.path.join(module_path, "module-config.yml")
 
     if not os.path.exists(config_path):
-        print(f"❌ Файл module_config.yml не найден: {config_path}")
+        print(f"❌ Файл module-config-template.yml не найден: {config_path}")
         return False
 
     try:
@@ -79,24 +80,24 @@ def replace_module_name_in_config(module_path: str, module_name: str) -> bool:
     new_content = content.replace("__MODULE_NAME__", module_name)
 
     try:
-        with open(config_path, "w", encoding="utf-8") as f:
+        with open(config_path_out, "w", encoding="utf-8") as f:
             f.write(new_content)
-        print(f"✅ В {config_path} заменено __MODULE_NAME__ → {module_name}")
+        print(f"✅ В {config_path_out} заменено __MODULE_NAME__ → {module_name}")
         return True
     except Exception as e:
-        print(f"⚠️ Ошибка записи {config_path}: {e}")
+        print(f"⚠️ Ошибка записи {config_path_out}: {e}")
         return False
 
 def generate_docker_compose_from_module(module_path: str, output_path: str = None):
     """
-    Генерирует docker-compose.yml на основе module_config.yml в указанном модуле.
+    Генерирует docker-compose.yml на основе module-config.yml в указанном модуле.
 
-    :param module_path: Путь к директории модуля, где лежит module_config.yml
+    :param module_path: Путь к директории модуля, где лежит module-config.yml
     :param output_path: Путь для сохранения docker-compose.yml (по умолчанию в ту же папку)
     """
-    config_path = os.path.join(module_path, "module_config.yml")
+    config_path = os.path.join(module_path, "module-config.yml")
     if not os.path.exists(config_path):
-        print(f"❌ Не найден module_config.yml: {config_path}")
+        print(f"❌ Не найден module-config.yml: {config_path}")
         return False
 
     with open(config_path, "r", encoding="utf-8") as f:
@@ -108,7 +109,7 @@ def generate_docker_compose_from_module(module_path: str, output_path: str = Non
 
     containers = config.get("containers", [])
     if not containers:
-        print("⚠️ В module_config.yml отсутствует поле 'containers'.")
+        print("⚠️ В module-config.yml отсутствует поле 'containers'.")
         return False
 
     compose_data = {"services": {}, "networks": {

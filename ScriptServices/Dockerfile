@@ -148,12 +148,14 @@ WORKDIR /home/script_service/web
 
 # Копируем файлы poetry.lock и pyproject.toml
 COPY poetry.lock pyproject.toml ./
+COPY ./external/whl_all ./shared_lib
 
 # Очистка кэша Poetry
 RUN poetry cache clear pypi --all
 
 # Устанавливаем зависимости
 RUN poetry install --no-interaction --no-ansi $(test "$YOUR_ENV" == "production" && echo "--no-dev")
+RUN poetry add ./shared_lib/*.whl
 
 # Проверяем, что Poetry использует правильный Python
 RUN poetry run python --version  # Должно вывести 3.12.x

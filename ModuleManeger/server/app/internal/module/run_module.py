@@ -1,6 +1,7 @@
 import os
 import subprocess
 from app.configuration.settings import ENV_FILE, CONFIG_SERVICES_DIR, MODULES_DIR, BASE_DIR, CONFIGURATE_DIR
+from app.internal.module.install_module import generate_docker_compose_from_module
 import shutil
 
 def update_env_var_to_local(key: str, value: str, env_file: str = ENV_FILE) -> str:
@@ -45,7 +46,26 @@ def run_module_in_container(name: str):
 
 	compose_file = os.path.join(module_dir, "docker-compose.yml")
 	if not os.path.exists(compose_file):
-		raise FileNotFoundError(f"docker-compose.yml не найден в {module_dir}")
+		generate_docker_compose_from_module(module_dir)
+		if not os.path.exists(compose_file):
+			raise FileNotFoundError(f"docker-compose.yml не найден в {module_dir}")
+	
+	cmd = [
+		"docker", "compose",
+		"--env-file", ENV_FILE,
+		"-f", compose_file,
+		"build"
+	]
+
+	env = os.environ.copy()
+	env["CONFIGURATE_DIR"] = CONFIGURATE_DIR
+
+	try:
+		subprocess.run(cmd, cwd=module_dir, check=True, env=env)
+		print(f"✅ Модуль {module_dir} запущен в контейнере")
+	except subprocess.CalledProcessError as e:
+		print(f"❌ Ошибка запуска модуля {module_dir}: {e}")
+		raise
 
 	cmd = [
 		"docker", "compose",

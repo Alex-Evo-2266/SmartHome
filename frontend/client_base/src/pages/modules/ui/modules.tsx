@@ -58,9 +58,9 @@ export const ModulesPage = () => {
 
     if(navigation.type === "website" && token !== "" && token !== undefined && token !== null){
         return (
-            <div className='container-page'>
-                <Panel>
-                    <iframe className='modules-frame' src={`/${prefix}/${navigation.service}${navigation.path}?temp_token=${token}`}>
+            <div className='container-page' style={{height: "calc(100% - 10px)"}}>
+                <Panel style={{height: "calc(100% - 32px)"}}>
+                    <iframe style={{height: "100%"}} className='modules-frame' src={`/${prefix}/${navigation.service}${navigation.path}?temp_token=${token}`}>
                     </iframe>
                 </Panel>
             </div>

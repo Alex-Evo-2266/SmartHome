@@ -19,6 +19,8 @@ export interface ModuleData{
     multiply: boolean
     containers: Containers[]
     load: boolean
+    repo?: string
+    local: boolean
     load_module_name: {
         name: string
         path: string
@@ -29,4 +31,6 @@ export interface ModuleData{
     }[]
 }
 
-export type AllModulesData = Record<string, ModuleData>
+export type AllModulesData = {
+    data: ModuleData[]
+}

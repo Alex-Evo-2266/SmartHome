@@ -1,29 +1,14 @@
-from app.pkg.rabitmq import WorkerThread, FanoutConsumer
-from app.configuration.settings import RABITMQ_HOST, RABITMQ_PORT
 
+from app.pkg import FanoutConsumer, QueueConsumer
+from app.configuration.settings import RABITMQ_HOST, RABITMQ_PORT, EXCHANGE_ROOM_DATA, EXCHANGE_DEVICE_DATA, DATA_SCRIPT
+from .device import device_listener
+from .room import setRoom
+from .script import run_script
+import logging
 
-class LoadDataFanout:
-    def __init__(self):
-        self.worker = FanoutConsumer()
-        
-    def connect(self, exchange: str, callback):
-        print(RABITMQ_HOST, exchange, RABITMQ_PORT)
-        self.exchange = exchange
-        self.worker.set_connection_data(RABITMQ_HOST, exchange=exchange, port=RABITMQ_PORT, callback=callback)
-        self.worker.start()
+logger = logging.getLogger(__name__)
 
-    def disconnect(self):
-        self.worker.stop()
-
-class LoadData:
-    def __init__(self):
-        self.worker = WorkerThread()
-        
-    def connect(self, queue: str, callback):
-        print(RABITMQ_HOST, queue, RABITMQ_PORT)
-        self.queue = queue
-        self.worker.set_connection_data(RABITMQ_HOST, queue=queue, port=RABITMQ_PORT, callback=callback)
-        self.worker.start()
-
-    def disconnect(self):
-        self.worker.stop()
+# слушатели
+loadRoomData = FanoutConsumer(host=RABITMQ_HOST, port=RABITMQ_PORT, exchange=EXCHANGE_ROOM_DATA, callback=setRoom, logger=logger)
+loadDeviceData = FanoutConsumer(host=RABITMQ_HOST, port=RABITMQ_PORT, exchange=EXCHANGE_DEVICE_DATA, callback=device_listener, logger=logger)
+loadScriptData = QueueConsumer(host=RABITMQ_HOST, port=RABITMQ_PORT, queue=DATA_SCRIPT, callback=run_script, logger=logger)

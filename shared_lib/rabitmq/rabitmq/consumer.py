@@ -1,6 +1,6 @@
 import pika
 import json
-import logging
+import logging, time
 from threading import Thread
 
 # ===========================
@@ -24,6 +24,16 @@ class BaseRabbitMQConsumer(Thread):
             self.connection.close()
         self.logger.info("Consumer stopped")
 
+    def _connect(self): 
+        params = pika.ConnectionParameters( 
+            host=self.host, 
+            port=self.port, 
+            heartbeat=300, 
+            blocked_connection_timeout=30 
+        ) 
+        self.connection = pika.BlockingConnection(params) 
+        self.channel = self.connection.channel()
+
     def run(self):
         raise NotImplementedError
 
@@ -34,21 +44,42 @@ class QueueConsumer(BaseRabbitMQConsumer):
         self.queue = queue
 
     def run(self):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self.port))
-        self.channel = self.connection.channel()
-        self.channel.queue_declare(queue=self.queue)
+        while not self._is_interrupted:
+            try:
+                self._connect()
+                self.channel.queue_declare(queue=self.queue)
 
-        self.logger.info(f"Consuming queue '{self.queue}' on {self.host}:{self.port}")
-        for message in self.channel.consume(self.queue, inactivity_timeout=1, auto_ack=self.auto_ack):
-            if self._is_interrupted:
-                break
-            if not all(message):
-                continue
-            method, properties, body = message
-            data = json.loads(body)
-            if self.callback:
-                self.callback(method, properties, data)
-            self.logger.debug(f"Consumed message from '{self.queue}': {data}")
+                self.logger.info(f"Consuming queue '{self.queue}' on {self.host}:{self.port}")
+                for message in self.channel.consume(self.queue, inactivity_timeout=1, auto_ack=self.auto_ack):
+                    if self._is_interrupted:
+                        break
+                    if not all(message):
+                        continue
+                    method, properties, body = message
+                    try:
+                        data = json.loads(body)
+                    except Exception: 
+                        self.logger.exception("Invalid JSON in message") 
+                        continue
+
+                    try:
+                        if self.callback:
+                            self.callback(method, properties, data)
+                        self.logger.debug(f"Consumed message from '{self.queue}': {data}")
+                    except Exception: 
+                        self.logger.exception("Error in callback")
+            except pika.exceptions.AMQPError as e: 
+                self.logger.error(f"RabbitMQ channel error: {e}") 
+                time.sleep(5) 
+            except Exception as e: 
+                self.logger.exception(f"Unexpected consumer error: {e}") 
+                time.sleep(5) 
+            finally: 
+                if self.connection and self.connection.is_open: 
+                    try: 
+                        self.connection.close() 
+                    except Exception: 
+                        pass
 
 
 class FanoutConsumer(BaseRabbitMQConsumer):
@@ -57,26 +88,41 @@ class FanoutConsumer(BaseRabbitMQConsumer):
         self.exchange = exchange
 
     def run(self):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self.port))
-        self.channel = self.connection.channel()
-        self.channel.exchange_declare(exchange=self.exchange, exchange_type='fanout')
+        while not self._is_interrupted:
+            try:
+                self._connect()
+                self.channel.exchange_declare(exchange=self.exchange, exchange_type='fanout')
 
-        result = self.channel.queue_declare(queue='', exclusive=True)
-        queue_name = result.method.queue
-        self.channel.queue_bind(exchange=self.exchange, queue=queue_name)
+                result = self.channel.queue_declare(queue='', exclusive=True)
+                queue_name = result.method.queue
+                self.channel.queue_bind(exchange=self.exchange, queue=queue_name)
 
-        self.logger.info(f"Consuming fanout exchange '{self.exchange}' on {self.host}:{self.port}")
+                self.logger.info(f"Consuming fanout exchange '{self.exchange}' on {self.host}:{self.port}")
 
-        def on_message(ch, method, properties, body):
-            if self._is_interrupted:
-                ch.stop_consuming()
-            data = json.loads(body)
-            if self.callback:
-                self.callback(data)
-            self.logger.debug(f"Consumed message from fanout '{self.exchange}': {data}")
+                def on_message(ch, method, properties, body):
+                    if self._is_interrupted:
+                        ch.stop_consuming()
+                        return
+                    try:
+                        data = json.loads(body)
+                        if self.callback:
+                            self.callback(method, properties, data)
+                        self.logger.debug(f"Consumed message from fanout '{self.exchange}': {data}")
+                    except Exception:
+                        self.logger.exception("Error processing fanout message")
 
-        self.channel.basic_consume(queue=queue_name, on_message_callback=on_message, auto_ack=True)
-        try:
-            self.channel.start_consuming()
-        except Exception as e:
-            self.logger.error(f"Consumer error: {e}")
+                self.channel.basic_consume(queue=queue_name, on_message_callback=on_message, auto_ack=True)
+                self.channel.start_consuming()
+
+            except pika.exceptions.AMQPError as e:
+                self.logger.error(f"FanoutConsumer channel error: {e}") 
+                time.sleep(5) 
+            except Exception as e: 
+                self.logger.exception(f"Unexpected FanoutConsumer error: {e}") 
+                time.sleep(5) 
+            finally: 
+                if self.connection and self.connection.is_open: 
+                    try: 
+                        self.connection.close() 
+                    except Exception: 
+                        pass
