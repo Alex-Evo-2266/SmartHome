@@ -10,17 +10,17 @@ class ExemplStatus(BaseModel):
 	containers: List[ContainerStatus]
 	all_running: bool
 
-class ContaiderConfig(BaseModel):
-	build: Optional[Dict[str, Any]]
-	command: str
-	restart: str
-	environment: Dict[str, Any]
-	labels: List[str]
-	volumes: List[str]
+# class ContaiderConfig(BaseModel):
+# 	build: Optional[Dict[str, Any]] = None
+# 	command: Optional[str] = None
+# 	restart: str = ""
+# 	environment: Dict[str, Any] = {}
+# 	labels: List[str] = []
+# 	volumes: List[str] = []
 
 class ContaiderData(BaseModel):
 	name: str
-	config: ContaiderConfig
+	config: Dict[str, Any]
 
 class ModulesConf(BaseModel):
 	name: str

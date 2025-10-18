@@ -4,7 +4,7 @@ from typing import Optional, List, Dict
 from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, MODULES_DIR
 from app.internal.module.search_modules import get_all_modules
 from app.internal.module.install_module import clone_module, generate_docker_compose_from_module
-from app.internal.module.run_module import run_module_in_container, stop_module_in_container
+from app.internal.module.run_module import run_module_in_container, stop_module_in_container, build_module_in_container
 from app.internal.module.delete import remove_module
 from app.internal.module.status import get_module_containers_status
 from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, ModulesLoadData, AllModulesResData
@@ -187,5 +187,12 @@ async def get_role(name: str):
 	try:
 		module_path = os.path.join(MODULES_DIR, name)
 		return generate_docker_compose_from_module(module_path)
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
+	
+@router.get("/build")
+async def get_role(name: str, container_name: Optional[str] = None):
+	try:
+		return build_module_in_container(name, container_name)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))

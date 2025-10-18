@@ -26,6 +26,7 @@ cp "$SCRIPT_DIR/src/tsconfig.scripts.json" "$BASE_DIR/$APP_NAME/"
 cp "$SCRIPT_DIR/src/next.config.ts" "$BASE_DIR/$APP_NAME/"
 cp "$SCRIPT_DIR/src/Dockerfile" "$BASE_DIR/$APP_NAME/"
 cp "$SCRIPT_DIR/src/generate_page.sh" "$BASE_DIR/$APP_NAME/scripts/"
+cp "$SCRIPT_DIR/src/generate_config.sh" "$BASE_DIR/$APP_NAME/scripts/"
 
 TEMPLATE_FILE="$SCRIPT_DIR/src/docker-compose-template.yml"
 TEMPLATE_MODULE_CONFIG_FILE="$SCRIPT_DIR/src/module-config.yml"
