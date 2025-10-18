@@ -247,3 +247,9 @@ class MqttService(BaseService):
         except Exception as e:
             logger.error(f"Error in run_command: {str(e)}", exc_info=True)
             return False
+        
+    @classmethod
+    def on_load_data(cls, data):
+        if isinstance(data, dict):
+            for topik, payload in data.items():
+                cls.client.publish(topik, payload, 0, False)
