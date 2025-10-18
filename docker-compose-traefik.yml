@@ -165,6 +165,7 @@ services:
     volumes:
       - ./SmartHome:/home/device_service/web
       - media_device_voluem:/home/device_service/web/media
+      - ./modules_core:/home/device_service/web/app/moduls/moduls
     depends_on:
       rabbitmq:
         condition: service_healthy

@@ -11,9 +11,12 @@ from app.configuration.settings import MODULS_DIR
 # Настройка логгера
 logger = logging.getLogger(__name__)
 
+POST_DIR = "moduls"
+
 def get_modules(directory: str, init: bool = True) -> List[str]:
     """Возвращает список имен модулей в указанной директории."""
     path = Path(directory)
+    logger.debug(f"Директория модулей: {path}.")
 
     if not path.exists() or not path.is_dir():
         logger.error(f"Директория {directory} не найдена или не является папкой.")
@@ -64,6 +67,7 @@ class ModulesArray:
     @classmethod
     def init_modules(cls, name: str) -> None:
         """Инициализирует и регистрирует все модули в указанном пакете."""
+        name = '.'.join([*name.split("."), POST_DIR])
         path = os.path.join(*name.split('.'))
         modules_name = get_modules(path, init=False)
         for module_name in modules_name:
@@ -84,6 +88,7 @@ class ModulesArray:
     @classmethod
     def install_dependencies(cls, name: str):
         """Устанавливает зависимости из config.yaml, если он существует."""
+        name = '.'.join([*name.split('.'), POST_DIR])
         path = Path(name.replace(".", os.sep))
         modules_name = get_modules(str(path), init=False)
 
