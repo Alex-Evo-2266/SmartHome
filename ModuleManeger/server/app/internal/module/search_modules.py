@@ -135,7 +135,8 @@ def get_all_modules(
     list_repo_url: str,
     token: str = None,
     force_refresh: bool = False,
-    no_cash: bool = False
+    no_cash: bool = False,
+    type_module: Optional[str] = None
 ) -> Dict[str, ModulesConfAndLoad]:
     """
     Главная функция: собирает все module-config-template.yml из списка modules.json
@@ -151,6 +152,8 @@ def get_all_modules(
             force_refresh or no_cash   # если no_cash=True -> игнорируем кеш
         )
         if not config_dict:
+            continue
+        if (not type_module is None) and config_dict["type"] != type_module:
             continue
         try:
             result[repo_url] = ModulesConfAndLoad.parse_obj(config_dict)

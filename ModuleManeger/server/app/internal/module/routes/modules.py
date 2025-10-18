@@ -14,6 +14,8 @@ from fastapi.responses import JSONResponse
 
 TEST_TOCKEN = None
 
+TYPE_DOCKER = "docker"
+
 logger = logging.getLogger(__name__)
 
 def load_module_configs(modules_dir: str)->List[ModuleData]:
@@ -24,6 +26,8 @@ def load_module_configs(modules_dir: str)->List[ModuleData]:
 			with open(config_path, "r", encoding="utf-8") as f:
 				try:
 					config = yaml.safe_load(f)
+					if config["type"] != TYPE_DOCKER:
+						continue
 				except yaml.YAMLError as e:
 					print(f"Ошибка чтения {config_path}: {e}")
 					continue
@@ -96,8 +100,11 @@ router = APIRouter(
 @router.get("/all", response_model=AllModulesResData)
 async def get_role(no_cash: bool = False):
 	try:
-		files = get_all_modules(URL_REPO_MODULES_LIST, token=TEST_TOCKEN, force_refresh=False, no_cash=no_cash)
+		print("p1")
+		files = get_all_modules(URL_REPO_MODULES_LIST, token=TEST_TOCKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
+		print("p2")
 		data = load_module_configs(MODULES_DIR)
+		print("p3")
 		used = []
 		locals = []
 		for key, item in files.items():
@@ -119,7 +126,7 @@ async def get_role(no_cash: bool = False):
 @router.get("/data/{name_module}", response_model=ModulesConfAndLoad)
 async def get_role(name_module:str, no_cash: bool = False):
 	try:
-		files = get_all_modules(URL_REPO_MODULES_LIST, token=TEST_TOCKEN, force_refresh=False, no_cash=no_cash)
+		files = get_all_modules(URL_REPO_MODULES_LIST, token=TEST_TOCKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
 		find_module = next((item for item in files.values() if item.name_module == name_module), None)
 		module_data_list = load_module_config_by_name(MODULES_DIR, name_module)
 		config:ModulesConfAndLoad | None = None
