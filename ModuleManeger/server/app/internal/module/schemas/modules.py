@@ -26,7 +26,7 @@ class ModulesConf(BaseModel):
 	name: str
 	name_module: str
 	multiply: bool
-	containers: List[ContaiderData]
+	containers: Optional[List[ContaiderData]] = None
 	type: str
 
 class ModulesLoadData(BaseModel):

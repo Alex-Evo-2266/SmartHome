@@ -32,6 +32,7 @@ services:
       - ${CONFIGURATE_DIR}:/home/module_manager/web/config_services
       - ${CONFIGURATE_DIR}/_managers_:/home/module_manager/web/config
       - ./modules:/home/module_manager/web/modules
+      - ./modules_core:/home/module_manager/web/modules_core
       - .env:/home/module_manager/web/.env
       - /var/run/docker.sock:/var/run/docker.sock
     environment:

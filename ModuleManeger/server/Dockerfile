@@ -37,6 +37,7 @@ RUN mkdir media
 RUN mkdir -p config_services && chmod 755 config_services
 RUN mkdir -p config && chmod 755 config
 RUN mkdir -p modules && chmod 755 modules
+RUN mkdir -p modules_core && chmod 755 modules_core
 RUN chmod 777 media/
 
 RUN groupadd module_manager

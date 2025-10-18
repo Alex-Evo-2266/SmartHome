@@ -1,10 +1,9 @@
 import json, logging, yaml, os
 from typing import Optional, List, Dict
 
-from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, MODULES_DIR, GIT_HUB_TOKEN
+from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, CORE_MODULES_DIR, GIT_HUB_TOKEN
 from app.internal.module.search_modules import get_all_modules
-from app.internal.module.install_module import clone_module, generate_docker_compose_from_module
-from app.internal.module.run_module import run_module_in_container, stop_module_in_container, build_module_in_container
+from app.internal.module.install_module import clone_module
 from app.internal.module.delete import remove_module
 from app.internal.module.status import get_module_containers_status
 from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, ModulesLoadData, AllModulesResData
@@ -12,7 +11,7 @@ from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, 
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
-TYPE_DOCKER = "docker"
+TYPE_CORE = "core"
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ def load_module_configs(modules_dir: str)->List[ModuleData]:
 			with open(config_path, "r", encoding="utf-8") as f:
 				try:
 					config = yaml.safe_load(f)
-					if config["type"] != TYPE_DOCKER:
+					if config["type"] != TYPE_CORE:
 						continue
 				except yaml.YAMLError as e:
 					print(f"Ошибка чтения {config_path}: {e}")
@@ -76,33 +75,17 @@ def load_module_config_by_name(modules_dir: str, module_name: str) -> List[Modul
 	return found_modules
 
 router = APIRouter(
-	prefix=f"{ROUTE_PREFIX}/modules",
-	tags=["modules"],
+	prefix=f"{ROUTE_PREFIX}/modules-core",
+	tags=["modules_core"],
 	responses={404: {"description": "Not found"}},
 )
 
-# @router.get("/all", response_model=Dict[str, ModulesConfAndLoad])
-# async def get_role(no_cash: bool = False):
-# 	try:
-# 		files = get_all_modules(URL_REPO_MODULES_LIST, token=TEST_TOCKEN, force_refresh=False, no_cash=no_cash)
-# 		data = load_module_configs(MODULES_DIR)
-# 		for key, item in files.items():
-# 			filtred = [ModulesLoadData(name=item2.exemle , path=item2.path, status=get_module_containers_status(item2.exemle)) for item2 in data if item2.module == item.name_module]
-# 			if(len(filtred) > 0):
-# 				files[key].load = True
-# 				files[key].load_module_name = filtred
-# 		return files
-# 	except Exception as e:
-# 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.get("/all", response_model=AllModulesResData)
 async def get_role(no_cash: bool = False):
 	try:
-		print("p1")
-		files = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
-		print("p2")
-		data = load_module_configs(MODULES_DIR)
-		print("p3")
+		files: Dict[str, ModulesConfAndLoad]  = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_CORE)
+		data = load_module_configs(CORE_MODULES_DIR)
 		used = []
 		locals = []
 		for key, item in files.items():
@@ -124,9 +107,9 @@ async def get_role(no_cash: bool = False):
 @router.get("/data/{name_module}", response_model=ModulesConfAndLoad)
 async def get_role(name_module:str, no_cash: bool = False):
 	try:
-		files = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
+		files = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_CORE)
 		find_module = next((item for item in files.values() if item.name_module == name_module), None)
-		module_data_list = load_module_config_by_name(MODULES_DIR, name_module)
+		module_data_list = load_module_config_by_name(CORE_MODULES_DIR, name_module)
 		config:ModulesConfAndLoad | None = None
 
 		if len(module_data_list) > 0:
@@ -146,27 +129,10 @@ async def get_role(name_module:str, no_cash: bool = False):
 @router.get("/install")
 async def get_role(name: str):
 	try:
-		res_folder = clone_module(name, GIT_HUB_TOKEN)
+		# res_folder = clone_module(name, TEST_TOCKEN)
 		# return load_module_configs(MODULES_DIR)
-		return res_folder
-	except Exception as e:
-		return JSONResponse(status_code=400, content=str(e))
-
-
-@router.get("/run")
-async def get_role(name: str, container_name: Optional[str] = None):
-	try:
-		# return load_module_configs(MODULES_DIR)
-		return run_module_in_container(name, container_name)
-	except Exception as e:
-		return JSONResponse(status_code=400, content=str(e))
-
-@router.get("/stop")
-async def get_role(name: str, container_name: Optional[str] = None):
-	try:
-		# return load_module_configs(MODULES_DIR)
-		print(name, container_name)
-		return stop_module_in_container(name, container_name)
+		# return res_folder
+		pass
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
@@ -174,30 +140,8 @@ async def get_role(name: str, container_name: Optional[str] = None):
 async def get_role(name: str):
 	try:
 		# return load_module_configs(MODULES_DIR)
-		return remove_module(name)
+		# return remove_module(name)
+		pass
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
-
-@router.get("/status")
-async def get_role(name: str):
-	try:
-		# return load_module_configs(MODULES_DIR)
-		return get_module_containers_status(name)
-	except Exception as e:
-		return JSONResponse(status_code=400, content=str(e))
-	
-@router.get("/generete")
-async def get_role(name: str):
-	try:
-		module_path = os.path.join(MODULES_DIR, name)
-		return generate_docker_compose_from_module(module_path)
-	except Exception as e:
-		return JSONResponse(status_code=400, content=str(e))
-	
-@router.get("/build")
-async def get_role(name: str, container_name: Optional[str] = None):
-	try:
-		return build_module_in_container(name, container_name)
-	except Exception as e:
-		return JSONResponse(status_code=400, content=str(e))

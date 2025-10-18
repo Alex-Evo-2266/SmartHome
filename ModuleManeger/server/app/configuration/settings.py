@@ -18,6 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 CONFIG_SERVICES_DIR = os.path.join(BASE_DIR, "config_services") 
 CONFIG_DIR = os.path.join(BASE_DIR, "config") 
 MODULES_DIR = os.path.join(BASE_DIR, "modules")
+CORE_MODULES_DIR = os.path.join(BASE_DIR, "modules_core")
 CACHE_FILE = os.path.join(CONFIG_DIR, "modules_cache.json")
 CACHE_INFO_FILE = os.path.join(CONFIG_DIR, "modules_info_cache.json")
 ENV_FILE = os.path.join(BASE_DIR, ".env")
@@ -25,3 +26,4 @@ ENV_FILE = os.path.join(BASE_DIR, ".env")
 URL_REPO_MODULES_LIST = "https://github.com/Alex-Evo-2266/SmartHome_Modules_List"
 
 CONFIGURATE_DIR = os.environ.get("CONFIGURATE_DIR")
+
