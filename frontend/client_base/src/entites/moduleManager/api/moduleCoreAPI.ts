@@ -28,7 +28,7 @@ export const useCoreModulesAPI = () => {
     },[request])
 
     const deleteModule = useCallback(async (name: string) => {
-        await request(`/api-modules-manager/modules/${name}`, TypeRequest.DELETE)
+        await request(`/api-modules-manager/modules-core/${name}`, TypeRequest.DELETE)
     },[request])
     
     useEffect(()=>{

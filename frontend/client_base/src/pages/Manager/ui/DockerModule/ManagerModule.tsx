@@ -6,7 +6,7 @@ import { ModuleData } from '@src/entites/moduleManager/modules/modules';
 import { Loading } from '@src/shared/ui/Loading';
 import { useNavigate } from 'react-router-dom';
 
-export const ManagerModulePage:React.FC = () => {
+export const DockerModule:React.FC = () => {
 
     const {getModule, loading, installModule, runModule, deleteModule, stopModule} = useModulesAPI()
     const [modules, setModules] = useState<ModuleData | null>(null)
@@ -21,7 +21,7 @@ export const ManagerModulePage:React.FC = () => {
     },[getModule, module_name])
 
     const clickExempl = (data: IDataItem) => {
-        navigate(`/manager/${module_name}/${data["name"]}`)
+        navigate(`/manager/docker/${module_name}/${data["name"]}`)
     }
 
     const install = async () => {
@@ -97,23 +97,22 @@ export const ManagerModulePage:React.FC = () => {
     }
 
     return(
-        <div className="manager-page">
-            <Panel>
-                <IconButton icon={<ArrowLeft/>} onClick={()=>navigate(-1)}/>
-                <Typography type="title">{module_name}</Typography>
-                <br/>
-                {
-                    modules.load_module_name.length > 0?
-                    <>
-                        <Button onClick={install}>Установка</Button>
-                        <Table onClickRow={clickExempl} columns={tableCol} data={modules.load_module_name.map(item=>({name: item.name, status: String(!!item.status?.all_running), local: String(modules.local)}))}/>
-                    </>:
-                    <>
-                        <Typography type="body">Установка</Typography>
-                        <Button onClick={install}>Установка</Button>
-                    </>
-                }
-            </Panel>
+        <>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+            <Typography type="title">{module_name}</Typography>
+            <Button onClick={install}>Установка</Button>
         </div>
+        {
+            modules.load_module_name.length > 0 &&
+            <Table 
+                onClickRow={clickExempl} 
+                columns={tableCol} 
+                data={modules.load_module_name.map(
+                    item=>({name: item.name, status: String(!!item.status?.all_running), local: String(modules.local)})
+                )}
+            />
+        }
+        </>
+                
     )
 }

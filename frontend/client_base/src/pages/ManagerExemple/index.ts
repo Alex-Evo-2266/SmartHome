@@ -1,1 +1,0 @@
-export {ManagerExemplePage} from './ui/ManegerExemple'

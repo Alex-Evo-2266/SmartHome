@@ -1,74 +1,85 @@
 import { useCallback, useEffect, useState } from "react"
 import { Loading } from "@src/shared/ui/Loading"
 import { ArrowLeft, Check, FAB, IconButton, ListContainer, ListItem, Panel, Plus, Tabs } from "alex-evo-sh-ui-kit"
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import './Manager.scss'
-import { useCoreModulesAPI, useModulesAPI } from "@src/entites/moduleManager";
-import { AllModulesData, ModuleData } from "@src/entites/moduleManager/modules/modules";
+import { useCoreAPI, useCoreModulesAPI, useModulesAPI } from "@src/entites/moduleManager";
+import { AllModulesData, CoreContainerId, ModuleData } from "@src/entites/moduleManager/modules/modules";
+import { ManagerContext } from "../lib/context";
 
+const TabsItems = [
+    {
+        label: "docker module",
+        path: "docker"
+    },
+    {
+        label: "core module",
+        path: "core-module"
+    },
+    {
+        label: "core",
+        path: "core"
+    }
+]
 
 export const ManagerPage = () => {
 
     const {getModulesAll, loading} = useModulesAPI()
-    const {getModulesAll:getModulesCoreAll, loading:loadingCore} = useCoreModulesAPI()
+    const location = useLocation();
+    const {getModulesAll:getModulesCoreAll, loading:loadingCoreModule} = useCoreModulesAPI()
+    const {getModulesAll:getCoreAll, loading:loadingCore} = useCoreAPI()
     const [allModules, setModules] = useState<ModuleData[]>([])
     const [allCoreModules, setCoreModules] = useState<ModuleData[]>([])
+    const [allCore, setCore] = useState<CoreContainerId[]>([])
     const navigate = useNavigate()
+    const pathParts = location.pathname.split('/'); // разобьет путь на части
+    const subRoute = pathParts[2];
 
     const load = useCallback(async()=>{
         const data = await getModulesAll()
-        const dataCore = await getModulesCoreAll()
+        const dataCoreModule = await getModulesCoreAll()
+        const dataCore = await getCoreAll()
         if(data)
             setModules(data.data)
+        if(dataCoreModule)
+            setCoreModules(dataCoreModule.data)
         if(dataCore)
-            setCoreModules(dataCore.data)
+            setCore(dataCore.data)
     },[getModulesAll])
 
     useEffect(()=>{
         load()
     },[load])
 
-    const clickModule = (data: ModuleData) => {
-        navigate(`/manager/${data.name_module}`)
+    const clickModule = (index:number) => {
+        navigate(`/manager/${TabsItems[index].path}`)
     }
 
-    if(loading || loadingCore)
+    const getIndex = (route: string) => {
+        const index = TabsItems.findIndex(item=>item.path === route)
+        if(index < 0)
+            return 0
+        return index
+    }
+
+    if(loading || loadingCore || loadingCoreModule)
         return(
             <Loading></Loading>
     )
 
     return (
         <div className="manager-page">
-            <Panel>
-                <Tabs tabs={[{
-                    label: "docker module",
-                    content: 
-                    <ListContainer>
-                        {
-                            allModules.map((data)=>{
-                                return(
-                                <ListItem onClick={()=>clickModule(data)} header={data.name_module} text={data.repo} icon={data.load? <Check primaryColor="#00aa00"/>: <i></i>}>
-                                </ListItem>
-                                )
-                            })
-                        }
-                    </ListContainer>
-                },{
-                    label: "core module",
-                    content: 
-                    <ListContainer>
-                        {
-                            allCoreModules.map((data)=>{
-                                return(
-                                <ListItem onClick={()=>clickModule(data)} header={data.name_module} text={data.repo} icon={data.load? <Check primaryColor="#00aa00"/>: <i></i>}>
-                                </ListItem>
-                                )
-                            })
-                        }
-                    </ListContainer>
-                }]}/>
-                
-            </Panel>
+            <ManagerContext.Provider value={{dockerModules:allModules, coreModuler:allCoreModules, core:allCore}}>
+                <Panel>
+                    <Tabs 
+                        activeTabIndex={getIndex(subRoute)} 
+                        onTabClick={clickModule} 
+                        tabs={TabsItems.map(item=>({label:item.label, content:<div/>}))}
+                    />
+                    <Outlet/>
+                </Panel>
+            </ManagerContext.Provider>
+            
             <FAB icon={<Plus/>}/>
         </div>
     )

@@ -2,6 +2,8 @@ services:
   traefik:
     image: traefik:v3.0
     restart: always
+    labels:
+      - "sh-core.core"
     networks: 
       - local_sh_network
     command:
@@ -94,6 +96,7 @@ services:
       RABITMQ_HOST: ${RABITMQ_HOST}
       RABITMQ_PORT: ${RABITMQ_PORT}
     labels:
+      - "sh-core.core"
       - "traefik.enable=true"
       # http (без TLS)
       - "traefik.http.routers.email_http.rule=PathPrefix(`/api-email`)"
@@ -143,6 +146,7 @@ services:
       EXCHANGE_ROOM_DATA: ${EXCHANGE_ROOM_DATA}
       DEVICE_VALUE_SEND: ${DEVICE_VALUE_SEND}
     labels:
+      - "sh-core.core"
       - "traefik.enable=true"
       # http (без TLS)
       - "traefik.http.routers.device_http.rule=PathPrefix(`/api-devices`)"
@@ -197,6 +201,7 @@ services:
       SMARTHOME_PAGE_BD_PASSWORD: ${MYSQL_PAGE_PASSWORD}
       PREFIX_PATH: modules
     labels:
+      - "sh-core.core"
       - "traefik.enable=true"
       # http (без TLS)
       - "traefik.http.routers.page_http.rule=PathPrefix(`/api-pages`)"
@@ -242,6 +247,7 @@ services:
       EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
       EXCHANGE_ROOM_DATA: ${EXCHANGE_ROOM_DATA}
     labels:
+      - "sh-core.core"
       - "traefik.enable=true"
       # http (без TLS)
       - "traefik.http.routers.script_http.rule=PathPrefix(`/api-scripts`)"
@@ -308,6 +314,8 @@ services:
       - ./mosquitto/log:/mosquitto/log
     ports:
       - 1884:1883
+    labels:
+      - "sh-core.core"
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
 

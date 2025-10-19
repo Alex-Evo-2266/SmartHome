@@ -8,6 +8,7 @@ services:
     ports:
       - 8005:8005
     labels:
+      - "sh-core.manager"
       - "traefik.enable=true"
 
       # http (без TLS)
@@ -37,6 +38,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - CONFIGURATE_DIR=${CONFIGURATE_DIR}
+      - ROOT_APP_DIR=${ROOT_APP_DIR}
     depends_on:
       rabbitmq:
         condition: service_healthy

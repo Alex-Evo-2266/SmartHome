@@ -1,17 +1,15 @@
-import { ArrowLeft, Button, IColumn, IconButton, ListContainer, ListItem, Panel, Table, Typography } from 'alex-evo-sh-ui-kit';
 import { useParams } from 'react-router-dom';
 import { useModulesAPI } from '@src/entites/moduleManager';
 import { useCallback, useEffect, useState } from 'react';
 import { Exemple, ModuleData } from '@src/entites/moduleManager/modules/modules';
 import { Loading } from '@src/shared/ui/Loading';
-import { useNavigate } from 'react-router-dom';
+import { Button, IColumn, Table, Typography } from 'alex-evo-sh-ui-kit';
 
-export const ManagerExemplePage:React.FC = () => {
+export const DockerExemplePage:React.FC = () => {
 
-    const {stopModule, runModule, getModule, loading, installModule} = useModulesAPI()
+    const {stopModule, runModule, getModule, loading} = useModulesAPI()
     const [module, setModule] = useState<{module: ModuleData, exempl?: Exemple} | null>(null)
     const { module_name, module_exempl } = useParams<{module_name: string, module_exempl: string}>();
-    const navigate = useNavigate()
 
     const load = useCallback(async()=>{
         if(!module_name) return
@@ -22,9 +20,6 @@ export const ManagerExemplePage:React.FC = () => {
         }
     },[getModule, module_name, module_exempl])
 
-    const clickContainer = (data: string) => {
-        navigate(`/manager/${module_name}/${data}`)
-    }
 
     const click = useCallback((f: (...arg: string[]) => void, ...arg: string[]) => {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,12 +28,6 @@ export const ManagerExemplePage:React.FC = () => {
         setTimeout(load, 100)
     }
 }, [load])
-
-    const install = async () => {
-        if(!module_name) return
-        await installModule(module_name)
-        setTimeout(()=>load(),100)
-    }
 
     const tableCol: IColumn[] = [
             {
@@ -86,27 +75,22 @@ export const ManagerExemplePage:React.FC = () => {
     if(!module || !module.exempl)
     {
         return(
-            <div className="manager-page">
-                <Panel>
-                    <IconButton icon={<ArrowLeft/>} onClick={()=>navigate(-1)}/>
-                    <Typography type="title">{module_name}</Typography>
-                    <Typography type="body">модуль не найден</Typography>
-                </Panel>
-            </div>
+            <>
+            <Typography type="title">{module_name}</Typography>
+            <Typography type="body">модуль не найден</Typography>
+            </>
         )
     }
 
     return(
-        <div className="manager-page">
-            <Panel>
-                <IconButton icon={<ArrowLeft/>} onClick={()=>navigate(-1)}/>
-                <Typography type="title">{module_name}</Typography>
-                <Typography type="title-2">{module_exempl}</Typography>
-                {
-                    module.exempl.status &&
-                    <Table columns={tableCol} data={module.exempl.status.containers.map(item=>({name: item.name, status: item.state}))}/>
-                }
-            </Panel>
-        </div>
+        <>
+            <Typography type="title">{module_name}</Typography>
+            <Typography type="title-2">{module_exempl}</Typography>
+            {
+                module.exempl.status &&
+                <Table columns={tableCol} data={module.exempl.status.containers.map(item=>({name: item.name, status: item.state}))}/>
+            }
+        </>
+                
     )
 }

@@ -124,22 +124,17 @@ async def get_role(name_module:str, no_cash: bool = False):
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 	
-@router.get("/install")
-async def get_role(name: str):
-	try:
-		# res_folder = clone_module(name, TEST_TOCKEN)
-		# return load_module_configs(MODULES_DIR)
-		# return res_folder
-		pass
-	except Exception as e:
-		return JSONResponse(status_code=400, content=str(e))
+# @router.get("/install")
+# async def get_role(name: str):
+# 	try:
+# 		pass
+# 	except Exception as e:
+# 		return JSONResponse(status_code=400, content=str(e))
 
-@router.delete("/{name}")
-async def get_role(name: str):
-	try:
-		# return load_module_configs(MODULES_DIR)
-		# return remove_module(name)
-		pass
-	except Exception as e:
-		return JSONResponse(status_code=400, content=str(e))
+# @router.delete("/{name}")
+# async def get_role(name: str):
+# 	try:
+# 		pass
+# 	except Exception as e:
+# 		return JSONResponse(status_code=400, content=str(e))
 

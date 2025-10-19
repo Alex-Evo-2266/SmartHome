@@ -40,3 +40,12 @@ export interface ModuleData{
 export type AllModulesData = {
     data: ModuleData[]
 }
+
+export interface CoreContainerId{
+    container_id: string
+    name: string
+}
+
+export type CoreContainerData = {
+    data: CoreContainerId[]
+}

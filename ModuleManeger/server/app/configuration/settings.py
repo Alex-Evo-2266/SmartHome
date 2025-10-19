@@ -25,5 +25,7 @@ ENV_FILE = os.path.join(BASE_DIR, ".env")
 
 URL_REPO_MODULES_LIST = "https://github.com/Alex-Evo-2266/SmartHome_Modules_List"
 
+ROOT_APP_DIR = os.environ.get("ROOT_APP_DIR")
+COMPOSE_FILE_CORE_MODULE = os.path.join(ROOT_APP_DIR, "docker-compose-traefik.yml")
 CONFIGURATE_DIR = os.environ.get("CONFIGURATE_DIR")
 

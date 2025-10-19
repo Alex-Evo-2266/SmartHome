@@ -48,3 +48,10 @@ class ModuleData(BaseModel):
 
 class AllModulesResData(BaseModel):
 	data: List[ModulesConfAndLoad]
+
+class ContainerId(BaseModel):
+	container_id: str
+	name: str
+
+class Containers(BaseModel):
+	data: List[ContainerId]
