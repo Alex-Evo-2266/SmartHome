@@ -1,0 +1,20 @@
+.drow-container{
+    width: 100%;
+    height: 100%;
+    border-top: 2px solid var(--Outline-color);
+}
+
+.constructor-container{
+    height: calc(100vh - 100px);
+}
+
+.constructor-script-control{
+    display: flex;
+    height: 100px;
+    align-items: center;
+    margin: 0 10px;
+    gap: 10px;
+    & > *:first-child{
+        width: 100%;
+    }
+}

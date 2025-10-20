@@ -1,0 +1,1 @@
+poetry add ./external/whl_all/*.whl

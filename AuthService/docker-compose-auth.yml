@@ -1,0 +1,117 @@
+services:
+  sh_auth_db:
+    image: mariadb
+    restart: always
+    networks: 
+      - local_auth_network
+    ports:
+      - 3308:3306
+    volumes:
+      - bd_auth_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_AUTH_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_AUTH_DATABASE}
+      MYSQL_USER: ${MYSQL_AUTH_USER}
+      MYSQL_PASSWORD: ${MYSQL_AUTH_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth_service:
+    build: ${AUTH_SERVICE_DIR}/SmartHomeAuth
+    restart: always
+    networks: 
+      - local_auth_network
+    command: ["./command.sh"]
+    environment:
+      SMARTHOME_AUTH_BD_HOST: ${AUTH_BD_HOST}
+      SMARTHOME_AUTH_BD_PORT: ${AUTH_BD_PORT}
+      SMARTHOME_AUTH_BD_NAME: ${MYSQL_AUTH_DATABASE}
+      SMARTHOME_AUTH_BD_USER: ${MYSQL_AUTH_USER}
+      SMARTHOME_AUTH_BD_PASSWORD: ${MYSQL_AUTH_PASSWORD}
+      EMAIL_TOPIK: ${EMAIL_TOPIK}
+      EMAIL_QUEUE: ${EMAIL_QUEUE}
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
+    ports:
+      - 8004:8004
+    labels:
+      - "sh-core.auth"
+      - "traefik.enable=true"
+
+      # http (без TLS)
+      - "traefik.http.routers.auth_http.rule=PathPrefix(`/api-auth`)"
+      - "traefik.http.routers.auth_http.entrypoints=web"
+      - "traefik.http.routers.auth_http.service=auth"
+
+      # https (с TLS)
+      - "traefik.http.routers.auth_https.rule=PathPrefix(`/api-auth`)"
+      - "traefik.http.routers.auth_https.entrypoints=websecure"
+      - "traefik.http.routers.auth_https.tls=true"
+      - "traefik.http.routers.auth_https.service=auth"
+
+      # общий сервис
+      - "traefik.http.services.auth.loadbalancer.server.port=8004"
+
+      # middleware для обычной проверки
+      - "traefik.http.middlewares.auth.forwardauth.address=http://auth_service:8004/api-auth/check"
+      - "traefik.http.middlewares.auth.forwardauth.trustforwardheader=true"
+      - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=x-user-id,x-user-role,x-access-token,x-user-privilege"
+
+      # middleware для iframe-сервисов
+      - "traefik.http.middlewares.moduleauth.forwardauth.address=http://auth_service:8004/api-auth/module-service/check"
+      - "traefik.http.middlewares.moduleauth.forwardauth.trustforwardheader=true"
+      - "traefik.http.middlewares.moduleauth.forwardauth.authrequestheaders=Cookie,X-Original-Uri"
+      - "traefik.http.middlewares.moduleauth.forwardauth.authResponseHeaders=x-user-id,x-user-role,x-access-token,x-user-privilege"
+    volumes:
+      - ${AUTH_SERVICE_DIR}/SmartHomeAuth:/home/auth_service/web
+      - ${CONFIGURATE_DIR}:/home/auth_service/web/config_services
+      - media_voluem:/home/auth_service/web/media
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sh_auth_db:
+        condition: service_healthy
+
+  client_auth:
+    container_name: client_auth
+    networks: 
+      - local_auth_network
+    build:
+      context: ${AUTH_SERVICE_DIR}/auth-service-frontend          # путь к вашему фронтенду (папка с package.json, vite.config.js)
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - client_auth_voluem:/home/frontend/web
+    labels:
+      - "sh-core.auth"
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.client_auth_strip.stripprefix.prefixes=/auth-service"
+      # http (без TLS)
+      - "traefik.http.routers.client_auth_http.rule=PathPrefix(`/auth-service`)"
+      - "traefik.http.routers.client_auth_http.entrypoints=web"
+      - "traefik.http.routers.client_auth_http.service=client_auth"
+      - "traefik.http.routers.client_auth_http.middlewares=client_auth_strip"
+      # https (с TLS)
+      - "traefik.http.routers.client_auth_https.rule=PathPrefix(`/auth-service`)"
+      - "traefik.http.routers.client_auth_https.entrypoints=websecure"
+      - "traefik.http.routers.client_auth_https.tls=true"
+      - "traefik.http.routers.client_auth_https.service=client_auth"
+      - "traefik.http.routers.client_auth_https.middlewares=client_auth_strip"
+      # общий сервис
+      - "traefik.http.services.client_auth.loadbalancer.server.port=80"
+    depends_on:
+      auth_service:
+        condition: service_started
+
+volumes:
+  media_voluem:
+  client_auth_voluem:
+  bd_auth_data:
+
+networks:
+  local_auth_network:
+    name: ${NETWORK_NAME}
+    external: true

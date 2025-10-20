@@ -1,6 +1,6 @@
 from logging.config import fileConfig
-from SmartHome.settings import DB_URL
-import SmartHome.models
+from app.configuration.settings import DB_URL
+import app.pkg.ormar.models
 
 from sqlalchemy import create_engine
 from sqlalchemy import engine_from_config
@@ -18,7 +18,7 @@ fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from SmartHome.dbormar import metadata
+from app.pkg.ormar.dbormar import metadata
 target_metadata = metadata
 # target_metadata = None
 

@@ -1,0 +1,23 @@
+
+.detail-page{
+
+    .header-container{
+        .image-container{
+            .lamp-image{
+                position: absolute;
+                right: 0;
+                z-index: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                top: -5px
+            }
+        }
+    }
+
+    .range-light-container{
+        margin-block: 0;
+        margin-inline: 10px;
+        box-shadow: var(--shadow-elevation-8);
+        border-radius: 20px;
+    }
+}

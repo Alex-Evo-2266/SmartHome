@@ -1,0 +1,26 @@
+.device-card{
+    min-width: 300px;
+    .device-card-system-name{
+        display: block;
+        color: var(--On-surface-variant-color);
+    }
+    .device-card-class{
+        color: var(--Tertiary-color);
+    }
+    .block{
+        display: block;
+    }
+    .device-card-status-container{
+        display: flex;
+        justify-content: center;
+        margin: 10px;
+        .device-card-status{
+            padding: 5px;
+            min-width: 80px;
+            text-align: center;
+            font-weight: 900;
+            font-size: 18px;
+            border-radius: 10px;
+        }
+    }
+}

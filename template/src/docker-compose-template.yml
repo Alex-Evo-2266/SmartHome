@@ -1,0 +1,37 @@
+services:
+  __MODULE_NAME__:
+    container_name: __MODULE_NAME__
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        CONTAINER_NAME: __MODULE_NAME__
+        PORT: 3000
+        NEXT_BASE_PATH: "/modules/__MODULE_NAME__"
+    command: sh -c "cp -r /app/config_local/* /app/config && npm run start"
+    restart: always
+    networks: 
+      - local_sh_network
+    environment:
+      CONTAINER_NAME: __MODULE_NAME__
+      PORT: 3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.__MODULE_NAME___http.rule=PathPrefix(`/modules/__MODULE_NAME__`)"
+      - "traefik.http.routers.__MODULE_NAME___http.entrypoints=web"
+      - "traefik.http.routers.__MODULE_NAME___http.middlewares=moduleauth@docker,module-__MODULE_NAME__-strip"
+      - "traefik.http.routers.__MODULE_NAME___http.service=__MODULE_NAME__"
+      - "traefik.http.routers.__MODULE_NAME___https.rule=PathPrefix(`/modules/__MODULE_NAME__`)"
+      - "traefik.http.routers.__MODULE_NAME___https.entrypoints=websecure"
+      - "traefik.http.routers.__MODULE_NAME___https.middlewares=moduleauth@docker,module-__MODULE_NAME__-strip"
+      - "traefik.http.routers.__MODULE_NAME___https.tls=true"
+      - "traefik.http.routers.__MODULE_NAME___https.service=__MODULE_NAME__"
+      - "traefik.http.services.__MODULE_NAME__.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.module-__MODULE_NAME__-strip.stripprefixregex.regex=^/modules/__MODULE_NAME__"
+    volumes:
+      - ${CONFIGURATE_DIR}/__MODULE_NAME__:/app/config
+
+networks:
+  local_sh_network:
+    name: ${NETWORK_NAME}
+    external: true

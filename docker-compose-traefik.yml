@@ -1,0 +1,355 @@
+services:
+  traefik:
+    image: traefik:v3.0
+    restart: always
+    labels:
+      - "sh-core.core"
+    networks: 
+      - local_sh_network
+    command:
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --api.dashboard=true
+      - --log.level=INFO
+      - --api.insecure=true   # включить Dashboard без авторизации (только для локалки)
+      - --entrypoints.websecure.address=:443
+    ports:
+      - "1337:80"
+      - "1338:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro
+      - ./certs:/certs:ro
+
+  sh_db:
+    image: mariadb
+    restart: always
+    networks: 
+      - local_sh_network
+    ports:
+      - 3307:3306
+    volumes:
+      - bd_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  sh_db_script:
+    image: mariadb
+    restart: always
+    networks: 
+      - local_sh_network
+    ports:
+      - 3309:3306
+    volumes:
+      - bd_data_script:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_SCRIPT_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_SCRIPT_DATABASE}
+      MYSQL_USER: ${MYSQL_SCRIPT_USER}
+      MYSQL_PASSWORD: ${MYSQL_SCRIPT_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  sh_page_db:
+    image: mariadb
+    restart: always
+    networks: 
+      - local_sh_network
+    ports:
+      - 3310:3306
+    volumes:
+      - bd_page_data2:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PAGE_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_PAGE_DATABASE}
+      MYSQL_USER: ${MYSQL_PAGE_USER}
+      MYSQL_PASSWORD: ${MYSQL_PAGE_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/3306 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  email_service:
+    build: ./EmailService
+    restart: always
+    networks: 
+      - local_sh_network
+    command: bash -c "uvicorn app:create_app --reload --port=8005 --host='0.0.0.0'"
+    environment:
+      EMAIL_TOPIK: ${EMAIL_TOPIK}
+      EMAIL_QUEUE: ${EMAIL_QUEUE}
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
+    labels:
+      - "sh-core.core"
+      - "traefik.enable=true"
+      # http (без TLS)
+      - "traefik.http.routers.email_http.rule=PathPrefix(`/api-email`)"
+      - "traefik.http.routers.email_http.entrypoints=web"
+      - "traefik.http.routers.email_http.service=email"
+      - "traefik.http.routers.email_http.middlewares=auth@docker"
+      # https (с TLS)
+      - "traefik.http.routers.email_https.rule=PathPrefix(`/api-email`)"
+      - "traefik.http.routers.email_https.entrypoints=websecure"
+      - "traefik.http.routers.email_https.tls=true"
+      - "traefik.http.routers.email_https.service=email"
+      - "traefik.http.routers.email_https.middlewares=auth@docker"
+      # общий сервис
+      - "traefik.http.services.email.loadbalancer.server.port=8005"
+    volumes:
+      - ./EmailService:/home/email_service/web
+      - media_voluem:/home/email_service/web/media
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  device_service:
+    build: ./SmartHome
+    restart: always
+    networks: 
+      - local_sh_network
+    command: bash -c "uvicorn app:create_app --reload --port=8006 --host='0.0.0.0'"
+    ports:
+      - 1235:8006
+    environment:
+      EMAIL_TOPIK: ${EMAIL_TOPIK}
+      EMAIL_QUEUE: ${EMAIL_QUEUE}
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
+      DATA_SCRIPT: ${DATA_SCRIPT}
+      SMARTHOME_BD_HOST: ${SMARTHOME_BD_HOST}
+      SMARTHOME_BD_PORT: ${SMARTHOME_BD_PORT}
+      SMARTHOME_BD_NAME: ${MYSQL_DATABASE}
+      SMARTHOME_BD_USER: ${MYSQL_USER}
+      SMARTHOME_BD_PASSWORD: ${MYSQL_PASSWORD}
+      DATA_TOPIC: ${DATA_TOPIC}
+      DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
+      DATA_QUEUE: ${DATA_QUEUE}
+      DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
+      EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+      EXCHANGE_SERVICE_DATA: ${EXCHANGE_SERVICE_DATA}
+      EXCHANGE_ROOM_DATA: ${EXCHANGE_ROOM_DATA}
+      DEVICE_VALUE_SEND: ${DEVICE_VALUE_SEND}
+    labels:
+      - "sh-core.core"
+      - "traefik.enable=true"
+      # http (без TLS)
+      - "traefik.http.routers.device_http.rule=PathPrefix(`/api-devices`)"
+      - "traefik.http.routers.device_http.entrypoints=web"
+      - "traefik.http.routers.device_http.service=device"
+      - "traefik.http.routers.device_http.middlewares=auth@docker"
+      # https (с TLS)
+      - "traefik.http.routers.device_https.rule=PathPrefix(`/api-devices`)"
+      - "traefik.http.routers.device_https.entrypoints=websecure"
+      - "traefik.http.routers.device_https.tls=true"
+      - "traefik.http.routers.device_https.service=device"
+      - "traefik.http.routers.device_https.middlewares=auth@docker"
+      # websocket
+      - "traefik.http.routers.device_ws.rule=PathPrefix(`/ws/base`)"
+      - "traefik.http.routers.device_ws.service=device_ws"
+      - "traefik.http.services.device_ws.loadbalancer.server.port=8006"
+      - "traefik.http.routers.device_ws.entrypoints=web"
+      # общий сервис
+      - "traefik.http.services.device.loadbalancer.server.port=8006"
+    volumes:
+      - ./SmartHome:/home/device_service/web
+      # - media_device_voluem:/home/device_service/web/media
+      - ./SmartHome/media:/home/device_service/web/media
+      - ./modules_core:/home/device_service/web/app/moduls/moduls
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sh_db:
+        condition: service_healthy
+
+  page_service:
+    build: ./PagesServices
+    restart: always
+    command: bash -c "uvicorn app:create_app --reload --port=8007 --host='0.0.0.0'"
+    networks: 
+      - local_sh_network
+    ports:
+      - 1236:8007
+    environment:
+      EMAIL_TOPIK: ${EMAIL_TOPIK}
+      EMAIL_QUEUE: ${EMAIL_QUEUE}
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
+      DATA_TOPIC: ${DATA_TOPIC}
+      DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
+      DATA_QUEUE: ${DATA_QUEUE}
+      DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
+      EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+      SMARTHOME_PAGE_BD_HOST: ${SMARTHOME_PAGE_BD_HOST}
+      SMARTHOME_PAGE_BD_PORT: ${SMARTHOME_PAGE_BD_PORT}
+      SMARTHOME_PAGE_BD_NAME: ${MYSQL_PAGE_DATABASE}
+      SMARTHOME_PAGE_BD_USER: ${MYSQL_PAGE_USER}
+      SMARTHOME_PAGE_BD_PASSWORD: ${MYSQL_PAGE_PASSWORD}
+      PREFIX_PATH: modules
+    labels:
+      - "sh-core.core"
+      - "traefik.enable=true"
+      # http (без TLS)
+      - "traefik.http.routers.page_http.rule=PathPrefix(`/api-pages`)"
+      - "traefik.http.routers.page_http.entrypoints=web"
+      - "traefik.http.routers.page_http.service=page"
+      - "traefik.http.routers.page_http.middlewares=auth@docker"
+      # https (с TLS)
+      - "traefik.http.routers.page_https.rule=PathPrefix(`/api-pages`)"
+      - "traefik.http.routers.page_https.entrypoints=websecure"
+      - "traefik.http.routers.page_https.tls=true"
+      - "traefik.http.routers.page_https.service=page"
+      - "traefik.http.routers.page_https.middlewares=auth@docker"
+      # общий сервис
+      - "traefik.http.services.page.loadbalancer.server.port=8007"
+    volumes:
+      - ${CONFIGURATE_DIR}/page_service:/home/device_service/web/config
+      - ${CONFIGURATE_DIR}:/home/device_service/web/config_services
+      - ./PagesServices:/home/device_service/web
+      - media_page_voluem:/home/device_service/web/media
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sh_page_db:
+        condition: service_healthy
+
+  script_service:
+    build: ./ScriptServices
+    restart: always
+    command: bash -c "uvicorn app:create_app --reload --port=8008 --host='0.0.0.0'"
+    networks: 
+      - local_sh_network
+    environment:
+      RABITMQ_HOST: ${RABITMQ_HOST}
+      RABITMQ_PORT: ${RABITMQ_PORT}
+      DATA_DEVICE_QUEUE: ${DATA_DEVICE_QUEUE}
+      DEVICE_VALUE_SEND: ${DEVICE_VALUE_SEND}
+      DATA_SCRIPT: ${DATA_SCRIPT}
+      SMARTHOME_SCRIPT_BD_HOST: ${SMARTHOME_SCRIPT_BD_HOST}
+      SMARTHOME_SCRIPT_BD_PORT: ${SMARTHOME_SCRIPT_BD_PORT}
+      SMARTHOME_SCRIPT_BD_NAME: ${MYSQL_SCRIPT_DATABASE}
+      SMARTHOME_SCRIPT_BD_USER: ${MYSQL_SCRIPT_USER}
+      SMARTHOME_SCRIPT_BD_PASSWORD: ${MYSQL_SCRIPT_PASSWORD}
+      EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+      EXCHANGE_ROOM_DATA: ${EXCHANGE_ROOM_DATA}
+    labels:
+      - "sh-core.core"
+      - "traefik.enable=true"
+      # http (без TLS)
+      - "traefik.http.routers.script_http.rule=PathPrefix(`/api-scripts`)"
+      - "traefik.http.routers.script_http.entrypoints=web"
+      - "traefik.http.routers.script_http.service=script"
+      - "traefik.http.routers.script_http.middlewares=auth@docker"
+      # https (с TLS)
+      - "traefik.http.routers.script_https.rule=PathPrefix(`/api-scripts`)"
+      - "traefik.http.routers.script_https.entrypoints=websecure"
+      - "traefik.http.routers.script_https.tls=true"
+      - "traefik.http.routers.script_https.service=script"
+      - "traefik.http.routers.script_https.middlewares=auth@docker"
+      # общий сервис
+      - "traefik.http.services.script.loadbalancer.server.port=8008"
+      - "traefik.http.routers.script.middlewares=auth@docker"
+    volumes:
+      - ./ScriptServices:/home/script_service/web
+    depends_on:
+      sh_db_script:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    networks: 
+      - local_sh_network
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 15s
+      timeout: 15s
+      retries: 3
+    ports:
+      - ${RABITMQ_OUT_PORT}:15672
+      - ${RABITMQ_PORT}:${RABITMQ_PORT}
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    networks: 
+      - local_sh_network
+    ports:
+      - 8088:80
+    environment:
+      - PMA_ARBITRARY=1
+
+  mosquitto:
+    container_name: mosquitto
+    build:
+      context: ./mosquitto
+      dockerfile: Dockerfile
+      args:
+        MOSQUITTO_USER: ${MOSQUITTO_USER}
+        MOSQUITTO_PASSWD: ${MOSQUITTO_PASSWD}
+    restart: always
+    networks: 
+      - local_sh_network
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - 1884:1883
+    labels:
+      - "sh-core.core"
+    environment:
+      MQTT_BROKER_URL: mqtt://mosquitto
+
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt
+    networks: 
+      - local_sh_network
+    restart: unless-stopped
+    volumes:
+      - ./Configurate/zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    ports:
+      - 8081:8080
+    environment:
+      - TZ=Europe/Moscow
+    privileged: true
+    depends_on:
+      mosquitto:
+        condition: service_started
+
+networks:
+  local_sh_network:
+    name: ${NETWORK_NAME}
+    external: true
+
+volumes:
+  media_voluem:
+  media_device_voluem:
+  client_voluem:
+  client_auth_voluem:
+  bd_auth_data:
+  bd_page_data2:
+  bd_data:
+  media_page_voluem:
+  bd_data_script:

@@ -1,53 +1,70 @@
-FROM python:3.8.0
 
-ENV PYTHONDONTRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+FROM python:3.12
 
-RUN apt-get update
-RUN apt-get upgrade -y
+# Установим переменные окружения
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    POETRY_VERSION=1.8.3 \
+    POETRY_HOME="/opt/poetry" \
+    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_CACHE_DIR="/var/cache/pypoetry"
 
-RUN mkdir -p /home/smart_home
+# Обновляем систему и устанавливаем необходимые пакеты
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y curl
 
-RUN groupadd smart_home
-RUN useradd -m -g smart_home smart_home -p PASSWORD
-RUN usermod -aG smart_home smart_home
+# Создаем пользователя и группу device_service
+RUN groupadd -r device_service && \
+    useradd -m -g device_service -r device_service && \
+    usermod -aG device_service device_service
 
-ENV POETRY_VERSION=1.0.0
+# Устанавливаем Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry
 
-ENV HOME=/home/smart_home
-ENV APP_HOME=/home/smart_home/web
+# Проверяем версию Python перед установкой зависимостей
+RUN python3 --version  # Должно вывести 3.12.x
 
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
+# Удаляем Python 3.11, так как он не нужен
+RUN apt-get remove -y python3.11 python3.11-minimal || echo "Python 3.11 не найден"
 
-RUN apt-get update \
-    && apt-get install -y netcat
+# Проверяем, что Python 3.12 стал активным
+RUN python3 --version  # Должно вывести 3.12.x
 
-RUN pip3 install --upgrade pip
+# Создаём рабочие директории
+RUN mkdir -p /home/device_service/web
+WORKDIR /home/device_service/web
+RUN mkdir -p /home/device_service/web/shared_lib
 
-RUN set -x && apt-get -qq update \
-    && apt-get install -y --no-install-recommends \
-    libpq-dev python3-dev git \
-    && apt-get purge -y --auto-remove\
-    && rm -rf /var/lib/apt/lists/*
+# Удаляем старую директорию .venv, если она есть
+# RUN rm -rf /home/device_service/web/.venv
 
-# RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
-#     cd /usr/local/bin && \
-#     ln -s /opt/poetry/bin/poetry && \
-#     poetry config virtualenvs.create false
+# Даем права на директорию .venv перед установкой зависимостей
+# RUN mkdir -p /home/device_service/web/.venv && chown -R device_service:device_service /home/device_service/web/.venv
 
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
-    poetry config virtualenvs.create false
+# Копируем файлы poetry.lock и pyproject.toml
+COPY poetry.lock pyproject.toml ./
+COPY ./external/whl_all ./shared_lib
 
-COPY poetry.lock $APP_HOME/
-COPY pyproject.toml $APP_HOME/
+# Очистка кэша Poetry
+RUN poetry cache clear pypi --all
 
-RUN poetry config virtualenvs.create false \
-  && poetry install $(test "$YOUR_ENV" == production && echo "--no-dev") --no-interaction --no-ansi
+# Устанавливаем зависимости
+RUN poetry install --no-interaction --no-ansi $(echo "--no-dev")
+RUN poetry add ./shared_lib/*.whl
 
-COPY . $APP_HOME
+# Проверяем, что Poetry использует правильный Python
+RUN poetry run python --version  # Должно вывести 3.12.x
 
-RUN mkdir media
-RUN chmod 777 media/
+# Копируем весь проект
+COPY . .
+
+# Создаём директорию media и устанавливаем права
+RUN mkdir -p media && chmod 755 media
+
+# Запускаем контейнер от имени пользователя device_service
+# USER device_service
+
+# Указываем рабочую директорию
+WORKDIR /home/device_service/web

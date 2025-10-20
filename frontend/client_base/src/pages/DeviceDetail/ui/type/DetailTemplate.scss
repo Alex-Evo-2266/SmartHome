@@ -1,0 +1,108 @@
+.base-bulb-panel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.detail-page{
+    position: relative;
+    display: flex;
+    min-height: calc(100vh - 10px);
+    gap: 5px;
+
+    &--min{
+        height: calc(100vh - 10px - 80px);
+    }
+    .detail-content{
+        position: relative;
+        flex: 100%;
+    }
+    .mobile-content{
+        border-radius: var(--card-border-radius);
+        position: relative;
+        overflow: hidden;
+        width: 350px;
+        max-width: 350px;
+        height: 100%;
+        &::before{
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--Surface-container-color);
+            z-index: -1;
+            top: 0;
+            left: 0;
+            opacity: 0.9;
+        }
+        .color-container{
+            padding: 0 10px;
+        }
+    }
+    .detail-name{
+        text-align: center;
+        width: 100%;
+        display: block;
+    }
+    .detail-back{
+        position: absolute;
+        top: 5px;
+        left: 5px;
+    }
+    .select-bulb{
+        position: absolute;
+        width: 100px;
+        top: 0;
+        right: 5px;
+        margin-block: 5px;
+        opacity: 0.8;
+        z-index: 10;
+    }
+    .header-container{
+        height: 250px;
+        width: 100%;
+        .image-container{
+            position: relative;
+            display: block;
+        }
+    }
+    .main-control{
+        .range-light-container{
+            margin: 5px;
+        }
+    }
+}
+
+
+@media (max-width: 1300px) {
+    .detail-page{
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        .detail-content{
+            flex: auto;
+            width: 350px;
+            max-width: 350px;
+            height: auto;
+        }
+        .detail-content:nth-child(2){
+            order: 0;
+        }
+        .detail-content:nth-child(1){
+            order: 1;
+        }
+        .detail-content:nth-child(3){
+            order: 2;
+        }
+    }
+}
+
+@media (max-width: 370px) {
+    .light-detail-page{
+        width: 100%;
+        padding: 0;
+        .detail-content{
+            width: 100%;
+            border-radius: 0%;
+        }   
+    }
+}

@@ -1,0 +1,43 @@
+import logging, asyncio
+from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
+from app.ingternal.device.serialize_model.value_set import save_values
+from app.configuration.loop.loop import loop
+from app.configuration.settings import DEVICE_DATA_POLL, SAVE_DEVICE_CONF, LOOP_SAVE_DEVICE
+from app.pkg import __config__
+
+from app.ingternal.logs import get_device_save
+
+# Настройка логирования
+logger = get_device_save.get_logger(__name__)
+
+async def save_devices():
+	"""
+	Функция сохранения данных устройств.
+	"""
+	try:
+		# Получение списка зарегистрированных устройств
+		device_list: ObservableDict | None = servicesDataPoll.get(DEVICE_DATA_POLL)
+		if not device_list:
+			logger.warning("Invalid key: DEVICE_DATA_POLL not found in servicesDataPoll.")
+			return
+
+		schemas = device_list.get_all_data()
+
+		logger.info(f"Found {len(schemas)} devices to save.")
+		await save_values(schemas)
+		# for schema in schemas:
+		# 	logger.info(f"try seve {schema}")
+		# 	await save_device(schema)
+	finally:
+		pass
+		# asyncio.current_task().cancel()
+	
+async def restart_save_data():
+	save_device_conf = __config__.get(SAVE_DEVICE_CONF)
+
+	if save_device_conf and save_device_conf.value and save_device_conf.value != '':
+		loop.register(LOOP_SAVE_DEVICE, save_devices, int(save_device_conf.value))
+		logger.info(f"Device saving loop registered with frequency: {save_device_conf.value}")
+	else:
+		loop.register(LOOP_SAVE_DEVICE, save_devices, 6)
+		logger.warning("SAVE_DEVICE_CONF not found in config, skipping device save loop registration.")

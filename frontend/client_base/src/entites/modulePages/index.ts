@@ -1,0 +1,1 @@
+export {useModulePageAPI} from './hooks/getPage'

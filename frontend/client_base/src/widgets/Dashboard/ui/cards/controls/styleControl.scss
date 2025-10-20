@@ -1,0 +1,61 @@
+.dashboard-card{
+    .dashboard-card-title{
+        height: 30px;
+    }
+}
+
+.dashboard-control-template{
+    display: flex;
+    flex-direction: column;
+    .dashboard-control-template-title{
+        height: 20px;
+        text-align: center;
+    }
+    .dashboard-control-template-content{
+        flex: calc(100% - 20px);
+        display: flex;
+        justify-content: center;
+    }
+}
+.dashboard-control-bool-1-val-container{
+    background-color: var(--Primary-container-color);
+    color: var(--On-primary-container-color);
+    width: 100%;
+    cursor: pointer;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    &.action{
+        color: var(--On-primary-color);
+        background-color: var(--Primary-color);
+    }
+    &.disabled{
+        background-color: var(--Outline-color);
+    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard-control-number-value{
+    border-radius: 25px;
+    background-color: var(--Primary-container-color);
+    width: calc(100% - 20px);
+    height: 40px;
+    color: var(--On-primary-container-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.readonly{
+        border: 1px solid var(--Primary-color);
+    }
+    &.undefined-control{
+        background-color: var(--Error-container-color);
+        border: 1px solid var(--Error-color);
+        color: var(--On-error-container-color);
+    }
+}
+.dashboard-control-number-value-range{
+    width: calc(100% - 20px);
+}
+

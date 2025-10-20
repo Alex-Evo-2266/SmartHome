@@ -1,0 +1,38 @@
+.room-card{
+    width: 100%;
+    margin: 5px;
+    text-align: center;
+}
+
+.rooms-header-panel{
+    text-align: center;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.room-page-device-list{
+    & > *{
+        margin-bottom: 5px;
+    }
+}
+
+.room-card-bool-indicator-container{
+    display: flex;
+    justify-content: center;
+    margin-block: 10px;
+    .room-card-bool-indicator{
+        cursor: pointer;
+        border: 1px solid var(--Outline-color);
+        border-radius: 10px;
+        max-width: 180px;
+        width: 100%;
+        line-height: 30px;
+        background-color: var(--Primary-container-color);
+        color: var(--On-primary-container-color);
+        &.active{
+            background-color: var(--Primary-color);
+            color: var(--On-primary-color);
+        }
+    }
+}
