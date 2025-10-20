@@ -73,3 +73,8 @@ service_config.yml
 certs
 
 dep_containres.txt
+
+/old_modules/*
+
+/modules_core/*
+!/modules_core/Virtual_devices

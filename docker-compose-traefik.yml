@@ -168,7 +168,8 @@ services:
       - "traefik.http.services.device.loadbalancer.server.port=8006"
     volumes:
       - ./SmartHome:/home/device_service/web
-      - media_device_voluem:/home/device_service/web/media
+      # - media_device_voluem:/home/device_service/web/media
+      - ./SmartHome/media:/home/device_service/web/media
       - ./modules_core:/home/device_service/web/app/moduls/moduls
     depends_on:
       rabbitmq:

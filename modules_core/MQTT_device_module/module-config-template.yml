@@ -1,4 +1,0 @@
-name: __MODULE_NAME__
-name_module: MQTT_device_module
-multiply: false
-type: core

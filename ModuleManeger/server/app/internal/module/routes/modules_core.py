@@ -4,6 +4,7 @@ from typing import Optional, List, Dict
 from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, CORE_MODULES_DIR, GIT_HUB_TOKEN
 from app.internal.module.search_modules import get_all_modules
 from app.internal.module.status import get_module_containers_status
+from app.internal.module.install_module_core import clone_module
 from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, ModulesLoadData, AllModulesResData
 
 from fastapi import APIRouter, Depends
@@ -80,7 +81,7 @@ router = APIRouter(
 
 	
 @router.get("/all", response_model=AllModulesResData)
-async def get_role(no_cash: bool = False):
+async def get_all_modules_url(no_cash: bool = False):
 	try:
 		files: Dict[str, ModulesConfAndLoad]  = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_CORE)
 		data = load_module_configs(CORE_MODULES_DIR)
@@ -103,7 +104,7 @@ async def get_role(no_cash: bool = False):
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/data/{name_module}", response_model=ModulesConfAndLoad)
-async def get_role(name_module:str, no_cash: bool = False):
+async def get_module(name_module:str, no_cash: bool = False):
 	try:
 		files = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_CORE)
 		find_module = next((item for item in files.values() if item.name_module == name_module), None)
@@ -124,12 +125,12 @@ async def get_role(name_module:str, no_cash: bool = False):
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 	
-# @router.get("/install")
-# async def get_role(name: str):
-# 	try:
-# 		pass
-# 	except Exception as e:
-# 		return JSONResponse(status_code=400, content=str(e))
+@router.get("/install")
+async def install_module(name: str):
+	try:
+		clone_module(name, GIT_HUB_TOKEN, CORE_MODULES_DIR, TYPE_CORE)
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
 
 # @router.delete("/{name}")
 # async def get_role(name: str):
