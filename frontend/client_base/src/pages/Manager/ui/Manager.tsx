@@ -69,7 +69,7 @@ export const ManagerPage = () => {
 
     return (
         <div className="manager-page">
-            <ManagerContext.Provider value={{dockerModules:allModules, coreModuler:allCoreModules, core:allCore}}>
+            <ManagerContext.Provider value={{dockerModules:allModules, coreModuler:allCoreModules, core:allCore, reload: load}}>
                 <Panel>
                     <Tabs 
                         activeTabIndex={getIndex(subRoute)} 

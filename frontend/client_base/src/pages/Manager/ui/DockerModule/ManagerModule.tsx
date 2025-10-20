@@ -32,7 +32,6 @@ export const DockerModule:React.FC = () => {
 
     const click = (f: (...arg: string[])=>void, ...arg: string[]) => {
         return (e:React.MouseEvent<HTMLButtonElement>) => {
-            console.log("f90")
             e.stopPropagation()
             f(...arg)
             setTimeout(load, 100)

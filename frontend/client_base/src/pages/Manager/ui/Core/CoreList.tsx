@@ -22,7 +22,7 @@ export const CoreList:React.FC = () => {
                         <ListItem
                         header={data.name} 
                         text={data.container_id} 
-                        control={<IconButtonMenu icon={<MoreVertical/>} blocks={[{items:[{
+                        control={<IconButtonMenu icon={<MoreVertical/>} autoHide blocks={[{items:[{
                             title: "restart",
                             onClick: ()=>restart(data.container_id),
                         }]}]}/>}

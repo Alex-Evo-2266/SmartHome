@@ -4,6 +4,7 @@ from typing import Optional, List, Dict
 from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, CORE_MODULES_DIR, GIT_HUB_TOKEN
 from app.internal.module.search_modules import get_all_modules
 from app.internal.module.status import get_module_containers_status
+from app.internal.module.delete import remove_core_module
 from app.internal.module.install_module_core import clone_module
 from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, ModulesLoadData, AllModulesResData
 
@@ -132,10 +133,10 @@ async def install_module(name: str):
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
-# @router.delete("/{name}")
-# async def get_role(name: str):
-# 	try:
-# 		pass
-# 	except Exception as e:
-# 		return JSONResponse(status_code=400, content=str(e))
+@router.delete("/{name}")
+async def get_role(name: str):
+	try:
+		remove_core_module(name)
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
 
