@@ -69,3 +69,7 @@ RUN mkdir -p config_services/dashboards && chmod 755 config_services/dashboards
 
 # Указываем рабочую директорию
 WORKDIR /home/device_service/web
+
+COPY ./command.sh ./
+# RUN chown auth_service:auth_service command.sh
+RUN chmod +x command.sh

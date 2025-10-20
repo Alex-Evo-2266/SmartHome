@@ -18,10 +18,6 @@ export const useCoreAPI = () => {
     const restartModule = useCallback(async (id: string) => {
         await request(`/api-modules-manager/core/restart/${id}`)
     },[request])
-
-    // const rebuildModule = useCallback(async (name: string) => {
-    //     await request(`/api-modules-manager/core/rebuild?name=${name}`)
-    // },[request])
     
     useEffect(()=>{
             if (error)
@@ -34,6 +30,7 @@ export const useCoreAPI = () => {
     return{
         loading,
         getModulesAll,
-        restartModule
+        restartModule,
+        rebuildModule
     }
 }

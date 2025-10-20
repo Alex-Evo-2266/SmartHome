@@ -180,7 +180,8 @@ services:
   page_service:
     build: ./PagesServices
     restart: always
-    command: bash -c "uvicorn app:create_app --reload --port=8007 --host='0.0.0.0'"
+    # command: bash -c "uvicorn app:create_app --reload --port=8007 --host='0.0.0.0'"
+    command: ["./command.sh"]
     networks: 
       - local_sh_network
     ports:
