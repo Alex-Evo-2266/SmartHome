@@ -3,7 +3,7 @@ import json
 from typing import List, Dict
 from app.internal.module.schemas.modules import ContainerId
 
-def get_containers_by_label(label: str) -> List[Dict[str, str]]:
+def get_containers_by_label(labels: List[str]) -> List[Dict[str, str]]:
     """
     Возвращает список контейнеров, у которых есть заданный label.
     Формат: [{"name": str, "container_id": str}]
@@ -18,9 +18,12 @@ def get_containers_by_label(label: str) -> List[Dict[str, str]]:
         containers = []
         for line in result.stdout.strip().splitlines():
             info = json.loads(line)
-            labels = info.get("Labels") or ""
-            if label in labels:
-                containers.append(ContainerId(name=info.get("Names", ""), container_id=info.get("ID")))
+            container_labels = info.get("Labels") or ""
+            if any(label in container_labels for label in labels):
+                containers.append({
+                    "name": info.get("Names", ""),
+                    "container_id": info.get("ID", "")
+                })
         return containers
     except subprocess.CalledProcessError as e:
         print("Ошибка при выполнении docker команды:", e)

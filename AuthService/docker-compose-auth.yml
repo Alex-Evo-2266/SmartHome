@@ -24,7 +24,7 @@ services:
     restart: always
     networks: 
       - local_auth_network
-    command: bash -c "alembic upgrade head && uvicorn app:create_app --reload --port=8004 --host='0.0.0.0'"
+    command: ["./command.sh"]
     environment:
       SMARTHOME_AUTH_BD_HOST: ${AUTH_BD_HOST}
       SMARTHOME_AUTH_BD_PORT: ${AUTH_BD_PORT}
@@ -38,6 +38,7 @@ services:
     ports:
       - 8004:8004
     labels:
+      - "sh-core.auth"
       - "traefik.enable=true"
 
       # http (без TLS)
@@ -85,6 +86,7 @@ services:
     volumes:
       - client_auth_voluem:/home/frontend/web
     labels:
+      - "sh-core.auth"
       - "traefik.enable=true"
       - "traefik.http.middlewares.client_auth_strip.stripprefix.prefixes=/auth-service"
       # http (без TLS)

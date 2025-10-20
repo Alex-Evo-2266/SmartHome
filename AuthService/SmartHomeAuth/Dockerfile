@@ -35,3 +35,9 @@ RUN chmod 777 media/
 RUN groupadd auth_service
 RUN useradd -m -g auth_service auth_service -p PASSWORD
 RUN usermod -aG auth_service auth_service
+
+COPY ./command.sh ./
+RUN chown auth_service:auth_service command.sh
+RUN chmod +x command.sh
+
+USER auth_service

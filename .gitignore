@@ -71,3 +71,5 @@ service_config.yml
 
 /certs/*
 certs
+
+dep_containres.txt

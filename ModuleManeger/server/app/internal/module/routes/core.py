@@ -22,7 +22,7 @@ router = APIRouter(
 @router.get("/all", response_model=Containers)
 async def get_role(no_cash: bool = False):
 	try:
-		return Containers(data=get_containers_by_label("sh-core.core"))
+		return Containers(data=get_containers_by_label(["sh-core.core", "sh-core.auth"]))
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 	
