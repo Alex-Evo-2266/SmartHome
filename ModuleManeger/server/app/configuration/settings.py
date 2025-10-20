@@ -29,3 +29,4 @@ ROOT_APP_DIR = os.environ.get("ROOT_APP_DIR")
 COMPOSE_FILE_CORE_MODULE = os.path.join(ROOT_APP_DIR, "docker-compose-traefik.yml")
 CONFIGURATE_DIR = os.environ.get("CONFIGURATE_DIR")
 
+GIT_HUB_TOKEN = None
