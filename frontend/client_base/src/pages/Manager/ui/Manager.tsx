@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react"
 import { Loading } from "@src/shared/ui/Loading"
-import { ArrowLeft, Check, FAB, IconButton, ListContainer, ListItem, Panel, Plus, Tabs } from "alex-evo-sh-ui-kit"
+import { FAB, Panel, Plus, Tabs } from "alex-evo-sh-ui-kit"
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import './Manager.scss'
 import { useCoreAPI, useCoreModulesAPI, useModulesAPI } from "@src/entites/moduleManager";
-import { AllModulesData, CoreContainerId, ModuleData } from "@src/entites/moduleManager/modules/modules";
+import { CoreContainerId, ModuleData } from "@src/entites/moduleManager/modules/modules";
 import { ManagerContext } from "../lib/context";
 
 const TabsItems = [
@@ -35,9 +35,9 @@ export const ManagerPage = () => {
     const pathParts = location.pathname.split('/'); // разобьет путь на части
     const subRoute = pathParts[2];
 
-    const load = useCallback(async()=>{
-        const data = await getModulesAll()
-        const dataCoreModule = await getModulesCoreAll()
+    const load = useCallback(async(no_cash:boolean = false)=>{
+        const data = await getModulesAll(no_cash)
+        const dataCoreModule = await getModulesCoreAll(no_cash)
         const dataCore = await getCoreAll()
         if(data)
             setModules(data.data)
@@ -80,7 +80,7 @@ export const ManagerPage = () => {
                 </Panel>
             </ManagerContext.Provider>
             
-            <FAB icon={<Plus/>}/>
+            <FAB onClick={()=>load(true)} icon={<Plus primaryColor="var(--On-primary-container-color)"/>}>reload</FAB>
         </div>
     )
 }

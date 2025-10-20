@@ -14,6 +14,7 @@ import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/Preview"
 import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit"
 import { ManagerPage } from "@src/pages/Manager/ui/Manager"
 import { DockerModuleList, DockerExemplePage, DockerModule, CoreList } from "@src/pages/Manager"
+import { CoreModuleList } from "@src/pages/Manager/ui/ModuleCore/ModuleCoreList"
 
 interface RoutesComponentProps{
 	isAuthenticated:boolean, 
@@ -42,6 +43,7 @@ export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated,
 						<Route path="docker" element={<DockerModuleList/>}/>
 						<Route path="docker/:module_name" element={<DockerModule/>}/>
 						<Route path="docker/:module_name/:module_exempl" element={<DockerExemplePage/>}/>
+						<Route path="core-module" element={<CoreModuleList/>}/>
 						<Route path="core" element={<CoreList/>}/>
 						<Route path="*" element={<Navigate replace to="/manager/docker" />} />
 					</Route>

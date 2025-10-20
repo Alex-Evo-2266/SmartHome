@@ -9,8 +9,8 @@ export const useCoreModulesAPI = () => {
     const {request, loading, error, clearError} = useHttp()
     const {showSnackbar} = useSnackbar()
     
-    const getModulesAll = useCallback(async () => {
-        const data: AllModulesData = await request(`/api-modules-manager/modules-core/all`)
+    const getModulesAll = useCallback(async (no_cash:boolean =false) => {
+        const data: AllModulesData = await request(`/api-modules-manager/modules-core/all?no_cash=${no_cash}`)
         if(!data)
             return
         return data

@@ -142,7 +142,7 @@ def get_all_modules(
     Главная функция: собирает все module-config-template.yml из списка modules.json
     и приводит к Dict[str, ModulesConf]
     """
-    repos = load_modules_list(list_repo_url, token)
+    repos = load_modules_list(list_repo_url, token, no_cash)
     result: Dict[str, ModulesConfAndLoad] = {}
 
     for repo_url in repos:
