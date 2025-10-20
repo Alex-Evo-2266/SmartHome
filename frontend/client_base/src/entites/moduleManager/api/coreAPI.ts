@@ -30,7 +30,6 @@ export const useCoreAPI = () => {
     return{
         loading,
         getModulesAll,
-        restartModule,
-        rebuildModule
+        restartModule
     }
 }
