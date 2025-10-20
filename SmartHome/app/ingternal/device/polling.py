@@ -127,7 +127,7 @@ async def polling(device_data: DeviceSerializeSchema):
 		# Обработка данных для устройств с методом PULL / Handle data retrieval for devices with PULL method
 		if connection_device.get_type_get_data() == DeviceGetData.PULL:
 			logger.info(f"start load {device_data.system_name} data: {connection_device}")
-			connection_device.load()
+			await asyncio.to_thread(connection_device.load)
 			await connection_device.load_async()
 			logger.info(f"end load {device_data.system_name} data: {connection_device}")
 
