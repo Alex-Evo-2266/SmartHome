@@ -32,3 +32,23 @@ SmartHome/logs
 settings_local.py
 
 castom_moduls-*
+*/**/node_modules/
+*/**/dist/
+*/**/certs/
+/certs/
+dep_containres.txt
+/Configurate/
+/EmailService/config/service_config.yml
+*/**/.vite
+/MatterBridge/
+/MatterController
+/ModuleManeger/
+/modules/
+/old_modules/
+/PagesServices/
+/ScriptServices/
+/SettingsService/
+/shared_lib/
+/SmartHome/external/
+/SmartHome/config/service_config.yml
+/.vscode/
