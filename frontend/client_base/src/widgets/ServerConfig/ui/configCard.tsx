@@ -1,4 +1,4 @@
-import { BaseActionCard, BasicTemplateDialog, Button, Card, ContentBox, NumberField, TextField, Typography } from "alex-evo-sh-ui-kit";
+import { BaseActionCard, BasicTemplateDialog, Button, Card, ContentBox, MoreText, NumberField, TextField, Typography } from "alex-evo-sh-ui-kit";
 import React, { useCallback, useEffect, useState } from "react";
 import { useConfigAPI } from "../api/deviceServiceConfigAPI";
 import { ConfigItem, ConfigItemType } from "../models/config";
@@ -25,6 +25,16 @@ export const SettingsEditor = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, tag: string) => {
     const { name, value } = e.target;
+    setEditedSettings((prev) =>
+      prev.map((group) =>
+        group[0].tag === tag
+          ? group.map((item) => (item.key === name ? { ...item, value } : item))
+          : group
+      )
+    );
+  };
+
+  const handleMoreChange = (value:string, name: string, tag: string) => {
     setEditedSettings((prev) =>
       prev.map((group) =>
         group[0].tag === tag
@@ -116,7 +126,17 @@ export const SettingsEditor = () => {
                 name={item.key}
                 onChange={changePass}
               />
-            ) : (
+            ) : item.type === ConfigItemType.MORE_TEXT?
+            (
+              <MoreText 
+              value={item.value} 
+              border
+              key={`${item.tag}-${item.key}`}
+              name={item.key}
+              onChange={(data)=>handleMoreChange(data, item.key, item.tag)}
+              separator=","
+              placeholder={item.key}/>
+            ):(
               <TextField
                 border
                 placeholder={item.key}

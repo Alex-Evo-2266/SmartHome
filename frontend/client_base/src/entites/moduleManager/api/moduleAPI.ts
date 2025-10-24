@@ -46,6 +46,10 @@ export const useModulesAPI = () => {
     const deleteModule = useCallback(async (name: string) => {
         await request(`/api-modules-manager/modules/${name}`, TypeRequest.DELETE)
     },[request])
+
+    const rebuildModule = useCallback(async (name: string) => {
+        await request(`/api-modules-manager/modules/build?name=${name}`)
+    },[request])
     
     useEffect(()=>{
             if (error)
@@ -62,6 +66,7 @@ export const useModulesAPI = () => {
         installModule,
         runModule,
         stopModule,
-        deleteModule
+        deleteModule,
+        rebuildModule
     }
 }

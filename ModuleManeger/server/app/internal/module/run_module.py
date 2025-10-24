@@ -35,6 +35,7 @@ def update_env_var_to_local(key: str, value: str, env_file: str = ENV_FILE) -> s
 	return local_env_file
 
 def build_module_in_container(name: str, container: str | None = None):
+	remove_module_containers(name)
 	module_dir = os.path.join(MODULES_DIR, name)
 
 	compose_file = os.path.join(module_dir, "docker-compose.yml")
@@ -50,12 +51,16 @@ def build_module_in_container(name: str, container: str | None = None):
 		"build"
 	]
 
+	if container:
+		cmd.append(container)
+
 	env = os.environ.copy()
 	env["CONFIGURATE_DIR"] = CONFIGURATE_DIR
 
 	try:
 		subprocess.run(cmd, cwd=module_dir, check=True, env=env)
 		print(f"✅ Модуль {module_dir} запущен в контейнере")
+		run_module_in_container(name)
 	except subprocess.CalledProcessError as e:
 		print(f"❌ Ошибка запуска модуля {module_dir}: {e}")
 		raise

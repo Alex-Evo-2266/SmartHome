@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const DockerModule:React.FC = () => {
 
-    const {getModule, loading, installModule, runModule, deleteModule, stopModule} = useModulesAPI()
+    const {getModule, loading, installModule, runModule, deleteModule, stopModule, rebuildModule} = useModulesAPI()
     const [modules, setModules] = useState<ModuleData | null>(null)
     const { module_name } = useParams<{module_name: string}>();
     const navigate = useNavigate()
@@ -61,12 +61,17 @@ export const DockerModule:React.FC = () => {
             template(_, data) {
                 if(data.status === "true")
                     return(
-                        <Button onClick={click(stopModule, data.name as string)}>остановка</Button>
+                        <>
+                            <Button onClick={click(stopModule, data.name as string)}>остановка</Button>
+                            <Button onClick={click(rebuildModule, data.name as string)}>пересборка</Button>
+
+                        </>
                     )
                 return(
                     <>
                         <Button onClick={click(runModule, data.name as string)}>запуск</Button>
                         <Button onClick={click(deleteModule, data.name as string)}>удалить</Button>
+                        <Button onClick={click(rebuildModule, data.name as string)}>пересборка</Button>
                         {/* {
                             data.local &&
                             <Button onClick={click(deleteModule, data.name as string)}>создать docker compose</Button>

@@ -72,7 +72,6 @@ class ModulesArray:
         modules_name = get_modules(path, init=False)
         for module_name in modules_name:
             try:
-
                 # Импортируем модуль
                 logger.info(f"Попытка импорта модуля {module_name}: {name}.{module_name}")
                 module = importlib.import_module(f"{name}.{module_name}")
@@ -84,6 +83,8 @@ class ModulesArray:
                     logger.warning(f"В модуле {module_name} не найден атрибут 'Module'.")
             except ImportError as e:
                 logger.error(f"Ошибка при импорте модуля {module_name}: {e}")
+            except Exception as e:
+                logger.error(f"Ошибка при инициализации модуля {module_name}: {e}")
 
     @classmethod
     def install_dependencies(cls, name: str):

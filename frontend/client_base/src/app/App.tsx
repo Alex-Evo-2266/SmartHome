@@ -13,7 +13,6 @@ function App() {
   const {isAuthenticated, role} = useAppSelector(state=>state.auth)
   const {updateDevicedata} = useUpdateDeviceData()
   const {listenSocket, closeSocket} = useSocket([
-    {messageType: "device-send", callback: (data)=>console.log(data)},
     {messageType: "device-send", callback: updateDevicedata}
   ])
 

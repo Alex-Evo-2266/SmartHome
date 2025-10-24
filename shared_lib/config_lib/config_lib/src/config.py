@@ -76,7 +76,6 @@ class Config():
 
 	async def load(self):
 		data = readYMLFile(self.file)
-		print(data)
 		if not data:
 			return
 		for item in data:
