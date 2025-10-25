@@ -273,8 +273,6 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  
-
   rabbitmq:
     image: rabbitmq:3-management
     restart: always
@@ -320,24 +318,6 @@ services:
       - "sh-core.core"
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
-
-  # zigbee2mqtt:
-  #   container_name: zigbee2mqtt
-  #   image: ghcr.io/koenkk/zigbee2mqtt
-  #   networks: 
-  #     - local_sh_network
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./Configurate/zigbee2mqtt:/app/data
-  #     - /run/udev:/run/udev:ro
-  #   ports:
-  #     - 8081:8080
-  #   environment:
-  #     - TZ=Europe/Moscow
-  #   privileged: true
-  #   depends_on:
-  #     mosquitto:
-  #       condition: service_started
 
 networks:
   local_sh_network:
