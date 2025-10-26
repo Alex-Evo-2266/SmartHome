@@ -3,6 +3,7 @@ import shutil, json
 from app.configuration.settings import MODULES_DIR
 from app.internal.module.run_module import stop_module_in_container, remove_module_containers
 from app.internal.module.install_module import clone_module
+from app.internal.module.run_module import build_module_in_container
 
 def update_module(name: str, token: str | None = None, base_dir: str = MODULES_DIR):
     """
@@ -26,3 +27,4 @@ def update_module(name: str, token: str | None = None, base_dir: str = MODULES_D
 
     # 4️⃣ установка
     clone_module(name, token, base_dir)
+    build_module_in_container(name)

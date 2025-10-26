@@ -60,7 +60,6 @@ def build_module_in_container(name: str, container: str | None = None):
 	try:
 		subprocess.run(cmd, cwd=module_dir, check=True, env=env)
 		print(f"✅ Модуль {module_dir} запущен в контейнере")
-		run_module_in_container(name)
 	except subprocess.CalledProcessError as e:
 		print(f"❌ Ошибка запуска модуля {module_dir}: {e}")
 		raise

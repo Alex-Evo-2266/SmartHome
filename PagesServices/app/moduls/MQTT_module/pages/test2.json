@@ -1,1 +1,0 @@
-{"name":"test2","url":"test2","page":{"type":"LIST","name":"button","value":[{"type":"PANEL","name":"button","value":{"type":"TEXT","value":"Topics","name":"text_fiald","option":{"fontSize":32,"pozition":"center"}}},{"type":"LIST","name":"button","value":[],"src":"SERVER_GENERATE","option":{},"src_key":"03e6bac2-1ef8-4299-993a-dd390df24aa0"}],"src":"MANUAL"}}

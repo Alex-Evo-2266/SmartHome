@@ -50,6 +50,10 @@ export const useModulesAPI = () => {
     const rebuildModule = useCallback(async (name: string) => {
         await request(`/api-modules-manager/modules/build?name=${name}`)
     },[request])
+
+    const updateModule = useCallback(async (name: string) => {
+        await request(`/api-modules-manager/modules/update?name=${name}`)
+    },[request])
     
     useEffect(()=>{
             if (error)
@@ -67,6 +71,7 @@ export const useModulesAPI = () => {
         runModule,
         stopModule,
         deleteModule,
-        rebuildModule
+        rebuildModule,
+        updateModule
     }
 }

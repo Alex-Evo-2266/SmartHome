@@ -199,12 +199,14 @@ async def generate_conf_module(name: str):
 @router.get("/build")
 async def build_module(name: str, container_name: Optional[str] = None):
 	try:
-		return build_module_in_container(name, container_name)
+		build_module_in_container(name, container_name)
+		run_module_in_container(name)
+		return
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/update")
-async def update_module(name: str):
+async def update_module_api(name: str):
 	try:
 		return update_module(name, GIT_HUB_TOKEN)
 	except Exception as e:
