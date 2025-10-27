@@ -1,16 +1,15 @@
-import { Card, Divider, RunningLine, SizeContext, Switch, Typography } from 'alex-evo-sh-ui-kit'
+import { useGetBinaryField, useGetNumberField } from '@src/features/Device';
+import { Card, Divider, RunningLine, ScreenSize, SizeContext, Switch } from 'alex-evo-sh-ui-kit'
+import { useCallback, useContext } from 'react'
+import { useNavigate } from 'react-router-dom';
+
 import { DeviceCardProps } from '../../models/props'
 import './Light.scss'
-import { Bulb } from '../../../../shared'
-import { getData } from '../../../../features/Device/helpers/fieldUtils'
-import { useGetBinaryField, useGetNumberField } from '../../../../features/Device/hooks/getField.hook'
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useContext } from 'react'
 import { cardSizeStyle } from '../../models/sizeDeviceCard'
 
 export const DeviceTemplateCard:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()
-    const {screen} = useContext(SizeContext)
+    const {screen} = useContext<{screen: ScreenSize}>(SizeContext)
     
     const {field: power, fieldValue: powerValue, changeField: changePower} = useGetBinaryField(device, "power")
     const {fieldValue: brightnessValue} = useGetNumberField(device, "brightness")
@@ -18,7 +17,7 @@ export const DeviceTemplateCard:React.FC<DeviceCardProps> = ({device}) => {
 
     const openDitail = useCallback(()=>{
         navigate(`/device/${device.system_name}`)
-    },[device.system_name])
+    },[device.system_name, navigate])
 
     return(
         <Card className='card-device' rootApp='#root' onClick={openDitail} style={cardSizeStyle(screen)}>

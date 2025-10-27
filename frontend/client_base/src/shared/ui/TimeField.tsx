@@ -1,5 +1,6 @@
-import { MODAL_ROOT_ID } from '../../const'
 import {TimeField as TF} from 'alex-evo-sh-ui-kit'
+
+import { MODAL_ROOT_ID } from '../../const'
 
 interface ITimeFieldProps{
     onChange?:(value: string)=>void

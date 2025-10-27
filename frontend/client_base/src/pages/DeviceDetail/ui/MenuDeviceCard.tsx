@@ -1,9 +1,10 @@
 import { BaseDialog, FAB, GearIcon, IMenuItem, IPoint, LinkIcon, Menu, Pen, ScreenSize, SizeContext, Trash, UnLinkIcon } from "alex-evo-sh-ui-kit"
-import { DialogPortal } from "../../../shared"
 import { useCallback, useContext, useMemo, useState } from "react"
+
+import { MENU_ROOT_ID } from "../../../const"
 import { StatusDevice } from "../../../entites/devices"
 import { useDeleteDevice, useLinkDevice } from "../../../features/Device"
-import { MENU_ROOT_ID } from "../../../const"
+import { DialogPortal } from "../../../shared"
 
 
 export const MenuDeviceCard = ({status, system_name, name, onEdit}:{status:StatusDevice, system_name:string, name:string, onEdit: ()=>void}) => {
@@ -39,7 +40,7 @@ export const MenuDeviceCard = ({status, system_name, name, onEdit}:{status:Statu
                 }
             }
             ]
-    },[onEdit, status, system_name, linkDevice, onEdit])
+    },[onEdit, status, system_name, linkDevice])
 
     const click = useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
         setPoz({x: Number(e.clientX), y: Number(e.clientY)})

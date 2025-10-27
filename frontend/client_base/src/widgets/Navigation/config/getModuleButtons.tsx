@@ -1,4 +1,5 @@
 import { NavigationButton as NB } from 'alex-evo-sh-ui-kit'
+
 import { NavigationItem } from '../../../entites/navigation' // тип items из useNavigationData
 
 export const getModuleButtons = (navigation: NavigationItem[]): NB[] =>

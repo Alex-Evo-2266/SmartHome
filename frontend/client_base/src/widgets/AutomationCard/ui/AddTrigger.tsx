@@ -1,12 +1,15 @@
 import { 
   BaseActionCard, BasicTemplateDialog, Button, DayOfWeekField, SelectionDialog, TextField 
 } from "alex-evo-sh-ui-kit";
-import { DialogPortal, SelectField, TimeField } from "../../../shared";
-import { useCallback, useState } from "react";
-import { useAppSelector } from "../../../shared/lib/hooks/redux";
-import { TriggerItem } from '../../../entites/automation';
 import { DateTime } from 'luxon';
+import { useCallback, useState } from "react";
+
+import { TriggerItem } from '../../../entites/automation';
 import { useRooms } from "../../../entites/rooms";
+import { DialogPortal, SelectField, TimeField } from "../../../shared";
+import { useAppSelector } from "../../../shared/lib/hooks/redux";
+
+
 
 interface AddTriggerProps {
   onHide: ()=>void;

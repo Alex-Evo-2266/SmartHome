@@ -1,8 +1,9 @@
-import { Form, FullScreenTemplateDialog, SegmentedButton } from "alex-evo-sh-ui-kit"
-import { useCallback, useEffect, useState } from "react"
-import { FieldData } from "../models/deviceData"
+import { Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
+import { useCallback, useState } from "react"
+
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions, TypeDeviceField } from "../../../entites/devices"
+import { FieldData } from "../models/deviceData"
 
 const BINARY_HIGH = '1'
 const BINARY_LOW = '0'
@@ -38,7 +39,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave, option}) => {
     const [value, setValue] = useState<FieldData>(getInitData())
     const [errors, setErrors] = useState<{[key:string]:string}>({})
 
-    const change = (name: string, data: any) => {
+    const change = (name: string, data: TypeDeviceField) => {
         if(name === 'type' && data === TypeDeviceField.BINARY)
         {
             return setValue(prev=>({...prev, type: data, low: BINARY_LOW, high: BINARY_HIGH}))
@@ -54,11 +55,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave, option}) => {
         setValue(prev=>({...prev, [name]: data}))
     }
 
-    useEffect(()=>{
-        console.log(value)
-    },[value])
-
-    const validField = (field:FieldData) => {
+    const validField = useCallback((field:FieldData) => {
         const errors:{[key:string]: string} = {}
 
         if(field.name.length === 1)
@@ -75,18 +72,16 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave, option}) => {
         }
 
         return errors
-    }
+    },[option.fields_creation_data.address])
 
     const save = useCallback(()=>{
-        console.log("d")
         const errors = validField(value)
         setErrors(errors)
-        console.log(errors)
         if(Object.keys(errors).length === 0)
         {
-            onSave && onSave(value)
+            onSave(value)
         }
-    },[onSave, value])
+    },[onSave, value, validField])
 
     return(
         <FullScreenTemplateDialog header="add field" onHide={onHide} onSave={save}>

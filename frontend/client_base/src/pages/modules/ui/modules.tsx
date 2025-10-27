@@ -1,16 +1,17 @@
-
-import { useParams } from 'react-router-dom';
-import { useModulePageAPI } from '../../../entites/modulePages';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Loading } from '../../../shared/ui/Loading';
+import { Panel } from 'alex-evo-sh-ui-kit';
 import { WebConstructor } from 'alex-evo-web-constructor';
-import { PageData } from '../../../entites/modulePages/models/page';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { MENU_ROOT_ID, MODAL_ROOT_ID } from '../../../const';
-import { useFetch } from '../api/moduleFetch';
+import { useModulePageAPI } from '../../../entites/modulePages';
+import { PageData } from '../../../entites/modulePages/models/page';
 import { useNavigationData } from '../../../entites/navigation';
 import { useToken } from '../../../entites/navigation/api/get_temp_token';
+import { Loading } from '../../../shared/ui/Loading';
+import { useFetch } from '../api/moduleFetch';
+
 import './modules.scss'
-import { Panel } from 'alex-evo-sh-ui-kit';
 
 export const ModulesPage = () => {
 
@@ -20,7 +21,6 @@ export const ModulesPage = () => {
         ()=>navigations.find(item=>item.service === moduleName && item.page_name === pageName),
         [navigations, pageName, moduleName]
     )
-    console.log(navigation)
     const {token} = useToken(navigation?.type === "website"?moduleName || "": "")
 
     
@@ -37,7 +37,7 @@ export const ModulesPage = () => {
             const data = await getPage(moduleName, pageName)
             setPageData(data)
         }
-    },[getPage, moduleName, pageName])
+    },[getPage, moduleName, pageName, navigation?.type])
 
     useEffect(()=>{
         loadPage()

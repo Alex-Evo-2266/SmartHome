@@ -1,14 +1,15 @@
 import { BaseDialog, FilterGroup, GridLayout, GridLayoutItem, MoreVertical, Panel, SearchAndFilter, SelectedFilters, Trash, Typography } from 'alex-evo-sh-ui-kit';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useRoomAPI } from '../../../entites/rooms/api/roomsAPI';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Room } from '../../../entites/rooms';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import { DeviceSchema } from '../../../entites/devices';
 import { TypeDevice } from '../../../entites/devices/models/type';
+import { Room } from '../../../entites/rooms';
+import { useRoomAPI } from '../../../entites/rooms/api/roomsAPI';
+import { capitalizeFirst, DialogPortal, IconButtonMenu } from '../../../shared';
 import { useAppSelector } from '../../../shared/lib/hooks/redux';
 import { DeviceCard } from '../../../widgets/DeviceCard';
 import './RoomPage.scss'
-import { capitalizeFirst, DialogPortal, IconButtonMenu } from '../../../shared';
 
 function isTypeDevice(value: unknown): value is TypeDevice{
   return (
@@ -18,7 +19,7 @@ function isTypeDevice(value: unknown): value is TypeDevice{
     "name_type" in value &&
     "fields" in value &&
     "device" in value &&
-    typeof (value as any).name_type === "string"
+    typeof value.name_type === "string"
   );
 }
 
@@ -29,15 +30,30 @@ function objectToArray<T>(obj: Record<string, T>): { name: string; options: T }[
   }));
 }
 
+// helper с перегрузками
+function toArray<K extends keyof DeviceSchema>(
+  key: K,
+  values: Set<unknown>
+): K extends "type_mask" ? string[] : DeviceSchema[K][]
+
+function toArray<K extends keyof DeviceSchema>(key: K, values: Set<unknown>) {
+  if (key === "type_mask") {
+    // здесь TypeScript точно понимает, что результат string[]
+    return Array.from(values) as string[]
+  } else {
+    return Array.from(values) as DeviceSchema[K][]
+  }
+}
+
 // Функция извлечения уникальных значений по ключам
 function extractUniqueValues<T extends keyof DeviceSchema>(
   devices: DeviceSchema[],
   keys: T[]
 ): { [K in T]: (K extends "type_mask" ? string[] : DeviceSchema[K][]) } {
-  const result = {} as any;
+  const result: { [K in T]: (K extends "type_mask" ? string[] : DeviceSchema[K][]) } = {} as { [K in T]: (K extends "type_mask" ? string[] : DeviceSchema[K][]) };
 
   keys.forEach((key) => {
-    const values = new Set<any>();
+    const values = new Set<unknown>();
     for (const device of devices) {
       const value = device[key];
       if (value !== undefined) {
@@ -48,7 +64,7 @@ function extractUniqueValues<T extends keyof DeviceSchema>(
         }
       }
     }
-    result[key] = Array.from(values);
+    result[key] = toArray(key, values); // ✅ безопасно
   });
 
   return result;
@@ -111,14 +127,14 @@ export const RoomPage:React.FC = () => {
         if(!name) return;
         const room = await getRoom(name)
         setRoom(room)
-    },[name])
+    },[name, getRoom])
 
     const deleteRoomHandler = useCallback(async()=>{
       if(!name) return;
       await deleteRoom(name)
       setDeleteVisible(false)
       navigate('/room')
-    },[deleteRoom, name])
+    },[deleteRoom, name, navigate])
 
     useEffect(()=>{
         loadRoom()

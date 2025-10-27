@@ -1,14 +1,14 @@
+import { MODAL_ROOT_ID } from "@src/const"
 import { ControlElement, DashboardCardGrid, TypeControlElements } from "@src/entites/dashboard/models/panel"
+import { TypeDeviceField } from "@src/entites/devices"
+import { useRooms } from "@src/entites/rooms"
+import { Script, useScriptAPI } from "@src/entites/script"
+import { getConfigRoomField } from "@src/features/Room"
+import { splitEnum } from "@src/shared/lib/helpers/enumStrimg"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
 import { BaseActionCard, BaseDialog, BasicTemplateDialog, Button, Checkbox, ColorContext, IColorContext, IconButton, IconsSelect, ListContainer, ListItem, NumberField, RadioButton, SelectField, SelectionDialog, TextField, Trash } from "alex-evo-sh-ui-kit"
 import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import './style.scss'
-import { useAppSelector } from "@src/shared/lib/hooks/redux"
-import { Script, useScriptAPI } from "@src/entites/script"
-import { useRooms } from "@src/entites/rooms"
-import { TypeDeviceField } from "@src/entites/devices"
-import { MODAL_ROOT_ID } from "@src/const"
-import { splitEnum } from "@src/shared/lib/helpers/enumStrimg"
-import { getConfigRoomField } from "@src/features/Room"
 
 interface IGridCardDialog{
     onHide: () => void
@@ -121,8 +121,8 @@ const AddControlDialog:React.FC<IAddControlDialog> = ({onHide, onSave, oldData})
         setReadonly(e.target.checked)
     }
 
-    const changeTitle = (e:React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value)
+    const changeTitle = (value: string) => {
+        setTitle(value)
     }
 
     const save = () => {
@@ -208,7 +208,7 @@ export const DataSelect: React.FC<AddActionProps> = ({ onHide, onSave, type }) =
     return ELEMENTS_TYPE_MAP[typeElement] === typeDev
   }
 
-  const baseConfig: Record<string, { steps: Step[] }> = {
+  const baseConfig: Record<string, { steps: Step[] }> = useMemo(()=>({
   device: {
     steps: [
       {
@@ -272,7 +272,7 @@ export const DataSelect: React.FC<AddActionProps> = ({ onHide, onSave, type }) =
       }
     ]
   }
-}
+}),[devicesData, rooms, scripts, type])
 
 interface TypeFieldText{
   type: "text"
@@ -310,7 +310,7 @@ const SERVICE_CONFIG: Record<string, { steps: Step[] }> = useMemo(()=>{
               {
                 if(field.type === TypeDeviceField.NUMBER)
                 {
-                  let option = []
+                  const option = []
                   if(field.low)
                     option[0] = Number(field.low)
                   else
@@ -337,7 +337,7 @@ const SERVICE_CONFIG: Record<string, { steps: Step[] }> = useMemo(()=>{
                 border
                 placeholder="Value to apply when pressed"
                 value={vals.button_value || ""}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setVal("button_value", e.target.value)}
+                onChange={(value: string) => setVal("button_value", value)}
               />)
             }
           }
@@ -380,7 +380,7 @@ const SERVICE_CONFIG: Record<string, { steps: Step[] }> = useMemo(()=>{
                 border
                 placeholder="Value to apply when pressed"
                 value={vals.button_value || ""}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setVal("button_value", e.target.value)}
+                onChange={(value:string) => setVal("button_value", value)}
               />)
             }
           }
@@ -390,7 +390,7 @@ const SERVICE_CONFIG: Record<string, { steps: Step[] }> = useMemo(()=>{
     }
   }
   return baseConfig
-},[type,devicesData,rooms,scripts])
+},[type, devicesData, rooms, baseConfig])
 
   const currentConfig = SERVICE_CONFIG[service];
 
@@ -422,7 +422,7 @@ const SERVICE_CONFIG: Record<string, { steps: Step[] }> = useMemo(()=>{
     onSave([service, ...Object.values(values)].join("."));
 
     setTimeout(onHide, 0);
-  }, [service, values, isValid, onSave]);
+  }, [service, values, isValid, onSave, onHide]);
 
   const stepVisible = currentConfig.steps.find(step=>step.type!=="custom" && openStep===step.key)
 

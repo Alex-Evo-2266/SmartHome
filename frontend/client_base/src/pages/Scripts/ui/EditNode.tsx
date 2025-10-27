@@ -1,8 +1,9 @@
 import { FullScreenTemplateDialog, TextField, Typography } from "alex-evo-sh-ui-kit"
-import { EditNode } from "../context/context"
-import { ChangeEvent, useCallback, useState } from "react"
+import { useCallback, useState } from "react"
+
 import { useScriptAPI } from "../../../entites/script/api/scriptAPI"
 import { useDebounce } from "../../../shared"
+import { EditNode } from "../context/context"
 
 export interface EditNodeDialogProps {
     onHide: ()=>void
@@ -29,9 +30,9 @@ export const EditNodeDialog:React.FC<EditNodeDialogProps> = ({onHide, data, onSa
 
     const debouncedCheck = useDebounce(check, 300)
     
-    const changeHandler = useCallback(async(e: ChangeEvent<HTMLInputElement>) => {
-        setExpression(e.target.value)
-        debouncedCheck(e.target.value)
+    const changeHandler = useCallback(async(value: string) => {
+        setExpression(value)
+        debouncedCheck(value)
     },[debouncedCheck])
 
     const save = useCallback(()=>{

@@ -1,11 +1,11 @@
+import { DeviceSerializeFieldSchema, TypeDeviceField } from "@src/entites/devices";
 import { Typography } from "alex-evo-sh-ui-kit";
-import { DeviceSerializeFieldSchema, TypeDeviceField } from "../../../../entites/devices";
+
+import { DeviceEnumField } from "./enum";
 import { DeviceNumberField } from "./number";
 import { DeviceSwitchField } from "./switch";
 import { DeviceTextField } from "./text";
 import './device-field.scss'
-import { DeviceEnumField } from "./enum";
-
 
 export const DeviceField: React.FC<{ field: DeviceSerializeFieldSchema, deviceName:string}> = ({ field, deviceName }) => {
 

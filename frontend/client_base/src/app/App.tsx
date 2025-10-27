@@ -1,19 +1,20 @@
-import { RoutesComponent } from "./routs"
-import { BrowserRouter } from 'react-router-dom';
-import '../shared/ui/index.scss'
-import { useAppSelector } from "../shared/lib/hooks/redux";
+import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit";
 import { useEffect } from "react";
+import { BrowserRouter } from 'react-router-dom';
+
+import { RoutesComponent } from "./routs"
+import '../shared/ui/index.scss'
+import { useUpdateDeviceData } from "../entites/devices/hooks/update_device_data";
+import { useAppSelector } from "../shared/lib/hooks/redux";
 import { useSocket } from "../shared/lib/hooks/webSocket.hook";
 
-import { useUpdateDeviceData } from "../entites/devices/hooks/update_device_data";
-import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit";
 
 function App() {
 
   const {isAuthenticated, role} = useAppSelector(state=>state.auth)
   const {updateDevicedata} = useUpdateDeviceData()
   const {listenSocket, closeSocket} = useSocket([
-    {messageType: "device-send", callback: updateDevicedata}
+      {messageType: "device-send", callback: updateDevicedata}
   ])
 
   useEffect(()=>{

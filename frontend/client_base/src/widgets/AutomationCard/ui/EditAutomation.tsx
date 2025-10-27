@@ -1,10 +1,11 @@
-import { useCallback, useState } from "react";
-import { ConditionType, Automation, TriggerItem, ConditionItem, ActionItem } from "../../../entites/automation/models/automation";
 import { BaseActionCard, BaseDialog, Button, ContentBox, FullScreenTemplateDialog, IconButton, ListContainer, ListItem, TextField, Trash } from "alex-evo-sh-ui-kit";
-import { DialogPortal, SelectField } from "../../../shared";
-import { AddTrigger } from "./AddTrigger";
-import { AddCondition } from "./AddCondition";
+import { useCallback, useState } from "react";
+
 import { AddAction } from "./AddAction";
+import { AddCondition } from "./AddCondition";
+import { AddTrigger } from "./AddTrigger";
+import { ConditionType, Automation, TriggerItem, ConditionItem, ActionItem } from "../../../entites/automation/models/automation";
+import { DialogPortal, SelectField } from "../../../shared";
 import { joinAutomation } from "../../../shared/lib/helpers/joinAutomation";
 
 interface AutomationEditorProps {
@@ -79,7 +80,7 @@ export const AutomationEditor: React.FC<AutomationEditorProps> = ({ automation, 
           border
           type="text"
           placeholder="Name Automation"
-          onChange={(e:React.ChangeEvent<HTMLInputElement>) => handleChange("name", e.target.value)}
+          onChange={(value: string) => handleChange("name", value)}
           value={formData.name}
         />
         <ContentBox label="Trigger" collapsible border className="edit-automation-box">

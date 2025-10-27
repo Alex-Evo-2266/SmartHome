@@ -1,12 +1,13 @@
-import { ColorContext, GridLayout, GridLayoutItem, IColorContext, Panel, Typography } from "alex-evo-sh-ui-kit"
 import { WIDTH_PANEL_CONTENT, WIDTH_PANEL_ITEM, WIDTH_PANEL_PADDING } from "@src/entites/dashboard/const"
 import { DashboardCardGrid } from "@src/entites/dashboard/models/panel"
-import { Controls } from "./controls"
-import { useContext, useState } from "react"
 import { DialogPortal } from "@src/shared"
-import { GridCardDialog } from "./dialogConfig/GridCardDialog"
 import { useAppDispatch } from "@src/shared/lib/hooks/redux"
 import { showBaseMenu } from "@src/shared/lib/reducers/menuReducer"
+import { ColorContext, GridLayout, GridLayoutItem, IColorContext, Panel, Typography } from "alex-evo-sh-ui-kit"
+import { useContext, useState } from "react"
+
+import { Controls } from "./controls"
+import { GridCardDialog } from "./dialogConfig/GridCardDialog"
 
 interface GridCardProps{
     cardData: DashboardCardGrid

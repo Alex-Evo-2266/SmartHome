@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react"
-import { SelectField } from "../../../shared"
 import { IOption } from "alex-evo-sh-ui-kit"
+import { useCallback, useEffect, useState } from "react"
+
 import { useRoomAPI } from "../../../entites/rooms"
+import { SelectField } from "../../../shared"
 
 export interface ISelectRoom {
     value: string,

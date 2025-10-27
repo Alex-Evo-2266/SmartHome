@@ -1,16 +1,17 @@
+import { ContentBox } from "alex-evo-sh-ui-kit"
 import { useMemo } from "react"
-import { useGetBinaryField, useGetNumberField } from "../../../../features/Device"
+
+import { DetailDeviceTemplate } from "./Temlate.DetailPage"
+import { FieldHistory } from "../../../../entites/devices/models/history"
+import { useGetBinaryField } from "../../../../features/Device"
+import { useGetEnumField } from "../../../../features/Device/hooks/getField.hook"
+import { Switch, SwitchBtnProps } from "../../../../shared/ui/Switch/Switch"
+import { DeviceField } from "../../../../widgets/DeviceCard/ui/fields"
 import { getFieldHistory } from "../../helpers/getFieldHistory"
 import { useDeviceHistory } from "../../hooks/history.hook"
 import { DeviceDetailProps } from "../../models/props"
-import { DetailDeviceTemplate } from "./Temlate.DetailPage"
-import { FieldHistory } from "../../../../entites/devices/models/history"
-import { ContentBox } from "alex-evo-sh-ui-kit"
-import { DeviceField } from "../../../../widgets/DeviceCard/ui/fields"
-import { Switch, SwitchBtnProps } from "../../../../shared/ui/Switch/Switch"
 
 import './SwitchDetail.scss'
-import { useGetEnumField } from "../../../../features/Device/hooks/getField.hook"
 
 const now = new Date();
 const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);

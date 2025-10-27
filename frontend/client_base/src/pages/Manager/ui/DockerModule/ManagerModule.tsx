@@ -1,9 +1,9 @@
-import { ArrowLeft, Button, Check, IColumn, IconButton, IDataItem, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
-import { useParams } from 'react-router-dom';
 import { useModulesAPI } from '@src/entites/moduleManager';
-import { useCallback, useEffect, useState } from 'react';
 import { ModuleData } from '@src/entites/moduleManager/modules/modules';
 import { Loading } from '@src/shared/ui/Loading';
+import { ArrowLeft, Button, Check, IColumn, IconButton, IDataItem, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 export const DockerModule:React.FC = () => {

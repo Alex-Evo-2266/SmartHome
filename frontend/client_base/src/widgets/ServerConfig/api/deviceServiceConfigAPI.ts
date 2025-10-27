@@ -1,8 +1,9 @@
 import { useCallback, useEffect } from "react"
+
+import { TypeRequest } from "../../../shared/api/type"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
 import { ConfigItem } from "../models/config"
-import { TypeRequest } from "../../../shared/api/type"
 
 export const useConfigAPI = () => {
 

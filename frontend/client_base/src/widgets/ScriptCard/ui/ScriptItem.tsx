@@ -1,7 +1,8 @@
-import { BaseButton, Button, IconButton, ListItem, Play, Switch } from "alex-evo-sh-ui-kit"
+import { IconButton, ListItem, Play, Switch } from "alex-evo-sh-ui-kit"
 import { useCallback } from "react"
-import { Script, useScriptAPI } from "../../../entites/script"
 import { useNavigate } from 'react-router-dom';
+
+import { Script, useScriptAPI } from "../../../entites/script"
 
 interface ScriptItemProps {
     script: Script
@@ -11,14 +12,8 @@ interface ScriptItemProps {
 
 export const ScriptItem:React.FC<ScriptItemProps> = ({script, updateData}) => {
 
-    const {editStatus: es, deleteScript, runScript} = useScriptAPI()
+    const {editStatus: es, runScript} = useScriptAPI()
     const navigate = useNavigate()
-
-    const deleteHandler = useCallback(async(name:string)=>{
-        if(!name) return
-        await deleteScript(name)
-        setTimeout(updateData,200)
-    },[deleteScript, updateData])
 
     const editStatus = useCallback(async (id: string, status?: boolean)=>{
         let newStatus = true
@@ -31,7 +26,7 @@ export const ScriptItem:React.FC<ScriptItemProps> = ({script, updateData}) => {
         script.is_active = newStatus
         await es(id, newStatus)
         setTimeout(updateData,200)
-    },[es])
+    },[es, updateData, script])
 
     const editScript = (id: string) => {
         navigate(`/script/constructor/${id}`)

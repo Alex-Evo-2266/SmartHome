@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
+import { DeviceSerializeFieldSchema } from "@src/entites/devices";
+import { useSendValue } from "@src/entites/devices/api/sendValue";
 import { Button, TextField } from "alex-evo-sh-ui-kit";
-import { useSendValue } from "../../../../entites/devices/api/sendValue";
+import { useState, useEffect, useCallback } from "react";
 
 export const DeviceTextField: React.FC<{ field: DeviceSerializeFieldSchema; deviceName: string }> = ({ field, deviceName }) => {
 
@@ -12,14 +12,14 @@ export const DeviceTextField: React.FC<{ field: DeviceSerializeFieldSchema; devi
     setValue(field.value);
   }, [field.value]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
+  const handleChange = (value: string) => {
+    const newValue = value;
     setValue(newValue);
   }
 
   const send = useCallback(()=>{
     sendValue(deviceName, field.id, String(value))
-  },[value, deviceName, field])
+  },[value, deviceName, field, sendValue])
 
   return (
     <div className="device-field-container device-text-container">

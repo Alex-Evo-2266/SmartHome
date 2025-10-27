@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+
 import { DeviceSchema } from "../../../entites/devices";
 import { DeviceTypeModel, Room, useRoomAPI } from "../../../entites/rooms";
 import { useAppSelector } from "../../../shared/lib/hooks/redux";
@@ -42,17 +43,17 @@ export const textValDevice = (
 export const useTextRoom = (type: string, field: string, room: Room | null) => {
     const {devicesData} = useAppSelector(state=>state.devices)
     const {roomSetDeviceValue} = useRoomAPI()
-    const value = useMemo(()=>textValDevice(type, field, room?.device_room ?? null, devicesData),[devicesData, room])
+    const value = useMemo(()=>textValDevice(type, field, room?.device_room ?? null, devicesData),[devicesData, room, field, type])
 
     const change = useCallback(async(val: string)=>{
         if(room)
             await roomSetDeviceValue(room.name_room, type, field, val.toString())
-    },[room, type, field])
+    },[room, type, field, roomSetDeviceValue])
 
     const changeHandler = useCallback(async(e: React.ChangeEvent<HTMLInputElement>)=>{
         if(room)
             await roomSetDeviceValue(room.name_room, type, field, e.target.value)
-    },[room, type, field])
+    },[room, type, field, roomSetDeviceValue])
 
     return {
         changeHandler,

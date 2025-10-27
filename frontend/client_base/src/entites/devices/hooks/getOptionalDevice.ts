@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+
 import { TypeRequest } from "../../../shared/api/type"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
@@ -9,12 +10,11 @@ export const useGetOptionDevice = () => {
 
     const {request, loading, error, clearError} = useHttp()
     const {showSnackbar} = useSnackbar()
-    const [options, useOptions] = useState<DeviceClassOptions[] | undefined>(undefined)
+    const [options, setOptions] = useState<DeviceClassOptions[] | undefined>(undefined)
 
     const getOptionDevice = useCallback(async () => {
         const {data}:{data:DeviceClassOptions[]} = await request('/api-devices/devices/options', TypeRequest.GET)
-        console.log(data)
-        useOptions(data)
+        setOptions(data)
     },[request])
 
     useEffect(()=>{

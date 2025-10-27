@@ -66,12 +66,12 @@ const ColorWheel = ({onChange, color, sat}:{onChange?:(color: string, set: strin
     const newColor = `hsl(${hue}, ${saturation}%, 50%)`;
     selectorRef.current.style.backgroundColor = newColor;
     onChange?.(hue.toFixed(0).toString(), saturation.toFixed(0).toString())
-  },[])
+  },[onChange])
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     updateColor(e.clientX, e.clientY);
-  };
+  },[updateColor, isDragging])
 
   const handleClick = (e: React.MouseEvent) => {
     updateColor(e.clientX, e.clientY);
@@ -85,7 +85,7 @@ const ColorWheel = ({onChange, color, sat}:{onChange?:(color: string, set: strin
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, handleMouseMove]);
 
   useEffect(()=>{
     setColor()

@@ -1,7 +1,8 @@
 import { useCallback } from "react"
+
 import { useAppDispatch } from "../../../shared/lib/hooks/redux"
-import { setDevicesData } from "../reducers/device_data"
 import { DeviceSchema } from "../models/device"
+import { setDevicesData } from "../reducers/device_data"
 
 
 export const useUpdateDeviceData = () => {

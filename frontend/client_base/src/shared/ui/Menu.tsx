@@ -1,7 +1,8 @@
+import {Menu as BaseMenu, ScreenSize, useScreenSize} from 'alex-evo-sh-ui-kit'
 import { useCallback } from 'react'
+
 import {MENU_ROOT_ID} from '../../const'
 import {useAppDispatch, useAppSelector} from "../lib/hooks/redux"
-import {Menu as BaseMenu, ScreenSize, useScreenSize} from 'alex-evo-sh-ui-kit'
 import { hideMenu } from '../lib/reducers/menuReducer'
 
 export const Menu = () => {
@@ -13,7 +14,7 @@ export const Menu = () => {
 	const hideHandler = useCallback(()=>{
 		dispatch(hideMenu())
 		menu.onHide?.()
-	},[menu.onHide, dispatch])
+	},[menu, dispatch])
 
 	return(<BaseMenu 
 		container={document.getElementById(MENU_ROOT_ID)}

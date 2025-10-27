@@ -1,6 +1,6 @@
-import { LoginData, LoginRequestData } from "../lib/model/authData";
 import { baseAPI } from "./baseAPI";
 import { TypeRequest } from "./type";
+import { LoginData, LoginRequestData } from "../lib/model/authData";
 
 const LOGIN_URL = "/api-auth/login"
 

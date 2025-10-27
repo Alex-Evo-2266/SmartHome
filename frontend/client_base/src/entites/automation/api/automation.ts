@@ -1,8 +1,9 @@
 import { useCallback, useEffect } from "react"
+
+import { TypeRequest } from "../../../shared/api/type"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
 import {Automation} from "../models/automation"
-import { TypeRequest } from "../../../shared/api/type"
 
 export const useAutomationAPI = () => {
 

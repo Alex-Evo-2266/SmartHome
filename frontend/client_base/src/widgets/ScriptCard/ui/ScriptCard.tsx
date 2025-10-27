@@ -1,14 +1,14 @@
 import { BaseActionCard, Button, Card, FilterGroup, ListContainer, SearchAndFilter, SelectedFilters } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { useNavigate } from 'react-router-dom';
+
 import { ScriptItem } from "./ScriptItem"
 import { Script, useScriptAPI } from "../../../entites/script"
-import { useNavigate } from 'react-router-dom';
 
 function matchesFilterFromSelected(
   automation: Script,
   filters: SelectedFilters
 ): boolean {
-    console.log("ds2", filters, automation)
   for (const key in filters) {
     const filterValues = filters[key];
 
@@ -21,7 +21,6 @@ function matchesFilterFromSelected(
 
     if (value === undefined) return false;
 
-    console.log("ds", filterValues, String(value))
     if (!filterValues.includes(String(value))) {
         return false;
     }

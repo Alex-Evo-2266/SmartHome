@@ -1,15 +1,16 @@
-import { ControlElementBool } from "@src/entites/dashboard/models/panel"
-import './styleControl.scss'
-import { useAppSelector } from "@src/shared/lib/hooks/redux"
-import { useCallback, useContext, useMemo } from "react"
-import { ControlTemplate } from "./template"
-import { ErrorControl } from "./readonly"
-import { WIDTH_PANEL_ITEM } from "@src/entites/dashboard/const"
 import { DashboardPageContext } from "@src/entites/dashboard"
+import { WIDTH_PANEL_ITEM } from "@src/entites/dashboard/const"
+import { ControlElementBool } from "@src/entites/dashboard/models/panel"
 import { useGetBinaryFieldControl } from "@src/features/Device"
 import { useBoolRoom } from "@src/features/Room"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
+import { getIcons, IconName } from "alex-evo-sh-ui-kit"
+import { useCallback, useContext, useMemo } from "react"
+
 import { parseDataPath } from "./controlUtils"
-import { getIcons } from "alex-evo-sh-ui-kit"
+import { ErrorControl } from "./readonly"
+import { ControlTemplate } from "./template"
+import './styleControl.scss'
 
 const BoolControlElement = ({ value, onClick, title, size, disabled, icon }: {
     value: boolean
@@ -20,7 +21,7 @@ const BoolControlElement = ({ value, onClick, title, size, disabled, icon }: {
     icon?: string
 }) => {
 
-    const Icon = icon? getIcons(icon as any): undefined
+    const Icon = icon? getIcons(icon as IconName): undefined
 
     return(
         <ControlTemplate onClick={onClick} title={title} size={size}>
@@ -42,7 +43,7 @@ const BoolControlDevice = ({ data }: { data: ControlElementBool }) => {
 
     const { fieldValue, updateFieldState } = useGetBinaryFieldControl(field ?? null, system_name)
 
-    const click = useCallback(() => updateFieldState(!fieldValue), [fieldValue])
+    const click = useCallback(() => updateFieldState(!fieldValue), [fieldValue, updateFieldState])
 
     if (!device || !field)
         return <ErrorControl data={data} />
@@ -62,7 +63,7 @@ const BoolControlDevice = ({ data }: { data: ControlElementBool }) => {
 const BoolControlRoom = ({ data }: { data: ControlElementBool }) => {
     const [, room_name = "", typeDevice = "", field = ""] = parseDataPath(data.data)
     const { rooms } = useContext(DashboardPageContext)
-    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms])
+    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms, room_name])
     const { click, value } = useBoolRoom(typeDevice, field, room ?? null)
 
     if (!room)

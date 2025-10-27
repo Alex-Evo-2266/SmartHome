@@ -1,14 +1,15 @@
+import { getConfigRoomField } from "@src/features/Room";
 import { 
   BaseActionCard, BasicTemplateDialog, Button, NumberField, SelectionDialog, TextField 
 } from "alex-evo-sh-ui-kit";
-import { DialogPortal, SelectField } from "../../../shared";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useAppSelector } from "../../../shared/lib/hooks/redux";
+
 import { ActionItem, SetType } from "../../../entites/automation";
 import { TypeDeviceField } from "../../../entites/devices";
-import { Script, useScriptAPI } from "../../../entites/script";
 import { useRooms } from "../../../entites/rooms";
-import { getConfigRoomField } from "@src/features/Room";
+import { Script, useScriptAPI } from "../../../entites/script";
+import { DialogPortal, SelectField } from "../../../shared";
+import { useAppSelector } from "../../../shared/lib/hooks/redux";
 
 interface AddActionProps {
   onHide: () => void;
@@ -49,7 +50,7 @@ export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
   },[getScripts]);
 
   /** Универсальная конфигурация шагов */
-  const SERVICE_CONFIG: Record<string, { steps: Step[] }> = {
+  const SERVICE_CONFIG: Record<string, { steps: Step[] }> = useMemo(()=>({
     delay: {
       steps: [
         {
@@ -137,7 +138,7 @@ export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
                 placeholder="Data" 
                 border 
                 value={vals.data||""}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setVal("data",e.target.value)}
+                onChange={(value: string)=>setVal("data",value)}
               />
             );
           }
@@ -241,14 +242,14 @@ export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
                 placeholder="Data" 
                 border 
                 value={vals.data||""}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setVal("data",e.target.value)}
+                onChange={(value: string)=>setVal("data",value)}
               />
             );
           }
         }
       ]
     }
-  };
+  }),[devicesData, rooms, scripts])
 
   const currentConfig = SERVICE_CONFIG[service];
 
@@ -294,7 +295,7 @@ export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
     });
 
     setTimeout(onHide, 0);
-  }, [service, values, isValid, onSave]);
+  }, [service, values, isValid, onSave, SERVICE_CONFIG, onHide]);
 
   return (
     <>

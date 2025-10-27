@@ -1,9 +1,10 @@
+
+import { login } from "@src/shared/api/login";
+import { useAppDispatch } from "@src/shared/lib/hooks/redux";
+import { LoginRequestData } from "@src/shared/lib/model/authData";
+import { login as saweAuthData } from "@src/shared/lib/reducers/userAuthDataReducer";
 import { useCallback } from "react";
-import { baseAPI } from "../../../shared/api/baseAPI";
-import { useAppDispatch } from "../../../shared/lib/hooks/redux";
-import { login as saweAuthData } from "../../../shared/lib/reducers/userAuthDataReducer";
-import { login } from "../../../shared/api/login";
-import { LoginRequestData } from "../../../shared/lib/model/authData";
+
 
 export const useUserLogin = () => {
 
@@ -17,7 +18,7 @@ export const useUserLogin = () => {
 		} catch (e) {
 			console.error(e);
 		}
-	},[baseAPI])
+	},[dispatch])
 
 	return{userLogin}
 }

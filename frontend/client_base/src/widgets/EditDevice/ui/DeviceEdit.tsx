@@ -1,6 +1,7 @@
 import { useMemo } from "react"
-import { DeviceSchema, useGetOptionDevice } from "../../../entites/devices"
+
 import { DeviceEditDialog } from "./DeviceEditDialog"
+import { DeviceSchema, useGetOptionDevice } from "../../../entites/devices"
 import './EditDevice.scss'
 
 interface DeviceDataProps{
@@ -11,7 +12,7 @@ interface DeviceDataProps{
 export const DeviceEdit:React.FC<DeviceDataProps> = ({data, onHide}) => {
 
     const {options} = useGetOptionDevice()
-    const option = useMemo(()=>options?.find(item=>item.class_name === data.class_device),[options])
+    const option = useMemo(()=>options?.find(item=>item.class_name === data.class_device),[options, data.class_device])
     
     if(!option)
         return null

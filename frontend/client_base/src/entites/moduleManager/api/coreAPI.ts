@@ -1,6 +1,7 @@
 import { useHttp } from "@src/shared/lib/hooks/http.hook"
 import { useSnackbar } from "@src/shared/lib/hooks/snackbar.hook"
 import { useCallback, useEffect } from "react"
+
 import { CoreContainerData } from "../modules/modules"
 
 export const useCoreAPI = () => {

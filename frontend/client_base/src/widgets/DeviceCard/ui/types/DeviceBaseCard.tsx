@@ -1,10 +1,11 @@
-import { DeviceField } from "../fields"
+import { Card, RunningLine, ScreenSize, SizeContext, Typography } from "alex-evo-sh-ui-kit"
+import { useCallback, useContext } from "react"
+import { useNavigate } from 'react-router-dom';
+
 import "./DeviceBaseCard.scss"
 import { DeviceCardProps } from "../../models/props"
-import { Card, RunningLine, SizeContext, Typography } from "alex-evo-sh-ui-kit"
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useContext } from "react"
 import { cardSizeStyle } from "../../models/sizeDeviceCard";
+import { DeviceField } from "../fields"
 
 const statusColor = {
     online: "#0f0",
@@ -17,11 +18,11 @@ const statusColor = {
 export const DeviceBaseCard: React.FC<DeviceCardProps> = ({ device }) => {
 
     const navigate = useNavigate()
-    const {screen} = useContext(SizeContext)
+    const {screen} = useContext<{screen: ScreenSize}>(SizeContext)
 
     const openDitail = useCallback(()=>{
         navigate(`/device/${device.system_name}`)
-    },[device.system_name])
+    },[device.system_name, navigate])
 
     return(
         <Card

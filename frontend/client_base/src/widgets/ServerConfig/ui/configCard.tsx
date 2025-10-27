@@ -1,10 +1,11 @@
 import { BaseActionCard, BasicTemplateDialog, Button, Card, ContentBox, MoreText, NumberField, TextField, Typography } from "alex-evo-sh-ui-kit";
-import React, { useCallback, useEffect, useState } from "react";
-import { useConfigAPI } from "../api/deviceServiceConfigAPI";
-import { ConfigItem, ConfigItemType } from "../models/config";
-import { groupByTag } from "../lib/helpers/groupByTag";
+import { useCallback, useEffect, useState } from "react";
+
 import { PasswordField } from "./passwordField";
 import { Loading } from "../../../shared/ui/Loading";
+import { useConfigAPI } from "../api/deviceServiceConfigAPI";
+import { groupByTag } from "../lib/helpers/groupByTag";
+import { ConfigItem, ConfigItemType } from "../models/config";
 
 export const SettingsEditor = () => {
   const [originalSettings, setOriginalSettings] = useState<ConfigItem[][]>([]);
@@ -23,8 +24,7 @@ export const SettingsEditor = () => {
     loadConfig();
   }, [loadConfig]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, tag: string) => {
-    const { name, value } = e.target;
+  const handleChange = (value: string, name: string, tag: string) => {
     setEditedSettings((prev) =>
       prev.map((group) =>
         group[0].tag === tag
@@ -58,7 +58,7 @@ export const SettingsEditor = () => {
   const changePass = useCallback(async(data: string, name:string) => {
     await patchConfig({[name]: data})
     setTimeout(loadConfig, 500)
-  },[patchConfig])
+  },[patchConfig, loadConfig])
 
   // Функция для сравнения изменений
   const getChanges = useCallback(() => {
@@ -83,20 +83,19 @@ export const SettingsEditor = () => {
 
   const handleSave = useCallback(async() => {
     setVisibleChangeDialog(true)
-    
-  },[patchConfig])
+  },[])
 
   const saveSand = useCallback( async ()=>{
     const changes = getChanges();
-    let data:{[key:string]:string} = {}
-    for( let change of changes)
+    const data:{[key:string]:string} = {}
+    for( const change of changes)
     {
       data[change.key] = change.newValue
     }
     await patchConfig(data)
     setVisibleChangeDialog(false)
     setTimeout(loadConfig, 500)
-  },[patchConfig, getChanges])
+  },[patchConfig, getChanges, loadConfig])
 
   return (
     <Card header="Server settings">
@@ -115,7 +114,7 @@ export const SettingsEditor = () => {
                 key={`${item.tag}-${item.key}`}
                 name={item.key}
                 value={Number(item.value)}
-                onChange={(data, name) => handleChangeNumber(data, name, item.tag)}
+                onChange={(data: number, name: string) => handleChangeNumber(data, name, item.tag)}
               />
             ) : item.type === ConfigItemType.PASSWORD ? (
               <PasswordField
@@ -143,7 +142,7 @@ export const SettingsEditor = () => {
                 key={`${item.tag}-${item.key}`}
                 name={item.key}
                 value={item.value}
-                onChange={(e) => handleChange(e, item.tag)}
+                onChange={(value: string, name: string) => handleChange(value, name, item.tag)}
               />
             )
           ))}

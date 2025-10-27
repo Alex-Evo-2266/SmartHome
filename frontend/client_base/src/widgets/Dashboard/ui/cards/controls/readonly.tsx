@@ -1,10 +1,11 @@
-import { ControlElement } from "@src/entites/dashboard/models/panel"
-import "./styleControl.scss"
-import { useAppSelector } from "@src/shared/lib/hooks/redux"
-import { useContext, useMemo } from "react"
 import { DashboardPageContext } from "@src/entites/dashboard/context"
-import { ControlTemplate } from "./template"
+import { ControlElement } from "@src/entites/dashboard/models/panel"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
+import "./styleControl.scss"
+import { useContext, useMemo } from "react"
+
 import { deviceHooks, normalizeType, parseDataPath, roomHooks } from "./controlUtils"
+import { ControlTemplate } from "./template"
 
 /**
  * UI-компонент для отображения только значения (без управления).
@@ -64,7 +65,7 @@ const ReadOnlyControlRoom: React.FC<{ data: ControlElement }> = ({ data }) => {
     const [, room_name = "", typeDevice = "", field = ""] = parseDataPath(data.data)
     const { rooms } = useContext(DashboardPageContext)
 
-    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms])
+    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms, room_name])
     const type = room?.device_room[typeDevice].fields[field].field_type
 
     const hook = roomHooks[normalizeType(type)]

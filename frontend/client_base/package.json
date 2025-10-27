@@ -7,13 +7,14 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx,js,jsx}' --fix",
     "preview": "vite preview"
   },
   "dependencies": {
     "@types/react-redux": "^7.1.34",
     "@xyflow/react": "^12.8.1",
-    "alex-evo-sh-ui-kit": "^1.1.57",
-    "alex-evo-web-constructor": "^1.0.27",
+    "alex-evo-sh-ui-kit": "^1.1.58",
+    "alex-evo-web-constructor": "^1.0.28",
     "chart.js": "^4.4.9",
     "chartjs-adapter-date-fns": "^3.0.0",
     "luxon": "^3.6.1",
@@ -25,19 +26,22 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.13.0",
+    "@eslint/js": "^9.38.0",
     "@types/luxon": "^3.6.2",
     "@types/node": "^24.3.0",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.3",
-    "eslint": "^9.13.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
-    "globals": "^15.11.0",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^15.15.0",
     "sass-embedded": "^1.81.0",
     "typescript": "~5.6.2",
-    "typescript-eslint": "^8.11.0",
+    "typescript-eslint": "^8.46.2",
     "vite": "^5.4.10"
   }
 }

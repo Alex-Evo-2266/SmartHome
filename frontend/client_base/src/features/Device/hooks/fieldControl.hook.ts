@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react"
+
 import { DeviceSerializeFieldSchema } from "../../../entites/devices"
-import { getData, getInitData, getOutData } from "../helpers/fieldUtils"
 import { useSendValue } from "../../../entites/devices/api/sendValue"
+import { getData, getInitData, getOutData } from "../helpers/fieldUtils"
 
 export const useGetBinaryFieldControl = (field: DeviceSerializeFieldSchema | null, deviceName: string) => {
 

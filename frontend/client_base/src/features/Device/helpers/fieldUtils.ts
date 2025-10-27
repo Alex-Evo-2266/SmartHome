@@ -1,4 +1,5 @@
 export function getInitData(high:string|null|undefined, value:string|null|undefined){
+    high=high
     // if(!high && value == "1")
     //     return true
     // if(high && value == high)
@@ -9,6 +10,8 @@ export function getInitData(high:string|null|undefined, value:string|null|undefi
 }
 
 export function getData(high:string|null|undefined, low:string|null|undefined, value:string|null|undefined, old:boolean){
+    high=high
+    low=low
     // if(!high && value == "1")
     //     return true
     // if(high && value == high)

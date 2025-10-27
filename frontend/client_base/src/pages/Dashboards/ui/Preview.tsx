@@ -1,13 +1,15 @@
-import { FAB, GridLayout, GridLayoutItem, ToolsIcon } from "alex-evo-sh-ui-kit"
 import { Dashboard, DashboardCard, DashboardPageContext, useDashboardAPI, WIDTH_PANEL } from "@src/entites/dashboard"
+import { useRoom } from "@src/features/Room"
 import { DialogPortal } from "@src/shared"
-import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@src/shared/lib/hooks/redux"
 import { hideMenu, showBaseMenu } from "@src/shared/lib/reducers/menuReducer"
-import { useParams } from 'react-router-dom';
-import { useRoom } from "@src/features/Room"
-import { CardDialog } from "./CreateCardDialog"
 import { GridCard } from "@src/widgets/Dashboard"
+import { FAB, GridLayout, GridLayoutItem, ToolsIcon } from "alex-evo-sh-ui-kit"
+import { useCallback, useEffect, useState } from "react"
+import { useParams } from 'react-router-dom';
+
+import { CardDialog } from "./CreateCardDialog"
+
 
 export const PreviewDashboardPage = () => {
 

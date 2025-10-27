@@ -1,5 +1,5 @@
-import { RefrashData } from "../lib/model/authData";
 import { TypeRequest } from "./type";
+import { RefrashData } from "../lib/model/authData";
 
 const REFRESH_URL = "/api-auth/refresh"
 
@@ -11,12 +11,12 @@ export const refresh = async(onError?:()=>void, onSuccess?:(data:RefrashData)=>v
 	const role = response.headers.get('X-User-Role')
 	const data = await response.json()
 	if (!response.ok) {
-		onError && onError()
+		onError?.()
 		throw new Error(data.message||'что-то пошло не так')
 	}
 	if(!token || !id || !date || !role){
 		throw Error("error auth data")
 	}
-	onSuccess && await onSuccess({token, id, expires_at:date, role})
+	await onSuccess?.({token, id, expires_at:date, role})
 	return token
 }

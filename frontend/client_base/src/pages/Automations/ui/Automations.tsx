@@ -1,9 +1,9 @@
 import { useScreenSize, ScreenSize, Tabs } from "alex-evo-sh-ui-kit"
-
-import './Automations.scss'
 import { useState } from "react"
+
 import { AutomationCard } from "../../../widgets/AutomationCard"
 import { ScriptCard } from "../../../widgets/ScriptCard"
+import './Automations.scss'
 
 export const AutomationPage = () => {
 

@@ -318,6 +318,40 @@ services:
       - "sh-core.core"
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
+  
+  base_frontend:
+    container_name: frontend
+    networks: 
+      - local_sh_network
+    build:
+      context: frontend/client_base        
+      dockerfile: Dockerfile
+    restart: always
+    labels:
+      - "sh-core.frontend"
+      - "traefik.enable=true"
+      # http
+      - "traefik.http.routers.frontend_http.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend_http.entrypoints=web"
+      - "traefik.http.routers.frontend_http.service=frontend"
+      - "traefik.http.routers.frontend_http.priority=1"
+      # https
+      - "traefik.http.routers.frontend_https.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend_https.entrypoints=websecure"
+      - "traefik.http.routers.frontend_https.tls=true"
+      - "traefik.http.routers.frontend_https.service=frontend"
+      - "traefik.http.routers.frontend_https.priority=1"
+      # общий сервис
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    depends_on:
+      auth_service:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
 
 networks:
   local_sh_network:
@@ -328,7 +362,7 @@ volumes:
   media_voluem:
   media_device_voluem:
   client_voluem:
-  client_auth_voluem:
+  frontend_voluem:
   bd_auth_data:
   bd_page_data2:
   bd_data:

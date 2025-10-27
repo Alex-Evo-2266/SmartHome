@@ -1,7 +1,8 @@
-import { DeviceDetailProps } from "../../models/props"
-import { DetailDeviceTemplate } from "./Temlate.DetailPage"
 import { ContentBox } from "alex-evo-sh-ui-kit"
+
+import { DetailDeviceTemplate } from "./Temlate.DetailPage"
 import { DeviceField } from "../../../../widgets/DeviceCard/ui/fields"
+import { DeviceDetailProps } from "../../models/props"
 
 import './SwitchDetail.scss'
 

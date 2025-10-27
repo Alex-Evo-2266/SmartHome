@@ -1,5 +1,5 @@
-import { Panel } from "alex-evo-sh-ui-kit"
 import { Handle, Position } from '@xyflow/react';
+import { Panel } from "alex-evo-sh-ui-kit"
 
 export const Start = () => {
 

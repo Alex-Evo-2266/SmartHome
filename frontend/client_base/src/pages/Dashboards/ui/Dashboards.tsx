@@ -1,10 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { ArrowUp, FAB, IColumn, IconButton, IDataItem, Panel, Plus, ScreenSize, Search, Table, TextDialog, ToolsIcon, Trash, Typography } from "alex-evo-sh-ui-kit"
-import { v4 as uuidv4 } from 'uuid';
-
 import { Dashboard, useDashboardAPI } from "@src/entites/dashboard"
 import { DialogPortal } from "@src/shared"
+import { ArrowUp, FAB, IColumn, IconButton, IDataItem, Plus, ScreenSize, Search, Table, TextDialog, ToolsIcon, Trash, Typography } from "alex-evo-sh-ui-kit"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 export const DashboardsPage = () => {
 
@@ -35,7 +34,7 @@ export const DashboardsPage = () => {
                 id: item.id,
                 included: userDashboards.map(i=>i.id).includes(item.id)?"true":"false"
             }))]
-    },[dashboards, userDashboards])
+    },[dashboards, userDashboards, search])
 
     const navigate = useNavigate()
 
@@ -56,7 +55,7 @@ export const DashboardsPage = () => {
             private: false
         })
         await loadDashboard()
-    },[createDashboard])
+    },[createDashboard, loadDashboard])
 
     useEffect(()=>{
         loadDashboard()
@@ -78,13 +77,13 @@ export const DashboardsPage = () => {
         const data = [...(userDashboards.map(i=>i.id)), id]
         await setUserDashboard(data)
         loadDashboard()
-    },[setUserDashboard, userDashboards])
+    },[setUserDashboard, userDashboards, loadDashboard])
 
     const deleteUserDashboards = useCallback(async(id: string) => {
         const data = userDashboards.map(i=>i.id).filter(i=>i!==id)
         await setUserDashboard(data)
         loadDashboard()
-    },[setUserDashboard, userDashboards])
+    },[setUserDashboard, userDashboards, loadDashboard])
 
     const columns:IColumn[] = [
         {

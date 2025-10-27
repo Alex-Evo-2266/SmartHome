@@ -1,13 +1,15 @@
-import { FAB, FilterGroup, GridLayout, GridLayoutItem, Plus, Search, SearchAndFilter, SelectedFilters } from "alex-evo-sh-ui-kit"
-import { DialogPortal } from "../../../shared"
-import { AddDeviceDialog } from "../../../widgets/AddDevice"
-import { DeviceCard } from "../../../widgets/DeviceCard"
-import { useAppSelector } from "../../../shared/lib/hooks/redux"
-import "./DevicePage.scss"
-import { useToggle } from "../hooks/addDevice.hook"
+import { FAB, FilterGroup, GridLayout, GridLayoutItem, Plus, SearchAndFilter, SelectedFilters } from "alex-evo-sh-ui-kit"
 import { useMemo, useState } from "react"
+
 import { DeviceSchema } from "../../../entites/devices"
 import { TypeDevice } from "../../../entites/devices/models/type"
+import { DialogPortal } from "../../../shared"
+import { useAppSelector } from "../../../shared/lib/hooks/redux"
+import { AddDeviceDialog } from "../../../widgets/AddDevice"
+import { DeviceCard } from "../../../widgets/DeviceCard"
+import { useToggle } from "../hooks/addDevice.hook"
+
+import "./DevicePage.scss"
 
 function isTypeDevice(value: unknown): value is TypeDevice{
   return (
@@ -17,7 +19,7 @@ function isTypeDevice(value: unknown): value is TypeDevice{
     "name_type" in value &&
     "fields" in value &&
     "device" in value &&
-    typeof (value as any).name_type === "string"
+    typeof value.name_type === "string"
   );
 }
 
@@ -28,15 +30,30 @@ function objectToArray<T>(obj: Record<string, T>): { name: string; options: T }[
   }));
 }
 
+// helper с перегрузками
+function toArray<K extends keyof DeviceSchema>(
+  key: K,
+  values: Set<unknown>
+): K extends "type_mask" ? string[] : DeviceSchema[K][]
+
+function toArray<K extends keyof DeviceSchema>(key: K, values: Set<unknown>) {
+  if (key === "type_mask") {
+    // здесь TypeScript точно понимает, что результат string[]
+    return Array.from(values) as string[]
+  } else {
+    return Array.from(values) as DeviceSchema[K][]
+  }
+}
+
 // Функция извлечения уникальных значений по ключам
 function extractUniqueValues<T extends keyof DeviceSchema>(
   devices: DeviceSchema[],
   keys: T[]
 ): { [K in T]: (K extends "type_mask" ? string[] : DeviceSchema[K][]) } {
-  const result = {} as any;
+  const result: { [K in T]: (K extends "type_mask" ? string[] : DeviceSchema[K][]) } = {} as { [K in T]: (K extends "type_mask" ? string[] : DeviceSchema[K][]) };
 
   keys.forEach((key) => {
-    const values = new Set<any>();
+    const values = new Set<unknown>();
     for (const device of devices) {
       const value = device[key];
       if (value !== undefined) {
@@ -47,7 +64,7 @@ function extractUniqueValues<T extends keyof DeviceSchema>(
         }
       }
     }
-    result[key] = Array.from(values);
+    result[key] = toArray(key, values);
   });
 
   return result;

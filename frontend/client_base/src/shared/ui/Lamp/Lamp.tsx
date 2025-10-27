@@ -41,7 +41,7 @@ export const Bulb = ({className = "", status = false, size = 1, color = "#cdcaaf
         >
           <defs>
             <filter id="soft-shadow" x="-150%" y="-150%" width="400%" height="400%">
-              <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="var(--Shadow-color)" />
+              <feDropShadow dx="0" dy="0" stdDeviation="1" floodColor="var(--Shadow-color)" />
             </filter>
           </defs>
             <path 

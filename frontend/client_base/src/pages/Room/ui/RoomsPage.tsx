@@ -1,10 +1,12 @@
 import { FAB, GridLayout, GridLayoutItem, Plus, TextDialog } from "alex-evo-sh-ui-kit"
-import { useRoom } from "../../../features/Room/hooks/rooms.hook"
-import { RoomCard } from "./RoomCard"
-import { DialogPortal } from "../../../shared"
 import { useCallback, useState } from "react"
-import './RoomPage.scss'
+
+import { RoomCard } from "./RoomCard"
+import { useRoom } from "../../../features/Room/hooks/rooms.hook"
+import { DialogPortal } from "../../../shared"
 import { Loading } from "../../../shared/ui/Loading"
+
+import './RoomPage.scss'
 
 export const RoomsPage = () => {
 
@@ -15,7 +17,7 @@ export const RoomsPage = () => {
         await addRoom({name_room: data})
         await getRooms()
         setVisible(false)
-    },[addRoom])
+    },[addRoom, getRooms])
 
     if(loading)
     {

@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+
 import { DeviceSchema, DeviceSerializeFieldSchema } from "../../../entites/devices";
 import { DeviceTypeModel, Room, useRoomAPI } from "../../../entites/rooms";
 import { useAppSelector } from "../../../shared/lib/hooks/redux";
@@ -46,7 +47,7 @@ export const numberValDevice = (
 
     const relatedDevices = devices.filter(d => powerSystemNames.has(d.system_name));
     
-    let buff = {max: Number.MAX_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, val: 0}
+    const buff = {max: Number.MAX_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, val: 0}
 
     for (const device of relatedDevices) {
         const fields = device.fields?.filter(f => powerFieldIds.has(f.id)) 
@@ -71,17 +72,17 @@ export const numberValDevice = (
 export const useNumberRoom = (type: string, field: string, room: Room | null) => {
     const {devicesData} = useAppSelector(state=>state.devices)
     const {roomSetDeviceValue} = useRoomAPI()
-    const {val: value, max, min} = useMemo(()=>numberValDevice(type, field, room?.device_room ?? null, devicesData),[devicesData, room])
+    const {val: value, max, min} = useMemo(()=>numberValDevice(type, field, room?.device_room ?? null, devicesData),[devicesData, room, field, type])
 
     const change = useCallback(async(val: number)=>{
         if(room)
             await roomSetDeviceValue(room.name_room, type, field, val.toString())
-    },[room, type, field])
+    },[room, type, field, roomSetDeviceValue])
 
     const changeHandler = useCallback(async(e: React.ChangeEvent<HTMLInputElement>)=>{
         if(room)
             await roomSetDeviceValue(room.name_room, type, field, e.target.value)
-    },[room, type, field])
+    },[room, type, field, roomSetDeviceValue])
 
     return {
         changeHandler,

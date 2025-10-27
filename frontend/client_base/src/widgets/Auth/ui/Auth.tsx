@@ -1,7 +1,8 @@
 import { Button, Panel, TextField, Typography } from "alex-evo-sh-ui-kit"
 import { useCallback, useState } from "react"
-import { useUserLogin } from "../api/login"
+
 import { LoginRequestData } from "../../../shared/lib/model/authData"
+import { useUserLogin } from "../api/login"
 
 export const Auth = () => {
 
@@ -12,8 +13,8 @@ export const Auth = () => {
         password: ""
     })
 
-    const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLogin(prev=>({...prev, [event.target.name]: event.target.value}))
+    const changeHandler = (value: string, name: string) => {
+        setLogin(prev=>({...prev, [name]: value}))
     }
 
     const onSubmite = useCallback(() => {

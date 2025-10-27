@@ -1,9 +1,9 @@
 import { DeviceCardProps } from "../models/props"
-import { LightDevice } from "./types/Light"
-import { DeviceBaseCard } from "./types/DeviceBaseCard"
-import { SwitchDevice } from "./types/Switch"
 import { ClimateDevice } from "./types/Climate"
+import { DeviceBaseCard } from "./types/DeviceBaseCard"
+import { LightDevice } from "./types/Light"
 import { MoveSensorDevice } from "./types/MoveSensor"
+import { SwitchDevice } from "./types/Switch"
 
 
 export const DeviceCard: React.FC<DeviceCardProps> = (props) => {

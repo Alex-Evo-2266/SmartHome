@@ -1,7 +1,9 @@
-import { IconButton, Panel, Pen, Typography } from "alex-evo-sh-ui-kit"
 import { Handle, Position } from '@xyflow/react';
-import { EditNode, ScriptConstructorEditContext } from "../../context/context";
+import { IconButton, Panel, Pen, Typography } from "alex-evo-sh-ui-kit"
 import { useContext } from "react";
+
+import { EditNode, ScriptConstructorEditContext } from "../../context/context";
+
 
 
 export const Action = (props:{data: {label: string, node: EditNode}}) => {

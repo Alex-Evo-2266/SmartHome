@@ -1,10 +1,12 @@
-import { Outlet } from "react-router-dom"
-import { ScreenSize, useScreenSize } from "alex-evo-sh-ui-kit"
-import { useNavigationData } from '../../../entites/navigation'
-import { getBarButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
 import { Menu } from "@src/shared"
-import './Root.scss'
+import { getBarButtons, Navigation, useMainButtons } from "@src/widgets/Navigation"
 import { getHidenBtn } from "@src/widgets/Navigation/config/hidenBtn"
+import { ScreenSize, useScreenSize } from "alex-evo-sh-ui-kit"
+import { Outlet } from "react-router-dom"
+
+import { useNavigationData } from '../../../entites/navigation'
+
+import './Root.scss'
 
 export const RootPage = () => {
 

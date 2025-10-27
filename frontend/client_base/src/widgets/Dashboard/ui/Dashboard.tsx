@@ -1,6 +1,7 @@
-import { GridLayout, GridLayoutItem } from "alex-evo-sh-ui-kit"
 import { Dashboard, DashboardPageContext, WIDTH_PANEL } from "@src/entites/dashboard"
 import { useRoom } from "@src/features/Room"
+import { GridLayout, GridLayoutItem } from "alex-evo-sh-ui-kit"
+
 import { GridCard } from "./cards/gridCard"
 
 export interface PreviewDashboardProps{

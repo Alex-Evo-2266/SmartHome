@@ -43,7 +43,7 @@ enum DeviceActionTypes {
           devicesData: action.payload,  // сохраняем массив устройств
         };
   
-      case DeviceActionTypes.UPDATE_DEVICE_VALUE:
+      case DeviceActionTypes.UPDATE_DEVICE_VALUE:{
         // Обновляем устройство с указанным ID и его поле
         const updatedDevices = state.devicesData.map(device =>
           device.name === action.payload.deviceId
@@ -62,6 +62,7 @@ enum DeviceActionTypes {
           ...state,
           devicesData: updatedDevices,  // возвращаем обновленный массив устройств
         };
+      }
   
       default:
         return state;

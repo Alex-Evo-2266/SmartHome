@@ -1,18 +1,18 @@
 import { refresh } from "./refresh";
 import { TypeRequest } from "./type";
 
-export const baseAPI = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict<any> | Dict<any>[] |undefined | null = undefined, headers:Dict<any> = {}, file:boolean = false) => {
+export const baseAPI = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict<unknown> | Dict<unknown>[] |undefined | null = undefined, headers:Dict<unknown> = {}, file:boolean = false) => {
 	let newBody: BodyInit | undefined | null = undefined
 	if(body && !file){
 		headers['Content-Type'] = 'application/json'
 		newBody = JSON.stringify(body);
 	}
 	console.log(url, {method, body: newBody, headers})
-	let response = await fetch(url, {method, body: newBody, headers});
+	const response = await fetch(url, {method, body: newBody, headers: (headers as Record<string, string>)});
 	return response
 }
 
-export const APIWitchToken = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict<any> | Dict<any>[] | undefined | null = undefined, token:string | undefined | null, headers:Dict<any> = {}, file:boolean = false) => {
+export const APIWitchToken = async(url:string, method: TypeRequest = TypeRequest.GET, body:Dict<unknown> | Dict<unknown>[] | undefined | null = undefined, token:string | undefined | null, headers:Dict<unknown> = {}, file:boolean = false) => {
 	if(token){
 		headers["Authorization"] = token
 	}
@@ -22,11 +22,11 @@ export const APIWitchToken = async(url:string, method: TypeRequest = TypeRequest
 export const requestWithRefrash = async (
 	url:string, 
 	method: TypeRequest = TypeRequest.GET, 
-	body:Dict<any> | Dict<any>[] | undefined | null = undefined, 
+	body:Dict<unknown> | Dict<unknown>[] | undefined | null = undefined, 
 	token:string | undefined | null = null, 
-	headers:Dict<any> = {}, 
+	headers:Dict<unknown> = {}, 
 	onErrorRefrash?:()=>void, 
-	onSuccessRefrash?:(data:any)=>void,
+	onSuccessRefrash?:(data:unknown)=>void,
 	file: boolean = false
 ) => {
 	let response = await APIWitchToken(url, method, body, token, headers, file)

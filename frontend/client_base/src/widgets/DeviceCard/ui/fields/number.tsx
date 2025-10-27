@@ -1,8 +1,9 @@
-import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
 import { Slider, Typography } from "alex-evo-sh-ui-kit";
+
+import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
 import "./device-field.scss"
-import { useDebounce } from "../../../../shared";
 import { useGetNumberFieldControl } from "../../../../features/Device/hooks/fieldControl.hook";
+import { useDebounce } from "../../../../shared";
 
 export const DeviceNumberField: React.FC<{ field: DeviceSerializeFieldSchema; deviceName: string }> = ({ field, deviceName }) => {
   
