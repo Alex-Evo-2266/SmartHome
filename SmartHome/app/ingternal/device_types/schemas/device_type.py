@@ -8,7 +8,8 @@ class FieldDeviceTypeSchema(BaseModel):
 	name_field_type: str
 	description: Optional[str] = ""    # Описание поля
 	type_field: TypeDeviceField    # Ожидаемый тип поля
-	required: bool = False  # Обязательное ли поле
+	required: bool = False  # Обязательное ли поле'
+	readOnly: bool = False
 
 	class Config:  
 		use_enum_values = True
@@ -31,6 +32,7 @@ class FieldDeviceTypeSerializeSchema(BaseModel):
 	field_type: TypeDeviceField    # Ожидаемый тип поля
 	required: bool = False  # Обязательное ли поле
 	device_type: Optional['DeviceTypeSerializeSchema'] = None
+	readOnly: bool = False
 
 	class Config:  
 		use_enum_values = True

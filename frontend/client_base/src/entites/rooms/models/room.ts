@@ -12,6 +12,7 @@ export interface DeviceField {
 
 export interface DeviceFieldType {
   field_type: TypeDeviceField;
+  readonly: boolean;
   devices: DeviceField[];
 }
 

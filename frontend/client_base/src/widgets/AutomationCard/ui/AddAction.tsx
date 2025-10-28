@@ -186,7 +186,7 @@ export const AddAction: React.FC<AddActionProps> = ({ onHide, onSave }) => {
             const dev = room?.device_room[dev_name]
             if(!dev)
               return []
-            return Object.keys(dev.fields).map(i=>({title: i, data: i}))
+            return Object.entries(dev.fields).filter(i=>!(i[1].readonly)).map(i=>({title: i[0], data: i[0]}))
           },
         },
         {

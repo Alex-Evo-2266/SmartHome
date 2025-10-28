@@ -1,5 +1,5 @@
 import os
-import yaml
+import yaml, sys
 import subprocess
 import importlib
 import logging
@@ -51,9 +51,10 @@ def is_package_installed(package: str) -> bool:
 def install_package(package: str):
     """Устанавливает пакет через Poetry."""
     try:
-        result = subprocess.run(
-            ["poetry", "add", package], check=True, capture_output=True, text=True
-        )
+        # result = subprocess.run(
+        #     ["poetry", "add", package], check=True, capture_output=True, text=True
+        # )
+        result = subprocess.run([sys.executable, "-m", "pip", "install", package])
         logger.info(f"Пакет {package} успешно установлен:\n{result.stdout}")
     except subprocess.CalledProcessError as e:
         logger.error(f"Ошибка при установке {package}: {e.stderr}")
@@ -88,13 +89,13 @@ class ModulesArray:
 
     @classmethod
     def install_dependencies(cls, name: str):
-        """Устанавливает зависимости из config.yaml, если он существует."""
+        """Устанавливает зависимости из module-config.yaml, если он существует."""
         name = '.'.join([*name.split('.'), POST_DIR])
         path = Path(name.replace(".", os.sep))
         modules_name = get_modules(str(path), init=False)
 
         for module_name in modules_name:
-            config_path = Path(MODULS_DIR) / module_name / "config.yaml"
+            config_path = Path(os.path.join(MODULS_DIR, module_name, "module-config.yml"))
             if config_path.exists():
                 try:
                     with config_path.open("r") as file:
@@ -105,7 +106,7 @@ class ModulesArray:
                 except Exception:
                     logger.exception(f"Ошибка при чтении {config_path}")
             else:
-                logger.info(f"Файл config.yaml не найден в {module_name}")
+                logger.info(f"Файл module-config.yaml не найден в {module_name}")
 
 
     @classmethod

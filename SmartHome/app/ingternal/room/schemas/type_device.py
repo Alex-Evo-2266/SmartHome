@@ -9,6 +9,7 @@ class DeviceField(BaseModel):
 
 class DeviceFieldType(BaseModel):
     field_type: TypeDeviceField
+    readonly: bool = False
     devices: List[DeviceField] = []
 
 

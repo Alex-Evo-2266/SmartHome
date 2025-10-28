@@ -4,5 +4,5 @@ from app.ingternal.device_types.types_names import TypesDeviceEnum
 from app.ingternal.device.schemas.enums import TypeDeviceField
 
 device_type = DeviceType(name=TypesDeviceEnum.ILLUMINANCE, fields=[
-        FieldDeviceTypeSchema(name_field_type="lum", type_field=TypeDeviceField.NUMBER, required=True, description=""),
+        FieldDeviceTypeSchema(name_field_type="lum", type_field=TypeDeviceField.NUMBER, required=True, description="", readOnly=True),
 ])

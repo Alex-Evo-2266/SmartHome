@@ -1,6 +1,8 @@
 from app.ingternal.device_types.models.device_type import TypeDevice, FieldTypeDevice
 from app.ingternal.device_types.schemas.device_type import DeviceTypeSerializeSchema, FieldDeviceTypeSerializeSchema
 from app.ingternal.logs import get_base_logger
+from app.ingternal.device_types.serialize_model.get_types import get_device_type_by_name
+from app.ingternal.device_types.schemas.device_type import FieldDeviceTypeSchema
 
 # Настройка логгера
 logger = get_base_logger.get_logger(__name__)
@@ -21,6 +23,8 @@ async def serialive_type_model(device_type: TypeDevice, fields_include: bool = T
     """
     try:
         logger.debug(f"Starting serialization for device type ID: {device_type.id}")
+
+        type_data = get_device_type_by_name(device_type.name_type)
         
         # Базовые данные устройства
         data = DeviceTypeSerializeSchema(
@@ -29,6 +33,11 @@ async def serialive_type_model(device_type: TypeDevice, fields_include: bool = T
             device=device_type.device,
             main=device_type.main
         )
+
+        def get_field_type_data(field_name: str):
+            if not type_data:
+                return None
+            return type_data.fields[field_name]
         
         if fields_include:
             logger.debug(f"Including fields for device type ID: {device_type.id}")
@@ -36,7 +45,7 @@ async def serialive_type_model(device_type: TypeDevice, fields_include: bool = T
                 fields = await device_type.fields.all()
                 logger.debug(f"Found {len(fields)} fields for device type ID: {device_type.id}")
                 
-                data.fields = [await serialize_field_type_model(x) for x in fields]
+                data.fields = [await serialize_field_type_model(x, type_data=get_field_type_data(x.name_field_type)) for x in fields]
                 logger.debug(f"Successfully serialized {len(data.fields)} fields")
             except Exception as e:
                 logger.error(f"Failed to serialize fields for device type ID: {device_type.id}: {str(e)}",
@@ -51,7 +60,7 @@ async def serialive_type_model(device_type: TypeDevice, fields_include: bool = T
                    exc_info=True)
         raise
 
-async def serialize_field_type_model(field: FieldTypeDevice, device_include: bool = False) -> FieldDeviceTypeSerializeSchema:
+async def serialize_field_type_model(field: FieldTypeDevice, device_include: bool = False, type_data: FieldDeviceTypeSchema | None = None) -> FieldDeviceTypeSerializeSchema:
     """
     Сериализация модели поля типа устройства
     
@@ -67,6 +76,7 @@ async def serialize_field_type_model(field: FieldTypeDevice, device_include: boo
     """
     try:
         logger.debug(f"Serializing field ID: {field.id}")
+
         
         field_data = FieldDeviceTypeSerializeSchema(
             id=field.id,
@@ -74,7 +84,8 @@ async def serialize_field_type_model(field: FieldTypeDevice, device_include: boo
             id_field_device=field.id_field_device,
             description=field.description,
             field_type=field.field_type,
-            required=field.required
+            required=field.required,
+            readOnly=type_data.readOnly if type_data else None
         )
         
         if device_include:

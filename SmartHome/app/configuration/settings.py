@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SCRIPT_AUTOMATION_PREFEX = "automation"
 
-MODULS_DIR = os.path.join(BASE_DIR, "app","moduls")
+MODULS_DIR = os.path.join(BASE_DIR, "app","moduls","moduls")
 
 
 TIME_UPPDATA = 6
