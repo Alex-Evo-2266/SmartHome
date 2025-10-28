@@ -247,6 +247,20 @@ class FieldBase(IField):
 		except ValueError:
 			logger.warning(f"Unable to convert value to int: {data}")
 			return None
+		
+	@staticmethod
+	def getFloat(data: str | None) -> float | int | None:
+		try:
+			if data is None:
+				return None
+			value = float(data)
+			# если нет дробной части — вернуть int
+			if value.is_integer():
+				return int(value)
+			return value
+		except ValueError:
+			logger.warning(f"Unable to convert value to float: {data}")
+			return None
 
 	def set(self, status: str, script: bool = True):
 		logger.info(f"Setting value '{status}' for field '{self.get_name()}' of device '{self.device_system_name}'")
@@ -285,7 +299,7 @@ class FieldBase(IField):
 	def _set_number(self, status: str):
 		high = self.getInt(self.data.high)
 		low = self.getInt(self.data.low)
-		status_int = self.getInt(status)
+		status_int = self.getFloat(status)
 
 		if status_int is None:
 			logger.warning(f"Invalid number value '{status}' for field '{self.get_name()}'")

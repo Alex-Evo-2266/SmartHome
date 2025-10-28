@@ -40,7 +40,7 @@ export const MoveSensorDevice:React.FC<DeviceCardProps> = ({device}) => {
                 }
                 <div onClick={openDitail}>
                 {
-                    moveValue !== null && <div><span>motion</span>: <span>{moveValue}</span></div>
+                    moveValue !== null && <div><span>motion</span>: <span>{String(moveValue)}</span></div>
                 }
                 </div>
             </div>
