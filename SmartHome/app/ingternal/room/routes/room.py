@@ -1,7 +1,8 @@
 import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import Callable, Awaitable, Any
+from app.pkg import auth_privilege_dep
 
 from app.ingternal.room.schemas.room import (
     RoomCreate, RoomDevicesUpdate, RoomUpdate,
@@ -37,27 +38,27 @@ async def handle_request(action: Callable[[], Awaitable[Any]]) -> JSONResponse:
 
 
 @router.post("", response_model=dict)
-async def add_room_url(data: RoomCreate) -> JSONResponse:
+async def add_room_url(data: RoomCreate, user_id:str=Depends(auth_privilege_dep("room"))) -> JSONResponse:
     return await handle_request(lambda: create_room(data))
 
 
 @router.delete("/{name}", response_model=dict)
-async def delete_room_url(name: str) -> JSONResponse:
+async def delete_room_url(name: str, user_id:str=Depends(auth_privilege_dep("room"))) -> JSONResponse:
     return await handle_request(lambda: delete_room(name))
 
 
 @router.patch("/{name}/devices", response_model=dict)
-async def device_in_room_update_url(name: str, data: RoomDevicesUpdate) -> JSONResponse:
+async def device_in_room_update_url(name: str, data: RoomDevicesUpdate, user_id:str=Depends(auth_privilege_dep("room"))) -> JSONResponse:
     return await handle_request(lambda: update_device_room(name, data))
 
 
 @router.put("/{name}", response_model=dict)
-async def update_room_url(name: str, data: RoomUpdate) -> JSONResponse:
+async def update_room_url(name: str, data: RoomUpdate, user_id:str=Depends(auth_privilege_dep("room"))) -> JSONResponse:
     return await handle_request(lambda: update_room(name, data))
 
 
 @router.get("/{name}", response_model=RoomDevicesRaw)
-async def get_room_url(name: str) -> Any:
+async def get_room_url(name: str, user_id:str=Depends(auth_privilege_dep("room"))) -> Any:
     try:
         return await get_room(name)
     except Exception as e:
@@ -66,7 +67,7 @@ async def get_room_url(name: str) -> Any:
 
 
 @router.get("", response_model=RoomDevicesRawList)
-async def all_room_url() -> Any:
+async def all_room_url(user_id:str=Depends(auth_privilege_dep("room"))) -> Any:
     try:
         rooms = await get_room_all()
         return RoomDevicesRawList(rooms=rooms)
@@ -76,19 +77,19 @@ async def all_room_url() -> Any:
 
 
 @router.post("/link_device", response_model=dict)
-async def link_room(data: RoomDevicesLink) -> JSONResponse:
+async def link_room(data: RoomDevicesLink, user_id:str=Depends(auth_privilege_dep("room"))) -> JSONResponse:
     return await handle_request(lambda: room_add_device(data.name_room, data.device))
 
 
 @router.patch("/set/value", response_model=dict)
-async def set_device_value_in_room(data: RoomDevicesSet) -> JSONResponse:
+async def set_device_value_in_room(data: RoomDevicesSet, user_id:str=Depends(auth_privilege_dep("room"))) -> JSONResponse:
     return await handle_request(lambda: set_value_room(
         data.name_room, data.device_type, data.field_name, data.value
     ))
 
 from app.ingternal.room.array.RoomArray import RoomArray
 @router.get("/test/eee")
-async def test() -> Any:
+async def test(user_id:str=Depends(auth_privilege_dep("room"))) -> Any:
     try:
         rooms = RoomArray.all()
         print("p9999", rooms)

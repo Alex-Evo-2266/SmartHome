@@ -1,5 +1,6 @@
 import subprocess
-from app.configuration.settings import ENV_FILE
+from app.internal.module.run_module import run_module_in_container
+from app.internal.module.active_modules import load_active_modules
 
 def restart_container(container_id: str) -> bool:
     """
@@ -48,3 +49,28 @@ def restart_container(container_id: str) -> bool:
 #     except subprocess.CalledProcessError:
 #         print(f"❌ Ошибка при пересборке/запуске сервиса {service_name}.")
 #         return False
+
+def restart_all_active_modules():
+	active = load_active_modules()
+
+	for name, info in active.copy().items():
+		container_id = info.get("container_id")
+		container_name = info.get("container")
+		if not container_id:
+			# Контейнер не записан или не найден — запустить заново
+			print(f"🟡 Для модуля {name} нет container_id — пробуем запустить заново")
+			run_module_in_container(name, container_name)
+			continue
+
+		# Проверяем, запущен ли контейнер
+		is_running = subprocess.run(
+			["docker", "ps", "-q", "-f", f"id={container_id}"],
+			stdout=subprocess.PIPE, text=True
+		).stdout.strip()
+
+		if is_running:
+			print(f"🔄 Рестарт контейнера {container_name} ({container_id})")
+			restart_container(container_id)
+		else:
+			print(f"🟠 Контейнер {container_name} ({container_id}) не активен, запускаем заново")
+			run_module_in_container(name, container_name)

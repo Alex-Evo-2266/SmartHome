@@ -5,7 +5,7 @@ from typing import Dict
 import json
 from datetime import datetime
 from app.internal.module.search_modules import get_all_modules
-from app.configuration.settings import URL_REPO_MODULES_LIST, MODULES_DIR, CONFIG_SERVICES_DIR
+from app.configuration.settings import URL_REPO_MODULES_LIST, MODULES_DIR, CONFIG_SERVICES_DIR, DATA_FILE
 from app.internal.module.schemas.modules import ModulesConf
 
 def clone_module(name: str, token: str | None = None, base_dir: str = MODULES_DIR):

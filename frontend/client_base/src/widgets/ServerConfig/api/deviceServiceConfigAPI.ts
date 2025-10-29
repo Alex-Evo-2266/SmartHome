@@ -5,18 +5,18 @@ import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
 import { ConfigItem } from "../models/config"
 
-export const useConfigAPI = () => {
+export const useConfigAPI = (preffix: string) => {
 
     const {request, error, clearError, loading} = useHttp()
     const {showSnackbar} = useSnackbar()
 
     const getConfig = useCallback(async () => {
-        const data:ConfigItem[] = await request("/api-devices/config")
+        const data:ConfigItem[] = await request(`${preffix}/config`)
         return data
     },[request])
 
     const patchConfig = useCallback(async (data: {[key:string]:string}) => {
-        await request("/api-devices/config", TypeRequest.PATCH, data)
+        await request(`${preffix}/config`, TypeRequest.PATCH, data)
     },[request])
 
     useEffect(()=>{

@@ -1,8 +1,9 @@
 import json, logging, yaml, os
 from typing import Optional, List, Dict
 
-from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, CORE_MODULES_DIR, GIT_HUB_TOKEN
+from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, CORE_MODULES_DIR, GIT_HUB_KEY
 from app.internal.module.search_modules import get_all_modules
+from app.pkg import __config__
 from app.internal.module.status import get_module_containers_status
 from app.internal.module.delete import remove_core_module
 from app.internal.module.install_module_core import clone_module
@@ -84,7 +85,10 @@ router = APIRouter(
 @router.get("/all", response_model=AllModulesResData)
 async def get_all_modules_url(no_cash: bool = False):
 	try:
-		files: Dict[str, ModulesConfAndLoad]  = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_CORE)
+		git_hub_token = __config__.get(GIT_HUB_KEY)
+		if git_hub_token == "":
+			git_hub_token = None
+		files: Dict[str, ModulesConfAndLoad]  = get_all_modules(URL_REPO_MODULES_LIST, token=git_hub_token, force_refresh=False, no_cash=no_cash, type_module=TYPE_CORE)
 		data = load_module_configs(CORE_MODULES_DIR)
 		used = []
 		locals = []
@@ -107,7 +111,10 @@ async def get_all_modules_url(no_cash: bool = False):
 @router.get("/data/{name_module}", response_model=ModulesConfAndLoad)
 async def get_module(name_module:str, no_cash: bool = False):
 	try:
-		files = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_CORE)
+		git_hub_token = __config__.get(GIT_HUB_KEY)
+		if git_hub_token == "":
+			git_hub_token = None
+		files = get_all_modules(URL_REPO_MODULES_LIST, token=git_hub_token, force_refresh=False, no_cash=no_cash, type_module=TYPE_CORE)
 		find_module = next((item for item in files.values() if item.name_module == name_module), None)
 		module_data_list = load_module_config_by_name(CORE_MODULES_DIR, name_module)
 		config:ModulesConfAndLoad | None = None
@@ -129,7 +136,10 @@ async def get_module(name_module:str, no_cash: bool = False):
 @router.get("/install")
 async def install_module(name: str):
 	try:
-		clone_module(name, GIT_HUB_TOKEN, CORE_MODULES_DIR, TYPE_CORE)
+		git_hub_token = __config__.get(GIT_HUB_KEY)
+		if git_hub_token == "":
+			git_hub_token = None
+		clone_module(name, git_hub_token, CORE_MODULES_DIR, TYPE_CORE)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 

@@ -7,10 +7,15 @@ import { useConfigAPI } from "../api/deviceServiceConfigAPI";
 import { groupByTag } from "../lib/helpers/groupByTag";
 import { ConfigItem, ConfigItemType } from "../models/config";
 
-export const SettingsEditor = () => {
+interface SettingsCardProps{
+  header: string
+  config_prefix: string
+}
+
+export const SettingsEditor:React.FC<SettingsCardProps> = ({header, config_prefix}) => {
   const [originalSettings, setOriginalSettings] = useState<ConfigItem[][]>([]);
   const [editedSettings, setEditedSettings] = useState<ConfigItem[][]>([]);
-  const { getConfig, patchConfig, loading } = useConfigAPI();
+  const { getConfig, patchConfig, loading } = useConfigAPI(config_prefix);
   const [visibleChangeDialog, setVisibleChangeDialog] = useState(false)
 
   const loadConfig = useCallback(async () => {
@@ -98,7 +103,7 @@ export const SettingsEditor = () => {
   },[patchConfig, getChanges, loadConfig])
 
   return (
-    <Card header="Server settings">
+    <Card header={header}>
       {
         loading?
         <Loading/>:
