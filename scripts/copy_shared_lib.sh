@@ -3,6 +3,8 @@
 # Путь к родительской папке относительно текущего скрипта
 BASE_DIR="$(dirname "$(realpath "$0")")/.."
 
+bash "$BASE_DIR/shared_lib/build_all.sh"
+
 # Перебираем все верхние папки в BASE_DIR
 for dir in "$BASE_DIR"/*/; do
     # Получаем имя папки

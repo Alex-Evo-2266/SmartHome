@@ -8,7 +8,7 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 mkdir -p "$SCRIPT_DIR/server/external"
 
 # Запускаем сборку из ../shared_lib относительно скрипта
-bash "$SCRIPT_DIR/../shared_lib/build_all.sh"
+# bash "$SCRIPT_DIR/../shared_lib/build_all.sh"
 
 # Копируем dist_all во внутреннюю папку external
 cp -r "$SCRIPT_DIR/../shared_lib/dist_all" "$SCRIPT_DIR/server/external"
