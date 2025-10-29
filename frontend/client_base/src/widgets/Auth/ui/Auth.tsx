@@ -27,7 +27,7 @@ export const Auth = () => {
             <div style={{display: 'flex', justifyContent:'center'}}>
                 <div>
                     <TextField name="name" placeholder="login" border onChange={changeHandler}/>
-                    <TextField name="password" placeholder="password" border onChange={changeHandler}/>
+                    <TextField type="password" name="password" placeholder="password" border onChange={changeHandler}/>
                     <Button onClick={onSubmite} style={{width:'100%'}}>login</Button>
                 </div>
             </div>
