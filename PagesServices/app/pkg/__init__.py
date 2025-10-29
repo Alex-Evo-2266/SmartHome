@@ -1,6 +1,7 @@
 from app.configuration.settings import CONFIG_TAG, ROUTE_PREFIX, CONFIG_DIR, CONFIG_FILE_NAME
-from app.pkg.config import get_router, ConfigRouterOption, Config, itemConfig, ConfigItemType
+from config_lib import get_router, ConfigRouterOption, Config, itemConfig, ConfigItemType
 from auth_dep_lib import auth_privilege_dep
+from rabitmq import *
 
 __config__ = Config(CONFIG_DIR, CONFIG_FILE_NAME)
 

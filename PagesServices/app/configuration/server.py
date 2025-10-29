@@ -9,7 +9,7 @@ from app.configuration.settings import MEDIA_ROOT, DEBUG, ORIGINS
 import logging
 # logging.disable(logging.CRITICAL)
 logging.basicConfig(
-    level=logging.WARNING,
+    level=logging.INFO,
     format="%(filename)s: %(asctime)s - %(levelname)s - %(message)s"
 )
 

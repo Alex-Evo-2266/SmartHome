@@ -13,15 +13,10 @@ from app.internal.pages.schemas.components import Page, Dialog, Component, Compo
 from app.internal.pages.schemas.navigation import NavigationData
 from app.internal.pages.schemas.web_constructor import WebConstructorData
 from app.internal.pages.schemas.module_data import ModuleData
-
+from app.pkg import auth_privilege_dep
 from app.internal.pages.logic.get_navigation import load_navigation_configs
 
 logger = logging.getLogger(__name__)
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(filename)s: %(asctime)s - %(levelname)s - %(message)s"
-)
 
 router = APIRouter(
 	prefix=f"{ROUTE_PREFIX}/pages",
@@ -30,7 +25,7 @@ router = APIRouter(
 )
 
 @router.get("/all", response_model=List[ModuleData], response_model_exclude_none=True)
-async def allPages():
+async def allPages(user_id:str=Depends(auth_privilege_dep("page"))):
 	try:
 		modules_data:List[ModuleData] = []
 		modules = ModulesArray.get_all()
@@ -46,7 +41,7 @@ async def allPages():
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/{module}/{page}", response_model=WebConstructorData, response_model_exclude_none=True)
-async def send(module: str, page: str):
+async def send(module: str, page: str, user_id:str=Depends(auth_privilege_dep("page"))):
     logger.info(f"Starting to fetch data for module '{module}' and page '{page}'")
     try:
         module_data = ModulesArray.get(module)
@@ -98,7 +93,7 @@ async def send(module: str, page: str):
         return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/navigations", response_model=NavigationData)
-async def navigation():
+async def navigation(user_id:str=Depends(auth_privilege_dep("base"))):
 	try:
 		return load_navigation_configs()
 	except Exception as e:
