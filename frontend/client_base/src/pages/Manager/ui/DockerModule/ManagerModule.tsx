@@ -1,7 +1,8 @@
 import { useModulesAPI } from '@src/entites/moduleManager';
 import { ModuleData } from '@src/entites/moduleManager/modules/modules';
+import { IconButtonMenu } from '@src/shared';
 import { Loading } from '@src/shared/ui/Loading';
-import { ArrowLeft, Button, Check, IColumn, IconButton, IDataItem, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
+import { ArrowLeft, Button, Check, IColumn, IconButton, IDataItem, MoreVertical, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -31,8 +32,7 @@ export const DockerModule:React.FC = () => {
     }
 
     const click = (f: (...arg: string[])=>void, ...arg: string[]) => {
-        return (e:React.MouseEvent<HTMLButtonElement>) => {
-            e.stopPropagation()
+        return () => {
             f(...arg)
             setTimeout(load, 100)
         }
@@ -61,23 +61,23 @@ export const DockerModule:React.FC = () => {
             template(_, data) {
                 if(data.status === "true")
                     return(
-                        <>
-                            <Button onClick={click(stopModule, data.name as string)}>остановка</Button>
-                            <Button onClick={click(rebuildModule, data.name as string)}>пересборка</Button>
-                            <Button onClick={click(updateModule, data.name as string)}>обновить</Button>
-                        </>
+                        <IconButtonMenu icon={<MoreVertical/>} blocks={[
+                            {items: [
+                                {title: "остановка", onClick: click(stopModule, data.name as string)},
+                                {title: "пересборка", onClick: click(rebuildModule, data.name as string)},
+                                {title: "обновить", onClick: click(updateModule, data.name as string)}
+                            ]}
+                        ]}/>
                     )
                 return(
-                    <>
-                        <Button onClick={click(runModule, data.name as string)}>запуск</Button>
-                        <Button onClick={click(deleteModule, data.name as string)}>удалить</Button>
-                        <Button onClick={click(rebuildModule, data.name as string)}>пересборка</Button>
-                        <Button onClick={click(updateModule, data.name as string)}>обновить</Button>
-                        {/* {
-                            data.local &&
-                            <Button onClick={click(deleteModule, data.name as string)}>создать docker compose</Button>
-                        } */}
-                    </>
+                    <IconButtonMenu icon={<MoreVertical/>} blocks={[
+                        {items: [
+                            {title: "запуск", onClick: click(runModule, data.name as string)},
+                            {title: "удалить", onClick: click(deleteModule, data.name as string)},
+                            {title: "пересборка", onClick: click(rebuildModule, data.name as string)},
+                            {title: "обновить", onClick: click(updateModule, data.name as string)}
+                        ]}
+                    ]}/>
                 )
             },
         }

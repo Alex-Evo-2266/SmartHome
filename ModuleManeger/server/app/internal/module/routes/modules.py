@@ -1,4 +1,4 @@
-import json, logging, yaml, os
+import json, logging, yaml, os, asyncio
 from typing import Optional, List, Dict
 from app.pkg import __config__
 
@@ -168,7 +168,8 @@ async def install_module(name: str):
 async def run_modue(name: str, container_name: Optional[str] = None):
 	try:
 		# return load_module_configs(MODULES_DIR)
-		return run_module_in_container(name, container_name)
+		# return run_module_in_container(name, container_name)
+		return await asyncio.to_thread(run_module_in_container, name, container_name)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
@@ -176,8 +177,8 @@ async def run_modue(name: str, container_name: Optional[str] = None):
 async def stop_module(name: str, container_name: Optional[str] = None):
 	try:
 		# return load_module_configs(MODULES_DIR)
-		print(name, container_name)
-		return stop_module_in_container(name, container_name)
+		print("stop", name, container_name)
+		return await asyncio.to_thread(stop_module_in_container, name, container_name)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
