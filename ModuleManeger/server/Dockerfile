@@ -21,11 +21,11 @@ WORKDIR $APP_HOME
 # RUN curl -sSL https://install.python-poetry.org | python3 -
 RUN python3.12 -m ensurepip --upgrade
 RUN python3.12 -m pip install --user pipx
-RUN python3.12 -m pipx ensurepath
-RUN source ~/.bashrc
+RUN export PATH="$HOME/.local/bin:$PATH"
 RUN pipx install poetry
+RUN poetry --version
 
-RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
+# RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
 
 COPY poetry.lock $APP_HOME/
 COPY pyproject.toml $APP_HOME/

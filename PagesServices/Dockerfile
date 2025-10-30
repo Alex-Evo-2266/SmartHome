@@ -23,11 +23,11 @@ RUN groupadd -r device_service && \
 #     ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry
 RUN python3.12 -m ensurepip --upgrade
 RUN python3.12 -m pip install --user pipx
-RUN python3.12 -m pipx ensurepath
-RUN source ~/.bashrc
+RUN export PATH="$HOME/.local/bin:$PATH"
 RUN pipx install poetry
+RUN poetry --version
 
-RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
+# RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
 
 # Проверяем версию Python перед установкой зависимостей
 RUN python3 --version  # Должно вывести 3.12.x
