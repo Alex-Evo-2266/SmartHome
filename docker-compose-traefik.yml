@@ -123,7 +123,8 @@ services:
     restart: always
     networks: 
       - local_sh_network
-    command: bash -c "uvicorn app:create_app --reload --port=8006 --host='0.0.0.0'"
+    # command: bash -c "uvicorn app:create_app --reload --port=8006 --host='0.0.0.0'"
+    command: ["./command.sh"]
     ports:
       - 1235:8006
     environment:
@@ -233,7 +234,8 @@ services:
   script_service:
     build: ./ScriptServices
     restart: always
-    command: bash -c "uvicorn app:create_app --reload --port=8008 --host='0.0.0.0'"
+    # command: bash -c "uvicorn app:create_app --reload --port=8008 --host='0.0.0.0'"
+    command: ["./command.sh"]
     networks: 
       - local_sh_network
     environment:
