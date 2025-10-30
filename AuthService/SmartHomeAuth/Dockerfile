@@ -18,7 +18,15 @@ ENV APP_HOME=/home/auth_service/web
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
+# RUN curl -sSL https://install.python-poetry.org | python3 -
+# RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
+
+RUN python3.12 -m ensurepip --upgrade
+RUN python3.12 -m pip install --user pipx
+RUN python3.12 -m pipx ensurepath
+RUN source ~/.bashrc
+RUN pipx install poetry
+
 RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
 
 COPY poetry.lock $APP_HOME/

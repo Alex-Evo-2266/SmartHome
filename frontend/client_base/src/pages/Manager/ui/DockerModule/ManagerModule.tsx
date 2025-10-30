@@ -95,12 +95,14 @@ export const DockerModule:React.FC = () => {
                     hovered 
                     onClick={()=>clickExempl(item.name)}
                     header={item.name} 
-                    icon={String(!!item.status?.all_running)==="true"?<Check/>: <X/>} 
-                    control={<IconButton icon={<MoreVertical/>} onClick={(e: React.MouseEvent<HTMLButtonElement>)=>showMenu(e, String(!!item.status?.all_running), item.name)}/>}
-                    // control={<IconButtonMenu 
-                    //     blocks={[{items:getMenuItems(String(!!item.status?.all_running), item.name)}]} 
-                    //     icon={<MoreVertical/>}
-                    // />}
+                    icon={String(!!item.status?.all_running)==="true"?<Check primaryColor="#00aa00"/>: <X/>} 
+                    control={
+                        <IconButton 
+                        icon={<MoreVertical/>} 
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>)=>showMenu(e, String(!!item.status?.all_running), item.name)}
+                        />
+                    }
+
                 />
             ))
         }
