@@ -1,15 +1,21 @@
-import { BaseActionCard, BasicTemplateDialog, Button, Card, ContentBox, NumberField, TextField, Typography } from "alex-evo-sh-ui-kit";
-import React, { useCallback, useEffect, useState } from "react";
-import { useConfigAPI } from "../api/deviceServiceConfigAPI";
-import { ConfigItem, ConfigItemType } from "../models/config";
-import { groupByTag } from "../lib/helpers/groupByTag";
+import { BaseActionCard, BasicTemplateDialog, Button, Card, ContentBox, MoreText, NumberField, TextField, Typography } from "alex-evo-sh-ui-kit";
+import { useCallback, useEffect, useState } from "react";
+
 import { PasswordField } from "./passwordField";
 import { Loading } from "../../../shared/ui/Loading";
+import { useConfigAPI } from "../api/deviceServiceConfigAPI";
+import { groupByTag } from "../lib/helpers/groupByTag";
+import { ConfigItem, ConfigItemType } from "../models/config";
 
-export const SettingsEditor = () => {
+interface SettingsCardProps{
+  header: string
+  config_prefix: string
+}
+
+export const SettingsEditor:React.FC<SettingsCardProps> = ({header, config_prefix}) => {
   const [originalSettings, setOriginalSettings] = useState<ConfigItem[][]>([]);
   const [editedSettings, setEditedSettings] = useState<ConfigItem[][]>([]);
-  const { getConfig, patchConfig, loading } = useConfigAPI();
+  const { getConfig, patchConfig, loading } = useConfigAPI(config_prefix);
   const [visibleChangeDialog, setVisibleChangeDialog] = useState(false)
 
   const loadConfig = useCallback(async () => {
@@ -23,8 +29,17 @@ export const SettingsEditor = () => {
     loadConfig();
   }, [loadConfig]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, tag: string) => {
-    const { name, value } = e.target;
+  const handleChange = (value: string, name: string, tag: string) => {
+    setEditedSettings((prev) =>
+      prev.map((group) =>
+        group[0].tag === tag
+          ? group.map((item) => (item.key === name ? { ...item, value } : item))
+          : group
+      )
+    );
+  };
+
+  const handleMoreChange = (value:string, name: string, tag: string) => {
     setEditedSettings((prev) =>
       prev.map((group) =>
         group[0].tag === tag
@@ -48,7 +63,7 @@ export const SettingsEditor = () => {
   const changePass = useCallback(async(data: string, name:string) => {
     await patchConfig({[name]: data})
     setTimeout(loadConfig, 500)
-  },[patchConfig])
+  },[patchConfig, loadConfig])
 
   // Функция для сравнения изменений
   const getChanges = useCallback(() => {
@@ -73,23 +88,22 @@ export const SettingsEditor = () => {
 
   const handleSave = useCallback(async() => {
     setVisibleChangeDialog(true)
-    
-  },[patchConfig])
+  },[])
 
   const saveSand = useCallback( async ()=>{
     const changes = getChanges();
-    let data:{[key:string]:string} = {}
-    for( let change of changes)
+    const data:{[key:string]:string} = {}
+    for( const change of changes)
     {
       data[change.key] = change.newValue
     }
     await patchConfig(data)
     setVisibleChangeDialog(false)
     setTimeout(loadConfig, 500)
-  },[patchConfig, getChanges])
+  },[patchConfig, getChanges, loadConfig])
 
   return (
-    <Card header="Server settings">
+    <Card header={header}>
       {
         loading?
         <Loading/>:
@@ -105,7 +119,7 @@ export const SettingsEditor = () => {
                 key={`${item.tag}-${item.key}`}
                 name={item.key}
                 value={Number(item.value)}
-                onChange={(data, name) => handleChangeNumber(data, name, item.tag)}
+                onChange={(data: number, name: string) => handleChangeNumber(data, name, item.tag)}
               />
             ) : item.type === ConfigItemType.PASSWORD ? (
               <PasswordField
@@ -116,14 +130,24 @@ export const SettingsEditor = () => {
                 name={item.key}
                 onChange={changePass}
               />
-            ) : (
+            ) : item.type === ConfigItemType.MORE_TEXT?
+            (
+              <MoreText 
+              value={item.value} 
+              border
+              key={`${item.tag}-${item.key}`}
+              name={item.key}
+              onChange={(data)=>handleMoreChange(data, item.key, item.tag)}
+              separator=","
+              placeholder={item.key}/>
+            ):(
               <TextField
                 border
                 placeholder={item.key}
                 key={`${item.tag}-${item.key}`}
                 name={item.key}
                 value={item.value}
-                onChange={(e) => handleChange(e, item.tag)}
+                onChange={(value: string, name: string) => handleChange(value, name, item.tag)}
               />
             )
           ))}

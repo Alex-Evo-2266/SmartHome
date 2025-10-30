@@ -1,10 +1,11 @@
 import { Button, ContentBox, Divider, IconButton, ListContainer, ListItem, Trash } from "alex-evo-sh-ui-kit"
 import { useCallback, useState } from "react"
-import { DialogPortal } from "../../../shared"
-import { DeviceClassOptions } from "../../../entites/devices"
-import { FieldData } from "../models/editDeviceSchema"
-import { EditField } from "./editField"
+
 import { AddField } from "./addFieldDialog"
+import { EditField } from "./editField"
+import { DeviceClassOptions } from "../../../entites/devices"
+import { DialogPortal } from "../../../shared"
+import { FieldData } from "../models/editDeviceSchema"
 
 interface DeviceDataProps{
     option: DeviceClassOptions
@@ -27,14 +28,14 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
         newFields.push(data)
         onChange(newFields)
         setAddFieldVisible(false)
-    },[fields])
+    },[fields, onChange])
 
     const editField = useCallback((index: number, data: FieldData) => {
         const newFields = fields.slice()
         newFields[index] = data
         onChange(newFields)
         setEditFieldVisible(null)
-    },[fields])
+    },[fields, onChange])
 
     const getField = useCallback((index: number) => {
         const data = fields.find((_, i) => i === index)

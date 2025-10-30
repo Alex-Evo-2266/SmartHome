@@ -1,6 +1,7 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List, Union
+from app.pkg import auth_privilege_dep
 
 from app.ingternal.device_types.serialize_model.create import create
 from app.ingternal.device_types.schemas.add_device_type import AddOrEditDeviceTypeSchema, SetMain
@@ -23,7 +24,7 @@ router = APIRouter(
 )
 
 @router.post("", status_code=200)
-async def add_device_type(data: AddOrEditDeviceTypeSchema):
+async def add_device_type(data: AddOrEditDeviceTypeSchema, user_id:str=Depends(auth_privilege_dep("device"))):
 	"""
 	Create or update a device type mapping
 	
@@ -43,7 +44,7 @@ async def add_device_type(data: AddOrEditDeviceTypeSchema):
 			detail=str(e))
 	
 @router.put("/{id}", status_code=200)
-async def edit_device_type(id: str, data: AddOrEditDeviceTypeSchema):
+async def edit_device_type(id: str, data: AddOrEditDeviceTypeSchema, user_id:str=Depends(auth_privilege_dep("device"))):
 	"""
 	Create or update a device type mapping
 	
@@ -63,7 +64,7 @@ async def edit_device_type(id: str, data: AddOrEditDeviceTypeSchema):
 			detail=str(e))
 			
 @router.get("", response_model=DeviceTypeResponseSchema)
-async def get_all_types():
+async def get_all_types(user_id:str=Depends(auth_privilege_dep("device"))):
 	try:
 		device_types = get_types()
 		return DeviceTypeResponseSchema(data=device_types)
@@ -73,7 +74,7 @@ async def get_all_types():
 			detail=str(e))
 
 @router.get("/{system_name}", response_model=DeviceTypeSerializeResponseSchema)
-async def get_device_all_types(system_name:str):
+async def get_device_all_types(system_name:str, user_id:str=Depends(auth_privilege_dep("device"))):
 	try:
 		device_types = await get_type_device(system_name)
 		return DeviceTypeSerializeResponseSchema(data=device_types)
@@ -85,7 +86,7 @@ async def get_device_all_types(system_name:str):
 			detail=str(e))
 	
 @router.get("/{system_name}/main", response_model=Union[DeviceTypeSerializeSchema | None])
-async def get_main_device_types(system_name:str):
+async def get_main_device_types(system_name:str, user_id:str=Depends(auth_privilege_dep("device"))):
 	try:
 		device_types = await get_type_main_device(system_name)
 		return device_types
@@ -97,7 +98,7 @@ async def get_main_device_types(system_name:str):
 			detail=str(e))
 	
 @router.patch("/{system_name}/main")
-async def set_main_device_types(system_name:str, data:SetMain):
+async def set_main_device_types(system_name:str, data:SetMain, user_id:str=Depends(auth_privilege_dep("device"))):
 	try:
 		await set_main(system_name, data.id)
 		return "ok"
@@ -109,7 +110,7 @@ async def set_main_device_types(system_name:str, data:SetMain):
 			detail=str(e))
 
 @router.get("/maps", response_model=DeviceTypeSerializeResponseSchema)
-async def get_all_field_map():
+async def get_all_field_map(user_id:str=Depends(auth_privilege_dep("device"))):
 	"""Get all device type mappings"""
 	try:
 		logger.info("Fetching all device type mappings")
@@ -123,7 +124,7 @@ async def get_all_field_map():
 			detail=str(e))
 
 @router.delete("/{id}", status_code=200)
-async def delete_type_dev(id: str):
+async def delete_type_dev(id: str, user_id:str=Depends(auth_privilege_dep("device"))):
 	"""Delete device type mapping by device system name"""
 	try:
 		logger.info(f"Deleting device type id: {id}")

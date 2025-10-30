@@ -1,5 +1,5 @@
-import { DeviceType, TypeFieldEditData } from "../models/type";
 import { getFieldType } from "./filterFields";
+import { DeviceType, TypeFieldEditData } from "../models/type";
 
 /**
  * Редактирует поле в массиве fields или добавляет/удаляет его

@@ -1,4 +1,4 @@
 export type ISocketData = {
     type: string
-    data: any | any[]
+    data: unknown | unknown[]
 }

@@ -1,7 +1,8 @@
 import { IOption } from "alex-evo-sh-ui-kit"
+
 import { DeviceSchema, TypeDeviceField } from "../../../entites/devices"
-import { DeviceType, DeviceTypeEditData, TypeFieldEditData } from "../models/type"
 import { TypeDevice, TypeField } from "../../../entites/devices/models/type"
+import { DeviceType, DeviceTypeEditData, TypeFieldEditData } from "../models/type"
 
 export function getFieldType(types: DeviceType[], typeName: string) {
     const type = types.find(item => item.name === typeName)

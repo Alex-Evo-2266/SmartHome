@@ -1,12 +1,13 @@
 import { ContentBox, Form, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
+
+import { EditType } from "./editType"
+import { FieldList } from "./fieldList"
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions, DeviceSchema, DeviceSerializeFieldSchema } from "../../../entites/devices"
-import { EditDeviceData, FieldData } from "../models/editDeviceSchema"
-import { FieldList } from "./fieldList"
-import { useEditDevice } from "../api/editDevice"
-import { EditType } from "./editType"
 import { SelectRoom } from "../../../features/Room"
+import { useEditDevice } from "../api/editDevice"
+import { EditDeviceData, FieldData } from "../models/editDeviceSchema"
 
 interface DeviceDataProps{
     data: DeviceSchema
@@ -69,7 +70,7 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
     const [errors, setErrors] = useState<{[key:string]:string}>({})
     const {editDevice} = useEditDevice()
 
-    const change = (name: string, data: any) => {
+    const change = (name: string, data: unknown) => {
         setValue(prev=>({...prev, [name]: data}))
     }
 
@@ -80,10 +81,6 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
             setValue(prev=>({...prev, room: roomName}))
     }
 
-    useEffect(()=>{
-        console.log("data",value, option, data)
-    },[value, option])
-
     const save = useCallback(async()=>{
         const errors = validDevice(value, option)
         setErrors(errors)
@@ -92,7 +89,7 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
             await editDevice({...value, class_device: data.class_device, type: data.type}, data.system_name)
             onHide()
         }
-    },[value, option, data, onHide])
+    },[value, option, data, onHide, editDevice])
 
     return(
         <FullScreenTemplateDialog onHide={onHide} onSave={save}>

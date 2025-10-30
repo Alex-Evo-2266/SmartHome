@@ -1,6 +1,7 @@
 import { useHttp } from "@src/shared/lib/hooks/http.hook"
 import { useSnackbar } from "@src/shared/lib/hooks/snackbar.hook"
 import { useCallback, useEffect } from "react"
+
 import { CoreContainerData } from "../modules/modules"
 
 export const useCoreAPI = () => {
@@ -18,10 +19,6 @@ export const useCoreAPI = () => {
     const restartModule = useCallback(async (id: string) => {
         await request(`/api-modules-manager/core/restart/${id}`)
     },[request])
-
-    // const rebuildModule = useCallback(async (name: string) => {
-    //     await request(`/api-modules-manager/core/rebuild?name=${name}`)
-    // },[request])
     
     useEffect(()=>{
             if (error)

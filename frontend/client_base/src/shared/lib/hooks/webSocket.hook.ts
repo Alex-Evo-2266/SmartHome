@@ -1,18 +1,19 @@
 import {useCallback, useRef} from 'react'
+
 import {ISocketData} from '../model/webSocket';
 
-export interface MessageCallback {
+export interface MessageCallback<T> {
   messageType: string; // Тип сообщения
-  callback: (data: any) => void; // Функция callback, которая принимает любые данные
+  callback: (data: T) => void; // Функция callback, которая принимает любые данные
 }
 
-export const useSocket = (callbacks: MessageCallback[] = []) =>{
+export const useSocket = <T>(callbacks: MessageCallback<T>[] = []) =>{
   const socket = useRef<WebSocket | null>(null);
   const timerId = useRef<number | undefined>(undefined);
 
   const connectSocket = useCallback(()=>{
     try{
-      let path = `ws://${import.meta.env.VITE_HOST}/ws/base`
+      const path = `ws://${import.meta.env.VITE_HOST}/ws/base`
       console.log(path)
       socket.current = new WebSocket(path)
     }catch(e){
@@ -37,10 +38,10 @@ export const useSocket = (callbacks: MessageCallback[] = []) =>{
       if(!socket.current) return;
       socket.current.onmessage = function(e) {
         const data: ISocketData = JSON.parse(e.data);
-        for(let collback of callbacks){
+        for(const collback of callbacks){
           if(collback.messageType === data.type)
           {
-            collback.callback(data.data)
+            collback.callback(data.data as T)
           }
         }
       }
@@ -52,7 +53,7 @@ export const useSocket = (callbacks: MessageCallback[] = []) =>{
         }, 10000);
       };
     }
-  },[closeSocket, connectSocket])
+  },[closeSocket, connectSocket, callbacks])
 
   return{
     listenSocket,

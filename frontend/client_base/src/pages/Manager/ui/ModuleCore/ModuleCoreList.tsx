@@ -1,39 +1,51 @@
+import { useCoreModulesAPI } from "@src/entites/moduleManager";
+import { ModuleData } from "@src/entites/moduleManager/modules/modules";
+import { IconButtonMenu } from "@src/shared";
 import { Check, ListContainer, ListItem, MoreVertical } from "alex-evo-sh-ui-kit"
 import { useContext } from "react"
+
 import { ManagerContext } from "../../lib/context"
-import { ModuleData } from "@src/entites/moduleManager/modules/modules"
-import { useNavigate } from 'react-router-dom';
-import { IconButtonMenu } from "@src/shared";
-import { useCoreModulesAPI } from "@src/entites/moduleManager";
 
 
 export const CoreModuleList:React.FC = () => {
 
-    const {coreModuler} = useContext(ManagerContext)
-    const {installModule} = useCoreModulesAPI()
-    const navigate = useNavigate()
+    const {coreModuler, reload} = useContext(ManagerContext)
+    const {installModule, deleteModule} = useCoreModulesAPI()
 
-    const clickModule = (data: ModuleData) => {
-        navigate(`/manager/core-module/${data.name_module}`)
+    function click<T>(f: (...arg: T[])=>void, ...arg: T[]){
+        return (e?:React.MouseEvent<HTMLButtonElement>) => {
+            e?.stopPropagation()
+            f(...arg)
+            setTimeout(reload, 100)
+        }
     }
 
-    const install = (data: string) => {
-        installModule(data)
+    function getMenu(data: ModuleData){
+        const items = []
+        if(data.load)
+            items.push({
+                title: "delete",
+                onClick: click(deleteModule, data.name_module)
+            })
+        else
+            items.push({
+                title: "install",
+                onClick: click(installModule, data.name_module)
+            })
+        return items
     }
 
     return(
         <ListContainer>
             {
-                coreModuler.map((data)=>{
+                coreModuler.map((data, index)=>{
                     return(
                         <ListItem
+                        key={`${data.name_module}-${index}`}
                         header={data.name_module} 
                         text={data.repo} 
                         icon={data.load? <Check primaryColor="#00aa00"/>: <i></i>}
-                        control={<IconButtonMenu icon={<MoreVertical/>} blocks={[{items:[{
-                            title: "install",
-                            onClick: ()=>install(data.name_module),
-                        }]}]}/>}
+                        control={<IconButtonMenu icon={<MoreVertical/>} autoHide blocks={[{items:getMenu(data)}]}/>}
                         />
                     )
                 })

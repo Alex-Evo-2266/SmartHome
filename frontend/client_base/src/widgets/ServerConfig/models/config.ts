@@ -3,7 +3,8 @@
 export enum ConfigItemType {
     NUMBER = "number",
     TEXT = "text",
-    PASSWORD = "password"
+    PASSWORD = "password",
+    MORE_TEXT = "more"
 }
 
 export interface ConfigItem {

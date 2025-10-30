@@ -1,9 +1,9 @@
-import { useParams } from 'react-router-dom';
 import { useModulesAPI } from '@src/entites/moduleManager';
-import { useCallback, useEffect, useState } from 'react';
 import { Exemple, ModuleData } from '@src/entites/moduleManager/modules/modules';
 import { Loading } from '@src/shared/ui/Loading';
 import { Button, IColumn, Table, Typography } from 'alex-evo-sh-ui-kit';
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 export const DockerExemplePage:React.FC = () => {
 

@@ -28,6 +28,7 @@ class ModulesConf(BaseModel):
 	multiply: bool
 	containers: Optional[List[ContaiderData]] = None
 	type: str
+	dependencies: Optional[List[str]] = None
 
 class ModulesLoadData(BaseModel):
 	name: str
@@ -52,6 +53,11 @@ class AllModulesResData(BaseModel):
 class ContainerId(BaseModel):
 	container_id: str
 	name: str
+	service: str
 
 class Containers(BaseModel):
 	data: List[ContainerId]
+
+class RebuildData(BaseModel):
+	service: str
+	name: str

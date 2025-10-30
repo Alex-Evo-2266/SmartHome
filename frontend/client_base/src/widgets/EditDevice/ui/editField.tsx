@@ -1,5 +1,6 @@
 import { Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
+
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions, TypeDeviceField } from "../../../entites/devices"
 import { FieldData } from "../models/editDeviceSchema"
@@ -26,7 +27,7 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
     const [value, setValue] = useState<FieldData>(data)
     const [errors, setErrors] = useState<{[key:string]:string}>({})
 
-    const change = (name: string, data: any) => {
+    const change = (name: string, data: TypeDeviceField) => {
         if(name === 'type' && data === TypeDeviceField.BINARY)
         {
             return setValue(prev=>({...prev, type: data, low: BINARY_LOW, high: BINARY_HIGH}))
@@ -42,11 +43,7 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
         setValue(prev=>({...prev, [name]: data}))
     }
 
-    useEffect(()=>{
-        console.log(value)
-    },[value])
-
-    const validField = (field:FieldData) => {
+    const validField = useCallback((field:FieldData) => {
         const errors:{[key:string]: string} = {}
 
         if(field.name.length === 1)
@@ -63,16 +60,16 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
         }
 
         return errors
-    }
+    },[option.fields_change.address])
 
     const save = useCallback(()=>{
         const errors = validField(value)
         setErrors(errors)
         if(Object.keys(errors).length === 0)
         {
-            onSave && onSave(value)
+            onSave(value)
         }
-    },[onSave, value])
+    },[onSave, value, validField])
 
     return(
         <FullScreenTemplateDialog header="add field" onHide={onHide} onSave={save}>

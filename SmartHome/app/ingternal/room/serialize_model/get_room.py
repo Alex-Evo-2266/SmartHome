@@ -128,6 +128,7 @@ async def build_device_types(devices) -> Dict[str, DeviceTypeModel]:
                 if field.name_field_type not in device_type_model.fields:
                     device_type_model.fields[field.name_field_type] = DeviceFieldType(
                         field_type=field.field_type,
+                        readonly=field.readOnly,
                         devices=[]
                     )
                 device_type_model.fields[field.name_field_type].devices.append(

@@ -5,12 +5,14 @@ export interface IManagerContext{
     dockerModules: ModuleData[]
     coreModuler: ModuleData[]
     core: CoreContainerId[]
+    reload: ()=>void
 }
 
 const initManager:IManagerContext = {
     dockerModules: [],
     core: [],
-    coreModuler: []
+    coreModuler: [],
+    reload: ()=>{}
 }
 
 export const ManagerContext = createContext<IManagerContext>(initManager)

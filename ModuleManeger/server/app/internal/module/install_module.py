@@ -2,9 +2,10 @@ import os
 import yaml
 import subprocess
 from typing import Dict
-from pathlib import Path
+import json
+from datetime import datetime
 from app.internal.module.search_modules import get_all_modules
-from app.configuration.settings import URL_REPO_MODULES_LIST, MODULES_DIR, CONFIG_SERVICES_DIR
+from app.configuration.settings import URL_REPO_MODULES_LIST, MODULES_DIR, CONFIG_SERVICES_DIR, DATA_FILE
 from app.internal.module.schemas.modules import ModulesConf
 
 def clone_module(name: str, token: str | None = None, base_dir: str = MODULES_DIR):
@@ -45,6 +46,7 @@ def clone_module_repo(repo_url: str, name_module: str, base_dir: str = MODULES_D
 
     replace_module_name_in_config(final_dir, name)
     generate_docker_compose_from_module(final_dir)
+    save_module_meta(final_dir, name)
 
     return final_dir
 
@@ -147,3 +149,48 @@ def generate_docker_compose_from_module(module_path: str, output_path: str = Non
 
     print(f"✅ docker-compose.yml успешно создан: {output_path}")
     return True
+
+
+def save_module_meta(module_path: str, module_name: str):
+    """
+    Сохраняет метаданные модуля (контейнеры, конфиги и т.д.) в meta.json.
+    """
+    config_path = os.path.join(module_path, "module-config.yml")
+    meta_path = os.path.join(module_path, "modules_meta.json")
+
+    if not os.path.exists(config_path):
+        print(f"⚠️ Не найден module-config.yml: {config_path}")
+        return
+
+    with open(config_path, "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+
+    containers = config.get("containers", [])
+    config_paths = []
+
+    # Извлекаем пути volume из контейнеров
+    for container in containers:
+        conf = container.get("config", {})
+        vols = conf.get("volumes", [])
+        for v in vols:
+            # Берем левую часть volume и подставляем MODULE_NAME
+            left = v.split(":")[0]
+            if "${CONFIGURATE_DIR}" in left:
+                left = left.replace("${CONFIGURATE_DIR}/", "")
+                left = left.replace("__MODULE_NAME__", module_name)
+                config_paths.append(os.path.join(CONFIG_SERVICES_DIR, left))
+
+    # Удаляем дубликаты
+    config_paths = list(dict.fromkeys(config_paths))
+
+    meta = {
+        "module_name": module_name,
+        "containers": [c.get("name") for c in containers if c.get("name")],
+        "config_paths": config_paths,
+        "created_at": datetime.utcnow().isoformat()
+    }
+
+    with open(meta_path, "w", encoding="utf-8") as f:
+        json.dump(meta, f, indent=2, ensure_ascii=False)
+
+    print(f"📝 Метаданные сохранены: {meta_path}")

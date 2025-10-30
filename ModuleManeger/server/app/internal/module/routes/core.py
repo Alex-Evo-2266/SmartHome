@@ -1,12 +1,11 @@
-import json, logging, yaml, os
-from typing import Optional, List, Dict
+import logging
 
-from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, CORE_MODULES_DIR, GIT_HUB_TOKEN
+from app.configuration.settings import ROUTE_PREFIX
 from app.internal.module.restart import restart_container
 from app.internal.module.schemas.modules import Containers
 from app.internal.module.get_by_label import get_containers_by_label
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 TYPE_CORE = "core"
@@ -20,7 +19,7 @@ router = APIRouter(
 )
 
 @router.get("/all", response_model=Containers)
-async def get_role(no_cash: bool = False):
+async def get_role():
 	try:
 		return Containers(data=get_containers_by_label(["sh-core.core", "sh-core.auth"]))
 	except Exception as e:

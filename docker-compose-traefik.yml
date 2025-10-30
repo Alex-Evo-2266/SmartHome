@@ -180,7 +180,8 @@ services:
   page_service:
     build: ./PagesServices
     restart: always
-    command: bash -c "uvicorn app:create_app --reload --port=8007 --host='0.0.0.0'"
+    # command: bash -c "uvicorn app:create_app --reload --port=8007 --host='0.0.0.0'"
+    command: ["./command.sh"]
     networks: 
       - local_sh_network
     ports:
@@ -195,6 +196,7 @@ services:
       DATA_QUEUE: ${DATA_QUEUE}
       DATA_LISTEN_QUEUE: ${DATA_LISTEN_QUEUE}
       EXCHANGE_DEVICE_DATA: ${EXCHANGE_DEVICE_DATA}
+      EXCHANGE_SERVICE_DATA: ${EXCHANGE_SERVICE_DATA}
       SMARTHOME_PAGE_BD_HOST: ${SMARTHOME_PAGE_BD_HOST}
       SMARTHOME_PAGE_BD_PORT: ${SMARTHOME_PAGE_BD_PORT}
       SMARTHOME_PAGE_BD_NAME: ${MYSQL_PAGE_DATABASE}
@@ -272,8 +274,6 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  
-
   rabbitmq:
     image: rabbitmq:3-management
     restart: always
@@ -319,24 +319,40 @@ services:
       - "sh-core.core"
     environment:
       MQTT_BROKER_URL: mqtt://mosquitto
-
-  zigbee2mqtt:
-    container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt
+  
+  base_frontend:
+    container_name: frontend
     networks: 
       - local_sh_network
-    restart: unless-stopped
-    volumes:
-      - ./Configurate/zigbee2mqtt:/app/data
-      - /run/udev:/run/udev:ro
-    ports:
-      - 8081:8080
-    environment:
-      - TZ=Europe/Moscow
-    privileged: true
+    build:
+      context: frontend/client_base        
+      dockerfile: Dockerfile
+    restart: always
+    labels:
+      - "sh-core.frontend"
+      - "traefik.enable=true"
+      # http
+      - "traefik.http.routers.frontend_http.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend_http.entrypoints=web"
+      - "traefik.http.routers.frontend_http.service=frontend"
+      - "traefik.http.routers.frontend_http.priority=1"
+      # https
+      - "traefik.http.routers.frontend_https.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend_https.entrypoints=websecure"
+      - "traefik.http.routers.frontend_https.tls=true"
+      - "traefik.http.routers.frontend_https.service=frontend"
+      - "traefik.http.routers.frontend_https.priority=1"
+      # общий сервис
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
     depends_on:
-      mosquitto:
+      auth_service:
         condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
 
 networks:
   local_sh_network:
@@ -347,7 +363,7 @@ volumes:
   media_voluem:
   media_device_voluem:
   client_voluem:
-  client_auth_voluem:
+  frontend_voluem:
   bd_auth_data:
   bd_page_data2:
   bd_data:

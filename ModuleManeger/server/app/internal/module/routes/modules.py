@@ -1,12 +1,14 @@
-import json, logging, yaml, os
+import json, logging, yaml, os, asyncio
 from typing import Optional, List, Dict
+from app.pkg import __config__
 
-from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, MODULES_DIR, GIT_HUB_TOKEN
+from app.configuration.settings import ROUTE_PREFIX, URL_REPO_MODULES_LIST, MODULES_DIR, GIT_HUB_KEY
 from app.internal.module.search_modules import get_all_modules
 from app.internal.module.install_module import clone_module, generate_docker_compose_from_module
 from app.internal.module.run_module import run_module_in_container, stop_module_in_container, build_module_in_container
 from app.internal.module.delete import remove_module
 from app.internal.module.status import get_module_containers_status
+from app.internal.module.update import update_module
 from app.internal.module.schemas.modules import ModulesConfAndLoad, ModuleData, ModulesLoadData, AllModulesResData
 
 from fastapi import APIRouter, Depends
@@ -96,10 +98,13 @@ router = APIRouter(
 # 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.get("/all", response_model=AllModulesResData)
-async def get_role(no_cash: bool = False):
+async def get_moduels(no_cash: bool = False):
 	try:
 		print("p1")
-		files = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
+		git_hub_token = __config__.get(GIT_HUB_KEY)
+		if git_hub_token == "":
+			git_hub_token = None
+		files = get_all_modules(URL_REPO_MODULES_LIST, token=git_hub_token, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
 		print("p2")
 		data = load_module_configs(MODULES_DIR)
 		print("p3")
@@ -122,9 +127,12 @@ async def get_role(no_cash: bool = False):
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/data/{name_module}", response_model=ModulesConfAndLoad)
-async def get_role(name_module:str, no_cash: bool = False):
+async def get_moduel(name_module:str, no_cash: bool = False):
 	try:
-		files = get_all_modules(URL_REPO_MODULES_LIST, token=GIT_HUB_TOKEN, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
+		git_hub_token = __config__.get(GIT_HUB_KEY)
+		if git_hub_token == "":
+			git_hub_token = None
+		files = get_all_modules(URL_REPO_MODULES_LIST, token=git_hub_token, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
 		find_module = next((item for item in files.values() if item.name_module == name_module), None)
 		module_data_list = load_module_config_by_name(MODULES_DIR, name_module)
 		config:ModulesConfAndLoad | None = None
@@ -144,9 +152,12 @@ async def get_role(name_module:str, no_cash: bool = False):
 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.get("/install")
-async def get_role(name: str):
+async def install_module(name: str):
 	try:
-		res_folder = clone_module(name, GIT_HUB_TOKEN)
+		git_hub_token = __config__.get(GIT_HUB_KEY)
+		if git_hub_token == "":
+			git_hub_token = None
+		res_folder = clone_module(name, git_hub_token)
 		# return load_module_configs(MODULES_DIR)
 		return res_folder
 	except Exception as e:
@@ -154,24 +165,25 @@ async def get_role(name: str):
 
 
 @router.get("/run")
-async def get_role(name: str, container_name: Optional[str] = None):
+async def run_modue(name: str, container_name: Optional[str] = None):
 	try:
 		# return load_module_configs(MODULES_DIR)
-		return run_module_in_container(name, container_name)
+		# return run_module_in_container(name, container_name)
+		return await asyncio.to_thread(run_module_in_container, name, container_name)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.get("/stop")
-async def get_role(name: str, container_name: Optional[str] = None):
+async def stop_module(name: str, container_name: Optional[str] = None):
 	try:
 		# return load_module_configs(MODULES_DIR)
-		print(name, container_name)
-		return stop_module_in_container(name, container_name)
+		print("stop", name, container_name)
+		return await asyncio.to_thread(stop_module_in_container, name, container_name)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))
 
 @router.delete("/{name}")
-async def get_role(name: str):
+async def delete_module(name: str):
 	try:
 		# return load_module_configs(MODULES_DIR)
 		return remove_module(name)
@@ -180,7 +192,7 @@ async def get_role(name: str):
 
 
 @router.get("/status")
-async def get_role(name: str):
+async def get_statue_moduel(name: str):
 	try:
 		# return load_module_configs(MODULES_DIR)
 		return get_module_containers_status(name)
@@ -188,7 +200,7 @@ async def get_role(name: str):
 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.get("/generete")
-async def get_role(name: str):
+async def generate_conf_module(name: str):
 	try:
 		module_path = os.path.join(MODULES_DIR, name)
 		return generate_docker_compose_from_module(module_path)
@@ -196,8 +208,20 @@ async def get_role(name: str):
 		return JSONResponse(status_code=400, content=str(e))
 	
 @router.get("/build")
-async def get_role(name: str, container_name: Optional[str] = None):
+async def build_module(name: str, container_name: Optional[str] = None):
 	try:
-		return build_module_in_container(name, container_name)
+		build_module_in_container(name, container_name)
+		run_module_in_container(name)
+		return
+	except Exception as e:
+		return JSONResponse(status_code=400, content=str(e))
+
+@router.get("/update")
+async def update_module_api(name: str):
+	try:
+		git_hub_token = __config__.get(GIT_HUB_KEY)
+		if git_hub_token == "":
+			git_hub_token = None
+		return update_module(name, git_hub_token)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))

@@ -1,5 +1,6 @@
 import { Form, FullScreenTemplateDialog, SegmentedButton } from "alex-evo-sh-ui-kit"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
+
 import { MODAL_ROOT_ID } from "../../../const"
 import { TypeDeviceField } from "../../../entites/devices"
 import { FieldData } from "../models/editDeviceSchema"
@@ -38,7 +39,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
     const [value, setValue] = useState<FieldData>(getInitData())
     const [errors, setErrors] = useState<{[key:string]:string}>({})
 
-    const change = (name: string, data: any) => {
+    const change = (name: string, data: TypeDeviceField) => {
         if(name === 'type' && data === TypeDeviceField.BINARY)
         {
             return setValue(prev=>({...prev, type: data, low: BINARY_LOW, high: BINARY_HIGH}))
@@ -57,10 +58,6 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
     const segmentsChange = (value: string[]) => {
         setValue(prev=>({...prev, virtual_field: value.includes('virtual'), read_only: value.includes('read only')}))
     }
-
-    useEffect(()=>{
-        console.log(value)
-    },[value])
 
     const validField = (field:FieldData) => {
         const errors:{[key:string]: string} = {}
@@ -83,10 +80,9 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
     const save = useCallback(()=>{
         const errors = validField(value)
         setErrors(errors)
-        console.log(errors)
         if(Object.keys(errors).length === 0)
         {
-            onSave && onSave(value)
+            onSave(value)
         }
     },[onSave, value])
 

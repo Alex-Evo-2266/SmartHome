@@ -1,5 +1,6 @@
-import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
 import { Switch } from "alex-evo-sh-ui-kit";
+
+import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
 import { useGetBinaryFieldControl } from "../../../../features/Device/hooks/fieldControl.hook";
 
 export const DeviceSwitchField: React.FC<{ field: DeviceSerializeFieldSchema; deviceName: string }> = ({ field, deviceName }) => {

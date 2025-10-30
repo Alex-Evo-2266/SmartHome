@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from 'react'
 import {
   ReactFlow,
   Controls,
@@ -7,20 +6,22 @@ import {
   useNodesState,
   Connection,
 } from '@xyflow/react'
-import '@xyflow/react/dist/style.css'
-import { v4 as uuidv4 } from 'uuid'
-import { ScriptCreate, TypeScriptNode } from '../../../entites/script/models/script';
-import { Trigger } from './block/trigger';
 import { BaseButton, FAB, Plus, SelectionDialog, TextField } from 'alex-evo-sh-ui-kit';
+import { useCallback, useEffect, useState } from 'react'
+import '@xyflow/react/dist/style.css'
+import { useParams, useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid'
+
 import { Start } from './block/start';
 import { EditNode, ScriptConstructorEditContext } from '../context/context';
-import { Condition } from './block/condition';
 import { Action } from './block/action';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Condition } from './block/condition';
+import { Trigger } from './block/trigger';
 import './stype.scss'
-import { DialogPortal } from '../../../shared';
 import { EditNodeDialog } from './EditNode';
 import { useScriptAPI } from '../../../entites/script/api/scriptAPI';
+import { ScriptCreate, TypeScriptNode } from '../../../entites/script/models/script';
+import { DialogPortal } from '../../../shared';
 
 interface ScriptNode{
   id:string,
@@ -113,7 +114,7 @@ export const ScriptConstructor: React.FC = () => {
   setNodes(loadedNodes);
   setEdges(loadedEdges);
   setName(script.name)
-  },[id, getScript])
+  },[id, getScript, setNodes, setEdges])
 
   const nodeTypes = {trigger: Trigger, start: Start, condition: Condition, action: Action}
  
@@ -195,8 +196,8 @@ export const ScriptConstructor: React.FC = () => {
     setEditHodeDialogVisible(null)
   }
 
-  const changeNameHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value)
+  const changeNameHandler = (value:string) => {
+    setName(value)
   }
 
   const saveScript = useCallback(async()=>{
@@ -208,7 +209,7 @@ export const ScriptConstructor: React.FC = () => {
       await createScript(script)
     }
     navigate("/automation")
-  },[nodes, edges, name, id])
+  },[nodes, edges, name, id, createScript, editScript, navigate])
 
   const items = [
     {

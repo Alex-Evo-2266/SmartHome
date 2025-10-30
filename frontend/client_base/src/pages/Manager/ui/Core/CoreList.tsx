@@ -1,8 +1,9 @@
+import { useCoreAPI } from "@src/entites/moduleManager"
+import { IconButtonMenu } from "@src/shared"
 import { ListContainer, ListItem, MoreVertical } from "alex-evo-sh-ui-kit"
 import { useContext } from "react"
+
 import { ManagerContext } from "../../lib/context"
-import { IconButtonMenu } from "@src/shared"
-import { useCoreAPI } from "@src/entites/moduleManager"
 
 
 export const CoreList:React.FC = () => {
@@ -17,12 +18,13 @@ export const CoreList:React.FC = () => {
     return(
         <ListContainer>
             {
-                core.map((data)=>{
+                core.map((data, index)=>{
                     return(
                         <ListItem
+                        key={`${data.container_id}-${index}`}
                         header={data.name} 
                         text={data.container_id} 
-                        control={<IconButtonMenu icon={<MoreVertical/>} blocks={[{items:[{
+                        control={<IconButtonMenu icon={<MoreVertical/>} autoHide blocks={[{items:[{
                             title: "restart",
                             onClick: ()=>restart(data.container_id),
                         }]}]}/>}

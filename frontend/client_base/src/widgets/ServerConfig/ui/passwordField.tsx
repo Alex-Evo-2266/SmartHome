@@ -1,6 +1,7 @@
 import { TextDialog, TextField } from "alex-evo-sh-ui-kit"
-import { DialogPortal } from "../../../shared"
 import { useCallback, useState } from "react"
+
+import { DialogPortal } from "../../../shared"
 
 
 export interface PasswordFieldProps{

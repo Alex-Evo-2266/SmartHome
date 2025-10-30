@@ -44,6 +44,7 @@ export type AllModulesData = {
 export interface CoreContainerId{
     container_id: string
     name: string
+    service: string
 }
 
 export type CoreContainerData = {

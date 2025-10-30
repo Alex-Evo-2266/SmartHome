@@ -1,16 +1,16 @@
+import { Automation, ConditionType, useAutomationAPI } from "@src/entites/automation"
+import { DialogPortal } from "@src/shared"
 import { BaseActionCard, Button, Card, FilterGroup, ListContainer, SearchAndFilter, SelectedFilters } from "alex-evo-sh-ui-kit"
-import { Automation, ConditionType, useAutomationAPI } from "../../../entites/automation"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { AutomationEditor } from "./EditAutomation"
-import { DialogPortal } from "../../../shared"
-import './style.scss'
+
 import { AutomationItem } from "./AutomationItem"
+import { AutomationEditor } from "./EditAutomation"
+import './style.scss'
 
 function matchesFilterFromSelected(
   automation: Automation,
   filters: SelectedFilters
 ): boolean {
-    console.log("ds2", filters, automation)
   for (const key in filters) {
     const filterValues = filters[key];
 
@@ -23,7 +23,6 @@ function matchesFilterFromSelected(
 
     if (value === undefined) return false;
 
-    console.log("ds", filterValues, String(value))
     if (!filterValues.includes(String(value))) {
         return false;
     }
@@ -31,8 +30,6 @@ function matchesFilterFromSelected(
 
   return true;
 }
-
-
 
 export const AutomationCard = () => {
 
@@ -61,7 +58,7 @@ export const AutomationCard = () => {
             await addAutomation(data)
             await getData()
         }
-    },[addAutomationItem])
+    },[addAutomationItem, addAutomation, getData])
 
     const filters:FilterGroup[] = [{name: "is_enabled", options: ["true", "false"]}]
 

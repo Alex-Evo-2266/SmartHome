@@ -3,6 +3,7 @@ import subprocess
 from app.configuration.settings import ENV_FILE, CONFIG_SERVICES_DIR, MODULES_DIR, BASE_DIR, CONFIGURATE_DIR
 from app.internal.module.install_module import generate_docker_compose_from_module
 import shutil
+from app.internal.module.active_modules import save_active_modules, load_active_modules
 
 def update_env_var_to_local(key: str, value: str, env_file: str = ENV_FILE) -> str:
 	"""
@@ -35,6 +36,7 @@ def update_env_var_to_local(key: str, value: str, env_file: str = ENV_FILE) -> s
 	return local_env_file
 
 def build_module_in_container(name: str, container: str | None = None):
+	remove_module_containers(name)
 	module_dir = os.path.join(MODULES_DIR, name)
 
 	compose_file = os.path.join(module_dir, "docker-compose.yml")
@@ -49,6 +51,9 @@ def build_module_in_container(name: str, container: str | None = None):
 		"-f", compose_file,
 		"build"
 	]
+
+	if container:
+		cmd.append(container)
 
 	env = os.environ.copy()
 	env["CONFIGURATE_DIR"] = CONFIGURATE_DIR
@@ -90,6 +95,10 @@ def run_module_in_container(name: str, container: str | None = None):
 	try:
 		subprocess.run(cmd, cwd=module_dir, check=True, env=env)
 		print(f"✅ Модуль {module_dir} запущен в контейнере")
+
+		active = load_active_modules()
+		active[name] = {"container": container, "compose_file": compose_file}
+		save_active_modules(active)
 	except subprocess.CalledProcessError as e:
 		print(f"❌ Ошибка запуска модуля {module_dir}: {e}")
 		raise
@@ -122,6 +131,10 @@ def stop_module_in_container(name: str, container: str | None = None):
 	try:
 		subprocess.run(cmd, cwd=module_dir, check=True, env=env)
 		print(f"✅ Модуль {module_dir} остановлен")
+
+		active = load_active_modules()
+		active.pop(name, None)
+		save_active_modules(active)
 	except subprocess.CalledProcessError as e:
 		print(f"❌ Ошибка остановки модуля {module_dir}: {e}")
 		raise

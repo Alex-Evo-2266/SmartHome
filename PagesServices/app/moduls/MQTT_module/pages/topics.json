@@ -1,1 +1,0 @@
-{"name":"topics","url":"topics","page":{"type":"LIST","name":"button","value":[{"type":"PANEL","name":"button","value":{"type":"TEXT","value":"MQTT","name":"text_fiald","option":{"fontSize":32,"pozition":"center"}}},{"type":"GRID_LAYOUT","name":"button","value":[],"src":"SERVER_GENERATE","option":{},"src_key":"1f7d5c56-ab89-424a-a0a7-9be506ab5f69"}],"src":"MANUAL"}}

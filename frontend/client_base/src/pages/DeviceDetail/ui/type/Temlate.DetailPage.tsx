@@ -1,10 +1,11 @@
-import { MenuDeviceCard } from "../MenuDeviceCard"
-import { Diagramm } from "../diagrams";
+import { ArrowLeft, IconButton, ScreenSize, SizeContext, Typography } from "alex-evo-sh-ui-kit";
+import { useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+
 import { FieldHistory } from "../../../../entites/devices/models/history";
 import { DeviceDetailProps } from "../../models/props";
-import { useContext } from "react";
-import { ArrowLeft, IconButton, ScreenSize, SizeContext, Typography } from "alex-evo-sh-ui-kit";
-import { useNavigate } from 'react-router-dom';
+import { Diagramm } from "../diagrams";
+import { MenuDeviceCard } from "../MenuDeviceCard"
 
 import './DetailTemplate.scss'
 

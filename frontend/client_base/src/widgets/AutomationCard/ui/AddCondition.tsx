@@ -1,11 +1,12 @@
 import { BaseActionCard, BasicTemplateDialog, Button, NumberField, SelectionDialog, TextField } from "alex-evo-sh-ui-kit";
-import { DialogPortal, SelectField } from "../../../shared";
-import { useState, useCallback } from "react";
-import { useAppSelector } from "../../../shared/lib/hooks/redux";
+import { useState, useCallback, useMemo } from "react";
+
 import { ConditionItem, Operation } from '../../../entites/automation';
 import { TypeDeviceField } from "../../../entites/devices";
-import { splitEnum } from "../../../shared/lib/helpers/enumStrimg";
 import { DeviceFieldType, useRooms } from "../../../entites/rooms";
+import { DialogPortal, SelectField } from "../../../shared";
+import { splitEnum } from "../../../shared/lib/helpers/enumStrimg";
+import { useAppSelector } from "../../../shared/lib/hooks/redux";
 
 type TypesField = {type:"number" | "text" | "bool" | "enum" | "any", option?: string[]}
 
@@ -48,6 +49,8 @@ function types_device_to_type_automation(type?:TypeDeviceField, enum_option?: st
         return {type:"any"};
 }
 
+
+
 export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>void}> = ({onHide,onSave})=>{
   const { devicesData } = useAppSelector(state=>state.devices);
   const { rooms } = useRooms();
@@ -56,8 +59,20 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
   const [openStep,setOpenStep] = useState<string|null>(null);
   const [operation,setOperation] = useState<Operation>(Operation.EQUAL);
 
+  const handleStepSelect = useCallback((key:string,value:string)=>{
+    setValues(prev => {
+        const n = { ...prev, [key]: value };
+        if(key.startsWith("arg1"))
+            return Object.fromEntries(
+                Object.entries(n).filter(([k]) => !k.startsWith("arg2"))
+            );
+        return n
+    });
+    setOpenStep(null);
+  },[]);
+
   // --- CONFIG ---
-  const SERVICE_STEPS: IArg = {
+  const SERVICE_STEPS: IArg = useMemo(()=>({
     device:{
       steps:[
         {
@@ -73,10 +88,8 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
           label:"Field",
           type:"select",
           getItems(vals,arg,type){
-            console.log(vals,arg,type)
             const device = devicesData.find(i=>i.system_name===vals[`${arg}_object`]);
             const typesField = types_automation_to_type_device(type)
-            console.log(device,typesField)
             if(type.type === "any")
                 return device?.fields?.map(f=>({title:f.name,data:f.id})) ?? [];
             return device?.fields
@@ -104,7 +117,7 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
               return <SelectField border items={[{title:"True",value:"true"},{title:"False",value:"false"}]} value={vals[`${arg}_val`]||""} onChange={v=>handleStepSelect(`${arg}_val`,v)}/>;
             if(type.type==="enum")
               return <SelectField border items={(type.option??[]).map(o=>({title:o,value:o}))} value={vals[`${arg}_val`]||""} onChange={v=>handleStepSelect(`${arg}_val`,v)}/>;
-            return <TextField border placeholder="Value" value={vals[`${arg}_val`]||""} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>handleStepSelect(`${arg}_val`,e.target.value)}/>;
+            return <TextField border placeholder="Value" value={vals[`${arg}_val`]||""} onChange={(value: string)=>handleStepSelect(`${arg}_val`,value)}/>;
           }
         }
       ],
@@ -165,19 +178,9 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
         return types_device_to_type_automation(type)
       },
     }
-  };
+  }),[rooms, handleStepSelect, devicesData]) 
   
-  const handleStepSelect = useCallback((key:string,value:string)=>{
-    setValues(prev => {
-        const n = { ...prev, [key]: value };
-        if(key.startsWith("arg1"))
-            return Object.fromEntries(
-                Object.entries(n).filter(([k]) => !k.startsWith("arg2"))
-            );
-        return n
-    });
-    setOpenStep(null);
-  },[]);
+
 
   const renderSteps = useCallback((arg:"arg1"|"arg2")=>{
     const arg_other = arg === "arg1"?"arg2":"arg1"
@@ -207,7 +210,7 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
       }
       return null;
     });
-  },[values, devicesData])
+  },[values, SERVICE_STEPS])
 
   const renderDialogs = useCallback((arg:"arg1"|"arg2")=>{
     const arg_other = arg === "arg1"?"arg2":"arg1"
@@ -234,7 +237,7 @@ export const AddCondition: React.FC<{onHide:()=>void; onSave:(d:ConditionItem)=>
       }
       return null;
     });
-  },[values, devicesData])
+  },[values, SERVICE_STEPS, openStep, handleStepSelect])
 
     const save = () => {
         const buildArg = (prefix: "arg1" | "arg2", serviceKey: string) => {

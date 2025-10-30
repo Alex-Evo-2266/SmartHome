@@ -1,9 +1,9 @@
-import { Tabs } from "alex-evo-sh-ui-kit"
 import { Dashboard, DashboardPageContext, useDashboardAPI } from "@src/entites/dashboard"
 import { useRoom } from "@src/features/Room"
+import { PreviewDashboard } from "@src/widgets/Dashboard/ui/Dashboard"
+import { Tabs } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import './Home.scss'
-import { PreviewDashboard } from "@src/widgets/Dashboard/ui/Dashboard"
 
 export const HomePage = () => {
 

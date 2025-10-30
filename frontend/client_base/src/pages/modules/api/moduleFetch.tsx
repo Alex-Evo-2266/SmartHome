@@ -1,8 +1,9 @@
+import { FetchFunction } from "alex-evo-web-constructor"
 import { useCallback, useEffect } from "react"
+
+import { TypeRequest } from "../../../shared/api/type"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
-import { FetchFunction } from "alex-evo-web-constructor"
-import { TypeRequest } from "../../../shared/api/type"
 
 export const useFetch = (moduleName:string | undefined = "") => {
 
@@ -28,23 +29,23 @@ export const useFetch = (moduleName:string | undefined = "") => {
     }
 }
 
-function searchParamsToDict(params: URLSearchParams): Record<string, any> {
-    const result: Record<string, any> = {};
+function searchParamsToDict(params: URLSearchParams): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
     params.forEach((value, key) => {
       result[key] = value;
     });
     return result;
   }
 
-  async function formDataToDict(formData: FormData): Promise<Record<string, any>> {
-    const result: Record<string, any> = {};
+  async function formDataToDict(formData: FormData): Promise<Record<string, unknown>> {
+    const result: Record<string, unknown> = {};
     for (const [key, value] of formData.entries()) {
       result[key] = value;
     }
     return result;
   }
 
-async function bodyInitToDict(body?: BodyInit | null): Promise<Record<string, any> | undefined> {
+async function bodyInitToDict(body?: BodyInit | null): Promise<Record<string, unknown> | undefined> {
     if (body === null || body === undefined) return undefined
     if (body instanceof FormData) {
       return formDataToDict(body);

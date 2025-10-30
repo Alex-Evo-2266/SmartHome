@@ -1,8 +1,9 @@
+import { ModuleData } from "@src/entites/moduleManager/modules/modules"
 import { Check, ListContainer, ListItem } from "alex-evo-sh-ui-kit"
 import { useContext } from "react"
-import { ManagerContext } from "../../lib/context"
-import { ModuleData } from "@src/entites/moduleManager/modules/modules"
 import { useNavigate } from 'react-router-dom';
+
+import { ManagerContext } from "../../lib/context"
 
 
 export const DockerModuleList:React.FC = () => {
@@ -17,9 +18,10 @@ export const DockerModuleList:React.FC = () => {
     return(
         <ListContainer>
             {
-                dockerModules.map((data)=>{
+                dockerModules.map((data, index)=>{
                     return(
                         <ListItem
+                        key={`${data.name_module}-${index}`}
                         onClick={()=>clickModule(data)} 
                         header={data.name_module} 
                         text={data.repo} 

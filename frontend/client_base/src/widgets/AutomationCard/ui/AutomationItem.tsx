@@ -1,7 +1,8 @@
 import { ListItem, Switch } from "alex-evo-sh-ui-kit"
-import { Automation, useAutomationAPI } from "../../../entites/automation"
 import { useCallback, useState } from "react"
+
 import { AutomationEditor } from "./EditAutomation"
+import { Automation, useAutomationAPI } from "../../../entites/automation"
 import { DialogPortal } from "../../../shared"
 import './style.scss'
 import { joinAutomation } from "../../../shared/lib/helpers/joinAutomation"
@@ -29,7 +30,7 @@ export const AutomationItem:React.FC<AutomationItemProps> = ({automation, update
             await editAutomation(automation.name, data)
             await updateData()
         }
-    },[automation])
+    },[automation, editAutomation, updateData])
 
     const editStatus = useCallback(async (name: string, status?: boolean)=>{
         let newStatus = true
@@ -42,7 +43,7 @@ export const AutomationItem:React.FC<AutomationItemProps> = ({automation, update
         automation.is_enabled = newStatus
         await enableAutomation(name, newStatus)
         setTimeout(updateData,200)
-    },[enableAutomation])
+    },[enableAutomation, updateData, automation])
 
     return(
         <>

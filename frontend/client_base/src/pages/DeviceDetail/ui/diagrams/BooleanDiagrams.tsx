@@ -1,4 +1,4 @@
-import { Line } from 'react-chartjs-2';
+import { ColorContext, IColorContext } from 'alex-evo-sh-ui-kit';
 import { 
   Chart as ChartJS, 
   LinearScale,
@@ -11,11 +11,12 @@ import {
   ChartData,
   ChartOptions
 } from 'chart.js';
-import { DiagramProps } from './props';
+import { useContext, useEffect, useRef } from 'react';
 import 'chartjs-adapter-date-fns';
-import React, { useContext } from 'react';
+import { Line } from 'react-chartjs-2';
+
+import { DiagramProps } from './props';
 import { getBooleanFieldStatus } from '../../helpers/BooleanFieldStatus';
-import { ColorContext } from 'alex-evo-sh-ui-kit';
 
 ChartJS.register(
   LinearScale,
@@ -29,12 +30,12 @@ ChartJS.register(
 
 export const BooleanTimelineChart: React.FC<DiagramProps> = ({ data: fieldHistory, label }) => {
 
-    const {colors} = useContext(ColorContext)
+    const {colors} = useContext<IColorContext>(ColorContext)
     
   // Правильное объявление ref с типизацией
-  const chartRef = React.useRef<ChartJS<'line'> | null>(null);
+  const chartRef = useRef<ChartJS<'line'> | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // При размонтировании компонента уничтожаем график
     return () => {
       if (chartRef.current) {
@@ -51,7 +52,7 @@ export const BooleanTimelineChart: React.FC<DiagramProps> = ({ data: fieldHistor
   const now = new Date();
   const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
-  function t(d:any){
+  function t(d:string){
     const d2 = new Date(d)
     return d2.getTime()
   }

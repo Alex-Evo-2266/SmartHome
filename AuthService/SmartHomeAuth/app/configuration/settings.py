@@ -48,6 +48,7 @@ MODULES_COOKIES_NAME = "module_auth_sh"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CONFIG_SERVICES_DIR = os.path.join(BASE_DIR, "config_services") 
+AUTH_PIVILEGES = os.environ.get("AUTH_PIVILEGES")
 
 ADMIN_BASE_LOGIN = "admin"
 ADMIN_BASE_PASSWORD = "admin"

@@ -1,5 +1,5 @@
 // Timeline.tsx
-import React from 'react';
+
 import { DiagramProps } from './props';
 import { StatusDevice } from '../../../../entites/devices';
 import { FieldHistoryItem } from '../../../../entites/devices/models/history';

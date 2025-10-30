@@ -1,8 +1,8 @@
-import { ControlElement } from "../../../../../entites/dashboard"
 import { BoolControl } from "./bool"
 import { ButtonControl } from "./button"
 import { NumberControl } from "./number"
 import { ReadOnlyControl } from "./readonly"
+import { ControlElement } from "../../../../../entites/dashboard"
 
 interface ControlsProps {
     data: ControlElement

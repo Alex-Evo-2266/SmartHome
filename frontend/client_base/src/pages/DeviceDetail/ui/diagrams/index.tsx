@@ -1,8 +1,8 @@
-import { TypeDeviceField } from "../../../../entites/devices";
 import { BooleanTimelineChart } from "./BooleanDiagrams";
 import { NumberDiagram } from "./NumberDiagrams";
 import { DiagramProps } from "./props";
 import Timeline from "./Text";
+import { TypeDeviceField } from "../../../../entites/devices";
 
 
 export const Diagramm:React.FC<DiagramProps> = (props) => {

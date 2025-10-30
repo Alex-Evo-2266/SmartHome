@@ -1,15 +1,16 @@
+import { ContentBox, Range } from "alex-evo-sh-ui-kit"
 import { useCallback, useMemo } from "react"
-import { useGetBinaryField, useGetNumberField } from "../../../../features/Device"
-import { Bulb, useDebounce } from "../../../../shared"
-import { getFieldHistory } from "../../helpers/getFieldHistory"
-import { useDeviceHistory } from "../../hooks/history.hook"
-import { DeviceDetailProps } from "../../models/props"
+
 import { DetailDeviceTemplate } from "./Temlate.DetailPage"
 import { FieldHistory } from "../../../../entites/devices/models/history"
-import { ContentBox, Range } from "alex-evo-sh-ui-kit"
+import { useGetBinaryField, useGetNumberField } from "../../../../features/Device"
+import { Bulb, useDebounce } from "../../../../shared"
 import { kelvinCSSGradient } from "../../../../shared/lib/helpers/tempColor"
 import ColorWheel from "../../../../shared/ui/Color/Palitra"
 import { DeviceField } from "../../../../widgets/DeviceCard/ui/fields"
+import { getFieldHistory } from "../../helpers/getFieldHistory"
+import { useDeviceHistory } from "../../hooks/history.hook"
+import { DeviceDetailProps } from "../../models/props"
 
 import './LightDetail.scss'
 
@@ -49,7 +50,7 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
             field.push(sat.id)
         }
         return field
-    },[power, brightness, temp]
+    },[power, brightness, temp, color, sat]
     )
 
     const notuUsedField = useMemo(()=>device.fields?.filter(item=>!usedField.includes(item.id)) ?? [],[device.fields, usedField])
@@ -73,8 +74,8 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
                             <Range 
                             className="range-light" 
                             strokeWidth="50px" 
-                            max={Number(brightness?.high) ?? 100} 
-                            min={Number(brightness?.low) ?? 0} 
+                            max={brightness?.high != null ? Number(brightness.high) : 100}
+                            min={brightness?.low != null ? Number(brightness.low) : 0}
                             value={brightnessValue ?? undefined} 
                             onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedBrightnessSend(Number(e.target.value))}
                             />
@@ -88,11 +89,14 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
                             strokeWidth="50px" 
                             className="range-light" 
                             styleTrack='point' 
-                            max={Number(temp?.high) ?? 100} 
-                            min={Number(temp?.low) ?? 0} 
+                            max={temp?.high != null ? Number(temp.high) : 100}
+                            min={temp?.low != null ? Number(temp.low) : 0}
                             value={tempVal ?? undefined} 
                             onChange={(e:React.ChangeEvent<HTMLInputElement>)=>debouncedTempSend(Number(e.target.value))} 
-                            colorBg={kelvinCSSGradient(Number(temp?.high) ?? 10000, Number(temp?.low) ?? 2000, 10, "to right")}
+                            colorBg={
+                                kelvinCSSGradient(
+                                    temp?.high != null ? Number(temp?.high) : 10000, 
+                                    temp?.low != null ? Number(temp?.low) : 2000, 10, "to right")}
                             />
                         </div>
                     }

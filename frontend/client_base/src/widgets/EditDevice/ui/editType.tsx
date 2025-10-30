@@ -1,11 +1,12 @@
 import { Button, ContentBox, ListContainer, ListItem, TextField } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useState } from "react"
-import { DialogPortal } from "../../../shared"
-import { DeviceClassOptions, DeviceSchema } from "../../../entites/devices"
-import { useTypeDeviceAPI } from "../api/types"
+
 import { EditTypeDialog } from "./EditTypeDialog"
-import { DeviceTypeEditData } from "../models/type"
+import { DeviceClassOptions, DeviceSchema } from "../../../entites/devices"
 import { TypeDevice } from "../../../entites/devices/models/type"
+import { DialogPortal } from "../../../shared"
+import { useTypeDeviceAPI } from "../api/types"
+import { DeviceTypeEditData } from "../models/type"
 
 interface EditTypeProps{
     option: DeviceClassOptions
@@ -36,7 +37,7 @@ export const EditType:React.FC<EditTypeProps> = ({option, data}) => {
             setEditTypeVisible(null)
             loadType(devcie.system_name) 
         }, 200);
-    },[devcie])
+    },[devcie, loadType, updateTypes])
 
     const addType = useCallback((newType: DeviceTypeEditData) => {
         createTypes(newType)
@@ -44,7 +45,7 @@ export const EditType:React.FC<EditTypeProps> = ({option, data}) => {
             setAddTypeVisible(false)
             loadType(devcie.system_name) 
         }, 200);
-    },[devcie])
+    },[devcie, createTypes, loadType])
 
     const hodeAndUpdate = useCallback(()=>{
         setTimeout(() => {

@@ -21,6 +21,7 @@ MODULES_DIR = os.path.join(BASE_DIR, "modules")
 CORE_MODULES_DIR = os.path.join(BASE_DIR, "modules_core")
 CACHE_FILE = os.path.join(CONFIG_DIR, "modules_cache.json")
 CACHE_INFO_FILE = os.path.join(CONFIG_DIR, "modules_info_cache.json")
+DATA_FILE = os.path.join(CONFIG_DIR, "data.json")
 ENV_FILE = os.path.join(BASE_DIR, ".env")
 
 URL_REPO_MODULES_LIST = "https://github.com/Alex-Evo-2266/SmartHome_Modules_List"
@@ -30,3 +31,11 @@ COMPOSE_FILE_CORE_MODULE = os.path.join(ROOT_APP_DIR, "docker-compose-traefik.ym
 CONFIGURATE_DIR = os.environ.get("CONFIGURATE_DIR")
 
 GIT_HUB_TOKEN = None
+GIT_HUB_KEY = "github_key"
+
+
+DEVICE_SERVICE = "device_service"
+
+# config
+CONFIG_FILE_NAME = 'service_config'
+CONFIG_TAG = "device-config"

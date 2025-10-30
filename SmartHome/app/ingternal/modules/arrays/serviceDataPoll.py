@@ -3,7 +3,7 @@ from typing import Callable, Dict, List, Awaitable, Generic, TypeVar
 import time
 import logging
 import asyncio, json
-from app.ingternal.utils.throttle import async_throttle
+from app.ingternal.utils.throttle import async_throttle_for_key
 
 logger = logging.getLogger(__name__)
 
@@ -17,17 +17,18 @@ class ObservableDict(Generic[T]):
         self._global_subscribers: Dict[str, Callable[[str, T], Awaitable[None]]] = {}
         logger.info("ObservableDict инициализирован")
 
-    @async_throttle(1)
+    @async_throttle_for_key(1)
     async def _notify_subscribers(self, key: str, value: T):
         
         # Уведомляем подписчиков ключа
         if key in self._subscribers:
             for callback in self._subscribers[key].values():
-                await callback(key, value)
-        
+                if(callback):
+                    await callback(key, value)
         # Уведомляем глобальных подписчиков
         for callback in self._global_subscribers.values():
-            await callback(key, value)
+            if(callback):
+                await callback(key, value)
 
     def set(self, key: str, value: T) -> None:
         """Синхронно устанавливает значение и уведомляет подписчиков асинхронно."""
@@ -35,7 +36,7 @@ class ObservableDict(Generic[T]):
         self._timestamps[key] = time.time()
         # logger.info(f"Установлено: {key} = {value}")
         asyncloop = asyncio.get_running_loop()
-        asyncloop.create_task(self._notify_subscribers(key, value))
+        asyncloop.create_task(self._notify_subscribers(key=key, value=value))
         
 
     async def set_async(self, key: str, value: T) -> None:
@@ -43,7 +44,7 @@ class ObservableDict(Generic[T]):
         self._data[key] = value
         self._timestamps[key] = time.time()
         # logger.info(f"Установлено: {key} = {value}")
-        await self._notify_subscribers(key, value)
+        await self._notify_subscribers(key=key, value=value)
 
 
     def get(self, key: str, default=None):

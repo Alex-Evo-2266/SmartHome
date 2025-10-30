@@ -1,14 +1,15 @@
-import { Range } from "alex-evo-sh-ui-kit"
-import "./styleControl.scss"
-import { useAppSelector } from "@src/shared/lib/hooks/redux"
-import { useContext, useMemo } from "react"
 import { WIDTH_PANEL_ITEM } from "@src/entites/dashboard/const"
-import { useDebounce } from "@src/shared"
-import { ControlTemplate } from "./template"
 import { DashboardPageContext } from "@src/entites/dashboard/context"
-import { ErrorControl } from "./readonly"
 import { ControlElementbase } from "@src/entites/dashboard/models/panel"
+import { useDebounce } from "@src/shared"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
+import { Range } from "alex-evo-sh-ui-kit"
+import { useContext, useMemo } from "react"
+
 import { deviceHooks, parseDataPath, roomHooks } from "./controlUtils"
+import { ErrorControl } from "./readonly"
+import { ControlTemplate } from "./template"
+import "./styleControl.scss"
 
 /**
  * Презентационный компонент слайдера (без логики).
@@ -91,7 +92,7 @@ const NumberControlRoom = ({ data }: { data: ControlElementbase }) => {
     const [, room_name = "", typeDevice = "", field = ""] = parseDataPath(data.data)
 
     const { rooms } = useContext(DashboardPageContext)
-    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms])
+    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms, room_name])
 
 
     const { change, value } = roomHooks["number"](typeDevice, field, room ?? null)

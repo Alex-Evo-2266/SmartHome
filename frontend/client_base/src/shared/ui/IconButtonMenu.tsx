@@ -1,5 +1,6 @@
-import { MENU_ROOT_ID } from "../../const"
 import {IBlock, IconButtonMenu as IconButtonM, useScreenSize} from 'alex-evo-sh-ui-kit'
+
+import { MENU_ROOT_ID } from "../../const"
 
 export interface IconButtonProps{
     icon: React.ReactNode

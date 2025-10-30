@@ -1,6 +1,7 @@
 import { Dashboard, GearIcon, Home, LogoutIcon, Plug, Room } from 'alex-evo-sh-ui-kit'
-import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { NavigationButton as NB } from 'alex-evo-sh-ui-kit'
+
+import { useHttp } from "../../../shared/lib/hooks/http.hook"
 
 export const useMainButtons = (): NB[] => {
   const { logout } = useHttp()

@@ -1,12 +1,13 @@
 import { ArrowRight, Button, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
 import { useCallback, useState } from "react"
+
 import { DeviceClassOptions, DeviceSchema } from "../../../entites/devices"
-import { SelectField } from "../../../shared"
-import { DeviceType, DeviceTypeEditData } from "../models/type"
-import { getFieldMap, getFieldsCondidat, getFieldType, getType } from "../helpers/filterFields"
-import { editField } from "../helpers/fieldTypeEdit"
 import { TypeDevice } from "../../../entites/devices/models/type"
+import { SelectField } from "../../../shared"
 import { useTypeDeviceAPI } from "../api/types"
+import { editField } from "../helpers/fieldTypeEdit"
+import { getFieldMap, getFieldsCondidat, getFieldType, getType } from "../helpers/filterFields"
+import { DeviceType, DeviceTypeEditData } from "../models/type"
 
 
 interface BaseProps {
@@ -39,7 +40,7 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 			onSave(typeMap, type?.id)
 		else if(typeMap)
 			onSave(typeMap)
-	},[typeMap, type])
+	},[typeMap, type, onSave])
 
 	const changeType = useCallback((newValue: string) => {
 		if(newValue === ""){
@@ -70,7 +71,7 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 	const setMain = useCallback(async()=>{
 		if(type?.id){
 			await setTypeMain(data.system_name, type.id)
-			onHideAndLoad && onHideAndLoad()
+			onHideAndLoad()
 		}
 	},[onHideAndLoad, setTypeMain, data.system_name, type])
 
@@ -87,7 +88,9 @@ export const EditTypeDialog:React.FC<TypeDataProps> = ({onHide, onSave, option, 
 						{
 							getFieldType(types, typeMap.name_type).map((item, index)=>(
 								<div className="device-type-field-map" key={`field-maps-${index}`}>
-									<TextField readOnly border value={item.name_field_type}/><ArrowRight/><SelectField onChange={(value)=>changeField(value, item.name_field_type, types)} items={getFieldsCondidat(item.type_field, data)} border value={getFieldMap(typeMap, item.name_field_type, data)}/>
+									<TextField readOnly border value={item.name_field_type}/>
+									<ArrowRight/>
+									<SelectField onChange={(value)=>changeField(value, item.name_field_type, types)} items={getFieldsCondidat(item.type_field, data)} border value={getFieldMap(typeMap, item.name_field_type, data)}/>
 								</div>
 							))
 						}

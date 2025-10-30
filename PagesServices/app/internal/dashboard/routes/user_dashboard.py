@@ -8,11 +8,6 @@ from app.pkg import auth_privilege_dep
 
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(filename)s: %(asctime)s - %(levelname)s - %(message)s"
-)
-
 router = APIRouter(
     prefix=f"{ROUTE_PREFIX}/user-dashboard",
     tags=["user-dashboard"],
@@ -31,7 +26,7 @@ def to_out_model(dashboard: Dashboard) -> DashboardOut:
     )
 
 @router.get("", response_model=DashboardsData)
-async def get_all_user_dashboards(user_id: str = Depends(auth_privilege_dep("device"))):
+async def get_all_user_dashboards(user_id: str = Depends(auth_privilege_dep("base"))):
     # Получаем объект UserDashboard
     user_dashboard = await UserDashboard.objects.get_or_none(user_id=user_id)
 
@@ -43,7 +38,7 @@ async def get_all_user_dashboards(user_id: str = Depends(auth_privilege_dep("dev
     return DashboardsData(dashboards=[to_out_model(d) for d in dashboards])
 
 @router.post("/set")
-async def add_dashboard(dashboard: DashboardsListUser, user_id: str = Depends(auth_privilege_dep("device"))):
+async def add_dashboard(dashboard: DashboardsListUser, user_id: str = Depends(auth_privilege_dep("base"))):
     # 1. Получаем или создаём UserDashboard
     user_dashboard, _ = await UserDashboard.objects.get_or_create(user_id=user_id)
 

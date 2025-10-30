@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
-import { useRoomAPI } from "../../../entites/rooms/api/roomsAPI"
+
 import { Room } from "../../../entites/rooms"
+import { useRoomAPI } from "../../../entites/rooms/api/roomsAPI"
 
 export const useRoom = () => {
 
@@ -10,7 +11,7 @@ export const useRoom = () => {
     const _getRooms = useCallback(async()=>{
         const rooms = await getRooms()
         setRooms(rooms.rooms)
-    },[])
+    },[setRooms, getRooms])
 
     useEffect(()=>{
         _getRooms()

@@ -1,7 +1,8 @@
+import { NavigatePortal } from '@src/shared/ui/NavigatePortal'
 import { NavigationBar, NavigationBtn, NavigationButton, NavigationDrawer, NavigationRail, ScreenSize, useScreenSize, X } from 'alex-evo-sh-ui-kit'
 import { useState } from "react"
+
 import { joinBarButtons } from '../config/barButtons'
-import { NavigatePortal } from '@src/shared/ui/NavigatePortal'
 
 export const Navigation = (
 	{mainBtn, otherBtn, barBtn:bt, first_btn}:{mainBtn:NavigationButton[], otherBtn:NavigationButton[], barBtn: NavigationButton[], first_btn?: NavigationBtn}

@@ -7,11 +7,6 @@ from app.pkg import auth_privilege_dep
 
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(filename)s: %(asctime)s - %(levelname)s - %(message)s"
-)
-
 router = APIRouter(
     prefix=f"{ROUTE_PREFIX}/dashboard",
     tags=["dashboard"],
@@ -30,19 +25,19 @@ def to_out_model(dashboard: Dashboard) -> DashboardOut:
     )
 
 @router.get("", response_model=DashboardsData)
-async def get_all_dashboards():
+async def get_all_dashboards(user_id:str=Depends(auth_privilege_dep("base"))):
     dashboards = await Dashboard.objects.all()
     return DashboardsData(dashboards=[to_out_model(d) for d in dashboards])
 
 @router.get("/{dashboard_id}", response_model=DashboardOut)
-async def get_dashboard(dashboard_id: str):
+async def get_dashboard(dashboard_id: str, user_id:str=Depends(auth_privilege_dep("base"))):
     dashboard = await Dashboard.objects.get_or_none(id=dashboard_id)
     if dashboard is None:
         raise HTTPException(status_code=404, detail="Dashboard not found")
     return to_out_model(dashboard)
 
 @router.post("", response_model=DashboardOut)
-async def create_dashboard(dashboard: DashboardIn, user: str = Depends(auth_privilege_dep("device"))):
+async def create_dashboard(dashboard: DashboardIn, user: str = Depends(auth_privilege_dep("page"))):
     exists = await Dashboard.objects.get_or_none(id=dashboard.id)
     if exists:
         raise HTTPException(status_code=400, detail="Dashboard with this id already exists")
@@ -56,7 +51,7 @@ async def create_dashboard(dashboard: DashboardIn, user: str = Depends(auth_priv
     return to_out_model(obj)
 
 @router.put("/{dashboard_id}", response_model=DashboardOut)
-async def update_dashboard(dashboard_id: str, dashboard: DashboardIn):
+async def update_dashboard(dashboard_id: str, dashboard: DashboardIn, user_id:str=Depends(auth_privilege_dep("page"))):
     if dashboard.id != dashboard_id:
         raise HTTPException(status_code=400, detail="Dashboard id mismatch")
     obj = await Dashboard.objects.get_or_none(id=dashboard_id)
@@ -70,7 +65,7 @@ async def update_dashboard(dashboard_id: str, dashboard: DashboardIn):
     return to_out_model(obj)
 
 @router.delete("/{dashboard_id}")
-async def delete_dashboard(dashboard_id: str):
+async def delete_dashboard(dashboard_id: str, user_id:str=Depends(auth_privilege_dep("page"))):
     obj = await Dashboard.objects.get_or_none(id=dashboard_id)
     if obj is None:
         raise HTTPException(status_code=404, detail="Dashboard not found")

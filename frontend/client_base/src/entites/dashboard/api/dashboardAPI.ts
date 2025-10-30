@@ -1,8 +1,9 @@
+import { TypeRequest } from "@src/shared/api/type"
 import { useHttp } from "@src/shared/lib/hooks/http.hook"
 import { useSnackbar } from "@src/shared/lib/hooks/snackbar.hook"
 import { useCallback, useEffect } from "react"
+
 import { Dashboard, Dashboards } from "../models/panel"
-import { TypeRequest } from "@src/shared/api/type"
 
 
 export const useDashboardAPI = () => {

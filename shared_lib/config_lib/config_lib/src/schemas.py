@@ -6,6 +6,7 @@ class ConfigItemType(str, Enum):
 	NUMBER = "number"
 	TEXT = "text"
 	PASSWORD = "password"
+	MORE_TEXT = "more"
 
 class ConfigItem(BaseModel):
 	class Config:  

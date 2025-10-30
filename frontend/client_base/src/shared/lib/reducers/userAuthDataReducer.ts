@@ -38,7 +38,7 @@ const initState = ():AuthState => {
 	if (!datauser)
 		datauser = '{}';
 	const data = JSON.parse(datauser)
-	let newdata: AuthState = {
+	const newdata: AuthState = {
 		token: data?.token || '',
 		id: data?.id || undefined,
 		role: data?.role || "",

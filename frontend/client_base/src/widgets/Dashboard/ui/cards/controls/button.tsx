@@ -1,10 +1,9 @@
-import { ControlElementButton } from "@src/entites/dashboard/models/panel"
-import "./styleControl.scss"
-import { useAppSelector } from "@src/shared/lib/hooks/redux"
-import { useCallback, useContext, useMemo } from "react"
-import { ControlTemplate } from "./template"
-import { ErrorControl } from "./readonly"
 import { DashboardPageContext, WIDTH_PANEL_ITEM } from "@src/entites/dashboard"
+import { ControlElementButton } from "@src/entites/dashboard/models/panel"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
+import { getIcons, IconName } from "alex-evo-sh-ui-kit"
+import { useCallback, useContext, useMemo } from "react"
+
 import {
     castValue,
     deviceHooks,
@@ -12,7 +11,11 @@ import {
     parseDataPath,
     roomHooks
 } from "./controlUtils"
-import { getIcons } from "alex-evo-sh-ui-kit"
+import { ErrorControl } from "./readonly"
+import { ControlTemplate } from "./template"
+import "./styleControl.scss"
+
+
 
 /**
  * Презентационный компонент кнопки.
@@ -31,7 +34,7 @@ const ButtonControlElement = ({
     disabled?: boolean
 }) => {
 
-    const Icon = icon? getIcons(icon): undefined
+    const Icon = icon? getIcons(icon as IconName): undefined
 
     return(
     <ControlTemplate onClick={onClick} title={title} size={size}>
@@ -85,7 +88,7 @@ const ButtonControlRoom = ({ data }: { data: ControlElementButton }) => {
 
     const { rooms } = useContext(DashboardPageContext)
 
-    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms])
+    const room = useMemo(() => rooms.find(i => i.name_room === room_name), [rooms, room_name])
     const type = room?.device_room[typeDevice].fields[field].field_type
 
     const hook = roomHooks[normalizeType(type)]

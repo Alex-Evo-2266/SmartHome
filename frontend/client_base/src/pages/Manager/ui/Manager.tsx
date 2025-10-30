@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react"
-import { Loading } from "@src/shared/ui/Loading"
-import { FAB, Panel, Plus, Tabs } from "alex-evo-sh-ui-kit"
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import './Manager.scss'
 import { useCoreAPI, useCoreModulesAPI, useModulesAPI } from "@src/entites/moduleManager";
 import { CoreContainerId, ModuleData } from "@src/entites/moduleManager/modules/modules";
+import { Loading } from "@src/shared/ui/Loading"
+import { FAB, Panel, Plus, Tabs } from "alex-evo-sh-ui-kit"
+import { useCallback, useEffect, useState } from "react"
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import './Manager.scss'
+
 import { ManagerContext } from "../lib/context";
 
 const TabsItems = [
@@ -45,7 +46,7 @@ export const ManagerPage = () => {
             setCoreModules(dataCoreModule.data)
         if(dataCore)
             setCore(dataCore.data)
-    },[getModulesAll])
+    },[getModulesAll, getCoreAll, getModulesCoreAll])
 
     useEffect(()=>{
         load()
@@ -69,7 +70,7 @@ export const ManagerPage = () => {
 
     return (
         <div className="manager-page">
-            <ManagerContext.Provider value={{dockerModules:allModules, coreModuler:allCoreModules, core:allCore}}>
+            <ManagerContext.Provider value={{dockerModules:allModules, coreModuler:allCoreModules, core:allCore, reload: load}}>
                 <Panel>
                     <Tabs 
                         activeTabIndex={getIndex(subRoute)} 

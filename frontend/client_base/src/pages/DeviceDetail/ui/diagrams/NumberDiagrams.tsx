@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { Line } from 'react-chartjs-2';
+import { ColorContext, IColorContext } from 'alex-evo-sh-ui-kit';
 import { 
   Chart as ChartJS, 
   CategoryScale, 
@@ -12,9 +11,12 @@ import {
   ChartData,
   ChartOptions
 } from 'chart.js';
+import { useContext } from 'react';
+import { Line } from 'react-chartjs-2';
+
 import { DiagramProps } from './props';
+
 import './Diagramm.scss'
-import { ColorContext } from 'alex-evo-sh-ui-kit';
 
 // Регистрируем необходимые компоненты Chart.js
 ChartJS.register(
@@ -31,7 +33,7 @@ ChartJS.register(
 
 export const NumberDiagram: React.FC<DiagramProps> = ({data: fieldHistory, label}) => {
 
-  const {colors} = useContext(ColorContext)
+  const {colors} = useContext<IColorContext>(ColorContext)
 
   if(fieldHistory === null)
     return null

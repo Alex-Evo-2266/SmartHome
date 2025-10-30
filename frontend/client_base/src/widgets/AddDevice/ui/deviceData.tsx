@@ -1,9 +1,10 @@
 import { ContentBox, Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
-import { useCallback, useEffect, useState } from "react"
-import { AddDeviceData } from "../models/deviceData"
-import { MODAL_ROOT_ID } from "../../../const"
+import { useCallback, useState } from "react"
+
 import { FieldList } from "./fieldList"
+import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions } from "../../../entites/devices"
+import { AddDeviceData } from "../models/deviceData"
 
 interface DeviceDataProps{
     option: DeviceClassOptions
@@ -49,24 +50,18 @@ export const DeviceData:React.FC<DeviceDataProps> = ({option, onHide, onSave}) =
     const [value, setValue] = useState<AddDeviceData>(getInitData(option))
     const [errors, setErrors] = useState<{[key:string]:string}>({})
 
-    const change = (name: string, data: any) => {
+    const change = (name: string, data: unknown) => {
         setValue(prev=>({...prev, [name]: data}))
-    }
-
-    useEffect(()=>{
-        console.log(value)
-    },[value])
-
-    
+    } 
 
     const save = useCallback(()=>{
         const errors = validDevice(value, option)
         setErrors(errors)
         if(Object.keys(errors).length === 0)
         {
-            onSave && onSave(value)
+            onSave(value)
         }
-    },[value, option])
+    },[value, option, onSave])
 
     return(
         <FullScreenTemplateDialog onHide={onHide} onSave={save}>

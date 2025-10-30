@@ -1,11 +1,12 @@
+import { Room } from "@src/entites/rooms";
+import { useBoolRoom, useNumberRoom } from "@src/features/Room";
+import { capitalizeFirst } from "@src/shared";
 import { Card, Typography } from "alex-evo-sh-ui-kit"
-import { capitalizeFirst } from "../../../shared";
-import { useNavigate } from 'react-router-dom';
-import './RoomPage.scss'
-import { Room } from "../../../entites/rooms";
 import { useCallback } from "react";
 import * as React from "react";
-import { useBoolRoom, useNumberRoom } from "../../../features/Room";
+import { useNavigate } from 'react-router-dom';
+
+import './RoomPage.scss'
 
 export interface RoomCardProps{
     children?: React.ReactNode

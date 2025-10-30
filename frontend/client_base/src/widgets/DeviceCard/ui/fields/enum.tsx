@@ -1,7 +1,8 @@
+import { DeviceSerializeFieldSchema } from "@src/entites/devices";
+import { useSendValue } from "@src/entites/devices/api/sendValue";
+import { SelectField } from "@src/shared";
 import { useState, useEffect, useCallback } from "react";
-import { DeviceSerializeFieldSchema } from "../../../../entites/devices";
-import { useSendValue } from "../../../../entites/devices/api/sendValue";
-import { SelectField } from "../../../../shared";
+
 
 export const DeviceEnumField: React.FC<{ field: DeviceSerializeFieldSchema; deviceName: string }> = ({ field, deviceName }) => {
 
@@ -15,7 +16,7 @@ export const DeviceEnumField: React.FC<{ field: DeviceSerializeFieldSchema; devi
   const handleChange = useCallback((value:string) => {
     setValue(value)
     sendValue(deviceName, field.id, value);
-  },[deviceName, field])
+  },[deviceName, field, sendValue])
 
   return (
     <div className="device-field-container device-text-container">

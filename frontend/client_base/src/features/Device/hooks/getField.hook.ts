@@ -1,5 +1,5 @@
-import { DeviceSchema } from "../../../entites/devices"
 import { useGetBinaryFieldControl, useGetEnumFieldControl, useGetNumberFieldControl } from "./fieldControl.hook"
+import { DeviceSchema } from "../../../entites/devices"
 
 function getField(device: DeviceSchema, nameField: string){
     const typeField = device.type_mask?.fields.find(item=>item.name_field_type === nameField)

@@ -1,12 +1,13 @@
+import { useGetBinaryField } from '@src/features/Device';
 import { Card, Divider, RunningLine, SizeContext, Typography, ScreenSize } from 'alex-evo-sh-ui-kit'
+import { useCallback, useContext } from 'react'
+import { useNavigate } from 'react-router-dom';
+
+import img1 from '../../../../../public/img/device/sensor2.png'
 import { DeviceCardProps } from '../../models/props'
+import { cardSizeStyle } from '../../models/sizeDeviceCard'
 import './Switch.scss'
 import './DeviceCardTemplate.scss'
-import { useGetBinaryField } from '../../../../features/Device/hooks/getField.hook'
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useContext } from 'react'
-import { cardSizeStyle } from '../../models/sizeDeviceCard'
-import img1 from '../../../../../public/img/device/sensor2.png'
 
 export const MoveSensorDevice:React.FC<DeviceCardProps> = ({device}) => {
     const navigate = useNavigate()
@@ -16,7 +17,7 @@ export const MoveSensorDevice:React.FC<DeviceCardProps> = ({device}) => {
 
     const openDitail = useCallback(()=>{
         navigate(`/device/${device.system_name}`)
-    },[device.system_name])
+    },[device.system_name, navigate])
 
     return(
         <Card className='card-device' rootApp='#root' onClick={openDitail} style={cardSizeStyle(screen, 'light')}>
@@ -39,7 +40,7 @@ export const MoveSensorDevice:React.FC<DeviceCardProps> = ({device}) => {
                 }
                 <div onClick={openDitail}>
                 {
-                    moveValue !== null && <div><span>motion</span>: <span>{moveValue}</span></div>
+                    moveValue !== null && <div><span>motion</span>: <span>{String(moveValue)}</span></div>
                 }
                 </div>
             </div>
