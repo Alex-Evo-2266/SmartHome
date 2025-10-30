@@ -1,8 +1,10 @@
 import { useModulesAPI } from '@src/entites/moduleManager';
 import { ModuleData } from '@src/entites/moduleManager/modules/modules';
-import { IconButtonMenu } from '@src/shared';
+import { useAppDispatch } from '@src/shared/lib/hooks/redux';
+import { showBaseMenu } from '@src/shared/lib/reducers/menuReducer';
 import { Loading } from '@src/shared/ui/Loading';
-import { ArrowLeft, Button, Check, IColumn, IconButton, IDataItem, MoreVertical, Panel, Table, Typography, X } from 'alex-evo-sh-ui-kit';
+import { ArrowLeft, Button, Check, IconButton, ListContainer, ListItem, MoreVertical, Panel, Typography, X } from 'alex-evo-sh-ui-kit';
+import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +15,7 @@ export const DockerModule:React.FC = () => {
     const [modules, setModules] = useState<ModuleData | null>(null)
     const { module_name } = useParams<{module_name: string}>();
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
     const load = useCallback(async()=>{
         if(!module_name) return
@@ -21,8 +24,8 @@ export const DockerModule:React.FC = () => {
             setModules(data)
     },[getModule, module_name])
 
-    const clickExempl = (data: IDataItem) => {
-        navigate(`/manager/docker/${module_name}/${data["name"]}`)
+    const clickExempl = (name: string) => {
+        navigate(`/manager/docker/${module_name}/${name}`)
     }
 
     const install = async () => {
@@ -42,46 +45,24 @@ export const DockerModule:React.FC = () => {
         load()
     },[load])
 
+    const getMenuItems = (status: string, name: string) => {
+        if(status === "true")
+            return [
+                    {title: "остановка", onClick: click(stopModule, name)},
+                    {title: "пересборка", onClick: click(rebuildModule, name)},
+                    {title: "обновить", onClick: click(updateModule, name)}
+                ]
+        return[
+            {title: "запуск", onClick: click(runModule, name)},
+            {title: "удалить", onClick: click(deleteModule, name)},
+            {title: "пересборка", onClick: click(rebuildModule, name)},
+            {title: "обновить", onClick: click(updateModule, name)}
+        ]
+    }
 
-    const tableCol: IColumn[] = [
-        {
-            title: "Название экземпляра",
-            field: "name"
-        },
-        {
-            title: "статус",
-            field: "status",
-            template(cell) {
-                return(<div>{cell[0].content === "true" ? <Check/>: <X/>}</div>)
-            },
-        },
-        {
-            title: "действия",
-            field: "action",
-            template(_, data) {
-                if(data.status === "true")
-                    return(
-                        <IconButtonMenu icon={<MoreVertical/>} blocks={[
-                            {items: [
-                                {title: "остановка", onClick: click(stopModule, data.name as string)},
-                                {title: "пересборка", onClick: click(rebuildModule, data.name as string)},
-                                {title: "обновить", onClick: click(updateModule, data.name as string)}
-                            ]}
-                        ]}/>
-                    )
-                return(
-                    <IconButtonMenu icon={<MoreVertical/>} blocks={[
-                        {items: [
-                            {title: "запуск", onClick: click(runModule, data.name as string)},
-                            {title: "удалить", onClick: click(deleteModule, data.name as string)},
-                            {title: "пересборка", onClick: click(rebuildModule, data.name as string)},
-                            {title: "обновить", onClick: click(updateModule, data.name as string)}
-                        ]}
-                    ]}/>
-                )
-            },
-        }
-    ]
+    const showMenu = (e:React.MouseEvent<HTMLButtonElement>, status: string, name: string) => {
+        dispatch(showBaseMenu(getMenuItems(status, name), e.clientX, e.clientY))
+    }
 
     if(loading)
         return(
@@ -107,16 +88,23 @@ export const DockerModule:React.FC = () => {
             <Typography type="title">{module_name}</Typography>
             <Button onClick={install}>Установка</Button>
         </div>
+        <ListContainer>
         {
-            modules.load_module_name.length > 0 &&
-            <Table 
-                onClickRow={clickExempl} 
-                columns={tableCol} 
-                data={modules.load_module_name.map(
-                    item=>({name: item.name, status: String(!!item.status?.all_running), local: String(modules.local)})
-                )}
-            />
+            modules.load_module_name.map(item=>(
+                <ListItem 
+                    hovered 
+                    onClick={()=>clickExempl(item.name)}
+                    header={item.name} 
+                    icon={String(!!item.status?.all_running)==="true"?<Check/>: <X/>} 
+                    control={<IconButton icon={<MoreVertical/>} onClick={(e: React.MouseEvent<HTMLButtonElement>)=>showMenu(e, String(!!item.status?.all_running), item.name)}/>}
+                    // control={<IconButtonMenu 
+                    //     blocks={[{items:getMenuItems(String(!!item.status?.all_running), item.name)}]} 
+                    //     icon={<MoreVertical/>}
+                    // />}
+                />
+            ))
         }
+        </ListContainer>
         </>
                 
     )
