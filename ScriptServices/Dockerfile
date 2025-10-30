@@ -127,13 +127,10 @@ RUN groupadd -r script_service && \
 # RUN curl -sSL https://install.python-poetry.org | python3 - && \
 #     ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry
 
-RUN python3.12 -m ensurepip --upgrade
-RUN python3.12 -m pip install --user pipx
-RUN export PATH="$HOME/.local/bin:$PATH"
-RUN pipx install poetry
-RUN poetry --version
+RUN wget https://install.python-poetry.org -O install-poetry.py
+RUN python3 install-poetry.py
 
-# RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
+RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
 
 # Проверяем версию Python перед установкой зависимостей
 RUN python3 --version  # Должно вывести 3.12.x
