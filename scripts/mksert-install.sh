@@ -40,16 +40,36 @@ case "$DISTRO" in
         ;;
 esac
 
+# Определяем архитектуру
+ARCH=$(uname -m)
+case "$ARCH" in
+    x86_64)
+        FILE_SUFFIX="linux-amd64"
+        ;;
+    aarch64)
+        FILE_SUFFIX="linux-arm64"
+        ;;
+    armv7l)
+        FILE_SUFFIX="linux-arm"
+        ;;
+    *)
+        echo "❌ Неизвестная архитектура: $ARCH"
+        exit 1
+        ;;
+esac
+
 # Получаем последнюю версию mkcert
 LATEST_VERSION=$(curl -s https://api.github.com/repos/FiloSottile/mkcert/releases/latest | grep tag_name | cut -d '"' -f 4)
 if [ -z "$LATEST_VERSION" ]; then
     echo "❌ Не удалось получить последнюю версию mkcert!"
     exit 1
 fi
-echo "📦 Скачиваем mkcert $LATEST_VERSION"
+
+echo "📦 Скачиваем mkcert $LATEST_VERSION для $ARCH"
 
 # Скачиваем бинарник
-curl -L -o /usr/local/bin/mkcert https://github.com/FiloSottile/mkcert/releases/download/$LATEST_VERSION/mkcert-v${LATEST_VERSION#v}-linux-amd64
+curl -L -o /usr/local/bin/mkcert \
+  https://github.com/FiloSottile/mkcert/releases/download/$LATEST_VERSION/mkcert-v${LATEST_VERSION#v}-${FILE_SUFFIX}
 
 # Делаем исполняемым
 chmod +x /usr/local/bin/mkcert
@@ -64,5 +84,6 @@ fi
 echo "⚙️ Устанавливаем локальный CA..."
 mkcert -install
 
+# Проверяем версию
 echo "✅ mkcert установлен успешно!"
-mkcert -version
+echo "🔢 Версия: $(mkcert -version)"
