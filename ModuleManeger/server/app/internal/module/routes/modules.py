@@ -101,9 +101,12 @@ router = APIRouter(
 async def get_moduels(no_cash: bool = False):
 	try:
 		print("p1")
-		git_hub_token = __config__.get(GIT_HUB_KEY)
-		if git_hub_token == "":
-			git_hub_token = None
+		git_hub_token_item = __config__.get(GIT_HUB_KEY)
+		git_hub_token = None
+		if git_hub_token_item != None:
+			git_hub_token = git_hub_token_item.value
+			if git_hub_token == "":
+				git_hub_token = None
 		files = get_all_modules(URL_REPO_MODULES_LIST, token=git_hub_token, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
 		print("p2")
 		data = load_module_configs(MODULES_DIR)
@@ -129,9 +132,12 @@ async def get_moduels(no_cash: bool = False):
 @router.get("/data/{name_module}", response_model=ModulesConfAndLoad)
 async def get_moduel(name_module:str, no_cash: bool = False):
 	try:
-		git_hub_token = __config__.get(GIT_HUB_KEY)
-		if git_hub_token == "":
-			git_hub_token = None
+		git_hub_token_item = __config__.get(GIT_HUB_KEY)
+		git_hub_token = None
+		if git_hub_token_item != None:
+			git_hub_token = git_hub_token_item.value
+			if git_hub_token == "":
+				git_hub_token = None
 		files = get_all_modules(URL_REPO_MODULES_LIST, token=git_hub_token, force_refresh=False, no_cash=no_cash, type_module=TYPE_DOCKER)
 		find_module = next((item for item in files.values() if item.name_module == name_module), None)
 		module_data_list = load_module_config_by_name(MODULES_DIR, name_module)
@@ -154,9 +160,12 @@ async def get_moduel(name_module:str, no_cash: bool = False):
 @router.get("/install")
 async def install_module(name: str):
 	try:
-		git_hub_token = __config__.get(GIT_HUB_KEY)
-		if git_hub_token == "":
-			git_hub_token = None
+		git_hub_token_item = __config__.get(GIT_HUB_KEY)
+		git_hub_token = None
+		if git_hub_token_item != None:
+			git_hub_token = git_hub_token_item.value
+			if git_hub_token == "":
+				git_hub_token = None
 		res_folder = clone_module(name, git_hub_token)
 		# return load_module_configs(MODULES_DIR)
 		return res_folder
@@ -219,9 +228,12 @@ async def build_module(name: str, container_name: Optional[str] = None):
 @router.get("/update")
 async def update_module_api(name: str):
 	try:
-		git_hub_token = __config__.get(GIT_HUB_KEY)
-		if git_hub_token == "":
-			git_hub_token = None
+		git_hub_token_item = __config__.get(GIT_HUB_KEY)
+		git_hub_token = None
+		if git_hub_token_item != None:
+			git_hub_token = git_hub_token_item.value
+			if git_hub_token == "":
+				git_hub_token = None
 		return update_module(name, git_hub_token)
 	except Exception as e:
 		return JSONResponse(status_code=400, content=str(e))

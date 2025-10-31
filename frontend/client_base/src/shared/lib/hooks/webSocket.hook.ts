@@ -13,7 +13,9 @@ export const useSocket = <T>(callbacks: MessageCallback<T>[] = []) =>{
 
   const connectSocket = useCallback(()=>{
     try{
-      const path = `ws://${import.meta.env.VITE_HOST}/ws/base`
+      const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+      // const path = `${protocol}://${import.meta.env.VITE_HOST}/ws/base`
+      const path = `${protocol}://${window.location.host}/ws/base`
       console.log(path)
       socket.current = new WebSocket(path)
     }catch(e){
