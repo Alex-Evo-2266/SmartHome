@@ -7,7 +7,7 @@ BASE_DIR="$(dirname "$(realpath "$0")")/.."
 CERT_DIR="$BASE_DIR/certs"
 
 # Список доменов (можно добавить свои сервисы)
-DOMAINS="localhost 127.0.0.1 ::1"
+DOMAINS="localhost 127.0.0.1 ::1 $1"
 
 # Создаём папку, если её нет
 mkdir -p "$CERT_DIR"

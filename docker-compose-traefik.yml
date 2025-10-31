@@ -165,6 +165,12 @@ services:
       - "traefik.http.routers.device_ws.service=device_ws"
       - "traefik.http.services.device_ws.loadbalancer.server.port=8006"
       - "traefik.http.routers.device_ws.entrypoints=web"
+      # websocket s
+      - "traefik.http.routers.device_wss.rule=PathPrefix(`/ws/base`)"
+      - "traefik.http.routers.device_wss.service=device_wss"
+      - "traefik.http.routers.device_wss.tls=true"
+      - "traefik.http.services.device_wss.loadbalancer.server.port=8006"
+      - "traefik.http.routers.device_wss.entrypoints=websecure"
       # общий сервис
       - "traefik.http.services.device.loadbalancer.server.port=8006"
     volumes:
