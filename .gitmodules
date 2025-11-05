@@ -1,0 +1,4 @@
+[submodule "AuthService"]
+	path = AuthService
+	url = https://github.com/Alex-Evo-2266/AuthService.git
+	branch = main
