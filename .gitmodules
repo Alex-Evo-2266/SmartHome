@@ -2,3 +2,7 @@
 	path = AuthService
 	url = https://github.com/Alex-Evo-2266/AuthService.git
 	branch = main
+[submodule "shared_lib/common_libs"]
+	path = shared_lib/common_libs
+	url = https://github.com/Alex-Evo-2266/SmartHomeLibs.git
+	branch = main
