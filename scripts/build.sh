@@ -2,6 +2,9 @@
 
 BASE_DIR="$(dirname "$(realpath "$0")")/.."
 
+sh $BASE_DIR/scripts/modules_init.sh
+sh $BASE_DIR/scripts/modules_update.sh
+
 sh $BASE_DIR/scripts/create_network.sh
 
 sh $BASE_DIR/scripts/copy_shared_lib.sh
