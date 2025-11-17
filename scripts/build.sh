@@ -9,5 +9,7 @@ sh $BASE_DIR/scripts/create_network.sh
 
 sh $BASE_DIR/scripts/copy_shared_lib.sh
 
+sh $BASE_DIR/AuthService/scripts/build-libs.sh
+
 CONFIGURATE_DIR="$BASE_DIR/Configurate" ROOT_APP_DIR="$BASE_DIR" docker compose --env-file $BASE_DIR/.env -f $BASE_DIR/docker-compose-traefik.yml -f $BASE_DIR/AuthService/docker-compose-auth.yml -f $BASE_DIR/ModuleManeger/docker-compose-manager.yml build
 

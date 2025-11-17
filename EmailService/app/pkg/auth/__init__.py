@@ -1,1 +1,0 @@
-from .depends.auth import auth_privilege_dep
