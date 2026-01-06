@@ -3,7 +3,7 @@ import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/Preview"
 import { DockerModuleList, DockerExemplePage, DockerModule, CoreList } from "@src/pages/Manager"
 import { ManagerPage } from "@src/pages/Manager/ui/Manager"
 import { CoreModuleList } from "@src/pages/Manager/ui/ModuleCore/ModuleCoreList"
-import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit"
+// import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit"
 import { Navigate, Route, Routes } from "react-router-dom"
 
 import { AuthPage } from "../pages/Auth/AuthPage"
@@ -27,8 +27,8 @@ export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated,
 	console.log("role: ", role)
 
 	return (
-		<ColorProvider>
-          <SizeProvider>
+		// <ColorProvider>
+        //   <SizeProvider>
 			<Routes>
 			{
 				isAuthenticated?
@@ -65,8 +65,8 @@ export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated,
 				</>
 			}
 		</Routes>
-		  </SizeProvider>
-		  </ColorProvider>
+		//   </SizeProvider>
+		//   </ColorProvider>
 			
 		
 	)
