@@ -24,6 +24,9 @@ class IDevice():
 	def get_values(self)->dict[str, str]:
 		pass
 
+	def get_poll_config(self)->tuple[int, int]:
+		pass
+
 	def get_field(self, field_id: str)->IField | None:
 		pass
 

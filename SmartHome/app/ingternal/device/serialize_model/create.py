@@ -3,6 +3,8 @@ from app.ingternal.device.serialize_model.utils import duble_field, create_field
 from app.ingternal.device.models.device import Device, DeviceField
 from app.ingternal.device.cache.invalidate_cache import invalidate_cache
 from app.ingternal.room.cache.all_rooms import invalidate_cache_room__type_device_data
+from app.configuration.queue import __queue__
+from app.ingternal.device.device_queue.types import InitDeviceItem
 
 import copy
 
@@ -22,5 +24,6 @@ async def add_device(data: AddDeviceSchema):
 		id = await create_field_id()
 		await DeviceField.objects.create(**(field.dict()), device=new_device, id=id)
 
+	__queue__.add("init_device", system_name=system_name, try_count=0)
 	invalidate_cache()
 	invalidate_cache_room__type_device_data()

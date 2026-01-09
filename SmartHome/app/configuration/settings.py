@@ -37,7 +37,7 @@ ROUTE_PREFIX = "/api-devices"
 CONFIG_TAG = "device-config"
 
 # config keys
-FREQUENCY = 'frequency'
+POLLING_INTERVAL = 'pooling_interval'
 SEND_DEVICE_CONF = 'send-device-data'
 SAVE_DEVICE_CONF = 'save-device-data'
 
@@ -49,9 +49,9 @@ LOOP_AUTOMATION = 'automation-loop'
 
 #websocket key
 TYPE_SEND_DEVICE = "device-send"
+TYPE_SEND_PATCH_DEVICE = "device-send-patch"
 
 #poll keys
-DEVICE_DATA_POLL = "poll-device-data"
 SERVICE_DATA_POLL = "poll-service-data"
 SERVICE_POLL = "poll-service"
 
@@ -66,7 +66,7 @@ MODULES_URL = '/media/device/modules/'
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 # LOGS_LEVEL = logging.DEBUG if DEBUG else logging.INFO
-LOGS_LEVEL = logging.INFO
+LOGS_LEVEL = logging.DEBUG
 
 BACKGROUND_DIR = os.path.join(MEDIA_DIR, 'backgrounds')
 MODULES_DIR = os.path.join(MEDIA_DIR, 'modules')

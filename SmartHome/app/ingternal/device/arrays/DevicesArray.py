@@ -1,7 +1,7 @@
 import logging
 from pydantic import BaseModel
 from typing import Any, List
-# from app.device.device_class.interfaces.device_interface import IDevice
+from app.ingternal.device.interface.device_class import IDevice
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ class DevicesArray():
     devices:List[DevicesArrayItem] = []
 
     @classmethod
-    def add_device(cls, id:str, device):
+    def add_device(cls, id:str, device: IDevice):
         for item in cls.devices:
             if(item.id==id):
                 return None

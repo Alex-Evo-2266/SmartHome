@@ -1,13 +1,13 @@
 
 from typing import Callable, Dict, List, Awaitable, Generic, TypeVar
 import time
-import logging
 import asyncio, json
 from app.ingternal.utils.throttle import async_throttle_for_key
-
-logger = logging.getLogger(__name__)
+from app.ingternal.logs import MyLogger
 
 T = TypeVar("T")
+
+logger = MyLogger().get_logger(__name__)
 
 class ObservableDict(Generic[T]):
     def __init__(self):
@@ -34,7 +34,7 @@ class ObservableDict(Generic[T]):
         """Синхронно устанавливает значение и уведомляет подписчиков асинхронно."""
         self._data[key] = value
         self._timestamps[key] = time.time()
-        # logger.info(f"Установлено: {key} = {value}")
+        logger.debug(f"Установлено: {key} = {value}")
         asyncloop = asyncio.get_running_loop()
         asyncloop.create_task(self._notify_subscribers(key=key, value=value))
         
@@ -43,13 +43,13 @@ class ObservableDict(Generic[T]):
         """Синхронно устанавливает значение и уведомляет подписчиков асинхронно."""
         self._data[key] = value
         self._timestamps[key] = time.time()
-        # logger.info(f"Установлено: {key} = {value}")
+        logger.debug(f"Установлено: {key} = {value}")
         await self._notify_subscribers(key=key, value=value)
 
 
     def get(self, key: str, default=None):
         value = self._data.get(key, default)
-        # logger.info(f"Получено: {key} = {value}")
+        logger.debug(f"Получено: {key} = {value}")
         return value
 
     def get_all(self):
@@ -61,7 +61,7 @@ class ObservableDict(Generic[T]):
 
     def get_last_modified(self, key: str):
         timestamp = self._timestamps.get(key, None)
-        # logger.info(f"Последнее изменение {key}: {timestamp}")
+        logger.debug(f"Последнее изменение {key}: {timestamp}")
         return timestamp
 
     def delete(self, key: str) -> None:

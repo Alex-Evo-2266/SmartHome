@@ -59,10 +59,16 @@ export enum StatusDevice {
     all_types: TypeDevice[];
     room?: string
     position_in_room?: string
+    poll_interval: number
+	  poll_timeout: number
   }
   
   export interface DeviceSchema extends DeviceSerializeSchema {
     value?: { [key: string]: string } | null;
+  }
+
+  export interface StateDeviceSchema extends DeviceSchema {
+    version: number
   }
   
   export interface ValueSerializeSchema {
@@ -72,3 +78,9 @@ export enum StatusDevice {
     field?: DeviceSerializeFieldSchema | null;
   }
   
+  export type PatchStateDevice = {
+    changes: Record<string, string>
+    system_name: string
+    updated_at: number
+    version: number
+  }

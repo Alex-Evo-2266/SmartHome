@@ -1,9 +1,11 @@
 from app.ingternal.device.schemas.enums import TypeDeviceField
 from typing import Optional
 
-def normalize_value(value: str, field_type: TypeDeviceField, 
+def normalize_value(value: str | None, field_type: TypeDeviceField, 
                     min_val: Optional[str] = None, 
                     max_val: Optional[str] = None) -> str:
+    if value == None:
+        return None
     # ----- BINARY -----
     if field_type == TypeDeviceField.BINARY:
         if min_val is not None and max_val is not None:

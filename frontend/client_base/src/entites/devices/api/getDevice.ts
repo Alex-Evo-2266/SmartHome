@@ -15,6 +15,11 @@ export const useDeviceAPI = () => {
         return data
     },[request])
 
+    const getDevices = useCallback(async () => {
+        const data:{data: DeviceSchema[]} = await request(`/api-devices/devices`)
+        return data.data
+    },[request])
+
     useEffect(()=>{
             if (error)
                 showSnackbar(error, {}, 10000)
@@ -25,6 +30,7 @@ export const useDeviceAPI = () => {
 
     return {
         getDevice,
+        getDevices,
         loading
     }
 }

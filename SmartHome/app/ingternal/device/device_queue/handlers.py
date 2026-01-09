@@ -1,32 +1,12 @@
-from queue_lib import QueueItem
 from app.ingternal.logs import get_base_logger
 from app.ingternal.device.serialize_model.create import add_device
 from app.ingternal.device.serialize_model.delete import delete_device
 from app.ingternal.device.serialize_model.update import edit_status_device
 from app.ingternal.device.set_device_status_by_field_name import set_status_by_field_name
-from app.ingternal.device.schemas.add_device import AddDeviceSchema
+from app.ingternal.device.init import init
+from app.ingternal.device.device_queue.types import AddItem, DeleteItem, EditStatusItem, ValueSetItem, InitDeviceItem
 
 logger = get_base_logger.get_logger(__name__)
-
-class AddItem(QueueItem):
-	type: str = "add"
-	object: AddDeviceSchema
-
-class DeleteItem(QueueItem):
-	type: str = "delete"
-	system_name: str
-
-class EditStatusItem(QueueItem):
-	type: str = "edit_status"
-	system_name: str
-	status: bool
-
-class ValueSetItem(QueueItem):
-	type: str = "set_value"
-	system_name: str
-	field: str
-	value: str | int
-
 
 async def handle_add(item: AddItem):
 	logger.debug(f"Adding device: {item.object}")
@@ -47,3 +27,8 @@ async def handle_value_set(item: ValueSetItem):
 	logger.info(f"Deleting device: {item.system_name}")
 	await set_status_by_field_name(item.system_name, item.field, item.value)
 	logger.debug("Device update status successfully")
+
+async def handle_init_device(item: InitDeviceItem):
+	logger.debug(f"init device: {item.system_name}")
+	await init(item.system_name, item.try_count)
+	logger.debug("Device init finish")

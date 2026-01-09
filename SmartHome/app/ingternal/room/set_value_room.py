@@ -42,7 +42,7 @@ async def set_value_room(room: str, device_type: str, field: str, value: str):
             ]
             for field_info in matching_fields:
                 try:
-                    set_status_for_device(device, field_info.id_field_device, value)
+                    await set_status_for_device(device, field_info.id_field_device, value)
                     logger.info(
                         f"Значение {field} устройства {device.data.system_name} обновлено на {value}"
                     )

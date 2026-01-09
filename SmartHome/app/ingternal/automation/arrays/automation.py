@@ -2,13 +2,13 @@ from app.ingternal.automation.schemas.automation import AutomationSchema, Trigge
 from typing import List, Callable, Optional, Dict, Tuple, Awaitable, TypeVar, Set
 from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel
-import logging
 
 from app.ingternal.room.cache.all_rooms import get_cached_room_data
 from app.ingternal.room.schemas.room import RoomDevicesRaw
+from app.ingternal.logs import MyLogger
 
 # Настройка логирования
-logger = logging.getLogger(__name__)
+logger = MyLogger().get_logger(__name__)
 
 # Константы для форматов времени
 TIME_FORMAT = "%H:%M:%S%z"  # Формат времени с часовым поясом
@@ -182,26 +182,29 @@ class AutomationManager:
         
     async def run_room_triggered_automations(self, device_id: str,field_id:str, room_name:str) -> None:
         rooms:List[RoomDevicesRaw] = await get_cached_room_data()
-        room = next(r for r in rooms if r.name_room == room_name)
-        for type_dev, d in room.device_room.items():
-            for field_dev, f in d.fields.items():
-                for dev in f.devices:
-                    if dev.system_name == device_id and dev.id_field_device == field_id:
-                        key = (room.name_room, type_dev, field_dev)
-                        if key not in self.room_index:
-                            return
-                        if key in self._running_rooms:
-                            logger.warning(f"Aвтоматизации выполняется '{key}'")
-                            return
-                        self._running_rooms.add(key)
-                        try:
-                            for automation_name in self.room_index[key].data:
-                                try:
-                                    await self.callback(self.automations[automation_name])
-                                except Exception as e:
-                                    logger.error(f"Ошибка выполнения автоматизации '{automation_name}' по триггеру комнаты: {e}")
-                        finally:
-                            self._running_rooms.remove(key)
+        try:
+            room = next(r for r in rooms if r.name_room == room_name)
+            for type_dev, d in room.device_room.items():
+                for field_dev, f in d.fields.items():
+                    for dev in f.devices:
+                        if dev.system_name == device_id and dev.id_field_device == field_id:
+                            key = (room.name_room, type_dev, field_dev)
+                            if key not in self.room_index:
+                                return
+                            if key in self._running_rooms:
+                                logger.warning(f"Aвтоматизации выполняется '{key}'")
+                                return
+                            self._running_rooms.add(key)
+                            try:
+                                for automation_name in self.room_index[key].data:
+                                    try:
+                                        await self.callback(self.automations[automation_name])
+                                    except Exception as e:
+                                        logger.error(f"Ошибка выполнения автоматизации '{automation_name}' по триггеру комнаты: {e}")
+                            finally:
+                                self._running_rooms.remove(key)
+        except Exception as e:
+            logger.warning(f"error trigger room: {room_name} - {e}")
 
     def clear_automations(self) -> None:
         """Очищает все автоматизации и сбрасывает состояние менеджера"""

@@ -12,9 +12,10 @@ import { useSocket } from "../shared/lib/hooks/webSocket.hook";
 function App() {
 
   const {isAuthenticated, role} = useAppSelector(state=>state.auth)
-  const {updateDevicedata} = useUpdateDeviceData()
+  const {updateDevicedata, patchDeviceState} = useUpdateDeviceData()
   const {listenSocket, closeSocket} = useSocket([
-      {messageType: "device-send", callback: updateDevicedata}
+      {messageType: "device-send", callback: updateDevicedata as (arg: unknown)=>void},
+      {messageType: "device-send-patch", callback: patchDeviceState as (arg: unknown)=>void},
   ])
 
   useEffect(()=>{

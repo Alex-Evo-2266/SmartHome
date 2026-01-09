@@ -1,9 +1,10 @@
 from typing import Optional, List, Dict, Type
 from app.ingternal.device_types.schemas.device_type import FieldDeviceTypeSchema
+from app.ingternal.device_types.types_names import TypesDeviceEnum
 
 class DeviceType:
 	def __init__(self, 
-				name: str, 
+				name: TypesDeviceEnum, 
 				fields: List[FieldDeviceTypeSchema],
 				label: str = "",
 				description: str = ""

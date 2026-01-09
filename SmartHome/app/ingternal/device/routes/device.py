@@ -18,7 +18,7 @@ from app.ingternal.device.set_device_status import set_status
 
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.ingternal.device.exceptions.device import DevicesStructureNotFound
-from app.configuration.settings import DEVICE_DATA_POLL
+from app.ingternal.modules.struct.DeviceStatusStore import store
 
 router = APIRouter(
     prefix="/api-devices/devices",
@@ -90,10 +90,8 @@ async def get_dev_serialize(system_name: str, user_id:str=Depends(auth_privilege
 @router.get("", response_model=DeviceResponseSchema)
 async def get_all_dev(user_id:str=Depends(auth_privilege_dep("device"))):
     try:
-        devices_list: Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
-        if not devices_list:
-            raise DevicesStructureNotFound()
-        devices = devices_list.get_all_data()
+        snapshots = store.get_all_snapshots()
+        devices = [DeviceSchema(**x.description.model_dump(), value=x.state) for x in snapshots]
         return DeviceResponseSchema(data=devices)
     except Exception as e:
         logger.warning(str(e))

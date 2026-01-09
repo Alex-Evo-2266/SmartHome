@@ -1,7 +1,7 @@
-import {DeviceSchema} from '../models/device'
+import {DeviceSchema, PatchStateDevice, StateDeviceSchema} from '../models/device'
 
 // Действия для работы с массивом данных устройств
-enum DeviceActionTypes {
+const enum DeviceActionTypes {
     SET_DEVICES_DATA = 'SET_DEVICES_DATA',
     UPDATE_DEVICE_VALUE = 'UPDATE_DEVICE_VALUE',
   }
@@ -11,21 +11,22 @@ enum DeviceActionTypes {
     type: DeviceActionTypes.SET_DEVICES_DATA;
     payload: DeviceSchema[];
   }
+
+  interface SetDevicesDataAction {
+    type: DeviceActionTypes.SET_DEVICES_DATA;
+    payload: DeviceSchema[];
+  }
   
   interface UpdateDeviceValueAction {
     type: DeviceActionTypes.UPDATE_DEVICE_VALUE;
-    payload: {
-      deviceId: string;
-      fieldName: string;
-      value: string;
-    };
+    payload: PatchStateDevice;
   }
   
   // Все возможные действия
   type DeviceActions = SetDevicesDataAction | UpdateDeviceValueAction;
 
   interface DeviceState {
-    devicesData: DeviceSchema[];  // массив устройств
+    devicesData: StateDeviceSchema[];  // массив устройств
   }
   
   const initialState: DeviceState = {
@@ -40,30 +41,51 @@ enum DeviceActionTypes {
       case DeviceActionTypes.SET_DEVICES_DATA:
         return {
           ...state,
-          devicesData: action.payload,  // сохраняем массив устройств
+          devicesData: action.payload.map(item=>{
+            const cond = state.devicesData.find(i=>i.system_name === item.system_name)
+            if(!cond){
+              return {...item, version: 0}
+            }
+            else{
+              return {...item, version: cond.version}
+            }
+          }
+            
+          ),  // сохраняем массив устройств
         };
   
       case DeviceActionTypes.UPDATE_DEVICE_VALUE:{
         // Обновляем устройство с указанным ID и его поле
-        const updatedDevices = state.devicesData.map(device =>
-          device.name === action.payload.deviceId
-            ? {
+        const updatedDevices = state.devicesData.map(device =>{
+          if(device.system_name === action.payload.system_name)
+          {
+            const values = device.value ?? {}
+            Object.entries(action.payload.changes).forEach(([key, value]) => values[key]=value)
+            return {
                 ...device,
-                fields: device.fields?.map(field =>
-                  field.name === action.payload.fieldName
-                    ? { ...field, value: action.payload.value }  // обновляем значение поля
-                    : field
-                ),
+                fields: device.fields?.map(field =>{
+                  const newValue = action.payload.changes[field.name]
+                  if(newValue !== null && newValue !== undefined){
+                    return {...field, value: newValue}
+                  }
+                  else{
+                    return field
+                  }
+                }),
+                value: values
               }
-            : device
-        );
+          }
+          else{
+            return device
+          }
+        });
   
         return {
           ...state,
           devicesData: updatedDevices,  // возвращаем обновленный массив устройств
         };
       }
-  
+
       default:
         return state;
     }
@@ -76,7 +98,7 @@ export const setDevicesData = (devices: DeviceSchema[]): SetDevicesDataAction =>
   });
   
   // Действие для обновления значения поля устройства в массиве
-  export const updateDeviceValue = (deviceId: string, fieldName: string, value: string): UpdateDeviceValueAction => ({
+  export const updateDeviceValue = (patch: PatchStateDevice): UpdateDeviceValueAction => ({
     type: DeviceActionTypes.UPDATE_DEVICE_VALUE,
-    payload: { deviceId, fieldName, value },
+    payload: patch,
   });

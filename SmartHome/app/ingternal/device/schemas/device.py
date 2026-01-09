@@ -1,8 +1,9 @@
 from enum import Enum
-from pydantic import BaseModel
-from typing import Optional, List, Dict
+from pydantic import BaseModel, Field
+from typing import Optional, List, Dict, Any
 from app.ingternal.device.schemas.enums import ReceivedDataFormat, TypeDeviceField, StatusDevice, DeviceGetData, DeviceFieldCategory, FieldGetDataType
 from app.ingternal.device_types.schemas.device_type import DeviceTypeSerializeSchema
+import time
 
 class DeviceInitFieldSchema(BaseModel):
 	name: str
@@ -50,12 +51,14 @@ class DeviceSerializeSchema(BaseModel):
 	all_types: List[DeviceTypeSerializeSchema] = []
 	room: Optional[str] = None
 	position_in_room: Optional[str] = None
+	poll_interval: Optional[int] = 1
+	poll_timeout: Optional[int] = 1
 
 	class Config:  
 		use_enum_values = True
 
 class DeviceSchema(DeviceSerializeSchema):
-	value: Optional[Dict[str,str]] = dict()
+	value: Optional[Dict[str,str | None]] = dict()
 
 class DeviceResponseSchema(BaseModel):
 	data: List[DeviceSchema]
@@ -93,3 +96,9 @@ class ValueSerializeResponseSchema(BaseModel):
 class ValueSerializeResponseListSchema(BaseModel):
 	data: List[ValueSerializeResponseSchema]
 	system_name: str
+
+class DeviceStateEvent(BaseModel):
+	system_name: str
+	changes: dict[str, str]
+	meta: dict[str, Any] = {}
+	ts: float = Field(default_factory=time.time)

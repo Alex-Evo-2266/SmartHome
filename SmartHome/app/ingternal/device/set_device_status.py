@@ -34,7 +34,7 @@ def normalize_numeric_value(field: IField, value: str) -> Union[str, int, float]
     return numeric
 
 
-def set_status_for_device(device: IDevice, field_id: str, value: str) -> None:
+async def set_status_for_device(device: IDevice, field_id: str, value: str) -> None:
     """Устанавливает статус устройства с учетом типа поля и ограничений."""
     field = device.get_field(field_id)
     if field is None:
@@ -47,7 +47,7 @@ def set_status_for_device(device: IDevice, field_id: str, value: str) -> None:
     else:
         final_value = value
 
-    device.set_value(field_id, final_value)
+    await device.set_value(field_id, final_value)
     logger.info(f"Status for device '{device.data.system_name}', field '{field_id}' set to '{final_value}'")
 
 
@@ -61,7 +61,7 @@ async def set_status(system_name: str, field_id: str, value: str) -> None:
         raise DeviceNotFound(f"Device '{system_name}' not found.")
 
     try:
-        device_cond.device.set_value(field_id, value)
+        await device_cond.device.set_value(field_id, value)
         logger.info(f"Successfully set status for device '{system_name}', field '{field_id}' to '{value}'")
     except Exception as e:
         logger.error(f"Error setting value for device '{system_name}', field '{field_id}': {e}")
@@ -78,7 +78,7 @@ async def set_status_correct(system_name: str, field_id: str, value: str) -> Non
         raise DeviceNotFound(f"Device '{system_name}' not found.")
 
     try:
-        set_status_for_device(device_cond.device, field_id, value)
+        await set_status_for_device(device_cond.device, field_id, value)
     except Exception as e:
         logger.error(f"Error setting corrected value for device '{system_name}', field '{field_id}': {e}")
         raise

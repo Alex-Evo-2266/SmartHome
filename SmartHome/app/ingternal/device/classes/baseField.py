@@ -7,7 +7,6 @@ from app.ingternal.device.schemas.add_device import AddDeviceFieldSchema
 from app.ingternal.device.schemas.enums import TypeDeviceField
 from app.ingternal.automation.run.register import automation_manager
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
-from app.configuration.settings import DEVICE_DATA_POLL
 from app.ingternal.logs import get_device_base_class
 from app.ingternal.device.map_value_field import normalize_value
 from app.ingternal.room.array.RoomArray import RoomArray
@@ -135,7 +134,7 @@ class FieldBase(IField):
 			case _:
 				self.data.value = status
 
-		self._update_device_data()
+		# self._update_device_data()
 
 		RoomArray.update_room(
 			self.device_system_name, 
@@ -183,13 +182,13 @@ class FieldBase(IField):
 		else:
 			logger.warning(f"Invalid enum value '{status}' for field '{self.get_name()}'")
 
-	def _update_device_data(self):
-		dev_list: Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
-		if dev_list:
-			device: DeviceSchema | None = dev_list.get(self.device_system_name)
-			if device:
-				device.value[self.data.name] = self.data.value
-				logger.debug(f"Updated device '{self.device_system_name}' field '{self.data.name}' with value '{self.data.value}'")
+	# def _update_device_data(self):
+	# 	dev_list: Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
+	# 	if dev_list:
+	# 		device: DeviceSchema | None = dev_list.get(self.device_system_name)
+	# 		if device:
+	# 			device.value[self.data.name] = self.data.value
+	# 			logger.debug(f"Updated device '{self.device_system_name}' field '{self.data.name}' with value '{self.data.value}'")
 
 	def _trigger_automation(self):
 		try:

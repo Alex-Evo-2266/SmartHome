@@ -1,15 +1,18 @@
 # Standard libraries
-import logging
 import asyncio
 from typing import Dict, List
+
+
+from app.ingternal.modules.struct.RoomStateStore import room_store, room_state_init
 
 # Local modules
 from app.pkg import itemConfig, ConfigItemType, __config__
 from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, ObservableDict
 from app.configuration.loop.loop import loop
 from app.pkg.ormar.dbormar import database
-from app.configuration.settings import EXCHANGE_ROOM_DATA,EXCHANGE_SERVICE_DATA, RABITMQ_HOST, FREQUENCY, DEVICE_VALUE_SEND, DATA_SCRIPT, SEND_DEVICE_CONF, DEVICE_DATA_POLL, EXCHANGE_DEVICE_DATA, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
-from app.ingternal.device.polling import restart_polling
+from app.configuration.settings import LOOP_DEVICE_POLLING, EXCHANGE_ROOM_DATA,EXCHANGE_SERVICE_DATA, RABITMQ_HOST, POLLING_INTERVAL, DEVICE_VALUE_SEND, DATA_SCRIPT, SEND_DEVICE_CONF, EXCHANGE_DEVICE_DATA, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
+# from app.ingternal.device.polling import restart_polling
+from app.ingternal.device.polling_device import restart_polling
 from app.ingternal.device.send import restart_send_device_data
 from app.ingternal.device.save import restart_save_data
 from app.moduls import getModule
@@ -22,9 +25,15 @@ from app.ingternal.senderPoll.sender import sender_device, sender_service, sende
 from app.ingternal.device.schemas.device import DeviceSchema
 from app.ingternal.modules.classes.baseService import BaseService
 from app.ingternal.room.array.RoomArray import RoomArray
+from app.ingternal.device.init import init_all
+from app.ingternal.device.polling_device import device_poll
 
 from app.ingternal.listener.listener import loadServiceData, loadDeviceData
 from app.configuration.queue import __queue__
+from app.ingternal.modules.struct.DeviceStatusStore import store
+from app.configuration.queue.init_handles import register_queue
+from app.ingternal.logs import MyLogger
+from app.ingternal.room.send import restart_send_room_data
 
 import tracemalloc
 
@@ -49,22 +58,25 @@ async def monitor_memory(data:str = ""):
         await asyncio.sleep(1)
 
 # Logger setup
-logger = logging.getLogger(__name__)
 
 async def startup():
     """
     Инициализация сервиса устройств.
     """
+
+    logger = MyLogger().get_logger(__name__)
+
     logger.info("Starting device service...")
 
     logger.info("Starting create dirs...")
     create_directorys()
 
     # Инициализация sub ObservableDict
-    servicesDataPoll.set(DEVICE_DATA_POLL, ObservableDict[DeviceSchema]())
     servicesDataPoll.set(SERVICE_DATA_POLL, ObservableDict[Dict | str | List]())
     servicesDataPoll.set(SERVICE_POLL, ObservableDict[BaseService]())
     logger.info("Device registry initialized.")
+
+    register_queue()
 
     # Подключение к базе данных
     database_ = database
@@ -79,7 +91,7 @@ async def startup():
     # Регистрация конфигурационных параметров
     try:
         __config__.register_config(
-            itemConfig(tag="device service", key=FREQUENCY, type=ConfigItemType.NUMBER),
+            itemConfig(tag="device service", key=POLLING_INTERVAL, type=ConfigItemType.NUMBER),
             restart_polling
         )
         __config__.register_config(
@@ -87,7 +99,7 @@ async def startup():
             restart_save_data
         )
         __config__.register_config(
-            itemConfig(tag="device service", key=SEND_DEVICE_CONF, type=ConfigItemType.NUMBER),
+            itemConfig(tag="device service", key=SEND_DEVICE_CONF, type=ConfigItemType.NUMBER, value="120"),
             restart_send_device_data
         )
         logger.info("Configuration items registered.")
@@ -112,6 +124,10 @@ async def startup():
     await restart_automation()
 
     loop.register("device_add_queue", __queue__.start, 1)
+    loop.register(LOOP_DEVICE_POLLING, device_poll, 1)
+
+
+    await init_all()
 
     # Загрузка конфигурации
     try:
@@ -130,6 +146,8 @@ async def startup():
     except RuntimeError as e:
         logger.error(f"Failed to start main loop: {e}")
 
+    await restart_send_room_data()
+
     # подключение отправление rabitqm
     sender_device.connect(exchange_name=EXCHANGE_DEVICE_DATA, host=RABITMQ_HOST)
     sender_room.connect(exchange_name=EXCHANGE_ROOM_DATA, host=RABITMQ_HOST)
@@ -137,13 +155,15 @@ async def startup():
     sender_service.connect(exchange_name=EXCHANGE_SERVICE_DATA, host=RABITMQ_HOST)
 
     # подписка на изменение
-    data_poll: ObservableDict = servicesDataPoll.get(DEVICE_DATA_POLL)
-    data_poll.subscribe_all("sender", sender_device.send)
-    data_poll.subscribe_all("sender2", sender_room.send)
+    store.subscribe_patch_global("sender", sender_device.send)
+    store.subscribe_patch_global("sender2", sender_room.send)
+    await room_state_init(room_store, store)
+    # data_poll.subscribe_all("sender", sender_device.send)
+    # data_poll.subscribe_all("sender2", sender_room.send)
 
 
     service_data_poll: ObservableDict = servicesDataPoll.get(SERVICE_DATA_POLL)
-    service_data_poll.subscribe_all("sender", sender_service.send)
+    service_data_poll.subscribe_all("sender_service", sender_service.send)
 
     await RoomArray.init_rooms()
 

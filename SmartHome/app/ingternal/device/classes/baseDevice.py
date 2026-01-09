@@ -12,7 +12,7 @@ from app.ingternal.device_types.types_names import TypesDeviceEnum
 from typing import ClassVar, Set, Union
 
 class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
-
+	poll_interval: int = 1
 	device_config = ConfigSchema()
 	# Статическое поле с допустимыми типами устройств
 	ALLOWED_TYPES: ClassVar[Union[None, Set[TypesDeviceEnum]]] = None
@@ -64,6 +64,9 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 	
 	def get_type_get_data(self)->DeviceGetData:
 		return self.data.type_get_data
+	
+	def get_poll_config(self)->tuple[int, int]:
+		return (self.data.poll_interval, self.data.poll_timeout)
 
 	def get_device(self)->any:
 		return self.device
@@ -78,29 +81,38 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		'''
 		return True
 
-	def set_value(self, field_id: str, value: str, script:bool = False):
+	async def set_value(self, field_id: str, value: str, *, script:bool = False, save_status: bool = False):
 		field = self.get_field(field_id)
 		if not field:
 			return
-		field.set(value, script)
+		if save_status:
+			field.set(value, script)
 
 	async def save(self):
 		initial_fields = [field._get_initial_data() for field in self.fields]
-		await edit_fields(self.data.system_name, initial_fields)
+		await edit_fields(self.data.system_name, initial_fields, init_device=False)
 		await update_device_from_object(
 			self.data.system_name,
 			self.data.status,
 			self.data.type_command,
 			self.data.type_get_data,
 			self.data.token,
-			self.data.address
+			self.data.address,
+			init_device=False
 			)
 
-	def load(self):
-		pass
+	# def load(self):
+	# 	pass
 
-	async def load_async(self):
-		pass
+	# async def load_async(self):
+	# 	await asyncio.to_thread(self.load)
+
+	async def async_load(self) -> dict[str, str]:
+		"""
+		Возвращает ТОЛЬКО изменения:
+		{ field_name: value }
+		"""
+		return {}
 
 	def dict(self):
 		data = self.get_schema()

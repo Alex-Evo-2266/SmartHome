@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Type
 
-from app.ingternal.device.exceptions.device import ClassAlreadyExistsException, DeviceNotFound
+from app.ingternal.device.exceptions.device import ClassAlreadyExistsException, DeviceClassNotFound
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.device.schemas.device import DeviceSerializeSchema
 
@@ -30,7 +30,7 @@ class DeviceClasses:
     def get(cls, class_name: str) -> Type[IDevice]:
         if class_name not in cls._classes:
             logger.error(f"Device class '{class_name}' not found.")
-            raise DeviceNotFound(f"Device class '{class_name}' not found.")
+            raise DeviceClassNotFound(f"Device class '{class_name}' not found.")
         logger.info(f"Retrieved device class: {class_name}")
         return cls._classes[class_name]
 
