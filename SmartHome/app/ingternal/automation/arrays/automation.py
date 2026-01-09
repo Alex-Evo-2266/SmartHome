@@ -6,6 +6,8 @@ from pydantic import BaseModel
 from app.ingternal.room.cache.all_rooms import get_cached_room_data
 from app.ingternal.room.schemas.room import RoomDevicesRaw
 from app.ingternal.logs import MyLogger
+from app.ingternal.modules.struct.DeviceStatusStore import DevicePatch
+from app.ingternal.modules.struct.RoomStateStore import RoomDevicePatch
 
 # Настройка логирования
 logger = MyLogger().get_logger(__name__)
@@ -168,8 +170,55 @@ class AutomationManager:
             (current_time - manager_schema.last_run_time) > timedelta(minutes=2)
         )
 
+    async def _run_automation_safe(self, automation_name: str):
+        automation = self.automations.get(automation_name)
+        if not automation:
+            return
+
+        try:
+            await self.callback(automation)
+        except Exception as e:
+            logger.error(
+                "Automation '%s' failed: %s",
+                automation_name,
+                e,
+            )
+
+    
+    async def on_device_patch(self, patch: DevicePatch) -> None:
+        logger.debug(f"Automation on_device_patch {patch} {self.device_index}")
+        for field_name in patch.changes.keys():
+            key = (patch.system_name, field_name)
+
+            if key not in self.device_index:
+                continue
+
+            for automation_name in self.device_index[key].data:
+                await self._run_automation_safe(automation_name)
+    
+    async def on_room_patch(self, patch: RoomDevicePatch) -> None:
+        logger.debug(f"Automation on_room_patch {patch}")
+        for field_name in patch.changes.keys():
+            key = (patch.room, patch.type_name, field_name)
+
+            if key not in self.room_index:
+                continue
+
+            if key in self._running_rooms:
+                logger.warning(f"Automation already running for {key}")
+                return
+
+            self._running_rooms.add(key)
+            try:
+                for automation_name in self.room_index[key].data:
+                    await self._run_automation_safe(automation_name)
+            finally:
+                self._running_rooms.remove(key)
+
+
+
     async def run_device_triggered_automations(self, device_id: str, field_name: str) -> None:
-        """Запускает автоматизации, связанные с указанным устройством"""
+        """legasy Запускает автоматизации, связанные с указанным устройством"""
         key = (device_id, field_name)
         if key not in self.device_index:
             return
@@ -181,6 +230,7 @@ class AutomationManager:
                 logger.error(f"Ошибка выполнения автоматизации '{automation_name}' по триггеру устройства: {e}")
         
     async def run_room_triggered_automations(self, device_id: str,field_id:str, room_name:str) -> None:
+        """legasy"""
         rooms:List[RoomDevicesRaw] = await get_cached_room_data()
         try:
             room = next(r for r in rooms if r.name_room == room_name)

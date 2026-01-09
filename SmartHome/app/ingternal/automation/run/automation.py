@@ -8,25 +8,40 @@ from app.ingternal.room.array.RoomArray import RoomArray
 from app.ingternal.device.interface.device_class import IDevice
 from app.ingternal.senderPoll.sender import sender_script
 from app.ingternal.room.set_value_room import set_value_room
+from app.ingternal.modules.struct.DeviceStatusStore import store
 
 from app.ingternal.logs import get_automatization
 from typing import List
 
 logger = get_automatization.get_logger(__name__)
 
-def _get_device_value(system_name:str, field_id:str):
-    dev = DevicesArray.get(system_name)
-    device:IDevice = dev.device
-    if not device:
+def _get_value(system_name:str, field_id:str):
+    snepshot = store.get_snapshot(system_name)
+    if not snepshot:
         logger.error(f"Device not found: {system_name}")
         raise DeviceNotFound()
-    f = device.get_field(field_id)
-    value = f.get()
+    try:
+        field = next(x for x in snepshot.description.fields if x.id == field_id)
+    except Exception as e:
+        logger.error(f"Field not found: {field_id}")
+        raise DeviceFieldNotFound()
+    return (snepshot.state[field.name], field)
+
+def _get_device_value(system_name:str, field_id:str):
+    logger.debug("_get_device_value system_name: %s, field_id: %s, all: %s", system_name, field_id, DevicesArray.all())
+    (value, field) = _get_value(system_name, field_id)
+    # dev = DevicesArray.get(system_name)
+    # if not dev:
+    #     logger.error(f"Device not found: {system_name}")
+    #     raise DeviceNotFound()
+    # device:IDevice = dev.device
+    # f = device.get_field(field_id)
+    # value = f.get()
     logger.info(f"Fetched device value: {value} for device {system_name}")
     if value is None:
         logger.error(f"Device value not found: {field_id} in {system_name}")
         raise DeviceNotValueFound()
-    if f.get_type() == TypeDeviceField.BINARY:
+    if field.type == TypeDeviceField.BINARY:
         if value =='1':
             return "true"
         elif value == '0':
@@ -35,7 +50,7 @@ def _get_device_value(system_name:str, field_id:str):
 
 async def condition_data(service: str, arg: str):
     ar = arg.split('.')
-    
+    logger.debug("condition_data service: %s, arg: %s", service, arg)
     if service == 'device':
         if len(ar) != 2:
             raise Exception("invalid condition")
@@ -112,23 +127,24 @@ async def action(data: ActionItemSchema):
             raise DeviceFieldNotFound()
         
         if field.get_type() == TypeDeviceField.BINARY and data.data == "target":
-            value = field.get()
+            (value, _) = _get_value(system_name, field.get_id())
+
             logger.info(f"Processing binary field: {field}, current value: {value}")
             if value is None and field.get_high() is None:
-                device_control.set_value(field.get_id(), "1", script=True)
+                await device_control.set_value(field.get_id(), "1")
             elif value is None:
-                device_control.set_value(field.get_id(), field.get_high(), script=True)
+                await device_control.set_value(field.get_id(), field.get_high())
             elif (field.get_high() is None and value == "0"):
-                device_control.set_value(field.get_id(), "1", script=True)
+                await device_control.set_value(field.get_id(), "1")
             elif field.get_high() is not None and value == "0":
-                device_control.set_value(field.get_id(), field.get_high(), script=True)
+                await device_control.set_value(field.get_id(), field.get_high())
             elif (field.get_low() is None and value == "1"):
-                device_control.set_value(field.get_id(), "0", script=True)
+                await device_control.set_value(field.get_id(), "0")
             elif (field.get_low() is not None and value == "1"):
-                device_control.set_value(field.get_id(), field.get_low(), script=True)
+                await device_control.set_value(field.get_id(), field.get_low())
         else:
             logger.info(f"Setting field {field} to {data.data}")
-            device_control.set_value(field.get_id(), data.data, script=True)
+            await device_control.set_value(field.get_id(), data.data)
     elif data.service == "script":
         await sender_script.send(data={"object":data.action, "service": data.service})
         logger.info(f"Executing script action: {data}")

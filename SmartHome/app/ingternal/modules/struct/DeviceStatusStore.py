@@ -240,9 +240,13 @@ class DeviceStatusStore():
         sub_id: str,
         callback: Callable[[DevicePatch], Awaitable[None]]
     ):
+        logger.debug("subscribe_patch system_name: %s, sub_id: %s", system_name, sub_id)
+        
         self._patch_subscribers.setdefault(system_name, {})[sub_id] = callback
 
     def unsubscribe_patch(self, system_name: str, sub_id: str):
+        logger.debug("unsubscribe_patch system_name: %s, sub_id: %s", system_name, sub_id)
+
         self._patch_subscribers.get(system_name, {}).pop(sub_id, None)
 
     def subscribe_patch_global(
@@ -250,9 +254,13 @@ class DeviceStatusStore():
         sub_id: str,
         callback: Callable[[DevicePatch], Awaitable[None]]
     ):
+        logger.debug("subscribe_patch_global sub_id: %s", sub_id)
+        
         self._global_patch_subscribers[sub_id] = callback
 
     def unsubscribe_patch_global(self, sub_id: str):
+        logger.debug("unsubscribe_patch_global sub_id: %s", sub_id)
+
         self._global_patch_subscribers.pop(sub_id, None)
 
 
@@ -263,6 +271,8 @@ class DeviceStatusStore():
         callback: Callable[[DeviceSnapshot], Awaitable[None]],
         emit_initial: bool = True
     ):
+        logger.debug("subscribe_snapshot system_name: %s, sub_id: %s", system_name, sub_id)
+        
         self._snapshot_subscribers.setdefault(system_name, {})[sub_id] = callback
 
         snap = self.get_snapshot(system_name)
@@ -277,6 +287,8 @@ class DeviceStatusStore():
         callback: Callable[[DeviceSnapshot], Awaitable[None]],
         emit_initial: bool = True
     ):
+        logger.debug("subscribe_snapshot_async system_name: %s, sub_id: %s", system_name, sub_id)
+        
         self._snapshot_subscribers.setdefault(system_name, {})[sub_id] = callback
 
         snap = self.get_snapshot(system_name)
@@ -284,6 +296,8 @@ class DeviceStatusStore():
             await safe_call(callback, snap)
 
     def unsubscribe_snapshot(self, system_name: str, sub_id: str):
+        logger.debug("unsubscribe_snapshot system_name: %s, sub_id: %s", system_name, sub_id)
+
         self._snapshot_subscribers.get(system_name, {}).pop(sub_id, None)
 
     def subscribe_snapshot_global(
@@ -292,6 +306,8 @@ class DeviceStatusStore():
         callback: Callable[[List[DeviceSnapshot]], Awaitable[None]],
         emit_initial: bool = True
     ):
+        logger.debug("subscribe_snapshot_global sub_id: %s", sub_id)
+        
         self._global_snapshot_subscribers[sub_id] = callback
 
         all_snapshots = self.get_all_snapshots()
@@ -304,6 +320,8 @@ class DeviceStatusStore():
         callback: Callable[[List[DeviceSnapshot]], Awaitable[None]],
         emit_initial: bool = True
     ):
+        logger.debug("subscribe_snapshot_global_async sub_id: %s", sub_id)
+
         self._global_snapshot_subscribers[sub_id] = callback
 
         all_snapshots = self.get_all_snapshots()
@@ -312,6 +330,8 @@ class DeviceStatusStore():
 
 
     def unsubscribe_snapshot_global(self, sub_id: str):
+        logger.debug("unsubscribe_snapshot_global sub_id: %s", sub_id)
+
         self._global_snapshot_subscribers.pop(sub_id, None)
 
     def remove_device(self, system_name: str) -> bool:

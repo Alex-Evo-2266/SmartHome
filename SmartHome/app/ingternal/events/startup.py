@@ -11,10 +11,8 @@ from app.ingternal.modules.arrays.serviceDataPoll import servicesDataPoll, Obser
 from app.configuration.loop.loop import loop
 from app.pkg.ormar.dbormar import database
 from app.configuration.settings import LOOP_DEVICE_POLLING, EXCHANGE_ROOM_DATA,EXCHANGE_SERVICE_DATA, RABITMQ_HOST, POLLING_INTERVAL, DEVICE_VALUE_SEND, DATA_SCRIPT, SEND_DEVICE_CONF, EXCHANGE_DEVICE_DATA, DATA_LISTEN_QUEUE, SAVE_DEVICE_CONF, SERVICE_POLL, SERVICE_DATA_POLL, DATA_QUEUE, DATA_DEVICE_QUEUE
-# from app.ingternal.device.polling import restart_polling
 from app.ingternal.device.polling_device import restart_polling
 from app.ingternal.device.send import restart_send_device_data
-from app.ingternal.device.save import restart_save_data
 from app.moduls import getModule
 from app.ingternal.device.arrays.DeviceClasses import DeviceClasses
 from app.ingternal.device.models.device import Device
@@ -27,6 +25,7 @@ from app.ingternal.modules.classes.baseService import BaseService
 from app.ingternal.room.array.RoomArray import RoomArray
 from app.ingternal.device.init import init_all
 from app.ingternal.device.polling_device import device_poll
+from app.ingternal.device.history.writer import history
 
 from app.ingternal.listener.listener import loadServiceData, loadDeviceData
 from app.configuration.queue import __queue__
@@ -95,10 +94,6 @@ async def startup():
             restart_polling
         )
         __config__.register_config(
-            itemConfig(tag="device service", key=SAVE_DEVICE_CONF, type=ConfigItemType.NUMBER),
-            restart_save_data
-        )
-        __config__.register_config(
             itemConfig(tag="device service", key=SEND_DEVICE_CONF, type=ConfigItemType.NUMBER, value="120"),
             restart_send_device_data
         )
@@ -157,6 +152,11 @@ async def startup():
     # подписка на изменение
     store.subscribe_patch_global("sender", sender_device.send)
     store.subscribe_patch_global("sender2", sender_room.send)
+    store.subscribe_patch_global(
+        sub_id="device_history",
+        callback=history.on_patch
+    )
+    history.start()
     await room_state_init(room_store, store)
     # data_poll.subscribe_all("sender", sender_device.send)
     # data_poll.subscribe_all("sender2", sender_room.send)

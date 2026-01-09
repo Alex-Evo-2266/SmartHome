@@ -142,8 +142,8 @@ class FieldBase(IField):
 			normalize_value(self.get(), self.get_type(), self.get_low(), self.get_high())
 		)
 
-		if script:
-			self._trigger_automation()
+		# if script:
+		# 	self._trigger_automation()
 
 	def _set_binary(self, status: str):
 		if self.data.high is not None and str(self.data.high) == status:
@@ -190,16 +190,16 @@ class FieldBase(IField):
 	# 			device.value[self.data.name] = self.data.value
 	# 			logger.debug(f"Updated device '{self.device_system_name}' field '{self.data.name}' with value '{self.data.value}'")
 
-	def _trigger_automation(self):
-		try:
-			asyncloop = asyncio.get_running_loop()
-			asyncloop.create_task(
-				automation_manager.run_device_triggered_automations(self.device_system_name, self.get_name())
-			)
-			asyncloop.create_task(
-				automation_manager.run_room_triggered_automations(self.device_system_name, self.get_id(), self.room)
-			)
+	# def _trigger_automation(self):
+	# 	try:
+	# 		asyncloop = asyncio.get_running_loop()
+	# 		asyncloop.create_task(
+	# 			automation_manager.run_device_triggered_automations(self.device_system_name, self.get_name())
+	# 		)
+	# 		asyncloop.create_task(
+	# 			automation_manager.run_room_triggered_automations(self.device_system_name, self.get_id(), self.room)
+	# 		)
 			
-			logger.debug(f"Scheduled automation for device '{self.device_system_name}' field '{self.get_name()}'")
-		except RuntimeError as e:
-			logger.warning(f"Could not schedule automation: {e}")
+	# 		logger.debug(f"Scheduled automation for device '{self.device_system_name}' field '{self.get_name()}'")
+	# 	except RuntimeError as e:
+	# 		logger.warning(f"Could not schedule automation: {e}")

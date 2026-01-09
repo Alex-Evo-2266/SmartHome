@@ -12,7 +12,7 @@ from app.ingternal.modules.struct.DeviceStatusStore import (
 )
 from app.ingternal.device.schemas.device import DeviceSerializeSchema
 from app.ingternal.device.schemas.enums import StatusDevice
-from app.ingternal.device.models.value import Value  # ormar model
+from app.ingternal.device.models.device import Value 
 
 
 logger = MyLogger().get_logger(__name__)
@@ -41,11 +41,14 @@ class DeviceHistoryWriter:
         self._flush_task: Optional[asyncio.Task] = None
         self._running = True
 
-        self._start_flush_loop()
 
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
+
+    def start(self):
+        self._start_flush_loop()
+
 
     async def on_patch(self, patch: DevicePatch):
         snap = self.store.get_snapshot(patch.system_name)
@@ -139,7 +142,3 @@ class DeviceHistoryWriter:
 
 history = DeviceHistoryWriter(store)
 
-store.subscribe_patch_global(
-    sub_id="device_history",
-    callback=history.on_patch
-)

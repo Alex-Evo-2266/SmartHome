@@ -6,6 +6,7 @@ from app.ingternal.device.classes.baseField import FieldBase
 from app.ingternal.device.classes.metaDevice import DeviceMeta
 from app.ingternal.device.interface.field_class import IField
 from app.ingternal.device.serialize_model.update import edit_fields, update_device_from_object
+from app.ingternal.modules.struct.DeviceStatusStore import store
 
 from app.ingternal.device_types.types_names import TypesDeviceEnum
 
@@ -52,6 +53,12 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			if field.get_data().name == field_name:
 				return field
 		return None
+	
+	def get_field_by_address(self, address: str)->IField | None:
+		for field in self.fields:
+			if field.get_data().address == address:
+				return field
+		return None
 
 	def get_fields(self)->list[IField]:
 		return self.fields
@@ -87,6 +94,9 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 			return
 		if save_status:
 			field.set(value, script)
+			await store.apply_patch_async(self.data.system_name, {field.get_name(): value})
+		if script:
+			pass
 
 	async def save(self):
 		initial_fields = [field._get_initial_data() for field in self.fields]

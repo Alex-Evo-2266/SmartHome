@@ -18,9 +18,9 @@ class Virtual(BaseDevice):
         virtual=True
     )
 
-    def set_value(self, field_id: str, value: str, script:bool = False):
+    async def set_value(self, field_id: str, value: str, *, script:bool = False, save_status: bool = True):
 
-        super().set_value(field_id, value)
+        await super().set_value(field_id, value, script=script, save_status=save_status)
 
     async def async_init(self):
         for field in self.fields:

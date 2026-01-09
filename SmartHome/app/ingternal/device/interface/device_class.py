@@ -33,6 +33,9 @@ class IDevice():
 	def get_field_by_name(self, field_name: str)->IField | None:
 		pass
 
+	def get_field_by_address(self, address: str)->IField | None:
+		pass
+
 	def get_fields(self)->list[IField]:
 		pass
 
@@ -58,7 +61,7 @@ class IDevice():
 		'''
 		return True
 
-	def set_value(self, field_id: str, value: str, script:bool = False):
+	async def set_value(self, field_id: str, value: str, *, script:bool = False, save_status: bool = False):
 		pass
 
 	async def save(self):
