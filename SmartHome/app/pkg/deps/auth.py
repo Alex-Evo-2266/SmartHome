@@ -1,0 +1,1 @@
+from auth_dep_lib import auth_privilege_dep

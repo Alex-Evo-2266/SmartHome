@@ -1,4 +1,4 @@
-from app.ingternal.modules.arrays.modulesArray import ModulesArray
+from app.core.state.module_state import ModulesArray
 import logging
 
 logger = logging.getLogger(__name__)

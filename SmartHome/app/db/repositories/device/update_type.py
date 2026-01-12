@@ -1,0 +1,75 @@
+from app.schemas.device.add_device_type import AddOrEditDeviceTypeSchema
+from app.db.repositories.device.delete_type import delete_type_device
+from app.db.repositories.device.create_type import create
+from app.db.cache.device.invalidate_cache import invalidate_cache, invalidate_cache_device_data_by_device
+from app.db.cache.room.all_rooms import invalidate_cache_room__type_device_data
+from app.db.models.device.device_type import TypeDevice
+from app.core.state.get_store import get_container
+from app.pkg.logger import get_base_logger
+
+# Настройка логгера
+logger = get_base_logger.get_logger(__name__)
+
+async def update_type_device(data: AddOrEditDeviceTypeSchema, id:str) -> None:
+    """
+    Updates a device type by first deleting the existing one and then creating a new version.
+    
+    Args:
+        data: AddOrEditDeviceTypeSchema containing the device type data
+        
+    Raises:
+        Exception: If any error occurs during the update process
+    """
+    try:
+        logger.info(f"Starting device type update for device: {data.device}")
+        logger.debug(f"Update data: name_type={data.name_type}, fields_count={len(data.fields)}")
+        
+        # Step 1: Delete existing device type
+        logger.debug(f"Deleting existing device type for device: {data.device}")
+        await delete_type_device(id)
+        logger.info(f"Successfully deleted old device type for device: {data.device}")
+        
+        # Step 2: Create new device type
+        logger.debug(f"Creating new device type for device: {data.device}")
+        await create(data)
+        logger.info(f"Successfully created new device type for device: {data.device}")
+        
+        logger.info(f"Completed device type update for device: {data.device}")
+        invalidate_cache()
+        invalidate_cache_device_data_by_device(system_name=data.device)
+        invalidate_cache_room__type_device_data()
+        get_container().connect_store.delete(data.device)
+    except Exception as e:
+        logger.error(
+            f"Failed to update device type for device {data.device}: {str(e)}",
+            exc_info=True
+        )
+        raise
+
+async def set_main(system_name: str, id:str) -> None:
+
+    try:
+        device_type: TypeDevice | None = await TypeDevice.objects.filter(device=system_name, main=True).get_or_none()
+        if device_type:
+            device_type.main = False
+            await device_type.update(_columns=["main"])
+        device_type: TypeDevice | None = await TypeDevice.objects.filter(device=system_name, id=id).get_or_none()
+        if device_type:
+            device_type.main = True
+            await device_type.update(_columns=["main"])
+            invalidate_cache()
+            invalidate_cache_device_data_by_device(system_name)
+            invalidate_cache_room__type_device_data()
+            get_container().connect_store.delete(system_name)
+        else:
+            invalidate_cache()
+            invalidate_cache_device_data_by_device(system_name)
+            invalidate_cache_room__type_device_data()
+            get_container().connect_store.delete(system_name)
+            raise Exception("invalid id")
+    except Exception as e:
+        logger.error(
+            f"Failed to update device type for device {system_name}: {str(e)}",
+            exc_info=True
+        )
+        raise

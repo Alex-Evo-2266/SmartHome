@@ -1,13 +1,14 @@
-from app.ingternal.events.startup import startup
-from app.ingternal.events.shutdown import shutdown
-from app.ingternal.events.websocket import websocket_endpoint
+from app.lifespan.startup import startup
+from app.lifespan.shutdown import shutdown
+from app.api.websocket.websocket import websocket_endpoint
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.utils import get_openapi
-from app.configuration.routes import __routes__
-from app.pkg.ormar.dbormar import database
-from app.configuration.settings import MEDIA_DIR, DEBUG, ORIGINS
+from app.pkg.routes import __routes__
+from app.db.ormar.dbormar import database
+from app.bootstrap.const import MEDIA_DIR
+from app.bootstrap.settings import DEBUG, ORIGINS
 
 import logging
 # logging.disable(logging.CRITICAL)
