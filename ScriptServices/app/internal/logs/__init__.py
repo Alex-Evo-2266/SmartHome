@@ -1,6 +1,12 @@
-from app.internal.logs.handlers import handler_base, handler_sender, handler_router
-from app.internal.logs.logs import MyLogger
+from app.internal.logs.get_logger import get_logger
 
-get_base_logger = MyLogger(handler_base)
-get_sender_logger = MyLogger(handler_sender)
-get_router_logger = MyLogger(handler_router)
+class MyLogger:
+    def __init__(self, file_name: str = None):
+        self.file_name = file_name 
+
+    def get_logger(self, name: str):
+        return get_logger(name, self.file_name or name)
+
+get_base_logger = MyLogger()
+get_sender_logger = MyLogger()
+get_router_logger = MyLogger()

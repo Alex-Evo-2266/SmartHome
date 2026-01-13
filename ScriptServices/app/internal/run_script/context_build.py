@@ -24,32 +24,95 @@ def g(confs: List[RoomDeviceData], devices: dict[str, dict]):
         return values[0]
     return min(*values)
 
-def get_context(room: List[RoomData], devices_objs: dict):
+def get_base_context():
     
-    room_copy = copy.deepcopy(room)
-    room_data_res:dict = {}
-    _devices = {
-        devices_objs[key]["system_name"]: {
-            x["name"]: devices_objs[key]["value"].get(x["name"],None) for x in devices_objs[key]["fields"]
-        } for key in devices_objs
-    }
-    for room_data in room_copy:
-        name = room_data.room_name
-        devices:Dict[str, Dict[str, List[RoomDeviceData]]] = room_data.devices
-        if not name in room_data_res:
-            room_data_res[name] = {}
-        for dev_name in devices:
-            if not dev_name in room_data_res[name]:
-                room_data_res[name][dev_name] = {}
-            for field_name in devices[dev_name]:
-                room_data_res[name][dev_name][field_name] = g(devices[dev_name][field_name], devices_objs)
     return {
-        "device": _devices,
-        "room": room_copy,
         "delay": {
-            "method": {
+            "_method": {
                 "args": ["time"],
                 "call": delay
             }
         }
     }
+
+
+def build_device_context(devices: dict) -> dict:
+    """
+    device.<name>:
+      - _meta  → служебная информация
+      - <field>._value
+      - <field>._method
+    """
+    ctx: dict = {}
+
+    for device_name, device in devices.items():
+        device_ctx = {}
+
+        # --- meta ---
+        device_ctx["_meta"] = {
+            "name": device.get("name", device_name),
+            "system_name": device.get("system_name", device_name),
+            "room": device.get("room"),
+            # "type": device.get("type"),
+        }
+
+        values = device.get("value", {})
+        if not isinstance(values, dict):
+            continue
+
+        for field_name, raw_value in values.items():
+            if field_name.startswith("__"):
+                continue
+
+            # async def setter(
+            #     val,
+            #     *,
+            #     _device=device_ctx["_meta"]["system_name"],
+            #     _field=field_name,
+            #     context_command=None,
+            #     **_
+            # ):
+            #     await sender_device.send(
+            #         data={
+            #             "system_name": _device,
+            #             "field": _field,
+            #             "value": val
+            #         }
+            #     )
+
+            device_ctx[field_name] = {
+                "_value": raw_value,
+                # "_method": {
+                #     "call": setter
+                # }
+            }
+
+        ctx[device_name] = device_ctx
+
+    return ctx
+
+def build_room_context(room: dict) -> dict:
+    """
+    Преобразует room-срез в context для evaluate_call.
+    Все поля read-only: только _value, без _method.
+    """
+    ctx: dict = {}
+
+    for room_name, types in room.items():
+        ctx[room_name] = {}
+
+        if not isinstance(types, dict):
+            continue
+
+        for type_name, fields in types.items():
+            ctx[room_name][type_name] = {}
+
+            if not isinstance(fields, dict):
+                continue
+
+            for field_name, raw_value in fields.items():
+                ctx[room_name][type_name][field_name] = {
+                    "_value": raw_value
+                }
+
+    return ctx

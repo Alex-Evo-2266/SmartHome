@@ -14,7 +14,7 @@ class CalculateCall():
         if value is None:
             return None
         if isinstance(value, dict):
-            val = value.get("value", None)
+            val = value.get("_value", None)
             return val
         else:
             return value
@@ -26,7 +26,7 @@ class CalculateCall():
         if value is None:
             return None
         if isinstance(value, dict):
-            method = value.get("method", None)
+            method = value.get("_method", None)
             if method is None:
                 logger.debug(f"[method] Метод не найден для {node.value}")
                 return None
@@ -42,7 +42,7 @@ class CalculateCall():
     async def method_args_parse(path: Call, context: dict, context_command: list[str] = []):
         if path is None:
             return None
-        logger.debug(f"[method_args_parse] type={path.type}, value={path.value}, context_command={context_command}")
+        logger.debug(f"[method_args_parse] type={path.type}, value={path.value}, context_command={context_command}, context={context}")
         if path.type == Groups.IDENTIFIC:
             node = copy.copy(path)
             return CalculateCall.value(node, context, [*context_command, path.value])
@@ -85,9 +85,11 @@ class CalculateCall():
         logger.debug(f"[set_device] target={target}, data={data}, context_command={context_command}")
         if len(target) >= 3 and target[0] == "device":
             await sender_device.send(data={
-                "system_name": target[1],
-                "field": target[2],
-                "value": data
+                "data":{
+                    "system_name": target[1],
+                    "field": target[2],
+                    "value": data
+                }
             })
 
     @staticmethod
@@ -101,8 +103,9 @@ class CalculateCall():
         raise Exception("Script error. error sintaxis")
 
     @staticmethod
-    async def evaluate_call(call: Call, context: dict, context_command: list[str] = []):
-        logger.debug(f"[evaluate_call] type={call.type}, value={getattr(call, 'value', None)}")
+    async def evaluate_call(call: Call, context: dict, context_command: list[str] | None = None):
+        context_command = context_command or []
+        logger.debug(f"[evaluate_call] type={call.type}, value={getattr(call, 'value', None)}, context={context}")
 
         if call.type == Groups.NUMBER:
             return CalculateCall.convert(call.value)

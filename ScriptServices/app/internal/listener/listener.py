@@ -4,9 +4,9 @@ from app.configuration.settings import RABITMQ_HOST, RABITMQ_PORT, EXCHANGE_ROOM
 from .device import device_listener
 from .room import setRoom
 from .script import run_script
-import logging
+from app.internal.logs import MyLogger
 
-logger = logging.getLogger(__name__)
+logger = MyLogger().get_logger(__name__)
 
 # слушатели
 loadRoomData = FanoutConsumer(host=RABITMQ_HOST, port=RABITMQ_PORT, exchange=EXCHANGE_ROOM_DATA, callback=setRoom, logger=logger)
