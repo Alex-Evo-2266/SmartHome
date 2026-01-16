@@ -42,9 +42,9 @@ def _get_device_value(system_name:str, field_id:str):
         logger.error(f"Device value not found: {field_id} in {system_name}")
         raise DeviceNotValueFound()
     if field.type == TypeDeviceField.BINARY:
-        if value =='1':
+        if value =='1' or value == 'True':
             return "true"
-        elif value == '0':
+        elif value == '0' or value == 'False':
             return "false"
     return value
 
