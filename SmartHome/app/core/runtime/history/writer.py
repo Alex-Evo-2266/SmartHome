@@ -62,6 +62,8 @@ class DeviceHistoryWriter:
         now = time.time()
 
         for field_name, value in patch.changes.items():
+            if value is None:
+                continue
             field = next(
                 (f for f in device.fields if f.name == field_name),
                 None

@@ -32,9 +32,9 @@ export const DetailDeviceLight:React.FC<DeviceDetailProps> = ({device, onEdit}) 
 
     const historyFields = useMemo<FieldHistory[]>(()=>!loading?[
         getFieldHistory(history, power?.id ?? null),
-        getFieldHistory(history, power?.id ?? null),
-        getFieldHistory(history, power?.id ?? null),
-    ].filter(item=>!!item):[],[history, power, loading])
+        getFieldHistory(history, brightness?.id ?? null),
+        getFieldHistory(history, temp?.id ?? null),
+    ].filter(item=>!!item):[],[history, power, brightness, temp,loading])
 
     console.log(historyFields)
 

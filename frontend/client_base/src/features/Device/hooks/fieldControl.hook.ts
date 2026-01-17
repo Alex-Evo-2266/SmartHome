@@ -1,19 +1,24 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { DeviceSerializeFieldSchema } from "../../../entites/devices"
 import { useSendValue } from "../../../entites/devices/api/sendValue"
 import { getData, getInitData, getOutData } from "../helpers/fieldUtils"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
 
 export const useGetBinaryFieldControl = (field: DeviceSerializeFieldSchema | null, deviceName: string) => {
 
-    const [fieldValue, setFieldValue] = useState(getInitData(field?.high, field?.value))
+    const {devicesData} = useAppSelector(state=>state.devices)
+    const valueData = useMemo(()=>{
+        return !!field?.name? devicesData.find(i=>i.system_name === deviceName)?.value?.[field?.name]: undefined
+    },[devicesData])
+    const [fieldValue, setFieldValue] = useState(getInitData(field?.high, valueData))
     
     const {sendValue} = useSendValue()
     
     useEffect(() => {
         if(!field) return;
-        setFieldValue(prev=>getData(field.high, field.low, field.value, prev));
-    }, [field]);
+        setFieldValue(prev=>getData(field.high, field.low, valueData, prev));
+    }, [field, valueData]);
 
     const updateFieldState = useCallback((newValue: boolean)=>{
         if(!field)return;
@@ -35,13 +40,17 @@ export const useGetBinaryFieldControl = (field: DeviceSerializeFieldSchema | nul
 
 export const useGetNumberFieldControl = (field: DeviceSerializeFieldSchema | null, deviceName: string) => {
 
-    const [fieldValue, setFieldValue] = useState(field?Number(field.value):null)
+    const {devicesData} = useAppSelector(state=>state.devices)
+    const valueData = useMemo(()=>{
+        return !!field?.name? devicesData.find(i=>i.system_name === deviceName)?.value?.[field?.name]: undefined
+    },[devicesData])
+    const [fieldValue, setFieldValue] = useState(field?Number(valueData):null)
     
     const {sendValue} = useSendValue()
     
     useEffect(() => {
         if(!field)return;
-        setFieldValue((prev) => (prev !== Number(field.value) ? Number(field.value) : prev));
+        setFieldValue((prev) => (prev !== Number(valueData) ? Number(valueData) : prev));
     }, [field]);
 
     const updateFieldState = useCallback((newValue: number)=>{
@@ -65,13 +74,17 @@ export const useGetNumberFieldControl = (field: DeviceSerializeFieldSchema | nul
 
 export const useGetEnumFieldControl = (field: DeviceSerializeFieldSchema | null, deviceName: string) => {
 
-    const [fieldValue, setFieldValue] = useState(field?field.value:null)
+    const {devicesData} = useAppSelector(state=>state.devices)
+    const valueData = useMemo(()=>{
+        return !!field?.name? devicesData.find(i=>i.system_name === deviceName)?.value?.[field?.name]: undefined
+    },[devicesData])
+    const [fieldValue, setFieldValue] = useState(field?valueData:null)
     
     const {sendValue} = useSendValue()
     
     useEffect(() => {
         if(!field)return;
-        setFieldValue((prev) => (prev !== field.value ? field.value: prev));
+        setFieldValue((prev) => (prev !== valueData ? valueData: prev));
     }, [field]);
 
     const updateFieldState = useCallback((newValue: string)=>{

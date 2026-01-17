@@ -21,7 +21,7 @@ async def add_device(data: AddDeviceSchema):
 	logger.info(new_device)
 	for field in data.fields:
 		logger.info("p3")
-		id = await get_id()
+		id = get_id()
 		await DeviceField.objects.create(**(field.dict()), device=new_device, id=id)
 
 	__queue__.add("init_device", system_name=data.system_name, try_count=0)

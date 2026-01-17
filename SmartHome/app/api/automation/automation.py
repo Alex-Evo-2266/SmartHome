@@ -54,7 +54,7 @@ async def delete_automation_api(name:str, user_id:str =Depends(auth_privilege_de
         return JSONResponse(status_code=400, content={"error": str(e)})
 
 @router.put("/{name}")
-async def delete_automation_api(name:str, data: AutomationSchema, user_id:str =Depends(auth_privilege_dep("automation"))):
+async def update_automation_api(name:str, data: AutomationSchema, user_id:str =Depends(auth_privilege_dep("automation"))):
     try:
         await update_automation(name, data)
         return JSONResponse(status_code=200, content={"message": "ok"})
@@ -63,7 +63,7 @@ async def delete_automation_api(name:str, data: AutomationSchema, user_id:str =D
         return JSONResponse(status_code=400, content={"error": str(e)})
 
 @router.patch("/{name}/enable")
-async def delete_automation_api(name:str, data: EnableSchema, user_id:str=Depends(auth_privilege_dep("automation"))):
+async def patch_automation_api(name:str, data: EnableSchema, user_id:str=Depends(auth_privilege_dep("automation"))):
     try:
         await update_status(name, data.is_enabled)
         return JSONResponse(status_code=200, content={"message": "ok"})

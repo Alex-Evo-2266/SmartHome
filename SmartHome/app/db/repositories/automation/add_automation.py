@@ -42,7 +42,7 @@ async def add_automation(data:AutomationSchema):
 	for index, action_schema in enumerate(data.else_branch):
 		await ActionElseItem.objects.create(
 			service=action_schema.service, 
-			action=action_schema.action, 
+			field=action_schema.action, 
 			data=action_schema.data, 
 			index=index,
 			type_set=action_schema.type_set,

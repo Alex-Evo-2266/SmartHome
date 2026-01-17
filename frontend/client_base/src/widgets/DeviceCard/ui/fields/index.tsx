@@ -6,8 +6,15 @@ import { DeviceNumberField } from "./number";
 import { DeviceSwitchField } from "./switch";
 import { DeviceTextField } from "./text";
 import './device-field.scss'
+import { useAppSelector } from "@src/shared/lib/hooks/redux";
+import { useMemo } from "react";
 
 export const DeviceField: React.FC<{ field: DeviceSerializeFieldSchema, deviceName:string}> = ({ field, deviceName }) => {
+
+    const {devicesData} = useAppSelector(state=>state.devices)
+      const valueData = useMemo(()=>{
+          return !!field?.name? devicesData.find(i=>i.system_name === deviceName)?.value?.[field?.name]: undefined
+      },[devicesData])
 
     const Components = {
         [TypeDeviceField.NUMBER]: DeviceNumberField,
@@ -26,7 +33,7 @@ export const DeviceField: React.FC<{ field: DeviceSerializeFieldSchema, deviceNa
               <div className="device-field-input-container">
               <label className="device-field-label">{field.name}</label>
                 <div className="device-field-input">
-                  <Typography type="body">{field.value}</Typography>
+                  <Typography type="body">{valueData}</Typography>
                 </div>
               </div>
             </div>

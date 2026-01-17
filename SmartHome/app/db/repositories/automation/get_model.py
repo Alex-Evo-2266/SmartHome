@@ -23,7 +23,7 @@ async def serialize_automation(automation:Automation):
     automation_schema.trigger = triggers
     automation_schema.condition = conditions
     automation_schema.then = serialize_action(await automation.actions.all())
-    automation_schema.else_branch = serialize_action(await automation.else_branch.all())
+    automation_schema.else_branch = serialize_else_action(await automation.else_branch.all())
 
     return automation_schema
 
@@ -48,6 +48,15 @@ def serialize_action(actions: List[ActionItem] | List[ActionElseItem]):
     return[ActionItemSchema(
         service=action.service, 
         action=action.action,
+        data=action.data, 
+        type_set=action.type_set
+    ) for action in actions]
+
+def serialize_else_action(actions: List[ActionItem] | List[ActionElseItem]):
+    actions.sort(key=attrgetter('index'))
+    return[ActionItemSchema(
+        service=action.service, 
+        action=action.field,
         data=action.data, 
         type_set=action.type_set
     ) for action in actions]

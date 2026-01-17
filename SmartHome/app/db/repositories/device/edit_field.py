@@ -56,6 +56,6 @@ async def edit_fields(device: Device, new_fields: List[AddDeviceFieldSchema], op
 
 		if not new_field_data.name in editable_field:
 
-			id = await get_id()
+			id = get_id()
 			new_field = await DeviceField.objects.create(**(new_field_data.dict()), device=device, id=id)
 			
