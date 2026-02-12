@@ -1,25 +1,28 @@
+import { MeData } from "@src/entites/auth/models/me";
 import { logoutInSession } from "../../api/logout";
 
 const SMARTHOME_USER_DATA = 'smarthome_user_data';
 
 enum TypeAction{
     LOGIN = "LOGIN",
-    LOGOUT = "LOGOUT"
+    LOGOUT = "LOGOUT",
+	INIT = "INIT_AUTH",
+}
+
+interface InitAuthAction {
+  type: TypeAction.INIT
 }
 
 interface AuthState{
-    token?: string
-    id?: string
-    role: string
-    expires_at: Date
+    user_data?: MeData
+    expires_at?: Date
     isAuthenticated: boolean
+	isInitialized: boolean
 }
 
 interface AuthPayload{
-    token: string
-    id: string
-    role: string
-    expires_at: Date
+    user_data: MeData
+    expires_at?: Date
 }
 
 interface UserLoginAction{
@@ -31,41 +34,54 @@ interface UserLogoutAction{
     type: TypeAction.LOGOUT
 }
 
-type UserAuthAction = UserLoginAction | UserLogoutAction
+type UserAuthAction = UserLoginAction | UserLogoutAction | InitAuthAction
 
-const initState = ():AuthState => {
-	let datauser = localStorage.getItem(SMARTHOME_USER_DATA)
-	if (!datauser)
-		datauser = '{}';
-	const data = JSON.parse(datauser)
-	const newdata: AuthState = {
-		token: data?.token || '',
-		id: data?.id || undefined,
-		role: data?.role || "",
-		isAuthenticated: !!data.token,
-		expires_at: (data?.expires_at)?new Date(data?.expires_at):new Date(),
-	}
-	return newdata
+const initState = (): AuthState => {
+  const raw = localStorage.getItem(SMARTHOME_USER_DATA)
+  if (!raw) {
+    return {
+      user_data: undefined,
+      isAuthenticated: false,
+      isInitialized: false,
+    }
+  }
+
+  const data = JSON.parse(raw)
+
+  return {
+    user_data: data.user_data,
+    isAuthenticated: !!data.user_data,
+    isInitialized: false,
+  }
 }
 
 export const authReducer = (state:AuthState = initState(), action:UserAuthAction) =>{
 	switch (action.type){
 		case TypeAction.LOGIN:
+			if(!action.payload.user_data)
+			{
+				return state
+			}
 			localStorage.setItem(SMARTHOME_USER_DATA, JSON.stringify({
-				id: action.payload.id, role:action.payload.role, token:action.payload.token, expires_at: new Date(action.payload.expires_at)
+				user_data: action.payload.user_data, expires_at: action.payload.expires_at && new Date(action.payload.expires_at)
 			}))
-			return ({token: action.payload.token, id: action.payload.id, role: action.payload.role, isAuthenticated:true, expires_at: new Date(action.payload.expires_at)})
+			return ({...state, user_data: action.payload.user_data, isAuthenticated:true, expires_at: action.payload.expires_at && new Date(action.payload.expires_at)})
 		case TypeAction.LOGOUT:
 			localStorage.removeItem(SMARTHOME_USER_DATA)
-			if(state.token)
-				logoutInSession(state.token)
-			return ({token: '', id: undefined, role: "", isAuthenticated:false, expires_at: new Date()})
+			logoutInSession()
+			return ({...state, user_data: undefined, isAuthenticated:false, expires_at: new Date()})
+		case TypeAction.INIT:
+			return {
+				...state,
+				isInitialized: true,
+			}
 		default:
 			return state
 	}
 }
 
 export const logout = ():UserAuthAction => ({type: TypeAction.LOGOUT})
-export const login = (token:string, id:string, role: string, expires_at: Date):UserAuthAction => {
-	return{type: TypeAction.LOGIN, payload:{token, id, role: role, expires_at}}
+export const login = (user:MeData, expires_at?: Date):UserAuthAction => {
+	return{type: TypeAction.LOGIN, payload:{user_data:user, expires_at}}
 }
+export const initAuth = (): InitAuthAction => ({type:TypeAction.INIT})

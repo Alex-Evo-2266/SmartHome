@@ -121,13 +121,13 @@ services:
       - "traefik.http.routers.device_http.rule=PathPrefix(`/api-devices`)"
       - "traefik.http.routers.device_http.entrypoints=web"
       - "traefik.http.routers.device_http.service=device"
-      - "traefik.http.routers.device_http.middlewares=auth@docker"
+      - "traefik.http.routers.device_http.middlewares=auth_sso@docker"
       # https (с TLS)
       - "traefik.http.routers.device_https.rule=PathPrefix(`/api-devices`)"
       - "traefik.http.routers.device_https.entrypoints=websecure"
       - "traefik.http.routers.device_https.tls=true"
       - "traefik.http.routers.device_https.service=device"
-      - "traefik.http.routers.device_https.middlewares=auth@docker"
+      - "traefik.http.routers.device_https.middlewares=auth_sso@docker"
       # websocket
       - "traefik.http.routers.device_ws.rule=PathPrefix(`/ws/base`)"
       - "traefik.http.routers.device_ws.service=device_ws"
@@ -185,13 +185,13 @@ services:
       - "traefik.http.routers.page_http.rule=PathPrefix(`/api-pages`)"
       - "traefik.http.routers.page_http.entrypoints=web"
       - "traefik.http.routers.page_http.service=page"
-      - "traefik.http.routers.page_http.middlewares=auth@docker"
+      - "traefik.http.routers.page_http.middlewares=auth_sso@docker"
       # https (с TLS)
       - "traefik.http.routers.page_https.rule=PathPrefix(`/api-pages`)"
       - "traefik.http.routers.page_https.entrypoints=websecure"
       - "traefik.http.routers.page_https.tls=true"
       - "traefik.http.routers.page_https.service=page"
-      - "traefik.http.routers.page_https.middlewares=auth@docker"
+      - "traefik.http.routers.page_https.middlewares=auth_sso@docker"
       # общий сервис
       - "traefik.http.services.page.loadbalancer.server.port=8007"
     volumes:
@@ -232,16 +232,16 @@ services:
       - "traefik.http.routers.script_http.rule=PathPrefix(`/api-scripts`)"
       - "traefik.http.routers.script_http.entrypoints=web"
       - "traefik.http.routers.script_http.service=script"
-      - "traefik.http.routers.script_http.middlewares=auth@docker"
+      - "traefik.http.routers.script_http.middlewares=auth_sso@docker"
       # https (с TLS)
       - "traefik.http.routers.script_https.rule=PathPrefix(`/api-scripts`)"
       - "traefik.http.routers.script_https.entrypoints=websecure"
       - "traefik.http.routers.script_https.tls=true"
       - "traefik.http.routers.script_https.service=script"
-      - "traefik.http.routers.script_https.middlewares=auth@docker"
+      - "traefik.http.routers.script_https.middlewares=auth_sso@docker"
       # общий сервис
       - "traefik.http.services.script.loadbalancer.server.port=8008"
-      - "traefik.http.routers.script.middlewares=auth@docker"
+      - "traefik.http.routers.script.middlewares=auth_sso@docker"
     volumes:
       - ./ScriptServices:/home/script_service/web
     depends_on:

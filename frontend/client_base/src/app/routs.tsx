@@ -3,10 +3,8 @@ import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/Preview"
 import { DockerModuleList, DockerExemplePage, DockerModule, CoreList } from "@src/pages/Manager"
 import { ManagerPage } from "@src/pages/Manager/ui/Manager"
 import { CoreModuleList } from "@src/pages/Manager/ui/ModuleCore/ModuleCoreList"
-// import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit"
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import { AuthPage } from "../pages/Auth/AuthPage"
 import { AutomationPage } from "../pages/Automations"
 import { DevicePage } from "../pages/Device"
 import { DetailDevice } from "../pages/DeviceDetail/ui/DeviceDetail"
@@ -16,23 +14,21 @@ import { RoomPage, RoomsPage } from "../pages/Room"
 import { RootPage } from "../pages/Root"
 import { ScriptConstructor } from "../pages/Scripts"
 import { SettingsPage } from "../pages/Settings"
+import { AuthGate } from "./authGate"
+
+
 
 interface RoutesComponentProps{
 	isAuthenticated:boolean, 
 	role?: string
 }
 
-export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated, role})=>{
-
-	console.log("role: ", role)
+export const RoutesComponent:React.FC<RoutesComponentProps> = ()=>{
 
 	return (
-		// <ColorProvider>
-        //   <SizeProvider>
-			<Routes>
+		<Routes>
 			{
-				isAuthenticated?
-				<>
+			<Route element={<AuthGate/>}>
 				<Route path="/" element={<RootPage/>}>
 					<Route path="home" element={<HomePage/>}/>
 					<Route path="device" element={<DevicePage/>}/>
@@ -58,16 +54,9 @@ export const RoutesComponent:React.FC<RoutesComponentProps> = ({isAuthenticated,
 					
 					<Route path="/*" element={<Navigate replace to="/home" />} />
 				</Route>
-				</>
-				:<>
-					<Route path="auth" element={<AuthPage/>}/>
-					<Route path="/*" element={<Navigate replace to="/auth" />} />
-				</>
+			</Route>
 			}
 		</Routes>
-		//   </SizeProvider>
-		//   </ColorProvider>
-			
 		
 	)
 }

@@ -1,13 +1,12 @@
-import { requestWithRefrash } from "./baseAPI"
+import { baseAPI } from "./baseAPI"
 import { TypeRequest } from "./type"
 
-export const logoutInSession = async(token: string) => {
+export const logoutInSession = async() => {
     try{
-        await requestWithRefrash(
-            "/api-auth/logout", 
+        await baseAPI(
+            "/api-auth/sso/logout", 
             TypeRequest.GET, 
             null, 
-            token, 
             {}
         )
     }
