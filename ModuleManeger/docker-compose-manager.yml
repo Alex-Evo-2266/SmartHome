@@ -15,14 +15,14 @@ services:
       - "traefik.http.routers.module_manager_http.rule=PathPrefix(`/api-modules-manager`)"
       - "traefik.http.routers.module_manager_http.entrypoints=web"
       - "traefik.http.routers.module_manager_http.service=module_manager"
-      - "traefik.http.routers.module_manager_http.middlewares=auth@docker"
+      - "traefik.http.routers.module_manager_http.middlewares=auth_sso@docker"
 
       # https (с TLS)
       - "traefik.http.routers.module_manager_https.rule=PathPrefix(`/api-modules-manager`)"
       - "traefik.http.routers.module_manager_https.entrypoints=websecure"
       - "traefik.http.routers.module_manager_https.tls=true"
       - "traefik.http.routers.module_manager_https.service=module_manager"
-      - "traefik.http.routers.module_manager_https.middlewares=auth@docker"
+      - "traefik.http.routers.module_manager_https.middlewares=auth_sso@docker"
 
       # - "traefik.http.middlewares.module_manager-strip.stripprefixregex.regex=^/modules/mqtt_page"
 
