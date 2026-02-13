@@ -11,7 +11,7 @@ export const useToken = (service:string) => {
     const [token, setToken] = useState<string>("")
 
     const getToken = useCallback(async(service:string)=>{
-        const {token}:{token: string} = await request(`/api-auth/module-service/temp-token?service=${service}`)
+        const {token}:{token: string} = await request(`/api-auth/sso/module-service/temp-token?service=${service}`)
         return token
     },[request])
 

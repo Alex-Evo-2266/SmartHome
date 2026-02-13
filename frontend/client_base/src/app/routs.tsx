@@ -14,21 +14,39 @@ import { RoomPage, RoomsPage } from "../pages/Room"
 import { RootPage } from "../pages/Root"
 import { ScriptConstructor } from "../pages/Scripts"
 import { SettingsPage } from "../pages/Settings"
-import { AuthGate } from "./authGate"
+import { useSocket } from "@src/shared/lib/hooks/webSocket.hook"
+import { useUpdateDeviceData } from "@src/entites/devices/hooks/update_device_data"
+import { useEffect } from "react"
+import { AuthGuard, useAuth } from "alex-evo-sh-auth"
 
+export const RoutesComponent = ()=>{
 
+	const { user, isAuthenticated, loading } = useAuth();
 
-interface RoutesComponentProps{
-	isAuthenticated:boolean, 
-	role?: string
-}
+	const {updateDevicedata, patchDeviceState} = useUpdateDeviceData()
+	const {listenSocket, closeSocket} = useSocket([
+		{messageType: "device-send", callback: updateDevicedata as (arg: unknown)=>void},
+		{messageType: "device-send-patch", callback: patchDeviceState as (arg: unknown)=>void},
+	])
 
-export const RoutesComponent:React.FC<RoutesComponentProps> = ()=>{
+	useEffect(()=>{
+		console.log(`auth data ${isAuthenticated} ${JSON.stringify(user)}`)
+	},[isAuthenticated, user])
+
+	useEffect(()=>{
+		if (isAuthenticated)
+		listenSocket()
+		return ()=>closeSocket()
+	},[listenSocket, closeSocket, isAuthenticated])
+
+	if (loading) return <p>Загрузка...</p>;
+
+	if (!isAuthenticated) return <p>Перенаправление на логин...</p>;
 
 	return (
+		<AuthGuard>
 		<Routes>
 			{
-			<Route element={<AuthGate/>}>
 				<Route path="/" element={<RootPage/>}>
 					<Route path="home" element={<HomePage/>}/>
 					<Route path="device" element={<DevicePage/>}/>
@@ -53,10 +71,11 @@ export const RoutesComponent:React.FC<RoutesComponentProps> = ()=>{
 					<Route path="dashboard/:id" element={<PreviewDashboardPage/>}/>
 					
 					<Route path="/*" element={<Navigate replace to="/home" />} />
-				</Route>
 			</Route>
 			}
 		</Routes>
+		</AuthGuard>
+
 		
 	)
 }

@@ -3,11 +3,12 @@ import {useState, useCallback} from 'react'
 import { useAppDispatch } from './redux.js';
 import { baseAPI } from '@src/shared/api/baseAPI.js';
 import { TypeRequest } from '@src/shared/api/type.js';
-import { logout } from '../reducers/userAuthDataReducer.js';
+import { useAuth } from 'alex-evo-sh-auth';
 
 export const useHttp = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
+	const {logout} = useAuth()
 	const dispatch = useAppDispatch()
 
 	const request = useCallback(async (url:string, method:TypeRequest = TypeRequest.GET, body?:Dict<unknown> | Dict<unknown>[], headers:Dict<unknown> = {}, file:boolean = false) => {
@@ -35,7 +36,7 @@ export const useHttp = () => {
 
 	const clearError = useCallback(() => {setError(null)},[]);
 
-	const userLogout = useCallback(()=>dispatch(logout()),[dispatch])
+	const userLogout = useCallback(()=>logout(),[dispatch])
 
 	return {loading, request, error, clearError, logout:userLogout}
 }
