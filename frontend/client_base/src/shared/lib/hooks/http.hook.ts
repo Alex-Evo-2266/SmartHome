@@ -18,7 +18,7 @@ export const useHttp = () => {
 			headers = {
 				...headers, 
 			}
-			let response = await baseAPI(authManager, url, method, body, headers ,file)
+			let response = await baseAPI(authManager, url, method, body, headers ,file, logout)
 
 			const data = await response.json()
 			if (!response.ok) {
@@ -33,7 +33,7 @@ export const useHttp = () => {
 			else if(e instanceof Error)
 				setError(e.message)
 		}
-	},[authManager]);
+	},[authManager, logout]);
 
 	const clearError = useCallback(() => {setError(null)},[]);
 
