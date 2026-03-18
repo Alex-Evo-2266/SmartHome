@@ -1,5 +1,5 @@
-import { ContentBox, Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
-import { useCallback, useState } from "react"
+import { ContentBox, Form, FormRef, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
+import { useCallback, useRef, useState } from "react"
 
 import { FieldList } from "./fieldList"
 import { MODAL_ROOT_ID } from "../../../const"
@@ -47,26 +47,26 @@ const validDevice = (data:AddDeviceData, option:DeviceClassOptions) => {
 
 export const DeviceData:React.FC<DeviceDataProps> = ({option, onHide, onSave}) => {
 
-    const [value, setValue] = useState<AddDeviceData>(getInitData(option))
     const [errors, setErrors] = useState<{[key:string]:string}>({})
+    const form = useRef<FormRef<AddDeviceData>>(null)
 
-    const change = (name: string, data: unknown) => {
-        setValue(prev=>({...prev, [name]: data}))
-    } 
+    const finishHandler = useCallback((data: AddDeviceData) => {
+        const error = validDevice(data, option)
+        setErrors(error)
+        if(Object.keys(error).length === 0)
+        {
+            onSave(data)
+        }
+    },[option, onSave])
 
     const save = useCallback(()=>{
-        const errors = validDevice(value, option)
-        setErrors(errors)
-        if(Object.keys(errors).length === 0)
-        {
-            onSave(value)
-        }
-    },[value, option, onSave])
+        form.current?.submit()
+    },[])
 
     return(
         <FullScreenTemplateDialog onHide={onHide} onSave={save}>
             <ContentBox label="main data">
-                <Form value={value} changeValue={change} errors={errors}>
+                <Form<AddDeviceData> ref={form} value={getInitData(option)} onFinish={finishHandler} errors={errors}>
                     <Form.TextInput name="name" border placeholder="name"/>
                     <Form.TextInput name="system_name" border placeholder="system name"/>
                     {option.address && <Form.TextInput name="address" border placeholder="address"/>}
@@ -74,7 +74,11 @@ export const DeviceData:React.FC<DeviceDataProps> = ({option, onHide, onSave}) =
                     {option.type_get_data && <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} items={['pull', 'push']} name="type_get_data" border placeholder="type get data"/>}
                 </Form>
             </ContentBox>
-            <FieldList fields={value.fields} option={option} onChange={data=>change('fields', data)}/>
+            <FieldList 
+                fields={form.current?.getValues().fields ?? []} 
+                option={option} 
+                onChange={data=>form.current?.setFieldValue('fields', data)}
+            />
         </FullScreenTemplateDialog>
     )
 }

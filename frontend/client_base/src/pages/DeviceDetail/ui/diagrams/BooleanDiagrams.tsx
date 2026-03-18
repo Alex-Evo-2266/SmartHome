@@ -115,7 +115,7 @@ export const BooleanTimelineChart: React.FC<DiagramProps> = ({ data: fieldHistor
           label: (ctx) => {
             const label = ctx.dataset.label || '';
             const value = ctx.parsed.y === 1 ? "ON" : "OFF";
-            return `${label}: ${value} (${new Date(ctx.parsed.x).toLocaleTimeString()})`;
+            return `${label}: ${value} (${ctx.parsed.x ? new Date(ctx.parsed.x).toLocaleTimeString():""})`;
           },
         },
       },

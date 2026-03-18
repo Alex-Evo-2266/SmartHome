@@ -2,7 +2,7 @@ import {
   BaseActionCard, BasicTemplateDialog, Button, DayOfWeekField, SelectionDialog, TextField 
 } from "alex-evo-sh-ui-kit";
 import { DateTime } from 'luxon';
-import { useCallback, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 
 import { TriggerItem } from '../../../entites/automation';
 import { useRooms } from "../../../entites/rooms";
@@ -20,7 +20,7 @@ interface CustomStep {
   key: string;
   label: string;
   type: "custom";
-  render: () => JSX.Element;
+  render: () => ReactNode;
 }
 
 interface SelectStep {

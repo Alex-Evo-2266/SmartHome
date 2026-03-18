@@ -92,7 +92,7 @@ const options: ChartOptions<'line'> = {
           label: (ctx) => {
             const label = ctx.dataset.label || '';
             const value = ctx.parsed.y;
-            return `${label}: ${value} (${new Date(ctx.parsed.x).toLocaleTimeString()})`;
+            return `${label}: ${value} (${ctx.parsed.x?new Date(ctx.parsed.x).toLocaleTimeString():""})`;
           },
         },
       },
