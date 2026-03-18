@@ -8,16 +8,17 @@ import { useAuth } from 'alex-evo-sh-auth';
 export const useHttp = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
-	const {logout} = useAuth()
+	const {logout, authManager} = useAuth()
 	const dispatch = useAppDispatch()
 
 	const request = useCallback(async (url:string, method:TypeRequest = TypeRequest.GET, body?:Dict<unknown> | Dict<unknown>[], headers:Dict<unknown> = {}, file:boolean = false) => {
+		if(!authManager)return
 		setLoading(true);
 		try {
 			headers = {
 				...headers, 
 			}
-			let response = await baseAPI(url, method, body, headers ,file)
+			let response = await baseAPI(authManager, url, method, body, headers ,file)
 
 			const data = await response.json()
 			if (!response.ok) {
@@ -32,7 +33,7 @@ export const useHttp = () => {
 			else if(e instanceof Error)
 				setError(e.message)
 		}
-	},[]);
+	},[authManager]);
 
 	const clearError = useCallback(() => {setError(null)},[]);
 

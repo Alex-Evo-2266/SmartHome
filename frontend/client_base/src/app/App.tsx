@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { RoutesComponent } from "./routs"
 import '../shared/ui/index.scss'
 import {AuthProvider} from 'alex-evo-sh-auth'
+import { authConfig } from "./config";
 
 
 function App() {
@@ -11,10 +12,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <AuthProvider
-        authUrl="/api-auth"
-        authFrontendUrl="/auth-service"
-        >
+        <AuthProvider authConfig={authConfig}>
           <ColorProvider>
             <SizeProvider>
               <RoutesComponent/>

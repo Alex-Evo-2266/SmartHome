@@ -17,17 +17,19 @@ import { SettingsPage } from "../pages/Settings"
 import { useSocket } from "@src/shared/lib/hooks/webSocket.hook"
 import { useUpdateDeviceData } from "@src/entites/devices/hooks/update_device_data"
 import { useEffect } from "react"
-import { AuthGuard, useAuth } from "alex-evo-sh-auth"
+import { CallbackPage, ProtectGate, useAuth } from "alex-evo-sh-auth"
 
 export const RoutesComponent = ()=>{
 
-	const { user, isAuthenticated, loading } = useAuth();
+	const { user, loading } = useAuth();
 
 	const {updateDevicedata, patchDeviceState} = useUpdateDeviceData()
 	const {listenSocket, closeSocket} = useSocket([
 		{messageType: "device-send", callback: updateDevicedata as (arg: unknown)=>void},
 		{messageType: "device-send-patch", callback: patchDeviceState as (arg: unknown)=>void},
 	])
+
+	const isAuthenticated = !!user
 
 	useEffect(()=>{
 		console.log(`auth data ${isAuthenticated} ${JSON.stringify(user)}`)
@@ -41,41 +43,39 @@ export const RoutesComponent = ()=>{
 
 	if (loading) return <p>Загрузка...</p>;
 
-	if (!isAuthenticated) return <p>Перенаправление на логин...</p>;
-
 	return (
-		<AuthGuard>
 		<Routes>
 			{
 				<Route path="/" element={<RootPage/>}>
-					<Route path="home" element={<HomePage/>}/>
-					<Route path="device" element={<DevicePage/>}/>
-					<Route path="device/:systemName" element={<DetailDevice/>}/>
-					<Route path="automation" element={<AutomationPage/>}/>
-					<Route path="module_pages/:moduleName/:pageName" element={<ModulesPage/>}/>
-					<Route path="manager" element={<ManagerPage/>}>
-						<Route index element={<Navigate to="docker" replace />} />
-						<Route path="docker" element={<DockerModuleList/>}/>
-						<Route path="docker/:module_name" element={<DockerModule/>}/>
-						<Route path="docker/:module_name/:module_exempl" element={<DockerExemplePage/>}/>
-						<Route path="core-module" element={<CoreModuleList/>}/>
-						<Route path="core" element={<CoreList/>}/>
-						<Route path="*" element={<Navigate replace to="/manager/docker" />} />
+					<Route path="callback" element={<CallbackPage/>}/>
+					<Route element={<ProtectGate loadingPage={<div>Loading...</div>}/>}>
+						<Route path="home" element={<HomePage/>}/>
+						<Route path="device" element={<DevicePage/>}/>
+						<Route path="device/:systemName" element={<DetailDevice/>}/>
+						<Route path="automation" element={<AutomationPage/>}/>
+						<Route path="module_pages/:moduleName/:pageName" element={<ModulesPage/>}/>
+						<Route path="manager" element={<ManagerPage/>}>
+							<Route index element={<Navigate to="docker" replace />} />
+							<Route path="docker" element={<DockerModuleList/>}/>
+							<Route path="docker/:module_name" element={<DockerModule/>}/>
+							<Route path="docker/:module_name/:module_exempl" element={<DockerExemplePage/>}/>
+							<Route path="core-module" element={<CoreModuleList/>}/>
+							<Route path="core" element={<CoreList/>}/>
+							<Route path="*" element={<Navigate replace to="/manager/docker" />} />
+						</Route>
+						<Route path="settings" element={<SettingsPage/>}/>
+						<Route path="room" element={<RoomsPage/>}/>
+						<Route path="room/:name" element={<RoomPage/>}/>
+						<Route path="script/constructor" element={<ScriptConstructor/>}/>
+						<Route path="script/constructor/:id" element={<ScriptConstructor/>}/>
+						<Route path="dashboard" element={<DashboardsPage/>}/>
+						<Route path="dashboard/:id" element={<PreviewDashboardPage/>}/>
 					</Route>
-					<Route path="settings" element={<SettingsPage/>}/>
-					<Route path="room" element={<RoomsPage/>}/>
-					<Route path="room/:name" element={<RoomPage/>}/>
-					<Route path="script/constructor" element={<ScriptConstructor/>}/>
-					<Route path="script/constructor/:id" element={<ScriptConstructor/>}/>
-					<Route path="dashboard" element={<DashboardsPage/>}/>
-					<Route path="dashboard/:id" element={<PreviewDashboardPage/>}/>
+					
 					
 					<Route path="/*" element={<Navigate replace to="/home" />} />
 			</Route>
 			}
 		</Routes>
-		</AuthGuard>
-
-		
 	)
 }
