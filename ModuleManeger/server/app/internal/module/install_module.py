@@ -130,9 +130,10 @@ def generate_docker_compose_from_module(module_path: str, output_path: str = Non
             continue
 
         # Добавляем сеть
-        conf.setdefault("networks", [])
-        if "local_sh_network" not in conf["networks"]:
-            conf["networks"].append("local_sh_network")
+        if not ("network_mode" in conf and conf["network_mode"] == "host"):
+            conf.setdefault("networks", [])
+            if "local_sh_network" not in conf["networks"]:
+                conf["networks"].append("local_sh_network")
 
         # Добавляем контейнер в services
         compose_data["services"][name] = {
