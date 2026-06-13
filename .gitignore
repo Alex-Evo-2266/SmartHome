@@ -78,3 +78,5 @@ dep_containres.txt
 
 /modules_core/*
 !/modules_core/Virtual_devices
+
+/modules/
