@@ -1,7 +1,7 @@
 import logging
-from app.ingternal.device.classes.baseDevice import BaseDevice
-from app.ingternal.device.schemas.config import ConfigSchema, ChangeField
-from app.ingternal.device.cache.cach_field import get_cached_last_value
+from app.core.entities.device.baseDevice import BaseDevice
+from app.schemas.device.config import ConfigSchema, ChangeField
+from app.db.cache.device.cach_field import get_cached_last_value
 
 
 # Настройка логирования
