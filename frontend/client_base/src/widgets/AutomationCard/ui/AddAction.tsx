@@ -20,7 +20,7 @@ interface CustomStep {
   key: string;
   label: string;
   type: "custom";
-  render: (vals: Record<string,string>, setVal:(k:string,v:string)=>void) => JSX.Element | null;
+  render: (vals: Record<string,string>, setVal:(k:string,v:string)=>void) => React.ReactNode | null;
 }
 
 interface SelectStep {

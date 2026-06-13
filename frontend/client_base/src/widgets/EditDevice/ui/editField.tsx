@@ -1,5 +1,5 @@
-import { Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
-import { useCallback, useState } from "react"
+import { Form, FormRef, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
+import { useCallback, useRef, useState } from "react"
 
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions, TypeDeviceField } from "../../../entites/devices"
@@ -24,23 +24,28 @@ function getOption() {
 
 export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data}) => {
 
-    const [value, setValue] = useState<FieldData>(data)
     const [errors, setErrors] = useState<{[key:string]:string}>({})
+    const form = useRef<FormRef<FieldData>>(null)
 
-    const change = (name: string, data: TypeDeviceField) => {
+    const change = <K extends keyof FieldData>(name: K, data: FieldData[K]) => {
         if(name === 'type' && data === TypeDeviceField.BINARY)
         {
-            return setValue(prev=>({...prev, type: data, low: BINARY_LOW, high: BINARY_HIGH}))
+            form.current?.setFieldValue("low", BINARY_LOW)
+            form.current?.setFieldValue("high", BINARY_HIGH)
+            return
         }
         if(name === 'type' && data === TypeDeviceField.NUMBER)
         {
-            return setValue(prev=>({...prev, type: data, low: NUMBER_LOW, high: NUMBER_HIGH}))
+            form.current?.setFieldValue("low", NUMBER_LOW)
+            form.current?.setFieldValue("high", NUMBER_HIGH)
+            return
         }
         if(name === 'type')
         {
-            return setValue(prev=>({...prev, type: data, low: undefined, high: undefined}))
+            form.current?.setFieldValue("low", undefined)
+            form.current?.setFieldValue("high", undefined)
+            return
         }
-        setValue(prev=>({...prev, [name]: data}))
     }
 
     const validField = useCallback((field:FieldData) => {
@@ -62,29 +67,29 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
         return errors
     },[option.fields_change.address])
 
-    const save = useCallback(()=>{
-        const errors = validField(value)
+    const finishHandler = useCallback((data: FieldData)=>{
+        const errors = validField(data)
         setErrors(errors)
         if(Object.keys(errors).length === 0)
         {
-            onSave(value)
+            onSave(data)
         }
-    },[onSave, value, validField])
+    },[onSave, validField])
 
     return(
-        <FullScreenTemplateDialog header="add field" onHide={onHide} onSave={save}>
+        <FullScreenTemplateDialog header="add field" onHide={onHide} onSave={form.current?.submit}>
             <div style={{marginInline: '16px'}}>
-                <Form value={value} changeValue={change} errors={errors}>
+                <Form<FieldData> value={data} onChangeValue={change} onFinish={finishHandler} errors={errors}>
                     {option.fields_change.name && <Form.TextInput border name="name" placeholder="name"/>}
-                    {option.fields_change.address && !value.virtual_field && <Form.TextInput border name="address" placeholder="address"/>}
+                    {option.fields_change.address && !form.current?.getValues().virtual_field && <Form.TextInput border name="address" placeholder="address"/>}
                     {option.fields_change.type && <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>}
                     {
-                    (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?
+                    (form.current?.getValues().type === TypeDeviceField.BINARY || form.current?.getValues().type === TypeDeviceField.NUMBER)?
                     <>
                         {option.fields_change.low && <Form.TextInput border name="low" placeholder="low"/>}
                         {option.fields_change.high && <Form.TextInput border name="high" placeholder="high"/>}
                     </>
-                    :(value.type === TypeDeviceField.ENUM && option.fields_change.enum_values)?
+                    :(form.current?.getValues().type === TypeDeviceField.ENUM && option.fields_change.enum_values)?
                         <Form.MoreTextField name="enum_values"/>
                     :null
                     }

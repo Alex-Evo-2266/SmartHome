@@ -1,5 +1,5 @@
-import { ContentBox, Form, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
-import { useCallback, useState } from "react"
+import { ContentBox, Form, FormRef, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
+import { useCallback, useRef, useState } from "react"
 
 import { EditType } from "./editType"
 import { FieldList } from "./fieldList"
@@ -66,22 +66,19 @@ const validDevice = (data:EditDeviceData, option:DeviceClassOptions) => {
 
 export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option}) => {
 
-    const [value, setValue] = useState<EditDeviceData>(getInitData(data))
     const [errors, setErrors] = useState<{[key:string]:string}>({})
     const {editDevice} = useEditDevice()
+    const form = useRef<FormRef<EditDeviceData>>(null)
 
-    const change = (name: string, data: unknown) => {
-        setValue(prev=>({...prev, [name]: data}))
-    }
 
     const changeRoom = (roomName: string) => {
         if(roomName == "")
-            setValue(prev=>({...prev, room: undefined}))
+            form.current?.setFieldValue("room", undefined)
         else
-            setValue(prev=>({...prev, room: roomName}))
+            form.current?.setFieldValue("room", roomName)
     }
 
-    const save = useCallback(async()=>{
+    const finishHandler = useCallback(async(value: EditDeviceData)=>{
         const errors = validDevice(value, option)
         setErrors(errors)
         if(Object.keys(errors).length === 0)
@@ -89,20 +86,28 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
             await editDevice({...value, class_device: data.class_device, type: data.type}, data.system_name)
             onHide()
         }
-    },[value, option, data, onHide, editDevice])
+    },[option, data, onHide, editDevice])
+
+    const save = () => {
+        form.current?.submit()
+    }
 
     return(
         <FullScreenTemplateDialog onHide={onHide} onSave={save}>
             <ContentBox label="edit main data">
-                <Form value={value} changeValue={change} errors={errors}>
+                <Form<EditDeviceData> ref={form} value={getInitData(data)} onFinish={finishHandler} errors={errors}>
                     <Form.TextInput name="name" border placeholder="name"/>
                     <Form.TextInput name="system_name" border placeholder="system name"/>
                     {option.address? <Form.TextInput name="address" border placeholder="address"/>:<TextField readOnly border placeholder="address" name="address" value={data.address}/>}
                     {option.token? <Form.TextInput name="token" border placeholder="token"/>:<TextField readOnly border placeholder="token" name="token" value={data.token}/>}
                     {option.type_get_data? <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} items={['pull', 'push']} name="type_get_data" border placeholder="type get data"/>:<TextField readOnly border placeholder="type get data" name="type_get_data" value={data.type_get_data}/>}
-                    <FieldList fields={value.fields} option={option} onChange={data=>change('fields', data)}/>
+                    <FieldList 
+                        fields={form.current?.getValues().fields ?? []} 
+                        option={option} 
+                        onChange={data=>form.current?.setFieldValue('fields', data)}
+                    />
                     <EditType option={option} data={data}/>
-                    <SelectRoom value={value.room ?? ""} onChange={changeRoom}/>
+                    <SelectRoom value={form.current?.getValues().room ?? ""} onChange={changeRoom}/>
                 </Form>
             </ContentBox>
         </FullScreenTemplateDialog>

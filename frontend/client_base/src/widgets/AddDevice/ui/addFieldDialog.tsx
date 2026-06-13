@@ -1,5 +1,5 @@
-import { Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
-import { useCallback, useState } from "react"
+import { Form, FormRef, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
+import { useCallback, useRef, useState } from "react"
 
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions, TypeDeviceField } from "../../../entites/devices"
@@ -16,17 +16,15 @@ interface FieldDataProps{
     option: DeviceClassOptions
 }
 
-function getInitData():FieldData{
-    return {
-        name: '',
-        address: '',
-        type: TypeDeviceField.BINARY,
-        low: BINARY_LOW,
-        high: BINARY_HIGH,
-        read_only: false,
-        unit: '',
-        virtual_field: false
-    }
+const initData:FieldData = {
+    name: '',
+    address: '',
+    type: TypeDeviceField.BINARY,
+    low: BINARY_LOW,
+    high: BINARY_HIGH,
+    read_only: false,
+    unit: '',
+    virtual_field: false
 }
 
 function getOption() {
@@ -36,27 +34,11 @@ function getOption() {
 
 export const AddField:React.FC<FieldDataProps> = ({onHide, onSave, option}) => {
 
-    const [value, setValue] = useState<FieldData>(getInitData())
-    const [errors, setErrors] = useState<{[key:string]:string}>({})
-
-    const change = (name: string, data: TypeDeviceField) => {
-        if(name === 'type' && data === TypeDeviceField.BINARY)
-        {
-            return setValue(prev=>({...prev, type: data, low: BINARY_LOW, high: BINARY_HIGH}))
-        }
-        if(name === 'type' && data === TypeDeviceField.NUMBER)
-        {
-            return setValue(prev=>({...prev, type: data, low: NUMBER_LOW, high: NUMBER_HIGH}))
-        }
-        if(name === 'type')
-        {
-            return setValue(prev=>({...prev, type: data, low: undefined, high: undefined}))
-        }
-        setValue(prev=>({...prev, [name]: data}))
-    }
+    const [errors, setErrors] = useState<Partial<Record<keyof FieldData, string>>>({})
+    const form = useRef<FormRef<FieldData>>(null)
 
     const validField = useCallback((field:FieldData) => {
-        const errors:{[key:string]: string} = {}
+        const errors:Partial<Record<keyof FieldData, string>> = {}
 
         if(field.name.length === 1)
         {
@@ -74,19 +56,44 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave, option}) => {
         return errors
     },[option.fields_creation_data.address])
 
-    const save = useCallback(()=>{
-        const errors = validField(value)
-        setErrors(errors)
-        if(Object.keys(errors).length === 0)
+    const finishHandler = useCallback((data: FieldData) => {
+        const error = validField(data)
+        setErrors(error)
+        if(Object.keys(error).length === 0)
         {
-            onSave(value)
+            onSave(data)
         }
-    },[onSave, value, validField])
+    },[onSave, validField])
+
+    const change = <K extends keyof FieldData>(name: K, data: FieldData[K]) => {
+        if(name === 'type' && data === TypeDeviceField.BINARY)
+        {
+            form.current?.setFieldValue("low", BINARY_LOW)
+            form.current?.setFieldValue("high", BINARY_HIGH)
+            return
+        }
+        if(name === 'type' && data === TypeDeviceField.NUMBER)
+        {
+            form.current?.setFieldValue("low", NUMBER_LOW)
+            form.current?.setFieldValue("high", NUMBER_HIGH)
+            return
+        }
+        if(name === 'type')
+        {
+            form.current?.setFieldValue("low", undefined)
+            form.current?.setFieldValue("high", undefined)
+            return
+        }
+    }
+
+    const save = useCallback(()=>{
+        form.current?.submit()
+    },[])
 
     return(
         <FullScreenTemplateDialog header="add field" onHide={onHide} onSave={save}>
             <div style={{marginInline: '16px'}}>
-                <Form value={value} changeValue={change} errors={errors}>
+                <Form<FieldData> ref={form} value={initData} onFinish={finishHandler} onChangeValue={change} errors={errors}>
                     <Form.TextInput border name="name" placeholder="name"/>
                     {
                         option.fields_creation_data.address &&
@@ -94,7 +101,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave, option}) => {
                     }
                     <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>
                     {
-                    (value.type === TypeDeviceField.BINARY || value.type === TypeDeviceField.NUMBER)?
+                    (form.current?.getValues().type === TypeDeviceField.BINARY || form.current?.getValues().type === TypeDeviceField.NUMBER)?
                     <>
                         <Form.TextInput border name="low" placeholder="low"/>
                         <Form.TextInput border name="high" placeholder="high"/>

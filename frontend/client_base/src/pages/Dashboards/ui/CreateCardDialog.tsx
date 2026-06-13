@@ -1,7 +1,7 @@
 import { MENU_ROOT_ID } from "@src/const"
 import { DashboardCard } from "@src/entites/dashboard"
-import { Form, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
-import { useEffect, useState } from "react"
+import { Form, FormRef, FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
+import { useRef, useState } from "react"
 import { v4 as uuidv4 } from 'uuid';
 
 const TYPES_CARD = [
@@ -14,22 +14,21 @@ export interface ICreateCardDialog{
     data?: DashboardCard
 }
 
+type FormDashboardCard = Omit<DashboardCard, "id" | "type">
+
 export const CardDialog:React.FC<ICreateCardDialog> = ({onSave, data, onHide}) => {
 
-    const [card, setCard] = useState<DashboardCard>({title:"", type:"grid", items:[]})
     const [error, setError] = useState<Record<string, string>>({})
+    const form = useRef<FormRef<DashboardCard>>(null)
 
-    const changeValue = (name: string, value: string) => {
-        setCard(prev=>({...prev, [name]:value}))
-    }
-
-    const hide = () => {
-        onHide()
-    }
-
-    const valid = () => {
+    const valid = (card: unknown): card is FormDashboardCard => {
         let isValid = true
-        if(!card.title || card.title === "")
+        if( card &&
+            typeof(card) === "object" &&
+            "title" in card &&
+            typeof(card.title) === "string" && 
+            card.title !== ""
+        )
         {
             setError(prev=>({...prev, title: "invalid title"}))
             isValid = false
@@ -37,23 +36,32 @@ export const CardDialog:React.FC<ICreateCardDialog> = ({onSave, data, onHide}) =
         return isValid
     }
 
-    const save = () => {
-        if(valid())
-        {
-            onSave({...card, id: uuidv4()})
-            onHide()
-        }
+    const finishHandler = (newData: Partial<DashboardCard>) => {
+        if(valid(newData))
+            onSave({...newData, id: uuidv4(), type: "grid", items: []})
     }
 
-    useEffect(()=>{
-        if(data)
-            setCard(data)
-    },[data])
+    const hide = () => {
+        onHide()
+    }
+
+    const save = () => {
+        form.current?.submit()
+    }
 
     return(
         <FullScreenTemplateDialog onHide={hide} onSave={save}>
             <div>
-                <Form changeValue={changeValue} value={card} errors={error}>
+                <Form<DashboardCard> 
+                ref={form} 
+                onFinish={finishHandler} 
+                value={data ?? {
+                    title: "",
+                    type: "grid",
+                    items: []
+                }} 
+                errors={error}
+                >
                     <Form.TextInput name="title" border/>
                     <Form.SelectInput name="type" items={TYPES_CARD} border container={document.getElementById(MENU_ROOT_ID)}/>
                 </Form>

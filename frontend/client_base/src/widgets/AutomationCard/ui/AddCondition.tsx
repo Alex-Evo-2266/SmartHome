@@ -1,5 +1,5 @@
 import { BaseActionCard, BasicTemplateDialog, Button, NumberField, SelectionDialog, TextField } from "alex-evo-sh-ui-kit";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, ReactNode } from "react";
 
 import { ConditionItem, Operation } from '../../../entites/automation';
 import { TypeDeviceField } from "../../../entites/devices";
@@ -14,7 +14,7 @@ interface CustomStep {
   key: string;
   label: string;
   type: "custom";
-  render: (vals:Record<string,string>, arg:"arg1"|"arg2", type:TypesField)=>JSX.Element;
+  render: (vals:Record<string,string>, arg:"arg1"|"arg2", type:TypesField)=>ReactNode;
 }
 
 interface SelectStep {
