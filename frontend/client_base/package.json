@@ -14,7 +14,7 @@
     "@types/react-redux": "^7.1.34",
     "@xyflow/react": "^12.8.1",
     "alex-evo-sh-auth": "^0.0.15",
-    "alex-evo-sh-ui-kit": "^1.1.87",
+    "alex-evo-sh-ui-kit": "^1.1.102",
     "alex-evo-web-constructor": "^1.0.30",
     "chart.js": "^4.4.9",
     "chartjs-adapter-date-fns": "^3.0.0",

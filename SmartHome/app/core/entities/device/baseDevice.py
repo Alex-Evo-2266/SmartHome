@@ -4,6 +4,7 @@ from app.schemas.device.device import DeviceSerializeSchema, DeviceSchema, Devic
 from app.schemas.device.config import ConfigSchema
 from app.schemas.device.enums import ReceivedDataFormat, DeviceGetData
 from app.core.entities.device.baseField import FieldBase
+from app.core.entities.device.field.createField import createField
 from app.core.entities.device.metaDevice import DeviceMeta
 from app.db.repositories.device.update import edit_fields, update_device_from_object
 from app.core.state.get_store import get_container
@@ -22,11 +23,11 @@ class BaseDevice(IDevice, metaclass=DeviceMeta, use=False):
 		self.fields: list[FieldBase] = []
 		if device.fields:
 			for item in device.fields:
-				self.fields.append(FieldBase(item, device.system_name, self.data.room))
+				self.fields.append(createField(item, device.system_name, self.data.room))
 		self.device = None
 
 	def _add_field(self, item:DeviceInitFieldSchema):
-		self.fields.append(FieldBase(DeviceSerializeFieldSchema(**(item.dict()), id=""), self.data.system_name, self.data.room))
+		self.fields.append(createField(DeviceSerializeFieldSchema(**(item.dict()), id=""), self.data.system_name, self.data.room))
 	
 	def get_value(self, field_id: str)->str | None:
 		field = self.get_field(field_id)

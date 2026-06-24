@@ -7,6 +7,7 @@ from app.pkg.runtime.queue import __queue__
 from app.core.entities.device.device_queue.types import InitDeviceItem
 import asyncio
 from app.exceptions.device import DeviceClassNotFound
+from app.core.runtime.device.polling_device import device_poll
 
 MAX_TRY_COUNT = 10
 
@@ -67,6 +68,7 @@ async def init(system_name: str, try_count: int):
 		await connect.save()
 
 		get_container().connect_store.add_device(device.system_name, connect)
+		await device_poll()
 	except Exception as e:
 		await store.apply_patch_async(device.system_name, {"__status__": StatusDevice.OFFLINE})
 		await asyncio.sleep(2)

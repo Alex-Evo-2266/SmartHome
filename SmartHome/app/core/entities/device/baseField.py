@@ -2,7 +2,7 @@ import asyncio
 from typing import Optional
 
 from app.core.ports.interface.field_class import IField
-from app.schemas.device.device import DeviceSerializeFieldSchema, DeviceSchema
+from app.schemas.device.device import DeviceSerializeFieldSchema, DeviceSchema, DeviceSerializeFieldWithActionsSchema
 from app.schemas.device.add_device import AddDeviceFieldSchema
 from app.schemas.device.enums import TypeDeviceField
 from app.pkg.logger import get_device_base_class
@@ -89,8 +89,8 @@ class FieldBase(IField):
 			virtual_field=self.data.virtual_field
 		)
 
-	def get_data(self) -> DeviceSerializeFieldSchema:
-		return self.data
+	def get_data(self) -> DeviceSerializeFieldWithActionsSchema:
+		return DeviceSerializeFieldWithActionsSchema(**(self.dict()), actions=self.get_actions())
 
 	def dict(self):
 		return self.data.model_dump()
@@ -121,82 +121,22 @@ class FieldBase(IField):
 
 	def set(self, status: str, script: bool = True):
 		logger.info(f"Setting value '{status}' for field '{self.get_name()}' of device '{self.device_system_name}'")
-		match self.data.type:
-			case TypeDeviceField.BINARY:
-				self._set_binary(status)
-			case TypeDeviceField.NUMBER:
-				self._set_number(status)
-			case TypeDeviceField.ENUM:
-				self._set_enum(status)
-			case _:
-				self.data.value = status
+		self.data.value = status
 
-		# self._update_device_data()
-
-		# RoomArray.update_room(
-		# 	self.device_system_name, 
-		# 	self.get_id(), 
-		# 	normalize_value(self.get(), self.get_type(), self.get_low(), self.get_high())
-		# )
-
-		# if script:
-		# 	self._trigger_automation()
-
-	def _set_binary(self, status: str):
-		if self.data.high is not None and str(self.data.high) == status:
-			self.data.value = '1'
-		elif self.data.low is not None and str(self.data.low) == status:
-			self.data.value = '0'
-		elif self.data.high is None and self.data.low is None:
-			if status in ('1', '0'):
-				self.data.value = status
-		else:
-			logger.warning(f"Invalid binary value '{status}' for field '{self.get_name()}'")
-
-	def _set_number(self, status: str):
-		high = self.getInt(self.data.high)
-		low = self.getInt(self.data.low)
-		status_int = self.getFloat(status)
-
-		if status_int is None:
-			logger.warning(f"Invalid number value '{status}' for field '{self.get_name()}'")
-			return
-
-		if high is not None and status_int > high:
-			self.data.value = str(high)
-		elif low is not None and status_int < low:
-			self.data.value = str(low)
-		else:
-			self.data.value = str(status_int)
-
-	def _set_enum(self, status: str):
-		enums = self.get_enum()
-		if enums is None:
-			logger.warning(f"Enum field '{self.get_name()}' has no enum values defined")
-			return
-		if status in enums:
-			self.data.value = status
-		else:
-			logger.warning(f"Invalid enum value '{status}' for field '{self.get_name()}'")
-
-	# def _update_device_data(self):
-	# 	dev_list: Optional[ObservableDict] = servicesDataPoll.get(DEVICE_DATA_POLL)
-	# 	if dev_list:
-	# 		device: DeviceSchema | None = dev_list.get(self.device_system_name)
-	# 		if device:
-	# 			device.value[self.data.name] = self.data.value
-	# 			logger.debug(f"Updated device '{self.device_system_name}' field '{self.data.name}' with value '{self.data.value}'")
-
-	# def _trigger_automation(self):
-	# 	try:
-	# 		asyncloop = asyncio.get_running_loop()
-	# 		asyncloop.create_task(
-	# 			automation_manager.run_device_triggered_automations(self.device_system_name, self.get_name())
-	# 		)
-	# 		asyncloop.create_task(
-	# 			automation_manager.run_room_triggered_automations(self.device_system_name, self.get_id(), self.room)
-	# 		)
+	def execute_action(
+		self,
+		action: str,
+		value: str | None = None
+	): 
+		if value is None:
+			raise ValueError("value required")
 			
-	# 		logger.debug(f"Scheduled automation for device '{self.device_system_name}' field '{self.get_name()}'")
-	# 	except RuntimeError as e:
-	# 		logger.warning(f"Could not schedule automation: {e}")
+		match action:
+			case "set":
+				self.set(value)
+
+			case _:
+				raise ValueError(action)
+
+	def get_actions(self) -> list[str]:
+		return ["set"]

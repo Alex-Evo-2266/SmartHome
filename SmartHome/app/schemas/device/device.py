@@ -33,6 +33,12 @@ class DeviceSerializeFieldSchema(DeviceInitFieldSchema):
 	class Config:  
 		use_enum_values = True
 
+class DeviceSerializeFieldWithActionsSchema(DeviceSerializeFieldSchema):
+	actions: List[str] = []
+
+	class Config:  
+		use_enum_values = True
+
 class StatusForm(BaseModel):
 	status: bool
 

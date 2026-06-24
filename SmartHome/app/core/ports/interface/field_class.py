@@ -1,5 +1,5 @@
 from app.schemas.device.add_device import AddDeviceFieldSchema
-from app.schemas.device.device import DeviceSerializeFieldSchema
+from app.schemas.device.device import DeviceSerializeFieldWithActionsSchema
 from app.schemas.device.enums import TypeDeviceField
 
 class IField():
@@ -45,7 +45,7 @@ class IField():
 	def _get_initial_data(self)->AddDeviceFieldSchema:
 		pass
 
-	def get_data(self)->DeviceSerializeFieldSchema:
+	def get_data(self)->DeviceSerializeFieldWithActionsSchema:
 		pass
 
 	def dict(self):
@@ -53,3 +53,13 @@ class IField():
 
 	def set(self, status, script=True):
 		pass
+
+	def execute_action(
+		self,
+		action: str,
+		value: str | None = None
+	): 
+		pass
+
+	def get_actions(self) -> list[str]:
+		return []

@@ -9,6 +9,7 @@ logger = MyLogger().get_logger(__name__)
 async def set_status(system_name: str, field_id: str, value: str) -> None:
     """Асинхронная установка значения без учета типа поля (прямой вызов)."""
     logger.info(f"Attempting to set status for device '{system_name}', field '{field_id}' with value '{value}'")
+    logger.info(f"tsest '{get_container().connect_store.devices}', 4 '{get_container().device_store._states}'")
 
     device_cond = get_container().connect_store.get(system_name)
     if not device_cond:
