@@ -1,5 +1,5 @@
 import { ContentBox, Form, FormRef, FullScreenTemplateDialog, TextField } from "alex-evo-sh-ui-kit"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import { EditType } from "./editType"
 import { FieldList } from "./fieldList"
@@ -66,10 +66,15 @@ const validDevice = (data:EditDeviceData, option:DeviceClassOptions) => {
 
 export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option}) => {
 
+    const [fields, setFields] = useState<FieldData[]>(getInitData(data).fields)
     const [errors, setErrors] = useState<{[key:string]:string}>({})
     const {editDevice} = useEditDevice()
     const form = useRef<FormRef<EditDeviceData>>(null)
 
+    useEffect(() => {
+        const initData = getInitData(data)
+        setFields(initData.fields)
+    }, [data])
 
     const changeRoom = (roomName: string) => {
         if(roomName == "")
@@ -79,18 +84,18 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
     }
 
     const finishHandler = useCallback(async(value: EditDeviceData)=>{
-        const errors = validDevice(value, option)
+        const errors = validDevice({...value, fields}, option)
         setErrors(errors)
         if(Object.keys(errors).length === 0)
         {
-            await editDevice({...value, class_device: data.class_device, type: data.type}, data.system_name)
+            await editDevice({...value, class_device: data.class_device, type: data.type, fields: fields}, data.system_name)
             onHide()
         }
-    },[option, data, onHide, editDevice])
+    },[option, data, onHide, editDevice, fields])
 
-    const save = () => {
+    const save = useCallback(() => {
         form.current?.submit()
-    }
+    },[fields])
 
     return(
         <FullScreenTemplateDialog onHide={onHide} onSave={save}>
@@ -102,9 +107,9 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
                     {option.token? <Form.TextInput name="token" border placeholder="token"/>:<TextField readOnly border placeholder="token" name="token" value={data.token}/>}
                     {option.type_get_data? <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} items={['pull', 'push']} name="type_get_data" border placeholder="type get data"/>:<TextField readOnly border placeholder="type get data" name="type_get_data" value={data.type_get_data}/>}
                     <FieldList 
-                        fields={form.current?.getValues().fields ?? []} 
+                        fields={fields} 
                         option={option} 
-                        onChange={data=>form.current?.setFieldValue('fields', data)}
+                        onChange={setFields}
                     />
                     <EditType option={option} data={data}/>
                     <SelectRoom value={form.current?.getValues().room ?? ""} onChange={changeRoom}/>

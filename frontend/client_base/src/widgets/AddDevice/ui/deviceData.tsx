@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from "react"
 import { FieldList } from "./fieldList"
 import { MODAL_ROOT_ID } from "../../../const"
 import { DeviceClassOptions } from "../../../entites/devices"
-import { AddDeviceData } from "../models/deviceData"
+import { AddDeviceData, FieldData } from "../models/deviceData"
 
 interface DeviceDataProps{
     option: DeviceClassOptions
@@ -47,17 +47,18 @@ const validDevice = (data:AddDeviceData, option:DeviceClassOptions) => {
 
 export const DeviceData:React.FC<DeviceDataProps> = ({option, onHide, onSave}) => {
 
+    const [fields, setFields] = useState<FieldData[]>([])
     const [errors, setErrors] = useState<{[key:string]:string}>({})
     const form = useRef<FormRef<AddDeviceData>>(null)
 
     const finishHandler = useCallback((data: AddDeviceData) => {
-        const error = validDevice(data, option)
+        const error = validDevice({...data, fields}, option)
         setErrors(error)
         if(Object.keys(error).length === 0)
         {
-            onSave(data)
+            onSave({...data, fields})
         }
-    },[option, onSave])
+    },[option, onSave, fields])
 
     const save = useCallback(()=>{
         form.current?.submit()
@@ -75,9 +76,9 @@ export const DeviceData:React.FC<DeviceDataProps> = ({option, onHide, onSave}) =
                 </Form>
             </ContentBox>
             <FieldList 
-                fields={form.current?.getValues().fields ?? []} 
+                fields={fields} 
                 option={option} 
-                onChange={data=>form.current?.setFieldValue('fields', data)}
+                onChange={setFields}
             />
         </FullScreenTemplateDialog>
     )

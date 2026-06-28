@@ -46,6 +46,7 @@ export const FieldList:React.FC<DeviceDataProps> = ({option, fields, onChange}) 
         setEditFieldVisible(getField(index))
     },[getField])
 
+
     return(
         <>
         {
