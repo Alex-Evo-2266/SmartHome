@@ -1,10 +1,21 @@
 .widget-dialog{
     display: flex;
+    &__mobile{
+        flex-direction: column; // меняем направление на колонку
+    }
     &_left-column{
         width: 300px;
+        &__mobile{
+            width: 100%;        // растягиваем на всю ширину
+        }
     }
     &_right-column{
         flex: 1;
+        &__mobile{
+            flex: none;         // убираем flex:1, чтобы не растягивался
+            width: 100%;        // растягиваем на всю ширину
+
+        }
     }
 }
 

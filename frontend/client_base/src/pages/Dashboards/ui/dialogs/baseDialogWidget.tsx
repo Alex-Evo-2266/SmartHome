@@ -1,4 +1,4 @@
-import { ArrowRight, Chips, FullScreenTemplateDialog} from "alex-evo-sh-ui-kit"
+import { ArrowRight, Chips, FullScreenTemplateDialog, ScreenSize, useScreenSize} from "alex-evo-sh-ui-kit"
 import './widgetConfigDialog.scss'
 import React, { useCallback, useMemo, useState } from "react"
 import { useWidgetsStore } from "../../helpers/widgetsStore"
@@ -19,6 +19,7 @@ export const WidgetConfigDialog = ({onHide, steps}:WidgetConfigDialogProps) => {
 
     const [step, setStep] = useState<number>(0)
     const widgetsStore = useWidgetsStore()
+    const {screen} = useScreenSize()
     const runtime = useMemo(()=>widgetsStore ? createRuntime(widgetsStore):null,[widgetsStore]) 
     const [condidat, setCondidat] = useState<WidgetSchema | null>(null)
     const schema = useMemo<DashboardSchema>(()=>{
@@ -36,6 +37,11 @@ export const WidgetConfigDialog = ({onHide, steps}:WidgetConfigDialogProps) => {
         }
     },[condidat])
 
+    const classSize = {
+        [ScreenSize.MOBILE]: "mobile",
+        [ScreenSize.STANDART]: "",
+        [ScreenSize.BIG_SCREEN]: "big",
+    }
 
     const next = useCallback(() => {
         setStep(prev=>steps.length - 1 <= prev ? prev : prev + 1)
@@ -60,10 +66,10 @@ export const WidgetConfigDialog = ({onHide, steps}:WidgetConfigDialogProps) => {
     const Component = curpage.component
 
     return(
-        <FullScreenTemplateDialog maxWidth="90%" onHide={onHide} btns={renderButtons()}>
+        <FullScreenTemplateDialog maxWidth="calc(90% - 80px)" onHide={onHide} btns={renderButtons()}>
             {
                 steps.length > 0?
-                <div className="widget-dialog_steps">
+                <div className={`widget-dialog_steps`}>
                     {
                         steps.map((item, i)=>(
                             <React.Fragment key={item.title}>
@@ -79,8 +85,8 @@ export const WidgetConfigDialog = ({onHide, steps}:WidgetConfigDialogProps) => {
                 :null
             }
             
-            <div className="widget-dialog">
-                <div className="widget-dialog_left-column">
+            <div className={`widget-dialog widget-dialog__${classSize[screen]}`}>
+                <div className={`widget-dialog_left-column widget-dialog_left-column__${classSize[screen]}`}>
                     {
                         runtime && 
                         <DashboardMainProvider
@@ -93,7 +99,7 @@ export const WidgetConfigDialog = ({onHide, steps}:WidgetConfigDialogProps) => {
                         </DashboardMainProvider>
                     }
                 </div>
-                <div className="widget-dialog_right-column">
+                <div className={`widget-dialog_right-column widget-dialog_right-column__${classSize[screen]}`}>
                     <Component condidat={condidat} setCondidat={setCondidat}/>
                 </div>
             </div>
