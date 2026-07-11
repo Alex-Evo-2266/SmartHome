@@ -20,11 +20,11 @@ export enum StatusDevice {
   
   export enum TypeDeviceField {
     BINARY = "binary",
-	NUMBER = "number",
-	TEXT = "text",
-	ENUM = "enum",
-	BASE = "base",
-	COUNTER = "counter"
+    NUMBER = "number",
+    TEXT = "text",
+    ENUM = "enum",
+    BASE = "base",
+    COUNTER = "counter"
   }
   
   export interface DeviceSerializeFieldSchema {

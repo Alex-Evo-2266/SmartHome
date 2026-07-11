@@ -1,103 +1,85 @@
-import { Dashboard, DashboardCard, DashboardPageContext, useDashboardAPI, WIDTH_PANEL } from "@src/entites/dashboard"
-import { useRoom } from "@src/features/Room"
-import { DialogPortal } from "@src/shared"
-import { useAppDispatch, useAppSelector } from "@src/shared/lib/hooks/redux"
-import { hideMenu, showBaseMenu } from "@src/shared/lib/reducers/menuReducer"
-import { GridCard } from "@src/widgets/Dashboard"
-import { FAB, GridLayout, GridLayoutItem, ToolsIcon } from "alex-evo-sh-ui-kit"
-import { useCallback, useEffect, useState } from "react"
-import { useParams } from 'react-router-dom';
 
-import { CardDialog } from "./CreateCardDialog"
+import { Dashboard, DashboardMainProvider, WidgetSchema, type DashboardSchema } from "alex-evo-web-constructor"
+import { FAB, ToolsIcon } from "alex-evo-sh-ui-kit"
+import { createRuntime } from "../helpers/dashboardRegistary"
+import { useMemo, useState } from "react"
+import { Sidebar } from "@src/shared/ui/SideBar"
+import { TreeBuilder, TreeNodeModel } from "alex-evo-tree"
+import { DialogPortal } from "@src/shared"
+import { WidgetsStoreContext, WidgetStore } from "../helpers/widgetsStore"
+import { AddWidgetgDialog } from "./dialogs/addWidgetDialog"
 
 
 export const PreviewDashboardPage = () => {
 
-    const { id } = useParams<{id: string}>();
-    const {rooms} = useRoom()
-    const dispatch = useAppDispatch()
-    const {visible} = useAppSelector(state=>state.menu)
-    const {getDashboard, updateDashboard} = useDashboardAPI()
-    const [dashboard, setDashboard] = useState<Dashboard | null>(null)
+    const [schema] = useState<DashboardSchema>({
+        version: "1",
+        blocks: {},
+        rootWidgets: [],
+        layout: "waterfall"
+    }) 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [dialogVisible, setDialogVisible] = useState<{parent: null | string, index: number} | null>(null)
 
-    const [visibleCreateCard, setVisibleCreateCard] = useState(false)
+    const widgetsStore = useMemo(()=>new WidgetStore(),[]) 
+    const runtime = useMemo(()=>createRuntime(widgetsStore),[widgetsStore]) 
 
-    const loadDashboard = useCallback(async()=>{
-        if(id)
-        {
-            const data = await getDashboard(id)
-            setDashboard(data)
-        }
-    },[getDashboard, id])
-
-    const changeCard = useCallback((data: DashboardCard, index: number)=>{
-        setDashboard(prev=>{
-            if(prev === null)
-                return null
-            const cards = prev.cards.slice()
-            cards[index] = data
-            return {...prev, cards:[...cards]}
-        })
-    },[])
-
-    const addCard = async (data: DashboardCard) => {
-        setDashboard(prev=>{
-            if(prev === null)
-                return null
-            return{...prev, cards: [...(prev?.cards ?? []), data]}})
+    const showTool = () =>{
+        setIsSidebarOpen(true)
     }
-    
-    const save = useCallback(() => {
-        if(dashboard !== null && id !== undefined)
-            updateDashboard(id, dashboard)
-    },[updateDashboard, id, dashboard])
 
-    const showTool = useCallback((e?:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
-        if(visible)
-            dispatch(hideMenu())
-        else
-        {
-            const poz = {x: e?.clientX ?? 0, y: e?.clientY ?? 0}
-            dispatch(showBaseMenu([
-                {
-                    title: "add card",
-                    onClick: ()=>setVisibleCreateCard(true)
-                },
-                {
-                    title: "save",
-                    onClick: save
-                }
-            ], poz.x + 60, poz.y, {autoHide: true}))
+    const addCard = (event: any) => {
+        console.log(event)
+    }
+    const closeSidebar = () => {
+        setIsSidebarOpen(false)
+    }
+
+    function f1(schema: DashboardSchema, block: WidgetSchema):TreeNodeModel{
+        return {
+            id: block.id,
+            title: block.type,
+            type: block.type,
+            data: block.data,
+            children: block.children ? block.children.map((item)=>f1(schema, schema.blocks[item])) : []
         }
-            
-    },[dispatch, visible, save])
+    }
 
-    useEffect(()=>{
-        loadDashboard()
-    },[loadDashboard])
+    function convertForTree(schema: DashboardSchema):TreeNodeModel[]{
+        return schema.rootWidgets.map((item)=>f1(schema, schema.blocks[item]))
+    }
 
     return(
-        <DashboardPageContext.Provider value={{rooms}}>
-            <div className="home-page container-page">
-                <GridLayout itemWith={`${WIDTH_PANEL}px`}>
+        <WidgetsStoreContext.Provider value={widgetsStore}>
+            <div style={{ display: 'flex', height: '100vh', position: 'relative' }}>
+                <div style={{ 
+                    flex: 1, 
+                    transition: 'margin-right 0.3s ease',
+                }}>
+                
+                    <DashboardMainProvider
+                        runtime={runtime}
+                        schema={schema}
+                    >
+                        <Dashboard
+                            schema={schema}
+                        />
+                    </DashboardMainProvider>
+                </div>
+
+                <FAB icon={<ToolsIcon/>} onClick={showTool}/>
+                {/* Боковая панель */}
+                <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar}>
+                    <TreeBuilder onInsert={(parent, index)=>setDialogVisible({parent, index})} items={convertForTree(schema)} renderNode={(node)=>(<div>{node.title}</div>)}/>
+                </Sidebar>
+
                 {
-                    dashboard?.cards.map((item, index)=>(
-                        <GridLayoutItem key={index}>
-                            <GridCard cardData={item} onSave={(data)=>changeCard(data, index)}/>
-                        </GridLayoutItem>
-                    ))
+                    !!dialogVisible && <DialogPortal>
+                        <AddWidgetgDialog onHide={()=>setDialogVisible(null)}/>
+                    </DialogPortal>
                 }
-                </GridLayout>
+                
             </div>
-            <FAB icon={<ToolsIcon/>} onClick={showTool}/>
-            {
-                visibleCreateCard && 
-                <DialogPortal>
-                    <CardDialog onSave={addCard} onHide={()=>setVisibleCreateCard(false)}/>
-                </DialogPortal>
-            }
-            
-        </DashboardPageContext.Provider>
-        
+        </WidgetsStoreContext.Provider>
     )
 }

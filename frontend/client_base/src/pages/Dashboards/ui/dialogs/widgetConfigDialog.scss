@@ -1,0 +1,22 @@
+.widget-dialog{
+    display: flex;
+    &_left-column{
+        width: 300px;
+    }
+    &_right-column{
+        flex: 1;
+    }
+}
+
+.widget-dialog_steps{
+    display: flex;
+    justify-content: end;
+    &_step{
+        background: var(--Secondary-container-color);
+        color: var(--On-secondary-container-color);
+        &_active{
+            background: var(--Secondary-color);
+            color: var(--On-secondary-color);
+        }
+    }
+}

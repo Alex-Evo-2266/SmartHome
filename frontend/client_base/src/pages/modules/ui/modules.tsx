@@ -1,5 +1,4 @@
 import { Panel } from 'alex-evo-sh-ui-kit';
-import { WebConstructor } from 'alex-evo-web-constructor';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -77,16 +76,5 @@ export const ModulesPage = () => {
         )
     }
 
-    return (
-        <div className='container-page'>
-            <WebConstructor 
-            containerMenu={document.getElementById(MENU_ROOT_ID)} 
-            containerModal={document.getElementById(MODAL_ROOT_ID)}
-            data={pageData.page.page} 
-            dialogs={pageData.dialogs} 
-            menu={pageData.menu}
-            fetchFunction={fetchData}
-            />
-        </div>
-    )
+    return (null)
 }
