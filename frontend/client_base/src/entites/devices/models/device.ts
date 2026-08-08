@@ -1,4 +1,6 @@
 import { TypeDevice } from "./type";
+import {TypeDeviceField} from '../../../shared/types/enums'
+export {TypeDeviceField}
 
 export enum ReceivedDataFormat {
     JSON = "json",
@@ -16,15 +18,6 @@ export enum StatusDevice {
   export  enum DeviceGetData {
     PULL = "pull",
 	PUSH = 'push'
-  }
-  
-  export enum TypeDeviceField {
-    BINARY = "binary",
-    NUMBER = "number",
-    TEXT = "text",
-    ENUM = "enum",
-    BASE = "base",
-    COUNTER = "counter"
   }
   
   export interface DeviceSerializeFieldSchema {

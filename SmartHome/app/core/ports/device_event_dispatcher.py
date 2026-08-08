@@ -29,6 +29,7 @@ class DeviceEventDispatcher:
         # - debounce / throttle
         # - агрегацию
         try:
+            print(event.changes, "p0")
             snapshot = self._store.get_snapshot(event.system_name)
             for field in snapshot.description.fields:
                 if field.name in event.changes:
@@ -39,9 +40,9 @@ class DeviceEventDispatcher:
                             event.changes[field.name] = "0"
             
             await self._store.apply_patch_async(
-            event.system_name,
-            event.changes
-        )
+                event.system_name,
+                event.changes
+            )
         except Exception as e:
             logger.error(f"Error serialise event: {e}")
             raise

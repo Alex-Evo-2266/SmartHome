@@ -2,7 +2,8 @@ import logging
 from app.core.entities.device.baseDevice import BaseDevice
 from app.schemas.device.config import ConfigSchema, ChangeField
 from app.db.cache.device.cach_field import get_cached_last_value
-
+# from app.core.ports.device_event_dispatcher import dispatcher
+# from app.core.state.event import DeviceEvent
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
@@ -21,6 +22,16 @@ class Virtual(BaseDevice):
     async def set_value(self, field_id: str, value: str, *, script:bool = False, save_status: bool = True):
 
         await super().set_value(field_id, value, script=script, save_status=save_status)
+
+        # field = self.get_field(field_id)
+        # changes = {field.get_name(): value}
+        # event = DeviceEvent(
+        #     system_name=self.get_schema().system_name,
+        #     source="virtual",
+        #     changes=changes
+        # )
+
+        # await dispatcher.emit(event)
 
     async def async_init(self):
         for field in self.fields:

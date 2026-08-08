@@ -1,26 +1,24 @@
 import { ArrowRight, Chips, FullScreenTemplateDialog, ScreenSize, useScreenSize} from "alex-evo-sh-ui-kit"
 import './widgetConfigDialog.scss'
 import React, { useCallback, useMemo, useState } from "react"
-import { useWidgetsStore } from "../../helpers/widgetsStore"
 import { Dashboard, DashboardMainProvider, DashboardSchema, WidgetSchema } from "alex-evo-web-constructor"
-import { createRuntime } from "../../helpers/dashboardRegistary"
+import { IcreateRuntime } from "../../helpers/dashboardRegistary"
 import { DialogButtonType } from "alex-evo-sh-ui-kit/dist/lib/ui/Dialog/types"
 import { WidgetStepDialogProps } from "./types"
 
 interface WidgetConfigDialogProps{
     onHide: ()=>void
+    runtime: IcreateRuntime
     steps:{
             title: string,
             component: React.FC<WidgetStepDialogProps>
         }[]
 }
 
-export const WidgetConfigDialog = ({onHide, steps}:WidgetConfigDialogProps) => {
+export const WidgetConfigDialog = ({onHide, steps, runtime}:WidgetConfigDialogProps) => {
 
     const [step, setStep] = useState<number>(0)
-    const widgetsStore = useWidgetsStore()
     const {screen} = useScreenSize()
-    const runtime = useMemo(()=>widgetsStore ? createRuntime(widgetsStore):null,[widgetsStore]) 
     const [condidat, setCondidat] = useState<WidgetSchema | null>(null)
     const schema = useMemo<DashboardSchema>(()=>{
         return {
@@ -47,6 +45,12 @@ export const WidgetConfigDialog = ({onHide, steps}:WidgetConfigDialogProps) => {
         setStep(prev=>steps.length - 1 <= prev ? prev : prev + 1)
     },[steps])
 
+    const setStepHandler = useCallback((step:number) => {
+        if(step < 0)step = 0
+        if(step > steps.length - 1)step = steps.length - 1
+        setStep(step)
+    },[steps])
+
     const renderButtons = useCallback(()=>{
         const btns:DialogButtonType[] = [{
             text: "cancel",
@@ -68,12 +72,16 @@ export const WidgetConfigDialog = ({onHide, steps}:WidgetConfigDialogProps) => {
     return(
         <FullScreenTemplateDialog maxWidth="calc(90% - 80px)" onHide={onHide} btns={renderButtons()}>
             {
-                steps.length > 0?
+                steps.length > 1?
                 <div className={`widget-dialog_steps`}>
                     {
                         steps.map((item, i)=>(
                             <React.Fragment key={item.title}>
-                            <Chips className={`widget-dialog_steps_step${step===i?"_active":""}`} text={item.title}/>
+                            <Chips 
+                                className={`widget-dialog_steps_step${step===i?"_active":""}`} 
+                                text={item.title}
+                                onClick={step>i ? ()=>setStepHandler(i) : undefined}
+                            />
                             {
                                 (steps.length - 1 !== i)?
                                 <ArrowRight/>:null

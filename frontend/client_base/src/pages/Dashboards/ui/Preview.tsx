@@ -1,13 +1,16 @@
 
-import { Dashboard, DashboardMainProvider, WidgetSchema, type DashboardSchema } from "alex-evo-web-constructor"
+import { Dashboard, DashboardMainProvider, useData, WidgetSchema, type DashboardSchema } from "alex-evo-web-constructor"
 import { FAB, ToolsIcon } from "alex-evo-sh-ui-kit"
-import { createRuntime } from "../helpers/dashboardRegistary"
-import { useMemo, useState } from "react"
+import { createRuntime, IcreateRuntime } from "../helpers/dashboardRegistary"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Sidebar } from "@src/shared/ui/SideBar"
 import { TreeBuilder, TreeNodeModel } from "alex-evo-tree"
 import { DialogPortal } from "@src/shared"
 import { WidgetsStoreContext, WidgetStore } from "../helpers/widgetsStore"
 import { AddWidgetgDialog } from "./dialogs/addWidgetDialog"
+import { useAppSelector } from "@src/shared/lib/hooks/redux"
+import { useRoom } from "@src/features/Room"
+import { TypeDeviceField } from "@src/entites/devices"
 
 
 export const PreviewDashboardPage = () => {
@@ -22,15 +25,57 @@ export const PreviewDashboardPage = () => {
     const [dialogVisible, setDialogVisible] = useState<{parent: null | string, index: number} | null>(null)
 
     const widgetsStore = useMemo(()=>new WidgetStore(),[]) 
-    const runtime = useMemo(()=>createRuntime(widgetsStore),[widgetsStore]) 
+    const { devicesData } = useAppSelector((state) => state.devices);
+    const {rooms} = useRoom()
+
+    const runtime = useMemo<IcreateRuntime>(()=>createRuntime(widgetsStore),[widgetsStore])
+    
+    const getValueRoomDevice = useCallback((devices:{system_name: string, id_field_device:string}[], type: TypeDeviceField)=>{
+        
+        const conds = devicesData.filter(dev=>devices.map(item=>item.system_name).includes(dev.system_name))
+        const conds_field = conds
+                                .map(dev=>dev.fields)
+                                ?.filter(fields=>!!fields && fields
+                                    .filter(field=>devices
+                                        .map(item=>item.id_field_device)
+                                        .includes(field.id)
+                                    )
+                                )
+                                .flat()
+                                .filter(item=>item !== undefined)
+        if(type === TypeDeviceField.TEXT || type === TypeDeviceField.BASE || type === TypeDeviceField.ENUM)
+            return conds_field.length === 0? "": conds_field[0].value ?? ""
+        if(type === TypeDeviceField.BINARY){
+            return conds_field.some(item=>item.value && ["true", true, 1, "1"].includes(item.value))
+        }
+        if(type === TypeDeviceField.NUMBER || type === TypeDeviceField.COUNTER){
+           return Math.max(...conds_field.map(item=>Number(item.value)).filter(item=>!Number.isNaN(item))) 
+        }
+
+
+    },[devicesData])
+
+    useEffect(()=>{
+        console.log("rooms", rooms)
+        rooms.forEach((item)=>{
+            for(let key in item.device_room){
+                for(let field_key in item.device_room[key].fields){
+                    const val = getValueRoomDevice(item.device_room[key].fields[field_key].devices, item.device_room[key].fields[field_key].field_type)
+                    runtime.store.set(`rooms.${item.name_room}.${key}.${field_key}`, val)
+                }
+            }
+        })
+        devicesData.forEach(dev=>{
+            dev.fields?.forEach(field=>{
+                runtime.store.set(`devices.${dev.system_name}.${field.id}`, field.value)
+            })
+        })
+    },[devicesData, rooms, getValueRoomDevice])
 
     const showTool = () =>{
         setIsSidebarOpen(true)
     }
 
-    const addCard = (event: any) => {
-        console.log(event)
-    }
     const closeSidebar = () => {
         setIsSidebarOpen(false)
     }
@@ -51,20 +96,20 @@ export const PreviewDashboardPage = () => {
 
     return(
         <WidgetsStoreContext.Provider value={widgetsStore}>
+            <DashboardMainProvider
+                runtime={runtime}
+                schema={schema}
+            >
             <div style={{ display: 'flex', height: '100vh', position: 'relative' }}>
                 <div style={{ 
                     flex: 1, 
                     transition: 'margin-right 0.3s ease',
                 }}>
                 
-                    <DashboardMainProvider
-                        runtime={runtime}
-                        schema={schema}
-                    >
+
                         <Dashboard
                             schema={schema}
                         />
-                    </DashboardMainProvider>
                 </div>
 
                 <FAB icon={<ToolsIcon/>} onClick={showTool}/>
@@ -75,11 +120,12 @@ export const PreviewDashboardPage = () => {
 
                 {
                     !!dialogVisible && <DialogPortal>
-                        <AddWidgetgDialog onHide={()=>setDialogVisible(null)}/>
+                        <AddWidgetgDialog runtime={runtime} onHide={()=>setDialogVisible(null)}/>
                     </DialogPortal>
                 }
                 
             </div>
+            </DashboardMainProvider>
         </WidgetsStoreContext.Provider>
     )
 }

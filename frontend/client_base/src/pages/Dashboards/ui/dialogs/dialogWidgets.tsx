@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from "react"
 import { useWidgets } from "../../helpers/widgetsStore"
 import { WidgetStepDialogProps } from "./types"
 import { DataNode, WidgetSchema } from "alex-evo-web-constructor"
+import { v4 as uuidv4 } from 'uuid';
 
 export const WidgetChoiseDialog:React.FC<WidgetStepDialogProps> = ({setCondidat}) => {
 
@@ -26,8 +27,8 @@ export const WidgetChoiseDialog:React.FC<WidgetStepDialogProps> = ({setCondidat}
         console.log(cond)
         if(!cond)return
         const widget:WidgetSchema = {
-            id: cond.id,
-            type: cond.type
+            id: uuidv4(),
+            type: cond.id
         }
         const data:Record<string, DataNode> = {}
         cond.settings?.forEach(item=>{

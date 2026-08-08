@@ -1,49 +1,7 @@
-import { TypeDeviceField } from "@src/entites/devices";
+import {WidgetStoreItem } from "@src/entites/dashboard/types/typeData";
 import { WidgetDefinition } from "alex-evo-web-constructor";
 import { createContext, useContext, useSyncExternalStore } from "react";
-import { v4 as uuidv4 } from 'uuid';
-
-export type WidgetStoreItemSettingsBase = {
-    lable: string
-    data_name: string
-}
-
-export type WidgetStoreItemSettingsNumber = WidgetStoreItemSettingsBase & {
-    type: TypeDeviceField.NUMBER | TypeDeviceField.COUNTER
-    sourse: "device" | "room" | "manula" | "binding" | "expression"
-    default?: number
-}
-
-export type WidgetStoreItemSettingsBinary = WidgetStoreItemSettingsBase & {
-    type: TypeDeviceField.BINARY
-    sourse: "device" | "room" | "manula" | "binding"
-    default?: boolean
-}
-
-export type WidgetStoreItemSettingsText = WidgetStoreItemSettingsBase & {
-    type: TypeDeviceField.TEXT | TypeDeviceField.BASE
-    sourse: "device" | "room" | "manula" | "binding"
-    default?: string
-}
-
-export type WidgetStoreItemSettingsEnum = WidgetStoreItemSettingsBase &{
-    type: TypeDeviceField.ENUM
-    sourse: "device" | "room" | "manula" | "binding"
-    default?: string
-    enum_values?: string[]
-}
-
-export type WidgetStoreItemSettings = WidgetStoreItemSettingsNumber | WidgetStoreItemSettingsBinary | WidgetStoreItemSettingsText | WidgetStoreItemSettingsEnum
-
-export interface WidgetStoreItem extends WidgetDefinition{
-    id: string
-    description?: string
-    name: string
-    icon?: React.ReactNode
-
-    settings?: WidgetStoreItemSettings[]
-
-}
+// import { v4 as uuidv4 } from 'uuid';
 
 export class WidgetStore {
     private widgets = new Map<string, WidgetStoreItem>();
@@ -66,10 +24,16 @@ export class WidgetStore {
         };
     }
 
-    register(widget: Omit<WidgetStoreItem, "id">) {
-        this.widgets.set(widget.type, {...widget, id: uuidv4()});
-        this.updateSnapshot()
-        this.emit();
+    register(widget: WidgetStoreItem) {
+        if(this.widgets.has(widget.id))
+        {
+            console.error(`alrady exist ${widget.id}`)
+        }
+        else{
+            this.widgets.set(widget.id, {...widget});
+            this.updateSnapshot()
+            this.emit();
+        }
     }
 
     unregister(type: string) {
@@ -89,14 +53,14 @@ export class WidgetStore {
         const cond = this.widgets.get(type);
         if(!cond) return undefined
         return {
-            type: cond.type,
+            type: cond.id,
             component: cond.component
         }
     }
 
     all_widget_definition():WidgetDefinition[] {
         return this.all().map(item=>({
-            type: item.type,
+            type: item.id,
             component: item.component
         }))
     }
