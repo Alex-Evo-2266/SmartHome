@@ -1,6 +1,6 @@
 
 import { Dashboard, DashboardMainProvider, WidgetSchema, type DashboardSchema } from "alex-evo-web-constructor"
-import { FAB, ToolsIcon } from "alex-evo-sh-ui-kit"
+import { Button, FAB, ToolsIcon } from "alex-evo-sh-ui-kit"
 import { createRuntime, IcreateRuntime } from "../helpers/dashboardRegistary"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Sidebar } from "@src/shared/ui/SideBar"
@@ -12,9 +12,16 @@ import { useAppSelector } from "@src/shared/lib/hooks/redux"
 import { useRoom } from "@src/features/Room"
 import { TypeDeviceField } from "@src/entites/devices"
 import { EditWidgetgDialog } from "./dialogs/editWidgetDialog"
+import { useDashboardAPI } from "@src/entites/dashboard"
+import { useParams } from 'react-router-dom';
 
 
 export const PreviewDashboardPage = () => {
+
+    const {updateDashboard, getDashboard} = useDashboardAPI()
+    const { id } = useParams<{id: string}>();
+
+    const [dashboard, setDashboard] = useState<{id:string, title:string, private: boolean}>({id:"", title:"", private:false})
 
     const [schema, setSchema] = useState<DashboardSchema>({
         version: "1",
@@ -22,7 +29,6 @@ export const PreviewDashboardPage = () => {
         rootWidgets: [],
         layout: "waterfall"
     }) 
-    console.log(schema)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [dialogVisible, setDialogVisible] = useState<{parent: null | string, index: number} | null>(null)
     const [dialogEditVisible, setDialogEditVisible] = useState<string | null>(null)
@@ -30,6 +36,17 @@ export const PreviewDashboardPage = () => {
     const widgetsStore = useMemo(()=>new WidgetStore(),[]) 
     const { devicesData } = useAppSelector((state) => state.devices);
     const {rooms} = useRoom()
+
+    const loadDashboard = useCallback(async()=>{
+        if(!id)return
+        const data = await getDashboard(id)
+        setDashboard(data)
+        setSchema(data.schema)
+    },[getDashboard, id])
+
+    useEffect(()=>{
+        loadDashboard()
+    },[loadDashboard])
 
     const runtime = useMemo<IcreateRuntime>(()=>createRuntime(widgetsStore),[widgetsStore])
     
@@ -84,12 +101,13 @@ export const PreviewDashboardPage = () => {
     }
 
     function f1(schema: DashboardSchema, block: WidgetSchema):TreeNodeModel{
+        console.log(schema, block)
         return {
             id: block.id,
             title: block.type,
             type: block.type,
             data: block.data,
-            children: block.children !== undefined ? block.children.map((item)=>f1(schema, schema.blocks[item])) : undefined
+            children: block.children !== undefined && block.children !== null ? block.children.map((item)=>f1(schema, schema.blocks[item])) : undefined
         }
     }
 
@@ -120,6 +138,11 @@ export const PreviewDashboardPage = () => {
         })
     },[])
 
+    const saveHandler = useCallback(()=>{
+        if(!id)return
+        updateDashboard(id, {...dashboard, schema:schema})
+    },[schema, dashboard, id])
+
     return(
         <WidgetsStoreContext.Provider value={widgetsStore}>
             <DashboardMainProvider
@@ -146,6 +169,7 @@ export const PreviewDashboardPage = () => {
                         items={convertForTree(schema)} 
                         renderNode={(node)=>(<div onClick={()=>{setDialogEditVisible(node.id)}}>{node.title}</div>)}
                     />
+                    <Button onClick={saveHandler}>save</Button>
                 </Sidebar>
 
                 {

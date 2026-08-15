@@ -1,3 +1,5 @@
+import { DashboardSchema } from "alex-evo-web-constructor"
+
 export type TypeControlElements = "bool" | "number" | "text" | "enum" | "button"
 
 export interface ControlElementbase{
@@ -45,7 +47,7 @@ export interface Dashboard{
     title: string
     id: string
     private: boolean,
-    cards: DashboardCard[]
+    schema: DashboardSchema
 }
 
 export interface Dashboards{

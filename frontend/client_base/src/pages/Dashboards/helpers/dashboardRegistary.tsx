@@ -52,6 +52,7 @@ function layoutRegistry(){
     layouts.register({ type: "stack", component: StackLayout });
     layouts.register({ type: "side-by-side", component: SideBySideLayout });
     layouts.register({ type: "waterfall", component: WaterfallLayout });
+    layouts.register({ type: "base", component: WaterfallLayout });
     layouts.register({ type: "centered", component: CenteredLayout });
 
     return layouts

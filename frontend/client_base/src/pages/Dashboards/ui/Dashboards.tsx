@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const DashboardsPage = () => {
 
-    const {getDashboardsAllType, createDashboard, setUserDashboard} = useDashboardAPI()
+    const {getDashboardsAll, createDashboard} = useDashboardAPI()
     const [search, setSearchQuery] = useState("")
     const [addDeviceDialogVisible, setAddDeviceDialogVisible] = useState(false)
     const [dashboards, setDashboards] = useState<Dashboard[]>([])
@@ -39,20 +39,24 @@ export const DashboardsPage = () => {
     const navigate = useNavigate()
 
     const loadDashboard = useCallback(async() => {
-        const data = await getDashboardsAllType()
+        const data = await getDashboardsAll()
         if(data)
         {
-            setDashboards(data[0])
-            setUserDashboards(data[1])
+            setDashboards(data)
         }
-    },[getDashboardsAllType])
+    },[getDashboardsAll])
 
     const addDashboard = useCallback(async(name: string) => {
         await createDashboard({
             title: name,
             id: uuidv4(),
-            cards:[],
-            private: false
+            private: false,
+            schema:{
+                version: "1",
+                layout: "base",
+                blocks:{},
+                rootWidgets:[]
+            }
         })
         await loadDashboard()
     },[createDashboard, loadDashboard])
@@ -74,16 +78,16 @@ export const DashboardsPage = () => {
     }
 
     const addUserDashboards = useCallback(async(id: string) => {
-        const data = [...(userDashboards.map(i=>i.id)), id]
-        await setUserDashboard(data)
-        loadDashboard()
-    },[setUserDashboard, userDashboards, loadDashboard])
+        // const data = [...(userDashboards.map(i=>i.id)), id]
+        // await setUserDashboard(data)
+        // loadDashboard()
+    },[userDashboards, loadDashboard])
 
     const deleteUserDashboards = useCallback(async(id: string) => {
-        const data = userDashboards.map(i=>i.id).filter(i=>i!==id)
-        await setUserDashboard(data)
-        loadDashboard()
-    },[setUserDashboard, userDashboards, loadDashboard])
+        // const data = userDashboards.map(i=>i.id).filter(i=>i!==id)
+        // await setUserDashboard(data)
+        // loadDashboard()
+    },[userDashboards, loadDashboard])
 
     const columns:IColumn[] = [
         {
