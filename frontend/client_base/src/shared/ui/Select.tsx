@@ -10,6 +10,7 @@ interface ISelectFieldProps{
     items: (IOption | string)[]
     border?: boolean
     name?: string
+    disabled?: boolean;
     error?: boolean
     onFocus?: (e:React.FocusEvent<HTMLInputElement>)=>void
     onBlur?: (e:React.FocusEvent<HTMLInputElement>)=>void

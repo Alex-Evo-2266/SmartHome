@@ -1,13 +1,13 @@
-import { WidgetStoreItemSettingsText } from "@src/entites/dashboard/types/typeData"
+import { WidgetStoreItemSettingsNumber } from "@src/entites/dashboard/types/typeData"
 import { NumberField } from "alex-evo-sh-ui-kit"
 
-export interface TextManualProps{
+export interface NumberManualProps{
     onChange:(value: any, name?: string | undefined)=>void,
     value: string
-    settings: WidgetStoreItemSettingsText
+    settings: WidgetStoreItemSettingsNumber
 }
 
-export const TextManual = (props: TextManualProps) => {
+export const NumberManual = (props: NumberManualProps) => {
 
     return(
         <NumberField 

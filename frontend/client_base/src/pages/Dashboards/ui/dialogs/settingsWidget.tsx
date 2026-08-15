@@ -124,7 +124,7 @@ export const WidgetSettingsDialog:React.FC<WidgetStepDialogProps> = ({setCondida
         <>
             {
                 settings?.map(item=>{
-                    return (<SettingsField key={item.data_name} settings={item} value={fields[item.data_name]} onChange={fieldHandler}/>)
+                    return (<SettingsField key={item.data_name} settings={item} value={condidat?.data?.[item.data_name] ?? ""} onChange={fieldHandler}/>)
                 })
             }
             <JsonContainer name="data" readonly data={isValidJsonData(store_dump)?store_dump:{}}/>

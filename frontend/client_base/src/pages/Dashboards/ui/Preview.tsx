@@ -1,5 +1,5 @@
 
-import { Dashboard, DashboardMainProvider, useData, WidgetSchema, type DashboardSchema } from "alex-evo-web-constructor"
+import { Dashboard, DashboardMainProvider, WidgetSchema, type DashboardSchema } from "alex-evo-web-constructor"
 import { FAB, ToolsIcon } from "alex-evo-sh-ui-kit"
 import { createRuntime, IcreateRuntime } from "../helpers/dashboardRegistary"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -11,18 +11,21 @@ import { AddWidgetgDialog } from "./dialogs/addWidgetDialog"
 import { useAppSelector } from "@src/shared/lib/hooks/redux"
 import { useRoom } from "@src/features/Room"
 import { TypeDeviceField } from "@src/entites/devices"
+import { EditWidgetgDialog } from "./dialogs/editWidgetDialog"
 
 
 export const PreviewDashboardPage = () => {
 
-    const [schema] = useState<DashboardSchema>({
+    const [schema, setSchema] = useState<DashboardSchema>({
         version: "1",
         blocks: {},
         rootWidgets: [],
         layout: "waterfall"
     }) 
+    console.log(schema)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [dialogVisible, setDialogVisible] = useState<{parent: null | string, index: number} | null>(null)
+    const [dialogEditVisible, setDialogEditVisible] = useState<string | null>(null)
 
     const widgetsStore = useMemo(()=>new WidgetStore(),[]) 
     const { devicesData } = useAppSelector((state) => state.devices);
@@ -86,13 +89,36 @@ export const PreviewDashboardPage = () => {
             title: block.type,
             type: block.type,
             data: block.data,
-            children: block.children ? block.children.map((item)=>f1(schema, schema.blocks[item])) : []
+            children: block.children !== undefined ? block.children.map((item)=>f1(schema, schema.blocks[item])) : undefined
         }
     }
 
     function convertForTree(schema: DashboardSchema):TreeNodeModel[]{
         return schema.rootWidgets.map((item)=>f1(schema, schema.blocks[item]))
     }
+
+    const addWidgetHandler = useCallback((widget: WidgetSchema)=>{
+        if(!dialogVisible)return;
+        setSchema(prev=>{
+            const root = prev.rootWidgets.slice()
+            const blocks = {...prev.blocks}
+            if(dialogVisible.parent === null){
+                root.splice(dialogVisible.index, 0, widget.id)
+            }
+            else{
+                blocks[dialogVisible.parent].children?.splice(dialogVisible.index, 0, widget.id)
+            }
+            return{...prev, blocks:{...blocks, [widget.id]:widget}, rootWidgets:root}
+        })
+        setDialogVisible(null)
+    },[dialogVisible])
+
+
+    const editWidgetHandler = useCallback((widget: WidgetSchema)=>{
+        setSchema(prev=>{
+            return{...prev, blocks:{...prev.blocks, [widget.id]:widget}}
+        })
+    },[])
 
     return(
         <WidgetsStoreContext.Provider value={widgetsStore}>
@@ -115,12 +141,22 @@ export const PreviewDashboardPage = () => {
                 <FAB icon={<ToolsIcon/>} onClick={showTool}/>
                 {/* Боковая панель */}
                 <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar}>
-                    <TreeBuilder onInsert={(parent, index)=>setDialogVisible({parent, index})} items={convertForTree(schema)} renderNode={(node)=>(<div>{node.title}</div>)}/>
+                    <TreeBuilder 
+                        onInsert={(parent, index)=>setDialogVisible({parent, index})} 
+                        items={convertForTree(schema)} 
+                        renderNode={(node)=>(<div onClick={()=>{setDialogEditVisible(node.id)}}>{node.title}</div>)}
+                    />
                 </Sidebar>
 
                 {
                     !!dialogVisible && <DialogPortal>
-                        <AddWidgetgDialog runtime={runtime} onHide={()=>setDialogVisible(null)}/>
+                        <AddWidgetgDialog runtime={runtime} onHide={()=>setDialogVisible(null)} onSave={addWidgetHandler}/>
+                    </DialogPortal>
+                }
+
+                {
+                    !!dialogEditVisible && <DialogPortal>
+                        <EditWidgetgDialog data={schema.blocks[dialogEditVisible]} runtime={runtime} onHide={()=>setDialogEditVisible(null)} onSave={editWidgetHandler}/>
                     </DialogPortal>
                 }
                 

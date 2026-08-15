@@ -3,16 +3,61 @@ import { TypeDeviceField } from "@src/entites/devices"
 import { SelectField } from "@src/shared"
 import { useAppSelector } from "@src/shared/lib/hooks/redux"
 import { ContentBox, Typography } from "alex-evo-sh-ui-kit"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
+
+function parseBinding(template:unknown) {
+  // Результат по умолчанию
+  const result = {
+    selectDevice: null,
+    selectDeviceField: null,
+  };
+
+  // Проверяем, что это объект с полем binding
+  if (!template || typeof template !== 'object' || !("binding" in template)) {
+    return result;
+  }
+
+  const bindingStr = template.binding;
+  
+  // Проверяем, что это строка
+  if (typeof bindingStr !== 'string') {
+    return result;
+  }
+
+  // Регулярное выражение для парсинга
+  // Ищем шаблон: rooms.${...}.${...}.${...}
+  const regex = /^devices\.([^}]+)\.([^}]+)$/;
+  const match = bindingStr.match(regex);
+
+  if (!match) {
+    return result;
+  }
+
+  // Извлекаем значения
+  const [, selectDevice, selectDeviceField] = match;
+
+  // Проверяем, что все переменные не пустые
+  if (selectDevice && selectDeviceField) {
+    return {
+      selectDevice: selectDevice.trim(),
+      selectDeviceField: selectDeviceField.trim()
+    };
+  }
+
+  return result;
+}
 
 export interface DeviceSelectProps{
     onChange:(value: any, name?: string | undefined)=>void,
-    value: string
+    value: unknown
     settings: WidgetStoreItemSettings
     types: TypeDeviceField[]
+    readonly: boolean
 }
 
 export const DeviceSelectField = (props: DeviceSelectProps) => {
+
+    const initValue = parseBinding(props.value)
 
     const { devicesData } = useAppSelector((state) => state.devices);
     const devicesDataText = useMemo(()=>
@@ -23,12 +68,24 @@ export const DeviceSelectField = (props: DeviceSelectProps) => {
         ),
         [devicesData, props.types]
     )
-    const [selectDevice, setSelectDevice] = useState<string | null>(null)
+    const [selectDevice, setSelectDevice] = useState<string | null>(initValue.selectDevice)
     const filterFields = useMemo(()=>{
         const curDevice = devicesData.find(item=>item.system_name === selectDevice)
-        return curDevice?.fields?.filter(item=>props.types.includes(item.type)) ?? []
-    },[devicesData, selectDevice, props.types])
-    const [selectField, setSelectField] = useState<string | null>(null)
+        return curDevice?.fields?.filter(item=>
+            props.types.includes(item.type) && 
+            (props.readonly || (!props.readonly && !item.read_only))
+        ) ?? []
+    },[devicesData, selectDevice, props.types, props.readonly])
+    const [selectField, setSelectField] = useState<string | null>(initValue.selectDeviceField)
+
+    const deviceHandler = useCallback((value:string)=>{
+        setSelectDevice(value)
+        setSelectField(null)
+    },[])
+    const deviceFieldHandler = useCallback((value:string)=>{
+        setSelectField(value)
+        props.onChange({binding:`devices.${selectDevice}.${value}`}, props.settings.data_name)
+    },[props.onChange, selectDevice, props.settings.data_name])
 
 
     return(
@@ -38,7 +95,7 @@ export const DeviceSelectField = (props: DeviceSelectProps) => {
                 border 
                 placeholder="devices"
                 items={devicesDataText.map(item=>({title:item.name, value:item.system_name}))}
-                onChange={setSelectDevice}
+                onChange={deviceHandler}
                 value={selectDevice ?? ""}
             />
             {
@@ -47,7 +104,7 @@ export const DeviceSelectField = (props: DeviceSelectProps) => {
                     border 
                     placeholder="field"
                     items={filterFields.map(item=>({title:item.name, value:item.id}))}
-                    onChange={setSelectField}
+                    onChange={deviceFieldHandler}
                     value={selectField ?? ""}
                 />
             }

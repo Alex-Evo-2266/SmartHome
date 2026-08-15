@@ -4,6 +4,7 @@ import { WidgetDefinition } from "alex-evo-web-constructor"
 export type WidgetStoreItemSettingsBase = {
     lable: string
     data_name: string
+    readonly?: boolean
 }
 
 export type WidgetStoreItemSettingsNumber = WidgetStoreItemSettingsBase & {

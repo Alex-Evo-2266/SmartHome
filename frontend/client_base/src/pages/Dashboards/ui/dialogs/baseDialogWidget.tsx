@@ -8,18 +8,20 @@ import { WidgetStepDialogProps } from "./types"
 
 interface WidgetConfigDialogProps{
     onHide: ()=>void
+    onSave: (data: WidgetSchema)=>void
     runtime: IcreateRuntime
     steps:{
             title: string,
             component: React.FC<WidgetStepDialogProps>
         }[]
+    data?: WidgetSchema | null
 }
 
-export const WidgetConfigDialog = ({onHide, steps, runtime}:WidgetConfigDialogProps) => {
+export const WidgetConfigDialog = ({onHide, steps, runtime, onSave, data = null}:WidgetConfigDialogProps) => {
 
     const [step, setStep] = useState<number>(0)
     const {screen} = useScreenSize()
-    const [condidat, setCondidat] = useState<WidgetSchema | null>(null)
+    const [condidat, setCondidat] = useState<WidgetSchema | null>(data)
     const schema = useMemo<DashboardSchema>(()=>{
         return {
             version: "0",
@@ -34,6 +36,11 @@ export const WidgetConfigDialog = ({onHide, steps, runtime}:WidgetConfigDialogPr
             layout: "flex"
         }
     },[condidat])
+
+    const saveHandler = useCallback(() => {
+        if(condidat)
+            onSave(condidat)
+    },[condidat, onSave])
 
     const classSize = {
         [ScreenSize.MOBILE]: "mobile",
@@ -51,7 +58,7 @@ export const WidgetConfigDialog = ({onHide, steps, runtime}:WidgetConfigDialogPr
         setStep(step)
     },[steps])
 
-    const renderButtons = useCallback(()=>{
+    const renderButtons = useMemo(()=>{
         const btns:DialogButtonType[] = [{
             text: "cancel",
             hide: true
@@ -63,6 +70,12 @@ export const WidgetConfigDialog = ({onHide, steps, runtime}:WidgetConfigDialogPr
                 onClick: next
             })
         }
+        else{
+            btns.push({
+                text: "save",
+                success: true
+            })
+        }
         return btns
     },[steps, step, next])
 
@@ -70,7 +83,7 @@ export const WidgetConfigDialog = ({onHide, steps, runtime}:WidgetConfigDialogPr
     const Component = curpage.component
 
     return(
-        <FullScreenTemplateDialog maxWidth="calc(90% - 80px)" onHide={onHide} btns={renderButtons()}>
+        <FullScreenTemplateDialog maxWidth="calc(90% - 80px)" onHide={onHide} btns={renderButtons} onSave={saveHandler}>
             {
                 steps.length > 1?
                 <div className={`widget-dialog_steps`}>

@@ -12,7 +12,7 @@ export interface MetricWidgetProps {
     trendValue?: string;
 }
 
-export function MetricWidget({ widget }: WidgetProps) {
+export function MetricRoomWidget({ widget }: WidgetProps) {
     
     const title = useResolvedData(widget.data?.title) ?? widget.props?.title;
     const icon = useResolvedData(widget.data?.icon) ?? widget.props?.icon;
@@ -94,11 +94,11 @@ export function MetricWidget({ widget }: WidgetProps) {
 }
 
 
-export const MetricWidgetData: WidgetStoreItem = { 
-    id: "metric", 
-    component: MetricWidget,
-    name: "метрика",
-    description: "metric",
+export const MetricRoomWidgetData: WidgetStoreItem = { 
+    id: "metricroom", 
+    component: MetricRoomWidget,
+    name: "метрика комнаты",
+    description: "metricroom",
     settings:[{
         data_name: "title",
         type: TypeDeviceField.TEXT,
@@ -109,10 +109,10 @@ export const MetricWidgetData: WidgetStoreItem = {
     },
     {
         data_name: "value",
-        type: TypeDeviceField.BINARY,
+        type: TypeDeviceField.NUMBER,
         readonly: true,
         lable: "value",
-        sourse: "device"
+        sourse: "room"
     },
     {
         data_name: "subtitle",
