@@ -245,6 +245,67 @@ export const useDashboardAPI = () => {
     )
 
 
+    /**
+     * Получить список активных dashboard.
+     */
+    const getActiveDashboardsCard = useCallback(
+        async () => {
+
+            const data: {dashboards: {id:string, title: string}[]} = await request(
+                `/api-pages/dashboard/active`,
+                TypeRequest.GET,
+            )
+
+            if (!data)
+                return
+
+            return data.dashboards
+
+        },
+        [request],
+    )
+
+    /**
+     * Получить список активных dashboard.
+     */
+    const activateDashboardCard = useCallback(
+        async (dashboard_id:string) => {
+
+            const data: Dashboards = await request(
+                `/api-pages/dashboard/${dashboard_id}/activate`,
+                TypeRequest.POST,
+            )
+
+            if (!data)
+                return
+
+            return data
+
+        },
+        [request],
+    )
+
+    /**
+     * Получить список активных dashboard.
+     */
+    const deactivateDashboardsCard = useCallback(
+        async (dashboard_id:string) => {
+
+            const data: Dashboards = await request(
+                `/api-pages/dashboard/${dashboard_id}/activate`,
+                TypeRequest.DELETE,
+            )
+
+            if (!data)
+                return
+
+            return data
+
+        },
+        [request],
+    )
+
+
     // =========================================================
     // ERROR
     // =========================================================
@@ -270,6 +331,11 @@ export const useDashboardAPI = () => {
     ])
 
 
+
+
+
+
+
     // =========================================================
     // RETURN
     // =========================================================
@@ -288,6 +354,10 @@ export const useDashboardAPI = () => {
         createGlobalDashboard,
         updateGlobalDashboard,
         deleteGlobalDashboard,
+
+        getActiveDashboardsCard,
+        activateDashboardCard,
+        deactivateDashboardsCard,
 
         loading,
     }

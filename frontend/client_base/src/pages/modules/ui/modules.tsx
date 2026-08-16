@@ -2,13 +2,10 @@ import { Panel } from 'alex-evo-sh-ui-kit';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { MENU_ROOT_ID, MODAL_ROOT_ID } from '../../../const';
 import { useModulePageAPI } from '../../../entites/modulePages';
-import { PageData } from '../../../entites/modulePages/models/page';
 import { useNavigationData } from '../../../entites/navigation';
 import { useToken } from '../../../entites/navigation/api/get_temp_token';
 import { Loading } from '../../../shared/ui/Loading';
-import { useFetch } from '../api/moduleFetch';
 
 import './modules.scss'
 
@@ -24,8 +21,7 @@ export const ModulesPage = () => {
 
     
     const {getPage, loading} = useModulePageAPI()
-    const [pageData, setPageData] = useState<null | PageData>(null)
-    const {fetchData} = useFetch(moduleName)
+    const [pageData, setPageData] = useState<null | any>(null)
 
     if(!moduleName || !pageName)
         throw new Error("error page url")

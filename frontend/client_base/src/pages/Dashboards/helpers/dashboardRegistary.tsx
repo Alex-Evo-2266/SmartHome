@@ -1,6 +1,6 @@
 import { DataStore, EventBus, LayoutRegistry, ModalManager, WidgetRegistry } from "alex-evo-web-constructor";
 import { FlexLayout } from "../ui/components/layouts/FlexLayout";
-import { GridLayout, Home } from "alex-evo-sh-ui-kit";
+import { GridLayout } from "alex-evo-sh-ui-kit";
 import { MasonryLayout } from "../ui/components/layouts/MasonryLayout";
 import { DashboardLayout } from "../ui/components/layouts/DashboardLayout";
 import { CardLayout } from "../ui/components/layouts/CardLayout";

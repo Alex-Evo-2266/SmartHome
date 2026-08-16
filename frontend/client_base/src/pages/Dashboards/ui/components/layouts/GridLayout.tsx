@@ -1,5 +1,4 @@
 // layouts/GridLayout.tsx
-import React from 'react';
 
 interface GridLayoutProps {
     children: React.ReactNode;

@@ -7,11 +7,15 @@ from fastapi import (
     HTTPException,
 )
 
+from app.internal.dashboard.models.dashboard import UserDashboard
+
 from app.configuration.settings import ROUTE_PREFIX, DASHBOARD_FOLDER
 from app.internal.dashboard.schemas.dashboard import (
     DashboardIn,
     DashboardOut,
     DashboardsData,
+    ActiveDashboardsData,
+    ActiveDashboardOut
 )
 from app.internal.dashboard.storage.dashboard_storage import (
     DashboardStorage,
@@ -42,6 +46,29 @@ dashboard_storage = DashboardStorage(
 # USER DASHBOARDS
 # ======================================================================
 
+
+@router.get(
+    "/active",
+    response_model=ActiveDashboardsData,
+)
+async def get_active_dashboards(
+    user_id: str = Depends(
+        auth_privilege_dep("base")
+    ),
+):
+    dashboards = await UserDashboard.objects.filter(
+        user_id=user_id,
+    ).all()
+
+    return ActiveDashboardsData(
+        dashboards=[
+            ActiveDashboardOut(
+                id=dashboard.dashboard_id,
+                title=dashboard.title,
+            )
+            for dashboard in dashboards
+        ]
+    )
 
 @router.get(
     "",
@@ -410,4 +437,61 @@ async def delete_dashboard(
 
     return {
         "detail": "Dashboard deleted",
+    }
+
+
+@router.post("/{dashboard_id}/activate")
+async def activate_dashboard(
+    dashboard_id: str,
+    user_id: str = Depends(
+        auth_privilege_dep("page")
+    ),
+):
+    dashboard = dashboard_storage.get_for_user(
+        dashboard_id=dashboard_id,
+        model=DashboardIn,
+        user_id=user_id,
+    )
+
+    if dashboard is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Dashboard not found",
+        )
+
+    exists = await UserDashboard.objects.get_or_none(
+        user_id=user_id,
+        dashboard_id=dashboard_id,
+    )
+
+    if exists is None:
+        await UserDashboard.objects.create(
+            user_id=user_id,
+            dashboard_id=dashboard_id,
+            title=dashboard.title,
+        )
+
+    return {
+        "dashboard_id": dashboard_id,
+        "active": True,
+    }
+
+@router.delete("/{dashboard_id}/activate")
+async def deactivate_dashboard(
+    dashboard_id: str,
+    user_id: str = Depends(
+        auth_privilege_dep("page")
+    ),
+):
+    dashboard = await UserDashboard.objects.get_or_none(
+        user_id=user_id,
+        dashboard_id=dashboard_id,
+    )
+
+    if dashboard is not None:
+        await dashboard.delete()
+
+    return {
+        "dashboard_id": dashboard_id,
+        "active": False,
     }

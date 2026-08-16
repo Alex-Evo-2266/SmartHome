@@ -1,5 +1,5 @@
 // AdvancedAutocomplete.tsx - расширенная версия
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AutocompleteField } from './AutocompleteField';
 
 interface IAdvancedAutocompleteProps {

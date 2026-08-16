@@ -1,5 +1,6 @@
 // layouts/StackLayout.tsx
-import React from 'react';
+
+import { Children, Fragment } from "react";
 
 interface StackLayoutProps {
     children: React.ReactNode;
@@ -21,7 +22,7 @@ export const StackLayout = ({
     align = 'left',
     dividers = false
 }: StackLayoutProps) => {
-    const childrenArray = React.Children.toArray(children);
+    const childrenArray = Children.toArray(children);
     
     return (
         <div style={{
@@ -35,7 +36,7 @@ export const StackLayout = ({
             background: '#f8f9fa'
         }}>
             {childrenArray.map((child, index) => (
-                <React.Fragment key={index}>
+                <Fragment key={index}>
                     <div style={{ width: '100%' }}>
                         {child}
                     </div>
@@ -46,7 +47,7 @@ export const StackLayout = ({
                             background: '#e0e0e0'
                         }} />
                     )}
-                </React.Fragment>
+                </Fragment>
             ))}
         </div>
     );

@@ -1,6 +1,6 @@
 import { ArrowRight, Chips, FullScreenTemplateDialog, ScreenSize, useScreenSize} from "alex-evo-sh-ui-kit"
 import './widgetConfigDialog.scss'
-import React, { useCallback, useMemo, useState } from "react"
+import { Fragment, useCallback, useMemo, useState } from "react"
 import { Dashboard, DashboardMainProvider, DashboardSchema, WidgetSchema } from "alex-evo-web-constructor"
 import { IcreateRuntime } from "../../helpers/dashboardRegistary"
 import { DialogButtonType } from "alex-evo-sh-ui-kit/dist/lib/ui/Dialog/types"
@@ -89,7 +89,7 @@ export const WidgetConfigDialog = ({onHide, steps, runtime, onSave, data = null}
                 <div className={`widget-dialog_steps`}>
                     {
                         steps.map((item, i)=>(
-                            <React.Fragment key={item.title}>
+                            <Fragment key={item.title}>
                             <Chips 
                                 className={`widget-dialog_steps_step${step===i?"_active":""}`} 
                                 text={item.title}
@@ -99,7 +99,7 @@ export const WidgetConfigDialog = ({onHide, steps, runtime, onSave, data = null}
                                 (steps.length - 1 !== i)?
                                 <ArrowRight/>:null
                             }
-                            </React.Fragment>
+                            </Fragment>
                         ))
                     }
                 </div>

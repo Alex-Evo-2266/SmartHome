@@ -1,5 +1,4 @@
 // layouts/CenteredLayout.tsx
-import React from 'react';
 
 interface CenteredLayoutProps {
     children: React.ReactNode;

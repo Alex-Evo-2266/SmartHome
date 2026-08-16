@@ -1,5 +1,5 @@
 // layouts/WaterfallLayout.tsx
-import React, { useEffect, useState } from 'react';
+import { Children, useEffect, useState } from 'react';
 
 interface WaterfallLayoutProps {
     children: React.ReactNode;
@@ -15,7 +15,7 @@ export const WaterfallLayout = ({
     const [columnItems, setColumnItems] = useState<React.ReactNode[][]>([]);
 
     useEffect(() => {
-        const items = React.Children.toArray(children);
+        const items = Children.toArray(children);
         const columnsArray: React.ReactNode[][] = Array.from({ length: columns }, () => []);
         
         // Распределяем элементы по колонкам с учетом высоты

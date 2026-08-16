@@ -270,7 +270,7 @@ services:
     networks: 
       - local_sh_network
     ports:
-      - 8088:80
+      - 8089:80
     environment:
       - PMA_ARBITRARY=1
 

@@ -5,21 +5,34 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
+function sortDeshboard(dashboards: Dashboard[], activeDashboards: {id:string, title: string}[]){
+    const ids = activeDashboards.map(item=>item.id)
+    return dashboards.reduce((acc, item)=>{
+        if(ids.includes(item.id)){
+            acc[0].push(item)
+        }else{
+            acc[1].push(item)
+        }
+        return acc
+    },[[],[]] as [Dashboard[],Dashboard[]])
+}
+
 export const DashboardsPage = () => {
 
-    const {getDashboardsAll, createDashboard} = useDashboardAPI()
+    const {getDashboardsAll, createDashboard, getActiveDashboardsCard, activateDashboardCard, deactivateDashboardsCard} = useDashboardAPI()
     const [search, setSearchQuery] = useState("")
     const [addDeviceDialogVisible, setAddDeviceDialogVisible] = useState(false)
     const [dashboards, setDashboards] = useState<Dashboard[]>([])
-    const [userDashboards, setUserDashboards] = useState<Dashboard[]>([])
+    const [activeDashboards, setActiveDashboards] = useState<{id:string, title: string}[]>([])
     const data = useMemo<IDataItem[]>(()=>{
+        const dsortDashboards = sortDeshboard(dashboards, activeDashboards)
         return [
             {
                 __all__:{
                     content: <Typography type="heading">Active dashboards</Typography>
                 }
             },
-            ...userDashboards.filter(item=>item.title.startsWith(search)).map(item=>({
+            ...dsortDashboards[0].filter(item=>item.title.startsWith(search)).map(item=>({
                 title: item.title,
                 id: item.id,
                 included: "true"
@@ -29,16 +42,22 @@ export const DashboardsPage = () => {
                     content: <Typography type="heading">Other dashboards</Typography>
                 }
             },
-            ...dashboards.filter(item=>item.title.startsWith(search) && !userDashboards.map(i=>i.id).includes(item.id)).map(item=>({
+            ...dsortDashboards[1].filter(item=>item.title.startsWith(search) && !activeDashboards.map(i=>i.id).includes(item.id)).map(item=>({
                 title: item.title,
                 id: item.id,
-                included: userDashboards.map(i=>i.id).includes(item.id)?"true":"false"
+                included: activeDashboards.map(i=>i.id).includes(item.id)?"true":"false"
             }))]
-    },[dashboards, userDashboards, search])
+    },[dashboards, activeDashboards, search])
 
     const navigate = useNavigate()
 
     const loadDashboard = useCallback(async() => {
+        const data2 = await getActiveDashboardsCard()
+        if(data2)
+        {
+            setActiveDashboards(data2)
+        }
+
         const data = await getDashboardsAll()
         if(data)
         {
@@ -78,16 +97,14 @@ export const DashboardsPage = () => {
     }
 
     const addUserDashboards = useCallback(async(id: string) => {
-        // const data = [...(userDashboards.map(i=>i.id)), id]
-        // await setUserDashboard(data)
-        // loadDashboard()
-    },[userDashboards, loadDashboard])
+        await activateDashboardCard(id)
+        await loadDashboard()
+    },[loadDashboard])
 
     const deleteUserDashboards = useCallback(async(id: string) => {
-        // const data = userDashboards.map(i=>i.id).filter(i=>i!==id)
-        // await setUserDashboard(data)
-        // loadDashboard()
-    },[userDashboards, loadDashboard])
+        await deactivateDashboardsCard(id)
+        await loadDashboard()
+    },[loadDashboard])
 
     const columns:IColumn[] = [
         {

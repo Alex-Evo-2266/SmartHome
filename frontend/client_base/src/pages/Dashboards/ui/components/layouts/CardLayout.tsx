@@ -1,5 +1,6 @@
 // layouts/CardLayout.tsx
-import React from 'react';
+
+import { Children } from "react";
 
 interface CardLayoutProps {
     children: React.ReactNode;
@@ -10,7 +11,6 @@ interface CardLayoutProps {
 
 export const CardLayout = ({ 
     children, 
-    columns = 4, 
     gap = '24px',
     cardMinWidth = '250px'
 }: CardLayoutProps) => {
@@ -24,7 +24,7 @@ export const CardLayout = ({
             minHeight: '100vh',
             background: '#f8f9fa'
         }}>
-            {React.Children.map(children, (child) => (
+            {Children.map(children, (child) => (
                 <div style={{
                     background: 'white',
                     borderRadius: '12px',

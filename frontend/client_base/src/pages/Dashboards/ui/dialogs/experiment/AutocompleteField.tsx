@@ -1,5 +1,5 @@
 // AutocompleteField.tsx
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import "./AutocompleteField.scss";
 import { TextField } from "alex-evo-sh-ui-kit";
 
@@ -25,7 +25,6 @@ export const AutocompleteField: React.FC<IAutocompleteFieldProps> = ({
   value,
   onChange,
   placeholder = "Введите значение...",
-  label,
   options,
   onSelect,
   disabled = false,
@@ -46,7 +45,7 @@ export const AutocompleteField: React.FC<IAutocompleteFieldProps> = ({
   
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const debounceTimerRef = useRef<null | number>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isNavigatingRef = useRef(false);
 
   // Функция для получения подсказок

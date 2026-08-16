@@ -1,20 +1,10 @@
 import './widgetConfigDialog.scss'
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo } from "react"
 import { useWidgets } from "../../helpers/widgetsStore"
 import { WidgetStepDialogProps } from "./types"
-import { TypeDeviceField } from '@src/entites/devices'
 import { SettingsField } from './fields'
 import { JsonContainer, JsonData } from 'alex-evo-sh-ui-kit'
 import { useDataStore } from 'alex-evo-web-constructor'
-
-function defaultValueByType(type:TypeDeviceField){
-    if([TypeDeviceField.BASE, TypeDeviceField.TEXT, TypeDeviceField.ENUM].includes(type)) return ""
-    if([TypeDeviceField.NUMBER, TypeDeviceField.COUNTER].includes(type)) return 0
-    if([TypeDeviceField.BINARY].includes(type)) return false
-    
-    
-}
-
 /**
  * Проверяет, является ли значение валидным JsonData
  */
@@ -112,11 +102,9 @@ export const WidgetSettingsDialog:React.FC<WidgetStepDialogProps> = ({setCondida
         return widgets.find(item=>condidat?.type === item.id)?.settings
     }, [condidat, widgets]);
 
-    const [fields, setFields] = useState(()=>Object.fromEntries(settings?.map(item=>[item.data_name, item.default ?? defaultValueByType(item.type)]) ?? []))
 
     const fieldHandler = useCallback((value:any, name?: string)=>{
         if(!name)return;
-        setFields(prev=>({...prev, [name]: value}))
         setCondidat(prev=>prev?({...prev, data: {...prev?.data, [name]: value}}):null)
     },[])
 

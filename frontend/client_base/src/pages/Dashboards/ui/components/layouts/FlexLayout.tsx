@@ -1,5 +1,4 @@
 // layouts/FlexLayout.tsx (улучшенная версия)
-import React from 'react';
 
 interface FlexLayoutProps {
     children: React.ReactNode;

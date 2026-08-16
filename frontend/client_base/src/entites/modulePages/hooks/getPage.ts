@@ -3,7 +3,6 @@ import { useCallback, useEffect } from "react"
 import { TypeRequest } from "../../../shared/api/type"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
-import { PageData } from "../models/page"
 
 
 export const useModulePageAPI = () => {
@@ -11,7 +10,7 @@ export const useModulePageAPI = () => {
     const {request, loading, error, clearError} = useHttp()
     const {showSnackbar} = useSnackbar() 
 
-    const getPage = useCallback(async (module:string, page:string):Promise<PageData> => {
+    const getPage = useCallback(async (module:string, page:string):Promise<any> => {
         return await request(`/api-pages/pages/${module}/${page}`, TypeRequest.GET)
     },[request])
 

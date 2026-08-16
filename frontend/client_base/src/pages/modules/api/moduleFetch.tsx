@@ -1,4 +1,3 @@
-import { FetchFunction } from "alex-evo-web-constructor"
 import { useCallback, useEffect } from "react"
 
 import { TypeRequest } from "../../../shared/api/type"
@@ -10,7 +9,7 @@ export const useFetch = (moduleName:string | undefined = "") => {
     const {request, loading, error, clearError} = useHttp()
     const {showSnackbar} = useSnackbar()
 
-    const fetchData: FetchFunction = useCallback(async (url: string, method?: string, body?: BodyInit | null, headers?: HeadersInit) => {
+    const fetchData: any = useCallback(async (url: string, method?: string, body?: BodyInit | null, headers?: HeadersInit) => {
         await request(`/api-pages/api/${moduleName}/${url}`, getMethod(method), await bodyInitToDict(body), headersInitToDict(headers))
     },[request, moduleName])
 

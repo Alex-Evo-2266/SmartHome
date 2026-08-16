@@ -1,6 +1,7 @@
 // layouts/MasonryLayout.tsx
 
-import React from "react";
+import { Children } from "react";
+
 
 interface MasonryLayoutProps {
     children: React.ReactNode;
@@ -16,7 +17,7 @@ export const MasonryLayout = ({
 
     // Разбиваем детей по колонкам для Masonry эффекта
     const getColumnItems = () => {
-        const items = React.Children.toArray(children);
+        const items = Children.toArray(children);
         const columnsArray: React.ReactNode[][] = Array.from({ length: columns }, () => []);
         
         items.forEach((child, index) => {

@@ -18,3 +18,10 @@ MYSQL_PASSWORD = os.environ.get("SMARTHOME_PAGE_BD_PASSWORD")
 MYSQL_DATABASE = os.environ.get("SMARTHOME_PAGE_BD_NAME")
 MYSQL_HOST = os.environ.get("SMARTHOME_PAGE_BD_HOST")
 MYSQL_PORT = os.environ.get("SMARTHOME_PAGE_BD_PORT")
+
+
+# MYSQL_USER = 'roothomepage'
+# MYSQL_PASSWORD = 'root'
+# MYSQL_DATABASE = 'SmartHomePage'
+# MYSQL_HOST = 'localhost'
+# MYSQL_PORT = '3310'

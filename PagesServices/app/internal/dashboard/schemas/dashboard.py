@@ -193,3 +193,13 @@ class DashboardOut(BaseModel):
 
 class DashboardsData(BaseModel):
     dashboards: list[DashboardOut]
+
+
+
+class ActiveDashboardOut(BaseModel):
+    id: str
+    title: str
+
+
+class ActiveDashboardsData(BaseModel):
+    dashboards: list[ActiveDashboardOut]

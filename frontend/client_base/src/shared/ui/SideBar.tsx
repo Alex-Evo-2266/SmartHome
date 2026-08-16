@@ -1,6 +1,6 @@
 // Sidebar.tsx
 import { Divider, IconButton, Panel, X } from 'alex-evo-sh-ui-kit'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 interface SidebarProps {
     isOpen: boolean

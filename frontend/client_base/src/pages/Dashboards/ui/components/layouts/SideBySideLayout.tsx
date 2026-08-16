@@ -1,5 +1,4 @@
 // layouts/SideBySideLayout.tsx
-import React from 'react';
 
 interface SideBySideLayoutProps {
     children: [React.ReactNode, React.ReactNode];

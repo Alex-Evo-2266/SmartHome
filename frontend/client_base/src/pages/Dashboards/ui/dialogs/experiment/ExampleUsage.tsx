@@ -1,5 +1,5 @@
 // ExampleUsage.tsx
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { AutocompleteField } from './AutocompleteField';
 
 // Интерфейс для объекта с данными
