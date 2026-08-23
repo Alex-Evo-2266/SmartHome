@@ -1,6 +1,6 @@
 import './widgetConfigDialog.scss'
 import { useCallback, useMemo } from "react"
-import { useWidgets } from "../../helpers/widgetsStore"
+import { useWidgets } from "../../../../features/Dashboard/helpers/widgetsStore"
 import { WidgetStepDialogProps } from "./types"
 import { SettingsField } from './fields'
 import { JsonContainer, JsonData } from 'alex-evo-sh-ui-kit'

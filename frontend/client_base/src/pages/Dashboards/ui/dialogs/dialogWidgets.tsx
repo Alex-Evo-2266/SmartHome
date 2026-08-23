@@ -1,7 +1,7 @@
 import { ListContainer, ListItem, Search } from "alex-evo-sh-ui-kit"
 import './widgetConfigDialog.scss'
 import { useCallback, useMemo, useState } from "react"
-import { useWidgets } from "../../helpers/widgetsStore"
+import { useWidgets } from "../../../../features/Dashboard/helpers/widgetsStore"
 import { WidgetStepDialogProps } from "./types"
 import { DataNode, WidgetSchema } from "alex-evo-web-constructor"
 import { v4 as uuidv4 } from 'uuid';

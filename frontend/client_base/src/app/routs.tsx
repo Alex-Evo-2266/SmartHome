@@ -1,5 +1,5 @@
 import { DashboardsPage } from "@src/pages/Dashboards/ui/Dashboards"
-import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/Preview"
+import { PreviewDashboardPage } from "@src/pages/Dashboards/ui/PreviewDashboardPage"
 import { DockerModuleList, DockerExemplePage, DockerModule, CoreList } from "@src/pages/Manager"
 import { ManagerPage } from "@src/pages/Manager/ui/Manager"
 import { CoreModuleList } from "@src/pages/Manager/ui/ModuleCore/ModuleCoreList"

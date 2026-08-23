@@ -1,7 +1,7 @@
 import './widgetConfigDialog.scss'
 import { WidgetConfigDialog } from "./baseDialogWidget"
 import { WidgetSettingsDialog } from './settingsWidget'
-import { IcreateRuntime } from '../../helpers/dashboardRegistary'
+import { IcreateRuntime } from '../../../../features/Dashboard/helpers/dashboardRegistary'
 import { WidgetSchema } from 'alex-evo-web-constructor'
 
 interface WidgetConfigDialogProps{

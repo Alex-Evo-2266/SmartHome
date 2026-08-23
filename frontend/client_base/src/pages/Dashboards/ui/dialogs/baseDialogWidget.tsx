@@ -2,7 +2,7 @@ import { ArrowRight, Chips, FullScreenTemplateDialog, ScreenSize, useScreenSize}
 import './widgetConfigDialog.scss'
 import { Fragment, useCallback, useMemo, useState } from "react"
 import { Dashboard, DashboardMainProvider, DashboardSchema, WidgetSchema } from "alex-evo-web-constructor"
-import { IcreateRuntime } from "../../helpers/dashboardRegistary"
+import { IcreateRuntime } from "../../../../features/Dashboard/helpers/dashboardRegistary"
 import { DialogButtonType } from "alex-evo-sh-ui-kit/dist/lib/ui/Dialog/types"
 import { WidgetStepDialogProps } from "./types"
 

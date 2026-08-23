@@ -35,7 +35,7 @@ export const WaterfallLayout = ({
             padding: '20px',
             width: 'calc(100% - 40px)',
             minHeight: 'calc(100vh - 40px)',
-            background: '#f0f2f5'
+            // background: '#f0f2f5'
         }}>
             {columnItems.map((column, index) => (
                 <div

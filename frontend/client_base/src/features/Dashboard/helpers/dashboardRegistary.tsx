@@ -1,18 +1,18 @@
 import { DataStore, EventBus, LayoutRegistry, ModalManager, WidgetRegistry } from "alex-evo-web-constructor";
-import { FlexLayout } from "../ui/components/layouts/FlexLayout";
+import { FlexLayout } from "../components/layouts/FlexLayout";
 import { GridLayout } from "alex-evo-sh-ui-kit";
-import { MasonryLayout } from "../ui/components/layouts/MasonryLayout";
-import { DashboardLayout } from "../ui/components/layouts/DashboardLayout";
-import { CardLayout } from "../ui/components/layouts/CardLayout";
-import { StackLayout } from "../ui/components/layouts/StackLayout";
-import { SideBySideLayout } from "../ui/components/layouts/SideBySideLayout";
-import { WaterfallLayout } from "../ui/components/layouts/WaterfallLayout";
-import { CenteredLayout } from "../ui/components/layouts/CenteredLayout";
-import { MetricWidgetData } from "../ui/components/widgets/MetricWidget";
-import { ProgressWidget } from "../ui/components/widgets/ProgressWidget";
-import { StatusWidget } from "../ui/components/widgets/StatusWidget";
+import { MasonryLayout } from "../components/layouts/MasonryLayout";
+import { DashboardLayout } from "../components/layouts/DashboardLayout";
+import { CardLayout } from "../components/layouts/CardLayout";
+import { StackLayout } from "../components/layouts/StackLayout";
+import { SideBySideLayout } from "../components/layouts/SideBySideLayout";
+import { WaterfallLayout } from "../components/layouts/WaterfallLayout";
+import { CenteredLayout } from "../components/layouts/CenteredLayout";
+import { MetricWidgetData } from "../components/widgets/MetricWidget";
+import { ProgressWidget } from "../components/widgets/ProgressWidget";
+import { StatusWidget } from "../components/widgets/StatusWidget";
 import { WidgetStore } from "./widgetsStore";
-import { MetricRoomWidgetData } from "../ui/components/widgets/MetricRoomWidget";
+import { MetricRoomWidgetData } from "../components/widgets/MetricRoomWidget";
 
 
 function widgetRegistry(widgetsStore: WidgetStore){
