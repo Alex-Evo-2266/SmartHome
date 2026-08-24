@@ -1,10 +1,12 @@
 import './widgetConfigDialog.scss'
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useWidgets } from "../../../../features/Dashboard/helpers/widgetsStore"
 import { WidgetStepDialogProps } from "./types"
 import { SettingsField } from './fields'
 import { JsonContainer, JsonData } from 'alex-evo-sh-ui-kit'
 import { useDataStore } from 'alex-evo-web-constructor'
+import { DialogPortal } from '@src/shared'
+import { LayoutConfigDialog } from './baseDialogLayout'
 /**
  * Проверяет, является ли значение валидным JsonData
  */
@@ -96,6 +98,7 @@ export const WidgetSettingsDialog:React.FC<WidgetStepDialogProps> = ({setCondida
         };
         return jsonStringifyWithNullUndefined(typeData)
     }, [data]);
+
     const settings = useMemo(() => {
         if (!widgets) return widgets;
         
@@ -110,12 +113,13 @@ export const WidgetSettingsDialog:React.FC<WidgetStepDialogProps> = ({setCondida
 
     return(
         <>
-            {
-                settings?.map(item=>{
-                    return (<SettingsField key={item.data_name} settings={item} value={condidat?.data?.[item.data_name] ?? ""} onChange={fieldHandler}/>)
-                })
-            }
-            <JsonContainer name="data" readonly data={isValidJsonData(store_dump)?store_dump:{}}/>
+          {
+            settings?.map(item=>{
+              return (<SettingsField key={item.data_name} settings={item} value={condidat?.data?.[item.data_name] ?? ""} onChange={fieldHandler}/>)
+            })
+          }
+          <JsonContainer name="data" readonly data={isValidJsonData(store_dump)?store_dump:{}}/>
+        
         </>
                     
     )

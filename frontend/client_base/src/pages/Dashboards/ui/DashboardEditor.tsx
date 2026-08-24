@@ -8,6 +8,9 @@ import { IcreateRuntime } from "@src/features/Dashboard/helpers/dashboardRegista
 import { DialogPortal } from "@src/shared"
 import { AddWidgetgDialog } from "./dialogs/addWidgetDialog"
 import { EditWidgetgDialog } from "./dialogs/editWidgetDialog"
+import { LayoutConfigDialog } from "./dialogs/baseDialogLayout"
+import { MoveEvent } from "alex-evo-tree"
+import { moveWidget } from "@src/shared/lib/helpers/dashboardHeloers"
 
 type DashboardEditorProps = {
     schema: DashboardSchema
@@ -15,9 +18,10 @@ type DashboardEditorProps = {
     editWidget: (widget: WidgetSchema<Record<string, unknown>>) => void
     runtime: IcreateRuntime
     save: ()=>void
+    setSchema: React.Dispatch<React.SetStateAction<DashboardSchema>>
 }
 
-export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save}:DashboardEditorProps) => {
+export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save, setSchema}:DashboardEditorProps) => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [addDialog, setAddDialog] = useState<{
@@ -26,6 +30,7 @@ export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save}:D
     } | null>(null)
 
     const [editWidgetId, setEditWidgetId] = useState<string | null>(null)
+    const [editLayout, setEditLayout] = useState(false)
 
     const treeItems = useMemo(
         () => dashboardToTree(schema),
@@ -69,9 +74,18 @@ export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save}:D
         [editWidgetId, editWidget],
     )
 
-    const handleEditLayout = useCallback(()=>{
-
+    const handleEditLayout = useCallback((typeLayout: string)=>{
+        setSchema(prev=>({...prev, layout:typeLayout}))
     },[])
+
+    const moveHandler = (event: MoveEvent) => {
+        console.log(event)
+
+        setSchema(prev=>moveWidget(prev, event.sourceId, {
+            index: event.index,
+            parentId: event.parentId ?? undefined
+        }))
+    }
 
     return(
         <>
@@ -93,8 +107,9 @@ export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save}:D
                         })
                     }}
                     onEdit={setEditWidgetId}
-                    onEditLayout={handleEditLayout}
+                    onEditLayout={()=>setEditLayout(true)}
                     onSave={save}
+                    onMove={moveHandler}
                 />
             </Sidebar>
 
@@ -118,6 +133,19 @@ export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save}:D
                     />
                 </DialogPortal>
             )}
+                    
+                    
+            {editLayout && (
+                <DialogPortal>
+                    <LayoutConfigDialog 
+                        runtime={runtime}
+                        data={schema.layout}
+                        onHide={()=>setEditLayout(false)}
+                        onSave={handleEditLayout}
+                    />
+                </DialogPortal>
+                )
+            }
         </>
 
     )

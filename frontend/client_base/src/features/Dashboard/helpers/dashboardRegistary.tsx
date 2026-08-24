@@ -13,12 +13,14 @@ import { ProgressWidget } from "../components/widgets/ProgressWidget";
 import { StatusWidget } from "../components/widgets/StatusWidget";
 import { WidgetStore } from "./widgetsStore";
 import { MetricRoomWidgetData } from "../components/widgets/MetricRoomWidget";
+import { CardWidgetData } from "../components/widgets/CardWidget";
 
 
 function widgetRegistry(widgetsStore: WidgetStore){
 
     widgetsStore.register(MetricWidgetData)
     widgetsStore.register(MetricRoomWidgetData)
+    widgetsStore.register(CardWidgetData)
     widgetsStore.register({ 
         id: "progress", 
         component: ProgressWidget,

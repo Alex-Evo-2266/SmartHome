@@ -39,6 +39,7 @@ export interface WidgetStoreItem extends Omit<WidgetDefinition, "type">{
     description?: string
     name: string
     icon?: React.ReactNode
+    children?: boolean
 
     settings?: WidgetStoreItemSettings[]
 

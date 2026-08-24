@@ -18,6 +18,7 @@ export const PreviewDashboardPage = () => {
         addWidget,
         editWidget,
         save,
+        setSchema
     } = useDashboardData(id)
 
     const {runtime, widgetsStore} = useDashboardRuntimeData()
@@ -44,7 +45,7 @@ export const PreviewDashboardPage = () => {
                         <Dashboard schema={schema} />
                     </div>
 
-                    <DashboardEditor schema={schema} runtime={runtime} addWidget={addWidget} editWidget={editWidget} save={save}/>
+                    <DashboardEditor setSchema={setSchema} schema={schema} runtime={runtime} addWidget={addWidget} editWidget={editWidget} save={save}/>
 
                 </div>
             </DashboardMainProvider>

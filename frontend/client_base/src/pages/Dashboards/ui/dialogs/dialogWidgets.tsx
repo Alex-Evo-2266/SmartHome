@@ -22,14 +22,13 @@ export const WidgetChoiseDialog:React.FC<WidgetStepDialogProps> = ({setCondidat}
     }, [search, widgets]);
 
     const selectHAndler = useCallback((id:string)=>{
-        console.log(id)
         const cond = widgets?.find(item=>item.id === id)
-        console.log(cond)
         if(!cond)return
         const widget:WidgetSchema = {
             id: uuidv4(),
-            type: cond.id
+            type: cond.id,
         }
+        if(cond?.children) widget.children = []
         const data:Record<string, DataNode> = {}
         cond.settings?.forEach(item=>{
             data[item.data_name] = item.default ?? ""
