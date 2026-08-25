@@ -6,6 +6,7 @@ interface SidebarProps {
     isOpen: boolean
     onClose: () => void
     children: ReactNode
+    footer: ReactNode
     width?: string | number
     position?: 'left' | 'right'
     overlay?: boolean // Если true - затемняет фон
@@ -17,6 +18,7 @@ export const Sidebar = ({
     isOpen,
     onClose,
     children,
+    footer,
     width = '400px',
     position = 'right',
     className = ''
@@ -67,6 +69,10 @@ export const Sidebar = ({
                 <Divider/>
                 <div style={{ padding: '20px', flex: 1, overflow: 'auto' }}>
                     {children}
+                </div>
+                <Divider/>
+                <div style={{ padding: '20px', height: '50px', overflow: 'auto' }}>
+                    {footer}
                 </div>
             </Panel>
         </>

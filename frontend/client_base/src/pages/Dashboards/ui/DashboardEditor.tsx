@@ -1,6 +1,6 @@
 import { Sidebar } from "@src/shared/ui/SideBar"
 import { DashboardSidebar } from "@src/features/Dashboard"
-import { FAB, ToolsIcon } from "alex-evo-sh-ui-kit"
+import { Button, FAB, ToolsIcon } from "alex-evo-sh-ui-kit"
 import { useCallback, useMemo, useState } from "react"
 import { dashboardToTree } from "@src/entites/dashboard"
 import { DashboardSchema, WidgetSchema } from "alex-evo-web-constructor"
@@ -11,6 +11,8 @@ import { EditWidgetgDialog } from "./dialogs/editWidgetDialog"
 import { LayoutConfigDialog } from "./dialogs/baseDialogLayout"
 import { MoveEvent } from "alex-evo-tree"
 import { moveWidget } from "@src/shared/lib/helpers/dashboardHeloers"
+
+import './DashboardEditor.scss'
 
 type DashboardEditorProps = {
     schema: DashboardSchema
@@ -97,6 +99,10 @@ export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save, s
             <Sidebar
                 isOpen={isSidebarOpen}
                 onClose={() => setIsSidebarOpen(false)}
+                className="dashboard-editor-sidebar"
+                footer={
+                    <Button style={{width:"100%"}} styleType="filledTotal" onClick={save}>save</Button>
+                }
             >
                 <DashboardSidebar
                     items={treeItems}
@@ -108,7 +114,6 @@ export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save, s
                     }}
                     onEdit={setEditWidgetId}
                     onEditLayout={()=>setEditLayout(true)}
-                    onSave={save}
                     onMove={moveHandler}
                 />
             </Sidebar>
