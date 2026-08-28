@@ -1,6 +1,5 @@
 // widgets/MetricWidget.tsx
-import { WidgetStoreItem } from '@src/entites/dashboard/types/typeData';
-import { TypeDeviceField } from '@src/entites/devices';
+import { TypeFieldWidget, WidgetStoreItem } from '@src/entites/dashboard/types/typeData';
 import { useResolvedData, WidgetProps } from 'alex-evo-web-constructor';
 
 export interface MetricWidgetProps {
@@ -101,7 +100,7 @@ export const MetricWidgetData: WidgetStoreItem = {
     description: "metric",
     settings:[{
         data_name: "title",
-        type: TypeDeviceField.TEXT,
+        type: TypeFieldWidget.TEXT,
         readonly: true,
         lable: "title",
         sourse: "manula",
@@ -109,14 +108,14 @@ export const MetricWidgetData: WidgetStoreItem = {
     },
     {
         data_name: "value",
-        type: TypeDeviceField.BINARY,
+        type: TypeFieldWidget.BINARY,
         readonly: true,
         lable: "value",
         sourse: "device"
     },
     {
         data_name: "subtitle",
-        type: TypeDeviceField.TEXT,
+        type: TypeFieldWidget.TEXT,
         readonly: true,
         lable: "subtitle",
         sourse: "manula",

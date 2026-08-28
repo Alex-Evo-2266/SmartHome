@@ -10,7 +10,7 @@ import { AddWidgetgDialog } from "./dialogs/addWidgetDialog"
 import { EditWidgetgDialog } from "./dialogs/editWidgetDialog"
 import { LayoutConfigDialog } from "./dialogs/baseDialogLayout"
 import { MoveEvent } from "alex-evo-tree"
-import { moveWidget } from "@src/shared/lib/helpers/dashboardHeloers"
+import { moveWidget } from "@src/shared/lib/helpers/dashboardHelpers"
 
 import './DashboardEditor.scss'
 

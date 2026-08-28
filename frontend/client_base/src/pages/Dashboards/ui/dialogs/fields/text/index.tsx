@@ -1,6 +1,6 @@
 import { WidgetStoreItemSettingsText } from "@src/entites/dashboard/types/typeData"
 import { TextManual } from "./manual"
-import { DeviceSelectField } from "../../selectValue/device"
+import { DeviceSelectField } from "../../selectValue/deviceField"
 import { TypeDeviceField } from "@src/entites/devices"
 import { RoomObjectSelectField } from "../../selectValue/room"
 

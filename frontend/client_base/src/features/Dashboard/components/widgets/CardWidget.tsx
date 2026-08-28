@@ -1,6 +1,5 @@
 // widgets/MetricWidget.tsx
-import { WidgetStoreItem } from '@src/entites/dashboard/types/typeData';
-import { TypeDeviceField } from '@src/entites/devices';
+import { TypeFieldWidget, WidgetStoreItem } from '@src/entites/dashboard/types/typeData';
 import { Card } from 'alex-evo-sh-ui-kit';
 import { useResolvedData, WidgetProps } from 'alex-evo-web-constructor';
 import { ReactNode } from 'react';
@@ -30,7 +29,7 @@ export const CardWidgetData: WidgetStoreItem = {
     children: true,
     settings:[{
         data_name: "title",
-        type: TypeDeviceField.TEXT,
+        type: TypeFieldWidget.TEXT,
         readonly: true,
         lable: "title",
         sourse: "manula",

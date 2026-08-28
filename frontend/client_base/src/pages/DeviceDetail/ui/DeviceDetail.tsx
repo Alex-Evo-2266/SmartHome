@@ -12,13 +12,7 @@ import { DetailDeviceUncnow } from './type/Uncnow';
 import { useAppSelector } from '../../../shared/lib/hooks/redux';
 import { DeviceEdit } from '../../../widgets/EditDevice';
 import { useDeviceAPI } from '@src/entites/devices/api/getDevice';
-
-function getDeviceInStore(devcies: DeviceSchema[], systemName: string | undefined){
-    if(!systemName){
-        return undefined
-    }
-    return devcies.find(item=>item.system_name===systemName)
-}
+import { getDeviceInStore } from '@src/entites/devices/helpers/getDeviceInStore';
 
 export const DetailDevice = () => {
     const { systemName } = useParams<{systemName: string}>();

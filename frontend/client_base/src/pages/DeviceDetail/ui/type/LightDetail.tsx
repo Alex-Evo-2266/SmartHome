@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react"
 
 import { DetailDeviceTemplate } from "./Temlate.DetailPage"
 import { FieldHistory } from "../../../../entites/devices/models/history"
-import { useGetBinaryField, useGetNumberField } from "../../../../features/Device"
+import { useGetBinaryField, useGetNumberField } from "../../../../entites/devices"
 import { Bulb, useDebounce } from "../../../../shared"
 import { kelvinCSSGradient } from "../../../../shared/lib/helpers/tempColor"
 import ColorWheel from "../../../../shared/ui/Color/Palitra"

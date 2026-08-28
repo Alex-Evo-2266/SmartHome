@@ -1,4 +1,4 @@
-import { useGetBinaryField } from '@src/features/Device';
+import { useGetBinaryField } from '@src/entites/devices';
 import { Card, Divider, RunningLine, SizeContext, Typography, ScreenSize } from 'alex-evo-sh-ui-kit'
 import { useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';

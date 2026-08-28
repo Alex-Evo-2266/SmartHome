@@ -14,6 +14,9 @@ import { StatusWidget } from "../components/widgets/StatusWidget";
 import { WidgetStore } from "./widgetsStore";
 import { MetricRoomWidgetData } from "../components/widgets/MetricRoomWidget";
 import { CardWidgetData } from "../components/widgets/CardWidget";
+import { LightCompactWidgetData } from "../components/widgets/LightCompactWidget";
+import { LightControlWidgetData } from "../components/widgets/LightControlWidget";
+import { LightColorWidgetData } from "../components/widgets/LightColorWidget";
 
 
 function widgetRegistry(widgetsStore: WidgetStore){
@@ -21,6 +24,9 @@ function widgetRegistry(widgetsStore: WidgetStore){
     widgetsStore.register(MetricWidgetData)
     widgetsStore.register(MetricRoomWidgetData)
     widgetsStore.register(CardWidgetData)
+    widgetsStore.register(LightCompactWidgetData)
+    widgetsStore.register(LightControlWidgetData)
+    widgetsStore.register(LightColorWidgetData)
     widgetsStore.register({ 
         id: "progress", 
         component: ProgressWidget,

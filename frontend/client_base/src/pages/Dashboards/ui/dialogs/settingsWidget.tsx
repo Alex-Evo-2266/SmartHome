@@ -105,6 +105,7 @@ export const WidgetSettingsDialog:React.FC<WidgetStepDialogProps> = ({setCondida
         return widgets.find(item=>condidat?.type === item.id)?.settings
     }, [condidat, widgets]);
 
+    console.log(settings)
 
     const fieldHandler = useCallback((value:any, name?: string)=>{
         if(!name)return;

@@ -1,5 +1,14 @@
-import { TypeDeviceField } from "@src/entites/devices"
 import { WidgetDefinition } from "alex-evo-web-constructor"
+
+export enum TypeFieldWidget{
+    BINARY = "binary",
+    NUMBER = "number",
+    TEXT = "text",
+    ENUM = "enum",
+    BASE = "base",
+    COUNTER = "counter",
+    FOR_DEVICE_TYPE = "FOR_DEVICE_TYPE",
+}
 
 export type WidgetStoreItemSettingsBase = {
     lable: string
@@ -8,31 +17,43 @@ export type WidgetStoreItemSettingsBase = {
 }
 
 export type WidgetStoreItemSettingsNumber = WidgetStoreItemSettingsBase & {
-    type: TypeDeviceField.NUMBER | TypeDeviceField.COUNTER
+    type: TypeFieldWidget.NUMBER | TypeFieldWidget.COUNTER
     sourse: "device" | "room" | "manula" | "binding" | "expression"
     default?: number
 }
 
 export type WidgetStoreItemSettingsBinary = WidgetStoreItemSettingsBase & {
-    type: TypeDeviceField.BINARY
+    type: TypeFieldWidget.BINARY
     sourse: "device" | "room" | "manula" | "binding"
     default?: boolean
 }
 
 export type WidgetStoreItemSettingsText = WidgetStoreItemSettingsBase & {
-    type: TypeDeviceField.TEXT | TypeDeviceField.BASE
+    type: TypeFieldWidget.TEXT | TypeFieldWidget.BASE
     sourse: "device" | "room" | "manula" | "binding"
     default?: string
 }
 
 export type WidgetStoreItemSettingsEnum = WidgetStoreItemSettingsBase &{
-    type: TypeDeviceField.ENUM
+    type: TypeFieldWidget.ENUM
     sourse: "device" | "room" | "manula" | "binding"
     default?: string
     enum_values?: string[]
 }
 
-export type WidgetStoreItemSettings = WidgetStoreItemSettingsNumber | WidgetStoreItemSettingsBinary | WidgetStoreItemSettingsText | WidgetStoreItemSettingsEnum
+export type WidgetStoreItemSettingsDeviceType = WidgetStoreItemSettingsBase &{
+    type: TypeFieldWidget.FOR_DEVICE_TYPE
+    sourse: "device" | "room"
+    device_type?: string
+    default?: string
+}
+
+export type WidgetStoreItemSettings = 
+        WidgetStoreItemSettingsNumber 
+        | WidgetStoreItemSettingsBinary 
+        | WidgetStoreItemSettingsText 
+        | WidgetStoreItemSettingsEnum
+        | WidgetStoreItemSettingsDeviceType
 
 export interface WidgetStoreItem extends Omit<WidgetDefinition, "type">{
     id: string

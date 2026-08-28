@@ -7,3 +7,5 @@ export {updateDeviceValue, setDevicesData, deviceReducer} from "./reducers/devic
 export type {DeviceClassOptions, ChangeField, OptionSchema} from "./models/option"
 
 export {useGetOptionDevice} from "./hooks/getOptionalDevice"
+
+export {useGetBinaryField, useGetNumberField, useGetEnumField} from './hooks/getField.hook'

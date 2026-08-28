@@ -2,8 +2,10 @@ import { ColorProvider, SizeProvider } from "alex-evo-sh-ui-kit";
 import { BrowserRouter } from 'react-router-dom';
 import { RoutesComponent } from "./routs"
 import '../shared/ui/index.scss'
-import {AuthProvider} from 'alex-evo-sh-auth'
+import {AuthManager, AuthProvider} from 'alex-evo-sh-auth'
 import { authConfig } from "./config";
+
+const manager = new AuthManager(authConfig)
 
 
 function App() {
@@ -12,7 +14,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <AuthProvider authConfig={authConfig}>
+        <AuthProvider authManager={manager}>
           <ColorProvider>
             <SizeProvider>
               <RoutesComponent/>
