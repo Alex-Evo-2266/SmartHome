@@ -36,7 +36,7 @@ async def update_type_device(data: AddOrEditDeviceTypeSchema, id:str) -> None:
         
         logger.info(f"Completed device type update for device: {data.device}")
         invalidate_cache()
-        invalidate_cache_device_data_by_device(system_name=data.device)
+        invalidate_cache_device_data_by_device(device=data.device)
         invalidate_cache_room__type_device_data()
         get_container().connect_store.delete(data.device)
     except Exception as e:

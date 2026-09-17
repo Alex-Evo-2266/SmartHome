@@ -48,6 +48,7 @@ export function StatusWidget({ widget }: WidgetProps<StatusWidgetProps>) {
             background: 'white',
             borderRadius: '12px',
             padding: '20px',
+            minWidth: "250px",
             boxShadow: '0 1px 3px rgba(0,0,0,0.06)'
         }}>
             {title && (

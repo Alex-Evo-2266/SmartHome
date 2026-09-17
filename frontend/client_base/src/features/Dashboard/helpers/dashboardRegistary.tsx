@@ -1,6 +1,5 @@
 import { DataStore, EventBus, LayoutRegistry, ModalManager, WidgetRegistry } from "alex-evo-web-constructor";
 import { FlexLayout } from "../components/layouts/FlexLayout";
-import { GridLayout } from "alex-evo-sh-ui-kit";
 import { MasonryLayout } from "../components/layouts/MasonryLayout";
 import { DashboardLayout } from "../components/layouts/DashboardLayout";
 import { CardLayout } from "../components/layouts/CardLayout";
@@ -17,6 +16,7 @@ import { CardWidgetData } from "../components/widgets/CardWidget";
 import { LightCompactWidgetData } from "../components/widgets/LightCompactWidget";
 import { LightControlWidgetData } from "../components/widgets/LightControlWidget";
 import { LightColorWidgetData } from "../components/widgets/LightColorWidget";
+import { GridLayout } from "../components/layouts/GridLayout";
 
 
 function widgetRegistry(widgetsStore: WidgetStore){

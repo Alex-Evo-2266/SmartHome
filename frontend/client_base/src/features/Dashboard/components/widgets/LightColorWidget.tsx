@@ -6,7 +6,7 @@ import {
 } from '@src/entites/dashboard/types/typeData';
 
 import {
-    Card,
+    Panel,
     Switch,
 } from 'alex-evo-sh-ui-kit';
 
@@ -50,7 +50,7 @@ export function LightColorWidget({
     } = useLightData(widget.data?.dev);
 
     return (
-        <Card>
+        <Panel style={{minWidth: "250px"}}>
 
             <div className="light-color">
 
@@ -71,7 +71,7 @@ export function LightColorWidget({
 
                     <Switch
                         checked={powerValue}
-                        onChange={e =>
+                        onChange={(e:React.ChangeEvent<HTMLInputElement>) =>
                             updateFieldPower(
                                 e.target.checked
                             )
@@ -157,7 +157,7 @@ export function LightColorWidget({
 
             </div>
 
-        </Card>
+        </Panel>
     );
 }
 

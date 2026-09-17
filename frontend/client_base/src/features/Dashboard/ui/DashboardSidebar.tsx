@@ -7,6 +7,7 @@ interface DashboardSidebarProps {
     onInsert: (parent: string | null, index: number) => void
     onEdit: (id: string) => void
     onEditLayout: () => void
+    onDelete: (id: string) => void
     onMove: (event: MoveEvent) => void
 }
 
@@ -15,7 +16,8 @@ export const DashboardSidebar = ({
     onInsert,
     onEdit,
     onEditLayout,
-    onMove
+    onMove,
+    onDelete
 }: DashboardSidebarProps) => {
 
     return (
@@ -24,6 +26,7 @@ export const DashboardSidebar = ({
                 items={items}
                 onInsert={onInsert}
                 onMove={onMove}
+                onDelete={onDelete}
                 renderNode={(node, drag) => (
                     <DashboardTreeNode
                         drag={drag}

@@ -13,6 +13,7 @@ interface DeviceDataProps{
     data: DeviceSchema
     onHide: ()=>void
     option: DeviceClassOptions
+    loadData: ()=>void
 }
 
 function serializeField(field:DeviceSerializeFieldSchema):FieldData{
@@ -64,7 +65,7 @@ const validDevice = (data:EditDeviceData, option:DeviceClassOptions) => {
     return errors
 }
 
-export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option}) => {
+export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option, loadData}) => {
 
     const [fields, setFields] = useState<FieldData[]>(getInitData(data).fields)
     const [errors, setErrors] = useState<{[key:string]:string}>({})
@@ -89,9 +90,11 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
         if(Object.keys(errors).length === 0)
         {
             await editDevice({...value, class_device: data.class_device, type: data.type, fields: fields}, data.system_name)
+            setTimeout(async()=>await loadData(),500)
+            
             onHide()
         }
-    },[option, data, onHide, editDevice, fields])
+    },[option, data, onHide, editDevice, fields, loadData])
 
     const save = useCallback(() => {
         form.current?.submit()

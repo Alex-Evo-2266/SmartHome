@@ -1,5 +1,8 @@
 // layouts/GridLayout.tsx
 
+import { GridLayout as GL, GridLayoutItem } from "alex-evo-sh-ui-kit";
+import { Children } from "react";
+
 interface GridLayoutProps {
     children: React.ReactNode;
     columns?: number;
@@ -8,26 +11,18 @@ interface GridLayoutProps {
 }
 
 export const GridLayout = ({ 
-    children, 
-    columns = 3, 
-    gap = '20px',
-    responsive = true 
+    children
 }: GridLayoutProps) => {
-    const gridTemplateColumns = responsive 
-        ? `repeat(auto-fit, minmax(280px, 1fr))`
-        : `repeat(${columns}, 1fr)`;
 
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns,
-            gap,
-            padding: '20px',
-            width: '100%',
-            minHeight: '100vh',
-            background: '#f5f7fa'
-        }}>
-            {children}
-        </div>
+        <GL className="device-container" itemMaxWith="300px" itemMinWith="200px">
+        {
+            Children.map(children,(child)=>(
+                <GridLayoutItem>
+                    {child}
+                </GridLayoutItem>
+            ))
+        }
+        </GL>
     );
 };

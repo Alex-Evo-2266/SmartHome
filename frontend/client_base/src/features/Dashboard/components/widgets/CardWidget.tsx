@@ -14,7 +14,7 @@ export function CardWidget({ widget, children }: WidgetProps) {
     const title = useResolvedData(widget.data?.title) ?? widget.props?.title;
 
     return (
-        <Card header={title}>
+        <Card header={title} style={{minWidth: "290px"}}>
             {children}
         </Card>
     );

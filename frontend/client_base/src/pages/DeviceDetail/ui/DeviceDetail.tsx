@@ -41,9 +41,13 @@ export const DetailDevice = () => {
 
     },[getDevice, deviceInStore])
 
-    useEffect(()=>{
+    const loadThisDevice = useCallback(async()=>{
         loadDevice(systemName)
     },[loadDevice, systemName])
+
+    useEffect(()=>{
+        loadThisDevice()
+    },[loadThisDevice])
 
 
     const components:{[key: string]: React.FC<DeviceDetailProps>} = {
@@ -67,7 +71,7 @@ export const DetailDevice = () => {
             {
                 editVisible &&
                 <DialogPortal>
-                    <DeviceEdit onHide={()=>setEditVisible(false)} data={aktualData}/>
+                    <DeviceEdit onHide={()=>setEditVisible(false)} data={aktualData} loadData={loadThisDevice}/>
                 </DialogPortal>
             }
         </>

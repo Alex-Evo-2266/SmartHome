@@ -1,7 +1,7 @@
-import { ArrowRight, Chips, FullScreenTemplateDialog, ScreenSize, useScreenSize} from "alex-evo-sh-ui-kit"
+import { FullScreenTemplateDialog, ScreenSize, useScreenSize} from "alex-evo-sh-ui-kit"
 import './widgetConfigDialog.scss'
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react"
-import { Dashboard, DashboardMainProvider, DashboardSchema, LayoutSchemaID, WidgetSchema } from "alex-evo-web-constructor"
+import { Dashboard, DashboardMainProvider, DashboardSchema, LayoutSchemaID } from "alex-evo-web-constructor"
 import { IcreateRuntime } from "../../../../features/Dashboard/helpers/dashboardRegistary"
 import { LayoutChoiseDialog } from "./LayoutChoiseDialog"
 

@@ -25,7 +25,7 @@ async def delete_type_device_by_device(device_system_name: str):
         
         logger.info(f"Successfully deleted {count} device type(s) for device {device_system_name}")
         invalidate_cache()
-        invalidate_cache_device_data_by_device(system_name=device_system_name)
+        invalidate_cache_device_data_by_device(device=device_system_name)
         invalidate_cache_room__type_device_data()
         get_container().connect_store.delete(device_system_name)
     except Exception as e:
@@ -55,7 +55,7 @@ async def delete_type_device(id: str):
         
         logger.info(f"Successfully deleted {name} device type id: {id}")
         invalidate_cache()
-        invalidate_cache_device_data_by_device(system_name=system_name)
+        invalidate_cache_device_data_by_device(device=system_name)
         invalidate_cache_room__type_device_data()
         get_container().connect_store.delete(system_name)
     except Exception as e:

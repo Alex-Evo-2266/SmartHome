@@ -60,7 +60,7 @@ async def create(type_obj: AddOrEditDeviceTypeSchema):
         logger.info(f"Completed device type creation. Successfully created {fields_created} "
                   f"out of {len(type_obj.fields)} fields for device type {type_obj.name_type}")
         invalidate_cache()
-        invalidate_cache_device_data_by_device(system_name=type_obj.device)
+        invalidate_cache_device_data_by_device(device=type_obj.device)
         invalidate_cache_room__type_device_data()
         get_container().connect_store.delete(type_obj.device)
         return new_type_device

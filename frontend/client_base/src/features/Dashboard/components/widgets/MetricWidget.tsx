@@ -32,7 +32,8 @@ export function MetricWidget({ widget }: WidgetProps) {
             boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
             borderLeft: `4px solid ${color}`,
             transition: 'transform 0.2s, box-shadow 0.2s',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            minWidth: "240px"
         }}>
             <div style={{
                 display: 'flex',

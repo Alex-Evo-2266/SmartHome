@@ -10,7 +10,7 @@ import { AddWidgetgDialog } from "./dialogs/addWidgetDialog"
 import { EditWidgetgDialog } from "./dialogs/editWidgetDialog"
 import { LayoutConfigDialog } from "./dialogs/baseDialogLayout"
 import { MoveEvent } from "alex-evo-tree"
-import { moveWidget } from "@src/shared/lib/helpers/dashboardHelpers"
+import { moveWidget, removeWidget } from "@src/shared/lib/helpers/dashboardHelpers"
 
 import './DashboardEditor.scss'
 
@@ -81,13 +81,15 @@ export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save, s
     },[])
 
     const moveHandler = (event: MoveEvent) => {
-        console.log(event)
-
         setSchema(prev=>moveWidget(prev, event.sourceId, {
             index: event.index,
             parentId: event.parentId ?? undefined
         }))
     }
+
+    const deleteHandler = (id:string) =>{
+        setSchema(prev=>removeWidget(prev, id))
+    }   
 
     return(
         <>
@@ -113,6 +115,7 @@ export const DashboardEditor = ({schema, addWidget, editWidget, runtime, save, s
                         })
                     }}
                     onEdit={setEditWidgetId}
+                    onDelete={deleteHandler}
                     onEditLayout={()=>setEditLayout(true)}
                     onMove={moveHandler}
                 />

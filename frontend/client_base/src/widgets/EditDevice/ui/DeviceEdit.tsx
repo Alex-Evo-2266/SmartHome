@@ -7,9 +7,10 @@ import './EditDevice.scss'
 interface DeviceDataProps{
     data: DeviceSchema
     onHide: ()=>void
+    loadData: ()=>void
 }
 
-export const DeviceEdit:React.FC<DeviceDataProps> = ({data, onHide}) => {
+export const DeviceEdit:React.FC<DeviceDataProps> = ({data, onHide, loadData}) => {
 
     const {options} = useGetOptionDevice()
     const option = useMemo(()=>options?.find(item=>item.class_name === data.class_device),[options, data.class_device])
@@ -17,5 +18,5 @@ export const DeviceEdit:React.FC<DeviceDataProps> = ({data, onHide}) => {
     if(!option)
         return null
 
-    return(<DeviceEditDialog onHide={onHide} data={data} option={option}/>)
+    return(<DeviceEditDialog onHide={onHide} data={data} option={option} loadData={loadData}/>)
 }
