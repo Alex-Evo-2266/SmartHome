@@ -16,22 +16,26 @@ import {
 } from 'alex-evo-web-constructor';
 import { useLightData } from '../../hooks/useLightData';
 import '../style.scss'
+import ColorWheel from '@src/shared/ui/Color/Palitra';
+import { useCallback } from 'react';
+import { hsvToHex } from '@src/shared/lib/helpers/colorHelper';
+// import { RGBtoHEX } from 'alex-evo-sh-ui-kit/dist/lib/helpers/color/colorConvert';
 
 
-const colors = [
-    "#ff4d4d",
-    "#ff9138",
-    "#ffd34e",
-    "#65d96b",
-    "#43d7d0",
-    "#688cff",
-    "#b16aff",
-    "#ec68c8",
-    "#ffb0a0",
-    "#f5e6b5",
-    "#d6d8ff",
-    "#bcefff",
-];
+// const colors = [
+//     "#ff4d4d",
+//     "#ff9138",
+//     "#ffd34e",
+//     "#65d96b",
+//     "#43d7d0",
+//     "#688cff",
+//     "#b16aff",
+//     "#ec68c8",
+//     "#ffb0a0",
+//     "#f5e6b5",
+//     "#d6d8ff",
+//     "#bcefff",
+// ];
 
 
 export function LightColorWidget({
@@ -47,7 +51,18 @@ export function LightColorWidget({
         updateFieldPower,
         brightnessValue,
         updateBrightness,
-    } = useLightData(widget.data?.dev);
+        colorValue,
+        satValue,
+        updateColor,
+    updateSat
+} = useLightData(widget.data?.dev);
+
+    const setColor = useCallback((color: string, sat: string)=>{
+        updateColor(Number(color))
+        updateSat(Number(sat))
+    },[updateColor, updateSat])
+
+    const textColor = hsvToHex(colorValue, satValue)
 
     return (
         <Panel style={{minWidth: "250px"}}>
@@ -81,13 +96,14 @@ export function LightColorWidget({
                 </div>
 
 
-                <div className="light-color__wheel">
+                {/* <div className="light-color__wheel">
 
                     <div className="light-color__wheel-inner"/>
 
                     <div className="light-color__cursor"/>
 
-                </div>
+                </div> */}
+                <ColorWheel color={colorValue?.toString() ?? "0"} sat={satValue?.toString() ?? "0"} onChange={setColor}/>
 
 
                 <div className="light-color__current">
@@ -95,23 +111,23 @@ export function LightColorWidget({
                     <div
                         className="light-color__dot"
                         style={{
-                            background: "#ffb347"
+                            background: textColor
                         }}
                     />
 
                     <div>
-                        <b>
+                        {/* <b>
                             Тёплый янтарный
-                        </b>
+                        </b> */}
 
                         <div className="light-color__hex">
-                            #FFB347
+                            {textColor}
                         </div>
                     </div>
 
                 </div>
 
-
+{/* 
                 <div className="light-color__palette">
 
                     {colors.map(color => (
@@ -126,7 +142,7 @@ export function LightColorWidget({
 
                     ))}
 
-                </div>
+                </div> */}
 
 
                 <div className="light-color__slider">

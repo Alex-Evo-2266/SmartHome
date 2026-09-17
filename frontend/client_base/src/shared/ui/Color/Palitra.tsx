@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import './Palitra.scss'
+import { hsvToHex } from '@src/shared/lib/helpers/colorHelper';
 
 const ColorWheel = ({onChange, color, sat}:{onChange?:(color: string, set: string)=>void, color: string, sat: string}) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -63,7 +64,8 @@ const ColorWheel = ({onChange, color, sat}:{onChange?:(color: string, set: strin
     // Calculate saturation (100-0%) based on distance from center
     const saturation = Math.min(100, (distance / radius) * 100);
     
-    const newColor = `hsl(${hue}, ${saturation}%, 50%)`;
+    const newColor = hsvToHex(hue, saturation)//`hsl(${hue}, ${saturation}%, 50%)`;
+    
     selectorRef.current.style.backgroundColor = newColor;
     onChange?.(hue.toFixed(0).toString(), saturation.toFixed(0).toString())
   },[onChange])

@@ -10,6 +10,8 @@ export interface MetricWidgetProps {
     trend?: 'up' | 'down' | 'stable';
     trendValue?: string;
 }
+const METRIC_MIN_WIDTH = 270;
+const METRIC_MAX_WIDTH = 500;
 
 export function MetricRoomWidget({ widget }: WidgetProps) {
     
@@ -23,6 +25,96 @@ export function MetricRoomWidget({ widget }: WidgetProps) {
 
     const trendIcon = trend === 'up' ? '↑' : trend === 'down' ? '↓' : '→';
     const trendColor = trend === 'up' ? '#2ecc71' : trend === 'down' ? '#e74c3c' : '#f39c12';
+
+     return (
+        <div
+            style={{
+                width: 'max-content',
+                minWidth: `${METRIC_MIN_WIDTH}px`,
+                maxWidth: `${METRIC_MAX_WIDTH}px`,
+                boxSizing: 'border-box',
+                flex: '0 0 auto',
+
+                background: 'white',
+                borderRadius: '12px',
+                padding: '20px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                borderLeft: `4px solid ${color}`,
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                cursor: 'pointer',
+            }}
+        >
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: '12px',
+                }}
+            >
+                <div>
+                    {icon && (
+                        <span
+                            style={{
+                                fontSize: '24px',
+                                marginRight: '8px',
+                            }}
+                        >
+                            {icon}
+                        </span>
+                    )}
+
+                    <span
+                        style={{
+                            fontSize: '14px',
+                            color: '#7f8c8d',
+                            fontWeight: '500',
+                        }}
+                    >
+                        {title}
+                    </span>
+                </div>
+
+                {trend && (
+                    <span
+                        style={{
+                            fontSize: '12px',
+                            color: trendColor,
+                            fontWeight: '600',
+                            background: `${trendColor}15`,
+                            padding: '2px 8px',
+                            borderRadius: '12px',
+                            whiteSpace: 'nowrap',
+                        }}
+                    >
+                        {trendIcon} {trendValue}
+                    </span>
+                )}
+            </div>
+
+            <div
+                style={{
+                    fontSize: '32px',
+                    fontWeight: '700',
+                    color: '#2c3e50',
+                    marginBottom: '4px',
+                }}
+            >
+                {value}
+            </div>
+
+            {subtitle && (
+                <div
+                    style={{
+                        fontSize: '13px',
+                        color: '#95a5a6',
+                    }}
+                >
+                    {subtitle}
+                </div>
+            )}
+        </div>
+    );
 
     return (
         <div style={{

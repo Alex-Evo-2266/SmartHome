@@ -58,6 +58,14 @@ export const useLightData = (node?: unknown) => {
     );
 
     const {
+        fieldValue: satValue,
+        updateFieldState: updateSat,
+    } = useGetNumberField(
+        device ?? null,
+        "sat"
+    );
+
+       const {
         fieldValue: colorValue,
         updateFieldState: updateColor,
     } = useGetNumberField(
@@ -92,6 +100,13 @@ export const useLightData = (node?: unknown) => {
                 : 30,
 
         updateColor,
+
+        satValue:
+            typeof satValue === "number"
+                ? satValue
+                : 30,
+
+        updateSat,
 
         temperatureValue:
             typeof temperatureValue === "number"
