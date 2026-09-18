@@ -80,3 +80,5 @@ dep_containres.txt
 !/modules_core/Virtual_devices
 
 /modules/
+
+local.txt
