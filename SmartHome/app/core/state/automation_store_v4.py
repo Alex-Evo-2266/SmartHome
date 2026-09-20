@@ -317,8 +317,6 @@ class AutomationManager_V4:
             finally:
                 self._running_automations.discard(automation_id)
 
-
-
 #================================================================================================
 
     def add_automation(self, automation: AutomationSchema):

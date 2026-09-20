@@ -49,10 +49,41 @@ class GroupOp(str, Enum):
     MUL = "mul"
 
 
+LiteralDataType = Literal["number", "string", "boolean", "time", "duration"]
+
+def _infer_data_type(value) -> LiteralDataType:
+    # bool раньше int — потому что bool является подклассом int
+    if isinstance(value, bool):
+        return "boolean"
+    if isinstance(value, int):
+        return "number"
+    if isinstance(value, float):
+        return "number"
+    if isinstance(value, str):
+        return "string"
+    raise ValueError(f"Не удалось вывести data_type для {value!r}")
+
+
+def _validate_value_matches_type(value, data_type: str) -> None:
+    """Мягкая проверка: value должен быть совместим с data_type."""
+    if data_type == "number":
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            raise ValueError(f"data_type='number', но value={value!r}")
+    elif data_type == "boolean":
+        if not isinstance(value, bool):
+            raise ValueError(f"data_type='boolean', но value={value!r}")
+    elif data_type == "string":
+        if not isinstance(value, str):
+            raise ValueError(f"data_type='string', но value={value!r}")
+    elif data_type in ("time", "duration"):
+        # Эти типы в YAML хранятся строками
+        if not isinstance(value, str):
+            raise ValueError(f"data_type='{data_type}', но value={value!r}")
+
+
 # ============================================================
 # Аргументы выражений
 # ============================================================
-
 class LiteralArg(BaseModel):
     model_config = ConfigDict(extra="forbid", use_enum_values=True)
 
@@ -62,6 +93,21 @@ class LiteralArg(BaseModel):
         "number", "string", "boolean", "time", "duration"
     ]] = None
 
+    @model_validator(mode="after")
+    def infer_data_type(self):
+        # Если data_type задан — доверяем ему, но проверим совместимость
+        if self.data_type is not None:
+            _validate_value_matches_type(self.value, self.data_type)
+            return self
+
+        # Иначе — выводим из value
+        if self.value is None:
+            # "literal: null" без data_type — ошибка
+            raise ValueError(
+                "LiteralArg: value=None требует явного data_type"
+            )
+        self.data_type = _infer_data_type(self.value)
+        return self
 
 class RefArg(BaseModel):
     model_config = ConfigDict(extra="forbid", use_enum_values=True)

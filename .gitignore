@@ -20,7 +20,6 @@ zigbee2mqtt/log
 zigbee2mqtt/*_backup.json
 zigbee2mqtt/state.json
 config/server-config.yml
-test
 devfront.sh
 devserver.sh
 SmartHome/files/*/*.*
@@ -48,7 +47,6 @@ old
 
 clientold
 
-tests
 
 command_and_script_format.md
 

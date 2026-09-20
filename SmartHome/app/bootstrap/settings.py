@@ -2,8 +2,8 @@ import logging, os
 from app.bootstrap.const import BASE_DIR
 
 try:
-    # from app.bootstrap.settings_local import *
-    raise Exception()
+    from app.bootstrap.settings_local import *
+    # raise Exception()
 except Exception as e:
     from app.bootstrap.settings_prod import *
 
