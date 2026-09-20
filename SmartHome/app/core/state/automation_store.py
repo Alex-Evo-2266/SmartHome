@@ -28,7 +28,7 @@ class AutomationManagerSchema(BaseModel):
 class AutomationManager:
     """Основной класс для управления автоматизациями"""
 
-    def __init__(self, callback: Callable[[AutomationSchema], Awaitable[None]] = None):
+    def __init__(self, callback: Optional[Callable[[AutomationSchema], Awaitable[None]]] = None):
         """
         Инициализация менеджера автоматизаций
         
@@ -70,7 +70,7 @@ class AutomationManager:
                 elif trigger.service == "room":
                     d = trigger.trigger.split(".")
                     if len(d) != 3:
-                        return
+                        return False
                     key = (d[0], d[1], d[2])
                     if key not in self.room_index:
                         self.room_index[key] = AutomationManagerSchema(data=[])
@@ -135,7 +135,8 @@ class AutomationManager:
             for automation_name in due_automations:
                 if automation_name not in self._processed_automations and automation_name in self.automations:
                     try:
-                        await self.callback(self.automations[automation_name])
+                        if self.callback:
+                            await self.callback(self.automations[automation_name])
                         self._processed_automations.add(automation_name)
                     except Exception as e:
                         logger.error(f"Ошибка выполнения автоматизации '{automation_name}': {e}")
@@ -179,7 +180,8 @@ class AutomationManager:
             return
 
         try:
-            await self.callback(automation)
+            if self.callback:
+                await self.callback(automation)
         except Exception as e:
             logger.error(
                 "Automation '%s' failed: %s",
@@ -228,7 +230,8 @@ class AutomationManager:
         
         for automation_name in self.device_index[key].data:
             try:
-                await self.callback(self.automations[automation_name])
+                if self.callback:
+                    await self.callback(self.automations[automation_name])
             except Exception as e:
                 logger.error(f"Ошибка выполнения автоматизации '{automation_name}' по триггеру устройства: {e}")
         
@@ -237,6 +240,8 @@ class AutomationManager:
         rooms:List[RoomDevicesRaw] = await get_cached_room_data()
         try:
             room = next(r for r in rooms if r.name_room == room_name)
+            if not room.device_room:
+                return
             for type_dev, d in room.device_room.items():
                 for field_dev, f in d.fields.items():
                     for dev in f.devices:
@@ -251,7 +256,8 @@ class AutomationManager:
                             try:
                                 for automation_name in self.room_index[key].data:
                                     try:
-                                        await self.callback(self.automations[automation_name])
+                                        if self.callback:
+                                            await self.callback(self.automations[automation_name])
                                     except Exception as e:
                                         logger.error(f"Ошибка выполнения автоматизации '{automation_name}' по триггеру комнаты: {e}")
                             finally:
@@ -268,22 +274,22 @@ class AutomationManager:
         self.last_run_time = None
         self._processed_automations.clear()
 
-    def remove_automation_by_name(self, name: str) -> bool:
-        """
-        Удаляет автоматизацию по имени
-        
-        :param name: Имя автоматизации для удаления
-        :return: True если автоматизация была найдена и удалена, False если не найдена
-        """
-        automations_to_remove = [a for a in self.automations if a.name == name]
-        if not automations_to_remove:
-            return False
-            
-        for automation in automations_to_remove:
-            self.automations.pop(automation)
-            self._remove_automation_from_indexes(automation)
-            
-        return True
+#    def remove_automation_by_name(self, name: str) -> bool:
+#        """
+ #       Удаляет автоматизацию по имени
+ #       
+ #       :param name: Имя автоматизации для удаления
+ #       :return: True если автоматизация была найдена и удалена, False если не найдена
+ #       """
+  #      automations_to_remove = [a for a in self.automations if a.name == name]
+  #      if not automations_to_remove:
+ #           return False
+  #          
+  #      for automation in automations_to_remove:
+  #          self.automations.pop(automation)
+  #          self._remove_automation_from_indexes(automation)
+  #          
+   #     return True
 
     def _remove_automation_from_indexes(self, automation: AutomationSchema) -> None:
         """Удаляет автоматизацию из всех индексов"""
