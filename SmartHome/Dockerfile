@@ -1,79 +1,61 @@
-
 FROM python:3.12
 
-# Установим переменные окружения
+# ---------- Переменные окружения ----------
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_VERSION=1.8.3 \
-    POETRY_HOME="/opt/poetry" \
+    POETRY_VERSION=2.4.1 \
     POETRY_VIRTUALENVS_CREATE=false \
     POETRY_CACHE_DIR="/var/cache/pypoetry"
 
-# Обновляем систему и устанавливаем необходимые пакеты
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y curl
-
-# Создаем пользователя и группу device_service
+# ---------- Пользователь ----------
 RUN groupadd -r device_service && \
     useradd -m -g device_service -r device_service && \
     usermod -aG device_service device_service
 
-# Устанавливаем Poetry
-# RUN curl -sSL https://install.python-poetry.org | python3 - && \
-#     ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry
-
-# RUN wget https://install.python-poetry.org -O install-poetry.py
-# RUN python3 install-poetry.py
-
+# ---------- Poetry ----------
+# Устанавливаем Poetry той версии, что указана в POETRY_VERSION.
+# pip подтянет нужную, --upgrade pip — чтобы работали современные wheels.
 RUN python3 -m pip install --upgrade pip \
-    && python3 -m pip install "poetry==1.8.3"
+ && python3 -m pip install "poetry==${POETRY_VERSION}"
 
+# Проверяем, что версии Python и Poetry совпадают с ожидаемыми
+RUN python3 --version && poetry --version
 
-# RUN cd /usr/local/bin && ln -s /opt/poetry/bin/poetry
-
-# Проверяем версию Python перед установкой зависимостей
-RUN python3 --version  # Должно вывести 3.12.x
-
-# Удаляем Python 3.11, так как он не нужен
-RUN apt-get remove -y python3.11 python3.11-minimal || echo "Python 3.11 не найден"
-
-# Проверяем, что Python 3.12 стал активным
-RUN python3 --version  # Должно вывести 3.12.x
-
-# Создаём рабочие директории
-RUN mkdir -p /home/device_service/web
-WORKDIR /home/device_service/web
+# ---------- Рабочая директория ----------
 RUN mkdir -p /home/device_service/web/shared_lib
+WORKDIR /home/device_service/web
 
-# Удаляем старую директорию .venv, если она есть
-# RUN rm -rf /home/device_service/web/.venv
-
-# Даем права на директорию .venv перед установкой зависимостей
-# RUN mkdir -p /home/device_service/web/.venv && chown -R device_service:device_service /home/device_service/web/.venv
-
-# Копируем файлы poetry.lock и pyproject.toml
+# ---------- Зависимости ----------
+# Копируем ТОЛЬКО манифесты — это позволяет кэшировать слой с установкой,
+# пока не меняется pyproject/lock.
 COPY poetry.lock pyproject.toml ./
 COPY ./external/whl_all ./shared_lib
 
-# Очистка кэша Poetry
-RUN poetry cache clear pypi --all
+# Сбрасываем кэш pip/poetry, чтобы не тянуть старое из локального образа
+RUN poetry cache clear pypi --all || true
 
-# Устанавливаем зависимости
-RUN poetry install --no-interaction --no-ansi $(echo "--no-dev")
-RUN poetry add ./shared_lib/*.whl
+# Ставим основные зависимости (без dev).
+# --only main — современный эквивалент устаревшего --no-dev в Poetry 2.x.
+RUN poetry install --no-interaction --no-ansi --only main
+
+# Ставим локальные whl-пакеты из shared_lib.
+# ВАЖНО: pip install --no-deps НЕ трогает pyproject.toml/poetry.lock,
+# поэтому следующий docker build не будет ругаться на расхождение.
+# Если нужны зависимости самих whl — убери --no-deps, но проверь,
+# что они не конфликтуют с основным lock.
+RUN if ls ./shared_lib/*.whl >/dev/null 2>&1; then \
+        pip install --no-deps ./shared_lib/*.whl; \
+    else \
+        echo "No .whl files in shared_lib — skipping"; \
+    fi
 
 # Проверяем, что Poetry использует правильный Python
-RUN poetry run python --version  # Должно вывести 3.12.x
+RUN poetry run python --version
 
-# Копируем весь проект
+# ---------- Проект ----------
 COPY . .
 
-# Создаём директорию media и устанавливаем права
+# Директория для медиа
 RUN mkdir -p media && chmod 755 media
 
-# Запускаем контейнер от имени пользователя device_service
-# USER device_service
-
-# Указываем рабочую директорию
 WORKDIR /home/device_service/web
