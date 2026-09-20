@@ -21,4 +21,4 @@ echo "📦 Выполняем миграции Alembic..."
 alembic upgrade head
 
 echo "🚀 Запускаем Uvicorn..."
-exec uvicorn app:create_app --reload --port=8006 --host=0.0.0.0
+exec uvicorn app.run:create_app --reload --port=8006 --host=0.0.0.0

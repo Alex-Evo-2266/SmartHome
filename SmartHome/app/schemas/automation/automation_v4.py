@@ -195,7 +195,7 @@ class DeviceTrigger(BaseModel):
     type: Literal["device"]
     device: str
     field: str
-    condition: Optional[RefArg]
+    condition: Optional[RefArg] = None
 
 class RoomTrigger(BaseModel):
     model_config = ConfigDict(extra="forbid", use_enum_values=True)
@@ -204,7 +204,7 @@ class RoomTrigger(BaseModel):
     room: str
     device_type: str
     field: str
-    condition: Optional[RefArg]
+    condition: Optional[RefArg] = None
 
 
 Trigger = Annotated[

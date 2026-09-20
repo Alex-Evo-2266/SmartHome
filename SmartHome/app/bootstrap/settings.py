@@ -1,4 +1,4 @@
-import logging
+import logging, os
 from app.bootstrap.const import BASE_DIR
 
 try:
