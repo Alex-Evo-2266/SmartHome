@@ -1,10 +1,58 @@
 # tests/automation/test_resolve_arg.py
 import pytest
-from app.schemas.automation.automation_v4 import LiteralArg, PathArg, RefArg
-from app.core.entities.automation.blocks.expression_arg import (
-    resolve_arg, EvalContext,
+from app.schemas.automation.automation_v4 import (
+    BinaryExpr, UnaryExpr, CallExpr, GroupExpr,
+    LiteralArg, RefArg, PathArg, BinaryOp, UnaryOp, GroupOp, AutomationSchema, ConditionStep
 )
+from app.core.entities.automation.blocks.expression_arg import (
+    resolve_arg, AutomationContext
+)
+import app.core.entities.automation.automation_context as ae
 import app.core.entities.automation.blocks.expression_arg as ea
+
+from app.core.entities.automation.blocks.evaluate_ref import ExpressionError
+
+
+# ============================================================
+# Хелперы — конструкторы узлов
+# ============================================================
+
+def lit(value, data_type=None) -> LiteralArg:
+    return LiteralArg(type="literal", value=value, data_type=data_type)
+
+
+def binary(op: BinaryOp, left, right) -> BinaryExpr:
+    return BinaryExpr(type="binary", op=op, left=left, right=right)
+
+
+def unary(op: UnaryOp, operand) -> UnaryExpr:
+    return UnaryExpr(type="unary", op=op, operand=operand)
+
+
+def call(fn: str, *args) -> CallExpr:
+    return CallExpr(type="call", fn=fn, args=list(args))
+
+
+def group(op: GroupOp, *items) -> GroupExpr:
+    return GroupExpr(type="group", op=op, items=list(items))
+
+def ref(name: str) -> RefArg:
+    return RefArg(type="ref", ref=name)
+
+
+def make_automation(expressions: dict) -> AutomationSchema:
+    return AutomationSchema(
+        id="s1",
+        name="test",
+        entry="step_1",
+        steps={"step_1": ConditionStep(type="condition", condition=lit(True))},                 # для тестов evaluate_ref шаги не нужны
+        expressions=expressions,
+    )
+
+@pytest.fixture
+def ctx() -> AutomationContext:
+    exprs = {"v_a": lit(5)}
+    return AutomationContext(make_automation(exprs))
 
 
 @pytest.mark.literal
@@ -29,13 +77,15 @@ class TestResolveArgPath:
         assert resolve_arg(arg) == "resolved:device.door.state"
 
     def test_path_with_ctx_caches(self, monkeypatch):
+
         calls = []
         def fake_resolve(arg):
             calls.append(arg.path)
             return "X"
-        monkeypatch.setattr(ea, "resolve_path", fake_resolve)
+        monkeypatch.setattr(ae, "resolve_path", fake_resolve)
 
-        ctx = EvalContext()
+        exprs = {"v_a": binary(BinaryOp.ADD, left=lit(2), right=lit(3))}
+        ctx = AutomationContext(make_automation(exprs))
         arg = PathArg(type="path", path="device.door.state")
 
         assert resolve_arg(arg, ctx) == "X"
@@ -45,10 +95,11 @@ class TestResolveArgPath:
     def test_ctx_invalidate_clears(self, monkeypatch):
         calls = []
         monkeypatch.setattr(
-            ea, "resolve_path",
+            ae, "resolve_path",
             lambda arg: calls.append(arg.path) or "X",
         )
-        ctx = EvalContext()
+        exprs = {"v_a": binary(BinaryOp.ADD, left=lit(2), right=lit(3))}
+        ctx = AutomationContext(make_automation(exprs))
         arg = PathArg(type="path", path="device.door.state")
 
         resolve_arg(arg, ctx)
@@ -62,7 +113,7 @@ class TestResolveArgRef:
 
     def test_ref_not_implemented(self):
         arg = RefArg(type="ref", ref="c_night")
-        with pytest.raises(NotImplementedError, match="c_night"):
+        with pytest.raises(ExpressionError, match="c_night"):
             resolve_arg(arg)
 
 

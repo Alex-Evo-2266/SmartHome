@@ -14,6 +14,9 @@ def resolve_literal(arg: LiteralArg) -> int | float | bool | str | time | timede
     Если data_type не задан (модель уже должна была его вывести),
     возвращает value как есть.
     """
+    # if arg.value is None:
+    #     return
+
     if arg.data_type is None:
         # Защита: до сюда не должно доходить, если валидатор включён
         return arg.value

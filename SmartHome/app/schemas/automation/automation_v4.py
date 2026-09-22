@@ -66,6 +66,9 @@ def _infer_data_type(value) -> LiteralDataType:
 
 def _validate_value_matches_type(value, data_type: str) -> None:
     """Мягкая проверка: value должен быть совместим с data_type."""
+    if value is None:
+        return
+
     if data_type == "number":
         if not isinstance(value, (int, float)) or isinstance(value, bool):
             raise ValueError(f"data_type='number', но value={value!r}")

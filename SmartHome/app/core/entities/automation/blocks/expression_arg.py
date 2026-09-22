@@ -23,48 +23,12 @@ from app.schemas.automation.automation_v4 import (
 )
 from app.core.entities.automation.blocks.literalArg import resolve_literal
 from app.core.entities.automation.blocks.pathArg import resolve_path
+from app.core.entities.automation.blocks.evaluate_ref import evaluate_ref
+from app.core.entities.automation.automation_context import AutomationContext
 from app.pkg.logger import get_automatization
 
 logger = get_automatization.get_logger(__name__)
 
-
-# ============================================================
-# Контекст вычисления (кэш PathArg)
-# ============================================================
-
-class EvalContext:
-    """
-    Кэш значений PathArg на время одного вычисления выражения.
-
-    Пример:
-        ctx = EvalContext()
-        a = resolve_arg(arg1, ctx)   # device.temp.value → 25
-        b = resolve_arg(arg2, ctx)   # device.temp.value → 25 (из кэша)
-
-    Между шагами сценария создавай новый контекст (или вызывай
-    .invalidate()), чтобы увидеть актуальное состояние стора.
-    """
-
-    __slots__ = ("_cache",)
-
-    def __init__(self) -> None:
-        self._cache: dict[str, Any] = {}
-
-    def get_path(self, arg: PathArg) -> Any:
-        """Возвращает значение PathArg, кэшируя по строке пути."""
-        if arg.path not in self._cache:
-            self._cache[arg.path] = resolve_path(arg)
-        return self._cache[arg.path]
-
-    def invalidate(self) -> None:
-        """Сбросить кэш — перед следующим вычислением."""
-        self._cache.clear()
-
-    def __contains__(self, path: str) -> bool:
-        return path in self._cache
-
-    def __len__(self) -> int:
-        return len(self._cache)
 
 
 # ============================================================
@@ -73,8 +37,8 @@ class EvalContext:
 
 def resolve_arg(
     arg: ExpressionArg,
-    ctx: EvalContext | None = None,
-) -> Any:
+    ctx: AutomationContext | None = None,
+):
     """
     Возвращает рантайм-значение ExpressionArg.
 
@@ -95,11 +59,7 @@ def resolve_arg(
         return resolve_path(arg)
 
     if isinstance(arg, RefArg):
-        # Когда появится движок ссылок — здесь будет:
-        #   return evaluate_ref(arg.ref, ctx)
-        raise NotImplementedError(
-            f"RefArg пока не поддерживается: ref={arg.ref!r}"
-        )
+        return evaluate_ref(arg, ctx)   # ← ВЕРНУТЬ результат
 
     raise TypeError(
         f"Неизвестный тип ExpressionArg: {type(arg).__name__}"
