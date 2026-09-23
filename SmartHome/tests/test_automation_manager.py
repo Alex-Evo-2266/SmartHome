@@ -86,7 +86,7 @@ def test_index_weekly(make_automation):
     for wd in (0, 2, 4):
         key = (wd, "22:30")
         assert key in mgr.weekly
-        assert "a1" in mgr.weekly[key].data
+        assert "a1" in (x.data for x in mgr.weekly[key].data)
 
 
 def test_index_monthly(make_automation):
@@ -95,8 +95,8 @@ def test_index_monthly(make_automation):
         type="time", kind="monthly", at="08:15", month_days=[1, 15]
     )
     mgr.add_automation(make_automation(id="a1", triggers=[trg]))
-    assert "a1" in mgr.monthly[(1, "08:15")].data
-    assert "a1" in mgr.monthly[(15, "08:15")].data
+    assert "a1" in (x.data for x in mgr.monthly[(1, "08:15")].data) 
+    assert "a1" in (x.data for x in mgr.monthly[(15, "08:15")].data) 
 
 
 def test_index_once_normalizes_to_utc(make_automation):
@@ -126,14 +126,14 @@ def test_index_device(make_automation, device_trigger):
     mgr.add_automation(make_automation(id="a1", triggers=[device_trigger]))
     key = ("dev1", "brightness")
     assert key in mgr.device_index
-    assert "a1" in mgr.device_index[key].data
+    assert "a1" in (x.data for x in mgr.device_index[key].data)  
 
 
 def test_index_room(make_automation, room_trigger):
     mgr = AutomationManager_V4()
     mgr.add_automation(make_automation(id="a1", triggers=[room_trigger]))
     key = ("kitchen", "light", "brightness")
-    assert "a1" in mgr.room_index[key].data
+    assert "a1" in (x.data for x in mgr.room_index[key].data)   
 
 
 # ============== _get_due_automations ==============

@@ -1,4 +1,4 @@
-from app.schemas.automation.automation_v4 import RoomTrigger, AutomationSchema, WeeklyTimeTrigger, MonthlyTimeTrigger, OnceTimeTrigger, DeviceTrigger
+from app.schemas.automation.automation_v4 import RoomTrigger, RefArg, AutomationSchema, WeeklyTimeTrigger, MonthlyTimeTrigger, OnceTimeTrigger, DeviceTrigger
 from typing import Callable, Optional, Awaitable, TypeVar
 from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel, Field
@@ -17,10 +17,16 @@ UTC_TIME_FORMAT = "%H:%M"    # Упрощенный формат UTC време�
 # Общий тип для ключей индексов
 KEY_TYPE = TypeVar('KEY_TYPE')
 
+class IndexBucketItem(BaseModel):
+    """Схема для хранения списка автоматизаций и времени последнего запуска"""
+    data: str
+    cond: Optional[RefArg] = None
+
 class IndexBucket(BaseModel):
     """Схема для хранения списка автоматизаций и времени последнего запуска"""
-    data: list[str] = Field(default_factory=list)
+    data: list[IndexBucketItem] = Field(default_factory=list)
     last_run_time: Optional[datetime] = None
+
 
 
 class AutomationManager_V4:
@@ -56,11 +62,11 @@ class AutomationManager_V4:
     @staticmethod
     def _remove_from_bucket(index: dict, key, automation_id: str) -> None:
         """Убирает id из bucket-а, чистит пустой ключ."""
-        bucket = index.get(key)
+        bucket:IndexBucket | None = index.get(key)
         if bucket is None:
             return
 
-        bucket.data = [i for i in bucket.data if i != automation_id]
+        bucket.data = [i for i in bucket.data if i.data != automation_id]
 
         # Если bucket опустел — удаляем ключ, чтобы не рос мусор
         if not bucket.data:
@@ -79,7 +85,7 @@ class AutomationManager_V4:
             key = (weekday, minute_key)
             bucket = self.weekly.setdefault(key, IndexBucket())
             if id not in bucket.data:
-                bucket.data.append(id)
+                bucket.data.append(IndexBucketItem(data=id))
 
     def index_monthly_trigger(
         self,
@@ -91,7 +97,7 @@ class AutomationManager_V4:
             key = (day, minute_key)
             bucket = self.monthly.setdefault(key, IndexBucket())
             if id not in bucket.data:
-                bucket.data.append(id)
+                bucket.data.append(IndexBucketItem(data=id))
 
     def index_once_trigger(
         self,
@@ -100,7 +106,7 @@ class AutomationManager_V4:
     ) -> None:
         moment_key = self._normalize_moment(trigger.run_at)   # "2026-01-15T22:30"
         bucket = self.once.setdefault(moment_key, IndexBucket())
-        bucket.data.append(id)
+        bucket.data.append(IndexBucketItem(data=id))
 
     @staticmethod
     def _normalize_time(at: str) -> str:
@@ -158,7 +164,7 @@ class AutomationManager_V4:
         minute_key = now.strftime("%H:%M")
 
         def _grab(index, key) -> list[str]:
-            bucket = index.get(key)
+            bucket: IndexBucket = index.get(key)
             if not bucket:
                 return []
             # Уже запускали в этом же «логическом моменте»?
@@ -166,7 +172,7 @@ class AutomationManager_V4:
             abs((now - bucket.last_run_time).total_seconds()) < 60:
                 return []
             bucket.last_run_time = now
-            return list(bucket.data)
+            return list(x.data for x in bucket.data)
 
         due_automations.extend(_grab(self.weekly, (now.weekday(), minute_key)))
         due_automations.extend(_grab(self.monthly, (now.day, minute_key)))
@@ -226,7 +232,7 @@ class AutomationManager_V4:
         key = (trigger.device, trigger.field)
         if key not in self.device_index:
             self.device_index[key] = IndexBucket(data=[])
-        self.device_index[key].data.append(id)
+        self.device_index[key].data.append(IndexBucketItem(data=id))
 
     def _unindex_device(self, automation_id: str, trigger: DeviceTrigger) -> None:
         key = (trigger.device, trigger.field)
@@ -235,18 +241,18 @@ class AutomationManager_V4:
     async def on_device_patch(self, patch: DevicePatch) -> None:
         logger.debug(f"Automation on_device_patch {patch} {self.device_index}")
 
-        candidates: set[str] = set()
+        candidates: set[tuple[str, RefArg | None]] = set()
 
         for field_name in patch.changes.keys():
             key = (patch.system_name, field_name)
             bucket = self.device_index.get(key)
             if bucket:
-                candidates.update(bucket.data)
+                candidates.update((x.data, x.cond) for x in bucket.data)
 
         if not candidates:
             return
 
-        for automation_id in candidates:
+        for (automation_id, conditionRef) in candidates:
             automation = self.automations.get(automation_id)
             if automation is None or automation_id in self._running_automations:
                 continue
@@ -275,7 +281,7 @@ class AutomationManager_V4:
         key = (trigger.room, trigger.device_type, trigger.field)
         bucket = self.room_index.setdefault(key, IndexBucket())
         if id not in bucket.data:
-            bucket.data.append(id)
+            bucket.data.append(IndexBucketItem(data=id))
 
     def _unindex_room(self, automation_id: str, trigger: RoomTrigger) -> None:
         key = (trigger.room, trigger.device_type, trigger.field)
@@ -284,18 +290,18 @@ class AutomationManager_V4:
     async def on_room_patch(self, patch: RoomDevicePatch) -> None:
         logger.debug(f"Automation on_room_patch {patch}")
 
-        candidates: set[str] = set()
+        candidates: set[tuple[str, RefArg | None]] = set()
 
         for field_name in patch.changes.keys():
             key = (patch.room, patch.type_name, field_name)
             bucket = self.room_index.get(key)
             if bucket:
-                candidates.update(bucket.data)
+                candidates.update((x.data, x.cond) for x in bucket.data)
 
         if not candidates:
             return
 
-        for automation_id in candidates:
+        for (automation_id, condRef) in candidates:
             automation = self.automations.get(automation_id)
             if automation is None or automation_id in self._running_automations:
                 continue

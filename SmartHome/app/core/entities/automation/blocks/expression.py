@@ -63,7 +63,7 @@ def _to_number(value: Any) -> int | float:
     raise TypeError(f"Не удалось привести к числу: {value!r}")
 
 
-def _to_bool(value: Any) -> bool:
+def to_bool(value: Any) -> bool:
     """Приводит значение к bool с разумной семантикой."""
     if isinstance(value, bool):
         return value
@@ -77,6 +77,7 @@ def _to_bool(value: Any) -> bool:
             return False
     return bool(value)
 
+_to_bool = to_bool
 
 def _to_time(value: Any) -> time:
     """Приводит значение к time для before/after."""
