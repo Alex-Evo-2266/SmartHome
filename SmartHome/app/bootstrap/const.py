@@ -10,7 +10,9 @@ TIMEZONE = datetime.timezone(datetime.timedelta(hours=3))
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+CONFIG_DIR = os.path.join(BASE_DIR, 'config_files')
 MODULES_DIR = os.path.join(MEDIA_DIR, 'modules')
+AUTOMATION_DIR = os.path.join(CONFIG_DIR, 'automation')
 
 MODULS_DIR = os.path.join(BASE_DIR, "app","moduls","moduls")
 MODULES_URL = '/media/device/modules/'

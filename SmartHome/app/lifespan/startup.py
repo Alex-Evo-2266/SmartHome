@@ -188,7 +188,7 @@ from app.core.runtime.history.writer import history
 from app.lifespan.listener import start_listeners
 from app.core.runtime.device.init import init_all
 from app.lifespan.automation import start_automation
-from app.core.entities.automation.automation import automation
+from app.core.entities.automation.automation_v4 import run_adapter
 from app.core.state.ObservableDict import ObservableDict, servicesDataPoll
 from app.pkg.runtime.register import register_queue
 from typing import Dict, List
@@ -253,7 +253,8 @@ async def startup():
         sub_id="device_history",
         callback=history.on_patch
     )
-    get_container().automation_store.register_collback(automation)
+
+    get_container().automation_store.register_collback(run_adapter)
     history.start()
 
     await start_ws_senders()

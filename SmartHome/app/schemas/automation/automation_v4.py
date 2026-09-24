@@ -301,7 +301,7 @@ class AwaitStep(BaseModel):
     model_config = ConfigDict(extra="forbid", use_enum_values=True)
 
     type: Literal["await"]
-    condition: ExpressionArg
+    trigger: Trigger
     timeout: Optional[ExpressionArg] = None
     on_timeout: Optional[str] = None
     label: Optional[str] = None
@@ -390,7 +390,6 @@ class AutomationSchema(BaseModel):
             elif isinstance(step, ConditionStep):
                 args_to_check.append(step.condition)
             elif isinstance(step, AwaitStep):
-                args_to_check.append(step.condition)
                 if step.timeout is not None:
                     args_to_check.append(step.timeout)
 

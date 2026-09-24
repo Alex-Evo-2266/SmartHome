@@ -2,7 +2,7 @@ from app.core.state.device_store import DeviceStatusStore
 from app.core.state.room_store import RoomStateStore
 from app.core.state.connect_store import DevicesArray
 from app.core.state.class_store import DeviceClasses
-from app.core.state.automation_store import AutomationManager
+from app.core.state.automation_store_v4 import AutomationManager_V4
 from app.core.entities.device.types.register_type import types
 
 class StoreContainer:
@@ -11,7 +11,7 @@ class StoreContainer:
         self.device_store = DeviceStatusStore()
         self.connect_store = DevicesArray()
         self.room_store = RoomStateStore()
-        self.automation_store = AutomationManager()
+        self.automation_store = AutomationManager_V4()
 
         try:
             for type_device in types:

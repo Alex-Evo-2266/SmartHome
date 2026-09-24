@@ -1,4 +1,4 @@
-from app.schemas.automation.automation_v4 import RoomTrigger, RefArg, AutomationSchema, WeeklyTimeTrigger, MonthlyTimeTrigger, OnceTimeTrigger, DeviceTrigger
+from app.schemas.automation.automation_v4 import RoomTrigger, Trigger, RefArg, AutomationSchema, WeeklyTimeTrigger, MonthlyTimeTrigger, OnceTimeTrigger, DeviceTrigger
 from typing import Callable, Optional, Awaitable, TypeVar
 from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel, Field
@@ -21,6 +21,9 @@ class IndexBucketItem(BaseModel):
     """Схема для хранения списка автоматизаций и времени последнего запуска"""
     data: str
     cond: Optional[RefArg] = None
+    startStep: Optional[str] = None
+    await_step_id: Optional[str] = None   # ← новый
+    ones: bool = False
 
 class IndexBucket(BaseModel):
     """Схема для хранения списка автоматизаций и времени последнего запуска"""
@@ -32,7 +35,7 @@ class IndexBucket(BaseModel):
 class AutomationManager_V4:
     """Основной класс для управления автоматизациями"""
 
-    def __init__(self, callback: Optional[Callable[[AutomationSchema], Awaitable[None]]] = None):
+    def __init__(self, callback: Optional[Callable[[AutomationSchema, str | None], Awaitable[None]]] = None):
         """
         Инициализация менеджера автоматизаций
         
@@ -56,7 +59,7 @@ class AutomationManager_V4:
         self._processed_automations: set[str] = set()
         self._running_automations: set[str] = set()
 
-    def register_collback(self, callback: Callable[[AutomationSchema], Awaitable[None]]):
+    def register_collback(self, callback: Callable[[AutomationSchema, str | None], Awaitable[None]]):
         self.callback = callback
 
     @staticmethod
@@ -78,35 +81,45 @@ class AutomationManager_V4:
         self,
         id: str,
         trigger: WeeklyTimeTrigger,
+        bucket_item: Optional[IndexBucketItem] = None
     ) -> None:
         """Регистрирует сценарий во всех нужных bucket-ах."""
         minute_key = self._normalize_time(trigger.at)   # "22:30"
         for weekday in trigger.weekdays:
             key = (weekday, minute_key)
             bucket = self.weekly.setdefault(key, IndexBucket())
-            if id not in bucket.data:
+            if(bucket_item):
+                bucket.data.append(bucket_item)
+            elif id not in bucket.data:
                 bucket.data.append(IndexBucketItem(data=id))
 
     def index_monthly_trigger(
         self,
         id: str,
         trigger: MonthlyTimeTrigger,
+        bucket_item: Optional[IndexBucketItem] = None
     ) -> None:
         minute_key = self._normalize_time(trigger.at)
         for day in trigger.month_days:
             key = (day, minute_key)
             bucket = self.monthly.setdefault(key, IndexBucket())
-            if id not in bucket.data:
+            if(bucket_item):
+                bucket.data.append(bucket_item)
+            elif id not in bucket.data:
                 bucket.data.append(IndexBucketItem(data=id))
 
     def index_once_trigger(
         self,
         id: str,
         trigger: OnceTimeTrigger,
+        bucket_item: Optional[IndexBucketItem] = None
     ) -> None:
         moment_key = self._normalize_moment(trigger.run_at)   # "2026-01-15T22:30"
         bucket = self.once.setdefault(moment_key, IndexBucket())
-        bucket.data.append(IndexBucketItem(data=id))
+        if(bucket_item):
+            bucket.data.append(bucket_item)
+        else:
+            bucket.data.append(IndexBucketItem(data=id))
 
     @staticmethod
     def _normalize_time(at: str) -> str:
@@ -122,49 +135,12 @@ class AutomationManager_V4:
 
 # ===================================== run time=============================================
 
-    # def _get_due_automations(self, now: datetime) -> list[str]:
-    #     """Возвращает список автоматизаций, которые должны быть выполнены в указанное время"""
-    #     due_automations = []
-    #     minute_key = now.strftime("%H:%M")
-        
-    #     # WEEKLY (включает "каждый день")
-    #     weekday = now.weekday()
-    #     key = (weekday, minute_key)
-    #     bucket = self.weekly.get(key)
-    #     if bucket:
-    #         due_automations.extend(self.weekly[key].data)
-    #         self.weekly[key].last_run_time = now
-
-    #     # MONTHLY
-    #     month_day = now.day
-    #     key = (month_day, minute_key)
-    #     bucket = self.monthly.get(key)
-    #     if bucket:
-    #         due_automations.extend(self.monthly[key].data)
-    #         self.monthly[key].last_run_time = now
-
-    #     # ONCE
-    #     moment_key = now.strftime("%Y-%m-%dT%H:%M")
-    #     key = moment_key
-    #     bucket = self.once.get(key)
-    #     if bucket:
-    #         due_automations.extend(self.once[key].data)
-    #         self.once[key].last_run_time = now
-
-    #     # INTERVAL
-    #     # for name, trigger_idx, interval_sec in list(self.interval):
-    #     #     last = self.scenario_last_run.get(name)
-    #     #     if last is None or (now - last).total_seconds() >= interval_sec:
-    #     #         await self._run_automation_safe(name)
-        
-    #     return due_automations
-
-    def _get_due_automations(self, now: datetime) -> list[str]:
-        due_automations = []
+    def _get_due_automations(self, now: datetime) -> list[IndexBucketItem]:
+        due: list[IndexBucketItem] = []
         minute_key = now.strftime("%H:%M")
 
-        def _grab(index, key) -> list[str]:
-            bucket: IndexBucket = index.get(key)
+        def _grab(index, key) -> list[IndexBucketItem]:
+            bucket: IndexBucket | None = index.get(key)
             if not bucket:
                 return []
             # Уже запускали в этом же «логическом моменте»?
@@ -172,13 +148,24 @@ class AutomationManager_V4:
             abs((now - bucket.last_run_time).total_seconds()) < 60:
                 return []
             bucket.last_run_time = now
-            return list(x.data for x in bucket.data)
 
-        due_automations.extend(_grab(self.weekly, (now.weekday(), minute_key)))
-        due_automations.extend(_grab(self.monthly, (now.day, minute_key)))
-        due_automations.extend(_grab(self.once, now.strftime("%Y-%m-%dT%H:%M")))
+            # Отделяем ones от обычных
+            ones = [item for item in bucket.data if item.ones]
+            regular = [item for item in bucket.data if not item.ones]
 
-        return due_automations
+            # ones удаляем из bucket сразу — это одноразовые подписки
+            if ones:
+                bucket.data = regular
+                if not bucket.data:
+                    index.pop(key, None)
+
+            return regular + ones
+
+        due.extend(_grab(self.weekly, (now.weekday(), minute_key)))
+        due.extend(_grab(self.monthly, (now.day, minute_key)))
+        due.extend(_grab(self.once, now.strftime("%Y-%m-%dT%H:%M")))
+
+        return due
 
     async def run_due_automations(self) -> None:
         now = datetime.now(timezone.utc)
@@ -190,20 +177,26 @@ class AutomationManager_V4:
         self._processed_automations.clear()
 
         while time_to_check <= now:
-            # Пропускаем большие промежутки (более 5 минут)
             if (now - time_to_check) > timedelta(minutes=5):
                 time_to_check += timedelta(minutes=1)
                 continue
 
-            due_automations = self._get_due_automations(time_to_check)
+            due_items = self._get_due_automations(time_to_check)
 
-            for automation_id in due_automations:
-                if automation_id not in self._processed_automations and automation_id in self.automations and self.callback:
-                    try:
-                        await self.callback(self.automations[automation_id])
-                        self._processed_automations.add(automation_id)
-                    except Exception as e:
-                        logger.error(f"Ошибка выполнения автоматизации '{automation_id}': {e}")
+            for item in due_items:
+                automation_id = item.data
+                if automation_id in self._processed_automations:
+                    continue
+                automation = self.automations.get(automation_id)
+                if automation is None or self.callback is None:
+                    continue
+                try:
+                    await self.callback(automation, item.startStep)
+                    self._processed_automations.add(automation_id)
+                except Exception as e:
+                    logger.error(
+                        "Automation '%s' failed: %s", automation_id, e,
+                    )
 
             time_to_check += timedelta(minutes=1)
 
@@ -227,60 +220,75 @@ class AutomationManager_V4:
 
 #============================================device==================================================
 
-    def index_device_trigger(self, id: str, trigger:DeviceTrigger) -> None:
+        
+    def index_device_trigger(self, id: str, trigger:DeviceTrigger, bucket_item: Optional[IndexBucketItem] = None) -> None:
         """Обрабатывает триггер устройства и добавляет в индекс"""
         key = (trigger.device, trigger.field)
         if key not in self.device_index:
             self.device_index[key] = IndexBucket(data=[])
-        self.device_index[key].data.append(IndexBucketItem(data=id))
+        if(bucket_item):
+            self.device_index[key].data.append(bucket_item)
+        else:
+            self.device_index[key].data.append(IndexBucketItem(data=id))
 
     def _unindex_device(self, automation_id: str, trigger: DeviceTrigger) -> None:
         key = (trigger.device, trigger.field)
         self._remove_from_bucket(self.device_index, key, automation_id)
 
     async def on_device_patch(self, patch: DevicePatch) -> None:
-        logger.debug(f"Automation on_device_patch {patch} {self.device_index}")
+        logger.debug("on_device_patch %s", patch)
 
-        candidates: set[tuple[str, RefArg | None]] = set()
+        candidates: list[IndexBucketItem] = []
 
         for field_name in patch.changes.keys():
             key = (patch.system_name, field_name)
             bucket = self.device_index.get(key)
-            if bucket:
-                candidates.update((x.data, x.cond) for x in bucket.data)
+            if not bucket:
+                continue
+
+            # Отделяем ones от обычных
+            ones = [item for item in bucket.data if item.ones]
+            regular = [item for item in bucket.data if not item.ones]
+
+            if ones:
+                bucket.data = regular
+                if not bucket.data:
+                    self.device_index.pop(key, None)
+
+            candidates.extend(regular + ones)
 
         if not candidates:
             return
 
-        for (automation_id, conditionRef) in candidates:
+        for item in candidates:
+            automation_id = item.data
             automation = self.automations.get(automation_id)
             if automation is None or automation_id in self._running_automations:
                 continue
 
-            # сюда проверку на условие в будущем
+            # TODO: проверка item.cond, если нужна
 
             self._running_automations.add(automation_id)
-
             try:
-                if(self.callback):
-                    await self.callback(automation)
+                if self.callback:
+                    await self.callback(automation, item.startStep)
             except Exception as e:
                 logger.error(
                     "Automation '%s' - '%s' failed: %s",
-                    automation.name,
-                    automation.id,
-                    e,
+                    automation.name, automation.id, e,
                 )
             finally:
                 self._running_automations.discard(automation_id)
 
 #======================================room==========================================
 
-    def index_room_trigger(self, id: str, trigger:RoomTrigger) -> None:
+    def index_room_trigger(self, id: str, trigger:RoomTrigger, bucket_item: Optional[IndexBucketItem] = None) -> None:
         """Обрабатывает триггер комнаты и добавляет в индекс"""
         key = (trigger.room, trigger.device_type, trigger.field)
         bucket = self.room_index.setdefault(key, IndexBucket())
-        if id not in bucket.data:
+        if bucket_item:
+            bucket.data.append(bucket_item)
+        elif id not in bucket.data:
             bucket.data.append(IndexBucketItem(data=id))
 
     def _unindex_room(self, automation_id: str, trigger: RoomTrigger) -> None:
@@ -288,37 +296,43 @@ class AutomationManager_V4:
         self._remove_from_bucket(self.room_index, key, automation_id)
 
     async def on_room_patch(self, patch: RoomDevicePatch) -> None:
-        logger.debug(f"Automation on_room_patch {patch}")
+        logger.debug("on_room_patch %s", patch)
 
-        candidates: set[tuple[str, RefArg | None]] = set()
+        candidates: list[IndexBucketItem] = []
 
         for field_name in patch.changes.keys():
             key = (patch.room, patch.type_name, field_name)
             bucket = self.room_index.get(key)
-            if bucket:
-                candidates.update((x.data, x.cond) for x in bucket.data)
+            if not bucket:
+                continue
+
+            ones = [item for item in bucket.data if item.ones]
+            regular = [item for item in bucket.data if not item.ones]
+
+            if ones:
+                bucket.data = regular
+                if not bucket.data:
+                    self.room_index.pop(key, None)
+
+            candidates.extend(regular + ones)
 
         if not candidates:
             return
 
-        for (automation_id, condRef) in candidates:
+        for item in candidates:
+            automation_id = item.data
             automation = self.automations.get(automation_id)
             if automation is None or automation_id in self._running_automations:
                 continue
 
-            # сюда проверку на условие в будущем
-
             self._running_automations.add(automation_id)
-
             try:
-                if(self.callback):
-                    await self.callback(automation)
+                if self.callback:
+                    await self.callback(automation, item.startStep)
             except Exception as e:
                 logger.error(
                     "Automation '%s' - '%s' failed: %s",
-                    automation.name,
-                    automation.id,
-                    e,
+                    automation.name, automation.id, e,
                 )
             finally:
                 self._running_automations.discard(automation_id)
@@ -351,6 +365,42 @@ class AutomationManager_V4:
                 self.index_device_trigger(automation.id, trigger)
             if(trigger.type == 'room'):
                 self.index_room_trigger(automation.id, trigger)
+
+        return True
+
+    def add_await_automation(
+            self, automation: AutomationSchema, 
+            trigger: Trigger, 
+            start_step: str, 
+            await_step_id: str
+        ):
+        """
+        Добавляет новую автоматизацию в менеджер
+        
+        :param automation: Автоматизация для добавления
+        :return: True если добавлено успешно, False если автоматизация уже существует
+        """
+        if not automation.id in self.automations:
+            self.automations[automation.id] = automation
+
+        bucket = IndexBucketItem(
+            data=automation.id, 
+            ones=True, 
+            startStep=start_step,
+            await_step_id=await_step_id
+        )
+
+        if(trigger.type == 'time'):
+            if(trigger.kind == 'weekly'):
+                self.index_time_trigger(automation.id, trigger, bucket)
+            if(trigger.kind == 'monthly'):
+                self.index_monthly_trigger(automation.id, trigger, bucket)
+            if(trigger.kind == 'once'):
+                self.index_once_trigger(automation.id, trigger, bucket)
+        if(trigger.type == 'device'):
+            self.index_device_trigger(automation.id, trigger, bucket)
+        if(trigger.type == 'room'):
+            self.index_room_trigger(automation.id, trigger, bucket)
 
         return True
 
@@ -389,6 +439,28 @@ class AutomationManager_V4:
         logger.info(f"Автоматизация '{automation_id}' удалена")
         return True
 
+    def remove_await_subscription(self, automation_id: str, await_step_id: str) -> None:
+        """Убирает await-подписку из всех индексов."""
+        def _clean(index: dict) -> None:
+            empty_keys = []
+            for key, bucket in index.items():
+                bucket.data = [
+                    x for x in bucket.data
+                    if not (x.ones
+                            and x.data == automation_id
+                            and x.await_step_id == await_step_id)
+                ]
+                if not bucket.data:
+                    empty_keys.append(key)
+            for k in empty_keys:
+                index.pop(k, None)
+
+        _clean(self.weekly)
+        _clean(self.monthly)
+        _clean(self.once)
+        _clean(self.device_index)
+        _clean(self.room_index)
+
     def clear_automations(self) -> None:
         """Очищает все автоматизации и сбрасывает состояние менеджера"""
         self.automations.clear()
@@ -400,4 +472,7 @@ class AutomationManager_V4:
         self._running_automations.clear()
         self.last_run_time = None
         self._processed_automations.clear()
+
+    def get_automation_by_id(self, id):
+        return self.automations.get(id)
 

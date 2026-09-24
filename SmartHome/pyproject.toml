@@ -19,6 +19,7 @@ pika = "^1.3.2"
 aio-pika = "^9.5.5"
 async-lru = "^2.0.5"
 yeelight = "^0.7.16"
+apscheduler = "^3.11.3"
 
 
 [build-system]

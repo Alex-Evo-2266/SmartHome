@@ -146,6 +146,7 @@ services:
       # - media_device_voluem:/home/device_service/web/media
       - ./SmartHome/media:/home/device_service/web/media
       - ./modules_core:/home/device_service/web/app/moduls/moduls
+      - ${CONFIGURATE_DIR}/_devices_:/home/device_service/web/config_files
     depends_on:
       rabbitmq:
         condition: service_healthy

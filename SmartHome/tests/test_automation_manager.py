@@ -145,9 +145,9 @@ def test_get_due_weekly(make_automation):
     )
     mgr.add_automation(make_automation(id="a1", triggers=[trg]))
 
-    monday = datetime(2026, 1, 5, 10, 0, tzinfo=timezone.utc)  # Monday
+    monday = datetime(2026, 1, 5, 10, 0, tzinfo=timezone.utc)
     due = mgr._get_due_automations(monday)
-    assert "a1" in due
+    assert "a1" in [x.data for x in due]              # ← поправлено
 
 
 def test_get_due_prevents_double_run_within_60s(make_automation):
@@ -160,8 +160,8 @@ def test_get_due_prevents_double_run_within_60s(make_automation):
     monday = datetime(2026, 1, 5, 10, 0, tzinfo=timezone.utc)
     due1 = mgr._get_due_automations(monday)
     due2 = mgr._get_due_automations(monday)
-    assert "a1" in due1
-    assert due2 == []
+    assert "a1" in [x.data for x in due1]             # ←
+    assert due2 == []                                 # ← второй раз пусто
 
 
 def test_get_due_once(make_automation):
@@ -172,7 +172,8 @@ def test_get_due_once(make_automation):
     mgr.add_automation(make_automation(id="a1", triggers=[trg]))
 
     moment = datetime(2026, 1, 15, 19, 30, tzinfo=timezone.utc)
-    assert "a1" in mgr._get_due_automations(moment)
+    due = mgr._get_due_automations(moment)
+    assert "a1" in [x.data for x in due]              # ←
 
 
 def test_get_due_monthly(make_automation):
@@ -182,7 +183,8 @@ def test_get_due_monthly(make_automation):
     )
     mgr.add_automation(make_automation(id="a1", triggers=[trg]))
     moment = datetime(2026, 3, 5, 10, 0, tzinfo=timezone.utc)
-    assert "a1" in mgr._get_due_automations(moment)
+    due = mgr._get_due_automations(moment)
+    assert "a1" in [x.data for x in due]              # ←
 
 
 # ============== run_due_automations (интеграция) ==============
@@ -192,7 +194,7 @@ def test_get_due_monthly(make_automation):
 async def test_run_due_calls_callback(make_automation):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -210,7 +212,7 @@ async def test_run_due_calls_callback(make_automation):
 async def test_run_due_does_not_run_twice(make_automation):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -229,7 +231,7 @@ async def test_run_due_does_not_run_twice(make_automation):
 async def test_run_due_ignores_wrong_time(make_automation):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -245,7 +247,7 @@ async def test_run_due_ignores_wrong_time(make_automation):
 @pytest.mark.asyncio
 @freeze_time("2026-01-05 10:00:00")
 async def test_callback_exception_is_logged_not_raised(make_automation):
-    async def bad_cb(_aut):
+    async def bad_cb(_aut, step):
         raise RuntimeError("boom")
 
     mgr = AutomationManager_V4(callback=bad_cb)
@@ -264,7 +266,7 @@ async def test_callback_exception_is_logged_not_raised(make_automation):
 async def test_on_device_patch_triggers(make_automation, device_trigger):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -278,7 +280,7 @@ async def test_on_device_patch_triggers(make_automation, device_trigger):
 async def test_on_device_patch_ignores_unrelated_field(make_automation, device_trigger):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -292,7 +294,7 @@ async def test_on_device_patch_ignores_unrelated_field(make_automation, device_t
 async def test_on_device_patch_ignores_other_device(make_automation, device_trigger):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -308,7 +310,7 @@ async def test_on_device_patch_ignores_other_device(make_automation, device_trig
 async def test_on_room_patch_triggers(make_automation, room_trigger):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -322,7 +324,7 @@ async def test_on_room_patch_triggers(make_automation, room_trigger):
 async def test_on_room_patch_wrong_room(make_automation, room_trigger):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -336,7 +338,7 @@ async def test_on_room_patch_wrong_room(make_automation, room_trigger):
 async def test_on_room_patch_wrong_type(make_automation, room_trigger):
     called = []
 
-    async def cb(aut):
+    async def cb(aut, step):
         called.append(aut.id)
 
     mgr = AutomationManager_V4(callback=cb)
@@ -355,7 +357,7 @@ async def test_device_patch_does_not_reenter(make_automation, device_trigger):
     release = asyncio.Event()
     call_count = 0
 
-    async def cb(_aut):
+    async def cb(_aut, step):
         nonlocal call_count
         call_count += 1
         running.set()

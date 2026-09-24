@@ -1,5 +1,5 @@
 import os
-from app.bootstrap.const import MODULES_DIR
+from app.bootstrap.const import MODULES_DIR, CONFIG_DIR, AUTOMATION_DIR
 
 def ensure_directory_exists(directory):
     """Проверяет, существует ли директория, и если нет — создает её."""
@@ -11,4 +11,5 @@ def ensure_directory_exists(directory):
 
 def create_directorys():
     ensure_directory_exists(MODULES_DIR)
-    print(MODULES_DIR)
+    ensure_directory_exists(CONFIG_DIR)
+    ensure_directory_exists(AUTOMATION_DIR)
