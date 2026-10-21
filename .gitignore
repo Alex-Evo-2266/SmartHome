@@ -80,3 +80,5 @@ dep_containres.txt
 /modules/
 
 local.txt
+
+.env

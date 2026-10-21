@@ -2,8 +2,8 @@ import logging, os
 from app.bootstrap.const import BASE_DIR
 
 try:
-    from app.bootstrap.settings_local import *
-    # raise Exception()
+    # from app.bootstrap.settings_local import *
+    raise Exception()
 except Exception as e:
     from app.bootstrap.settings_prod import *
 
@@ -14,7 +14,6 @@ DB_URL = "".join(["mysql+pymysql://",
     MYSQL_PASSWORD,"@",
     MYSQL_HOST,":",MYSQL_PORT,"/",
     MYSQL_DATABASE])
-print("bd: ",DB_URL)
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 LOGS_LEVEL = logging.DEBUG if DEBUG else logging.INFO

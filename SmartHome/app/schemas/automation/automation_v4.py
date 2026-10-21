@@ -256,10 +256,8 @@ class RoomTrigger(BaseModel):
     condition: Optional[RefArg] = None
 
 
-Trigger = Annotated[
-    Union[DeviceTrigger, TimeTrigger, RoomTrigger],
-    Field(discriminator="type"),
-]
+Trigger = Union[DeviceTrigger, TimeTrigger, RoomTrigger]
+
 
 
 # ============================================================

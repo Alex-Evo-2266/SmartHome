@@ -176,6 +176,7 @@
 from app.pkg.logger import MyLogger
 from app.lifespan.utils.create_dirs import create_directorys
 from app.db.ormar.dbormar import database
+from app.scheduler import scheduler
 from app.lifespan.register_config import register_config
 from app.lifespan.start_senders import start_rabbitmq_senders, start_ws_senders
 from app.pkg.config.core import __config__
@@ -187,8 +188,7 @@ from app.core.state.get_store import get_container
 from app.core.runtime.history.writer import history
 from app.lifespan.listener import start_listeners
 from app.core.runtime.device.init import init_all
-from app.lifespan.automation import start_automation
-from app.core.entities.automation.automation_v4 import run_adapter
+from app.lifespan.automation_v4 import start_automation
 from app.core.state.ObservableDict import ObservableDict, servicesDataPoll
 from app.pkg.runtime.register import register_queue
 from typing import Dict, List
@@ -215,12 +215,28 @@ async def startup():
     # Подключение к базе данных
     database_ = database
     if not database_.is_connected:
+        logger.info("Connecting to the database...")
         try:
             await database_.connect()
             logger.info("Database connection established.")
-        except Exception as e:
-            logger.error(f"Failed to connect to database: {e}")
-            return  # Прерываем запуск при ошибке
+        except Exception:
+            logger.exception("Failed to connect to the database.")
+            raise
+    else:
+        logger.info("Database is already connected.")
+
+    if not scheduler.running:
+        logger.info("Starting APScheduler and initializing its database job store...")
+        try:
+            scheduler.start()
+        except Exception:
+            logger.exception("Failed to start APScheduler.")
+            if database_.is_connected:
+                logger.info("Disconnecting from the database after scheduler startup failure...")
+                await database_.disconnect()
+                logger.info("Database connection closed.")
+            raise
+        logger.info("APScheduler started.")
     
     register_config()
 
@@ -254,7 +270,6 @@ async def startup():
         callback=history.on_patch
     )
 
-    get_container().automation_store.register_collback(run_adapter)
     history.start()
 
     await start_ws_senders()
