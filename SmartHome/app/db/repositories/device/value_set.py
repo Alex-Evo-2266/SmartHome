@@ -3,7 +3,7 @@ import logging
 from datetime import datetime, timezone
 
 from app.schemas.device.device import DeviceSchema
-from app.db.models.device import Value
+from app.db.models.device.device import Value
 from app.db.repositories.device.utils.utils import get_id
 from app.db.cache.device.invalidate_cache import invalidate_cache_device_data_by_field
 from app.db.cache.device.cach_field import get_cached_last_value, get_cached_fields, CachFieldData
@@ -16,9 +16,12 @@ async def save_values(data: List[DeviceSchema]):
     values_to_create:List[Value] = []  # Буфер для batch-создания записей
 
     for device in data:
-        fields: List[CachFieldData] = await get_cached_fields(device.system_name)
+        fields: List[CachFieldData] | None = await get_cached_fields(device.system_name)
         if not fields:
             logger.warning(f"Device '{device.system_name}' has no fields.")
+            continue
+        if not device.value:
+            logger.warning(f"Device '{device.system_name}' has no values.")
             continue
         for field in fields:
             value = device.value.get(field.name)  # Безопасное извлечение значения

@@ -2,11 +2,12 @@
 from app.pkg.logger import MyLogger
 from app.core.state.get_store import get_container
 from app.core.entities.device.set_status import set_status_for_device
-from app.exceptions.device import DeviceNotFound
+from app.exceptions.device import DeviceNotFound, DeviceFieldNotFound
+from app.core.ports.interface.device_class import IDevice
 
 logger = MyLogger().get_logger(__name__)
 
-async def set_status(system_name: str, field_id: str, value: str) -> None:
+async def set_status(system_name: str, field_id: str, value: str | int) -> None:
     """Асинхронная установка значения без учета типа поля (прямой вызов)."""
     logger.info(f"Attempting to set status for device '{system_name}', field '{field_id}' with value '{value}'")
     logger.info(f"tsest '{get_container().connect_store.devices}', 4 '{get_container().device_store._states}'")
@@ -37,4 +38,26 @@ async def set_status_correct(system_name: str, field_id: str, value: str) -> Non
         await set_status_for_device(device_cond.device, field_id, value)
     except Exception as e:
         logger.error(f"Error setting corrected value for device '{system_name}', field '{field_id}': {e}")
+        raise
+
+async def set_status_by_name_field_correct(system_name: str, field_name: str, value: str) -> None:
+    """Асинхронная установка значения с учетом типа поля и ограничений."""
+    logger.info(f"Attempting to set corrected status for device '{system_name}', field '{field_name}' with value '{value}'")
+
+    device_cond = get_container().connect_store.get(system_name)
+    if not device_cond:
+        logger.error(f"Device '{system_name}' not found.")
+        raise DeviceNotFound(f"Device '{system_name}' not found.")
+
+    device: IDevice = device_cond.device
+    cond_field = device.get_field_by_name(field_name)
+
+    if not cond_field:
+        logger.error(f"Device '{system_name}' field '{field_name}' not found.")
+        raise DeviceFieldNotFound(f"Device '{system_name}' field '{field_name}' not found.")
+
+    try:
+        await set_status_for_device(device_cond.device, cond_field.get_id(), value)
+    except Exception as e:
+        logger.error(f"Error setting corrected value for device '{system_name}', field '{field_name}': {e}")
         raise

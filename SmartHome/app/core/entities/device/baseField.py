@@ -46,13 +46,13 @@ class FieldBase(IField):
 	def get_type(self):
 		return self.data.type
 
-	def get_unit(self) -> str:
+	def get_unit(self) -> str | None:
 		return self.data.unit
 
-	def get_entity(self) -> str:
+	def get_entity(self) -> str | None:
 		return self.data.entity
 
-	def get_address(self) -> str:
+	def get_address(self) -> str | None:
 		return self.data.address
 
 	def is_virtual_field(self) -> bool:

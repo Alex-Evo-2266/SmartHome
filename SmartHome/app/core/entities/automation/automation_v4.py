@@ -32,6 +32,7 @@ from app.core.entities.automation.blocks.expression_arg import resolve_arg
 from app.pkg.logger import get_automatization
 from app.scheduler import scheduler
 from app.core.state.get_store import get_container
+from app.core.entities.automation.device_action_handler import device_action_handler
 
 logger = get_automatization.get_logger(__name__)
 
@@ -158,23 +159,15 @@ class AutomationRunner:
             return None
 
         scheduler.add_job(
-            self._continue_after_delay,
+            continue_after_delay,
             "date",
             run_date=datetime.now(timezone.utc) + timedelta(seconds=seconds),
             args=[automation_id, step.next],
-            id=f"auto:{automation_id}:delay:{step_id}",   # ← новый формат
+            id=f"auto:{automation_id}:delay:{step_id}",
             replace_existing=True,
             misfire_grace_time=300,
         )
-        return None                    # ← БАГ-ФИКС: не идём дальше
-
-    async def _continue_after_delay(self, automation_id: str, next_step: str | None) -> None:
-        if next_step is None:
-            return
-        automation = get_container().automation_store.get_automation_by_id(automation_id)
-        if automation is None:
-            return
-        await self.run(automation, startStep=next_step)
+        return None
 
     # ------------------------------------------------------------------
     # ActionStep
@@ -257,7 +250,7 @@ class AutomationRunner:
             if step.timeout is not None:
                 timeout_sec = self._resolve_seconds(step.timeout, ctx)
                 scheduler.add_job(
-                    self._handle_await_timeout,
+                    continue_after_await_timeout,
                     "date",
                     run_date=datetime.now(timezone.utc) + timedelta(seconds=timeout_sec),
                     args=[automation_id, step_id, step.on_timeout],
@@ -268,30 +261,8 @@ class AutomationRunner:
 
         # 3. Раннер останавливается. Продолжение:
         #    - по событию (manager.on_device_patch → callback)
-        #    - по таймауту (_handle_await_timeout)
+        #    - по таймауту (continue_after_await_timeout)
         return None
-
-    async def _handle_await_timeout(
-        self,
-        automation_id: str,
-        step_id: str,
-        on_timeout: str | None,
-    ) -> None:
-        """Сработал таймаут ожидания: снимаем подписку и идём в on_timeout."""
-        manager = get_container().automation_store
-
-        # 1. Снимаем подписку из индексов — иначе останется навсегда
-        manager.remove_await_subscription(automation_id, step_id)
-
-        if on_timeout is None:
-            return
-
-        # 2. Продолжаем сценарий с ветки on_timeout
-        automation = manager.get_automation_by_id(automation_id)
-        if automation is None:
-            return
-
-        await self.run(automation, startStep=on_timeout)
 
     # ------------------------------------------------------------------
     # Утилиты
@@ -325,15 +296,44 @@ class AutomationRunner:
         )
 
 
-async def mok(
-    device: str,
-    command: str,
-    params: dict[str, Any]
-) -> None:
-    # your implementation
-    ...
+async def continue_after_delay(automation_id: str, next_step: str | None) -> None:
+    if next_step is None:
+        return
 
-automation_v4 = AutomationRunner(mok)
+    automation = get_container().automation_store.get_automation_by_id(automation_id)
+    if automation is None:
+        logger.warning(
+            "Cannot continue delay for automation '%s': automation is not registered",
+            automation_id,
+        )
+        return
+
+    await run_adapter(automation, startStep=next_step)
+
+
+async def continue_after_await_timeout(
+    automation_id: str,
+    step_id: str,
+    on_timeout: str | None,
+) -> None:
+    manager = get_container().automation_store
+    manager.remove_await_subscription(automation_id, step_id)
+
+    if on_timeout is None:
+        return
+
+    automation = manager.get_automation_by_id(automation_id)
+    if automation is None:
+        logger.warning(
+            "Cannot continue await timeout for automation '%s': automation is not registered",
+            automation_id,
+        )
+        return
+
+    await run_adapter(automation, startStep=on_timeout)
+
+
+automation_v4 = AutomationRunner(device_action_handler)
 
 
 async def run_adapter(automation: AutomationSchema, startStep: str | None) -> None:

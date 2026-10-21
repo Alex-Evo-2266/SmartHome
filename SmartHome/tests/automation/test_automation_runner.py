@@ -4,6 +4,7 @@ from datetime import timedelta
 from unittest.mock import MagicMock, patch
 
 import pytest
+from apscheduler.util import obj_to_ref, ref_to_obj
 
 from app.schemas.automation.automation_v4 import (
     AutomationSchema, DelayStep, ActionStep, ConditionStep, AwaitStep,
@@ -14,6 +15,7 @@ from app.core.entities.automation.automation_context import AutomationContext
 from app.core.entities.automation.automation_v4 import (
     AutomationRunner, StepExecutionError, MAX_STEPS_PER_RUN,
 )
+from app.core.entities.automation import automation_v4 as runner_module
 
 
 # ---------- helpers ----------
@@ -155,6 +157,26 @@ class TestDelayStep:
         # args=[automation_id, next_step]
         args = scheduler_fake.jobs[job_id]["args"]
         assert args == ["a1", "s2"]
+
+    @pytest.mark.asyncio
+    async def test_delay_job_continues_with_next_step(
+        self, runner, handler, scheduler_fake, store_fake, monkeypatch
+    ):
+        automation = make_automation({
+            "s1": DelayStep(type="delay", duration=lit(0), next="s2"),
+            "s2": ActionStep(type="action", device="d", command="after_delay"),
+        })
+        store_fake.automations["a1"] = automation
+        monkeypatch.setattr(runner_module, "automation_v4", runner)
+
+        await runner.run(automation)
+        job = next(iter(scheduler_fake.jobs.values()))
+        assert job["func"] is runner_module.continue_after_delay
+        assert ref_to_obj(obj_to_ref(job["func"])) is runner_module.continue_after_delay
+
+        await job["func"](*job["args"])
+
+        assert handler.calls == [("d", "after_delay", {})]
 
 
     @pytest.mark.asyncio
@@ -321,6 +343,7 @@ class TestAwaitStep:
         assert job_id == "auto:a1:await:s1:timeout"
         args = scheduler_fake.jobs[job_id]["args"]
         assert args == ["a1", "s1", "s3"]
+        assert scheduler_fake.jobs[job_id]["func"] is runner_module.continue_after_await_timeout
 
     @pytest.mark.asyncio
     async def test_no_timeout_no_job(self, runner, store_fake, scheduler_fake):

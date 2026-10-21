@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Annotated, Optional, Literal, Union
+from typing import Annotated, Optional, Literal, Union, Any, Awaitable, Callable
 
 from pydantic import BaseModel, Field, ConfigDict, model_validator, field_validator
 
@@ -284,6 +284,30 @@ class ActionStep(BaseModel):
     next: Optional[str] = None
 
 
+class RoomActionStep(BaseModel):
+    """Действие над устройствами определённого типа в комнате."""
+    model_config = ConfigDict(extra="forbid", use_enum_values=True)
+
+    type: Literal["room_action"]
+    room: str
+    device_type: str
+    command: str
+    params: dict[str, ExpressionArg] = Field(default_factory=dict)
+    label: Optional[str] = None
+    next: Optional[str] = None
+
+
+class ScriptActionStep(BaseModel):
+    """Запуск другого сценария."""
+    model_config = ConfigDict(extra="forbid", use_enum_values=True)
+
+    type: Literal["script"]
+    script: str
+    params: dict[str, ExpressionArg] = Field(default_factory=dict)
+    label: Optional[str] = None
+    next: Optional[str] = None
+
+
 class ConditionStep(BaseModel):
     model_config = ConfigDict(extra="forbid", use_enum_values=True)
 
@@ -307,7 +331,7 @@ class AwaitStep(BaseModel):
 
 
 Step = Annotated[
-    Union[DelayStep, ActionStep, ConditionStep, AwaitStep],
+    Union[DelayStep, ActionStep, ConditionStep, AwaitStep, ScriptActionStep, RoomActionStep],
     Field(discriminator="type"),
 ]
 
@@ -420,3 +444,33 @@ class EnableSchema(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     is_enabled: bool = True
+
+
+
+
+
+class CommandParameter(BaseModel):
+    """Описание параметра команды для API и фронтенда."""
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+    title: str
+    data_type: Literal["number", "string", "boolean", "any"] = "any"
+    required: bool = True
+    description: str | None = None
+
+
+class DeviceCommand(BaseModel):
+    """Описание команды устройства."""
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+    title: str
+    description: str | None = None
+    parameters: list[CommandParameter] = Field(default_factory=list)
+
+
+CommandHandler = Callable[
+    [str, dict[str, Any]],
+    Awaitable[None],
+]
