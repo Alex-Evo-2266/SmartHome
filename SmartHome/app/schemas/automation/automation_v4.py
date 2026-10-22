@@ -49,6 +49,49 @@ class GroupOp(str, Enum):
     MUL = "mul"
 
 
+from typing import Annotated, Literal
+from pydantic import BaseModel, Field, ConfigDict
+
+
+class ValueParameter(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["value"] = "value"
+    data_type: Literal[
+        "number", "string", "boolean", "time", "duration"
+    ]
+    default: int | float | str | bool | None = None
+
+
+class DeviceParameter(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["device"] = "device"
+    device_type: str | None = None
+
+
+class DeviceRoomParameter(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["room_device"] = "room_device"
+    device_type: str
+
+
+ParameterDefinition = Annotated[
+    ValueParameter | DeviceParameter | DeviceRoomParameter,
+    Field(discriminator="type"),
+]
+
+
+class ScriptParameter(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    title: str
+    description: str | None = None
+    required: bool = True
+    definition: ParameterDefinition
+
+
 LiteralDataType = Literal["number", "string", "boolean", "time", "duration"]
 
 def _infer_data_type(value) -> LiteralDataType:
@@ -277,24 +320,24 @@ class ActionStep(BaseModel):
     model_config = ConfigDict(extra="forbid", use_enum_values=True)
 
     type: Literal["action"]
-    device: str
+    path: str
     command: str
     params: dict[str, ExpressionArg] = Field(default_factory=dict)
     label: Optional[str] = None
     next: Optional[str] = None
 
 
-class RoomActionStep(BaseModel):
-    """Действие над устройствами определённого типа в комнате."""
-    model_config = ConfigDict(extra="forbid", use_enum_values=True)
+# class RoomActionStep(BaseModel):
+#     """Действие над устройствами определённого типа в комнате."""
+#     model_config = ConfigDict(extra="forbid", use_enum_values=True)
 
-    type: Literal["room_action"]
-    room: str
-    device_type: str
-    command: str
-    params: dict[str, ExpressionArg] = Field(default_factory=dict)
-    label: Optional[str] = None
-    next: Optional[str] = None
+#     type: Literal["room_action"]
+#     room: str
+#     device_type: str
+#     command: str
+#     params: dict[str, ExpressionArg] = Field(default_factory=dict)
+#     label: Optional[str] = None
+#     next: Optional[str] = None
 
 
 class ScriptActionStep(BaseModel):
@@ -331,7 +374,7 @@ class AwaitStep(BaseModel):
 
 
 Step = Annotated[
-    Union[DelayStep, ActionStep, ConditionStep, AwaitStep, ScriptActionStep, RoomActionStep],
+    Union[DelayStep, ActionStep, ConditionStep, AwaitStep, ScriptActionStep],
     Field(discriminator="type"),
 ]
 
@@ -349,6 +392,7 @@ class AutomationSchema(BaseModel):
     description: Optional[str] = None
 
     trigger: list[Trigger] = Field(default_factory=list)
+    parameters: dict[str, ScriptParameter] = Field(default_factory=list)
     entry: str
 
     steps: dict[str, Step] = Field(default_factory=dict)

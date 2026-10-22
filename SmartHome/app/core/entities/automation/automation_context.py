@@ -34,13 +34,14 @@ class AutomationContext:
     __slots__ = (
         "steps", "expressions",
         "_path_cache", "_expr_cache",
-        "_evaluating", "_depth", "automation_id", "_automation"
+        "_evaluating", "_depth", "automation_id", "_automation", "variables"
     )
 
-    def __init__(self, automation: AutomationSchema) -> None:
+    def __init__(self, automation: AutomationSchema, variables: dict[str, Any]) -> None:
         self.steps: dict[str, Step] = automation.steps
         self.expressions: dict[str, Expression] = automation.expressions
         self.automation_id: str = automation.id
+        self.variables: dict[str, Any] = variables
         self._automation: AutomationSchema = automation
 
         self._path_cache: dict[str, Any] = {}
@@ -54,10 +55,16 @@ class AutomationContext:
         return self.steps
 
     def get_automation(self) -> AutomationSchema:
-            return self._automation
+        return self._automation
+
+    def get_variables(self) -> dict[str, Any]:
+        return self.variables
+
+    def get_variable(self, name: str) -> Any | None:
+        return self.variables.get(name)
 
     def get_automation_id(self) -> str:
-            return self.automation_id
+        return self.automation_id
 
     def get_expressions(self) -> dict[str, Expression]:
         return self.expressions

@@ -34,7 +34,7 @@ async def set_value_room(room: str, device_type: str, field: str, value: str):
             continue
 
         for type_info in types:
-            if type_info.name_type != device_type:
+            if type_info.name_type != device_type or not type_info.fields:
                 continue
 
             matching_fields = [

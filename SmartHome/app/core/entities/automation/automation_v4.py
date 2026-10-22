@@ -49,7 +49,7 @@ class ActionHandler(Protocol):
     """Хендлер команд действий. Инжектится снаружи."""
     async def __call__(
         self,
-        device: str,
+        path: str,
         command: str,
         params: dict[str, Any],
     ) -> None: ...
@@ -65,7 +65,8 @@ class AutomationRunner:
         self,
         automation: AutomationSchema,
         ctx: AutomationContext | None = None,
-        startStep: str | None = None
+        startStep: str | None = None,
+        variables: dict[str, Any] = {}
     ) -> None:
         """
         Запускает сценарий.
@@ -76,7 +77,7 @@ class AutomationRunner:
                                     (включая превышение MAX_STEPS_PER_RUN).
         """
         if ctx is None:
-            ctx = AutomationContext(automation)
+            ctx = AutomationContext(automation, variables)
 
         current_id: str | None = automation.entry
         if not startStep is None:
@@ -173,14 +174,55 @@ class AutomationRunner:
     # ActionStep
     # ------------------------------------------------------------------
 
+
+    def _resolve_action_device(
+        self,
+        path: str,
+        ctx: AutomationContext,
+    ) -> str:
+        """Разрешает путь устройства, в том числе ссылку на параметр."""
+
+        if not path.startswith("variable."):
+            # Обычный идентификатор устройства.
+            return path
+
+        parts = path.split(".")
+
+        if len(parts) != 2 or not parts[1]:
+            raise ValueError(
+                f"Некорректный путь устройства: {path!r}"
+            )
+
+        name = parts[1]
+        parameter_meta = ctx.get_automation().parameters[name]
+        if not parameter_meta or (parameter_meta.definition.type != 'device' and parameter_meta.definition.type != 'room_device'):
+            raise ValueError(
+                f"Параметр сценария {name!r} тмеет не верный тип для событий"
+            )
+        variable = ctx.get_variable(name)
+
+        if variable is None:
+            raise ValueError(
+                f"Параметр сценария {name!r} не передан"
+            )
+
+        if not isinstance(variable, str) or not variable:
+            raise ValueError(
+                f"Параметр {name!r} должен содержать "
+                f"идентификатор устройства, получено: {variable!r}"
+            )
+
+        return variable
+
     async def _run_action(
         self,
         step: ActionStep,
         ctx: AutomationContext,
     ) -> str | None:
+        path = self._resolve_action_device(step.path, ctx)
         params = {name: resolve_arg(arg, ctx) for name, arg in step.params.items()}
-        logger.debug("Action %s.%s %s", step.device, step.command, params)
-        await self._action_handler(step.device, step.command, params)
+        logger.debug("Action %s - %s %s %s", step.path, path, step.command, params)
+        await self._action_handler(path, step.command, params)
         return step.next
 
     # ------------------------------------------------------------------
