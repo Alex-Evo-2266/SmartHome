@@ -26,6 +26,8 @@ export const AutomationPage = () => {
                     <AutomationCard/>:
                     pageNumber == 1?
                     <ScriptCard/>:
+                    pageNumber == 2?
+                    <AutomationCard/>:
                     null
                 }
                 </div>
@@ -37,6 +39,7 @@ export const AutomationPage = () => {
         <div className="automation-page container-page">
             <AutomationCard/>
             <ScriptCard/>
+            <AutomationCard/>
         </div>
     )
 }
