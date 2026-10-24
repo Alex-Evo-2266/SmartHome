@@ -6,3 +6,5 @@ export {useTextRoom, textValDevice} from './hooks/textField.hook'
 export {useRoom} from './hooks/rooms.hook'
 
 export {getConfigRoomField} from './helpers/config' 
+
+export {RoomObjectSelectField} from './ui/SelectRoomWithTypeField'

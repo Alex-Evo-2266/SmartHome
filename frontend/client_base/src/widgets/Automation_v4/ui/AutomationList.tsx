@@ -1,10 +1,10 @@
-import { Automation, ConditionType, useAutomationAPI } from "@src/entites/automation"
-import { DialogPortal } from "@src/shared"
+import { Automation, AutomationStep, useAutomationAPI } from "@src/entites/automation_v4"
 import { BaseActionCard, Button, Card, FilterGroup, ListContainer, SearchAndFilter, SelectedFilters } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import './style.scss'
 import { AutomationItem } from "./AutomationItem"
+import { AutomationEditor } from "./AutomationEditor"
 
 function matchesFilterFromSelected(
   automation: Automation,
@@ -32,11 +32,12 @@ function matchesFilterFromSelected(
 
 export const AutomationCard = () => {
 
-    const {getAutomationAll, addAutomation} = useAutomationAPI()
+    const {getAutomationAll} = useAutomationAPI()
     const [automation, setAutomation] = useState<Automation[]>([])
-    const [addAutomationItem, setAddAutomationItem] = useState<boolean>(false)
+    const [selectAutomation, setSelectAutomation] = useState<Automation | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({})
+    const {} = useAutomationAPI
 
     const getData = useCallback(async()=>{
         const data = await getAutomationAll()
@@ -52,13 +53,6 @@ export const AutomationCard = () => {
         getData()
     },[getData])
 
-    const addAutomationHandler =  useCallback(async(data: Automation)=>{
-        if (addAutomationItem){
-            await addAutomation(data)
-            await getData()
-        }
-    },[addAutomationItem, addAutomation, getData])
-
     const filters:FilterGroup[] = [{name: "is_enabled", options: ["true", "false"]}]
 
     return(
@@ -68,27 +62,26 @@ export const AutomationCard = () => {
             <ListContainer transparent>
             {
                 filteredAutomation && filteredAutomation.map((item)=>(
-                    <AutomationItem updateData={getData} automation={item} key={`automation-${item.name}`}/>
+                    <AutomationItem automation={item} key={`automation-${item.name}`}/>
                 ))
             }
             </ListContainer>
             
             <BaseActionCard>
-                <Button onClick={()=>setAddAutomationItem(true)}>
+                <Button onClick={()=>{}}>
                     add automation
                 </Button>
             </BaseActionCard>
         </Card>
-        {/* {
-            addAutomationItem &&
-            <DialogPortal>
-                <AutomationEditor 
-                    onHide={()=>setAddAutomationItem(false)} 
-                    automation={{condition:[], trigger: [], then: [], else_branch:[], name:"", condition_type:ConditionType.AND}} 
-                    onSave={addAutomationHandler}
-                />
-            </DialogPortal>
-        } */}
+        {
+            selectAutomation !== null &&
+            <AutomationEditor
+                automation={selectAutomation}
+                onChange={setSelectAutomation}
+                onSave={()=>{}}
+                createStep={()=>{return {} as AutomationStep}}
+            />
+        }
         </>
     )
 }

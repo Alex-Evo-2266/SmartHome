@@ -1,0 +1,34 @@
+.automation-editor__canvas-heading{
+  margin: 5px;
+}
+.automation-editor__header{
+  margin: 5px;
+}
+
+.automation-editor_step{
+  background: var(--Surface-container-color);
+  color: var(--On-surface-color);
+  &.list-item-container_active{
+    background: var(--Primary-container-color);
+    color: var(--On-primary-color);
+    .list-item-container__icon-container{
+      color: var(--On-primary-color);
+    }
+    .list-item-container__icon-container{
+      color: var(--On-primary-color);
+    }
+    .list-item-container__text-container__text{
+      color: var(--On-primary-color);
+    }
+  }
+  .list-item-container__icon-container{
+    color: var(--On-surface-color);
+  }
+  .list-item-container__icon-container{
+    color: var(--On-surface-color);
+  }
+  .list-item-container__text-container__text{
+    color: var(--On-surface-color);
+  }
+}
+

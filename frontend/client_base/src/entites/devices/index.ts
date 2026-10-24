@@ -9,3 +9,6 @@ export type {DeviceClassOptions, ChangeField, OptionSchema} from "./models/optio
 export {useGetOptionDevice} from "./hooks/getOptionalDevice"
 
 export {useGetBinaryField, useGetNumberField, useGetEnumField} from './hooks/getField.hook'
+
+export {DeviceSelectField} from './select/deviceField'
+export {DeviceSelectForType} from './select/deviceForType'

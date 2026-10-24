@@ -1,9 +1,11 @@
 import { useScreenSize, ScreenSize, Tabs } from "alex-evo-sh-ui-kit"
 import { useState } from "react"
 
-import { AutomationCard } from "../../../widgets/AutomationCard"
+import { AutomationCard as Ac } from "../../../widgets/AutomationCard"
 import { ScriptCard } from "../../../widgets/ScriptCard"
 import './Automations.scss'
+import { AutomationCard } from "@src/widgets/Automation_v4/ui/AutomationList"
+import { AutomationEditor } from "@src/widgets/Automation_v4/ui/AutomationEditor"
 
 export const AutomationPage = () => {
 
@@ -13,6 +15,7 @@ export const AutomationPage = () => {
     const tabs = [
         {label: "automation", content: null},
         {label: "script", content: null},
+        {label: "automationv4", content: null},
     ]
 
     if(screen === ScreenSize.MOBILE)
@@ -23,7 +26,7 @@ export const AutomationPage = () => {
                 <div style={{marginTop: '5px'}}>
                 {
                     pageNumber == 0?
-                    <AutomationCard/>:
+                    <Ac/>:
                     pageNumber == 1?
                     <ScriptCard/>:
                     pageNumber == 2?
@@ -36,10 +39,14 @@ export const AutomationPage = () => {
     }
 
     return(
-        <div className="automation-page container-page">
-            <AutomationCard/>
-            <ScriptCard/>
-            <AutomationCard/>
-        </div>
+        <>
+            <div className="automation-page container-page">
+                <Ac/>
+                <ScriptCard/>
+                <AutomationCard/>
+            </div>
+
+        </>
+        
     )
 }

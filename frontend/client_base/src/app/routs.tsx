@@ -18,6 +18,7 @@ import { useSocket } from "@src/shared/lib/hooks/webSocket.hook"
 import { useUpdateDeviceData } from "@src/entites/devices/hooks/update_device_data"
 import { useEffect } from "react"
 import { CallbackPage, ProtectGate, useAuth } from "alex-evo-sh-auth"
+import { AutomationEditorPage } from "@src/pages/AutomationEditor"
 
 export const RoutesComponent = ()=>{
 
@@ -53,6 +54,7 @@ export const RoutesComponent = ()=>{
 						<Route path="device" element={<DevicePage/>}/>
 						<Route path="device/:systemName" element={<DetailDevice/>}/>
 						<Route path="automation" element={<AutomationPage/>}/>
+						<Route path="automation/:id" element={<AutomationEditorPage/>}/>
 						<Route path="module_pages/:moduleName/:pageName" element={<ModulesPage/>}/>
 						<Route path="manager" element={<ManagerPage/>}>
 							<Route index element={<Navigate to="docker" replace />} />

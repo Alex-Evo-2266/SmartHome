@@ -6,11 +6,10 @@ import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
 
 import type {
     Automation,
-    AutomationListResponse,
     EnableAutomationRequest,
 } from "../models/automation"
 
-const AUTOMATION_URL = "/api-devices/automation"
+const AUTOMATION_URL = "/api-devices/automation-v4"
 
 export const useAutomationAPI = () => {
     const { request, loading, error, clearError } = useHttp()
@@ -21,10 +20,10 @@ export const useAutomationAPI = () => {
      * Ожидаемый ответ: { data: Automation[] }
      */
     const getAutomationAll = useCallback(async (): Promise<Automation[]> => {
-        const response: AutomationListResponse =
+        const response: Automation[] =
             await request(AUTOMATION_URL)
 
-        return response.data
+        return response
     }, [request])
 
     /**

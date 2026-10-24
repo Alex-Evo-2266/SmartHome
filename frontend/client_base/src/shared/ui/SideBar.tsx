@@ -6,7 +6,7 @@ interface SidebarProps {
     isOpen: boolean
     onClose: () => void
     children: ReactNode
-    footer: ReactNode
+    footer?: ReactNode
     width?: string | number
     position?: 'left' | 'right'
     overlay?: boolean // Если true - затемняет фон
