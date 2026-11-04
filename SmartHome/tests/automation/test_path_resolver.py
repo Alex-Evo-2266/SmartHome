@@ -330,9 +330,9 @@ class TestResolvePathSystem:
 @pytest.mark.variable
 class TestResolvePathVariable:
 
-    def test_variable_not_implemented(self):
+    def test_variable_requires_context(self):
         arg = PathArg(type="path", path="variable.counter")
-        with pytest.raises(NotImplementedError):
+        with pytest.raises(ValueError, match="контекст автоматизации"):
             pr.resolve_path(arg)
 
     def test_empty_variable_name_raises(self):
@@ -350,7 +350,6 @@ class TestResolvePathInvalid:
 
     @pytest.mark.parametrize("path", [
         "garbage",
-        "room.kitchen.light.state",   # room пока не поддерживается
         "",
         "device",                     # без точки
         "system",                     # без точки

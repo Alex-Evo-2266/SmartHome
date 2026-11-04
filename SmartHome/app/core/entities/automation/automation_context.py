@@ -23,10 +23,12 @@ class AutomationContext:
 
     Хранит:
       - steps, expressions — из AutomationSchema
-      - _path_cache        — значения PathArg (device.*, system.*)
+      - variables         — значения runtime-параметров и их defaults
+      - _path_cache        — значения PathArg (device.*, room.*, system.*, variable.*)
       - _expr_cache        — вычисленные значения Expression по id
       - _evaluating        — id выражений, которые сейчас в стеке (для циклов)
       - _depth             — текущая глубина рекурсии
+      - _resolving_variables — ссылки переменных, которые сейчас разрешаются
     """
 
     MAX_DEPTH = 64
@@ -34,19 +36,32 @@ class AutomationContext:
     __slots__ = (
         "steps", "expressions",
         "_path_cache", "_expr_cache",
-        "_evaluating", "_depth", "automation_id", "_automation", "variables"
+        "_evaluating", "_depth", "_resolving_variables",
+        "automation_id", "_automation", "variables"
     )
 
-    def __init__(self, automation: AutomationSchema, variables: dict[str, Any]) -> None:
+    def __init__(
+        self,
+        automation: AutomationSchema,
+        variables: dict[str, Any] | None = None,
+    ) -> None:
         self.steps: dict[str, Step] = automation.steps
         self.expressions: dict[str, Expression] = automation.expressions
         self.automation_id: str = automation.id
-        self.variables: dict[str, Any] = variables
+        self.variables: dict[str, Any] = dict(variables or {})
         self._automation: AutomationSchema = automation
+
+        for name, parameter in automation.parameters.items():
+            default = parameter.definition.default
+            if name not in self.variables and default is not None:
+                self.variables[name] = default
+
+        self._validate_variables()
 
         self._path_cache: dict[str, Any] = {}
         self._expr_cache: dict[str, Any] = {}
         self._evaluating: set[str] = set()
+        self._resolving_variables: list[str] = []
         self._depth: int = 0
 
     # ---------- steps / expressions ----------
@@ -62,6 +77,46 @@ class AutomationContext:
 
     def get_variable(self, name: str) -> Any | None:
         return self.variables.get(name)
+
+    def has_variable(self, name: str) -> bool:
+        return name in self.variables
+
+    def _validate_variables(self) -> None:
+        for name, value in self.variables.items():
+            parameter = self._automation.parameters.get(name)
+            if parameter is None or value is None:
+                continue
+
+            definition = parameter.definition
+            valid = (
+                isinstance(value, str)
+                if definition.type in ("string", "time", "path")
+                else isinstance(value, bool)
+                if definition.type == "boolean"
+                else isinstance(value, (int, float)) and not isinstance(value, bool)
+            )
+            if not valid:
+                raise ValueError(
+                    f"Значение параметра {name!r} не соответствует типу "
+                    f"{definition.type!r}: {value!r}"
+                )
+
+    def enter_variable(self, name: str) -> None:
+        if name in self._resolving_variables:
+            chain = " → ".join([*self._resolving_variables, name])
+            raise ValueError(f"Циклическая ссылка переменных: {chain}")
+        if len(self._resolving_variables) >= self.MAX_DEPTH:
+            raise ValueError(
+                f"Превышена максимальная глубина ссылок переменных "
+                f"({self.MAX_DEPTH})"
+            )
+        self._resolving_variables.append(name)
+
+    def exit_variable(self, name: str) -> None:
+        if self._resolving_variables and self._resolving_variables[-1] == name:
+            self._resolving_variables.pop()
+        elif name in self._resolving_variables:
+            self._resolving_variables.remove(name)
 
     def get_automation_id(self) -> str:
         return self.automation_id
@@ -85,7 +140,7 @@ class AutomationContext:
 
     def get_path(self, arg: PathArg) -> Any:
         if arg.path not in self._path_cache:
-            self._path_cache[arg.path] = resolve_path(arg)
+            self._path_cache[arg.path] = resolve_path(arg, self)
         return self._path_cache[arg.path]
 
     # ---------- Expression cache ----------
@@ -129,6 +184,7 @@ class AutomationContext:
         self._path_cache.clear()
         self._expr_cache.clear()
         self._evaluating.clear()
+        self._resolving_variables.clear()
         self._depth = 0
 
     def __contains__(self, path: str) -> bool:

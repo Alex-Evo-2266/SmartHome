@@ -79,7 +79,7 @@ class TestResolveArgPath:
     def test_path_with_ctx_caches(self, monkeypatch):
 
         calls = []
-        def fake_resolve(arg):
+        def fake_resolve(arg, ctx=None):
             calls.append(arg.path)
             return "X"
         monkeypatch.setattr(ae, "resolve_path", fake_resolve)
@@ -96,7 +96,7 @@ class TestResolveArgPath:
         calls = []
         monkeypatch.setattr(
             ae, "resolve_path",
-            lambda arg: calls.append(arg.path) or "X",
+            lambda arg, ctx=None: calls.append(arg.path) or "X",
         )
         exprs = {"v_a": binary(BinaryOp.ADD, left=lit(2), right=lit(3))}
         ctx = AutomationContext(make_automation(exprs))

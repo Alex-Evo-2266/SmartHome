@@ -382,7 +382,7 @@ class AutomationSchema(BaseModel):
     description: Optional[str] = None
 
     trigger: list[Trigger] = Field(default_factory=list)
-    parameters: dict[str, ScriptParameter] = Field(default_factory=list)
+    parameters: dict[str, ScriptParameter] = Field(default_factory=dict)
     entry: str
 
     steps: dict[str, Step] = Field(default_factory=dict)

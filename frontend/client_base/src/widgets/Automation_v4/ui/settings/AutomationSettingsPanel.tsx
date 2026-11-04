@@ -56,6 +56,7 @@ export function AutomationSettingsPanel({
   const editorProps = {
     key: selection.id,
     step,
+    parameters: automation.parameters,
     onChange: (nextStep: AutomationStep) =>
       onStepChange(selection.id, nextStep),
     onDelete: () => onStepDelete(selection.id),

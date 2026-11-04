@@ -4,8 +4,9 @@
 
 Поддерживаемые формы:
   device.<system_name>.<field_id>   — значение поля устройства
+  room.<room>.<device_type>.<field> — агрегированное значение комнаты
   system.<field>                    — системные данные (time, date, weekday, ...)
-  variable.<name>                   — пользовательские переменные (заглушка)
+  variable.<name>                   — пользовательские переменные
 
 Если путь неизвестен — бросается ValueError, чтобы сценарий не «продолжался
 с None» и ошибка была видна на этапе запуска, а не через 3 шага.
@@ -13,7 +14,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Any, Final
+from typing import TYPE_CHECKING, Any, Final
 
 from app.schemas.automation.automation_v4 import PathArg
 from app.schemas.device.device import DeviceSerializeFieldSchema, TypeDeviceField
@@ -26,6 +27,9 @@ from app.core.state.get_store import get_container
 from app.pkg.logger import get_automatization
 
 logger = get_automatization.get_logger(__name__)
+
+if TYPE_CHECKING:
+    from app.core.entities.automation.automation_context import AutomationContext
 
 
 # ============================================================
@@ -211,31 +215,116 @@ def _resolve_system(field: str) -> Any:
 
 
 # ============================================================
-# Variable-пути (заглушка)
+# Variable-пути
 # ============================================================
 
-def _resolve_variable(name: str) -> Any:
+def _resolve_variable(
+    name: str,
+    ctx: AutomationContext | None,
+    *,
+    resolve_reference: bool = True,
+) -> Any:
     """
-    Пользовательские переменные. Пока не реализовано —
-    бросаем NotImplementedError, чтобы не возвращать None молча.
+    Получает значение переменной из контекста и, если оно содержит
+    ссылку на namespace, разрешает её тем же резолвером путей.
     """
-    raise NotImplementedError(
-        f"variable-путь пока не реализован: variable.{name}"
-    )
+    if not name or "." in name:
+        raise ValueError(f"Неверный variable-путь: variable.{name}")
+    if ctx is None:
+        raise ValueError(
+            f"Для разрешения variable.{name} необходим контекст автоматизации"
+        )
+    if not ctx.has_variable(name):
+        raise ValueError(f"Переменная не найдена: variable.{name}")
+
+    ctx.enter_variable(name)
+    try:
+        value = ctx.get_variable(name)
+        if not resolve_reference:
+            if not isinstance(value, str) or not value:
+                raise ValueError(
+                    f"Переменная variable.{name} должна содержать "
+                    f"непустой строковый путь, получено: {value!r}"
+                )
+            return value
+        if not isinstance(value, str):
+            return value
+
+        prefix = value.split(".", 1)[0]
+        if prefix in {"device", "room", "system", "variable"}:
+            return resolve_path(PathArg(type="path", path=value), ctx)
+        return value
+    finally:
+        ctx.exit_variable(name)
+
+
+def _resolve_room(path: str) -> Any:
+    """Разрешает полное поле комнаты или поле с уникальным именем."""
+    parts = path.split(".")
+    if len(parts) not in (3, 4) or any(not part for part in parts):
+        raise ValueError(f"Неверный room-путь: {path!r}")
+
+    room_name = parts[1]
+    snapshots = get_container().room_store.get_all_snapshots()
+    room = next((item for item in snapshots if item.room == room_name), None)
+    if room is None:
+        raise ValueError(f"Комната не найдена: {room_name!r}")
+
+    if len(parts) == 4:
+        device_type, field_name = parts[2], parts[3]
+        device = next(
+            (item for item in room.devices if item.type_name == device_type),
+            None,
+        )
+        if device is None:
+            raise ValueError(
+                f"Тип устройства {device_type!r} не найден в комнате {room_name!r}"
+            )
+        if field_name not in device.state:
+            raise ValueError(f"Поле {field_name!r} не найдено в {path!r}")
+        value = device.state[field_name]
+    else:
+        field_name = parts[2]
+        values = [
+            device.state[field_name]
+            for device in room.devices
+            if field_name in device.state
+        ]
+        if not values:
+            raise ValueError(
+                f"Поле {field_name!r} не найдено в комнате {room_name!r}"
+            )
+        if len(values) > 1:
+            raise ValueError(
+                f"Поле {field_name!r} неоднозначно в комнате {room_name!r}; "
+                "укажите тип устройства"
+            )
+        value = values[0]
+
+    if value is None:
+        raise DeviceNotValueFound()
+    return value
 
 
 # ============================================================
 # Публичная точка входа
 # ============================================================
 
-def resolve_path(arg: PathArg) -> Any:
+def resolve_path(
+    arg: PathArg,
+    ctx: AutomationContext | None = None,
+    *,
+    preserve_path: bool = False,
+) -> Any:
     """
     Возвращает значение по PathArg.
 
     Формы:
       device.<system_name>.<field_id>   — значение поля устройства
+      room.<room_name>.<device_type>.<field> — значение поля комнаты
+      room.<room_name>.<field>         — значение уникального поля комнаты
       system.<field>                    — системные данные
-      variable.<name>                   — пользовательские переменные (TBD)
+      variable.<name>                  — пользовательские переменные
 
     Бросает:
       ValueError          — неизвестный префикс или некорректный путь
@@ -244,6 +333,9 @@ def resolve_path(arg: PathArg) -> Any:
       DeviceNotValueFound — значение поля = None
     """
     path = arg.path
+
+    if preserve_path and not path.startswith("variable."):
+        return path
 
     # ---- device.<system_name>.<field_id> ----
     # split с ограничением: system_name может содержать точки? — нет,
@@ -260,14 +352,26 @@ def resolve_path(arg: PathArg) -> Any:
         field = path[len("system."):]
         if not field:
             raise ValueError(f"Неверный system-путь: {path!r}")
+        if preserve_path:
+            return path
         return _resolve_system(field)
+
+    # ---- room.<room>.<device_type>.<field> / room.<room>.<field> ----
+    if path.startswith("room."):
+        if preserve_path:
+            return path
+        return _resolve_room(path)
 
     # ---- variable.<name> ----
     if path.startswith("variable."):
         name = path[len("variable."):]
         if not name:
             raise ValueError(f"Неверный variable-путь: {path!r}")
-        return _resolve_variable(name)
+        return _resolve_variable(
+            name,
+            ctx,
+            resolve_reference=not preserve_path,
+        )
 
     # ---- неизвестно ----
     raise ValueError(f"Неизвестный префикс пути: {path!r}")

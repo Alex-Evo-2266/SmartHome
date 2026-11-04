@@ -630,7 +630,7 @@ class TestEvalContextIntegration:
         calls: list[str] = []
         monkeypatch.setattr(
             ea, "resolve_path",
-            lambda arg: calls.append(arg.path) or 10,
+            lambda arg, ctx=None: calls.append(arg.path) or 10,
         )
 
         ctx = AutomationContext(make_automation({})) 
