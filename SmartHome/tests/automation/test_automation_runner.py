@@ -41,10 +41,10 @@ def make_automation(steps, entry="s1", expressions=None, id="a1"):
 
 class FakeActionHandler:
     def __init__(self):
-        self.calls: list[tuple[str, str, dict]] = []
+        self.calls: list[tuple[str, dict]] = []
 
-    async def __call__(self, device, command, params):
-        self.calls.append((device, command, params))
+    async def __call__(self, command, params):
+        self.calls.append((command, params))
 
 
 class FakeScheduler:
@@ -147,7 +147,7 @@ class TestDelayStep:
     async def test_delay_schedules_job(self, runner, scheduler_fake):
         steps = {
             "s1": DelayStep(type="delay", duration=lit(2.0), next="s2"),
-            "s2": ActionStep(type="action", device="d", command="c", next=None),
+            "s2": ActionStep(type="action", command="c", params={"path": lit("d")}, next=None),
         }
         await runner.run(make_automation(steps))
         # раннер завершился сразу — job добавлен, s2 НЕ выполнен
@@ -164,7 +164,7 @@ class TestDelayStep:
     ):
         automation = make_automation({
             "s1": DelayStep(type="delay", duration=lit(0), next="s2"),
-            "s2": ActionStep(type="action", device="d", command="after_delay"),
+            "s2": ActionStep(type="action", command="after_delay", params={"path": lit("d")}),
         })
         store_fake.automations["a1"] = automation
         monkeypatch.setattr(runner_module, "automation_v4", runner)
@@ -176,14 +176,14 @@ class TestDelayStep:
 
         await job["func"](*job["args"])
 
-        assert handler.calls == [("d", "after_delay", {})]
+        assert handler.calls == [("after_delay", {"path": "d"})]
 
 
     @pytest.mark.asyncio
     async def test_delay_seconds_numeric_string(self, runner, scheduler_fake):
         steps = {
             "s1": DelayStep(type="delay", duration=lit("2.0"), next="s2"),
-            "s2": ActionStep(type="action", device="d", command="c", next=None),
+            "s2": ActionStep(type="action", command="c", params={"path": lit("d")}, next=None),
         }
         await runner.run(make_automation(steps))
         assert len(scheduler_fake.jobs) == 1
@@ -196,7 +196,7 @@ class TestDelayStep:
                 duration=lit("PT2S", dt="duration"),
                 next="s2",
             ),
-            "s2": ActionStep(type="action", device="d", command="c", next=None),
+            "s2": ActionStep(type="action", command="c", params={"path": lit("d")}, next=None),
         }
         await runner.run(make_automation(steps))
         assert len(scheduler_fake.jobs) == 1
@@ -207,36 +207,59 @@ class TestDelayStep:
 class TestActionStep:
 
     @pytest.mark.asyncio
+    async def test_action_without_path_keeps_params_unchanged(self, runner, handler):
+        steps = {
+            "s1": ActionStep(
+                type="action",
+                command="pathless",
+                params={"enabled": lit(True)},
+            )
+        }
+
+        await runner.run(make_automation(steps))
+
+        assert handler.calls == [("pathless", {"enabled": True})]
+
+    @pytest.mark.asyncio
     async def test_simple_action(self, runner, handler):
         steps = {"s1": ActionStep(
-            type="action", device="light_hall",
+            type="action",
             command="turn_on", next=None,
+            params={"path": lit("light_hall")},
         )}
         await runner.run(make_automation(steps))
-        assert handler.calls == [("light_hall", "turn_on", {})]
+        assert handler.calls == [("turn_on", {"path": "light_hall"})]
 
     @pytest.mark.asyncio
     async def test_action_with_params(self, runner, handler):
         steps = {"s1": ActionStep(
-            type="action", device="light_hall", command="turn_on",
-            params={"brightness": lit(20), "color": lit("warm")},
+            type="action", command="turn_on",
+            params={
+                "path": lit("light_hall"),
+                "brightness": lit(20),
+                "color": lit("warm"),
+            },
             next=None,
         )}
         await runner.run(make_automation(steps))
         assert handler.calls == [
-            ("light_hall", "turn_on", {"brightness": 20, "color": "warm"}),
+            ("turn_on", {
+                "path": "light_hall",
+                "brightness": 20,
+                "color": "warm",
+            }),
         ]
 
     @pytest.mark.asyncio
     async def test_action_with_expr_param(self, runner, handler):
         steps = {"s1": ActionStep(
-            type="action", device="l", command="set",
-            params={"value": ref("v_bright")},
+            type="action", command="set",
+            params={"path": lit("l"), "value": ref("v_bright")},
             next=None,
         )}
         exprs = {"v_bright": binary(BinaryOp.ADD, lit(40), lit(10))}
         await runner.run(make_automation(steps, expressions=exprs))
-        assert handler.calls == [("l", "set", {"value": 50})]
+        assert handler.calls == [("set", {"path": "l", "value": 50})]
 
 
 # ---------- ConditionStep ----------
@@ -251,12 +274,12 @@ class TestConditionStep:
                 condition=ref("c_true"),
                 on_true="s2", on_false="s3",
             ),
-            "s2": ActionStep(type="action", device="d", command="true_branch", next=None),
-            "s3": ActionStep(type="action", device="d", command="false_branch", next=None),
+            "s2": ActionStep(type="action", command="true_branch", params={"path": lit("d")}, next=None),
+            "s3": ActionStep(type="action", command="false_branch", params={"path": lit("d")}, next=None),
         }
         exprs = {"c_true": binary(BinaryOp.EQ, lit(1), lit(1))}
         await runner.run(make_automation(steps, expressions=exprs))
-        assert handler.calls == [("d", "true_branch", {})]
+        assert handler.calls == [("true_branch", {"path": "d"})]
 
     @pytest.mark.asyncio
     async def test_false_branch(self, runner, handler):
@@ -266,12 +289,12 @@ class TestConditionStep:
                 condition=ref("c_false"),
                 on_true="s2", on_false="s3",
             ),
-            "s2": ActionStep(type="action", device="d", command="true_branch", next=None),
-            "s3": ActionStep(type="action", device="d", command="false_branch", next=None),
+            "s2": ActionStep(type="action", command="true_branch", params={"path": lit("d")}, next=None),
+            "s3": ActionStep(type="action", command="false_branch", params={"path": lit("d")}, next=None),
         }
         exprs = {"c_false": binary(BinaryOp.EQ, lit(1), lit(2))}
         await runner.run(make_automation(steps, expressions=exprs))
-        assert handler.calls == [("d", "false_branch", {})]
+        assert handler.calls == [("false_branch", {"path": "d"})]
 
     @pytest.mark.asyncio
     async def test_true_branch_null_ends(self, runner, handler):
@@ -298,7 +321,7 @@ class TestAwaitStep:
                 next="s2",
                 on_timeout=None,
             ),
-            "s2": ActionStep(type="action", device="d", command="after_await", next=None),
+            "s2": ActionStep(type="action", command="after_await", params={"path": lit("d")}, next=None),
         }
         automation = make_automation(steps)
         store_fake.automations["a1"] = automation
@@ -329,8 +352,8 @@ class TestAwaitStep:
                 next="s2",
                 on_timeout="s3",
             ),
-            "s2": ActionStep(type="action", device="d", command="ok", next=None),
-            "s3": ActionStep(type="action", device="d", command="timeout", next=None),
+            "s2": ActionStep(type="action", command="ok", params={"path": lit("d")}, next=None),
+            "s3": ActionStep(type="action", command="timeout", params={"path": lit("d")}, next=None),
         }
         automation = make_automation(steps)
         store_fake.automations["a1"] = automation
@@ -356,7 +379,7 @@ class TestAwaitStep:
                 ),
                 next="s2",
             ),
-            "s2": ActionStep(type="action", device="d", command="c", next=None),
+            "s2": ActionStep(type="action", command="c", params={"path": lit("d")}, next=None),
         }
         automation = make_automation(steps)
         store_fake.automations["a1"] = automation
@@ -375,7 +398,7 @@ class TestAwaitStep:
                 trigger=DeviceTrigger(type="device", device="door", field="state"),
                 next="s2",
             ),
-            "s2": ActionStep(type="action", device="d", command="should_not_run", next=None),
+            "s2": ActionStep(type="action", command="should_not_run", params={"path": lit("d")}, next=None),
         }
         automation = make_automation(steps)
         store_fake.automations["a1"] = automation
@@ -395,7 +418,7 @@ class TestRunnerErrors:
     async def test_step_not_found(self, runner):
         from app.schemas.automation.automation_v4 import AutomationSchema
 
-        steps = {"s1": ActionStep(type="action", device="d", command="c", next="missing")}
+        steps = {"s1": ActionStep(type="action", command="c", params={"path": lit("d")}, next="missing")}
         automation = AutomationSchema.model_construct(
             id="a1", name="test", entry="s1",
             steps=steps, expressions={},
@@ -410,8 +433,8 @@ class TestRunnerErrors:
     async def test_cycle_max_steps(self, runner):
         # s1 → s2 → s1 (без delay — оба шага action с next)
         steps = {
-            "s1": ActionStep(type="action", device="d", command="c1", next="s2"),
-            "s2": ActionStep(type="action", device="d", command="c2", next="s1"),
+            "s1": ActionStep(type="action", command="c1", params={"path": lit("d")}, next="s2"),
+            "s2": ActionStep(type="action", command="c2", params={"path": lit("d")}, next="s1"),
         }
         with pytest.raises(StepExecutionError, match="максимальное число шагов"):
             await runner.run(make_automation(steps))
@@ -427,7 +450,7 @@ class TestRunnerErrors:
             gc.return_value.automation_store = store_fake
             r = AutomationRunner(action_handler=Failing())
 
-            steps = {"s1": ActionStep(type="action", device="d", command="c", next=None)}
+            steps = {"s1": ActionStep(type="action", command="c", params={"path": lit("d")}, next=None)}
             with pytest.raises(StepExecutionError, match="boom"):
                 await r.run(make_automation(steps))
 
@@ -435,7 +458,7 @@ class TestRunnerErrors:
     async def test_bad_duration_type(self, runner):
         steps = {
             "s1": DelayStep(type="delay", duration=lit("abc"), next="s2"),
-            "s2": ActionStep(type="action", device="d", command="c", next=None),
+            "s2": ActionStep(type="action", command="c", params={"path": lit("d")}, next=None),
         }
         with pytest.raises(StepExecutionError):
             await runner.run(make_automation(steps))

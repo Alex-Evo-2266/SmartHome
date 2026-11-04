@@ -33,8 +33,21 @@ def test_extra_fields_forbidden(make_automation):
     with pytest.raises(ValidationError):
         AutomationSchema(
             id="x", name="y", entry="s1",
-            steps={"s1": {"type": "action", "device": "d", "command": "c"}},
+            steps={"s1": {"type": "action", "command": "c"}},
             unexpected_field=1,  # type: ignore[call-arg]
+        )
+
+
+def test_action_step_rejects_separate_path_field(make_automation):
+    with pytest.raises(ValidationError):
+        make_automation(
+            steps={
+                "s1": {
+                    "type": "action",
+                    "path": "device.lamp.state",
+                    "command": "set_value",
+                }
+            }
         )
 
 
@@ -48,7 +61,7 @@ def test_entry_not_found(make_automation):
 
 def test_next_points_to_missing_step(make_automation):
     steps = {
-        "s1": {"type": "action", "device": "d", "command": "c", "next": "ghost"},
+        "s1": {"type": "action", "command": "c", "next": "ghost"},
     }
     with pytest.raises(ValidationError) as exc:
         make_automation(steps=steps)

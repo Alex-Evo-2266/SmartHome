@@ -49,7 +49,6 @@ class ActionHandler(Protocol):
     """Хендлер команд действий. Инжектится снаружи."""
     async def __call__(
         self,
-        path: str,
         command: str,
         params: dict[str, Any],
     ) -> None: ...
@@ -177,13 +176,12 @@ class AutomationRunner:
 
     def _resolve_action_device(
         self,
-        path: str,
+        path: Any,
         ctx: AutomationContext,
-    ) -> str:
-        """Разрешает путь устройства, в том числе ссылку на параметр."""
+    ) -> Any:
+        """Разрешает ссылку variable.* в параметре пути команды."""
 
-        if not path.startswith("variable."):
-            # Обычный идентификатор устройства.
+        if not isinstance(path, str) or not path.startswith("variable."):
             return path
 
         parts = path.split(".")
@@ -194,10 +192,13 @@ class AutomationRunner:
             )
 
         name = parts[1]
-        parameter_meta = ctx.get_automation().parameters[name]
-        if not parameter_meta or (parameter_meta.definition.type != 'device' and parameter_meta.definition.type != 'room_device'):
+        parameter_meta = ctx.get_automation().parameters.get(name)
+        if parameter_meta is None or parameter_meta.definition.type not in (
+            "device",
+            "room_device",
+        ):
             raise ValueError(
-                f"Параметр сценария {name!r} тмеет не верный тип для событий"
+                f"Параметр сценария {name!r} имеет неверный тип для пути действия"
             )
         variable = ctx.get_variable(name)
 
@@ -219,11 +220,18 @@ class AutomationRunner:
         step: ActionStep,
         ctx: AutomationContext,
     ) -> str | None:
-        path = self._resolve_action_device(step.path, ctx)
-        params = {name: resolve_arg(arg, ctx) for name, arg in step.params.items()}
-        logger.debug("Action %s - %s %s %s", step.path, path, step.command, params)
-        await self._action_handler(path, step.command, params)
-        return step.next
+        try:
+            logger.debug("Action step %s", step)
+            params = {name: resolve_arg(arg, ctx) for name, arg in step.params.items()}
+            if "path" in params:
+                logger.debug("Action params %s", params)
+                params["path"] = self._resolve_action_device(params["path"], ctx)
+            logger.debug("Action %s %s", step.command, params)
+            await self._action_handler(step.command, params)
+            return step.next
+        except Exception as e:
+            logger.error("Action error %s", e)
+            raise
 
     # ------------------------------------------------------------------
     # ConditionStep

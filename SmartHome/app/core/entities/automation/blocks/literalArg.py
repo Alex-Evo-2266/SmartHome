@@ -30,6 +30,9 @@ def resolve_literal(arg: LiteralArg) -> int | float | bool | str | time | timede
     if arg.data_type == "boolean":
         return arg.value
 
+    if arg.data_type == "path":
+        return arg.value
+
     if arg.data_type == "time":
         return _parse_time(arg.value)
 

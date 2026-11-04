@@ -10,6 +10,7 @@ from app.schemas.automation.automation_v4 import (
     DelayStep,
     ConditionStep,
     AwaitStep,
+    LiteralArg,
     BinaryExpr,
     UnaryExpr,
     CallExpr,
@@ -37,8 +38,14 @@ def make_automation():
             steps = {
                 "s1": ActionStep(
                     type="action",
-                    device="dev1",
                     command="turn_on",
+                    params={
+                        "path": LiteralArg(
+                            type="literal",
+                            value="dev1",
+                            data_type="string",
+                        )
+                    },
                 ),
             }
         return AutomationSchema(

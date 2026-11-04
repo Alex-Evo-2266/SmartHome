@@ -127,7 +127,7 @@ class LiteralArg(BaseModel):
     type: Literal["literal"]
     value: Union[int, float, str, bool, None] = None
     data_type: Optional[Literal[
-        "number", "string", "boolean", "time", "duration"
+        "number", "string", "boolean", "time", "duration", "path"
     ]] = None
 
     @model_validator(mode="after")
@@ -311,7 +311,6 @@ class ActionStep(BaseModel):
     model_config = ConfigDict(extra="forbid", use_enum_values=True)
 
     type: Literal["action"]
-    path: str
     command: str
     params: dict[str, ExpressionArg] = Field(default_factory=dict)
     label: Optional[str] = None
@@ -490,7 +489,7 @@ class CommandParameter(BaseModel):
 
     name: str
     title: str
-    data_type: Literal["number", "string", "boolean", "any"] = "any"
+    data_type: Literal["number", "string", "boolean", "any", "path"] = "any"
     required: bool = True
     description: str | None = None
 
@@ -511,7 +510,4 @@ class DeviceCommand(BaseModel):
     parameters: list[CommandParameter] = Field(default_factory=list)
 
 
-CommandHandler = Callable[
-    [str, dict[str, Any]],
-    Awaitable[None],
-]
+CommandHandler = Callable[[dict[str, Any]], Awaitable[None]]

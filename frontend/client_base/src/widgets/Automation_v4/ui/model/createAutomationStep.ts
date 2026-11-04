@@ -12,7 +12,6 @@ export function createAutomationStep(
     case "action":
       return {
         type: "action",
-        path: "",
         command: "",
         params: {},
         label: "Новое действие",

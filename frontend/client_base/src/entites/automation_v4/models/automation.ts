@@ -177,7 +177,6 @@ export interface DelayStep {
 
 export interface ActionStep {
     type: "action"
-    path: string
     command: string
     params: Record<string, ExpressionArg>
     label?: string | null

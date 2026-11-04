@@ -23,6 +23,7 @@ async def set_value_room(room: str, device_type: str, field: str, value: str):
     """
     logger.info(f"set value input data: room={room} devcie={device_type} field={field} value={value}")
     devices = get_devices_room(room)
+    field_found = False
     for device in devices:
         try:
             types= device.data.all_types
@@ -41,6 +42,7 @@ async def set_value_room(room: str, device_type: str, field: str, value: str):
                 f for f in type_info.fields if f.name_field_type == field
             ]
             for field_info in matching_fields:
+                field_found = True
                 try:
                     await set_status_for_device(device, field_info.id_field_device, value)
                     logger.info(
@@ -50,3 +52,10 @@ async def set_value_room(room: str, device_type: str, field: str, value: str):
                     logger.exception(
                         f"Ошибка при обновлении {field} устройства {device.data.system_name}"
                     )
+                    raise
+
+    if not field_found:
+        raise ValueError(
+            f"Поле '{field}' типа устройства '{device_type}' "
+            f"не найдено в комнате '{room}'"
+        )
