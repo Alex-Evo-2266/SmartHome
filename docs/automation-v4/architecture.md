@@ -62,26 +62,35 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Life as V4 lifecycle
+    participant Life as V4 Lifecycle
     participant Store as AutomationStorage
-    participant Manager as AutomationManager_V4
-    participant State as Device/room store
+    participant Manager as AutomationManager V4
+    participant State as Device Room Store
     participant Scheduler as APScheduler
     participant Runner as AutomationRunner
     participant Ctx as AutomationContext
-    participant Handler as Action handler
+    participant Handler as Action Handler
+
     Life->>Store: load_all()
     Store-->>Manager: validated automations
+
     Life->>State: subscribe to patch callbacks
     Life->>Scheduler: schedule run_due_automations every minute
-    State->>Manager: device/room patch
+
+    State->>Manager: device or room patch
     Manager->>Runner: callback for matching trigger
+
     Scheduler->>Manager: check due time triggers
     Manager->>Runner: callback for due automation
-    Runner->>Ctx: create context; invalidate caches between steps
-    Runner->>Ctx: resolve/evaluate step arguments
-    Runner->>Handler: command(params)
-    Runner-->>Runner: follow next/branch or pause for delay/await
+
+    Runner->>Ctx: create context
+    Runner->>Ctx: invalidate caches between steps
+    Runner->>Ctx: resolve and evaluate step arguments
+
+    Runner->>Handler: execute command(params)
+
+    Runner-->>Runner: follow next or branch
+    Runner-->>Runner: pause for delay or await
 ```
 
 ## Жизненный цикл
