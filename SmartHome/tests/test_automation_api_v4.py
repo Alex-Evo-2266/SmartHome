@@ -1,9 +1,11 @@
+import json
 import sys
 from types import ModuleType, SimpleNamespace
 from unittest.mock import AsyncMock
 
 import pytest
-from fastapi import HTTPException
+from fastapi import FastAPI, HTTPException
+from pydantic import TypeAdapter
 
 if "auth_dep_lib" not in sys.modules:
     auth_dep_module = ModuleType("auth_dep_lib")
@@ -11,6 +13,25 @@ if "auth_dep_lib" not in sys.modules:
     sys.modules["auth_dep_lib"] = auth_dep_module
 
 from app.api.automation import automation_v4 as api
+from app.core.entities.automation.automation_context import AutomationContext
+from app.core.entities.automation.blocks.expression import (
+    _FUNCTIONS,
+    _LAZY_FUNCTIONS,
+    evaluate_expr,
+)
+from app.core.entities.automation.blocks.expression_capabilities import (
+    EXPRESSION_CAPABILITIES,
+)
+from app.schemas.automation.automation_v4 import (
+    AutomationSchema,
+    BinaryOp,
+    ConditionStep,
+    Expression,
+    ExpressionArg,
+    GroupOp,
+    LiteralArg,
+    UnaryOp,
+)
 from app.core.state.automation_store_v4 import AutomationManager_V4
 from app.db.repositories.automation_v4.automation_io import AutomationStorage
 
@@ -83,6 +104,100 @@ async def test_manual_run_invokes_runner(api_state, make_automation, monkeypatch
 
     assert result == {"message": "Автоматизация запущена", "id": "manual-run"}
     run_adapter.assert_awaited_once_with(automation, startStep=None)
+
+
+@pytest.mark.asyncio
+async def test_expression_capabilities_endpoint_returns_catalog():
+    app = FastAPI()
+    app.include_router(api.router)
+
+    messages = []
+    received_request = False
+
+    async def receive():
+        nonlocal received_request
+        if received_request:
+            return {"type": "http.disconnect"}
+        received_request = True
+        return {"type": "http.request", "body": b"", "more_body": False}
+
+    async def send(message):
+        messages.append(message)
+
+    path = "/api-devices/automation-v4/expression-capabilities"
+    await app(
+        {
+            "type": "http",
+            "asgi": {"version": "3.0", "spec_version": "2.3"},
+            "http_version": "1.1",
+            "method": "GET",
+            "scheme": "http",
+            "path": path,
+            "raw_path": path.encode(),
+            "query_string": b"",
+            "headers": [],
+            "server": ("testserver", 80),
+            "client": ("testclient", 50000),
+            "root_path": "",
+        },
+        receive,
+        send,
+    )
+
+    response_start = next(message for message in messages if message["type"] == "http.response.start")
+    response_body = next(message for message in messages if message["type"] == "http.response.body")
+    assert response_start["status"] == 200
+    assert json.loads(response_body["body"]) == EXPRESSION_CAPABILITIES
+
+
+def test_expression_capabilities_match_evaluator_and_models():
+    operators = EXPRESSION_CAPABILITIES["operators"]
+    assert {item["id"] for item in operators["binary"]} == {
+        item.value for item in BinaryOp
+    }
+    assert {item["id"] for item in operators["unary"]} == {
+        item.value for item in UnaryOp
+    }
+    assert {item["id"] for item in operators["group"]} == {
+        item.value for item in GroupOp
+    }
+    assert {item["id"] for item in EXPRESSION_CAPABILITIES["functions"]} == (
+        set(_FUNCTIONS) | set(_LAZY_FUNCTIONS)
+    )
+    assert {
+        item["id"]
+        for item in EXPRESSION_CAPABILITIES["functions"]
+        if item["evaluation"] == "lazy"
+    } == set(_LAZY_FUNCTIONS)
+
+    automation = AutomationSchema(
+        id="capabilities-test",
+        name="Capabilities test",
+        entry="condition",
+        steps={
+            "condition": ConditionStep(
+                type="condition",
+                condition=LiteralArg(type="literal", value=True),
+            )
+        },
+    )
+    context = AutomationContext(automation, {})
+    expression_adapter = TypeAdapter(Expression)
+    argument_adapter = TypeAdapter(ExpressionArg)
+
+    for argument in EXPRESSION_CAPABILITIES["argument_types"].values():
+        argument_adapter.validate_python(argument["example_json"])
+
+    examples = [
+        item["example_json"]
+        for category in ("binary", "unary", "group")
+        for item in operators[category]
+    ]
+    examples.extend(item["example_json"] for item in EXPRESSION_CAPABILITIES["functions"])
+
+    for example in examples:
+        expression = expression_adapter.validate_python(example)
+        evaluate_expr(expression, context)
 
 
 @pytest.mark.asyncio

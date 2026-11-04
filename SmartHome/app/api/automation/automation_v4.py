@@ -1,6 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.core.entities.automation.automation_v4 import run_adapter
+from app.core.entities.automation.blocks.expression_capabilities import (
+    get_expression_capabilities,
+)
 from app.core.state.get_store import get_container
 from app.core.entities.automation.device_action_handler import get_action_commands, DeviceCommand
 from app.db.repositories.automation_v4.automation_io import (
@@ -57,6 +60,12 @@ async def action_commands_automation(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Ошибка получения команд автоматизации",
         ) from exc
+
+
+@router.get("/expression-capabilities", response_model=dict[str, object])
+async def expression_capabilities() -> dict[str, object]:
+    """Return the expression engine's supported syntax and functions."""
+    return get_expression_capabilities()
 
 
 
@@ -169,4 +178,3 @@ async def run_automation(
             detail=f"Ошибка выполнения автоматизации '{automation_id}': {exc}",
         ) from exc
     return {"message": "Автоматизация запущена", "id": automation_id}
-

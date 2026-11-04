@@ -5,7 +5,7 @@
 Поддерживаемые типы:
   LiteralArg — константа (число / строка / bool / time / duration)
   PathArg    — путь к данным (device.*, system.*, variable.*)
-  RefArg     — ссылка на выражение (пока не поддерживается)
+  RefArg     — ссылка на выражение из AutomationSchema.expressions
 
 Кэш: EvalContext хранит значения PathArg в рамках одного вычисления,
 чтобы одно и то же поле не читалось из стора дважды. Между шагами
@@ -47,7 +47,7 @@ def resolve_arg(
                 Если None — PathArg читается без кэша.
     :return: int | float | bool | str | time | timedelta | Any
 
-    :raises NotImplementedError: для RefArg
+    :raises ExpressionError:    для неразрешимой ссылки RefArg
     :raises TypeError:            для неизвестного типа
     """
     if isinstance(arg, LiteralArg):
