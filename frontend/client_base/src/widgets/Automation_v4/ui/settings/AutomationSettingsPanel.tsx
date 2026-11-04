@@ -5,7 +5,6 @@ import type {
 
 import type {
   EditorSelection,
-  EntryMode,
 } from "../model/editorTypes";
 
 import { getStepEditorKind } from "../model/editorTypes";
@@ -20,9 +19,7 @@ import { ScriptActionStepEditor } from "./steps/ScriptActionStepEditor";
 interface AutomationSettingsPanelProps {
   automation: Automation;
   selection: EditorSelection | null;
-  entryMode: EntryMode;
   onChange: (patch: Partial<Automation>) => void;
-  onEntryModeChange: (mode: EntryMode) => void;
   onStepChange: (id: string, step: AutomationStep) => void;
   onStepDelete: (id: string) => void;
 }
@@ -30,9 +27,7 @@ interface AutomationSettingsPanelProps {
 export function AutomationSettingsPanel({
   automation,
   selection,
-  entryMode,
   onChange,
-  onEntryModeChange,
   onStepChange,
   onStepDelete,
 }: AutomationSettingsPanelProps) {
@@ -41,9 +36,7 @@ export function AutomationSettingsPanel({
   if (selection.type === "start") {
     return (
       <StartSettings
-        mode={entryMode}
         automation={automation}
-        onModeChange={onEntryModeChange}
         onChange={onChange}
       />
     );

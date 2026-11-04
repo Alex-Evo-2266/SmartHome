@@ -9,11 +9,9 @@ import "./AutomationEditor.scss";
 
 import type {
   EditorSelection,
-  EntryMode,
   StepEditorKind,
 } from "./model/editorTypes";
 
-import { getInitialEntryMode } from "./model/editorTypes";
 import { AutomationFlow } from "./flow/AutomationFlow";
 import { AutomationSettingsPanel } from "./settings/AutomationSettingsPanel";
 import { Button, Panel, TextField, Typography } from "alex-evo-sh-ui-kit";
@@ -48,23 +46,12 @@ export function AutomationEditor({
 }: AutomationEditorProps) {
   const [selection, setSelection] = useState<EditorSelection | null>(null);
 
-  const [entryMode, setEntryMode] = useState<EntryMode>(() =>
-    getInitialEntryMode(
-      automation.trigger.length,
-      Object.keys(automation.parameters).length,
-    ),
-  );
-
   function updateAutomation(patch: Partial<Automation>) {
-    console.log(patch)
+    console.log("patch", patch)
     onChange({
       ...automation,
       ...patch,
     });
-  }
-
-  function handleEntryModeChange(mode: EntryMode) {
-    setEntryMode(mode);
   }
 
   function addStep(kind: StepEditorKind) {
@@ -173,7 +160,6 @@ export function AutomationEditor({
       <div className="automation-editor__body">
         <AutomationFlow
           automation={automation}
-          entryMode={entryMode}
           selection={selection}
           onSelect={setSelection}
           onAddStep={addStep}
@@ -183,9 +169,7 @@ export function AutomationEditor({
           <AutomationSettingsPanel
             automation={automation}
             selection={selection}
-            entryMode={entryMode}
             onChange={updateAutomation}
-            onEntryModeChange={handleEntryModeChange}
             onStepChange={updateStep}
             onStepDelete={deleteStep}
           />

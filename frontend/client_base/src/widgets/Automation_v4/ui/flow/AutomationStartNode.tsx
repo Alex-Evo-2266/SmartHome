@@ -1,22 +1,31 @@
+import { Automation } from "@src/entites/automation_v4";
 import { ListItem } from "alex-evo-sh-ui-kit";
-import type { EntryMode } from "../model/editorTypes";
 
 interface AutomationStartNodeProps {
-  mode: EntryMode;
+  automation: Automation;
   selected: boolean;
   onSelect: () => void;
 }
 
-const MODE_LABELS: Record<EntryMode, string> = {
-  empty: "Без триггеров и аргументов",
-  triggers: "Запуск по триггерам",
-  function: "Функция с аргументами",
+const modeLabes = (automation: Automation)=>{
+  if(automation.trigger.length > 0 && Object.keys(automation.parameters).length > 0){
+    return "Начало шаблона"
+  }
+  else if(automation.trigger.length > 0){
+    return "Запуск по триггерам"
+  }
+  else if(Object.keys(automation.parameters).length > 0){
+    return "Функция с аргументами"
+  }
+  else{
+    return "Функция без аргументов"
+  }
 };
 
 export function AutomationStartNode({
-  mode,
   selected,
   onSelect,
+  automation
 }: AutomationStartNodeProps) {
   return (
     <ListItem 
@@ -26,7 +35,7 @@ export function AutomationStartNode({
         icon={
             "▶"
         }
-        title={MODE_LABELS[mode]}
+        title={modeLabes(automation)}
         onClick={onSelect}
     />
   );

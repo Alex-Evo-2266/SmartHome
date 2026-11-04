@@ -1,7 +1,5 @@
 import type { AutomationStep } from "@src/entites/automation_v4";
 
-export type EntryMode = "empty" | "triggers" | "function";
-
 export type EditorSelection =
   | { type: "start" }
   | { type: "step"; id: string };
@@ -48,21 +46,6 @@ export function getStepEditorKind(
 
 export function getStepTitle(step: AutomationStep): string {
   return step.label || STEP_TITLES[getStepEditorKind(step)];
-}
-
-export function getInitialEntryMode(
-  triggerCount: number,
-  parameterCount: number,
-): EntryMode {
-  if (triggerCount > 0) {
-    return "triggers";
-  }
-
-  if (parameterCount > 0) {
-    return "function";
-  }
-
-  return "empty";
 }
 
 

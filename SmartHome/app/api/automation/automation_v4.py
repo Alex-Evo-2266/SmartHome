@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.core.entities.automation.automation_v4 import run_adapter
 from app.core.state.get_store import get_container
+from app.core.entities.automation.device_action_handler import get_action_commands, DeviceCommand
 from app.db.repositories.automation_v4.automation_io import (
     AutomationIOError,
     automation_storage,
@@ -43,6 +44,20 @@ async def get_automations(
 ) -> list[AutomationSchema]:
     automations = get_container().automation_store.automations
     return [automations[key] for key in sorted(automations)]
+
+
+@router.get("/action_commands")
+async def action_commands_automation(
+    # user_id: str = Depends(auth_privilege_dep("automation")),
+) -> list[DeviceCommand]:
+    try:
+        return get_action_commands()
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка получения команд автоматизации",
+        ) from exc
+
 
 
 @router.get("/{automation_id}", response_model=AutomationSchema)
@@ -154,3 +169,4 @@ async def run_automation(
             detail=f"Ошибка выполнения автоматизации '{automation_id}': {exc}",
         ) from exc
     return {"message": "Автоматизация запущена", "id": automation_id}
+

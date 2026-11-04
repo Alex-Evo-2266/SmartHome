@@ -1,7 +1,7 @@
 
 from typing import Any
 from app.pkg.logger import get_automatization
-from app.schemas.automation.automation_v4 import DeviceCommand, CommandHandler, CommandParameter
+from app.schemas.automation.automation_v4 import DeviceCommand, CommandHandler, CommandParameter, Target, CommandParameter
 from app.core.services.device.set_status import set_status_by_name_field_correct
 from app.core.entities.room.set_value_room import set_value_room
 
@@ -70,7 +70,12 @@ register_command(
         name="set_value",
         title="Установить значение",
         description="Устанавливает значение поля устройства.",
-        parameters=[],
+        target=Target.FIELD_DEVICE,
+        parameters=[CommandParameter(
+            name="value",
+            title="value",
+            data_type="any"
+        )],
     ),
     set_value_handler,
 )
@@ -96,3 +101,6 @@ async def device_action_handler(
         )
 
     await handler(path, params)
+
+def get_action_commands():
+    return list(COMMANDS.values())

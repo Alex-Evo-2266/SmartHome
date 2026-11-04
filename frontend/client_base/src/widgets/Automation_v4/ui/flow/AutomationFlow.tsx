@@ -5,17 +5,16 @@ import type {
 } from "@src/entites/automation_v4";
 import type {
   EditorSelection,
-  EntryMode,
   StepEditorKind,
 } from "../model/editorTypes";
 import { STEP_TITLES } from "../model/editorTypes";
 import { AutomationStartNode } from "./AutomationStartNode";
 import { AutomationStepNode } from "./AutomationStepNode";
 import { Panel } from "alex-evo-sh-ui-kit";
+import './styleFlow.scss'
 
 interface AutomationFlowProps {
   automation: Automation;
-  entryMode: EntryMode;
   selection: EditorSelection | null;
   onSelect: (selection: EditorSelection) => void;
   onAddStep: (kind: StepEditorKind) => void;
@@ -23,7 +22,6 @@ interface AutomationFlowProps {
 
 export function AutomationFlow({
   automation,
-  entryMode,
   selection,
   onSelect,
   onAddStep,
@@ -51,15 +49,12 @@ export function AutomationFlow({
 
       <div className="automation-flow">
         <AutomationStartNode
-          mode={entryMode}
+          automation={automation}
           selected={selection !== null && selection.type === "start"}
           onSelect={() => onSelect({ type: "start" })}
         />
 
         {steps.map(([id, step], index) => (
-          <div className="automation-flow__item" key={id}>
-            <div className="automation-flow__connector" />
-
             <AutomationStepNode
               id={id}
               step={step}
@@ -71,7 +66,6 @@ export function AutomationFlow({
                 onSelect({ type: "step", id: stepId })
               }
             />
-          </div>
         ))}
 
         <div className="automation-add-step">

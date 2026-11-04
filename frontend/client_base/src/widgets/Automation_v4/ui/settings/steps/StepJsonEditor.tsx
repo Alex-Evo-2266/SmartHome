@@ -67,17 +67,8 @@ export function StepJsonEditor({
       </div>
 
       <section className="automation-settings__section">
-        <label htmlFor="automation-step-json">
-          Конфигурация шага
-        </label>
 
-        <textarea
-          id="automation-step-json"
-          className="automation-json"
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          spellCheck={false}
-        />
+
 
         <JsonContainer name="step" data={JSON.parse(draft)} readonly/>
 

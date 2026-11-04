@@ -1,11 +1,14 @@
 import { useCallback, useState } from "react";
 import type { Automation } from "@src/entites/automation_v4";
 import { DeviceSelectField } from "@src/entites/devices";
-import { Button, ContentBox, DangerButton } from "alex-evo-sh-ui-kit";
+import { Button, ContentBox, DangerButton, DayOfWeekField, MoreText, NumberField, Typography } from "alex-evo-sh-ui-kit";
 import { MODAL_ROOT_ID } from "@src/const";
 import { RoomObjectSelectField } from "@src/features/Room";
 import { AddTrigger } from "./dialogs/AddTrigger";
 import { TriggerKind } from "../model/editorTypes";
+import { DateField, SelectField, TimeField } from "@src/shared";
+import { numberToWeekday, weekdayToNumber } from "@src/shared/lib/helpers/dayOfWeekConverts";
+import { toLocalDate, toLocalTime, updateDateTimeLocal } from "@src/shared/lib/helpers/timeFormat";
 
 type Trigger = Automation["trigger"][number];
 
@@ -50,6 +53,7 @@ export function TriggerEditor({
   const [addTriggerDialogVisible, setAddTriggerDialogVisible] =
     useState<boolean>(false);
 
+
   function addTrigger(kindToAdd: TriggerKind) {
     onChange([...triggers, createTrigger(kindToAdd)]);
   }
@@ -69,6 +73,7 @@ export function TriggerEditor({
       triggers.filter((_, currentIndex) => currentIndex !== index),
     );
   }
+
 
   console.log(triggers)
 
@@ -131,12 +136,21 @@ export function TriggerEditor({
 
             {trigger.type === "time" && (
               <>
-                <label>
-                  Расписание
-                  <select
-                    value={trigger.kind}
-                    onChange={(event) => {
-                      const kind = event.target.value;
+                <SelectField border items={[
+                    {
+                        value: "weekly",
+                        title: "По дням недели"
+                    },
+                    {
+                        title: "Один раз",
+                        value: "once"
+                    },
+                    {
+                        value: "monthly",
+                        title: "По дням месяца"
+                    }
+                ]} value={trigger.kind} onChange={(value) => {
+                      const kind = value;
 
                       if (kind === "weekly") {
                         updateTrigger(index, {
@@ -180,93 +194,46 @@ export function TriggerEditor({
                           month_days: undefined,
                         });
                       }
-                    }}
-                  >
-                    <option value="weekly">По дням недели</option>
-                    <option value="once">Один раз</option>
-                    <option value="monthly">По дням месяца</option>
-                    <option value="interval">Через интервал</option>
-                  </select>
-                </label>
+                    }}/>
 
                 {trigger.kind === "weekly" && (
                   <>
-                    <label>
-                      Время
-                      <input
-                        type="time"
-                        value={trigger.at}
-                        onChange={(event) =>
-                          updateTrigger(index, {
-                            at: event.target.value,
-                          })
-                        }
-                      />
-                    </label>
-
-                    <label>
-                      Дни недели (0 — понедельник, 6 — воскресенье)
-                      <input
-                        value={trigger.weekdays.join(",")}
-                        onChange={(event) => {
-                          const weekdays = event.target.value
-                            .split(",")
-                            .map((value) => Number(value.trim()))
-                            .filter(
-                              (value) =>
-                                Number.isInteger(value) &&
-                                value >= 0 &&
-                                value <= 6,
-                            );
-
-                          updateTrigger(index, { weekdays });
+                        <TimeField border value={trigger.at} onChange={(value) =>
+                            updateTrigger(index, {
+                                at: value,
+                            })
+                        }/>
+                        <DayOfWeekField
+                        value={trigger.weekdays.map(numberToWeekday).filter(v=>v!==undefined)}
+                        onChange={(value) => {
+                            const converts = value.map(weekdayToNumber).filter(v=>v!==undefined)
+                            updateTrigger(index, { weekdays: converts });
                         }}
-                        placeholder="0,1,2,3,4"
-                      />
-                    </label>
+                        />
                   </>
                 )}
 
                 {trigger.kind === "once" && (
-                  <label>
-                    Дата и время
-                    <input
-                      type="datetime-local"
-                      value={trigger.run_at.slice(0, 16)}
-                      onChange={(event) => {
-                        const value = event.target.value;
-
-                        if (value) {
-                          updateTrigger(index, {
+                    
+                    <TriggerTimeOnce date={trigger.run_at} onChange={(value)=>{
+                        updateTrigger(index, {
                             run_at: new Date(value).toISOString(),
-                          });
-                        }
-                      }}
-                    />
-                  </label>
+                        });
+                    }}/>
+
                 )}
 
                 {trigger.kind === "monthly" && (
                   <>
-                    <label>
-                      Время
-                      <input
-                        type="time"
-                        value={trigger.at}
-                        onChange={(event) =>
+                  <TimeField border value={trigger.at}
+                        onChange={(value) =>
                           updateTrigger(index, {
-                            at: event.target.value,
+                            at: value,
                           })
-                        }
-                      />
-                    </label>
-
-                    <label>
-                      Дни месяца
-                      <input
-                        value={trigger.month_days.join(",")}
-                        onChange={(event) => {
-                          const month_days = event.target.value
+                        }/>
+                   <MoreText border value={trigger.month_days.join(",")}
+                        onChange={(value) => {
+                          const month_days = value
                             .split(",")
                             .map((value) => Number(value.trim()))
                             .filter(
@@ -277,45 +244,7 @@ export function TriggerEditor({
                             );
 
                           updateTrigger(index, { month_days });
-                        }}
-                        placeholder="1,15"
-                      />
-                    </label>
-                  </>
-                )}
-
-                {trigger.kind === "interval" && (
-                  <>
-                    <label>
-                      Интервал
-                      <input
-                        type="number"
-                        min={1}
-                        value={trigger.interval}
-                        onChange={(event) =>
-                          updateTrigger(index, {
-                            interval: Number(event.target.value),
-                          })
-                        }
-                      />
-                    </label>
-
-                    <label>
-                      Единица времени
-                      <select
-                        value={trigger.unit}
-                        onChange={(event) =>
-                          updateTrigger(index, {
-                            unit: event.target.value,
-                          })
-                        }
-                      >
-                        <option value="seconds">Секунды</option>
-                        <option value="minutes">Минуты</option>
-                        <option value="hours">Часы</option>
-                        <option value="days">Дни</option>
-                      </select>
-                    </label>
+                        }}/>
                   </>
                 )}
               </>
@@ -336,4 +265,32 @@ export function TriggerEditor({
       }
     </section>
   );
+}
+
+type DateTimePart = "date" | "time";
+
+
+const TriggerTimeOnce = ({onChange, date}:{onChange:(date:string)=>void, date:string}) => {
+
+    const updateDateTime = useCallback((
+        datetimeLocal: string,
+        type: DateTimePart,
+        data: string,
+    ) => {
+
+        const dataOut = updateDateTimeLocal(datetimeLocal, type, data)
+        console.log(dataOut)
+        onChange(dataOut)
+    },[onChange])
+
+    
+
+    return(
+        <>
+            <Typography type="body">Введине дату и время</Typography>
+            <DateField border value={toLocalDate(date)} onChange={value => updateDateTime(date, "date", value)}/>
+            <TimeField border value={toLocalTime(date)} onChange={value => updateDateTime(date, "time", value)}/>
+        </>
+    )
+
 }

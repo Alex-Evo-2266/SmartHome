@@ -56,29 +56,20 @@ from pydantic import BaseModel, Field, ConfigDict
 class ValueParameter(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    type: Literal["value"] = "value"
-    data_type: Literal[
-        "number", "string", "boolean", "time", "duration"
-    ]
+    type: Literal[
+        "number", "string", "boolean", "time"
+    ] = "string"
     default: int | float | str | bool | None = None
 
 
-class DeviceParameter(BaseModel):
+class PathParameter(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    type: Literal["device"] = "device"
-    device_type: str | None = None
-
-
-class DeviceRoomParameter(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    type: Literal["room_device"] = "room_device"
-    device_type: str
-
+    type: Literal["path"] = "path"
+    default: str | None = None
 
 ParameterDefinition = Annotated[
-    ValueParameter | DeviceParameter | DeviceRoomParameter,
+    ValueParameter | PathParameter,
     Field(discriminator="type"),
 ]
 
@@ -503,6 +494,11 @@ class CommandParameter(BaseModel):
     required: bool = True
     description: str | None = None
 
+class Target(str, Enum):
+    DEVICE = "device"
+    SYSTEM = "system",
+    ROOM = "room",
+    FIELD_DEVICE = "field"
 
 class DeviceCommand(BaseModel):
     """Описание команды устройства."""
@@ -511,6 +507,7 @@ class DeviceCommand(BaseModel):
     name: str
     title: str
     description: str | None = None
+    target: Target
     parameters: list[CommandParameter] = Field(default_factory=list)
 
 

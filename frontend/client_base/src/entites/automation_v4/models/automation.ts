@@ -19,29 +19,24 @@ export type LiteralDataType =
     | "time"
     | "duration"
 
+export type LiteralDataTypeWithOutDuration = Exclude<LiteralDataType, "duration">
+
 
 // ─── Параметры сценария ─────────────────────────────────────
 
 export interface ValueParameterDefinition {
-    type: "value"
-    data_type: LiteralDataType
+    type: LiteralDataTypeWithOutDuration
     default?: number | string | boolean | null
 }
 
-export interface DeviceParameterDefinition {
-    type: "device"
-    device_type?: string | null
-}
-
-export interface RoomDeviceParameterDefinition {
-    type: "room_device"
-    device_type: string
+export interface PathParameterDefinition {
+    type: "path"
+    default?: string | null
 }
 
 export type ParameterDefinition =
     | ValueParameterDefinition
-    | DeviceParameterDefinition
-    | RoomDeviceParameterDefinition
+    | PathParameterDefinition
 
 export interface ScriptParameter {
     title: string

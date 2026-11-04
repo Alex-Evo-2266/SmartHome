@@ -1,163 +1,146 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { Automation } from "@src/entites/automation_v4";
+import {
+  Button,
+  ContentBox,
+  DangerButton,
+  MoreText,
+  NumberField,
+  TextField,
+} from "alex-evo-sh-ui-kit";
+import { MODAL_ROOT_ID } from "@src/const";
+import { SelectField, TimeField } from "@src/shared";
+import { AddArgument, FormDataAddArgument } from "./dialogs/AddArgument";
+
+// ─── Типы ──────────────────────────────────────────────────
 
 type Parameters = Automation["parameters"];
 type Parameter = Parameters[string];
 type Definition = Parameter["definition"];
 type DefinitionType = Definition["type"];
-type LiteralType = Extract<Definition, { type: "value" }>["data_type"];
 
 interface FunctionArgumentsEditorProps {
   parameters: Parameters;
   onChange: (parameters: Parameters) => void;
 }
 
-const LITERAL_TYPES: { value: LiteralType; label: string }[] = [
-  { value: "string", label: "Строка" },
-  { value: "number", label: "Число" },
-  { value: "boolean", label: "Булево значение" },
-  { value: "duration", label: "Длительность" },
-  { value: "time", label: "Время" },
-];
+// ─── Константы ─────────────────────────────────────────────
 
 const DEFINITION_TYPES: {
   value: DefinitionType;
-  label: string;
+  title: string;
 }[] = [
-  { value: "value", label: "Значение" },
-  { value: "device", label: "Устройство" },
-  { value: "room_device", label: "Устройство в комнате" },
+  { value: "string", title: "Строка" },
+  { value: "number", title: "Число" },
+  { value: "boolean", title: "Логическое значение" },
+  { value: "time", title: "Время" },
+  { value: "path", title: "Путь" },
 ];
 
-/**
- * Создаёт новое определение с учётом его конкретного типа.
- *
- * data_type и default существуют только у value.
- * device_type у device может быть null или отсутствовать.
- * device_type у room_device обязателен и должен быть строкой.
- */
+// ─── Создание определения ──────────────────────────────────
+
 function createDefinition(type: DefinitionType): Definition {
   switch (type) {
-    case "value":
+    case "string":
       return {
-        type: "value",
-        data_type: "string",
+        type: "string",
         default: "",
       };
 
-    case "device":
+    case "number":
       return {
-        type: "device",
-        device_type: null,
+        type: "number",
+        default: 0,
       };
 
-    case "room_device":
+    case "boolean":
       return {
-        type: "room_device",
-        device_type: "LIGHT",
+        type: "boolean",
+        default: false,
+      };
+
+    case "time":
+      return {
+        type: "time",
+        default: "08:00",
+      };
+
+    case "path":
+      return {
+        type: "path",
+        default: "",
       };
   }
 }
 
-function createParameter(): Parameter {
+function createParameter(name: string, type: DefinitionType, description: string = ""): Parameter {
   return {
-    title: "Новый параметр",
-    description: "",
+    title: name,
+    description: description,
     required: false,
-    definition: createDefinition("value"),
+    definition: createDefinition(type),
   };
 }
 
-function getDefaultInputValue(
-  value: number | string | boolean | null | undefined,
-): string {
-  if (value === null || value === undefined) {
-    return "";
-  }
+// ─── Компонент ─────────────────────────────────────────────
 
-  return String(value);
-}
-
-function parseDefaultValue(
-  value: string,
-  dataType: LiteralType,
-): number | string | boolean | null {
-  if (value === "") {
-    return "";
-  }
-
-  switch (dataType) {
-    case "number": {
-      const parsed = Number(value);
-      return Number.isNaN(parsed) ? 0 : parsed;
-    }
-
-    case "boolean":
-      return value === "true";
-
-    case "string":
-    case "duration":
-    case "time":
-      return value;
-  }
-}
-
-export default function FunctionArgumentsEditor({
+export function FunctionArgumentsEditor({
   parameters,
   onChange,
 }: FunctionArgumentsEditorProps) {
-  const [newKey, setNewKey] = useState("");
+  const [addDialogVisible, setAddDialogVisible] = useState(false);
 
   const entries = Object.entries(parameters ?? {});
 
-  const updateParameter = (
+  // Обновление параметра целиком.
+  function updateParameter(
     key: string,
-    updatedParameter: Parameter,
-  ) => {
+    parameter: Parameter,
+  ) {
     onChange({
       ...parameters,
-      [key]: updatedParameter,
+      [key]: parameter,
     });
-  };
+  }
 
-  const updateDefinition = (
+  // Обновление только определения параметра.
+  function updateDefinition(
     key: string,
     definition: Definition,
-  ) => {
+  ) {
     const parameter = parameters[key];
 
-    if (!parameter) {
-      return;
-    }
+    if (!parameter) return;
 
     updateParameter(key, {
       ...parameter,
       definition,
     });
-  };
+  }
 
-  const addParameter = () => {
-    const key = newKey.trim();
+  // Добавление аргумента.
+  const addParameter = useCallback((kind: FormDataAddArgument) => {
 
-    if (!key || Object.prototype.hasOwnProperty.call(parameters, key)) {
-      return;
-    }
+    console.log(":d")
 
     onChange({
       ...parameters,
-      [key]: createParameter(),
+      [kind.name]: createParameter(kind.name, kind.type, kind.discription),
     });
 
-    setNewKey("");
-  };
+  },[parameters])
 
-  const removeParameter = (key: string) => {
+  // Удаление аргумента.
+  function removeParameter(key: string) {
     const updated = { ...parameters };
-    delete updated[key];
-    onChange(updated);
-  };
 
-  const renameParameter = (oldKey: string, newName: string) => {
+    delete updated[key];
+
+    onChange(updated);
+  }
+
+  // Переименование ключа аргумента.
+  function renameParameter(oldKey: string, newName: string) {
     const key = newName.trim();
 
     if (
@@ -165,6 +148,7 @@ export default function FunctionArgumentsEditor({
       key === oldKey ||
       Object.prototype.hasOwnProperty.call(parameters, key)
     ) {
+      console.error("key allrady exist")
       return;
     }
 
@@ -175,247 +159,180 @@ export default function FunctionArgumentsEditor({
     }
 
     onChange(updated);
-  };
+  }
 
   return (
-    <section className="automation-arguments">
-      <div className="automation-arguments__header">
-        <h3>Аргументы функции</h3>
+    <section className="automation-settings__section">
+      <div className="automation-settings__row">
+        <label>Аргументы функции</label>
+
+        <span className="automation-editor__step-count">
+          {entries.length}
+        </span>
       </div>
 
-      <div className="automation-arguments__add">
-        <input
-          type="text"
-          value={newKey}
-          placeholder="Имя нового параметра"
-          onChange={(event) => setNewKey(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              addParameter();
-            }
-          }}
-        />
-
-        <button
-          type="button"
-          onClick={addParameter}
-          disabled={
-            !newKey.trim() ||
-            Object.prototype.hasOwnProperty.call(parameters, newKey.trim())
-          }
-        >
-          Добавить
-        </button>
-      </div>
-
-      {entries.length === 0 ? (
-        <p className="automation-arguments__empty">
-          Аргументы не добавлены.
-        </p>
-      ) : (
-        <div className="automation-arguments__list">
-          {entries.map(([key, parameter]) => {
-            const definition = parameter.definition;
-
-            return (
-              <article
-                className="automation-arguments__item"
-                key={key}
-              >
-                <div className="automation-arguments__item-header">
-                  <label className="automation-arguments__field">
-                    <span>Имя параметра</span>
-                    <input
-                      type="text"
-                      defaultValue={key}
-                      onBlur={(event) => {
-                        renameParameter(key, event.currentTarget.value);
-                      }}
-                    />
-                  </label>
-
-                  <button
-                    type="button"
-                    onClick={() => removeParameter(key)}
-                    aria-label={`Удалить параметр ${key}`}
-                  >
-                    Удалить
-                  </button>
-                </div>
-
-                <label className="automation-arguments__field">
-                  <span>Название</span>
-                  <input
-                    type="text"
-                    value={parameter.title}
-                    onChange={(event) =>
-                      updateParameter(key, {
-                        ...parameter,
-                        title: event.target.value,
-                      })
-                    }
-                  />
-                </label>
-
-                <label className="automation-arguments__field">
-                  <span>Описание</span>
-                  <textarea
-                    value={parameter.description ?? ""}
-                    onChange={(event) =>
-                      updateParameter(key, {
-                        ...parameter,
-                        description: event.target.value,
-                      })
-                    }
-                    rows={2}
-                  />
-                </label>
-
-                <label className="automation-arguments__checkbox">
-                  <input
-                    type="checkbox"
-                    checked={parameter.required}
-                    onChange={(event) =>
-                      updateParameter(key, {
-                        ...parameter,
-                        required: event.target.checked,
-                      })
-                    }
-                  />
-                  Обязательный параметр
-                </label>
-
-                <label className="automation-arguments__field">
-                  <span>Тип определения</span>
-                  <select
-                    value={definition.type}
-                    onChange={(event) => {
-                      updateDefinition(
-                        key,
-                        createDefinition(event.target.value as DefinitionType),
-                      );
-                    }}
-                  >
-                    {DEFINITION_TYPES.map((item) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                {definition.type === "value" && (
-                  <>
-                    <label className="automation-arguments__field">
-                      <span>Тип значения</span>
-                      <select
-                        value={definition.data_type}
-                        onChange={(event) => {
-                          const dataType = event.target.value as LiteralType;
-
-                          updateDefinition(key, {
-                            ...definition,
-                            data_type: dataType,
-                            default:
-                              dataType === "boolean"
-                                ? false
-                                : dataType === "number"
-                                  ? 0
-                                  : "",
-                          });
-                        }}
-                      >
-                        {LITERAL_TYPES.map((item) => (
-                          <option key={item.value} value={item.value}>
-                            {item.label}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-
-                    <label className="automation-arguments__field">
-                      <span>Значение по умолчанию</span>
-
-                      {definition.data_type === "boolean" ? (
-                        <select
-                          value={getDefaultInputValue(definition.default)}
-                          onChange={(event) =>
-                            updateDefinition(key, {
-                              ...definition,
-                              default: parseDefaultValue(
-                                event.target.value,
-                                definition.data_type,
-                              ),
-                            })
-                          }
-                        >
-                          <option value="">Не задано</option>
-                          <option value="true">Да</option>
-                          <option value="false">Нет</option>
-                        </select>
-                      ) : (
-                        <input
-                          type={
-                            definition.data_type === "number"
-                              ? "number"
-                              : "text"
-                          }
-                          value={getDefaultInputValue(definition.default)}
-                          onChange={(event) =>
-                            updateDefinition(key, {
-                              ...definition,
-                              default: parseDefaultValue(
-                                event.target.value,
-                                definition.data_type,
-                              ),
-                            })
-                          }
-                        />
-                      )}
-                    </label>
-                  </>
-                )}
-
-                {definition.type === "device" && (
-                  <label className="automation-arguments__field">
-                    <span>Тип устройства (необязательно)</span>
-                    <input
-                      type="text"
-                      value={definition.device_type ?? ""}
-                      placeholder="Например, LIGHT"
-                      onChange={(event) =>
-                        updateDefinition(key, {
-                          type: "device",
-                          device_type: event.target.value || null,
-                        })
-                      }
-                    />
-                  </label>
-                )}
-
-                {definition.type === "room_device" && (
-                  <label className="automation-arguments__field">
-                    <span>Тип устройства</span>
-                    <input
-                      type="text"
-                      required
-                      value={definition.device_type}
-                      placeholder="Например, LIGHT"
-                      onChange={(event) =>
-                        updateDefinition(key, {
-                          type: "room_device",
-                          device_type: event.target.value,
-                        })
-                      }
-                    />
-                  </label>
-                )}
-              </article>
-            );
-          })}
+      {entries.length === 0 && (
+        <div className="automation-settings__empty">
+          <span>Аргументы не добавлены</span>
+          <p>
+            Добавьте аргумент, чтобы передавать значения
+            в функцию сценария.
+          </p>
         </div>
       )}
+
+      <div className="automation-trigger-list">
+        {entries.map(([key, parameter]) => {
+          const definition = parameter.definition;
+
+          return (
+            <div
+              className="automation-trigger-item"
+              key={key}
+            >
+              <ContentBox
+                label={`Аргумент: ${parameter.title || key}`}
+                border
+                collapsible
+                defaultVisible={false}
+              >
+                <TextField
+                  border
+                  disabled
+                  placeholder="name"
+                  value={key}
+                  onChange={(data)=>{renameParameter(key, data)}}
+                />
+
+
+                <SelectField
+                  border
+                  placeholder="type"
+                  items={DEFINITION_TYPES.map((item) => ({
+                    value: item.value,
+                    title: item.title,
+                  }))}
+                  value={definition.type}
+                  onChange={(value) => {
+                    updateDefinition(
+                      key,
+                      createDefinition(value as DefinitionType),
+                    );
+                  }}
+                />
+
+                {definition.type === "string" && (
+                  <TextField
+                    border
+                    placeholder="default"
+                    value={definition.default}
+                    onChange={(value) => {
+                        updateDefinition(key, {
+                          type: "string",
+                          default: value,
+                        });
+                      }}
+                  />
+                )}
+
+                {definition.type === "number" && (
+                  <NumberField
+                    border
+                    placeholder="default"
+                    value={definition.default}
+                    onChange={(value) => {
+                        updateDefinition(key, {
+                          type: "number",
+                          default: value,
+                        });
+                      }}
+                  />
+                )}
+
+                {definition.type === "boolean" && (
+                    <SelectField items={[{
+                      title: "true",
+                      value: "true"
+                    },{
+                      title: "false",
+                      value: "false"
+                    }]}
+                    border
+                    placeholder="default"
+                    value={String(Boolean(definition.default))}
+                    onChange={(value) => {
+                        updateDefinition(key, {
+                          type: "boolean",
+                          default:
+                            value === ""
+                              ? null
+                              : value === "true",
+                        });
+                      }}
+                    />
+                )}
+
+                {definition.type === "time" && (
+                    <TimeField
+                      border
+                      value={
+                        typeof definition.default === "string"
+                          ? definition.default
+                          : ""
+                      }
+                      onChange={(value) =>
+                        updateDefinition(key, {
+                          type: "time",
+                          default: value,
+                        })
+                      }
+                    />
+                )}
+
+                {definition.type === "path" && (
+                  <label>
+                    Путь по умолчанию
+                    <MoreText
+                      border
+                      value={definition.default ?? ""}
+                      onChange={(value) =>
+                        updateDefinition(key, {
+                          type: "path",
+                          default: value || null,
+                        })
+                      }
+                    />
+                  </label>
+                )}
+
+                <DangerButton
+                  style={{ background: "var(--Error-color)" }}
+                  container={document.getElementById(MODAL_ROOT_ID)}
+                  type="button"
+                  text="Вы уверены, что хотите удалить аргумент?"
+                  header="Удалить аргумент"
+                  onClick={() => removeParameter(key)}
+                >
+                  Удалить аргумент
+                </DangerButton>
+              </ContentBox>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Добавление аргумента */}
+
+      <div className="automation-add-step">
+        <Button
+          onClick={()=>setAddDialogVisible(true)}
+        >
+          Добавить аргумент
+        </Button>
+      </div>
+      {
+        addDialogVisible && <AddArgument onHide={()=>setAddDialogVisible(false)} onSuccess={addParameter}/>
+      }
     </section>
   );
 }
