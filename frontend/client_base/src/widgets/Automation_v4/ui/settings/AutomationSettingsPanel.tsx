@@ -3,23 +3,24 @@ import type {
   AutomationStep,
 } from "@src/entites/automation_v4";
 
+import { StartSettings } from "./StartSettings";
 import type {
   EditorSelection,
 } from "../model/editorTypes";
-
 import { getStepEditorKind } from "../model/editorTypes";
-import { StartSettings } from "./StartSettings";
-
-import { ActionStepEditor } from "./steps/ActionStepEditor";
-import { DelayStepEditor } from "./steps/DelayStepEditor";
-import { ConditionStepEditor } from "./steps/ConditionStepEditor";
+import { ActionStepEditor } from "./steps/ActionStepEditor/ActionStepEditor";
 import { AwaitStepEditor } from "./steps/AwaitStepEditor";
+import { ConditionStepEditor } from "./steps/ConditionStepEditor";
+import { DelayStepEditor } from "./steps/DelayStepEditor";
 import { ScriptActionStepEditor } from "./steps/ScriptActionStepEditor";
 
 interface AutomationSettingsPanelProps {
   automation: Automation;
   selection: EditorSelection | null;
   onChange: (patch: Partial<Automation>) => void;
+  onExpressionsChange: (
+    update: (expressions: Automation["expressions"]) => Automation["expressions"],
+  ) => void;
   onStepChange: (id: string, step: AutomationStep) => void;
   onStepDelete: (id: string) => void;
 }
@@ -28,6 +29,7 @@ export function AutomationSettingsPanel({
   automation,
   selection,
   onChange,
+  onExpressionsChange,
   onStepChange,
   onStepDelete,
 }: AutomationSettingsPanelProps) {
@@ -57,11 +59,12 @@ export function AutomationSettingsPanel({
     key: selection.id,
     step,
     parameters: automation.parameters,
+    expressions: automation.expressions,
     onChange: (nextStep: AutomationStep) =>
       onStepChange(selection.id, nextStep),
     onDelete: () => onStepDelete(selection.id),
+    onExpressionChange: onExpressionsChange,
   };
-
   switch (getStepEditorKind(step)) {
     case "action":
       return <ActionStepEditor {...editorProps} />;

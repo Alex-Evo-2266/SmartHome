@@ -71,7 +71,7 @@ _STRING_RIGHT = _literal("world")
 _TIME_LEFT = _literal("08:00", "time")
 _TIME_RIGHT = _literal("22:00", "time")
 _ANY_VALUES = ["number", "string", "boolean", "time", "duration", "path"]
-_NUMBER_VALUES = ["number", "numeric string", "boolean"]
+_NUMBER_VALUES = ["number", "boolean"]
 
 
 _BINARY_OPERATORS = [

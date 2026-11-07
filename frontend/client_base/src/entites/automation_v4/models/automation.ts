@@ -56,7 +56,7 @@ export interface LiteralArg {
 
 export interface RefArg {
     type: "ref"
-    ref: string
+    ref: string | null
 }
 
 export interface PathArg {
@@ -69,20 +69,22 @@ export type ExpressionArg =
     | RefArg
     | PathArg
 
+export type ExpressionArgWithNull = ExpressionArg | null
+
 
 // ─── Выражения ──────────────────────────────────────────────
 
 export interface BinaryExpression {
     type: "binary"
     op: BinaryOperator
-    left: ExpressionArg
-    right: ExpressionArg
+    left: ExpressionArgWithNull
+    right: ExpressionArgWithNull
 }
 
 export interface UnaryExpression {
     type: "unary"
     op: UnaryOperator
-    operand: ExpressionArg
+    operand: ExpressionArgWithNull
 }
 
 export interface CallExpression {
@@ -102,6 +104,9 @@ export type AutomationExpression =
     | UnaryExpression
     | CallExpression
     | GroupExpression
+
+
+
 
 
 // ─── Триггеры ───────────────────────────────────────────────
@@ -245,6 +250,164 @@ export interface AutomationListResponse {
     data: Automation[]
 }
 
+export type DeviceCommandTarget =
+    | "device"
+    | "system"
+    | "room"
+    | "field"
+
+export type DeviceCommandDataType =
+    | "number"
+    | "string"
+    | "boolean"
+    | "any"
+    | "path"
+
+export interface DeviceCommandParameter {
+    name: string
+    title: string
+    data_type: DeviceCommandDataType
+    required: boolean
+    description?: string | null
+}
+
+export interface DeviceCommand {
+    name: string
+    title: string
+    description?: string | null
+    target: DeviceCommandTarget
+    parameters: DeviceCommandParameter[]
+}
+
 export interface EnableAutomationRequest {
     is_enabled: boolean
+}
+
+export type ExpressionArgumentType = "literal" | "ref" | "path";
+
+export type ExpressionValueType =
+    | "number"
+    | "integer"
+    | "string"
+    | "boolean"
+    | "time"
+    | "duration"
+    | "path"
+    | "numeric string"
+    | "ISO-время"
+    | "datetime";
+
+export type OperatorCategory = "binary" | "unary" | "group";
+
+export interface ExpressionArgumentDefinition {
+    name: string;
+    position: number | string;
+    required: boolean;
+    expression_arg_types: ExpressionArgumentType[];
+    value_types: ExpressionValueType[];
+    default?: unknown;
+}
+
+export interface OperatorDefinition {
+    id: string;
+    name: string;
+    category: OperatorCategory;
+    description: string;
+    argument_count: number | {
+        minimum: number;
+        maximum: number | null;
+    };
+    arguments: ExpressionArgumentDefinition[];
+    result_type: string;
+    validation: string;
+    example_json: Record<string, unknown>;
+}
+
+export interface FunctionDefinition {
+    id: string;
+    name: string;
+    description: string;
+    arguments: ExpressionArgumentDefinition[];
+    min_args: number;
+    max_args: number | null;
+    result_type: string;
+    validation: string;
+    evaluation: "eager" | "lazy";
+    example_json: Record<string, unknown>;
+}
+
+export interface ExpressionCapabilitiesResponse {
+    types: Record<string, {
+        id: string;
+        name: string;
+        description: string;
+        json_shape: Record<string, unknown>;
+        required_fields: string[];
+        optional_fields: string[];
+        argument_types: ExpressionArgumentType[];
+        example_json: Record<string, unknown>;
+    }>;
+    operators: Record<OperatorCategory, OperatorDefinition[]>;
+    functions: FunctionDefinition[];
+    argument_types: Record<string, {
+        id: string;
+        description: string;
+        format: Record<string, unknown>;
+        required_fields: string[];
+        optional_fields: string[];
+        validation: string;
+        example_json: Record<string, unknown>;
+    }>;
+}
+
+export type ExpressionBlockSelection =
+    | {
+        kind: "operator";
+        expressionType: "binary";
+        op: string;
+        definition: OperatorDefinition;
+    }
+    | {
+        kind: "operator";
+        expressionType: "unary";
+        op: string;
+        definition: OperatorDefinition;
+    }
+    | {
+        kind: "operator";
+        expressionType: "group";
+        op: string;
+        definition: OperatorDefinition;
+    }
+    | {
+        kind: "function";
+        expressionType: "call";
+        fn: string;
+        definition: FunctionDefinition;
+    }
+    | {
+        kind: "literal";
+        expressionType: "literal";
+    }
+    | {
+        kind: "path";
+        expressionType: "path";
+    };
+
+
+
+export interface ExpressionBuilderModalProps {
+  value: ExpressionArg;
+
+  expressions: Automation["expressions"];
+
+  capabilities: ExpressionCapabilitiesResponse | null;
+
+  onChange: (value: ExpressionArg) => void;
+
+  onExpressionsChange: (
+    expressions: Automation["expressions"],
+  ) => void;
+
+  onClose: () => void;
 }

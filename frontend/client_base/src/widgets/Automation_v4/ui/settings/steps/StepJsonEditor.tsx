@@ -15,7 +15,7 @@ export function StepJsonEditor({
   onChange,
   onDelete,
 }: StepJsonEditorProps) {
-  const [draft, setDraft] = useState(() =>
+  const [draft] = useState(() =>
     JSON.stringify(step, null, 2),
   );
   const [error, setError] = useState<string | null>(null);

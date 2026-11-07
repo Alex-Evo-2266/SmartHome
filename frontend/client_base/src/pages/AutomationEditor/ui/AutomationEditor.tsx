@@ -28,6 +28,6 @@ export function AutomationEditorPage() {
         return null
 
     return(
-        <AutomationEditor automation={automation} createStep={()=>{return {} as AutomationStep}} onChange={update} onSave={()=>{}}/>
+        <AutomationEditor automation={automation} createStep={()=>{return {} as AutomationStep}} onChange={setAutomation} onSave={()=>{}}/>
     )
 }

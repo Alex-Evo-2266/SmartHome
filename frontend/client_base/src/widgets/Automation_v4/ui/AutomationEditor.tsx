@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState, type ChangeEvent } from "react";
 
 import type {
   Automation,
@@ -19,7 +19,7 @@ import { Sidebar } from "@src/shared/ui/SideBar";
 
 interface AutomationEditorProps {
   automation: Automation;
-  onChange: (automation: Automation) => void;
+  onChange: React.Dispatch<React.SetStateAction<Automation | null>>;
   onSave?: () => void;
   saving?: boolean;
 
@@ -46,13 +46,32 @@ export function AutomationEditor({
 }: AutomationEditorProps) {
   const [selection, setSelection] = useState<EditorSelection | null>(null);
 
-  function updateAutomation(patch: Partial<Automation>) {
-    console.log("patch", patch)
-    onChange({
-      ...automation,
-      ...patch,
-    });
-  }
+  const updateAutomation = useCallback((patch: Partial<Automation>) => {
+    onChange((prev) => {
+      if (!prev) return prev;
+
+      return {
+          ...prev,
+          ...patch,
+      };
+  });
+  },[onChange])
+
+  const updateExpressions = useCallback(
+    (
+      update: (expressions: Automation["expressions"]) => Automation["expressions"],
+    ) => {
+      onChange((previous) =>
+        previous
+          ? {
+              ...previous,
+              expressions: update(previous.expressions),
+            }
+          : previous,
+      );
+    },
+    [onChange],
+  );
 
   function addStep(kind: StepEditorKind) {
     const id = createId();
@@ -134,7 +153,7 @@ export function AutomationEditor({
             border
             value={automation.name}
             placeholder="Название сценария"
-            onChange={(event) =>
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
               updateAutomation({ name: event.target.value })
             }
             aria-label="Название сценария"
@@ -170,6 +189,7 @@ export function AutomationEditor({
             automation={automation}
             selection={selection}
             onChange={updateAutomation}
+            onExpressionsChange={updateExpressions}
             onStepChange={updateStep}
             onStepDelete={deleteStep}
           />

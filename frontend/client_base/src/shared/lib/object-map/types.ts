@@ -1,3 +1,4 @@
+import type { ExpressionValueType } from "@src/entites/automation_v4"
 import { TypeDeviceField } from "@src/entites/devices"
 
 export const ROOT_NAMESPASE_ARRAY = [
@@ -18,7 +19,8 @@ export type ObjectNodeKind =
 
 export interface ObjectNodeMeta {
     kind?: ObjectNodeKind
-    type?: TypeDeviceField | string
+    type?: TypeDeviceField
+    valueType?: ExpressionValueType
     readonly?: boolean
 }
 

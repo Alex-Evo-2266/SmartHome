@@ -3,10 +3,11 @@ import { useCallback, useEffect } from "react"
 import { TypeRequest } from "../../../shared/api/type"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
 import { useSnackbar } from "../../../shared/lib/hooks/snackbar.hook"
-
 import type {
     Automation,
+    DeviceCommand,
     EnableAutomationRequest,
+    ExpressionCapabilitiesResponse,
 } from "../models/automation"
 
 const AUTOMATION_URL = "/api-devices/automation-v4"
@@ -46,7 +47,7 @@ export const useAutomationAPI = () => {
         await request(
             AUTOMATION_URL,
             TypeRequest.POST,
-            automation as any,
+            automation as unknown as Record<string, unknown>,
         )
     }, [request])
 
@@ -60,8 +61,30 @@ export const useAutomationAPI = () => {
         await request(
             `${AUTOMATION_URL}/${encodeURIComponent(id)}`,
             TypeRequest.PUT,
-            automation as any,
+            automation as unknown as Record<string, unknown>,
         )
+    }, [request])
+
+    /**
+     * Получить список доступных команд устройства.
+     */
+    const getActionCommands = useCallback(async (): Promise<DeviceCommand[]> => {
+        const response: DeviceCommand[] = await request(
+            `${AUTOMATION_URL}/action_commands`,
+        )
+
+        return response
+    }, [request])
+
+    /**
+     * Получить описания поддерживаемых выражений.
+     */
+    const getExpressionCapabilities = useCallback(async (): Promise<ExpressionCapabilitiesResponse> => {
+        const response: ExpressionCapabilitiesResponse = await request(
+            `${AUTOMATION_URL}/expression-capabilities`,
+        )
+
+        return response
     }, [request])
 
     /**
@@ -90,7 +113,7 @@ export const useAutomationAPI = () => {
         await request(
             `${AUTOMATION_URL}/${encodeURIComponent(id)}/enable`,
             TypeRequest.PATCH,
-            body as any,
+            body as unknown as Record<string, unknown>,
         )
     }, [request])
 
@@ -109,6 +132,8 @@ export const useAutomationAPI = () => {
         getAutomation,
         addAutomation,
         editAutomation,
+        getActionCommands,
+        getExpressionCapabilities,
         deleteAutomation,
         enableAutomation,
         loading,

@@ -3,11 +3,13 @@ import { useRoom } from "@src/features/Room"
 import { useAppSelector } from "@src/shared/lib/hooks/redux"
 import { useMemo } from "react"
 
+import { mapDeviceFieldValueType } from "./mapDeviceFieldValueType"
 import {
     ObjectMap,
     ObjectNode,
     UseObjectMapProps
 } from "../../../../shared/lib/object-map/types"
+
 
 /**
  * Создание узла поля устройства.
@@ -15,13 +17,25 @@ import {
 const createFieldNode = (
     type: TypeDeviceField,
     readonly: boolean
-): ObjectNode => ({
-    meta: {
-        kind: "field",
-        type,
-        readonly
+): ObjectNode => {
+    return {
+        meta: {
+            kind: "field",
+            type,
+            valueType: mapDeviceFieldValueType(type),
+            readonly
+        }
     }
-})
+}
+
+const SYSTEM_FIELDS: Record<string, ObjectNode> = {
+    time: { meta: { kind: "field", valueType: "time" } },
+    hour_minute: { meta: { kind: "field", valueType: "time" } },
+    date: { meta: { kind: "field", valueType: "string" } },
+    weekday: { meta: { kind: "field", valueType: "number" } },
+    timestamp: { meta: { kind: "field", valueType: "number" } },
+    utc_offset: { meta: { kind: "field", valueType: "number" } }
+}
 
 /**
  * Создание узла устройства.
@@ -164,7 +178,10 @@ export const useObjectMap = ({
                 meta: {
                     kind: "namespace"
                 },
-                children: system
+                children: {
+                    ...SYSTEM_FIELDS,
+                    ...system
+                }
             }
         }
 

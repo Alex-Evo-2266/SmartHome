@@ -1,7 +1,12 @@
+import type { ExpressionValueType } from "@src/entites/automation_v4"
 import { SelectField } from "@src/shared"
 import { ObjectMap } from "@src/shared/lib/object-map/types"
 import { useEffect, useMemo, useState } from "react"
-import { usePathSelector } from "./usePathSelector"
+
+import {
+    isNodeAllowedByTypes,
+    usePathSelector
+} from "./usePathSelector"
 
 export interface PathSelectorProps {
     objectMap: ObjectMap
@@ -9,6 +14,7 @@ export interface PathSelectorProps {
     value?: string
     maxDepth?: number
     minDepth?: number
+    allowedValueTypes?: readonly ExpressionValueType[]
     onChange: (path: string) => void
     onValidityChange?: (valid: boolean) => void
 }
@@ -19,18 +25,25 @@ export const PathSelector = ({
     value,
     maxDepth,
     minDepth,
+    allowedValueTypes,
     onChange,
     onValidityChange
 }: PathSelectorProps) => {
 
-    const [internalValue, setInternalValue] = useState(initialPath)
+    const [internalValue, setInternalValue] = useState(
+        value ?? initialPath
+    )
 
-    // Если initialPath изменился, сбрасываем локальный выбор.
     useEffect(() => {
-        if (value === undefined) {
-            setInternalValue(initialPath)
+
+        if (value !== undefined) {
+            setInternalValue(value)
+            return
         }
-    }, [initialPath, value])
+
+        setInternalValue(initialPath)
+
+    }, [value, initialPath])
 
     const currentValue = value ?? internalValue
 
@@ -46,7 +59,8 @@ export const PathSelector = ({
         initialPath,
         value: currentValue,
         maxDepth,
-        minDepth
+        minDepth,
+        allowedValueTypes
     })
 
     useEffect(() => {
@@ -54,6 +68,7 @@ export const PathSelector = ({
     }, [isValid, onValidityChange])
 
     const commit = (nextPath: string) => {
+
         if (value === undefined) {
             setInternalValue(nextPath)
         }
@@ -65,7 +80,11 @@ export const PathSelector = ({
         index: number,
         selected: string
     ) => {
-        const nextSegments = updateSegment(index, selected)
+
+        const nextSegments = updateSegment(
+            index,
+            selected
+        )
 
         commit(nextSegments.join("."))
     }
@@ -75,12 +94,16 @@ export const PathSelector = ({
     }
 
     const nextItems = useMemo(
-        () => Object.keys(currentNode?.children ?? {}),
-        [currentNode]
+        () => Object.entries(currentNode?.children ?? {})
+            .filter(([, node]) =>
+                isNodeAllowedByTypes(node, allowedValueTypes)
+            )
+            .map(([name]) => name),
+        [currentNode, allowedValueTypes]
     )
 
     const baseDepth = initialPath.split(".").filter(Boolean).length
-    console.log(levels, canContinue)
+
     return (
         <>
             {levels.map((level, index) => (
@@ -89,9 +112,9 @@ export const PathSelector = ({
                     border
                     items={level.items}
                     value={level.value}
-                    onChange={data => handleChange(
+                    onChange={selected => handleChange(
                         baseDepth + index,
-                        data
+                        selected
                     )}
                 />
             ))}
