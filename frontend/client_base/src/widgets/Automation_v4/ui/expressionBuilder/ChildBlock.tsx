@@ -161,6 +161,7 @@ export const ChildBlock = ({
             <SelectBlockModal
                 onHide={() => setAddBlockVisible(false)}
                 onSelect={selectBlock}
+                allowedTypes={allowedValueTypes ?? []}
             />
         )
     }

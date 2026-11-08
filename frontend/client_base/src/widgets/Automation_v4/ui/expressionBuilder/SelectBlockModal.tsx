@@ -1,7 +1,7 @@
-
 import {
     ExpressionBlockSelection,
     ExpressionCapabilitiesResponse,
+    ExpressionValueType,
     FunctionDefinition,
     OperatorCategory,
     OperatorDefinition,
@@ -16,6 +16,7 @@ import "./SelectBlockModal.scss";
 type SelectBlockModalProps = {
     onHide: () => void;
     onSelect: (selection: ExpressionBlockSelection) => void;
+    allowedTypes: readonly ExpressionValueType[];
 };
 
 type SimpleBlockDefinition = {
@@ -108,6 +109,7 @@ type DetailedBlock = Extract<
 export const SelectBlockModal = ({
     onHide,
     onSelect,
+    allowedTypes,
 }: SelectBlockModalProps) => {
     const { getExpressionCapabilities } = useAutomationAPI();
 
@@ -120,6 +122,34 @@ export const SelectBlockModal = ({
     const [category, setCategory] = useState<CategoryKey>("binary");
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [search, setSearch] = useState("");
+
+    const allowedTypesSet = useMemo(
+        () => new Set<ExpressionValueType>(allowedTypes),
+        [allowedTypes],
+    );
+
+    // Проверка типа результата, полученного от backend
+    const isAllowedResultType = useCallback(
+        (resultType: string): boolean => {
+            const validTypes: ExpressionValueType[] = [
+                "number",
+                "string",
+                "boolean",
+                "time",
+                "duration",
+                "path",
+                "ISO-время",
+                "datetime",
+                "enum",
+            ];
+
+            return (
+                validTypes.includes(resultType as ExpressionValueType) &&
+                allowedTypesSet.has(resultType as ExpressionValueType)
+            );
+        },
+        [allowedTypesSet],
+    );
 
     const load = useCallback(async () => {
         try {
@@ -145,6 +175,7 @@ export const SelectBlockModal = ({
     const blocks = useMemo((): SelectedBlock[] => {
         if (!data) return [];
 
+        // Значения всегда доступны
         if (category === "literal") {
             return simpleBlocks.literal.map((definition) => ({
                 kind: "literal" as const,
@@ -152,6 +183,7 @@ export const SelectBlockModal = ({
             }));
         }
 
+        // Пути всегда доступны
         if (category === "path") {
             return simpleBlocks.path.map((definition) => ({
                 kind: "path" as const,
@@ -159,21 +191,30 @@ export const SelectBlockModal = ({
             }));
         }
 
+        // Функции фильтруются по типу результата
         if (category === "functions") {
-            return data.functions.map((definition) => ({
-                kind: "function" as const,
-                definition,
-            }));
+            return data.functions
+                .filter((definition) =>
+                    isAllowedResultType(definition.result_type),
+                )
+                .map((definition) => ({
+                    kind: "function" as const,
+                    definition,
+                }));
         }
 
-        // Здесь category уже имеет тип OperatorCategory
-        return data.operators[category].map((definition) => ({
-            kind: "operator" as const,
-            definition,
-        }));
-    }, [data, category]);
+        // Операторы фильтруются по типу результата
+        return data.operators[category]
+            .filter((definition) =>
+                isAllowedResultType(definition.result_type),
+            )
+            .map((definition) => ({
+                kind: "operator" as const,
+                definition,
+            }));
+    }, [data, category, isAllowedResultType]);
 
-    // Поиск по блокам
+    // Поиск по доступным блокам
     const filteredBlocks = useMemo(() => {
         const value = search.trim().toLowerCase();
 
@@ -191,17 +232,20 @@ export const SelectBlockModal = ({
     // Текущий выбранный блок
     const selectedBlock = useMemo(() => {
         return (
-            blocks.find((block) => block.definition.id === selectedId) ?? null
+            filteredBlocks.find(
+                (block) => block.definition.id === selectedId,
+            ) ?? null
         );
-    }, [blocks, selectedId]);
+    }, [filteredBlocks, selectedId]);
 
+    // Переключение категории
     const selectCategory = (value: CategoryKey) => {
         setCategory(value);
         setSelectedId(null);
         setSearch("");
     };
 
-    // Подсчёт количества блоков в категории
+    // Подсчёт количества доступных блоков
     const getCategoryCount = (categoryKey: CategoryKey): number => {
         if (!data) return 0;
 
@@ -214,10 +258,14 @@ export const SelectBlockModal = ({
         }
 
         if (categoryKey === "functions") {
-            return data.functions.length;
+            return data.functions.filter((definition) =>
+                isAllowedResultType(definition.result_type),
+            ).length;
         }
 
-        return data.operators[categoryKey].length;
+        return data.operators[categoryKey].filter((definition) =>
+            isAllowedResultType(definition.result_type),
+        ).length;
     };
 
     // Выбор блока
@@ -286,12 +334,21 @@ export const SelectBlockModal = ({
         return block.definition.arguments;
     };
 
-    // Автоматически выбираем первый блок категории
+    // Автоматический выбор первого доступного блока
     useEffect(() => {
-        if (!selectedId && blocks.length > 0) {
-            setSelectedId(blocks[0].definition.id);
+        if (filteredBlocks.length === 0) {
+            setSelectedId(null);
+            return;
         }
-    }, [blocks, selectedId]);
+
+        const selectedExists = filteredBlocks.some(
+            (block) => block.definition.id === selectedId,
+        );
+
+        if (!selectedExists) {
+            setSelectedId(filteredBlocks[0].definition.id);
+        }
+    }, [filteredBlocks, selectedId]);
 
     return (
         <DialogPortal>
