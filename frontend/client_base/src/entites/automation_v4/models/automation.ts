@@ -262,6 +262,8 @@ export type DeviceCommandDataType =
     | "boolean"
     | "any"
     | "path"
+    | "enum"
+    | "for_path"
 
 export interface DeviceCommandParameter {
     name: string
@@ -287,15 +289,14 @@ export type ExpressionArgumentType = "literal" | "ref" | "path";
 
 export type ExpressionValueType =
     | "number"
-    | "integer"
     | "string"
     | "boolean"
     | "time"
     | "duration"
     | "path"
-    | "numeric string"
     | "ISO-время"
-    | "datetime";
+    | "datetime"
+    | "enum";
 
 export type OperatorCategory = "binary" | "unary" | "group";
 

@@ -25,9 +25,19 @@ function getOption() {
 export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data}) => {
 
     const [errors, setErrors] = useState<{[key:string]:string}>({})
+    const [fieldType, setFieldType] = useState(data.type)
+    const [virtualField, setVirtualField] = useState(data.virtual_field)
     const form = useRef<FormRef<FieldData>>(null)
 
     const change = <K extends keyof FieldData>(name: K, data: FieldData[K]) => {
+        if(name === 'type'){
+            setFieldType(data as TypeDeviceField)
+        }
+        if(name === "virtual_field")
+        {
+            console.log("p0")
+            setVirtualField(data as boolean)
+        }
         if(name === 'type' && data === TypeDeviceField.BINARY)
         {
             form.current?.setFieldValue("low", BINARY_LOW)
@@ -67,7 +77,13 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
         return errors
     },[option.fields_change.address])
 
+    const save = () => {
+        console.log("p9")
+        form.current?.submit()
+    }
+
     const finishHandler = useCallback((data: FieldData)=>{
+        console.log("e4")
         const errors = validField(data)
         setErrors(errors)
         if(Object.keys(errors).length === 0)
@@ -77,20 +93,20 @@ export const EditField:React.FC<FieldDataProps> = ({onHide, onSave, option, data
     },[onSave, validField])
 
     return(
-        <FullScreenTemplateDialog header="add field" onHide={onHide} onSave={form.current?.submit}>
+        <FullScreenTemplateDialog header="edit field" onHide={onHide} onSave={save}>
             <div style={{marginInline: '16px'}}>
-                <Form<FieldData> value={data} onChangeValue={change} onFinish={finishHandler} errors={errors}>
+                <Form<FieldData> ref={form} value={data} onChangeValue={change} onFinish={finishHandler} errors={errors}>
                     {option.fields_change.name && <Form.TextInput border name="name" placeholder="name"/>}
-                    {option.fields_change.address && !form.current?.getValues().virtual_field && <Form.TextInput border name="address" placeholder="address"/>}
+                    {option.fields_change.address && !virtualField && <Form.TextInput border name="address" placeholder="address"/>}
                     {option.fields_change.type && <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>}
                     {
-                    (form.current?.getValues().type === TypeDeviceField.BINARY || form.current?.getValues().type === TypeDeviceField.NUMBER)?
+                    (fieldType === TypeDeviceField.BINARY || fieldType === TypeDeviceField.NUMBER)?
                     <>
                         {option.fields_change.low && <Form.TextInput border name="low" placeholder="low"/>}
                         {option.fields_change.high && <Form.TextInput border name="high" placeholder="high"/>}
                     </>
-                    :(form.current?.getValues().type === TypeDeviceField.ENUM && option.fields_change.enum_values)?
-                        <Form.MoreTextField name="enum_values"/>
+                    :(fieldType === TypeDeviceField.ENUM && option.fields_change.enum_values)?
+                        <Form.MoreTextField border name="enum_values"/>
                     :null
                     }
                     {option.fields_change.unit && <Form.TextInput border name="unit" placeholder="unit"/>}

@@ -1,22 +1,30 @@
+
 import {
     BinaryExpression,
     ExpressionArg
 } from "@src/entites/automation_v4"
 
+import {
+    useCallback,
+    useContext
+} from "react"
+
 import { ChildBlock } from "../ChildBlock"
 import { contextAutomation } from "../StartBlock"
 
-import { useCallback, useContext } from "react"
 import { getBinaryAllowedTypes } from "../../settings/steps/ActionStepEditor/utils/getAllowedValueTypes"
 
+import styles from "./Bynary.module.scss"
+
+interface BinaryExpressionProps {
+    expression: BinaryExpression
+    id: string
+}
 
 export const BynaryExpression = ({
     expression,
     id
-}: {
-    expression: BinaryExpression
-    id: string
-}) => {
+}: BinaryExpressionProps) => {
 
     const {
         updateExpression,
@@ -35,7 +43,7 @@ export const BynaryExpression = ({
         "right"
     )
 
-    const uleft = useCallback((data: ExpressionArg) => {
+    const updateLeft = useCallback((data: ExpressionArg) => {
         updateExpression(id, current => {
             if (!current || current.type !== "binary") {
                 throw new Error(
@@ -50,7 +58,7 @@ export const BynaryExpression = ({
         })
     }, [id, updateExpression])
 
-    const uright = useCallback((data: ExpressionArg) => {
+    const updateRight = useCallback((data: ExpressionArg) => {
         updateExpression(id, current => {
             if (!current || current.type !== "binary") {
                 throw new Error(
@@ -66,27 +74,31 @@ export const BynaryExpression = ({
     }, [id, updateExpression])
 
     return (
-        <div style={{
-            display: "flex",
-            border: "1px solid #000"
-        }}>
-            <span>
-                <ChildBlock
-                    data={expression.left}
-                    allowedValueTypes={leftAllowedTypes}
-                    onChange={uleft}
-                />
-            </span>
+        <div className={styles.expression}>
 
-            {expression.op}
+            <div className={styles.operands}>
+                <div className={styles.operand}>
 
-            <span>
-                <ChildBlock
-                    data={expression.right}
-                    allowedValueTypes={rightAllowedTypes}
-                    onChange={uright}
-                />
-            </span>
+                    <ChildBlock
+                        data={expression.left}
+                        allowedValueTypes={leftAllowedTypes}
+                        onChange={updateLeft}
+                    />
+                </div>
+
+                <div className={styles.operator}>
+                    {expression.op}
+                </div>
+
+                <div className={styles.operand}>
+
+                    <ChildBlock
+                        data={expression.right}
+                        allowedValueTypes={rightAllowedTypes}
+                        onChange={updateRight}
+                    />
+                </div>
+            </div>
         </div>
     )
 }

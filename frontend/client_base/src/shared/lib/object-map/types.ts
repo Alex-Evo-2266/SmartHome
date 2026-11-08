@@ -22,6 +22,7 @@ export interface ObjectNodeMeta {
     type?: TypeDeviceField
     valueType?: ExpressionValueType
     readonly?: boolean
+    enum_vals?: string[]
 }
 
 export interface ObjectNode {

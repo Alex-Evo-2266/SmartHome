@@ -12,7 +12,8 @@ export const useEditDevice = () => {
     const {showSnackbar} = useSnackbar()
 
     const editDevice = useCallback(async (data: EditDeviceDataSendSchema, system_name:string) => {
-        await request(`/api-devices/devices/${system_name}`, TypeRequest.PUT, data)
+        const result = await request(`/api-devices/devices/${system_name}`, TypeRequest.PUT, data)
+        return result !== undefined
     },[request])
 
     useEffect(()=>{

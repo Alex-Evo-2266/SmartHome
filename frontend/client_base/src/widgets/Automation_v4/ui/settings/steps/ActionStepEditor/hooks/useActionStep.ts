@@ -5,7 +5,7 @@ import type {
   ExpressionArg,
 } from "@src/entites/automation_v4";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { defaultParameterValue } from "../utils/defaultParameterValue";
 
 interface Props {

@@ -42,7 +42,7 @@ export function LiteralParameterField({
               ? "false"
               : ""
         }
-        onChange={selected => {
+        onChange={(selected: string) => {
           onChange({
             type: "literal",
             value: selected === "true",
@@ -63,7 +63,7 @@ export function LiteralParameterField({
             ? literalValue
             : 0
         }
-        onChange={nextValue => {
+        onChange={(nextValue: number) => {
           onChange({
             type: "literal",
             value: nextValue,
@@ -84,14 +84,11 @@ export function LiteralParameterField({
           ? String(literalValue)
           : ""
       }
-      onChange={nextValue => {
+      onChange={(nextValue: string) => {
         onChange({
           type: "literal",
           value: nextValue,
           data_type: getLiteralDataType(parameter.data_type)
-            // parameter.data_type === "any"
-            //   ? "string"
-            //   : parameter.data_type,
         });
       }}
     />

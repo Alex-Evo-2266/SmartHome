@@ -6,7 +6,7 @@ import type { StepEditorKind } from "./editorTypes";
 
 export function createAutomationStep(
   kind: StepEditorKind,
-  id: string,
+  _id: string,
 ): AutomationStep {
   switch (kind) {
     case "action":

@@ -3,12 +3,10 @@ import type {
     ExpressionValueType,
     PathArg
 } from "@src/entites/automation_v4"
-import { SelectField } from "@src/shared"
 import { ObjectNode } from "@src/shared/lib/object-map/types"
 import { PathSelector } from "@src/widgets/Automation_v4/ui/selectFields/PathSelector/PathSelector"
 import { useObjectMap } from "@src/widgets/Automation_v4/ui/selectFields/useObjectMap"
 
-import { getPathSource } from "../utils/getPathSource"
 
 
 
@@ -31,34 +29,16 @@ export function PathParameterField({
             ? value.path
             : "device"
 
-    const source = getPathSource(pathValue)
-
     const objectMap = useObjectMap({
         variables
     })
 
+    console.log(objectMap)
+
     return (
         <div style={{ display: "grid", gap: 12 }}>
 
-            <SelectField
-                border
-                items={[
-                    { value: "device", title: "Device" },
-                    { value: "room", title: "Room" },
-                    { value: "variable", title: "Variable" },
-                    { value: "system", title: "System" }
-                ]}
-                value={source}
-                onChange={selected => {
-                    onChange({
-                        type: "path",
-                        path: selected
-                    })
-                }}
-            />
-
             <PathSelector
-                initialPath={source}
                 objectMap={objectMap}
                 value={pathValue}
                 allowedValueTypes={allowedValueTypes}

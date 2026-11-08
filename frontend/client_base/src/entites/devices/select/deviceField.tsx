@@ -1,6 +1,5 @@
 import { SelectField } from "@src/shared"
 import { useAppSelector } from "@src/shared/lib/hooks/redux"
-import { ContentBox, Typography } from "alex-evo-sh-ui-kit"
 import { useCallback, useMemo, useState } from "react"
 import { TypeDeviceField } from "../models/device";
 

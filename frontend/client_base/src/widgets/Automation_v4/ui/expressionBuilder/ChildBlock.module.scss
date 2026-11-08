@@ -1,0 +1,100 @@
+
+.emptySlot {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    flex-wrap: wrap;
+    max-width: 100%;
+}
+
+.expressionBlock {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    max-width: 100%;
+    min-width: 0;
+    min-height: 38px;
+    padding: 4px 6px;
+
+    background: var(--Surface-container-high-color);
+    border: 1px solid var(--Outline-color);
+    border-radius: 6px;
+
+    color: var(--On-surface-color);
+    vertical-align: middle;
+
+    transition: border-color 0.15s ease;
+
+    &:hover {
+        border-color: var(--Primary-color);
+    }
+}
+
+.blockType {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 48px;
+    height: 27px;
+    padding: 0 7px;
+
+    border-radius: 4px;
+
+    background: var(--Primary-container-color);
+    color: var(--On-primary-container-color);
+
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.blockContent {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    min-width: 0;
+    max-width: 100%;
+}
+
+.removeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 23px;
+    height: 27px;
+    padding: 0;
+
+    border: none;
+    border-radius: 4px;
+
+    background: transparent;
+    color: var(--On-surface-variant-color);
+
+    font-size: 20px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+
+    &:hover {
+        background: var(--Error-color);
+        color: var(--On-error-color);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--Error-color);
+        outline-offset: 2px;
+    }
+}

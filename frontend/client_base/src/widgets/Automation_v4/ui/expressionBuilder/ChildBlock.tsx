@@ -1,42 +1,49 @@
+
 import {
     BinaryExpression,
     BinaryOperator,
     CallExpression,
     ExpressionArg,
     ExpressionBlockSelection,
+    ExpressionValueType,
     GroupExpression,
     GroupOperator,
     UnaryExpression,
-    UnaryOperator,
-    ExpressionValueType
+    UnaryOperator
 } from "@src/entites/automation_v4"
-import {
-    IconButton,
-    Trash
-} from "alex-evo-sh-ui-kit"
+
 import {
     useCallback,
     useContext,
     useState
 } from "react"
+
 import { v4 as uuidv4 } from "uuid"
 
-import { AddBlock } from "./AddBlock"
 import { PathBlock } from "./blocks/PathBlock"
 import { RefBlock } from "./blocks/RefBlock"
 import { SelectBlockModal } from "./SelectBlockModal"
 import { contextAutomation } from "./StartBlock"
 
+import { ExpressionAddButton } from "./components/ExpressionAddButton"
+import { LiteralValueEditor } from "./components/LiteralValueEditor"
+
+import styles from "./ChildBlock.module.scss"
+
 type ChildBlockProps = {
     data: ExpressionArg | null
     allowedValueTypes?: readonly ExpressionValueType[]
     onChange: (data: ExpressionArg) => void
+    enum_values?: string[]
 }
+
+type LiteralArg = Extract<ExpressionArg, { type: "literal" }>
 
 export const ChildBlock = ({
     data,
     onChange,
-    allowedValueTypes
+    allowedValueTypes,
+    enum_values
 }: ChildBlockProps) => {
 
     const [addBlockVisible, setAddBlockVisible] = useState(false)
@@ -50,7 +57,9 @@ export const ChildBlock = ({
         })
     }, [onChange])
 
-    const selectBlock = (selected: ExpressionBlockSelection) => {
+    const selectBlock = useCallback((
+        selected: ExpressionBlockSelection
+    ) => {
 
         if (selected.kind === "literal") {
             onChange({
@@ -136,72 +145,114 @@ export const ChildBlock = ({
                 })
             }
         }
+
+        setAddBlockVisible(false)
+
+    }, [onChange, updateExpression])
+
+    const openModal = () => {
+        setAddBlockVisible(true)
     }
 
-    if (data === null) {
+    const renderAddModal = () => {
+        if (!addBlockVisible) return null
+
         return (
-            <>
-                <AddBlock onClick={() => setAddBlockVisible(true)} />
-
-                {addBlockVisible && (
-                    <SelectBlockModal
-                        onHide={() => setAddBlockVisible(false)}
-                        onSelect={selectBlock}
-                    />
-                )}
-            </>
-        )
-    }
-
-    if (data.type === "literal") {
-        return (
-            <>
-                <input
-                    value={data.value != null ? String(data.value) : ""}
-                    onChange={event => onChange({
-                        ...data,
-                        value: event.target.value
-                    })}
-                />
-
-                <IconButton
-                    icon={<Trash />}
-                    onClick={onClear}
-                />
-            </>
-        )
-    }
-
-    if (data.type === "path") {
-        return (
-            <PathBlock
-                allowedValueTypes={allowedValueTypes}
-                value={data}
-                onChange={onChange}
-                onClear={onClear}
+            <SelectBlockModal
+                onHide={() => setAddBlockVisible(false)}
+                onSelect={selectBlock}
             />
         )
     }
 
-    if (data.type === "ref") {
+    // Empty expression slot
+    if (
+        data === null ||
+        (data.type === "ref" && data.ref === null)
+    ) {
+        return (
+            <div className={styles.emptySlot}>
+                <ExpressionAddButton onClick={openModal} />
+                {renderAddModal()}
+            </div>
+        )
+    }
 
-        if (data.ref === null) {
-            return (
-                <>
-                    <AddBlock onClick={() => setAddBlockVisible(true)} />
-
-                    {addBlockVisible && (
-                        <SelectBlockModal
-                            onHide={() => setAddBlockVisible(false)}
-                            onSelect={selectBlock}
-                        />
-                    )}
-                </>
-            )
-        }
+    // Literal
+    if (data.type === "literal") {
 
         return (
-            <RefBlock id={data.ref} onClear={onClear} />
+            <div className={styles.expressionBlock}>
+
+                <div className={styles.blockContent}>
+                    <LiteralValueEditor
+                        data={data as LiteralArg}
+                        allowedValueTypes={allowedValueTypes}
+                        enum_values={enum_values}
+                        onChange={onChange}
+                    />
+                </div>
+
+                <button
+                    type="button"
+                    className={styles.removeButton}
+                    onClick={onClear}
+                    title="Удалить значение"
+                >
+                    ×
+                </button>
+            </div>
+        )
+    }
+
+    // Path
+    if (data.type === "path") {
+
+        return (
+            <div className={styles.expressionBlock}>
+
+                <div className={styles.blockContent}>
+                    <PathBlock
+                        allowedValueTypes={allowedValueTypes}
+                        value={data}
+                        onChange={onChange}
+                    />
+                </div>
+
+                <button
+                    type="button"
+                    className={styles.removeButton}
+                    onClick={onClear}
+                    title="Удалить путь"
+                >
+                    ×
+                </button>
+            </div>
+        )
+    }
+
+    // Reference to nested expression
+    if (data.type === "ref") {
+
+        return (
+            <div className={styles.expressionBlock}>
+
+                <div className={styles.blockContent}>
+                    <RefBlock
+                        id={data.ref!}
+                        onClear={onClear}
+                    />
+                </div>
+
+                <button
+                    type="button"
+                    className={styles.removeButton}
+                    onClick={onClear}
+                    title="Удалить выражение"
+                >
+                    ×
+                </button>
+            </div>
         )
     }
 

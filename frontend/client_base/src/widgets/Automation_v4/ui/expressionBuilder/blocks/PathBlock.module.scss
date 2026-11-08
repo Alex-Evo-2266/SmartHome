@@ -1,0 +1,243 @@
+
+.pathButton {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+
+    min-height: 34px;
+    max-width: 100%;
+    min-width: 0;
+
+    padding: 4px 7px;
+
+    border: 1px solid var(--Outline-color);
+    border-radius: 5px;
+
+    background: var(--Surface-container-lowest-color);
+    color: var(--On-surface-color);
+
+    font: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+
+    &:hover {
+        background: var(--Surface-container-hover-color);
+        border-color: var(--Primary-color);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--Primary-color);
+        outline-offset: 2px;
+    }
+}
+
+.selected {
+    border-color: var(--Primary-color);
+}
+
+.empty {
+    border-style: dashed;
+
+    .pathValue {
+        color: var(--On-surface-variant-color);
+    }
+}
+
+.pathLabel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    height: 22px;
+    padding: 0 6px;
+
+    border-radius: 3px;
+
+    background: var(--Primary-container-color);
+    color: var(--On-primary-container-color);
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.pathValue {
+    min-width: 0;
+    max-width: 280px;
+
+    color: var(--On-surface-color);
+
+    font-size: 13px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+.editIcon {
+    flex-shrink: 0;
+
+    color: var(--On-surface-variant-color);
+    font-size: 15px;
+
+    transition: color 0.15s ease;
+
+    .pathButton:hover & {
+        color: var(--Primary-color);
+    }
+}
+
+// Dialog
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgb(0 0 0 / 65%);
+    backdrop-filter: blur(2px);
+}
+
+.dialog {
+    display: flex;
+    flex-direction: column;
+
+    width: 600px;
+    max-width: 100%;
+    max-height: min(85vh, 800px);
+    min-width: 0;
+
+    overflow: hidden;
+
+    background: var(--Surface-container-color);
+    border: 1px solid var(--Outline-color);
+    border-radius: 9px;
+
+    box-shadow: 0 15px 50px rgb(0 0 0 / 45%);
+}
+
+.dialogHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 15px 18px;
+
+    background: var(--Surface-container-high-color);
+    border-bottom: 1px solid var(--Outline-color);
+}
+
+.dialogType {
+    display: block;
+    margin-bottom: 4px;
+
+    color: var(--Secondary-color);
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+}
+
+.dialogTitle {
+    margin: 0;
+
+    color: var(--On-surface-color);
+
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.closeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 30px;
+    height: 30px;
+    padding: 0;
+
+    border: none;
+    border-radius: 5px;
+
+    background: transparent;
+    color: var(--On-surface-variant-color);
+
+    font-size: 24px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    &:hover {
+        background: var(--Error-color);
+        color: var(--On-error-color);
+    }
+}
+
+.dialogContent {
+    min-height: 0;
+    overflow-y: auto;
+
+    padding: 18px;
+
+    color: var(--On-surface-color);
+}
+
+.dialogFooter {
+    display: flex;
+    justify-content: flex-end;
+
+    padding: 12px 18px;
+
+    border-top: 1px solid var(--Outline-variant-color);
+    background: var(--Surface-container-low-color);
+}
+
+.cancelButton {
+    min-height: 32px;
+    padding: 0 14px;
+
+    border: 1px solid var(--Outline-color);
+    border-radius: 5px;
+
+    background: var(--Surface-container-high-color);
+    color: var(--On-surface-color);
+
+    font: inherit;
+    font-size: 12px;
+
+    cursor: pointer;
+
+    &:hover {
+        background: var(--Surface-container-highest-color);
+    }
+}
+
+@media (max-width: 600px) {
+    .overlay {
+        padding: 10px;
+    }
+
+    .dialog {
+        width: 100%;
+        max-height: 90vh;
+    }
+
+    .pathValue {
+        max-width: 180px;
+    }
+}

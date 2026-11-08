@@ -1,4 +1,4 @@
-import { Automation, AutomationExpression, ExpressionArg, ExpressionCapabilitiesResponse } from "@src/entites/automation_v4"
+import { Automation, AutomationExpression, DeviceCommandDataType, ExpressionArg, ExpressionCapabilitiesResponse, ExpressionValueType } from "@src/entites/automation_v4"
 import { DialogPortal } from "@src/shared"
 import { ObjectNode } from "@src/shared/lib/object-map/types"
 import { FullScreenTemplateDialog } from "alex-evo-sh-ui-kit"
@@ -39,21 +39,30 @@ export const ExpressionContext = ({
     )
 }
 
+type ExForPath = Exclude<DeviceCommandDataType, "for_path">
 
-export const ExpressionBuilder = ({expressions, updateExpression, onChange, value, variables, capabilities}:
+export const ExpressionBuilder = ({enum_vals, type, expressions, updateExpression, onChange, value, variables, capabilities}:
     {
+        type: ExForPath
         expressions: Expressions, 
         updateExpression: UpdateExpression,
         onChange: (data: ExpressionArg)=>void
         value:ExpressionArg, 
         variables: Record<string, ObjectNode>
         capabilities: ExpressionCapabilitiesResponse | null
+        enum_vals?: string[] 
     }) => {
+
+        const types:ExpressionValueType[] = type === "any" ? 
+        ["ISO-время", "boolean", "datetime", "duration", "number", "path", "string", "time"] : 
+        [type]
 
     return(
         <ExpressionContext expressions={expressions} updateExpression={updateExpression} variables={variables} capabilities={capabilities}>
-            <span>=</span>
-            <ChildBlock data={value} onChange={onChange}/>
+            <div>
+                <span style={{marginRight: "10px"}}>=</span>
+                <ChildBlock enum_values={enum_vals} allowedValueTypes={types} data={value} onChange={onChange}/>
+            </div>
         </ExpressionContext>
     )
 }
@@ -66,10 +75,13 @@ type ExpressionBuilderModalProps = {
     onClose: ()=>void
     onExpressionsChange: ExpressionChange
     variables: Record<string, ObjectNode>;
+    pathType: ExForPath | undefined
+    type: DeviceCommandDataType
+    enum_vals?: string[] 
 }
 
 
-export const ExpressionBuilderModal = ({expressions, onExpressionsChange, onChange, value, onClose, variables, capabilities}:ExpressionBuilderModalProps) => {
+export const ExpressionBuilderModal = ({enum_vals, pathType, expressions, onExpressionsChange, onChange, value, onClose, variables, capabilities, type}:ExpressionBuilderModalProps) => {
 
     const expressionChange = useCallback<UpdateExpression>((id, update) => {
         onExpressionsChange((currentExpressions) => {
@@ -78,10 +90,12 @@ export const ExpressionBuilderModal = ({expressions, onExpressionsChange, onChan
         })
     },[onExpressionsChange])
 
+    const type2: ExForPath = type === "for_path"? pathType === undefined ? "any" : pathType : type
+
     return(
         <DialogPortal>
             <FullScreenTemplateDialog onHide={onClose}>
-                <ExpressionBuilder variables={variables} value={value} expressions={expressions} updateExpression={expressionChange} onChange={onChange} capabilities={capabilities}/>
+                <ExpressionBuilder enum_vals={enum_vals} type={type2} variables={variables} value={value} expressions={expressions} updateExpression={expressionChange} onChange={onChange} capabilities={capabilities}/>
             </FullScreenTemplateDialog>
         </DialogPortal>
     )

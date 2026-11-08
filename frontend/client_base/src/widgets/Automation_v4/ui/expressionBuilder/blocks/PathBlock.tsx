@@ -1,51 +1,61 @@
-import type { ExpressionValueType, PathArg } from "@src/entites/automation_v4"
+
+import type {
+    ExpressionValueType,
+    PathArg
+} from "@src/entites/automation_v4"
+
 import { DialogPortal } from "@src/shared"
+
 import {
-    BaseDialog,
-    IconButton,
-    Trash,
-    Typography
-} from "alex-evo-sh-ui-kit"
-import { useContext, useState } from "react"
+    useContext,
+    useState
+} from "react"
 
 import {
     PathParameterField
 } from "../../settings/steps/ActionStepEditor/components/PathParameterField"
+
 import { contextAutomation } from "../StartBlock"
 
-
-
+import styles from "./PathBlock.module.scss"
+import { BaseDialog } from "alex-evo-sh-ui-kit"
 
 type PathBlockProps = {
     value?: PathArg
     allowedValueTypes?: readonly ExpressionValueType[]
     onChange: (value: PathArg) => void
-    onClear: () => void
 }
 
 export const PathBlock = ({
     value,
     allowedValueTypes,
-    onChange,
-    onClear
+    onChange
 }: PathBlockProps) => {
 
     const [dialogVisible, setDialogVisible] = useState(false)
 
     return (
         <>
-            <div onClick={() => setDialogVisible(true)}>
-                <Typography type="body">
-                    {!value?.path
-                        ? "Выберите значение"
-                        : value.path}
-                </Typography>
-            </div>
+            <button
+                type="button"
+                className={`${styles.pathButton} ${
+                    value?.path ? styles.selected : styles.empty
+                }`}
+                onClick={() => setDialogVisible(true)}
+                title={value?.path || "Выбрать путь"}
+            >
+                <span className={styles.pathLabel}>
+                    PATH
+                </span>
 
-            <IconButton
-                icon={<Trash />}
-                onClick={onClear}
-            />
+                <span className={styles.pathValue}>
+                    {value?.path || "Выберите значение"}
+                </span>
+
+                <span className={styles.editIcon}>
+                    ✎
+                </span>
+            </button>
 
             {dialogVisible && (
                 <PathDialog
@@ -74,6 +84,8 @@ export const PathDialog = ({
 }: PathDialogProps) => {
 
     const { variables } = useContext(contextAutomation)
+
+    console.log(allowedValueTypes)
 
     return (
         <DialogPortal>

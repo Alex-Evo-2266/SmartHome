@@ -7,6 +7,7 @@ import {
 import { useCallback, useMemo } from "react"
 
 export interface PathSelectorLevel {
+    index: number
     path: string
     value: string
     items: string[]
@@ -14,7 +15,6 @@ export interface PathSelectorLevel {
 
 interface UsePathSelectorProps {
     objectMap: ObjectMap
-    initialPath: string
     value?: string
     maxDepth?: number
     minDepth?: number
@@ -25,35 +25,48 @@ interface UsePathSelectorResult {
     segments: string[]
     path: string
     levels: PathSelectorLevel[]
+    rootItems: string[]
     currentNode?: ObjectNode
     canContinue: boolean
     isValid: boolean
     relativeDepth: number
-    updateSegment: (index: number, selected: string) => string[]
+    updateSegment: (
+        index: number,
+        selected: string
+    ) => string[]
 }
 
-
+/**
+ * Проверяет, может ли узел содержать
+ * значение одного из разрешённых типов.
+ */
 export const isNodeAllowedByTypes = (
     node: ObjectNode,
     allowedValueTypes?: readonly ExpressionValueType[]
 ): boolean => {
-
     if (allowedValueTypes === undefined) {
         return true
+    }
+
+    if (allowedValueTypes.length === 0) {
+        return false
     }
 
     if (
         node.meta?.kind === "field" ||
         node.meta?.kind === "variable"
     ) {
-        return node.meta.valueType !== undefined &&
+        return (
+            node.meta.valueType !== undefined &&
             allowedValueTypes.includes(node.meta.valueType)
+        )
     }
 
     return Object.values(node.children ?? {}).some(child =>
         isNodeAllowedByTypes(child, allowedValueTypes)
     )
 }
+
 /**
  * Получение узла по полному пути.
  */
@@ -61,7 +74,6 @@ const getObjectNode = (
     objectMap: ObjectMap,
     path: string
 ): ObjectNode | undefined => {
-
     const segments = path.split(".").filter(Boolean)
 
     if (!segments.length) {
@@ -71,7 +83,6 @@ const getObjectNode = (
     let currentNode: ObjectNode | undefined
 
     for (const segment of segments) {
-
         const children = currentNode
             ? currentNode.children
             : objectMap
@@ -93,7 +104,6 @@ const getAllowedChildren = (
     node: ObjectNode | undefined,
     allowedValueTypes?: readonly ExpressionValueType[]
 ): string[] => {
-
     if (!node?.children) {
         return []
     }
@@ -107,53 +117,49 @@ const getAllowedChildren = (
 
 export const usePathSelector = ({
     objectMap,
-    initialPath,
     value,
     maxDepth,
     minDepth,
     allowedValueTypes
 }: UsePathSelectorProps): UsePathSelectorResult => {
 
-    const baseSegments = useMemo(
-        () => initialPath.split(".").filter(Boolean),
-        [initialPath]
-    )
-
-    const requestedSegments = useMemo(
-        () => (value ?? initialPath).split(".").filter(Boolean),
-        [value, initialPath]
-    )
-
     /**
-     * Проверяем, что выбранный путь начинается с initialPath.
+     * Разбиваем входной путь на сегменты.
      */
-    const validPrefix = baseSegments.every(
-        (segment, index) => requestedSegments[index] === segment
+    const requestedSegments = useMemo(
+        () => (value ?? "").split(".").filter(Boolean),
+        [value]
     )
 
     /**
-     * Получаем существующие сегменты пути.
+     * Корневые элементы.
      *
-     * Важно: здесь НЕ фильтруем выбранный путь по типу.
-     * Это позволяет сохранить несовместимый путь и показать,
-     * что он невалиден, вместо автоматического удаления.
+     * Отображаются даже тогда, когда путь пустой.
+     */
+    const rootItems = useMemo(
+        () =>
+            Object.entries(objectMap)
+                .filter(([, node]) =>
+                    isNodeAllowedByTypes(node, allowedValueTypes)
+                )
+                .map(([name]) => name),
+        [objectMap, allowedValueTypes]
+    )
+
+    /**
+     * Получаем существующую часть пути.
+     *
+     * Если сегмент отсутствует в objectMap,
+     * дальнейшие сегменты отбрасываются.
      */
     const segments = useMemo(() => {
-
-        if (!validPrefix) {
-            return baseSegments
-        }
-
         const result: string[] = []
 
         let currentChildren: Record<string, ObjectNode> = objectMap
 
-        const depthLimit = maxDepth === undefined
-            ? Infinity
-            : baseSegments.length + maxDepth
+        const depthLimit = maxDepth ?? Infinity
 
         for (const segment of requestedSegments) {
-
             if (result.length >= depthLimit) {
                 break
             }
@@ -170,93 +176,78 @@ export const usePathSelector = ({
         }
 
         return result
-
     }, [
         objectMap,
         requestedSegments,
-        baseSegments,
-        validPrefix,
         maxDepth
     ])
 
     const path = segments.join(".")
 
+    /**
+     * Текущий узел выбранного пути.
+     */
     const currentNode = useMemo(
         () => getObjectNode(objectMap, path),
         [objectMap, path]
     )
 
-    const relativeDepth = Math.max(
-        0,
-        segments.length - baseSegments.length
-    )
+    const relativeDepth = segments.length
 
     /**
-     * Строим уровни селектов.
-     *
-     * Для каждого уровня:
-     * - показываем только разрешённые узлы;
-     * - сохраняем текущий выбранный элемент,
-     *   даже если его тип не подходит.
+     * Строим Select для каждого выбранного сегмента.
      */
     const levels = useMemo<PathSelectorLevel[]>(() => {
-
         const result: PathSelectorLevel[] = []
 
-        for (
-            let index = 0;
-            index < relativeDepth;
-            index++
-        ) {
+        let parentNode: ObjectNode | undefined
 
-            const parentSegments = segments.slice(
-                0,
-                baseSegments.length + index
-            )
+        for (let index = 0; index < segments.length; index++) {
+            const selected = segments[index]
 
-            const parentPath = parentSegments.join(".")
+            const children = parentNode
+                ? parentNode.children
+                : objectMap
 
-            const selected = segments[
-                baseSegments.length + index
-            ]
+            const items = Object.entries(children ?? {})
+                .filter(([, node]) =>
+                    isNodeAllowedByTypes(node, allowedValueTypes)
+                )
+                .map(([name]) => name)
 
-            const parentNode = getObjectNode(
-                objectMap,
-                parentPath
-            )
-
-            const items = getAllowedChildren(
-                parentNode,
-                allowedValueTypes
-            )
-
-            // Не удаляем уже выбранный несовместимый элемент.
-            if (selected && !items.includes(selected)) {
+            /**
+             * Не теряем уже выбранное значение,
+             * если оно больше не проходит фильтрацию.
+             */
+            if (!items.includes(selected)) {
                 items.push(selected)
             }
 
             result.push({
-                path: parentPath,
+                index,
+                path: segments.slice(0, index).join("."),
                 value: selected,
                 items
             })
+
+            parentNode = children?.[selected]
         }
 
         return result
-
     }, [
         objectMap,
         segments,
-        baseSegments,
-        relativeDepth,
         allowedValueTypes
     ])
 
     /**
-     * Проверяем типы всех выбранных узлов после initialPath.
+     * Проверяем типы всех выбранных узлов.
+     *
+     * Тип проверяется для конечного поля,
+     * а промежуточные объекты проверяются
+     * на наличие подходящих дочерних элементов.
      */
     const typesValid = useMemo(() => {
-
         if (allowedValueTypes === undefined) {
             return true
         }
@@ -265,28 +256,37 @@ export const usePathSelector = ({
             return false
         }
 
-        for (
-            let index = baseSegments.length;
-            index < segments.length;
-            index++
-        ) {
-
-            const node = getObjectNode(
-                objectMap,
-                segments.slice(0, index + 1).join(".")
-            )
-
-            if (!node || !isNodeAllowedByTypes(node, allowedValueTypes)) {
-                return false
-            }
+        if (segments.length === 0) {
+            return false
         }
 
-        return true
+        const lastNode = getObjectNode(
+            objectMap,
+            path
+        )
 
+        if (!lastNode) {
+            return false
+        }
+
+        if (
+            lastNode.meta?.kind === "field" ||
+            lastNode.meta?.kind === "variable"
+        ) {
+            return (
+                lastNode.meta.valueType !== undefined &&
+                allowedValueTypes.includes(lastNode.meta.valueType)
+            )
+        }
+
+        return isNodeAllowedByTypes(
+            lastNode,
+            allowedValueTypes
+        )
     }, [
         objectMap,
         segments,
-        baseSegments,
+        path,
         allowedValueTypes
     ])
 
@@ -296,7 +296,6 @@ export const usePathSelector = ({
 
     const isValid =
         !!currentNode &&
-        validPrefix &&
         depthValid &&
         typesValid
 
@@ -306,22 +305,22 @@ export const usePathSelector = ({
     const canContinue =
         !!currentNode &&
         relativeDepth < (maxDepth ?? Infinity) &&
-        getAllowedChildren(currentNode, allowedValueTypes).length > 0
+        getAllowedChildren(
+            currentNode,
+            allowedValueTypes
+        ).length > 0
 
     /**
-     * Обновление сегмента пути.
+     * Изменение сегмента.
      *
-     * index — абсолютный индекс сегмента,
-     * относительно полного пути, включая initialPath.
+     * Все сегменты после изменённого удаляются.
      */
     const updateSegment = useCallback(
         (index: number, selected: string): string[] => {
-
             return [
                 ...segments.slice(0, index),
                 selected
             ]
-
         },
         [segments]
     )
@@ -330,6 +329,7 @@ export const usePathSelector = ({
         segments,
         path,
         levels,
+        rootItems,
         currentNode,
         canContinue,
         isValid,

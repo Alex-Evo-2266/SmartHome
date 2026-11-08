@@ -1,8 +1,7 @@
 import { useCallback, useState } from "react";
 import type { Automation } from "@src/entites/automation_v4";
 import { DeviceSelectField } from "@src/entites/devices";
-import { Button, ContentBox, DangerButton, DayOfWeekField, MoreText, NumberField, Typography } from "alex-evo-sh-ui-kit";
-import { MODAL_ROOT_ID } from "@src/const";
+import { Button, ContentBox, DayOfWeekField, MoreText, Typography } from "alex-evo-sh-ui-kit";
 import { RoomObjectSelectField } from "@src/features/Room";
 import { AddTrigger } from "./dialogs/AddTrigger";
 import { TriggerKind } from "../model/editorTypes";
@@ -249,7 +248,7 @@ export function TriggerEditor({
                 )}
               </>
             )}
-                <DangerButton style={{background: "var(--Error-color)"}} container={document.getElementById(MODAL_ROOT_ID)} type="button" text="Вы уверены что хотите удалить триггер?" header="Удалить триггер" onClick={()=>removeTrigger(index)}>удалить</DangerButton>
+                <Button type="button" onClick={()=>removeTrigger(index)}>удалить</Button>
             </ContentBox>
 
           </div>

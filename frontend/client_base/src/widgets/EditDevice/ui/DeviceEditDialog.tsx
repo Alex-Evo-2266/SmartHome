@@ -89,9 +89,11 @@ export const DeviceEditDialog:React.FC<DeviceDataProps> = ({data, onHide, option
         setErrors(errors)
         if(Object.keys(errors).length === 0)
         {
-            await editDevice({...value, class_device: data.class_device, type: data.type, fields: fields}, data.system_name)
-            setTimeout(async()=>await loadData(),500)
-            
+            const saved = await editDevice({...value, class_device: data.class_device, type: data.type, fields: fields}, data.system_name)
+            if(!saved)
+                return
+
+            await loadData()
             onHide()
         }
     },[option, data, onHide, editDevice, fields, loadData])

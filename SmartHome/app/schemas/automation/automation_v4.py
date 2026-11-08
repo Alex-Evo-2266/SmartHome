@@ -489,7 +489,7 @@ class CommandParameter(BaseModel):
 
     name: str
     title: str
-    data_type: Literal["number", "string", "boolean", "any", "path"] = "any"
+    data_type: Literal["number", "string", "boolean", "any", "path", "for_path"] = "any"
     required: bool = True
     description: str | None = None
 

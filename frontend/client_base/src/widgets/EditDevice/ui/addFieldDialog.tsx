@@ -37,6 +37,8 @@ function getOption() {
 export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
 
     const [errors, setErrors] = useState<{[key:string]:string}>({})
+    const [fieldType, setFieldType] = useState(TypeDeviceField.BINARY)
+    const [virtualField, setVirtualField] = useState(false)
     const form = useRef<FormRef<FieldData>>(null)
 
     const save = () => {
@@ -44,6 +46,9 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
     }
 
     const change = <K extends keyof FieldData>(name: K, data: FieldData[K]) => {
+        if(name === 'type'){
+            setFieldType(data as TypeDeviceField)
+        }
         if(name === 'type' && data === TypeDeviceField.BINARY)
         {
             form.current?.setFieldValue("low", BINARY_LOW)
@@ -64,7 +69,9 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
         }
     }
     const segmentsChange = (value: string[]) => {
-        form.current?.setFieldValue("virtual_field", value.includes('virtual'))
+        const isVirtual = value.includes('virtual')
+        setVirtualField(isVirtual)
+        form.current?.setFieldValue("virtual_field", isVirtual)
         form.current?.setFieldValue("read_only", value.includes('read only'))
     }
 
@@ -100,11 +107,11 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
             <div style={{marginInline: '16px'}}>
                 <Form<FieldData> ref={form} value={getInitData()} onChangeValue={change} onFinish={finishHandler} errors={errors}>
                     <Form.TextInput border name="name" placeholder="name"/>
-                    {form.current?.getValues().virtual_field?null:<Form.TextInput border name="address" placeholder="address"/>}
+                    {virtualField?null:<Form.TextInput border name="address" placeholder="address"/>}
                     
                     <Form.SelectInput container={document.getElementById(MODAL_ROOT_ID)} border name="type" items={getOption()} placeholder="type"/>
                     {
-                    (form.current?.getValues().type === TypeDeviceField.BINARY || form.current?.getValues().type === TypeDeviceField.NUMBER)?
+                    (fieldType === TypeDeviceField.BINARY || fieldType === TypeDeviceField.NUMBER)?
                     <>
                         <Form.TextInput border name="low" placeholder="low"/>
                         <Form.TextInput border name="high" placeholder="high"/>
@@ -112,7 +119,7 @@ export const AddField:React.FC<FieldDataProps> = ({onHide, onSave}) => {
                     :null
                     }
                     {
-                        (form.current?.getValues().type === TypeDeviceField.ENUM)?
+                        fieldType === TypeDeviceField.ENUM?
                         <> 
                         <Form.MoreTextField border name="enum_values"/>
                         </>:

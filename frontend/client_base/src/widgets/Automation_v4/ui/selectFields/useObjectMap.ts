@@ -9,6 +9,7 @@ import {
     ObjectNode,
     UseObjectMapProps
 } from "../../../../shared/lib/object-map/types"
+import { splitEnum } from "@src/shared/lib/helpers/enumStrimg"
 
 
 /**
@@ -16,14 +17,17 @@ import {
  */
 const createFieldNode = (
     type: TypeDeviceField,
-    readonly: boolean
+    readonly: boolean,
+    enum_vals?: string
 ): ObjectNode => {
+    const vals = enum_vals ? splitEnum(enum_vals) : undefined
     return {
         meta: {
             kind: "field",
             type,
             valueType: mapDeviceFieldValueType(type),
-            readonly
+            readonly,
+            enum_vals: vals
         }
     }
 }
@@ -91,7 +95,8 @@ export const useObjectMap = ({
             device.fields?.forEach(field => {
                 fields[field.name] = createFieldNode(
                     field.type,
-                    field.read_only
+                    field.read_only,
+                    field.enum_values ?? undefined
                 )
             })
 

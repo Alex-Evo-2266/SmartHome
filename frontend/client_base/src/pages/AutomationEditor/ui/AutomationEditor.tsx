@@ -14,11 +14,7 @@ export function AutomationEditorPage() {
         if(!id) return
         const automationData = await getAutomation(id)
         setAutomation(automationData)
-    },[id])
-
-    const update = useCallback((automation: Automation)=>{
-        setAutomation(automation)
-    },[])
+    },[id, getAutomation])
 
     useEffect(()=>{
         load()

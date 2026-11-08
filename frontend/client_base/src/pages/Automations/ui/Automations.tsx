@@ -5,7 +5,6 @@ import { AutomationCard as Ac } from "../../../widgets/AutomationCard"
 import { ScriptCard } from "../../../widgets/ScriptCard"
 import './Automations.scss'
 import { AutomationCard } from "@src/widgets/Automation_v4/ui/AutomationList"
-import { AutomationEditor } from "@src/widgets/Automation_v4/ui/AutomationEditor"
 
 export const AutomationPage = () => {
 

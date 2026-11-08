@@ -119,7 +119,7 @@ register_command(
             CommandParameter(
                 name="value",
                 title="value",
-                data_type="any",
+                data_type="for_path",
             ),
         ],
     ),
