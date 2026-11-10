@@ -134,11 +134,9 @@ export const SelectBlockModal = ({
         [allowedTypes],
     );
 
-    const isLiteralAllowed = allowedTypes.some((type) =>
-        ["number", "string", "boolean", "time", "duration", "ISO-время", "datetime", "enum"].includes(type),
-    );
+    const isLiteralAllowed = !allowedTypes.includes("path");
 
-    const isPathAllowed = allowedTypesSet.has("path");
+    const isPathAllowed = true;
 
     // Проверка типа результата, полученного от backend
     const isAllowedResultType = useCallback(

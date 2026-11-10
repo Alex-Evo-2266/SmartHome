@@ -106,13 +106,13 @@ export function TriggerEditor({
                     trigger.type === "device"? "Триггер устройства":
                     trigger.type === "room"? "Триггер комнаты":
                     trigger.type === "time"? "Временной триггер":""}
-                border collapsible defaultVisible={false}
+                border collapsible defaultVisible
                 >
 
             {trigger.type === "device" && (
                 <>
-                    <DeviceSelectField onChange={(data:string)=>{
-                        const segments = data.split(".")
+                    <DeviceSelectField onChange={(data:{binding: string})=>{
+                        const segments = data.binding.split(".")
                         updateTrigger(index, {
                             device: segments[0],
                             field: segments[1]

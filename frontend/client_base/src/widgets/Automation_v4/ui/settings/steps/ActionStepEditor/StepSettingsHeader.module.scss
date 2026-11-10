@@ -1,0 +1,25 @@
+.settings {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 0;
+  color: var(--On-surface-color);
+}
+
+.header {
+  display: grid;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--Outline-variant-color);
+}
+
+.eyebrow {
+  color: var(--On-surface-variant-color);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.description {
+  color: var(--On-surface-variant-color);
+  line-height: 1.45;
+}

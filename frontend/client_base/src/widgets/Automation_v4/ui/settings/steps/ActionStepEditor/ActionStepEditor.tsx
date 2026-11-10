@@ -11,15 +11,17 @@ import { SelectField } from "@src/shared";
 import type { ObjectMap, ObjectNode } from "@src/shared/lib/object-map/types";
 import { useMemo, useState } from "react";
 
+import styles from './StepSettingsHeader.module.scss'
+
 // Путь импорта укажи согласно расположению своего хука.
 
-import { StepJsonEditor } from "../StepJsonEditor";
 import { ActionParameter } from "./components/ActionParameter";
 import { useActionCommands } from "./hooks/useActionCommands";
 import { useActionStep } from "./hooks/useActionStep";
 import { ExpressionBuilderModal } from "../../../expressionBuilder/StartBlock";
 import { useObjectMap } from "../../../selectFields/useObjectMap";
 import { TypeDeviceField } from "@src/entites/devices";
+import { Typography } from "alex-evo-sh-ui-kit";
 
 type ExForPath = Exclude<DeviceCommandDataType, "for_path">
 
@@ -208,12 +210,12 @@ export function ActionStepEditor({
 
   return (
     <>
-      <StepJsonEditor
-        step={step}
-        onChange={onChange}
-        onDelete={onDelete}
-        title="Действие устройства"
-      />
+      <header className={styles.header}>
+        <Typography type="small" className={styles.eyebrow}>
+          НАСТРОЙКИ ДЕЙСТВИЯ
+        </Typography>
+        <Typography type="title-2">Действие</Typography>
+      </header>
 
       <div
         style={{

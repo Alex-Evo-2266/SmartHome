@@ -194,7 +194,7 @@ export function FunctionArgumentsEditor({
                 label={`Аргумент: ${parameter.title || key}`}
                 border
                 collapsible
-                defaultVisible={false}
+                defaultVisible
               >
                 <TextField
                   border
