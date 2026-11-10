@@ -92,9 +92,18 @@ export const ExpressionBuilderModal = ({enum_vals, pathType, expressions, onExpr
 
     const type2: ExForPath = type === "for_path"? pathType === undefined ? "any" : pathType : type
 
+    const l = () => {
+        console.log("d")
+    }
+
     return(
         <DialogPortal>
-            <FullScreenTemplateDialog onHide={onClose}>
+            <FullScreenTemplateDialog btns={[
+                {
+                    text: "ok", 
+                    onClick: onClose
+                }
+            ]}>
                 <ExpressionBuilder enum_vals={enum_vals} type={type2} variables={variables} value={value} expressions={expressions} updateExpression={expressionChange} onChange={onChange} capabilities={capabilities}/>
             </FullScreenTemplateDialog>
         </DialogPortal>

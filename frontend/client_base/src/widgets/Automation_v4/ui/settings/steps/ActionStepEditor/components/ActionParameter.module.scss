@@ -1,0 +1,170 @@
+
+.parameter {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    min-width: 0;
+    padding: 10px;
+
+    background: var(--Surface-container-color);
+    border: 1px solid var(--Outline-variant-color);
+    border-radius: 7px;
+
+    transition: border-color 0.15s ease;
+
+    &:hover {
+        border-color: var(--Outline-color);
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.titleWrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    min-width: 0;
+}
+
+.title {
+    color: var(--On-surface-color);
+    font-size: 13px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.type {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 20px;
+    padding: 0 7px;
+
+    border-radius: 4px;
+
+    background: var(--Secondary-container-color);
+    color: var(--On-secondary-container-color);
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.description {
+    margin: 0;
+
+    color: var(--On-surface-variant-color);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.expressionButton {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 7px 9px;
+
+    border: 1px solid var(--Outline-color);
+    border-radius: 5px;
+
+    background: var(--Surface-container-low-color);
+    color: var(--On-surface-color);
+
+    text-align: left;
+    font: inherit;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+
+    &:hover {
+        background: var(--Surface-container-hover-color);
+        border-color: var(--Primary-color);
+
+        .editIcon {
+            color: var(--Primary-color);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--Primary-color);
+        outline-offset: 2px;
+    }
+}
+
+.hasValue {
+    border-left: 3px solid var(--Primary-color);
+}
+
+.empty {
+    border-style: dashed;
+
+    .expressionPreview {
+        color: var(--On-surface-variant-color);
+    }
+}
+
+.expressionContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    min-width: 0;
+    flex: 1;
+}
+
+.expressionLabel {
+    color: var(--On-surface-variant-color);
+
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+}
+
+.expressionPreview {
+    overflow: hidden;
+
+    color: var(--On-surface-color);
+    font-size: 13px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.editIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: 4px;
+
+    background: var(--Surface-container-high-color);
+    color: var(--On-surface-variant-color);
+
+    font-size: 17px;
+
+    transition: color 0.15s ease;
+}
+
+.pathEditor {
+    min-width: 0;
+}

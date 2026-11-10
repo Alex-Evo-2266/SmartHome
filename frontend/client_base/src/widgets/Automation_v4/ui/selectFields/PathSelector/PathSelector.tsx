@@ -28,6 +28,8 @@ export const PathSelector = ({
     onChange,
     onValidityChange
 }: PathSelectorProps) => {
+
+
     const [internalValue, setInternalValue] = useState(value ?? "")
 
     /**
@@ -41,6 +43,14 @@ export const PathSelector = ({
     }, [value])
 
     const currentValue = value ?? internalValue
+
+        console.log({
+        objectMap,
+        value: currentValue,
+        maxDepth,
+        minDepth,
+        allowedValueTypes
+    })
 
     const {
         path,
@@ -57,6 +67,7 @@ export const PathSelector = ({
         minDepth,
         allowedValueTypes
     })
+    console.log(path, levels)
 
     /**
      * Передаём наружу состояние валидности.
@@ -132,6 +143,7 @@ export const PathSelector = ({
         <>
             {showRoot && (
                 <SelectField
+                    style={{marginBlock: "0"}}
                     border
                     items={rootItems}
                     onChange={handleNext}
@@ -140,6 +152,7 @@ export const PathSelector = ({
 
             {levels.map(level => (
                 <SelectField
+                    style={{marginBlock: "0"}}
                     key={level.index}
                     border
                     items={level.items}
@@ -155,6 +168,7 @@ export const PathSelector = ({
 
             {canContinue && (
                 <SelectField
+                    style={{marginBlock: "0"}}
                     border
                     items={nextItems}
                     onChange={handleNext}

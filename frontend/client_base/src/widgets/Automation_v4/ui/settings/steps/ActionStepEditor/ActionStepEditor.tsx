@@ -276,7 +276,7 @@ export function ActionStepEditor({
             );
           }}
           onExpressionsChange={onExpressionChange}
-          onClose={() => setExpressionEditor(null)}
+          onClose={() => {console.log("d"), setExpressionEditor(null)}}
         />
       )}
     </>

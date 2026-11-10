@@ -8,6 +8,7 @@ import { DialogPortal } from "@src/shared"
 
 import {
     useContext,
+    useMemo,
     useState
 } from "react"
 
@@ -87,13 +88,18 @@ export const PathDialog = ({
 
     console.log(allowedValueTypes)
 
+    const allowedTypes = useMemo(()=>{
+        const types = allowedValueTypes?.filter(i=>i!=="path") ?? []
+        return types.length > 0? types : undefined
+    },[allowedValueTypes])
+
     return (
         <DialogPortal>
             <BaseDialog onHide={onClose}>
                 <PathParameterField
                     variables={variables}
                     value={value}
-                    allowedValueTypes={allowedValueTypes}
+                    allowedValueTypes={allowedTypes}
                     onChange={onChange}
                 />
             </BaseDialog>

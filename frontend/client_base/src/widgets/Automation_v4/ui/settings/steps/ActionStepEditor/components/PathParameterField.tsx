@@ -36,7 +36,7 @@ export function PathParameterField({
     console.log(objectMap)
 
     return (
-        <div style={{ display: "grid", gap: 12 }}>
+        <div style={{ display: "grid"}}>
 
             <PathSelector
                 objectMap={objectMap}

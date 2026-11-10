@@ -46,6 +46,8 @@ const simpleBlocks: Record<"literal" | "path", SimpleBlockDefinition[]> = {
 
 type CategoryKey = OperatorCategory | "functions" | "literal" | "path";
 
+
+
 const categories: {
     id: CategoryKey;
     name: string;
@@ -119,7 +121,11 @@ export const SelectBlockModal = ({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [category, setCategory] = useState<CategoryKey>("binary");
+    const [category, setCategory] = useState<CategoryKey>(
+        allowedTypes.length === 1 && allowedTypes[0] === "path"
+            ? "path"
+            : "binary",
+    );
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [search, setSearch] = useState("");
 
@@ -127,6 +133,12 @@ export const SelectBlockModal = ({
         () => new Set<ExpressionValueType>(allowedTypes),
         [allowedTypes],
     );
+
+    const isLiteralAllowed = allowedTypes.some((type) =>
+        ["number", "string", "boolean", "time", "duration", "ISO-время", "datetime", "enum"].includes(type),
+    );
+
+    const isPathAllowed = allowedTypesSet.has("path");
 
     // Проверка типа результата, полученного от backend
     const isAllowedResultType = useCallback(
@@ -175,23 +187,24 @@ export const SelectBlockModal = ({
     const blocks = useMemo((): SelectedBlock[] => {
         if (!data) return [];
 
-        // Значения всегда доступны
         if (category === "literal") {
+            if (!isLiteralAllowed) return [];
+
             return simpleBlocks.literal.map((definition) => ({
                 kind: "literal" as const,
                 definition,
             }));
         }
 
-        // Пути всегда доступны
         if (category === "path") {
+            if (!isPathAllowed) return [];
+
             return simpleBlocks.path.map((definition) => ({
                 kind: "path" as const,
                 definition,
             }));
         }
 
-        // Функции фильтруются по типу результата
         if (category === "functions") {
             return data.functions
                 .filter((definition) =>
@@ -203,7 +216,6 @@ export const SelectBlockModal = ({
                 }));
         }
 
-        // Операторы фильтруются по типу результата
         return data.operators[category]
             .filter((definition) =>
                 isAllowedResultType(definition.result_type),
@@ -212,7 +224,13 @@ export const SelectBlockModal = ({
                 kind: "operator" as const,
                 definition,
             }));
-    }, [data, category, isAllowedResultType]);
+    }, [
+        data,
+        category,
+        isAllowedResultType,
+        isLiteralAllowed,
+        isPathAllowed,
+    ]);
 
     // Поиск по доступным блокам
     const filteredBlocks = useMemo(() => {
@@ -250,11 +268,11 @@ export const SelectBlockModal = ({
         if (!data) return 0;
 
         if (categoryKey === "literal") {
-            return simpleBlocks.literal.length;
+            return isLiteralAllowed ? simpleBlocks.literal.length : 0;
         }
 
         if (categoryKey === "path") {
-            return simpleBlocks.path.length;
+            return isPathAllowed ? simpleBlocks.path.length : 0;
         }
 
         if (categoryKey === "functions") {
