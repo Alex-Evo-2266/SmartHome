@@ -70,7 +70,6 @@ export function TriggerEditor({
     updateTrigger(index, { condition: null });
   }
 
-
   function addTrigger(kindToAdd: TriggerKind) {
     onChange([...triggers, createTrigger(kindToAdd)]);
   }
@@ -90,9 +89,6 @@ export function TriggerEditor({
       triggers.filter((_, currentIndex) => currentIndex !== index),
     );
   }
-
-
-  console.log(triggers)
 
   return (
     <section className="automation-settings__section">
@@ -273,6 +269,12 @@ export function TriggerEditor({
                   onRemove={() => removeCondition(index)}
                 />
               )}
+
+              <div style={{ marginTop: 12 }}>
+                <Button type="button" onClick={() => removeTrigger(index)}>
+                  Удалить триггер
+                </Button>
+              </div>
            
             </ContentBox>
 

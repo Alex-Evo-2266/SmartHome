@@ -1,4 +1,4 @@
-import { Automation, AutomationStep, useAutomationAPI } from "@src/entites/automation_v4";
+import { Automation, useAutomationAPI } from "@src/entites/automation_v4";
 import { AutomationEditor } from "@src/widgets/Automation_v4/ui/AutomationEditor";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';

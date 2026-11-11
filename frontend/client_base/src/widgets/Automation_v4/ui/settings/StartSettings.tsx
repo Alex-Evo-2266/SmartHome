@@ -4,8 +4,8 @@ import { Typography } from "alex-evo-sh-ui-kit";
 import { FunctionArgumentsEditor } from "./FunctionArgumentsEditor";
 import styles from "./StartSettings.module.scss";
 import { TriggerEditor } from "./TriggerEditor";
-import { ExpressionBuilderModalProps } from "../expressionBuilder/StartBlock";
-import { useMemo } from "react";
+import { useAutomationVariables } from "../shared/useAutomationVariables";
+import type { ExpressionBuilderModalProps } from "../expressionBuilder/StartBlock";
 
 interface StartSettingsProps {
   automation: Automation;
@@ -24,28 +24,7 @@ export function StartSettings({
   onChange,
   ...props
 }: StartSettingsProps) {
-
-  const parameters = automation.parameters
-
-    const variables = useMemo(
-      () =>
-        Object.fromEntries(
-          Object.entries(parameters ?? {}).map(([name, parameter]) => {
-            const { type } = parameter.definition;
-  
-            return [
-              name,
-              {
-                meta: {
-                  kind: "variable" as const,
-                  ...(type !== "path" && type !== "for_path" ? { valueType: type } : {}),
-                },
-              },
-            ];
-          }),
-        ),
-      [parameters],
-    );
+  const variables = useAutomationVariables(automation.parameters);
 
   return (
     <div className={styles.settings}>

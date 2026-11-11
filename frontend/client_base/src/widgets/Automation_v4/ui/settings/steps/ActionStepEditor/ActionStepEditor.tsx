@@ -9,7 +9,7 @@ import type {
 
 import { SelectField } from "@src/shared";
 import type { ObjectMap, ObjectNode } from "@src/shared/lib/object-map/types";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import styles from '../StepSettingsHeader.module.scss'
 
@@ -21,7 +21,8 @@ import { useActionStep } from "./hooks/useActionStep";
 import { ExpressionBuilderModal } from "../../../expressionBuilder/StartBlock";
 import { useObjectMap } from "../../../selectFields/useObjectMap";
 import { TypeDeviceField } from "@src/entites/devices";
-import { Typography } from "alex-evo-sh-ui-kit";
+import { Button, Typography } from "alex-evo-sh-ui-kit";
+import { useAutomationVariables } from "../../../shared/useAutomationVariables";
 
 type ExForPath = Exclude<DeviceCommandDataType, "for_path">
 
@@ -161,25 +162,7 @@ export function ActionStepEditor({
   const [expressionEditor, setExpressionEditor] =
     useState<ExpressionEditorState | null>(null);
 
-  const variables = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(parameters ?? {}).map(([name, parameter]) => {
-          const { type } = parameter.definition;
-
-          return [
-            name,
-            {
-              meta: {
-                kind: "variable" as const,
-                ...(type !== "path" && type !== "for_path" ? { valueType: type } : {}),
-              },
-            },
-          ];
-        }),
-      ),
-    [parameters],
-  );
+  const variables = useAutomationVariables(parameters);
 
   // Собираем дерево доступных объектов и переменных.
   const objectMap = useObjectMap({ variables });
@@ -211,10 +194,18 @@ export function ActionStepEditor({
   return (
     <>
       <header className={styles.header}>
-        <Typography type="small" className={styles.eyebrow}>
-          НАСТРОЙКИ ДЕЙСТВИЯ
-        </Typography>
-        <Typography type="title-2">Действие</Typography>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+          <div>
+            <Typography type="small" className={styles.eyebrow}>
+              НАСТРОЙКИ ДЕЙСТВИЯ
+            </Typography>
+            <Typography type="title-2">Действие</Typography>
+          </div>
+
+          <Button type="button" onClick={onDelete}>
+            Удалить
+          </Button>
+        </div>
       </header>
 
       <div
@@ -249,10 +240,6 @@ export function ActionStepEditor({
                 parameter={parameter}
                 value={actionStep.params[parameter.name]}
                 expressions={expressions}
-                variables={variables}
-                onChange={value =>
-                  updateParameter(parameter, value)
-                }
                 onOpenExpression={() =>
                   openExpressionBuilder(parameter)
                 }

@@ -18,7 +18,7 @@ const createLiteral = (
 
 export function createStep(
   kind: StepEditorKind,
-  id?: string,
+  _id?: string,
 ): AutomationStep {
   switch (kind) {
     case "action":

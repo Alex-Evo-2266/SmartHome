@@ -27,7 +27,7 @@
 
 ## Условия триггеров
 
-`DeviceTrigger.condition` и `RoomTrigger.condition` имеют тип `RefArg | null`. Они проходят ссылочную проверку схемы. Однако текущие `on_device_patch`/`on_room_patch` не вычисляют `item.cond` (есть TODO); событие вызывает запуск независимо от этого условия. Не считайте поле фильтром runtime, пока реализация не изменится.
+`DeviceTrigger.condition` и `RoomTrigger.condition` имеют тип `RefArg | null`. Они проходят ссылочную проверку схемы и при обработке patch-событий вычисляются через `AutomationContext`/`resolve_arg`. Если выражение возвращает ложное значение, сработавший триггер пропускается и callback не вызывается.
 
 ## Условие в `AwaitStep`
 

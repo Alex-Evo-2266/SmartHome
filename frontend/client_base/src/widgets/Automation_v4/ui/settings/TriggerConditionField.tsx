@@ -1,6 +1,7 @@
 
 import type { ExpressionArgWithNull } from "@src/entites/automation_v4";
 import { Typography } from "alex-evo-sh-ui-kit";
+import { getConditionLabel } from "../shared/expressionPreview";
 import "./TriggerConditionField.scss";
 
 interface TriggerConditionFieldProps {
@@ -9,45 +10,12 @@ interface TriggerConditionFieldProps {
   onRemove: () => void;
 }
 
-function getConditionPreview(value: ExpressionArgWithNull) {
-  if (!value) {
-    return {
-      type: "Не задано",
-      title: "Условие отсутствует",
-      description: "Нажмите, чтобы добавить условие срабатывания",
-    };
-  }
-
-  switch (value.type) {
-    case "literal":
-      return {
-        type: "Константа",
-        title: String(value.value ?? "null"),
-        description: "Постоянное логическое значение",
-      };
-
-    case "path":
-      return {
-        type: "Путь",
-        title: value.path,
-        description: "Значение из объекта системы",
-      };
-
-    case "ref":
-      return {
-        type: "Выражение",
-        title: value.ref ? "Составное выражение" : "Выражение не выбрано",
-        description: value.ref ? `ID: ${value.ref}` : "Необходимо выбрать выражение",
-      };
-  }
-}
-
 export function TriggerConditionField({
   value,
   onEdit,
   onRemove,
 }: TriggerConditionFieldProps) {
-  const preview = getConditionPreview(value);
+  const preview = getConditionLabel(value);
 
   return (
     <div className="trigger-condition">

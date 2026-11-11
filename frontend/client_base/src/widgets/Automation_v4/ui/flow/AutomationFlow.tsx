@@ -88,11 +88,6 @@ export function AutomationFlow({
       </Panel>
 
       <div className="automation-flow">
-        <div className="automation-flow__branches">
-          <span className="automation-flow__branch active">
-            Основная
-          </span>
-        </div>
 
         <div className="automation-flow__list">
           <AutomationStartNode

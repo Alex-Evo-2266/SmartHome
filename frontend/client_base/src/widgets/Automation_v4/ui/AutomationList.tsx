@@ -1,4 +1,4 @@
-import { Automation, AutomationStep, useAutomationAPI } from "@src/entites/automation_v4"
+import { Automation, useAutomationAPI } from "@src/entites/automation_v4"
 import { BaseActionCard, Button, Card, FilterGroup, ListContainer, SearchAndFilter, SelectedFilters } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
@@ -37,7 +37,6 @@ export const AutomationCard = () => {
     const [selectAutomation, setSelectAutomation] = useState<Automation | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({})
-    const {} = useAutomationAPI
 
     const getData = useCallback(async()=>{
         const data = await getAutomationAll()

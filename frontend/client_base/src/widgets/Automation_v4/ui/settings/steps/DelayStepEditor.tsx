@@ -1,5 +1,5 @@
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import type {
   Automation,
@@ -7,12 +7,13 @@ import type {
   ExpressionArg,
 } from "@src/entites/automation_v4";
 
-import { Typography } from "alex-evo-sh-ui-kit";
+import { Button, Typography } from "alex-evo-sh-ui-kit";
 
 import styles from "./StepSettingsHeader.module.scss";
 import { useActionCommands } from "./ActionStepEditor/hooks/useActionCommands";
-import { useObjectMap } from "../../selectFields/useObjectMap";
 import { ExpressionBuilderModal } from "../../expressionBuilder/StartBlock";
+import { useAutomationVariables } from "../../shared/useAutomationVariables";
+import { getExpressionPreview } from "../../shared/expressionPreview";
 
 interface Props {
   step: AutomationStep;
@@ -35,24 +36,6 @@ function isDelayStep(
   return step.type === "delay";
 }
 
-function getExpressionPreview(value: ExpressionArg | null): string {
-  if (!value) return "Не задано";
-
-  if (value.type === "literal") {
-    return String(value.value);
-  }
-
-  if (value.type === "path") {
-    return value.path;
-  }
-
-  if (value.type === "ref") {
-    return value.ref ?? "";
-  }
-
-  return "Настроенное выражение";
-}
-
 export function DelayStepEditor({
   step,
   parameters,
@@ -65,29 +48,7 @@ export function DelayStepEditor({
 
   const { capabilities } = useActionCommands();
 
-  const variables = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(parameters ?? {}).map(([name, parameter]) => {
-          const { type } = parameter.definition;
-
-          return [
-            name,
-            {
-              meta: {
-                kind: "variable" as const,
-                ...(type !== "path" && type !== "for_path"
-                  ? { valueType: type }
-                  : {}),
-              },
-            },
-          ];
-        }),
-      ),
-    [parameters],
-  );
-
-  const objectMap = useObjectMap({ variables });
+  const variables = useAutomationVariables(parameters);
 
   if (!isDelayStep(step)) return null;
 
@@ -103,13 +64,21 @@ export function DelayStepEditor({
   return (
     <>
       <header className={styles.header}>
-        <Typography type="small" className={styles.eyebrow}>
-          НАСТРОЙКИ ШАГА
-        </Typography>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+          <div>
+            <Typography type="small" className={styles.eyebrow}>
+              НАСТРОЙКИ ШАГА
+            </Typography>
 
-        <Typography type="title-2">
-          Задержка
-        </Typography>
+            <Typography type="title-2">
+              Задержка
+            </Typography>
+          </div>
+
+          <Button type="button" onClick={onDelete}>
+            Удалить
+          </Button>
+        </div>
       </header>
 
       <div
@@ -143,7 +112,7 @@ export function DelayStepEditor({
             }}
           >
             <span>
-              {getExpressionPreview(duration)}
+              {getExpressionPreview(duration, expressions)}
             </span>
 
             <span>

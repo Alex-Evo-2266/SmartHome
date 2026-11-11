@@ -10,6 +10,19 @@ from app.pkg.logger import MyLogger
 # Настройка логирования
 logger = MyLogger().get_logger(__name__)
 
+
+def _trigger_condition_matches(
+    automation: AutomationSchema,
+    condition: RefArg,
+) -> bool:
+    from app.core.entities.automation.automation_context import AutomationContext
+    from app.core.entities.automation.blocks.expression import to_bool
+    from app.core.entities.automation.blocks.expression_arg import resolve_arg
+
+    context = AutomationContext(automation)
+    return to_bool(resolve_arg(condition, context))
+
+
 # Константы для форматов времени
 TIME_FORMAT = "%H:%M:%S%z"  # Формат времени с часовым поясом
 UTC_TIME_FORMAT = "%H:%M"    # Упрощенный формат UTC времени
@@ -226,10 +239,10 @@ class AutomationManager_V4:
         key = (trigger.device, trigger.field)
         if key not in self.device_index:
             self.device_index[key] = IndexBucket(data=[])
-        if(bucket_item):
-            self.device_index[key].data.append(bucket_item)
-        else:
-            self.device_index[key].data.append(IndexBucketItem(data=id))
+        item = bucket_item or IndexBucketItem(data=id)
+        if trigger.condition is not None:
+            item.cond = trigger.condition
+        self.device_index[key].data.append(item)
 
     def _unindex_device(self, automation_id: str, trigger: DeviceTrigger) -> None:
         key = (trigger.device, trigger.field)
@@ -266,7 +279,16 @@ class AutomationManager_V4:
             if automation is None or automation_id in self._running_automations:
                 continue
 
-            # TODO: проверка item.cond, если нужна
+            if item.cond is not None:
+                try:
+                    if not _trigger_condition_matches(automation, item.cond):
+                        continue
+                except Exception as e:
+                    logger.warning(
+                        "Trigger condition for automation '%s' failed: %s",
+                        automation_id, e,
+                    )
+                    continue
 
             self._running_automations.add(automation_id)
             try:
@@ -286,10 +308,13 @@ class AutomationManager_V4:
         """Обрабатывает триггер комнаты и добавляет в индекс"""
         key = (trigger.room, trigger.device_type, trigger.field)
         bucket = self.room_index.setdefault(key, IndexBucket())
+        item = bucket_item or IndexBucketItem(data=id)
+        if trigger.condition is not None:
+            item.cond = trigger.condition
         if bucket_item:
-            bucket.data.append(bucket_item)
+            bucket.data.append(item)
         elif id not in bucket.data:
-            bucket.data.append(IndexBucketItem(data=id))
+            bucket.data.append(item)
 
     def _unindex_room(self, automation_id: str, trigger: RoomTrigger) -> None:
         key = (trigger.room, trigger.device_type, trigger.field)
@@ -324,6 +349,17 @@ class AutomationManager_V4:
             automation = self.automations.get(automation_id)
             if automation is None or automation_id in self._running_automations:
                 continue
+
+            if item.cond is not None:
+                try:
+                    if not _trigger_condition_matches(automation, item.cond):
+                        continue
+                except Exception as e:
+                    logger.warning(
+                        "Trigger condition for automation '%s' failed: %s",
+                        automation_id, e,
+                    )
+                    continue
 
             self._running_automations.add(automation_id)
             try:
@@ -387,7 +423,8 @@ class AutomationManager_V4:
             data=automation.id, 
             ones=True, 
             startStep=start_step,
-            await_step_id=await_step_id
+            await_step_id=await_step_id,
+            cond=getattr(trigger, 'condition', None),
         )
 
         if(trigger.type == 'time'):
@@ -475,4 +512,3 @@ class AutomationManager_V4:
 
     def get_automation_by_id(self, id):
         return self.automations.get(id)
-

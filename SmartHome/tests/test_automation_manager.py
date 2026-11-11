@@ -12,6 +12,7 @@ from app.schemas.automation.automation_v4 import (
     OnceTimeTrigger,
     DeviceTrigger,
     RoomTrigger,
+    RefArg,
 )
 
 
@@ -304,6 +305,41 @@ async def test_on_device_patch_ignores_other_device(make_automation, device_trig
     assert called == []
 
 
+@pytest.mark.asyncio
+async def test_on_device_patch_evaluates_trigger_condition(make_automation):
+    called = []
+
+    async def cb(aut, step):
+        called.append(aut.id)
+
+    mgr = AutomationManager_V4(callback=cb)
+    trigger = DeviceTrigger(
+        type="device",
+        device="dev1",
+        field="brightness",
+        condition=RefArg(type="ref", ref="is_high"),
+    )
+    automation = make_automation(
+        id="a1",
+        triggers=[trigger],
+        expressions={"is_high": {"type": "literal", "value": False}},
+    )
+    mgr.add_automation(automation)
+
+    await mgr.on_device_patch(_device_patch("dev1", {"brightness": 5}))
+    assert called == []
+
+    automation = make_automation(
+        id="a1",
+        triggers=[trigger],
+        expressions={"is_high": {"type": "literal", "value": True}},
+    )
+    mgr.remove_automation("a1")
+    mgr.add_automation(automation)
+    await mgr.on_device_patch(_device_patch("dev1", {"brightness": 15}))
+    assert called == ["a1"]
+
+
 # ============== on_room_patch ==============
 
 @pytest.mark.asyncio
@@ -346,6 +382,42 @@ async def test_on_room_patch_wrong_type(make_automation, room_trigger):
 
     await mgr.on_room_patch(_room_patch("kitchen", "sensor", {"brightness": 20}))
     assert called == []
+
+
+@pytest.mark.asyncio
+async def test_on_room_patch_evaluates_trigger_condition(make_automation):
+    called = []
+
+    async def cb(aut, step):
+        called.append(aut.id)
+
+    mgr = AutomationManager_V4(callback=cb)
+    trigger = RoomTrigger(
+        type="room",
+        room="kitchen",
+        device_type="light",
+        field="brightness",
+        condition=RefArg(type="ref", ref="is_high"),
+    )
+    automation = make_automation(
+        id="a1",
+        triggers=[trigger],
+        expressions={"is_high": {"type": "literal", "value": False}},
+    )
+    mgr.add_automation(automation)
+
+    await mgr.on_room_patch(_room_patch("kitchen", "light", {"brightness": 5}))
+    assert called == []
+
+    mgr.remove_automation("a1")
+    automation = make_automation(
+        id="a1",
+        triggers=[trigger],
+        expressions={"is_high": {"type": "literal", "value": True}},
+    )
+    mgr.add_automation(automation)
+    await mgr.on_room_patch(_room_patch("kitchen", "light", {"brightness": 15}))
+    assert called == ["a1"]
 
 
 # ============== Реентерабельность ==============

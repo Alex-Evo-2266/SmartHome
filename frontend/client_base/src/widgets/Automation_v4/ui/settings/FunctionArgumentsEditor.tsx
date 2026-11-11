@@ -7,9 +7,9 @@ import {
   NumberField,
   TextField,
 } from "alex-evo-sh-ui-kit";
-import { MODAL_ROOT_ID } from "@src/const";
 import { SelectField, TimeField } from "@src/shared";
 import { AddArgument, FormDataAddArgument } from "./dialogs/AddArgument";
+import { MODAL_ROOT_ID } from "@src/const";
 
 // ─── Типы ──────────────────────────────────────────────────
 
@@ -131,15 +131,11 @@ export function FunctionArgumentsEditor({
 
   // Добавление аргумента.
   const addParameter = useCallback((kind: FormDataAddArgument) => {
-
-    console.log(":d")
-
     onChange({
       ...parameters,
       [kind.name]: createParameter(kind.name, kind.type, kind.discription),
     });
-
-  },[parameters])
+  }, [onChange, parameters]);
 
   // Удаление аргумента.
   function removeParameter(key: string) {
@@ -212,7 +208,9 @@ export function FunctionArgumentsEditor({
                   disabled
                   placeholder="name"
                   value={key}
-                  onChange={(data)=>{renameParameter(key, data)}}
+                  onChange={(data: string) => {
+                    renameParameter(key, data);
+                  }}
                 />
 
 
@@ -237,7 +235,7 @@ export function FunctionArgumentsEditor({
                     border
                     placeholder="default"
                     value={definition.default}
-                    onChange={(value) => {
+                    onChange={(value: string) => {
                         updateDefinition(key, {
                           type: "string",
                           default: value,
@@ -251,10 +249,10 @@ export function FunctionArgumentsEditor({
                     border
                     placeholder="default"
                     value={definition.default}
-                    onChange={(value) => {
+                    onChange={(value: number | string) => {
                         updateDefinition(key, {
                           type: "number",
-                          default: value,
+                          default: typeof value === "number" ? value : Number(value),
                         });
                       }}
                   />
@@ -271,7 +269,7 @@ export function FunctionArgumentsEditor({
                     border
                     placeholder="default"
                     value={String(Boolean(definition.default))}
-                    onChange={(value) => {
+                    onChange={(value: string) => {
                         updateDefinition(key, {
                           type: "boolean",
                           default:
@@ -314,9 +312,19 @@ export function FunctionArgumentsEditor({
                 )}
 
                 <DangerButton
-                  style={{ background: "var(--Error-color)" }}
+                  style={{
+                    background: "var(--Error-color)",
+                    color: "var(--On-primary-color)",
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "10px 12px",
+                    fontSize: 14,
+                    lineHeight: "14px",
+                    cursor: "pointer",
+                  }}
                   container={document.getElementById(MODAL_ROOT_ID)}
                   type="button"
+                  size="small"
                   text="Вы уверены, что хотите удалить аргумент?"
                   header="Удалить аргумент"
                   onClick={() => removeParameter(key)}

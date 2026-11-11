@@ -189,9 +189,6 @@ export function AutomationEditor({
           />
         </div>
         <div style={{display: "flex", justifyContent: "space-between"}}>
-          <Typography type="small">
-            Вертикальный конструктор сценариев
-          </Typography>
 
           <Button
             type="button"

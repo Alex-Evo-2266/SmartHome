@@ -25,7 +25,7 @@
 {"type":"device","device":"hall_switch","field":"state"}
 ```
 
-Менеджер сопоставляет обновления по паре `(device, field)`. В текущем `on_device_patch` условие `condition` не вычисляется (оставлен TODO в коде): фактическое срабатывание по patch не фильтруется этой ссылкой.
+Менеджер сопоставляет обновления по паре `(device, field)`. В `on_device_patch` условие `condition` вычисляется перед запуском сценария; если выражение возвращает `False`, callback не вызывается.
 
 ## Триггер комнаты
 
@@ -43,7 +43,7 @@
 {"type":"room","room":"living_room","device_type":"light","field":"state"}
 ```
 
-Runtime индексирует по `(room, device_type, field)`. Как и для device trigger, `condition` не применяется при обработке room patch.
+Runtime индексирует по `(room, device_type, field)`. Для room patch условие `condition` тоже вычисляется до callback, и при ложном результате запуск пропускается.
 
 ## Временные триггеры
 
@@ -98,7 +98,7 @@ Manager индексирует monthly по `(day_of_month, "HH:MM")`.
 
 ## Known Issues
 
-- `condition` у device/room trigger валиден, но не вычисляется в patch callback.
+- `condition` у device/room trigger валиден и теперь учитывается при patch callback.
 - `interval` объявлен в Pydantic, но отсутствует в регистрации/индексации manager.
 - `AwaitStep` также содержит `Trigger`, однако его подписка не проверяет условие как ожидается; детали в [step-await.md](./step-await.md).
 - Триггерный `condition` имеет тип именно `RefArg`, не произвольный `ExpressionArg`.
