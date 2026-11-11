@@ -6,7 +6,7 @@ import { Automation } from "@src/entites/automation_v4";
 type Parameters = Automation["parameters"];
 type Parameter = Parameters[string];
 type Definition = Parameter["definition"];
-type DefinitionType = Definition["type"];
+type DefinitionType = Exclude<Definition["type"], "enum" | "for_path">
 
 const DEFINITION_TYPES: {
   value: DefinitionType;

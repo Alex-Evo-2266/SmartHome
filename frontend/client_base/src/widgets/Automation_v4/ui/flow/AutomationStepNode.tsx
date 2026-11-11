@@ -3,7 +3,7 @@ import {
   getStepEditorKind,
   getStepTitle,
   STEP_ICONS,
-} from "../model/editorTypes";
+} from "../../../../entites/automation_v4/helpers/editorTypes";
 import { ListItem } from "alex-evo-sh-ui-kit";
 
 interface AutomationStepNodeProps {

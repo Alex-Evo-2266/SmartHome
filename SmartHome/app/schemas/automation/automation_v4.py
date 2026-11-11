@@ -66,6 +66,9 @@ class PathParameter(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     type: Literal["path"] = "path"
+    path_type:  Literal[
+        "number", "string", "boolean", "any", "enum"
+    ] = "any"
     default: str | None = None
 
 ParameterDefinition = Annotated[
@@ -490,6 +493,7 @@ class CommandParameter(BaseModel):
     name: str
     title: str
     data_type: Literal["number", "string", "boolean", "any", "path", "for_path"] = "any"
+    path_res_type: Literal["number", "string", "boolean", "any"] | None = None
     required: bool = True
     description: str | None = None
 

@@ -56,6 +56,19 @@ export const LiteralValueEditor = ({
         )
     }
 
+    if(types.includes("string"))
+    {
+        return (
+            <input
+                className={styles.input}
+                type="text"
+                value={value != null ? String(value) : ""}
+                onChange={event => updateValue(event.target.value)}
+                placeholder="Введите значение"
+            />
+        )
+    }
+
     // Number / Duration
     if (
         types.includes("number") ||

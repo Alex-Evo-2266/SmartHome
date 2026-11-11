@@ -2,7 +2,7 @@ import type {
   AutomationStep,
 } from "@src/entites/automation_v4";
 
-import type { StepEditorKind } from "./editorTypes";
+import type { StepEditorKind } from "../../../../entites/automation_v4/helpers/editorTypes";
 
 export function createAutomationStep(
   kind: StepEditorKind,

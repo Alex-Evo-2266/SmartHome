@@ -6,13 +6,14 @@ import type {
 import { StartSettings } from "./StartSettings";
 import type {
   EditorSelection,
-} from "../model/editorTypes";
-import { getStepEditorKind } from "../model/editorTypes";
+} from "../../../../entites/automation_v4/helpers/editorTypes";
+import { getStepEditorKind } from "../../../../entites/automation_v4/helpers/editorTypes";
 import { ActionStepEditor } from "./steps/ActionStepEditor/ActionStepEditor";
 import { AwaitStepEditor } from "./steps/AwaitStepEditor";
 import { ConditionStepEditor } from "./steps/ConditionStepEditor";
 import { DelayStepEditor } from "./steps/DelayStepEditor";
 import { ScriptActionStepEditor } from "./steps/ScriptActionStepEditor";
+import { useActionCommands } from "./steps/ActionStepEditor/hooks/useActionCommands";
 
 interface AutomationSettingsPanelProps {
   automation: Automation;
@@ -33,13 +34,21 @@ export function AutomationSettingsPanel({
   onStepChange,
   onStepDelete,
 }: AutomationSettingsPanelProps) {
+
+    const {
+      capabilities,
+    } = useActionCommands();
+
   if(selection === null) return null
 
   if (selection.type === "start") {
     return (
       <StartSettings
+        capabilities={capabilities}
         automation={automation}
         onChange={onChange}
+        expressions={automation.expressions}
+        onExpressionsChange={onExpressionsChange}
       />
     );
   }

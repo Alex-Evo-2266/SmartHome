@@ -67,7 +67,7 @@ export const ExpressionBuilder = ({enum_vals, type, expressions, updateExpressio
     )
 }
 
-type ExpressionBuilderModalProps = {
+export type ExpressionBuilderModalProps = {
     expressions: Expressions, 
     value:ExpressionArg, 
     capabilities: ExpressionCapabilitiesResponse | null
@@ -91,10 +91,6 @@ export const ExpressionBuilderModal = ({enum_vals, pathType, expressions, onExpr
     },[onExpressionsChange])
 
     const type2: ExForPath = type === "for_path"? pathType === undefined ? "any" : pathType : type
-
-    const l = () => {
-        console.log("d")
-    }
 
     return(
         <DialogPortal>

@@ -20,10 +20,14 @@ export function AutomationEditorPage() {
         load()
     },[load])
 
+    useEffect(()=>{
+        console.log(automation)
+    },[automation])
+
     if(!automation)
         return null
 
     return(
-        <AutomationEditor automation={automation} createStep={()=>{return {} as AutomationStep}} onChange={setAutomation} onSave={()=>{}}/>
+        <AutomationEditor automation={automation} onChange={setAutomation} onSave={()=>{}}/>
     )
 }

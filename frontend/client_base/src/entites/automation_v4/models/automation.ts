@@ -16,7 +16,9 @@ export type LiteralDataType =
     | "number"
     | "string"
     | "boolean"
+    | "for_path"
     | "time"
+    | "enum"
     | "duration"
 
 export type LiteralDataTypeWithOutDuration = Exclude<LiteralDataType, "duration">
@@ -31,6 +33,7 @@ export interface ValueParameterDefinition {
 
 export interface PathParameterDefinition {
     type: "path"
+    path_type: "number" | "string" | "boolean" | "any" | "enum"
     default?: string | null
 }
 
@@ -265,10 +268,13 @@ export type DeviceCommandDataType =
     | "enum"
     | "for_path"
 
+export type DeviceCommandDataTypePath = Exclude<DeviceCommandDataType, "path" | "for_path">
+
 export interface DeviceCommandParameter {
     name: string
     title: string
     data_type: DeviceCommandDataType
+    path_res_type?: DeviceCommandDataTypePath
     required: boolean
     description?: string | null
 }

@@ -1,13 +1,15 @@
 import { useCallback, useState } from "react";
-import type { Automation } from "@src/entites/automation_v4";
+import type { Automation, RefArg } from "@src/entites/automation_v4";
 import { DeviceSelectField } from "@src/entites/devices";
 import { Button, ContentBox, DayOfWeekField, MoreText, Typography } from "alex-evo-sh-ui-kit";
 import { RoomObjectSelectField } from "@src/features/Room";
 import { AddTrigger } from "./dialogs/AddTrigger";
-import { TriggerKind } from "../model/editorTypes";
+import { TriggerKind } from "../../../../entites/automation_v4/helpers/editorTypes";
 import { DateField, SelectField, TimeField } from "@src/shared";
 import { numberToWeekday, weekdayToNumber } from "@src/shared/lib/helpers/dayOfWeekConverts";
 import { toLocalDate, toLocalTime, updateDateTimeLocal } from "@src/shared/lib/helpers/timeFormat";
+import { ExpressionBuilderModal, ExpressionBuilderModalProps } from "../expressionBuilder/StartBlock";
+import { TriggerConditionField } from "./TriggerConditionField";
 
 type Trigger = Automation["trigger"][number];
 
@@ -15,6 +17,11 @@ type Trigger = Automation["trigger"][number];
 interface TriggerEditorProps {
   triggers: Automation["trigger"];
   onChange: (triggers: Automation["trigger"]) => void;
+
+  expressions: Automation["expressions"];
+  onExpressionsChange: ExpressionBuilderModalProps["onExpressionsChange"];
+  variables: ExpressionBuilderModalProps["variables"];
+  capabilities: ExpressionBuilderModalProps["capabilities"];
 }
 
 function createTrigger(kind: TriggerKind): Trigger {
@@ -48,9 +55,20 @@ function createTrigger(kind: TriggerKind): Trigger {
 export function TriggerEditor({
   triggers,
   onChange,
+  expressions,
+  onExpressionsChange,
+  variables,
+  capabilities
 }: TriggerEditorProps) {
   const [addTriggerDialogVisible, setAddTriggerDialogVisible] =
     useState<boolean>(false);
+
+  const [editingConditionIndex, setEditingConditionIndex] =
+    useState<number | null>(null);
+
+  function removeCondition(index: number) {
+    updateTrigger(index, { condition: null });
+  }
 
 
   function addTrigger(kindToAdd: TriggerKind) {
@@ -248,7 +266,14 @@ export function TriggerEditor({
                 )}
               </>
             )}
-                <Button type="button" onClick={()=>removeTrigger(index)}>удалить</Button>
+            {(trigger.type === "device" || trigger.type === "room") && (
+                <TriggerConditionField
+                  value={trigger.condition ?? null}
+                  onEdit={() => setEditingConditionIndex(index)}
+                  onRemove={() => removeCondition(index)}
+                />
+              )}
+           
             </ContentBox>
 
           </div>
@@ -262,6 +287,39 @@ export function TriggerEditor({
         addTriggerDialogVisible && 
             <AddTrigger onHide={()=>setAddTriggerDialogVisible(false)} onSuccess={addTrigger}/>
       }
+      {editingConditionIndex !== null && (() => {
+        const trigger = triggers[editingConditionIndex];
+
+        if (!trigger || (trigger.type !== "device" && trigger.type !== "room")) {
+          return null;
+        }
+
+        return (
+          <ExpressionBuilderModal
+            type="boolean"
+            pathType={undefined}
+            enum_vals={undefined}
+            value={
+              trigger.condition ??
+              ({
+                type: "literal",
+                value: true,
+                data_type: "boolean",
+              } as Parameters<ExpressionBuilderModalProps["onChange"]>[0])
+            }
+            expressions={expressions}
+            onExpressionsChange={onExpressionsChange}
+            variables={variables}
+            capabilities={capabilities}
+            onChange={(value) => {
+              updateTrigger(editingConditionIndex, {
+                condition: value as RefArg,
+              });
+            }}
+            onClose={() => setEditingConditionIndex(null)}
+          />
+        );
+      })()}
     </section>
   );
 }

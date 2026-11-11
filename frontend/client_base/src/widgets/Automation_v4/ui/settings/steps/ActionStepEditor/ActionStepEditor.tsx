@@ -11,7 +11,7 @@ import { SelectField } from "@src/shared";
 import type { ObjectMap, ObjectNode } from "@src/shared/lib/object-map/types";
 import { useMemo, useState } from "react";
 
-import styles from './StepSettingsHeader.module.scss'
+import styles from '../StepSettingsHeader.module.scss'
 
 // Путь импорта укажи согласно расположению своего хука.
 
@@ -172,7 +172,7 @@ export function ActionStepEditor({
             {
               meta: {
                 kind: "variable" as const,
-                ...(type !== "path" ? { valueType: type } : {}),
+                ...(type !== "path" && type !== "for_path" ? { valueType: type } : {}),
               },
             },
           ];

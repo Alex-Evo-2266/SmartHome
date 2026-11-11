@@ -134,7 +134,9 @@ export const SelectBlockModal = ({
         [allowedTypes],
     );
 
-    const isLiteralAllowed = !allowedTypes.includes("path");
+    console.log(allowedTypes)
+
+    const isLiteralAllowed = allowedTypes.length > 1 || !allowedTypes.includes("path");
 
     const isPathAllowed = true;
 

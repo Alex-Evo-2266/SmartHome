@@ -10,27 +10,19 @@ import "./AutomationEditor.scss";
 import type {
   EditorSelection,
   StepEditorKind,
-} from "./model/editorTypes";
+} from "../../../entites/automation_v4/helpers/editorTypes";
 
 import { AutomationFlow } from "./flow/AutomationFlow";
 import { AutomationSettingsPanel } from "./settings/AutomationSettingsPanel";
 import { Button, Panel, TextField, Typography } from "alex-evo-sh-ui-kit";
 import { Sidebar } from "@src/shared/ui/SideBar";
+import { createStep } from "@src/entites/automation_v4/helpers/createStep";
 
 interface AutomationEditorProps {
   automation: Automation;
   onChange: React.Dispatch<React.SetStateAction<Automation | null>>;
   onSave?: () => void;
   saving?: boolean;
-
-  /**
-   * Создаёт новый шаг с обязательными полями,
-   * соответствующими backend-схеме.
-   */
-  createStep: (
-    kind: StepEditorKind,
-    id: string,
-  ) => AutomationStep;
 }
 
 function createId(): string {
@@ -42,7 +34,6 @@ export function AutomationEditor({
   onChange,
   onSave,
   saving = false,
-  createStep,
 }: AutomationEditorProps) {
   const [selection, setSelection] = useState<EditorSelection | null>(null);
 
@@ -73,18 +64,56 @@ export function AutomationEditor({
     [onChange],
   );
 
-  function addStep(kind: StepEditorKind) {
+  function addStep(kind: StepEditorKind, afterStepId: string | null) {
     const id = createId();
-    const step = createStep(kind, id);
+    const newStep = createStep(kind, id);
 
-    updateAutomation({
-      steps: {
-        ...automation.steps,
-        [id]: step,
-      },
+    onChange((previous) => {
+      if (!previous) return previous;
 
-      // Если это первый шаг, он становится точкой входа.
-      entry: automation.entry || id,
+      const steps = { ...previous.steps };
+
+      if (afterStepId === null) {
+        // Вставка сразу после стартового узла.
+        const updatedNewStep = {
+          ...newStep,
+          next: previous.entry || null,
+        } as AutomationStep;
+
+        steps[id] = updatedNewStep;
+
+        return {
+          ...previous,
+          steps,
+          entry: id,
+        };
+      }
+
+      const previousStep = steps[afterStepId];
+
+      if (!previousStep) return previous;
+
+      const previousNext =
+        previousStep.next ?? null;
+
+      // Новый шаг продолжает прежнюю последовательность.
+      const updatedNewStep = {
+        ...newStep,
+        next: previousNext,
+      } as AutomationStep;
+
+      // Предыдущий шаг теперь ведёт на новый.
+      steps[afterStepId] = {
+        ...previousStep,
+        next: id,
+      } as AutomationStep;
+
+      steps[id] = updatedNewStep;
+
+      return {
+        ...previous,
+        steps,
+      };
     });
 
     setSelection({
@@ -93,14 +122,14 @@ export function AutomationEditor({
     });
   }
 
-  function updateStep(id: string, step: AutomationStep) {
+  const updateStep = useCallback((id: string, step: AutomationStep) => {
     updateAutomation({
       steps: {
         ...automation.steps,
         [id]: step,
       },
     });
-  }
+  },[automation])
 
   function deleteStep(id: string) {
     const remainingSteps = { ...automation.steps };

@@ -4,7 +4,6 @@ import {
   Button,
   ContentBox,
   DangerButton,
-  MoreText,
   NumberField,
   TextField,
 } from "alex-evo-sh-ui-kit";
@@ -16,8 +15,9 @@ import { AddArgument, FormDataAddArgument } from "./dialogs/AddArgument";
 
 type Parameters = Automation["parameters"];
 type Parameter = Parameters[string];
-type Definition = Parameter["definition"];
-type DefinitionType = Definition["type"];
+type Definition = Parameter["definition"]
+type DefinitionType = Exclude<Definition["type"], "enum" | "for_path">
+type PathType = "string" | "number" | "boolean" | "any"
 
 interface FunctionArgumentsEditorProps {
   parameters: Parameters;
@@ -35,6 +35,16 @@ const DEFINITION_TYPES: {
   { value: "boolean", title: "Логическое значение" },
   { value: "time", title: "Время" },
   { value: "path", title: "Путь" },
+];
+
+const PATH_TYPES: {
+  value: PathType;
+  title: string;
+}[] = [
+  { value: "any", title: "" },
+  { value: "string", title: "Строка" },
+  { value: "number", title: "Число" },
+  { value: "boolean", title: "Логическое значение" },
 ];
 
 // ─── Создание определения ──────────────────────────────────
@@ -68,6 +78,7 @@ function createDefinition(type: DefinitionType): Definition {
     case "path":
       return {
         type: "path",
+        path_type: "any",
         default: "",
       };
   }
@@ -290,19 +301,16 @@ export function FunctionArgumentsEditor({
                 )}
 
                 {definition.type === "path" && (
-                  <label>
-                    Путь по умолчанию
-                    <MoreText
-                      border
-                      value={definition.default ?? ""}
-                      onChange={(value) =>
+                  <>
+                  <SelectField border items={PATH_TYPES} onChange={(value) =>
                         updateDefinition(key, {
                           type: "path",
-                          default: value || null,
+                          path_type: value as PathType,
+                          default: null,
                         })
-                      }
-                    />
-                  </label>
+                      }/>
+                  </>
+                  
                 )}
 
                 <DangerButton

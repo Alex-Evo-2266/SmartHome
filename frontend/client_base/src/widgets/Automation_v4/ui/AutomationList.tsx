@@ -79,7 +79,6 @@ export const AutomationCard = () => {
                 automation={selectAutomation}
                 onChange={setSelectAutomation}
                 onSave={()=>{}}
-                createStep={()=>{return {} as AutomationStep}}
             />
         }
         </>

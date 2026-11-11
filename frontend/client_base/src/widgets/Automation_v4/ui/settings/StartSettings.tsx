@@ -4,16 +4,49 @@ import { Typography } from "alex-evo-sh-ui-kit";
 import { FunctionArgumentsEditor } from "./FunctionArgumentsEditor";
 import styles from "./StartSettings.module.scss";
 import { TriggerEditor } from "./TriggerEditor";
+import { ExpressionBuilderModalProps } from "../expressionBuilder/StartBlock";
+import { useMemo } from "react";
 
 interface StartSettingsProps {
   automation: Automation;
   onChange: (patch: Partial<Automation>) => void;
+
+    expressions: Automation["expressions"];
+    onExpressionsChange: ExpressionBuilderModalProps["onExpressionsChange"];
+    // variables: ExpressionBuilderModalProps["variables"];
+    capabilities: ExpressionBuilderModalProps["capabilities"];
 }
+
+
 
 export function StartSettings({
   automation,
   onChange,
+  ...props
 }: StartSettingsProps) {
+
+  const parameters = automation.parameters
+
+    const variables = useMemo(
+      () =>
+        Object.fromEntries(
+          Object.entries(parameters ?? {}).map(([name, parameter]) => {
+            const { type } = parameter.definition;
+  
+            return [
+              name,
+              {
+                meta: {
+                  kind: "variable" as const,
+                  ...(type !== "path" && type !== "for_path" ? { valueType: type } : {}),
+                },
+              },
+            ];
+          }),
+        ),
+      [parameters],
+    );
+
   return (
     <div className={styles.settings}>
       <header className={styles.header}>
@@ -28,6 +61,8 @@ export function StartSettings({
 
       <div className={styles.groups}>
         <TriggerEditor
+        {...{...props}}
+        variables={variables}
           triggers={automation.trigger}
           onChange={(trigger) => onChange({ trigger })}
         />

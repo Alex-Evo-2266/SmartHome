@@ -1,6 +1,6 @@
 import { DialogPortal } from "@src/shared"
 import { SelectionDialog } from "alex-evo-sh-ui-kit"
-import { TriggerKind } from "../../model/editorTypes"
+import { TriggerKind } from "../../../../../entites/automation_v4/helpers/editorTypes"
 
 const kinds: {title: string, data: TriggerKind}[] = [{
     title: "устройство",
