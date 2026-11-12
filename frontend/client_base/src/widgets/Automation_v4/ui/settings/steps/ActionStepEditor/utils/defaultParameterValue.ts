@@ -30,7 +30,7 @@ export function defaultParameterValue(
 
     default: {
       const dataType: LiteralDataType =
-        parameter.data_type === "any"
+        parameter.data_type === "any" || parameter.data_type === "for_path"
           ? "string"
           : parameter.data_type;
 

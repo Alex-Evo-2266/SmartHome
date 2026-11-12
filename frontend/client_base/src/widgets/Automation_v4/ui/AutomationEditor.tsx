@@ -1,28 +1,27 @@
+import type { Automation, AutomationStep } from "@src/entites/automation_v4";
+import { createStep } from "@src/entites/automation_v4/helpers/createStep";
+import { DialogPortal } from "@src/shared";
+import { Sidebar } from "@src/shared/ui/SideBar";
+import { BaseActionCard, BasicTemplateDialog, Button, Panel, TextField, Typography } from "alex-evo-sh-ui-kit";
 import { useCallback, useState, type ChangeEvent } from "react";
 
-import type {
-  Automation,
-  AutomationStep,
-} from "@src/entites/automation_v4";
-
-import "./AutomationEditor.scss";
-
+import { AutomationFlow } from "./flow/AutomationFlow";
+import { AutomationSettingsPanel } from "./settings/AutomationSettingsPanel";
 import type {
   EditorSelection,
   StepEditorKind,
 } from "../../../entites/automation_v4/helpers/editorTypes";
-
-import { AutomationFlow } from "./flow/AutomationFlow";
-import { AutomationSettingsPanel } from "./settings/AutomationSettingsPanel";
-import { Button, Panel, TextField, Typography } from "alex-evo-sh-ui-kit";
-import { Sidebar } from "@src/shared/ui/SideBar";
-import { createStep } from "@src/entites/automation_v4/helpers/createStep";
+import "./AutomationEditor.scss";
 
 interface AutomationEditorProps {
   automation: Automation;
   onChange: React.Dispatch<React.SetStateAction<Automation | null>>;
   onSave?: () => void;
+  onCreateNew?: () => void;
+  mode?: "create" | "edit";
+  dirty?: boolean;
   saving?: boolean;
+  creating?: boolean;
 }
 
 function createId(): string {
@@ -33,11 +32,17 @@ export function AutomationEditor({
   automation,
   onChange,
   onSave,
+  onCreateNew,
+  mode = "edit",
+  dirty = false,
   saving = false,
+  creating = false,
 }: AutomationEditorProps) {
   const [selection, setSelection] = useState<EditorSelection | null>(null);
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
 
   const updateAutomation = useCallback((patch: Partial<Automation>) => {
+    console.log("p9", patch)
     onChange((prev) => {
       if (!prev) return prev;
 
@@ -129,7 +134,7 @@ export function AutomationEditor({
         [id]: step,
       },
     });
-  },[automation])
+  }, [automation, updateAutomation]);
 
   function deleteStep(id: string) {
     const remainingSteps = { ...automation.steps };
@@ -143,20 +148,13 @@ export function AutomationEditor({
     const cleanedSteps: Automation["steps"] = {};
 
     for (const [stepId, step] of Object.entries(remainingSteps)) {
-      const updated = { ...step } as Record<string, unknown>;
+      const updated: AutomationStep = { ...step };
+      if (updated.next === id) updated.next = undefined;
+      if ("on_true" in updated && updated.on_true === id) updated.on_true = undefined;
+      if ("on_false" in updated && updated.on_false === id) updated.on_false = undefined;
+      if ("on_timeout" in updated && updated.on_timeout === id) updated.on_timeout = undefined;
 
-      for (const field of [
-        "next",
-        "on_true",
-        "on_false",
-        "on_timeout",
-      ]) {
-        if (updated[field] === id) {
-          updated[field] = undefined;
-        }
-      }
-
-      cleanedSteps[stepId] = updated as any as AutomationStep;
+      cleanedSteps[stepId] = updated;
     }
 
     const nextEntry =
@@ -176,30 +174,45 @@ export function AutomationEditor({
     <div className="automation-editor">
       <Panel className="automation-editor__header">
         <div className="automation-editor__heading">
-          <Typography type="title-2">РЕДАКТОР АВТОМАТИЗАЦИИ</Typography>
+          <Typography type="title-2">
+            {mode === "create" ? "НОВЫЙ СЦЕНАРИЙ" : "РЕДАКТОР АВТОМАТИЗАЦИИ"}
+          </Typography>
 
           <TextField
             border
             value={automation.name}
             placeholder="Название сценария"
-            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              updateAutomation({ name: event.target.value })
+            onChange={(name) =>
+              updateAutomation({ name })
             }
             aria-label="Название сценария"
           />
         </div>
-        <div style={{display: "flex", justifyContent: "space-between"}}>
-
+        <div style={{display: "flex", justifyContent: "space-between", gap: "8px"}}>
+          {onCreateNew && (
+            <Button
+              type="button"
+              onClick={() => dirty ? setConfirmDiscard(true) : onCreateNew()}
+              disabled={saving || creating}
+            >
+              {mode === "create" ? "Начать заново" : "Создать сценарий"}
+            </Button>
+          )}
           <Button
             type="button"
             className="automation-button automation-button--primary"
             onClick={onSave}
-            disabled={!onSave || saving}
+            disabled={!onSave || saving || creating}
           >
-            {saving ? "Сохранение…" : "Сохранить"}
+            {creating
+              ? "Создание…"
+              : saving
+                ? "Сохранение…"
+                : mode === "create"
+                  ? "Создать сценарий"
+                  : "Сохранить"}
           </Button>
         </div>
-        
       </Panel>
         
       <div className="automation-editor__body">
@@ -221,6 +234,34 @@ export function AutomationEditor({
           />
         </Sidebar>
       </div>
+      {confirmDiscard && (
+        <DialogPortal>
+          <BasicTemplateDialog
+            header="Несохранённые изменения"
+            action={
+              <BaseActionCard>
+                <Button styleType="text" onClick={() => setConfirmDiscard(false)}>
+                  Остаться
+                </Button>
+                <Button
+                  styleType="text"
+                  onClick={() => {
+                    setConfirmDiscard(false);
+                    onCreateNew?.();
+                  }}
+                >
+                  Отбросить и создать
+                </Button>
+              </BaseActionCard>
+            }
+            onHide={() => setConfirmDiscard(false)}
+          >
+            <Typography type="body">
+              Текущие несохранённые изменения будут потеряны. Продолжить?
+            </Typography>
+          </BasicTemplateDialog>
+        </DialogPortal>
+      )}
     </div>
   );
 }

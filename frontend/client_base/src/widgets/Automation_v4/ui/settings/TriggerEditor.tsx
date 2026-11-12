@@ -74,7 +74,7 @@ export function TriggerEditor({
     onChange([...triggers, createTrigger(kindToAdd)]);
   }
 
-  function updateTrigger(index: number, patch: Record<string, unknown>) {
+  const updateTrigger = useCallback((index: number, patch: Record<string, unknown>) => {
     onChange(
       triggers.map((trigger, currentIndex) =>
         currentIndex === index
@@ -82,7 +82,7 @@ export function TriggerEditor({
           : trigger,
       ),
     );
-  }
+  },[onChange, triggers])
 
   function removeTrigger(index: number) {
     onChange(
@@ -128,8 +128,8 @@ export function TriggerEditor({
                     <DeviceSelectField onChange={(data:{binding: string})=>{
                         const segments = data.binding.split(".")
                         updateTrigger(index, {
-                            device: segments[0],
-                            field: segments[1]
+                            device: segments[1],
+                            field: segments[2]
                     })}} value={`${trigger.device}.${trigger.field}`}/>
                 </>
             )}
@@ -140,9 +140,9 @@ export function TriggerEditor({
                         console.log(data)
                         const segments = data.split(".")
                         updateTrigger(index, {
-                            room: segments[0],
-                            device_type: segments[1],
-                            field: segments[2]
+                            room: segments[1],
+                            device_type: segments[2],
+                            field: segments[3]
                     })}} value={`${trigger.room}.${trigger.device_type}.${trigger.field}`}/>
               </>
             )}

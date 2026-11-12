@@ -35,6 +35,11 @@ export const useAutomationAPI = () => {
     ): Promise<Automation> => {
         return await request(
             `${AUTOMATION_URL}/${encodeURIComponent(id)}`,
+            TypeRequest.GET,
+            undefined,
+            {},
+            false,
+            true,
         )
     }, [request])
 
@@ -43,11 +48,14 @@ export const useAutomationAPI = () => {
      */
     const addAutomation = useCallback(async (
         automation: Automation,
-    ): Promise<void> => {
-        await request(
+    ): Promise<Automation> => {
+        return await request(
             AUTOMATION_URL,
             TypeRequest.POST,
             automation as unknown as Record<string, unknown>,
+            {},
+            false,
+            true,
         )
     }, [request])
 
@@ -57,11 +65,14 @@ export const useAutomationAPI = () => {
     const editAutomation = useCallback(async (
         id: string,
         automation: Automation,
-    ): Promise<void> => {
-        await request(
+    ): Promise<Automation> => {
+        return await request(
             `${AUTOMATION_URL}/${encodeURIComponent(id)}`,
             TypeRequest.PUT,
             automation as unknown as Record<string, unknown>,
+            {},
+            false,
+            true,
         )
     }, [request])
 

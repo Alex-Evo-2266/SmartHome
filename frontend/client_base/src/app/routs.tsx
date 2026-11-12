@@ -54,6 +54,7 @@ export const RoutesComponent = ()=>{
 						<Route path="device" element={<DevicePage/>}/>
 						<Route path="device/:systemName" element={<DetailDevice/>}/>
 						<Route path="automation" element={<AutomationPage/>}/>
+						<Route path="automation/new" element={<AutomationEditorPage isCreateRoute/>}/>
 						<Route path="automation/:id" element={<AutomationEditorPage/>}/>
 						<Route path="module_pages/:moduleName/:pageName" element={<ModulesPage/>}/>
 						<Route path="manager" element={<ManagerPage/>}>

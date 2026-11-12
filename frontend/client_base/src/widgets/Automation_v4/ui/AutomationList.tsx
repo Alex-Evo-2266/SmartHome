@@ -1,10 +1,11 @@
 import { Automation, useAutomationAPI } from "@src/entites/automation_v4"
 import { BaseActionCard, Button, Card, FilterGroup, ListContainer, SearchAndFilter, SelectedFilters } from "alex-evo-sh-ui-kit"
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 import './style.scss'
-import { AutomationItem } from "./AutomationItem"
 import { AutomationEditor } from "./AutomationEditor"
+import { AutomationItem } from "./AutomationItem"
 
 function matchesFilterFromSelected(
   automation: Automation,
@@ -33,6 +34,7 @@ function matchesFilterFromSelected(
 export const AutomationCard = () => {
 
     const {getAutomationAll} = useAutomationAPI()
+    const navigate = useNavigate()
     const [automation, setAutomation] = useState<Automation[]>([])
     const [selectAutomation, setSelectAutomation] = useState<Automation | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
@@ -67,8 +69,8 @@ export const AutomationCard = () => {
             </ListContainer>
             
             <BaseActionCard>
-                <Button onClick={()=>{}}>
-                    add automation
+                <Button onClick={()=>navigate("/automation/new")}>
+                    Создать сценарий
                 </Button>
             </BaseActionCard>
         </Card>

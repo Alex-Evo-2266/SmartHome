@@ -119,7 +119,7 @@ def _normalize_number(value: Any) -> int | float | Any:
 
 def _fetch_device_field(
     system_name: str,
-    field_id: str,
+    field_name: str,
 ) -> tuple[Any, DeviceSerializeFieldSchema]:
     """
     Возвращает (значение, описание поля) или бросает:
@@ -137,29 +137,30 @@ def _fetch_device_field(
         raise DeviceNotFound()
 
     fields = snapshot.description.fields or []
-    field = next((f for f in fields if f.id == field_id), None)
+    logger.debug(fields)
+    field = next((f for f in fields if f.name == field_name), None)
 
     if field is None:
-        logger.error("Field not found: %s in %s", field_id, system_name)
+        logger.error("Field not found: %s in %s", field_name, system_name)
         raise DeviceFieldNotFound()
 
     value = snapshot.state.get(field.name)
     return value, field
 
 
-def _resolve_device(system_name: str, field_id: str) -> Any:
+def _resolve_device(system_name: str, field_name: str) -> Any:
     """
     Читает значение поля устройства и нормализует по типу поля.
     """
-    value, field = _fetch_device_field(system_name, field_id)
+    value, field = _fetch_device_field(system_name, field_name)
 
     logger.debug(
         "resolve device.%s.%s → %r (type=%s)",
-        system_name, field_id, value, field.type,
+        system_name, field_name, value, field.type,
     )
 
     if value is None:
-        logger.error("Device value is None: %s in %s", field_id, system_name)
+        logger.error("Device value is None: %s in %s", field_name, system_name)
         raise DeviceNotValueFound()
 
     if field.type == TypeDeviceField.BINARY:
