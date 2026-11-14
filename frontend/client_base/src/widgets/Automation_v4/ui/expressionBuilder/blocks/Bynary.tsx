@@ -1,4 +1,3 @@
-
 import {
     BinaryExpression,
     ExpressionArg
@@ -6,7 +5,8 @@ import {
 
 import {
     useCallback,
-    useContext
+    useContext,
+    useMemo
 } from "react"
 
 import { ChildBlock } from "../ChildBlock"
@@ -30,6 +30,17 @@ export const BynaryExpression = ({
         updateExpression,
         capabilities
     } = useContext(contextAutomation)
+
+    // Получаем метаданные операции из capabilities
+    const operator = useMemo(() => {
+        if(!capabilities) return
+        return capabilities.operators.binary.find(
+            item => item.id === expression.op
+        )
+    }, [capabilities, expression.op])
+
+    // Если symbol не задан, используем id операции
+    const operatorLabel = operator?.symbol ?? expression.op
 
     const leftAllowedTypes = getBinaryAllowedTypes(
         capabilities,
@@ -75,10 +86,8 @@ export const BynaryExpression = ({
 
     return (
         <div className={styles.expression}>
-
             <div className={styles.operands}>
                 <div className={styles.operand}>
-
                     <ChildBlock
                         data={expression.left}
                         allowedValueTypes={leftAllowedTypes}
@@ -86,12 +95,14 @@ export const BynaryExpression = ({
                     />
                 </div>
 
-                <div className={styles.operator}>
-                    {expression.op}
+                <div
+                    className={styles.operator}
+                    title={operator?.name ?? expression.op}
+                >
+                    {operatorLabel}
                 </div>
 
                 <div className={styles.operand}>
-
                     <ChildBlock
                         data={expression.right}
                         allowedValueTypes={rightAllowedTypes}

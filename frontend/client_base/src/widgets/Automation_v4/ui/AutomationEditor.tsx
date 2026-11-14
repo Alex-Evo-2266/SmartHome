@@ -1,16 +1,19 @@
 import type { Automation, AutomationStep } from "@src/entites/automation_v4";
+import { CapabilitiesContextProvider } from "@src/entites/automation_v4/context/capabilitiesContext";
 import { createStep } from "@src/entites/automation_v4/helpers/createStep";
 import { DialogPortal } from "@src/shared";
 import { Sidebar } from "@src/shared/ui/SideBar";
-import { BaseActionCard, BasicTemplateDialog, Button, Panel, TextField, Typography } from "alex-evo-sh-ui-kit";
-import { useCallback, useState, type ChangeEvent } from "react";
+import { BaseActionCard, BasicTemplateDialog, Button, DangerButton, Panel, TextField, Typography } from "alex-evo-sh-ui-kit";
+import { useCallback, useState } from "react";
 
 import { AutomationFlow } from "./flow/AutomationFlow";
 import { AutomationSettingsPanel } from "./settings/AutomationSettingsPanel";
 import type {
   EditorSelection,
   StepEditorKind,
+  StepInsertTarget,
 } from "../../../entites/automation_v4/helpers/editorTypes";
+
 import "./AutomationEditor.scss";
 
 interface AutomationEditorProps {
@@ -18,6 +21,7 @@ interface AutomationEditorProps {
   onChange: React.Dispatch<React.SetStateAction<Automation | null>>;
   onSave?: () => void;
   onCreateNew?: () => void;
+  onDelete?:()=>void
   mode?: "create" | "edit";
   dirty?: boolean;
   saving?: boolean;
@@ -33,6 +37,7 @@ export function AutomationEditor({
   onChange,
   onSave,
   onCreateNew,
+  onDelete,
   mode = "edit",
   dirty = false,
   saving = false,
@@ -40,9 +45,9 @@ export function AutomationEditor({
 }: AutomationEditorProps) {
   const [selection, setSelection] = useState<EditorSelection | null>(null);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
+  const [stepDeleteError, setStepDeleteError] = useState<string | null>(null);
 
   const updateAutomation = useCallback((patch: Partial<Automation>) => {
-    console.log("p9", patch)
     onChange((prev) => {
       if (!prev) return prev;
 
@@ -69,7 +74,7 @@ export function AutomationEditor({
     [onChange],
   );
 
-  function addStep(kind: StepEditorKind, afterStepId: string | null) {
+  function addStep(kind: StepEditorKind, target: StepInsertTarget) {
     const id = createId();
     const newStep = createStep(kind, id);
 
@@ -78,47 +83,35 @@ export function AutomationEditor({
 
       const steps = { ...previous.steps };
 
-      if (afterStepId === null) {
-        // Вставка сразу после стартового узла.
-        const updatedNewStep = {
-          ...newStep,
-          next: previous.entry || null,
-        } as AutomationStep;
-
-        steps[id] = updatedNewStep;
-
-        return {
-          ...previous,
-          steps,
-          entry: id,
-        };
+      if (target.type === "start") {
+        steps[id] = { ...newStep, next: previous.entry || null };
+        return { ...previous, steps, entry: id };
       }
 
-      const previousStep = steps[afterStepId];
-
+      const previousStep = steps[target.stepId];
       if (!previousStep) return previous;
 
-      const previousNext =
-        previousStep.next ?? null;
+      if (target.type === "condition-branch") {
+        if (previousStep.type !== "condition") return previous;
 
-      // Новый шаг продолжает прежнюю последовательность.
-      const updatedNewStep = {
-        ...newStep,
-        next: previousNext,
-      } as AutomationStep;
+        const previousBranch =
+          target.branch === "true"
+            ? previousStep.on_true ?? null
+            : previousStep.on_false ?? null;
 
-      // Предыдущий шаг теперь ведёт на новый.
-      steps[afterStepId] = {
-        ...previousStep,
-        next: id,
-      } as AutomationStep;
+        steps[id] = { ...newStep, next: previousBranch };
+        steps[target.stepId] =
+          target.branch === "true"
+            ? { ...previousStep, on_true: id }
+            : { ...previousStep, on_false: id };
 
-      steps[id] = updatedNewStep;
+        return { ...previous, steps };
+      }
 
-      return {
-        ...previous,
-        steps,
-      };
+      steps[id] = { ...newStep, next: previousStep.next ?? null };
+      steps[target.stepId] = { ...previousStep, next: id };
+
+      return { ...previous, steps };
     });
 
     setSelection({
@@ -137,40 +130,59 @@ export function AutomationEditor({
   }, [automation, updateAutomation]);
 
   function deleteStep(id: string) {
-    const remainingSteps = { ...automation.steps };
-
-    delete remainingSteps[id];
-
-    /*
-     * Удаляем ссылки на шаг, чтобы не оставлять заведомо
-     * несуществующие next/on_true/on_false/on_timeout.
-     */
-    const cleanedSteps: Automation["steps"] = {};
-
-    for (const [stepId, step] of Object.entries(remainingSteps)) {
-      const updated: AutomationStep = { ...step };
-      if (updated.next === id) updated.next = undefined;
-      if ("on_true" in updated && updated.on_true === id) updated.on_true = undefined;
-      if ("on_false" in updated && updated.on_false === id) updated.on_false = undefined;
-      if ("on_timeout" in updated && updated.on_timeout === id) updated.on_timeout = undefined;
-
-      cleanedSteps[stepId] = updated;
+    if (automation.entry === id && automation.steps[id]?.type === "condition") {
+      setStepDeleteError(
+        "Нельзя удалить условие, которое является входом сценария. Сначала добавьте шаг перед ним.",
+      );
+      return;
     }
 
-    const nextEntry =
-      automation.entry === id
-        ? Object.keys(cleanedSteps)[0] ?? ""
-        : automation.entry;
+    setStepDeleteError(null);
+    onChange((previous) => {
+      if (!previous?.steps[id]) return previous;
 
-    updateAutomation({
-      steps: cleanedSteps,
-      entry: nextEntry,
+      const deletedStep = previous.steps[id];
+      const nextId =
+        deletedStep.type === "condition" || deletedStep.next === id
+          ? null
+          : deletedStep.next ?? null;
+      const replacement =
+        nextId && previous.steps[nextId] ? nextId : null;
+      const cleanedSteps: Automation["steps"] = {};
+
+      for (const [stepId, step] of Object.entries(previous.steps)) {
+        if (stepId === id) continue;
+
+        const updated: AutomationStep = { ...step };
+        if (updated.next === id) updated.next = replacement;
+        if ("on_true" in updated && updated.on_true === id) {
+          updated.on_true = replacement;
+        }
+        if ("on_false" in updated && updated.on_false === id) {
+          updated.on_false = replacement;
+        }
+        if ("on_timeout" in updated && updated.on_timeout === id) {
+          updated.on_timeout = replacement;
+        }
+
+        cleanedSteps[stepId] = updated;
+      }
+
+      const entry =
+        previous.entry === id
+          ? deletedStep.type === "condition"
+            ? ""
+            : replacement ?? ""
+          : previous.entry;
+
+      return { ...previous, steps: cleanedSteps, entry };
     });
 
     setSelection({ type: "start" });
   }
 
   return (
+    <CapabilitiesContextProvider>
     <div className="automation-editor">
       <Panel className="automation-editor__header">
         <div className="automation-editor__heading">
@@ -198,6 +210,10 @@ export function AutomationEditor({
               {mode === "create" ? "Начать заново" : "Создать сценарий"}
             </Button>
           )}
+          {
+            onDelete && 
+            <DangerButton style={{background: "var(--Error-color)"}} text="удалить сценарий" header="удалить сценарий" onClick={onDelete}>удалить</DangerButton>
+          }
           <Button
             type="button"
             className="automation-button automation-button--primary"
@@ -215,6 +231,11 @@ export function AutomationEditor({
         </div>
       </Panel>
         
+      {stepDeleteError && (
+        <div className="automation-editor__step-delete-error" role="alert">
+          {stepDeleteError}
+        </div>
+      )}
       <div className="automation-editor__body">
         <AutomationFlow
           automation={automation}
@@ -263,5 +284,6 @@ export function AutomationEditor({
         </DialogPortal>
       )}
     </div>
+    </CapabilitiesContextProvider>
   );
 }

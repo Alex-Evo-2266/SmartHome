@@ -5,6 +5,14 @@
   margin: 5px;
 }
 
+.automation-editor__step-delete-error{
+  margin: 5px;
+  padding: 10px 12px;
+  border: 1px solid var(--Error-color);
+  border-radius: 8px;
+  color: var(--Error-color);
+}
+
 .automation-editor_step{
   background: var(--Surface-container-color);
   color: var(--On-surface-color);
@@ -31,4 +39,3 @@
     color: var(--On-surface-color);
   }
 }
-

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { TypeRequest } from "../../../shared/api/type"
 import { useHttp } from "../../../shared/lib/hooks/http.hook"
@@ -8,6 +8,8 @@ import type {
     DeviceCommand,
     EnableAutomationRequest,
     ExpressionCapabilitiesResponse,
+    OperatorCategory,
+    OperatorDefinition,
 } from "../models/automation"
 
 const AUTOMATION_URL = "/api-devices/automation-v4"
@@ -148,5 +150,46 @@ export const useAutomationAPI = () => {
         deleteAutomation,
         enableAutomation,
         loading,
+    }
+}
+
+
+
+export const useAutomationExpressionCapabilities = () => {
+
+    const {getExpressionCapabilities} = useAutomationAPI()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
+    const [expressionCapabilities, setData] = useState<ExpressionCapabilitiesResponse>({
+        functions:[],
+        types: {},
+        argument_types: {},
+        operators: {} as Record<OperatorCategory, OperatorDefinition[]>
+    })
+
+    const load = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const result = await getExpressionCapabilities();
+
+            setData(result as ExpressionCapabilitiesResponse);
+        } catch (e) {
+            console.error(e);
+            setError("Не удалось загрузить список блоков");
+        } finally {
+            setLoading(false);
+        }
+    }, [getExpressionCapabilities]);
+
+    useEffect(() => {
+        load();
+    }, [load]);
+
+    return{
+        expressionCapabilities,
+        loading,
+        error
     }
 }

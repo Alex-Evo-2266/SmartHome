@@ -1,6 +1,7 @@
 import type {
   Automation,
   ExpressionArgWithNull,
+  ExpressionCapabilitiesResponse,
 } from "@src/entites/automation_v4";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -20,9 +21,34 @@ function formatLiteralValue(value: unknown): string {
   }
 }
 
+function getOperatorLabel(
+  capabilities: ExpressionCapabilitiesResponse | null,
+  type: "binary" | "unary" | "group",
+  op: unknown,
+): string {
+  if (typeof op !== "string") return "Операция";
+
+  const operators = capabilities?.operators[type];
+  const operator = operators?.find((item) => item.id === op);
+
+  return operator?.symbol ?? operator?.name ?? op;
+}
+
+function getFunctionLabel(
+  capabilities: ExpressionCapabilitiesResponse | null,
+  fn: unknown,
+): string {
+  if (typeof fn !== "string") return "Функция";
+
+  const func = capabilities?.functions.find((item) => item.id === fn);
+
+  return func?.name ?? fn;
+}
+
 export function getExpressionPreview(
   value: ExpressionArgWithNull | unknown,
   expressions: Automation["expressions"],
+  capabilities: ExpressionCapabilitiesResponse | null,
   depth = 0,
 ): string {
   if (!value) return "Не задано";
@@ -30,6 +56,9 @@ export function getExpressionPreview(
   if (!isRecord(value) || depth > 5) {
     return "Выражение";
   }
+
+  const nested = (item: unknown) =>
+    getExpressionPreview(item, expressions, capabilities, depth + 1);
 
   switch (value.type) {
     case "literal":
@@ -45,33 +74,59 @@ export function getExpressionPreview(
         return "Выражение не найдено";
       }
 
-      const expression = expressions[value.ref] as unknown;
+      const expression: unknown = expressions[value.ref];
 
       if (!isRecord(expression)) {
         return "Выражение не найдено";
       }
 
-      const nested = (item: unknown) => getExpressionPreview(item, expressions, depth + 1);
-
       switch (expression.type) {
         case "binary": {
           const left = nested(expression.left);
           const right = nested(expression.right);
-          return `${left} ${String(expression.op ?? "")} ${right}`;
+          const operator = getOperatorLabel(
+            capabilities,
+            "binary",
+            expression.op,
+          );
+
+          return `${left} ${operator} ${right}`;
         }
 
-        case "unary":
-          return `${String(expression.op ?? "")} ${nested(expression.arg)}`;
+        case "unary": {
+          const operator = getOperatorLabel(
+            capabilities,
+            "unary",
+            expression.op,
+          );
+
+          const argument = nested(expression.arg);
+
+          return `${operator}${operator.length > 1 ? " " : ""}${argument}`;
+        }
 
         case "group": {
-          const items = Array.isArray(expression.items) ? expression.items : [];
-          const separator = ` ${String(expression.op ?? "")} `;
-          return items.length ? items.map(nested).join(separator) : "Пустая группа";
+          const items = Array.isArray(expression.items)
+            ? expression.items
+            : [];
+
+          const operator = getOperatorLabel(
+            capabilities,
+            "group",
+            expression.op,
+          );
+
+          return items.length
+            ? items.map(nested).join(` ${operator} `)
+            : "Пустая группа";
         }
 
         case "call": {
-          const fn = String(expression.fn ?? "Функция");
-          const args = Array.isArray(expression.args) ? expression.args : [];
+          const fn = getFunctionLabel(capabilities, expression.fn);
+          const args = Array.isArray(expression.args)
+            ? expression.args
+            : [];
+
           return `${fn}(${args.map(nested).join(", ")})`;
         }
 
@@ -117,7 +172,9 @@ export function getConditionLabel(value: ExpressionArgWithNull): {
       return {
         type: "Выражение",
         title: value.ref ? "Составное выражение" : "Выражение не выбрано",
-        description: value.ref ? `ID: ${value.ref}` : "Необходимо выбрать выражение",
+        description: value.ref
+          ? `ID: ${value.ref}`
+          : "Необходимо выбрать выражение",
       };
 
     default:

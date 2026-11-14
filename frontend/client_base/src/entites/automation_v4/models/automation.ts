@@ -319,6 +319,7 @@ export interface OperatorDefinition {
     id: string;
     name: string;
     category: OperatorCategory;
+    symbol: string
     description: string;
     argument_count: number | {
         minimum: number;

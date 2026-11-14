@@ -30,8 +30,9 @@ def _binary(
     validation: str,
     left: dict[str, Any],
     right: dict[str, Any],
+    symbol: str | None = None,
 ) -> dict[str, Any]:
-    return {
+    result = {
         "id": op.value,
         "name": name,
         "category": "binary",
@@ -63,6 +64,10 @@ def _binary(
         },
     }
 
+    if symbol is not None:
+        result["symbol"] = symbol
+
+    return result
 
 _NUMBER_LEFT = _literal(10)
 _NUMBER_RIGHT = _literal(3)
@@ -86,6 +91,7 @@ _BINARY_OPERATORS = [
         "явном data_type у литерала.",
         _NUMBER_LEFT,
         _literal(10),
+        symbol="=="
     ),
     _binary(
         BinaryOp.NE,
@@ -96,12 +102,14 @@ _BINARY_OPERATORS = [
         "Оба операнда вычисляются до сравнения.",
         _NUMBER_LEFT,
         _literal(3),
+        symbol="≠"
     ),
     _binary(
         BinaryOp.LT, "Меньше", "Сравнивает два числовых значения.",
         _NUMBER_VALUES, "boolean",
         "Оба значения преобразуются в число; строка должна содержать число.",
         _NUMBER_LEFT, _NUMBER_RIGHT,
+        symbol="<"
     ),
     _binary(
         BinaryOp.LTE, "Меньше или равно",
@@ -109,12 +117,14 @@ _BINARY_OPERATORS = [
         _NUMBER_VALUES, "boolean",
         "Оба значения преобразуются в число; строка должна содержать число.",
         _NUMBER_LEFT, _literal(10),
+        symbol="<="
     ),
     _binary(
         BinaryOp.GT, "Больше", "Сравнивает два числовых значения.",
         _NUMBER_VALUES, "boolean",
         "Оба значения преобразуются в число; строка должна содержать число.",
         _NUMBER_LEFT, _NUMBER_RIGHT,
+        symbol=">"
     ),
     _binary(
         BinaryOp.GTE, "Больше или равно",
@@ -122,21 +132,25 @@ _BINARY_OPERATORS = [
         _NUMBER_VALUES, "boolean",
         "Оба значения преобразуются в число; строка должна содержать число.",
         _NUMBER_LEFT, _literal(10),
+        symbol=">="
     ),
     _binary(
         BinaryOp.ADD, "Сложение", "Складывает числовые значения.",
         _NUMBER_VALUES, "number", "Оба значения преобразуются в число.",
         _NUMBER_LEFT, _NUMBER_RIGHT,
+        symbol="+"
     ),
     _binary(
         BinaryOp.SUB, "Вычитание", "Вычитает правый операнд из левого.",
         _NUMBER_VALUES, "number", "Оба значения преобразуются в число.",
         _NUMBER_LEFT, _NUMBER_RIGHT,
+        symbol="-"
     ),
     _binary(
         BinaryOp.MUL, "Умножение", "Перемножает числовые значения.",
         _NUMBER_VALUES, "number", "Оба значения преобразуются в число.",
         _NUMBER_LEFT, _NUMBER_RIGHT,
+        symbol="*"
     ),
     _binary(
         BinaryOp.DIV, "Деление", "Делит левый операнд на правый.",
@@ -144,6 +158,7 @@ _BINARY_OPERATORS = [
         "Оба значения преобразуются в число; деление на ноль вызывает "
         "ExpressionError.",
         _NUMBER_LEFT, _literal(2),
+        symbol="/"
     ),
     _binary(
         BinaryOp.MOD, "Остаток от деления",
@@ -152,6 +167,7 @@ _BINARY_OPERATORS = [
         "Оба значения преобразуются в число; нулевой делитель вызывает "
         "ExpressionError.",
         _NUMBER_LEFT, _NUMBER_RIGHT,
+        symbol="%"
     ),
     _binary(
         BinaryOp.POW, "Степень",
@@ -159,6 +175,7 @@ _BINARY_OPERATORS = [
         _NUMBER_VALUES, "number | complex",
         "Оба значения преобразуются в число.",
         _literal(2), _literal(3),
+        symbol="^"
     ),
     _binary(
         BinaryOp.CONCAT, "Конкатенация",

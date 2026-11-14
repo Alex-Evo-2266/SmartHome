@@ -50,3 +50,12 @@ export function getStepTitle(step: AutomationStep): string {
 
 
 export type TriggerKind = "device" | "room" | "time";
+
+export type StepInsertTarget =
+  | { type: "start" }
+  | { type: "next"; stepId: string }
+  | {
+      type: "condition-branch";
+      stepId: string;
+      branch: "true" | "false";
+    };

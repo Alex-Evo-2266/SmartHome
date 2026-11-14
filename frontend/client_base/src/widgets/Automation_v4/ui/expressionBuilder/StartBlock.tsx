@@ -75,7 +75,7 @@ export type ExpressionBuilderModalProps = {
     onClose: ()=>void
     onExpressionsChange: ExpressionChange
     variables: Record<string, ObjectNode>;
-    pathType: ExForPath | undefined
+    pathType?: ExForPath | undefined
     type: DeviceCommandDataType
     enum_vals?: string[] 
 }

@@ -30,7 +30,7 @@ export function AutomationEditorPage({ isCreateRoute = false }: AutomationEditor
 
     const { id } = useParams<{id: string}>();
     const navigate = useNavigate();
-    const {getAutomation, addAutomation, editAutomation} = useAutomationAPI();
+    const {getAutomation, addAutomation, editAutomation, deleteAutomation} = useAutomationAPI();
     const {showSnackbar} = useSnackbar();
     const [automation, setAutomation] = useState<null | Automation>(null)
     const [mode, setMode] = useState<EditorMode>(isCreateRoute ? "create" : "edit");
@@ -170,6 +170,10 @@ export function AutomationEditorPage({ isCreateRoute = false }: AutomationEditor
         navigate("/automation/new");
     }, [navigate]);
 
+    const deleteAutomationHandler = useCallback((automation: Automation)=>{
+        deleteAutomation(automation.id)
+    },[deleteAutomation])
+
     if (!routeReady) return <p>Загрузка сценария…</p>;
 
     if (loadError) {
@@ -183,6 +187,7 @@ export function AutomationEditorPage({ isCreateRoute = false }: AutomationEditor
             key={`${mode}:${editingId ?? automation.id}`}
             automation={automation}
             onChange={setAutomation}
+            onDelete={mode === "edit" ?()=>deleteAutomationHandler(automation): undefined}
             mode={mode}
             dirty={isDirty}
             saving={saving}

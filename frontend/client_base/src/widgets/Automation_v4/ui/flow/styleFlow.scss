@@ -17,6 +17,170 @@
     border-bottom: 1px solid var(--Outline-variant-color);
   }
 
+  &__breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 5px 12px;
+    color: var(--On-surface-variant-color);
+    font-size: 14px;
+  }
+
+  &__breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    button {
+      padding: 2px 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button[aria-current="page"] {
+      color: var(--On-surface-color);
+      font-weight: 600;
+      cursor: default;
+    }
+  }
+
+  &__branch-context {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 5px 12px;
+    padding: 12px;
+    border: 1px solid var(--Outline-variant-color);
+    border-radius: 10px;
+    background: var(--Surface-container-low-color);
+
+    p {
+      margin: 4px 0 0;
+      color: var(--On-surface-variant-color);
+      overflow-wrap: anywhere;
+    }
+  }
+
+  &__branch-switch {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 8px;
+    background: var(--Surface-container-color);
+
+    button {
+      padding: 7px 12px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--On-surface-variant-color);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .automation-flow__branch-switch-active {
+      background: var(--Primary-color);
+      color: var(--On-primary-color);
+    }
+  }
+
+  &__branch-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0 5px 10px;
+  }
+
+  &__branch-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 5px;
+    padding: 11px 12px;
+    border: 1px solid var(--Outline-variant-color);
+    border-radius: 9px;
+    background: var(--Surface-container-low-color);
+    color: var(--On-surface-color);
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+      border-color: var(--Primary-color);
+      background: var(--Surface-container-high-color);
+    }
+  }
+
+  &__branch-card--true {
+    box-shadow: inset 3px 0 var(--Success-color, var(--Primary-color));
+  }
+
+  &__branch-card--false {
+    box-shadow: inset 3px 0 var(--Error-color);
+  }
+
+  &__branch-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-weight: 600;
+  }
+
+  &__branch-count,
+  &__branch-preview {
+    color: var(--On-surface-variant-color);
+    font-size: 13px;
+  }
+
+  &__branch-preview {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__detached {
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid var(--Outline-variant-color);
+
+    h3 {
+      margin: 0 5px 8px;
+      color: var(--On-surface-variant-color);
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  &__empty {
+    padding: 24px 16px;
+    border: 1px dashed var(--Outline-variant-color);
+    border-radius: 10px;
+    color: var(--On-surface-variant-color);
+    text-align: center;
+
+    p {
+      margin: 0 0 12px;
+    }
+  }
+
+  &__empty-add {
+    padding: 9px 14px;
+    border: 1px solid var(--Primary-color);
+    border-radius: 8px;
+    background: var(--Primary-color);
+    color: var(--On-primary-color);
+    font: inherit;
+    cursor: pointer;
+  }
+
   &__branch {
     padding: 8px 16px;
     color: var(--Primary-color);
@@ -136,6 +300,27 @@
     &:hover {
       border-color: var(--Primary-color);
       background: var(--Surface-container-high-color);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .automation-flow {
+      &__branch-cards {
+        grid-template-columns: 1fr;
+      }
+
+      &__branch-context {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      &__branch-switch {
+        align-self: stretch;
+
+        button {
+          flex: 1;
+        }
+      }
     }
   }
 }

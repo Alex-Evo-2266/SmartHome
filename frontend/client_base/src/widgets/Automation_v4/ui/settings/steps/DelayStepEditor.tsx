@@ -112,7 +112,7 @@ export function DelayStepEditor({
             }}
           >
             <span>
-              {getExpressionPreview(duration, expressions)}
+              {getExpressionPreview(duration, expressions, capabilities)}
             </span>
 
             <span>
