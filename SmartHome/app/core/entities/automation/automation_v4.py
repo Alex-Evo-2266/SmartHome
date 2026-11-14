@@ -86,6 +86,10 @@ class AutomationRunner:
         steps_count = 0
 
         while current_id is not None:
+            if not automation.is_enabled:
+                logger.info("Automation '%s' disabled; stopping run", automation.id)
+                return
+
             if steps_count >= MAX_STEPS_PER_RUN:
                 raise StepExecutionError(
                     f"Сценарий '{automation.id}': превышено максимальное "
@@ -254,12 +258,14 @@ class AutomationRunner:
 
         # 1. Регистрируем подписку в индексах (ones=True)
         if(step.next):
-            manager.add_await_automation(
+            registered = manager.add_await_automation(
                 automation=ctx.get_automation(),
                 trigger=step.trigger,
                 start_step=step.next,
                 await_step_id=step_id,
             )
+            if not registered:
+                return None
 
             # 2. Регистрируем таймаут через APScheduler (если задан)
             if step.timeout is not None:
@@ -316,9 +322,9 @@ async def continue_after_delay(automation_id: str, next_step: str | None) -> Non
         return
 
     automation = get_container().automation_store.get_automation_by_id(automation_id)
-    if automation is None:
+    if automation is None or not automation.is_enabled:
         logger.warning(
-            "Cannot continue delay for automation '%s': automation is not registered",
+            "Cannot continue delay for automation '%s': automation is not registered or disabled",
             automation_id,
         )
         return
@@ -338,9 +344,9 @@ async def continue_after_await_timeout(
         return
 
     automation = manager.get_automation_by_id(automation_id)
-    if automation is None:
+    if automation is None or not automation.is_enabled:
         logger.warning(
-            "Cannot continue await timeout for automation '%s': automation is not registered",
+            "Cannot continue await timeout for automation '%s': automation is not registered or disabled",
             automation_id,
         )
         return

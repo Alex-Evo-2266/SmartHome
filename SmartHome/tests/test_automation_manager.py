@@ -6,6 +6,7 @@ import pytest
 from freezegun import freeze_time
 
 from app.core.state.automation_store_v4 import AutomationManager_V4
+from app.core.state import automation_store_v4 as automation_store_module
 from app.schemas.automation.automation_v4 import (
     WeeklyTimeTrigger,
     MonthlyTimeTrigger,
@@ -74,6 +75,77 @@ def test_clear_automations(make_automation, weekly_trigger, device_trigger):
     assert mgr.weekly == {}
     assert mgr.device_index == {}
     assert mgr.last_run_time is None
+
+
+def test_enabled_state_registers_triggers_once_and_blocks_disabled_runs(
+    make_automation, device_trigger, monkeypatch
+):
+    class FakeScheduler:
+        running = True
+
+        def get_jobs(self):
+            return []
+
+    monkeypatch.setattr(automation_store_module, "scheduler", FakeScheduler())
+    calls = []
+
+    async def callback(automation, start_step):
+        calls.append(automation.id)
+
+    mgr = AutomationManager_V4(callback=callback)
+    automation = make_automation(
+        id="switchable",
+        triggers=[device_trigger],
+    ).model_copy(update={"is_enabled": False})
+
+    assert mgr.add_automation(automation)
+    assert mgr.device_index == {}
+
+    assert mgr.set_automation_enabled("switchable", True)
+    assert len(mgr.device_index[("dev1", "brightness")].data) == 1
+    assert mgr.set_automation_enabled("switchable", True)
+    assert len(mgr.device_index[("dev1", "brightness")].data) == 1
+
+    asyncio.run(mgr.on_device_patch(_device_patch("dev1", {"brightness": 1})))
+    assert calls == ["switchable"]
+
+    assert mgr.set_automation_enabled("switchable", False)
+    assert mgr.device_index == {}
+    asyncio.run(mgr.on_device_patch(_device_patch("dev1", {"brightness": 2})))
+    assert calls == ["switchable"]
+
+
+def test_disabling_clears_await_subscriptions_and_scheduled_jobs(
+    make_automation, device_trigger, monkeypatch
+):
+    removed_jobs = []
+
+    class FakeScheduler:
+        running = True
+
+        def get_jobs(self):
+            return [
+                type("Job", (), {"id": "auto:switchable:delay:s1"})(),
+                type("Job", (), {"id": "auto:other:delay:s1"})(),
+            ]
+
+        def remove_job(self, job_id):
+            removed_jobs.append(job_id)
+
+    monkeypatch.setattr(automation_store_module, "scheduler", FakeScheduler())
+    mgr = AutomationManager_V4()
+    automation = make_automation(id="switchable", triggers=[device_trigger])
+    mgr.add_automation(automation)
+    mgr.add_await_automation(
+        automation,
+        DeviceTrigger(type="device", device="door", field="state"),
+        start_step="s1",
+        await_step_id="await-1",
+    )
+
+    assert mgr.set_automation_enabled("switchable", False)
+    assert mgr.device_index == {}
+    assert removed_jobs == ["auto:switchable:delay:s1"]
 
 
 # ============== Индексация времени ==============

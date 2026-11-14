@@ -11,7 +11,7 @@ from app.db.repositories.automation_v4.automation_io import (
     automation_storage,
 )
 from app.pkg.deps.auth import auth_privilege_dep
-from app.schemas.automation.automation_v4 import AutomationSchema
+from app.schemas.automation.automation_v4 import AutomationSchema, EnableSchema
 
 router = APIRouter(
     prefix="/api-devices/automation-v4",
@@ -164,12 +164,39 @@ async def delete_automation(
     manager.remove_automation(automation_id)
 
 
+@router.patch("/{automation_id}/enable", response_model=AutomationSchema)
+async def enable_automation(
+    automation_id: str,
+    data: EnableSchema,
+) -> AutomationSchema:
+    _ensure_safe_id(automation_id)
+    manager = get_container().automation_store
+    automation = _get_automation(automation_id)
+    updated = automation.model_copy(update={"is_enabled": data.is_enabled})
+
+    try:
+        automation_storage.save(updated)
+    except (AutomationIOError, OSError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(exc),
+        ) from exc
+
+    manager.set_automation_enabled(automation_id, data.is_enabled)
+    return updated
+
+
 @router.post("/{automation_id}/run")
 async def run_automation(
     automation_id: str,
     # user_id: str = Depends(auth_privilege_dep("automation")),
 ) -> dict[str, str]:
     automation = _get_automation(automation_id)
+    if not automation.is_enabled:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Автоматизация '{automation_id}' отключена",
+        )
     try:
         await run_adapter(automation, startStep=None)
     except Exception as exc:

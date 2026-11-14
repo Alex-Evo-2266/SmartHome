@@ -42,7 +42,7 @@ Automation V4 — описываемый JSON/YAML граф автоматиза
 - `ScriptActionStep` присутствует в модели, но не исполняется runner-ом; `interval` проходит схему, но не планируется manager-ом.
 - `AwaitStep` приостанавливает выполнение и ставит event subscription/timeout только при заданном `next`; callback не проверяет условие, а timeout не отменяется событием.
 - Device/room trigger `condition` сейчас не фильтрует patch-события.
-- Frontend V4 содержит локальный editor, но его Save handler и создание шагов на page flow заглушены; CRUD save hooks не подключены. Frontend PATCH enable endpoint отсутствует в backend, а backend не фильтрует `is_enabled`.
+- Frontend V4 содержит локальный editor, но его Save handler и создание шагов на page flow заглушены; CRUD save hooks не подключены. Переключатель включения/отключения работает отдельно от сохранения редактора и использует backend PATCH endpoint.
 
 ## Основные сущности
 

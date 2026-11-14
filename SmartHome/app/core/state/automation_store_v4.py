@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel, Field
 from app.core.state.event import DevicePatch, RoomDevicePatch
 from datetime import time
+from app.scheduler import scheduler
 
 from app.pkg.logger import MyLogger
 
@@ -201,7 +202,11 @@ class AutomationManager_V4:
                 if automation_id in self._processed_automations:
                     continue
                 automation = self.automations.get(automation_id)
-                if automation is None or self.callback is None:
+                if (
+                    automation is None
+                    or not automation.is_enabled
+                    or self.callback is None
+                ):
                     continue
                 try:
                     await self.callback(automation, item.startStep)
@@ -276,7 +281,11 @@ class AutomationManager_V4:
         for item in candidates:
             automation_id = item.data
             automation = self.automations.get(automation_id)
-            if automation is None or automation_id in self._running_automations:
+            if (
+                automation is None
+                or not automation.is_enabled
+                or automation_id in self._running_automations
+            ):
                 continue
 
             if item.cond is not None:
@@ -347,7 +356,11 @@ class AutomationManager_V4:
         for item in candidates:
             automation_id = item.data
             automation = self.automations.get(automation_id)
-            if automation is None or automation_id in self._running_automations:
+            if (
+                automation is None
+                or not automation.is_enabled
+                or automation_id in self._running_automations
+            ):
                 continue
 
             if item.cond is not None:
@@ -387,20 +400,62 @@ class AutomationManager_V4:
             return False
 
         self.automations[automation.id] = automation
+        if automation.is_enabled:
+            self._register_triggers(automation)
+        return True
 
+    def _register_triggers(self, automation: AutomationSchema) -> None:
         for trigger in automation.trigger:
-
-            if(trigger.type == 'time'):
-                if(trigger.kind == 'weekly'):
+            if trigger.type == "time":
+                if trigger.kind == "weekly":
                     self.index_time_trigger(automation.id, trigger)
-                if(trigger.kind == 'monthly'):
+                elif trigger.kind == "monthly":
                     self.index_monthly_trigger(automation.id, trigger)
-                if(trigger.kind == 'once'):
+                elif trigger.kind == "once":
                     self.index_once_trigger(automation.id, trigger)
-            if(trigger.type == 'device'):
+            elif trigger.type == "device":
                 self.index_device_trigger(automation.id, trigger)
-            if(trigger.type == 'room'):
+            elif trigger.type == "room":
                 self.index_room_trigger(automation.id, trigger)
+
+    def _unregister_triggers(self, automation: AutomationSchema) -> None:
+        automation_id = automation.id
+        for trigger in automation.trigger:
+            if trigger.type == "time":
+                if trigger.kind == "weekly":
+                    self._unindex_weekly(automation_id, trigger)
+                elif trigger.kind == "monthly":
+                    self._unindex_monthly(automation_id, trigger)
+                elif trigger.kind == "once":
+                    self._unindex_once(automation_id, trigger)
+            elif trigger.type == "device":
+                self._unindex_device(automation_id, trigger)
+            elif trigger.type == "room":
+                self._unindex_room(automation_id, trigger)
+
+    def _cancel_scheduled_jobs(self, automation_id: str) -> None:
+        if not scheduler.running:
+            return
+        job_prefix = f"auto:{automation_id}:"
+        for job in scheduler.get_jobs():
+            if job.id.startswith(job_prefix):
+                scheduler.remove_job(job.id)
+
+    def set_automation_enabled(self, automation_id: str, enabled: bool) -> bool:
+        automation = self.automations.get(automation_id)
+        if automation is None:
+            return False
+        if automation.is_enabled == enabled:
+            return True
+
+        if enabled:
+            automation.is_enabled = True
+            self._register_triggers(automation)
+        else:
+            self._unregister_triggers(automation)
+            self.remove_await_subscriptions(automation_id)
+            self._cancel_scheduled_jobs(automation_id)
+            automation.is_enabled = False
 
         return True
 
@@ -416,6 +471,8 @@ class AutomationManager_V4:
         :param automation: Автоматизация для добавления
         :return: True если добавлено успешно, False если автоматизация уже существует
         """
+        if not automation.is_enabled:
+            return False
         if not automation.id in self.automations:
             self.automations[automation.id] = automation
 
@@ -453,19 +510,9 @@ class AutomationManager_V4:
             logger.warning(f"Автоматизация '{automation_id}' не найдена")
             return False
 
-        # Снимаем все триггеры с индексов
-        for trigger in automation.trigger:
-            if trigger.type == "time":
-                if trigger.kind == "weekly":
-                    self._unindex_weekly(automation_id, trigger)
-                elif trigger.kind == "monthly":
-                    self._unindex_monthly(automation_id, trigger)
-                elif trigger.kind == "once":
-                    self._unindex_once(automation_id, trigger)
-            elif trigger.type == 'device':
-                self._unindex_device(automation_id, trigger)
-            elif trigger.type == 'room':
-                self._unindex_room(automation_id, trigger)
+        self._unregister_triggers(automation)
+        self.remove_await_subscriptions(automation_id)
+        self._cancel_scheduled_jobs(automation_id)
 
         # Убираем из основного словаря
         del self.automations[automation_id]
@@ -497,6 +544,27 @@ class AutomationManager_V4:
         _clean(self.once)
         _clean(self.device_index)
         _clean(self.room_index)
+
+    def remove_await_subscriptions(self, automation_id: str) -> None:
+        """Удаляет все временные подписки await для сценария."""
+        for index in (
+            self.weekly,
+            self.monthly,
+            self.once,
+            self.device_index,
+            self.room_index,
+        ):
+            empty_keys = []
+            for key, bucket in index.items():
+                bucket.data = [
+                    item
+                    for item in bucket.data
+                    if not (item.ones and item.data == automation_id)
+                ]
+                if not bucket.data:
+                    empty_keys.append(key)
+            for key in empty_keys:
+                index.pop(key, None)
 
     def clear_automations(self) -> None:
         """Очищает все автоматизации и сбрасывает состояние менеджера"""

@@ -1,18 +1,11 @@
-import { useCallback, useState } from "react";
-import type { Automation, RefArg } from "@src/entites/automation_v4";
-import { DeviceSelectField } from "@src/entites/devices";
-import { Button, ContentBox, DayOfWeekField, MoreText, Typography } from "alex-evo-sh-ui-kit";
-import { RoomObjectSelectField } from "@src/features/Room";
+import type { Automation, AutomationTrigger } from "@src/entites/automation_v4";
+import { Button, ContentBox } from "alex-evo-sh-ui-kit";
+import { useState } from "react";
+
 import { AddTrigger } from "./dialogs/AddTrigger";
+import { TriggerFields } from "./TriggerFields";
 import { TriggerKind } from "../../../../entites/automation_v4/helpers/editorTypes";
-import { DateField, SelectField, TimeField } from "@src/shared";
-import { numberToWeekday, weekdayToNumber } from "@src/shared/lib/helpers/dayOfWeekConverts";
-import { toLocalDate, toLocalTime, updateDateTimeLocal } from "@src/shared/lib/helpers/timeFormat";
-import { ExpressionBuilderModal, ExpressionBuilderModalProps } from "../expressionBuilder/StartBlock";
-import { TriggerConditionField } from "./TriggerConditionField";
-
-type Trigger = Automation["trigger"][number];
-
+import { ExpressionBuilderModalProps } from "../expressionBuilder/StartBlock";
 
 interface TriggerEditorProps {
   triggers: Automation["trigger"];
@@ -24,14 +17,14 @@ interface TriggerEditorProps {
   capabilities: ExpressionBuilderModalProps["capabilities"];
 }
 
-function createTrigger(kind: TriggerKind): Trigger {
+function createTrigger(kind: TriggerKind): AutomationTrigger {
   if (kind === "device") {
     return {
       type: "device",
       device: "",
       field: "",
       condition: null,
-    } as Trigger;
+    };
   }
 
   if (kind === "room") {
@@ -41,7 +34,7 @@ function createTrigger(kind: TriggerKind): Trigger {
       device_type: "",
       field: "",
       condition: null,
-    } as Trigger;
+    };
   }
 
   return {
@@ -49,7 +42,7 @@ function createTrigger(kind: TriggerKind): Trigger {
     kind: "weekly",
     at: "08:00",
     weekdays: [0, 1, 2, 3, 4],
-  } as Trigger;
+  };
 }
 
 export function TriggerEditor({
@@ -63,26 +56,19 @@ export function TriggerEditor({
   const [addTriggerDialogVisible, setAddTriggerDialogVisible] =
     useState<boolean>(false);
 
-  const [editingConditionIndex, setEditingConditionIndex] =
-    useState<number | null>(null);
-
-  function removeCondition(index: number) {
-    updateTrigger(index, { condition: null });
-  }
-
   function addTrigger(kindToAdd: TriggerKind) {
     onChange([...triggers, createTrigger(kindToAdd)]);
   }
 
-  const updateTrigger = useCallback((index: number, patch: Record<string, unknown>) => {
+  function updateTrigger(index: number, nextTrigger: AutomationTrigger) {
     onChange(
-      triggers.map((trigger, currentIndex) =>
+      triggers.map((currentTrigger, currentIndex) =>
         currentIndex === index
-          ? ({ ...trigger, ...patch } as Trigger)
-          : trigger,
+          ? nextTrigger
+          : currentTrigger,
       ),
     );
-  },[onChange, triggers])
+  }
 
   function removeTrigger(index: number) {
     onChange(
@@ -123,152 +109,14 @@ export function TriggerEditor({
                 border collapsible defaultVisible
                 >
 
-            {trigger.type === "device" && (
-                <>
-                    <DeviceSelectField onChange={(data:{binding: string})=>{
-                        const segments = data.binding.split(".")
-                        updateTrigger(index, {
-                            device: segments[1],
-                            field: segments[2]
-                    })}} value={`${trigger.device}.${trigger.field}`}/>
-                </>
-            )}
-
-            {trigger.type === "room" && (
-              <>
-                    <RoomObjectSelectField onChange={(data:string)=>{
-                        console.log(data)
-                        const segments = data.split(".")
-                        updateTrigger(index, {
-                            room: segments[1],
-                            device_type: segments[2],
-                            field: segments[3]
-                    })}} value={`${trigger.room}.${trigger.device_type}.${trigger.field}`}/>
-              </>
-            )}
-
-            {trigger.type === "time" && (
-              <>
-                <SelectField border items={[
-                    {
-                        value: "weekly",
-                        title: "По дням недели"
-                    },
-                    {
-                        title: "Один раз",
-                        value: "once"
-                    },
-                    {
-                        value: "monthly",
-                        title: "По дням месяца"
-                    }
-                ]} value={trigger.kind} onChange={(value) => {
-                      const kind = value;
-
-                      if (kind === "weekly") {
-                        updateTrigger(index, {
-                          kind: "weekly",
-                          at: "08:00",
-                          weekdays: [0, 1, 2, 3, 4],
-                          run_at: undefined,
-                          month_days: undefined,
-                          interval: undefined,
-                          unit: undefined,
-                        });
-                      } else if (kind === "once") {
-                        updateTrigger(index, {
-                          kind: "once",
-                          run_at: new Date(Date.now() + 60_000)
-                            .toISOString(),
-                          at: undefined,
-                          weekdays: undefined,
-                          month_days: undefined,
-                          interval: undefined,
-                          unit: undefined,
-                        });
-                      } else if (kind === "monthly") {
-                        updateTrigger(index, {
-                          kind: "monthly",
-                          at: "08:00",
-                          month_days: [1],
-                          run_at: undefined,
-                          weekdays: undefined,
-                          interval: undefined,
-                          unit: undefined,
-                        });
-                      } else if (kind === "interval") {
-                        updateTrigger(index, {
-                          kind: "interval",
-                          interval: 5,
-                          unit: "minutes",
-                          run_at: undefined,
-                          at: undefined,
-                          weekdays: undefined,
-                          month_days: undefined,
-                        });
-                      }
-                    }}/>
-
-                {trigger.kind === "weekly" && (
-                  <>
-                        <TimeField border value={trigger.at} onChange={(value) =>
-                            updateTrigger(index, {
-                                at: value,
-                            })
-                        }/>
-                        <DayOfWeekField
-                        value={trigger.weekdays.map(numberToWeekday).filter(v=>v!==undefined)}
-                        onChange={(value) => {
-                            const converts = value.map(weekdayToNumber).filter(v=>v!==undefined)
-                            updateTrigger(index, { weekdays: converts });
-                        }}
-                        />
-                  </>
-                )}
-
-                {trigger.kind === "once" && (
-                    
-                    <TriggerTimeOnce date={trigger.run_at} onChange={(value)=>{
-                        updateTrigger(index, {
-                            run_at: new Date(value).toISOString(),
-                        });
-                    }}/>
-
-                )}
-
-                {trigger.kind === "monthly" && (
-                  <>
-                  <TimeField border value={trigger.at}
-                        onChange={(value) =>
-                          updateTrigger(index, {
-                            at: value,
-                          })
-                        }/>
-                   <MoreText border value={trigger.month_days.join(",")}
-                        onChange={(value) => {
-                          const month_days = value
-                            .split(",")
-                            .map((value) => Number(value.trim()))
-                            .filter(
-                              (value) =>
-                                Number.isInteger(value) &&
-                                value >= 1 &&
-                                value <= 31,
-                            );
-
-                          updateTrigger(index, { month_days });
-                        }}/>
-                  </>
-                )}
-              </>
-            )}
-            {(trigger.type === "device" || trigger.type === "room") && (
-                <TriggerConditionField
-                  value={trigger.condition ?? null}
-                  onEdit={() => setEditingConditionIndex(index)}
-                  onRemove={() => removeCondition(index)}
-                />
-              )}
+              <TriggerFields
+                trigger={trigger}
+                onChange={(nextTrigger) => updateTrigger(index, nextTrigger)}
+                expressions={expressions}
+                onExpressionsChange={onExpressionsChange}
+                variables={variables}
+                capabilities={capabilities}
+              />
 
               <div style={{ marginTop: 12 }}>
                 <Button type="button" onClick={() => removeTrigger(index)}>
@@ -289,67 +137,6 @@ export function TriggerEditor({
         addTriggerDialogVisible && 
             <AddTrigger onHide={()=>setAddTriggerDialogVisible(false)} onSuccess={addTrigger}/>
       }
-      {editingConditionIndex !== null && (() => {
-        const trigger = triggers[editingConditionIndex];
-
-        if (!trigger || (trigger.type !== "device" && trigger.type !== "room")) {
-          return null;
-        }
-
-        return (
-          <ExpressionBuilderModal
-            type="boolean"
-            pathType={undefined}
-            enum_vals={undefined}
-            value={
-              trigger.condition ??
-              ({
-                type: "literal",
-                value: true,
-                data_type: "boolean",
-              } as Parameters<ExpressionBuilderModalProps["onChange"]>[0])
-            }
-            expressions={expressions}
-            onExpressionsChange={onExpressionsChange}
-            variables={variables}
-            capabilities={capabilities}
-            onChange={(value) => {
-              updateTrigger(editingConditionIndex, {
-                condition: value as RefArg,
-              });
-            }}
-            onClose={() => setEditingConditionIndex(null)}
-          />
-        );
-      })()}
     </section>
   );
-}
-
-type DateTimePart = "date" | "time";
-
-
-const TriggerTimeOnce = ({onChange, date}:{onChange:(date:string)=>void, date:string}) => {
-
-    const updateDateTime = useCallback((
-        datetimeLocal: string,
-        type: DateTimePart,
-        data: string,
-    ) => {
-
-        const dataOut = updateDateTimeLocal(datetimeLocal, type, data)
-        console.log(dataOut)
-        onChange(dataOut)
-    },[onChange])
-
-    
-
-    return(
-        <>
-            <Typography type="body">Введине дату и время</Typography>
-            <DateField border value={toLocalDate(date)} onChange={value => updateDateTime(date, "date", value)}/>
-            <TimeField border value={toLocalTime(date)} onChange={value => updateDateTime(date, "time", value)}/>
-        </>
-    )
-
 }

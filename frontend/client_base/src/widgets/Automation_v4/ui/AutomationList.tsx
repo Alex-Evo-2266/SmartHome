@@ -45,6 +45,12 @@ export const AutomationCard = () => {
         setAutomation(data)
     },[getAutomationAll])
 
+    const updateAutomation = useCallback((updated: Automation) => {
+        setAutomation(current => current.map(item => (
+            item.id === updated.id ? updated : item
+        )))
+    }, [])
+
     const filteredAutomation = useMemo(()=>automation
         .filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .filter(item => matchesFilterFromSelected(item, selectedFilters))
@@ -63,7 +69,11 @@ export const AutomationCard = () => {
             <ListContainer transparent>
             {
                 filteredAutomation && filteredAutomation.map((item)=>(
-                    <AutomationItem automation={item} key={`automation-${item.name}`}/>
+                    <AutomationItem
+                        automation={item}
+                        key={`automation-${item.id}`}
+                        onAutomationChange={updateAutomation}
+                    />
                 ))
             }
             </ListContainer>

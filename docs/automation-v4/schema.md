@@ -105,12 +105,11 @@
 
 `DeviceCommand` содержит обязательные `name`, `title`, `target`, необязательные `description` и `parameters` (default `[]`). `target` — enum `Target` в schema-модуле; список доступных команд выдаётся отдельным endpoint-ом, см. [api.md](./api.md).
 
-`EnableSchema` с `is_enabled: bool = true` также объявлена в backend-схеме, однако текущий Automation V4 router её не использует и не предоставляет enable endpoint. Кроме того, manager не проверяет `AutomationSchema.is_enabled` при запуске. Это модельное поле не следует считать действующим переключателем.
+`EnableSchema` с `is_enabled: bool = true` используется endpoint `PATCH /api-devices/automation-v4/{automation_id}/enable`; значение `AutomationSchema.is_enabled` сохраняется в YAML и определяет регистрацию триггеров/выполнение сценария. Подробности переходов состояния см. в [api.md](./api.md).
 
 ## Known Issues
 
 - В `Target` enum поля `SYSTEM="system",` и `ROOM="room",` объявлены с завершающей запятой и получают tuple values; фактическое поведение отличается от очевидных строковых значений.
-- `EnableSchema` объявлена, но V4 router не реализует соответствующий endpoint; `is_enabled` не отключает регистрацию/выполнение.
 
 ## YAML
 

@@ -118,15 +118,18 @@ export const useAutomationAPI = () => {
     const enableAutomation = useCallback(async (
         id: string,
         enabled: boolean,
-    ): Promise<void> => {
+    ): Promise<Automation> => {
         const body: EnableAutomationRequest = {
             is_enabled: enabled,
         }
 
-        await request(
+        return await request(
             `${AUTOMATION_URL}/${encodeURIComponent(id)}/enable`,
             TypeRequest.PATCH,
             body as unknown as Record<string, unknown>,
+            {},
+            false,
+            true,
         )
     }, [request])
 

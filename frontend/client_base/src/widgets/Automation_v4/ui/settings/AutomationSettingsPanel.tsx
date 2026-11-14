@@ -4,16 +4,16 @@ import type {
 } from "@src/entites/automation_v4";
 
 import { StartSettings } from "./StartSettings";
-import type {
-  EditorSelection,
-} from "../../../../entites/automation_v4/helpers/editorTypes";
-import { getStepEditorKind } from "../../../../entites/automation_v4/helpers/editorTypes";
 import { ActionStepEditor } from "./steps/ActionStepEditor/ActionStepEditor";
+import { useActionCommands } from "./steps/ActionStepEditor/hooks/useActionCommands";
 import { AwaitStepEditor } from "./steps/AwaitStepEditor";
 import { ConditionStepEditor } from "./steps/ConditionStepEditor";
 import { DelayStepEditor } from "./steps/DelayStepEditor";
 import { ScriptActionStepEditor } from "./steps/ScriptActionStepEditor";
-import { useActionCommands } from "./steps/ActionStepEditor/hooks/useActionCommands";
+import { getStepEditorKind } from "../../../../entites/automation_v4/helpers/editorTypes";
+import type {
+  EditorSelection,
+} from "../../../../entites/automation_v4/helpers/editorTypes";
 
 interface AutomationSettingsPanelProps {
   automation: Automation;
@@ -82,10 +82,18 @@ export function AutomationSettingsPanel({
       return <DelayStepEditor {...editorProps} />;
 
     case "condition":
-      return <ConditionStepEditor {...editorProps} />;
+      if (step.type !== "condition") return null;
+      return <ConditionStepEditor {...editorProps} step={step} />;
 
     case "await":
-      return <AwaitStepEditor {...editorProps} />;
+      if (step.type !== "await") return null;
+      return (
+        <AwaitStepEditor
+          {...editorProps}
+          step={step}
+          capabilities={capabilities}
+        />
+      );
 
     case "script":
       return <ScriptActionStepEditor {...editorProps} />;

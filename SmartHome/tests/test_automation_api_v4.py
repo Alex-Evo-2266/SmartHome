@@ -26,6 +26,7 @@ from app.schemas.automation.automation_v4 import (
     AutomationSchema,
     BinaryOp,
     ConditionStep,
+    DeviceTrigger,
     Expression,
     ExpressionArg,
     GroupOp,
@@ -33,7 +34,9 @@ from app.schemas.automation.automation_v4 import (
     UnaryOp,
 )
 from app.core.state.automation_store_v4 import AutomationManager_V4
+from app.core.state import automation_store_v4 as automation_store_module
 from app.db.repositories.automation_v4.automation_io import AutomationStorage
+from app.schemas.automation.automation_v4 import EnableSchema
 
 
 @pytest.fixture
@@ -93,6 +96,48 @@ async def test_update_requires_matching_existing_id(api_state, make_automation):
 
 
 @pytest.mark.asyncio
+async def test_enable_endpoint_persists_and_updates_automation(api_state, make_automation, monkeypatch):
+    class FakeScheduler:
+        running = True
+
+        def get_jobs(self):
+            return []
+
+    monkeypatch.setattr(automation_store_module, "scheduler", FakeScheduler())
+    manager, storage = api_state
+    automation = make_automation(
+        id="switchable",
+        triggers=[DeviceTrigger(type="device", device="dev1", field="state")],
+    )
+    manager.add_automation(automation)
+    storage.save(automation)
+
+    disabled = await api.enable_automation(
+        "switchable",
+        EnableSchema(is_enabled=False),
+    )
+    assert disabled.is_enabled is False
+    assert manager.get_automation_by_id("switchable").is_enabled is False
+    assert storage.load("switchable").is_enabled is False
+    assert manager.device_index == {}
+
+    manager.clear_automations()
+    reloaded = storage.load("switchable")
+    manager.add_automation(reloaded)
+    assert manager.get_automation_by_id("switchable").is_enabled is False
+    assert manager.device_index == {}
+
+    enabled = await api.enable_automation(
+        "switchable",
+        EnableSchema(is_enabled=True),
+    )
+    assert enabled.is_enabled is True
+    assert manager.get_automation_by_id("switchable").is_enabled is True
+    assert storage.load("switchable").is_enabled is True
+    assert len(manager.device_index[("dev1", "state")].data) == 1
+
+
+@pytest.mark.asyncio
 async def test_manual_run_invokes_runner(api_state, make_automation, monkeypatch):
     manager, _ = api_state
     automation = make_automation(id="manual-run")
@@ -104,6 +149,22 @@ async def test_manual_run_invokes_runner(api_state, make_automation, monkeypatch
 
     assert result == {"message": "Автоматизация запущена", "id": "manual-run"}
     run_adapter.assert_awaited_once_with(automation, startStep=None)
+
+
+@pytest.mark.asyncio
+async def test_manual_run_rejects_disabled_automation(api_state, make_automation, monkeypatch):
+    manager, _ = api_state
+    manager.add_automation(
+        make_automation(id="disabled-run").model_copy(update={"is_enabled": False})
+    )
+    run_adapter = AsyncMock()
+    monkeypatch.setattr(api, "run_adapter", run_adapter)
+
+    with pytest.raises(HTTPException) as exc:
+        await api.run_automation("disabled-run")
+
+    assert exc.value.status_code == 409
+    run_adapter.assert_not_awaited()
 
 
 @pytest.mark.asyncio

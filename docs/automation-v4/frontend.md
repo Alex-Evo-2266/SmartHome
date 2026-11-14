@@ -49,6 +49,8 @@ Frontend-модель ориентирована на редактировани
 - DELETE удаление;
 - PATCH `/{id}/enable` для enable/disable.
 
+Список `AutomationList` передаёт состояние каждой записи в `AutomationItem`. Переключатель отправляет PATCH через `useAutomationAPI`; пока запрос выполняется, Switch отключён от ввода. После успеха список заменяет запись ответом backend, а при ошибке сохраняет старое значение; API hook отображает ошибку через `useSnackbar`.
+
 В исследованном API hook нет вызовов `action_commands` и `expression-capabilities`; полноценный Expression editor/command-metadata flow не подключён. Backend предоставляет эти discovery endpoints отдельно. Backend CRUD и metadata API описаны в [api.md](./api.md).
 
 ## Редактор, триггеры и параметры
@@ -89,6 +91,6 @@ Page-level editor загружает автоматизацию по ID чере
 
 ## Known Issues
 
-Frontend содержит `PATCH /{id}/enable`, но backend V4 router не объявляет этот endpoint. `EnableSchema` существует в backend-модели, однако не используется этим router-ом. Backend manager также не фильтрует запуск по `is_enabled`. Нельзя считать UI-переключатель рабочей backend-функцией.
+Сохранение редактора по-прежнему не подключено; это не мешает отдельному PATCH endpoint для включения/отключения сценария. Переключатель обновляет runtime-состояние через backend и сохраняет его в YAML.
 
 Для точного поведения backend сверяйтесь с [api.md](./api.md); ограничения runtime описаны в [steps.md](./steps.md) и [triggers.md](./triggers.md).

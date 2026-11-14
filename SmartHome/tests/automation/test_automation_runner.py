@@ -261,6 +261,24 @@ class TestActionStep:
         await runner.run(make_automation(steps, expressions=exprs))
         assert handler.calls == [("set", {"path": "l", "value": 50})]
 
+    @pytest.mark.asyncio
+    async def test_stops_before_next_step_when_automation_is_disabled(self):
+        steps = {
+            "s1": ActionStep(type="action", command="disable", params={}, next="s2"),
+            "s2": ActionStep(type="action", command="must_not_run", params={}),
+        }
+        automation = make_automation(steps)
+        calls = []
+
+        class DisableAfterFirstAction:
+            async def __call__(self, command, params):
+                calls.append(command)
+                automation.is_enabled = False
+
+        await AutomationRunner(DisableAfterFirstAction()).run(automation)
+
+        assert calls == ["disable"]
+
 
 # ---------- ConditionStep ----------
 
