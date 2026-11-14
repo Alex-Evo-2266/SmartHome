@@ -24,6 +24,7 @@ from pydantic import ValidationError
 
 from app.schemas.automation.automation_v4 import AutomationSchema
 from app.bootstrap.const import AUTOMATION_DIR
+from app.pkg.logger import get_automatization
 
 try:
     from yaml import CSafeLoader as _SafeLoader
@@ -32,6 +33,7 @@ except ImportError:  # pragma: no cover
     from yaml import SafeLoader as _SafeLoader
     from yaml import SafeDumper as _SafeDumper
 
+logger = get_automatization.get_logger(__name__)
 
 # ============================================================
 # Ошибки
@@ -96,8 +98,11 @@ class AutomationStorage:
         Сохраняет сценарий в файл атомарно:
         пишем во временный файл рядом, потом os.replace.
         """
+
+        logger.debug(automation)
         path = self.path_for(automation.id)
         text = self.dumps(automation)
+        logger.debug(text)
 
         fd, tmp_path = tempfile.mkstemp(
             dir=str(path.parent),
@@ -146,6 +151,15 @@ class AutomationStorage:
     def dumps(self, automation: AutomationSchema) -> str:
         """AutomationSchema → YAML-строка."""
         data = automation.model_dump(mode="json", exclude_none=True)
+        logger.debug(
+            "[AutomationIO] Serialized data before YAML: %r",
+            data,
+        )
+
+        logger.debug(
+            "[AutomationIO] Value type: %s",
+            type(data.get("expressions", {})).__name__,
+        )
         try:
             return yaml.dump(data, **self._DUMP_KWARGS)
         except yaml.YAMLError as e:

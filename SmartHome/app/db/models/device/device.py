@@ -32,7 +32,7 @@ class DeviceField(ormar.Model):
 	type_get_value: FieldGetDataType = ormar.String(max_length=200, default=FieldGetDataType.PUBLISH, nullable=True)
 	low: Optional[str] = ormar.String(max_length=200, nullable=True)
 	high: Optional[str] = ormar.String(max_length=200, nullable=True)
-	enum_values: Optional[str] = ormar.String(max_length=200, nullable=True)
+	enum_values: Optional[str] = ormar.String(max_length=1000, nullable=True)
 	read_only: bool = ormar.Boolean()
 	icon: str = ormar.String(max_length=200, default="room")
 	unit: Optional[str] = ormar.String(max_length=200, default="")

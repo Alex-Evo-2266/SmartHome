@@ -20,6 +20,7 @@ async def add_device(data: AddDeviceSchema):
 	new_device = await Device.objects.create(**(data2.dict()))
 	logger.info(new_device)
 	for field in data.fields:
+		logger.info(field)
 		logger.info("p3")
 		id = get_id()
 		await DeviceField.objects.create(**(field.dict()), device=new_device, id=id)

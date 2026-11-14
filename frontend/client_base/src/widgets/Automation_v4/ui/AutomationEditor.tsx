@@ -48,6 +48,7 @@ export function AutomationEditor({
   const [stepDeleteError, setStepDeleteError] = useState<string | null>(null);
 
   const updateAutomation = useCallback((patch: Partial<Automation>) => {
+    console.log(patch)
     onChange((prev) => {
       if (!prev) return prev;
 
@@ -194,7 +195,7 @@ export function AutomationEditor({
             border
             value={automation.name}
             placeholder="Название сценария"
-            onChange={(name) =>
+            onChange={(name: string) =>
               updateAutomation({ name })
             }
             aria-label="Название сценария"
@@ -212,7 +213,11 @@ export function AutomationEditor({
           )}
           {
             onDelete && 
-            <DangerButton style={{background: "var(--Error-color)"}} text="удалить сценарий" header="удалить сценарий" onClick={onDelete}>удалить</DangerButton>
+            <DangerButton 
+            // @ts-ignore
+            style={{background: "var(--Error-color)"}} 
+            text="удалить сценарий" header="удалить сценарий" 
+            onClick={onDelete}>удалить</DangerButton>
           }
           <Button
             type="button"

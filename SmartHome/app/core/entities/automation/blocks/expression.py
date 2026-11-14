@@ -54,6 +54,10 @@ def _to_number(value: Any) -> int | float:
         return value
     if isinstance(value, str):
         s = value.strip()
+        if(s.lower() == "true"):
+            return 1
+        if(s.lower() == "false"):
+            return 0
         try:
             if "." in s or "e" in s.lower():
                 return float(s)
@@ -99,9 +103,16 @@ def _equal(a: Any, b: Any) -> bool:
     Равенство с числовым приведением.
     "25" == 25 → True (частая ситуация с MQTT-строками).
     """
+    logger.debug(a)
+    logger.debug(type(a))
+    logger.debug(b)
+    logger.debug(type(b))
     if type(a) is type(b):
         return a == b
     try:
+        logger.debug(b)
+        logger.debug(_to_number(a))
+        logger.debug(_to_number(b))
         return _to_number(a) == _to_number(b)
     except (TypeError, ValueError):
         return a == b

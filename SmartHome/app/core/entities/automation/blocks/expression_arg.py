@@ -50,6 +50,8 @@ def resolve_arg(
     :raises ExpressionError:    для неразрешимой ссылки RefArg
     :raises TypeError:            для неизвестного типа
     """
+    logger.debug(arg)
+    
     if isinstance(arg, LiteralArg):
         return resolve_literal(arg)
 

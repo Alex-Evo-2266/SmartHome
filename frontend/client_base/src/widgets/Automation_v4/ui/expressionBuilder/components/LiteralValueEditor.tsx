@@ -26,9 +26,10 @@ export const LiteralValueEditor = ({
 
     const types = allowedValueTypes ?? []
 
-    const updateValue = (value: valueType) => {
+    const updateValue = (value: valueType, type: "boolean" | "number" | "string" = "string") => {
         onChange({
             ...data,
+            data_type: type,
             value
         })
     }
@@ -83,7 +84,8 @@ export const LiteralValueEditor = ({
                     const raw = event.target.value
 
                     updateValue(
-                        raw === "" ? null : Number(raw)
+                        raw === "" ? null : Number(raw),
+                        "number"
                     )
                 }}
                 placeholder="Число"
@@ -99,7 +101,7 @@ export const LiteralValueEditor = ({
                 className={styles.select}
                 value={value == null ? "" : String(value)}
                 onChange={event => {
-                    updateValue(event.target.value === "true")
+                    updateValue(event.target.value === "true", "boolean")
                 }}
             >
                 <option value="" disabled>

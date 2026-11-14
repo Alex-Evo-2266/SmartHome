@@ -310,8 +310,8 @@ export function FunctionArgumentsEditor({
                   </>
                   
                 )}
-
                 <DangerButton
+                // @ts-ignore
                   style={{
                     background: "var(--Error-color)",
                     color: "var(--On-primary-color)",

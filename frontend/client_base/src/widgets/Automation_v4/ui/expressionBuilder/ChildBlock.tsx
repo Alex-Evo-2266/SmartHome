@@ -8,6 +8,7 @@ import {
     ExpressionValueType,
     GroupExpression,
     GroupOperator,
+    LiteralDataType,
     UnaryExpression,
     UnaryOperator
 } from "@src/entites/automation_v4"
@@ -62,8 +63,16 @@ export const ChildBlock = ({
     ) => {
 
         if (selected.kind === "literal") {
+            const type: LiteralDataType = (allowedValueTypes?.length === 1 && allowedValueTypes[0] === "boolean") ? "boolean":
+            (allowedValueTypes?.length === 1 && allowedValueTypes[0] === "number") ? "number":
+            (allowedValueTypes?.length === 2 && allowedValueTypes.includes("boolean") && allowedValueTypes.includes("number")) ? "number": "string"
+            console.log({
+                type: "literal",
+                data_type: type
+            })
             onChange({
-                type: "literal"
+                type: "literal",
+                data_type: type
             })
         }
 

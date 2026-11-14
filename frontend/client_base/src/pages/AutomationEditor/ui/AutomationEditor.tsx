@@ -1,4 +1,5 @@
 import { Automation, useAutomationAPI } from "@src/entites/automation_v4";
+import { normalizeAutomation } from "@src/entites/automation_v4/helpers/normalize";
 import { useSnackbar } from "@src/shared/lib/hooks/snackbar.hook";
 import { AutomationEditor } from "@src/widgets/Automation_v4/ui/AutomationEditor";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -46,6 +47,10 @@ export function AutomationEditorPage({ isCreateRoute = false }: AutomationEditor
     useLayoutEffect(() => {
         automationRef.current = automation;
     }, [automation]);
+
+    useEffect(()=>{
+        console.log(automation)
+    },[automation])
 
     useEffect(() => {
         if (isCreateRoute) {
@@ -104,10 +109,10 @@ export function AutomationEditorPage({ isCreateRoute = false }: AutomationEditor
             return;
         }
 
-        const snapshot: Automation = {
+        const snapshot = normalizeAutomation({
             ...currentAutomation,
             name: currentAutomation.name.trim(),
-        };
+        })
 
         requestInProgress.current = true;
         if (mode === "create") {

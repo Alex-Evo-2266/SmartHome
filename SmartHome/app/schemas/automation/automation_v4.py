@@ -1,8 +1,7 @@
 from enum import Enum
 from typing import Annotated, Optional, Literal, Union, Any, Awaitable, Callable
 
-from pydantic import BaseModel, Field, ConfigDict, model_validator, field_validator
-
+from pydantic import BaseModel, Field, ConfigDict, model_validator, field_validator, BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictFloat, StrictStr
 from datetime import datetime
 
 class Weekday(int, Enum):
@@ -128,7 +127,13 @@ class LiteralArg(BaseModel):
     model_config = ConfigDict(extra="forbid", use_enum_values=True)
 
     type: Literal["literal"]
-    value: Union[int, float, str, bool, None] = None
+    value: Union[
+        StrictBool,
+        StrictInt,
+        StrictFloat,
+        StrictStr,
+        None
+    ] = None
     data_type: Optional[Literal[
         "number", "string", "boolean", "time", "duration", "path"
     ]] = None
@@ -167,7 +172,6 @@ ExpressionArg = Annotated[
     Union[LiteralArg, RefArg, PathArg],
     Field(discriminator="type"),
 ]
-
 
 # ============================================================
 # Выражения (AST)

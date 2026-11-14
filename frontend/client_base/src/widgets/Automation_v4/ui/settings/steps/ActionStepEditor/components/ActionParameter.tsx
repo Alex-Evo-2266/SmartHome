@@ -7,8 +7,6 @@ import type {
 
 import styles from "./ActionParameter.module.scss";
 import { getExpressionPreview } from "../../../../shared/expressionPreview";
-import { useContext } from "react";
-import { contextAutomation } from "@src/widgets/Automation_v4/ui/expressionBuilder/StartBlock";
 import { useActionCommands } from "../hooks/useActionCommands";
 
 interface Props {
